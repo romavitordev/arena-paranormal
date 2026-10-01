@@ -325,6 +325,16 @@ export class Assist {
     this.cooldown = ASSIST.cooldown;
   }
 
+  // troca de personagem: passa a ser quem acabou de sair de campo (com o modelo dele)
+  takeOver(def, rig) {
+    if (this.active) this.leave();
+    this.def = def;
+    this.rig = rig;
+    this.anim = new Animator(rig, def.anims);
+    this.anim.play('idle', { blend: 0 });
+    this.color = ELEMENTS[def.element] ? new THREE.Color(ELEMENTS[def.element].color).getHex() : def.energyColor;
+  }
+
   // fim do round / partida: some sem efeito e volta pronto
   reset() {
     this.active = null;

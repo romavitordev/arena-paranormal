@@ -9,7 +9,7 @@ especial = Carga → Carga → ○ (custa 50, ofensivos causam 250, nunca hitkil
 (quebra e atordoa por 1 s). Quem bate na defesa fica exposto para contra-ataque. Defesa parada segura até especiais (menos o Inexistir).
 **Esquiva:** L2/LT + direção (4 cargas, recuperam tomando dano) (4.2 m, 0.18 s de invulnerabilidade, cooldown 0.6 s).
 **Dash:** × + × na direção do analógico (sem direção, até o adversário). **Dash longo:** △ + × (persegue o adversário, 10 de sanidade) — no Joui, △ + × é o Teleporte das Sombras.
-**Combo vertical:** ↑ + ○ dentro do combo lança e o atacante sobe junto (até 3 golpes aéreos + finalização); ↓ + ○ derruba. × depois de acertar = dash de perseguição (até 2 por combo).
+**Combo vertical:** ↑ + ○ dentro do combo lança e o atacante sobe junto (até 3 golpes aéreos + finalização); ↓ + ○ derruba. × depois de acertar = dash de perseguição (até Infinity por combo).
 **Queda:** caído não toma dano; × ou L2 logo ao cair levanta rolando. **Perfect Block:** defesa no instante do impacto (todos). **Carregar andando:** 45% da velocidade, 50% da carga.
 **Agarrão:** R2 + ○ (curta distância, 70 de dano, não pode ser defendido — só esquivado). **Versões fortes:** △ + ○ = físico forte (×1.6, gasta 60 da defesa, 15 de sanidade) · △ + □ = principal forte (×1.6, +20 de energia).
 **Elementos (só nos rituais — habilidades e especiais):** Sangue > Conhecimento > Energia > Morte > Sangue (+10% / −10%). **Escala de combo:** 1 → 1 → 0.9 → 0.8 → 0.72 → 0.65 → 0.58 → 0.5. **Substituição:** L2 apanhando (1 carga). **Escapar do agarrão:** R2 + ○ logo no começo. **Transcender:** vida ≤ 30% + segurar △ 1 s (1x por partida, +15% de dano por 12 s, aguenta 1 golpe).
@@ -246,7 +246,7 @@ Névoa paranormal por 10 s (sem dano direto): +25% de dano, esquiva com 1.6× in
 - **Envelhecimento Localizado "Black Hole"** — R1 + △ / RB + Y · custo 30 · cooldown 26 s
   Segura cinzas, diz "Black Hole" e assopra: as cinzas ficam pretas e envelhecem as próprias feridas até cicatrizarem em espiral.
 
-### Especial: Kaboom!
+### Especial: Supernova
 
 250 de dano · custo 50 · cooldown 14 s.
 
@@ -303,17 +303,18 @@ Névoa paranormal por 10 s (sem dano direto): +25% de dano, esquiva com 1.6× in
 
 | Comando | Golpe | Dano | Alcance | Observações |
 |---|---|---|---|---|
-| ○ 1 | Jab | 30 | 1.6 m |  |
-| ○ 2 | Direto | 36 | 1.7 m |  |
-| ○ 3 | Cruzado | 40 | 1.6 m |  |
-| ○ 4 | Gancho | 42 | 1.5 m |  |
-| ○ 5 | Golpe pesado | 64 | 1.8 m | finalizador: lança |
-| Frente + ○ | Avanço | 46 | 1.8 m |  |
-| Trás + ○ | Agarrão e empurrão | 34 | 1.4 m | finalizador: afasta |
-| Lado + ○ | Gancho em movimento | 38 | 1.6 m |  |
-| No ar + ○ | Soco meteoro | 44 | 1.9 m | desce com impacto |
-| ↑ + ○ (no combo) | Gancho ascendente | 46 | 1.9 m | finalizador: undefined |
-| ↓ + ○ (no combo) | Soco meteoro | 56 | 1.9 m | finalizador: derruba |
+| ○ 1 | Jab | 24 | 1.8 m |  |
+| ○ 2 | Direto | 26 | 1.8 m |  |
+| ○ 3 | Rajada sigilar | 42 (3 acertos) | 1.8 m |  |
+| ○ 4 | Soco no corpo | 28 | 1.7 m |  |
+| ○ 5 | Cruzado | 30 | 1.8 m |  |
+| ○ 6 | Golpe da Transcendência | 60 | 1.9 m | finalizador: lança |
+| Frente + ○ | Avanço | 36 | 1.8 m |  |
+| Trás + ○ | Agarrão e empurrão | 32 | 1.5 m | finalizador: afasta |
+| Lado + ○ | Gancho em movimento | 30 | 1.8 m |  |
+| No ar + ○ | Soco meteoro aéreo | 40 | 1.9 m | desce com impacto |
+| ↑ + ○ (no combo) | Gancho ascendente | 42 | 1.9 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Soco meteoro | 52 | 1.9 m | finalizador: derruba |
 
 ### Principal (□ / X): Impacto Sigilar
 

@@ -130,11 +130,14 @@ export default {
     },
   ],
 
-  // Especial KABOOM!: as três granadas dela, uma atrás da outra; a última leva tudo junto
+  // Especial SUPERNOVA (cinemático): corre com a escopeta, atira à queima-roupa, o inimigo voa longe,
+  // ela segura a granada do coração vermelho e arremessa — explosão com SUPERNOVA na tela e ela sorrindo
   special: {
-    name: 'Kaboom!',
-    banner: 'Kaboom!',
-    type: 'kaboom',
+    name: 'Supernova',
+    banner: 'SUPERNOVA',
+    type: 'supernova',
+    shotShare: 0.35, // tiro 35% · explosão 65%
+    knockDistance: 5.5,
     energyCost: 50,
     cooldown: 14,
     // damage: omitido → COMBAT.specialDamage (250)

@@ -11,8 +11,10 @@
 //   dodge    → Esquiva (+ direção)          (L2 / LT) — 4 cargas
 //   mod      → Modificador de habilidade    (R1 / RB) — segurar + outro botão
 //   start    → Pausa
-//   assist1  → Assistência 1 (batalha em equipe) (D-pad ← / analógico direito ←)
-//   assist2  → Assistência 2 (batalha em equipe) (D-pad → / analógico direito →)
+//   assist1  → Chama a assistência 1 (batalha em equipe)       (D-pad ◀)
+//   assist2  → Chama a assistência 2 (batalha em equipe)       (D-pad ▶)
+//   switch1  → Troca para o personagem da assistência 1        (analógico direito ◀)
+//   switch2  → Troca para o personagem da assistência 2        (analógico direito ▶)
 //
 // A câmera fica sempre travada no adversário (padrão), sem botão de troca.
 // L1/LB fica livre para funções futuras.
@@ -33,6 +35,8 @@ export const KEYBOARD_LAYOUTS = {
     mod: ['KeyR'],
     assist1: ['KeyZ'],
     assist2: ['KeyC'],
+    switch1: ['KeyX'],
+    switch2: ['KeyV'],
     select: ['Tab'],
     start: ['Escape'],
   },
@@ -51,6 +55,8 @@ export const KEYBOARD_LAYOUTS = {
     mod: ['Numpad6', 'KeyO'],
     assist1: ['Numpad7', 'KeyN'],
     assist2: ['Numpad9', 'KeyM'],
+    switch1: ['NumpadDivide', 'Comma'],
+    switch2: ['NumpadMultiply', 'Period'],
     start: ['Backspace'],
   },
 };
@@ -66,8 +72,9 @@ export const GAMEPAD_LAYOUT = {
   block: [7], // RT / R2
   select: [8],
   start: [9],
-  assist1: [14], // D-pad ← (na batalha em equipe o D-pad ←/→ chama as assistências)
-  assist2: [15], // D-pad →
+  assist1: [14], // D-pad ◀ (na batalha em equipe o D-pad ◀/▶ chama as assistências)
+  assist2: [15], // D-pad ▶
+  // switch1/switch2: analógico direito ◀/▶ (lido como eixo no InputManager)
   up: [12],
   down: [13],
   left: [14],
@@ -87,6 +94,6 @@ export const PLAYER_DEVICES = [
 export const BUTTON_LABELS = {
   pad: {
     physical: 'B/○', ranged: 'X/□', carga: 'Y/△', jump: 'A/×',
-    block: 'RT/R2', mod: 'RB/R1', dodge: 'LT/L2', assist1: '◀', assist2: '▶',
+    block: 'RT/R2', mod: 'RB/R1', dodge: 'LT/L2', assist1: '◀', assist2: '▶', switch1: 'R◀', switch2: 'R▶',
   },
 };

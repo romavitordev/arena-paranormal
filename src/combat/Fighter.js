@@ -58,7 +58,7 @@ export class Fighter {
     this.visible = true;
 
     // cooldowns: nome → segundos restantes; cooldownMax para a HUD
-    this.cooldowns = { ranged: 0, special: 0, dodge: 0, dash: 0, grab: 0, powerMelee: 0, substitution: 0 };
+    this.cooldowns = { ranged: 0, special: 0, dodge: 0, dash: 0, grab: 0, powerMelee: 0, substitution: 0, switch: 0 };
     this.cooldownMax = {
       ranged: def.ranged?.cooldown || 1,
       special: def.special?.cooldown ?? COMBAT.specialCooldown,
@@ -381,6 +381,75 @@ export class Fighter {
     });
   }
 
+  // Batalha em equipe (estilo Storm 4): o personagem da assistência entra em campo e o atual vira a
+  // assistência daquele lado. Vida, sanidade e esquivas são da equipe e continuam iguais.
+  trySwitch(slot) {
+    const as = this.assists && this.assists[slot];
+    if (!as) return false;
+    const S = COMBAT.switch;
+    if (this.cooldowns.switch > 0) { this.notify('TROCA RECARREGANDO'); return false; }
+    if (as.active) { this.notify('ASSISTÊNCIA EM CAMPO'); return false; }
+    if (!['idle', 'charging', 'block', 'dashing'].includes(this.state) || !this.onGround || this.world.cinematic) return false;
+    const w = this.world;
+    const newDef = as.def;
+    const newRig = as.rig;
+    const oldDef = this.def;
+    const oldRig = this.rig;
+    // fumaça de troca onde estava o antigo
+    w.fx.burst(this.chestPos(), { count: 30, color: 0x2a2632, kind: 'smoke', speed: 2.5, life: 0.6, size: 0.8, grow: 1 });
+    w.scene.remove(oldRig.root);
+    if (newRig.root.parent) newRig.root.parent.remove(newRig.root);
+    as.takeOver(oldDef, oldRig);
+    as.cooldown = Math.max(as.cooldown, S.assistCooldown);
+    this.applyDef(newDef, newRig);
+    this.cooldowns.switch = S.cooldown;
+    this.cooldownMax.switch = S.cooldown;
+    this.invuln = Math.max(this.invuln, S.invuln);
+    w.fx.burst(this.chestPos(), { count: 26, color: newDef.energyColor ?? 0xffffff, speed: 5, life: 0.4, size: 0.22 });
+    w.fx.ring(new THREE.Vector3(this.pos.x, 0.06, this.pos.z), { color: newDef.energyColor ?? 0xffffff, radius: 2, life: 0.4 });
+    w.audio.play('teleport');
+    this.notify(`TROCA: ${newDef.name}!`, true);
+    w.onSwitch && w.onSwitch(this, oldDef, newDef);
+    return true;
+  }
+
+  // troca a definição (personagem) deste lutador mantendo vida, sanidade, posição e placar
+  applyDef(def, rig) {
+    this.stopCharging();
+    this.stopStrikeFx();
+    this.endBuffs();
+    this.seq = null;
+    this.def = def;
+    this.rig = rig;
+    this.anim = new Animator(rig, def.anims);
+    this.world.scene.add(rig.root);
+    rig.root.visible = true;
+    rig.root.position.copy(this.pos);
+    rig.root.rotation.y = this.yaw;
+    rig.body.position.y = 0;
+    const s = def.stats || {};
+    this.moveSpeed = s.moveSpeed ?? COMBAT.moveSpeed;
+    this.dodgeCfg = { ...COMBAT.dodge, ...(def.dodge || {}) };
+    this.cooldownMax.ranged = def.ranged?.cooldown || 1;
+    this.cooldownMax.special = def.special?.cooldown ?? COMBAT.specialCooldown;
+    this.cooldownMax.dodge = this.dodgeCfg.cooldown;
+    for (const a of def.abilities || []) {
+      if (this.cooldowns[a.id] === undefined) this.cooldowns[a.id] = 0;
+      this.cooldownMax[a.id] = a.cooldown;
+    }
+    this.combo = { chain: -1, steps: 0, grace: 0, queued: null, strike: null, hits: [], windows: [] };
+    this.carga = { stage: 0, timer: 0 };
+    this.glowTint = null;
+    this.buffTint = null;
+    this.armorHits = 0;
+    this.dash = null;
+    this.setVisible(true);
+    this.setOpacity(1);
+    this.hideRangedProps();
+    this.anim.play('idle', { restart: true, blend: 0 });
+    this.setState('idle');
+  }
+
   endBuffs() {
     for (const b of this.buffs || []) b.onEnd && b.onEnd();
     this.buffs = [];
@@ -456,10 +525,12 @@ export class Fighter {
 
     this.bufferInputs();
 
-    // batalha em equipe: chamar assistência 1/2 (D-pad ←/→)
+    // batalha em equipe: chamar assistência 1/2 (D-pad ◀/▶) ou TROCAR de personagem (analógico direito ◀/▶)
     if (this.assists && !this.world.cinematic) {
       if (this.input.pressed.assist1 && this.assists[0]) this.assists[0].call();
       if (this.input.pressed.assist2 && this.assists[1]) this.assists[1].call();
+      if (this.input.pressed.switch1) this.trySwitch(0);
+      if (this.input.pressed.switch2) this.trySwitch(1);
     }
 
     switch (this.state) {
@@ -627,6 +698,10 @@ export class Fighter {
     if (!opp || opp.state === 'ko' || (opp.comboDashes || 0) >= C.maxPerCombo) return false;
     if (!this.spendEnergy(C.energyCost)) return false;
     opp.comboDashes = (opp.comboDashes || 0) + 1;
+    // a sequência recomeça do primeiro golpe (não cai no finalizador)
+    this.combo.chain = -1;
+    this.combo.steps = 0;
+    this.combo.queued = null;
     this.stopStrikeFx();
     this.setState('idle');
     this.startDash('chase');
@@ -1226,8 +1301,11 @@ export class Fighter {
 
     // qualquer ○ apertado durante o golpe entra na fila (não perde botão no combo rápido)
     if (this.input.pressed.physical && t > 0.02) c.queued = { intent: this.dirIntent(), vert: this.stickVert() || this.capturedVert || (c.queued && c.queued.vert) };
-    // × depois de acertar: dash de perseguição (combo → dash → continua); limitado por combo
-    if (this.input.pressed.jump && c.hits.some(Boolean) && t > c.windows[c.windows.length - 1][1] && this.tryComboDash()) return;
+    // △ + × depois de acertar: RUSH de perseguição (estilo Storm) — a sequência de ○ recomeça do 1º golpe,
+    // então dá para emendar ○○○ → △+× → ○○○ → △+× ... antes do finalizador
+    const inp = this.input;
+    const rush = (inp.pressed.jump && (inp.held.carga || this.recent('carga'))) || (inp.pressed.carga && (inp.held.jump || this.recent('jump')));
+    if (rush && !c.air && c.hits.some(Boolean) && t > c.windows[0][0] && this.tryComboDash()) return;
     // combo aéreo: acompanha o alvo no ar
     if (c.air && this.airCombo) {
       const tg = this.airCombo.target;

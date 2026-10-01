@@ -118,9 +118,14 @@ export const COMBAT = {
   // ---- Combos verticais (dentro de um combo): ↑ + ○ lança para cima, ↓ + ○ derruba ----
   airCombo: { chase: 12.5, maxHits: 3, hang: 2.0, pop: 4.0, chainMult: 0.6, finalMult: 1.2 },
   // ---- Dash de perseguição no meio do combo (× depois de acertar) ----
-  comboDash: { maxPerCombo: 2, energyCost: 8 },
+  // Rush de combo (estilo Storm): △+× depois de acertar um golpe da sequência de ○ — persegue o alvo e a
+  // sequência RECOMEÇA do 1º golpe. Sem limite fixo: o que segura é a sanidade (custo por rush), a escala
+  // de dano do combo e a Substituição de quem apanha.
+  comboDash: { maxPerCombo: Infinity, energyCost: 8 },
   // ---- Queda: caído não toma dano; dá para levantar rolando (× ou L2) ----
   down: { lie: 0.75, techFrom: 0.12, techUntil: 0.6, techDistance: 2.6, techTime: 0.32, getup: 0.35 },
+  // ---- Batalha em equipe: troca de personagem (estilo Storm 4) ----
+  switch: { cooldown: 5, assistCooldown: 6, invuln: 0.35 }, // vida e sanidade são da equipe
   // ---- Anti-repetição ----
   maxVolleys: 2, // no máximo 2 disparos do mesmo jogador no ar (um terceiro apaga o mais antigo)
   repeat: { after: 2, mult: 0.7, window: 2.5 }, // o mesmo golpe 3x seguidas causa 70% (até variar)

@@ -25,20 +25,24 @@ export default {
 
   melee: {
     name: 'Punhos',
+    // sequência ágil: cada golpe sai rápido, empurra pouco (o alvo continua no alcance) e emenda no próximo
     strikes: [
-      { name: 'Jab', anim: 'jab', dur: 0.28, active: [0.07, 0.15], damage: 30, range: 1.6, arc: 90, knockback: 2.4, lunge: 1.2, hitstop: 0.075, sound: 'swing', hitSound: 'punch', hand: 'L', impactScale: 1.2 },
-      { name: 'Direto', anim: 'cross', dur: 0.34, active: [0.11, 0.2], damage: 36, range: 1.7, arc: 90, knockback: 3.0, lunge: 1.2, hitstop: 0.075, sound: 'swing', hitSound: 'heavyPunch', hand: 'R', impactScale: 1.3 },
-      { name: 'Cruzado', anim: 'hook_l', dur: 0.38, active: [0.13, 0.23], damage: 40, range: 1.6, arc: 130, knockback: 3.2, lunge: 1.1, hitstop: 0.075, sound: 'swing', hitSound: 'heavyPunch', hand: 'L', impactScale: 1.3 },
-      { name: 'Gancho', anim: 'uppercut', dur: 0.45, active: [0.18, 0.28], damage: 42, range: 1.5, arc: 100, knockback: 3.4, lunge: 1.0, hitstop: 0.075, sound: 'swing', hitSound: 'heavyPunch', hand: 'R', impactScale: 1.4 },
-      { name: 'Golpe pesado', anim: 'heavy_punch', dur: 0.55, active: [0.24, 0.34], damage: 64, range: 1.8, arc: 90, lunge: 2.0, finisher: 'launch', hitstop: 0.075, sound: 'swing', hitSound: 'heavyPunch', hand: 'R', impactFx: 'sigil', impactScale: 1.8 },
+      { name: 'Jab', anim: 'jab', dur: 0.24, active: [0.06, 0.13], damage: 24, range: 1.8, arc: 100, knockback: 0.8, lunge: 1.3, sound: 'swing', hitSound: 'punch', hand: 'L' },
+      { name: 'Direto', anim: 'cross', dur: 0.26, active: [0.07, 0.14], damage: 26, range: 1.8, arc: 100, knockback: 0.9, lunge: 1.2, sound: 'swing', hitSound: 'punch', hand: 'R' },
+      // três socos seguidos com sigilos (três acertos)
+      { name: 'Rajada sigilar', anim: 'flurry', dur: 0.5, actives: [[0.06, 0.14], [0.2, 0.28], [0.34, 0.42]], damage: 42, range: 1.8, arc: 110, knockback: 0.5, lunge: 0.9, sound: 'swing', hitSound: 'punch', impactFx: 'sigil', impactScale: 0.9 },
+      { name: 'Soco no corpo', anim: 'body_blow', dur: 0.3, active: [0.09, 0.17], damage: 28, range: 1.7, arc: 100, knockback: 1.0, lunge: 1.1, sound: 'swing', hitSound: 'heavyPunch', hand: 'R' },
+      { name: 'Cruzado', anim: 'hook_l', dur: 0.32, active: [0.1, 0.18], damage: 30, range: 1.8, arc: 140, knockback: 1.2, lunge: 1.1, sound: 'swing', hitSound: 'heavyPunch', hand: 'L', impactScale: 1.2 },
+      { name: 'Golpe da Transcendência', anim: 'heavy_punch', dur: 0.46, active: [0.18, 0.27], damage: 60, range: 1.9, arc: 100, lunge: 2.0, finisher: 'launch', hitstop: 0.08, sound: 'swing', hitSound: 'heavyPunch', hand: 'R', impactFx: 'sigil', impactScale: 1.8 },
     ],
-    up: { name: 'Gancho ascendente', anim: 'uppercut', dur: 0.46, active: [0.16, 0.28], damage: 46, range: 1.9, arc: 120, lunge: 0.9, finisher: 'launchHigh', launcher: true, sound: 'swing', hitSound: 'heavyPunch', hitstop: 0.08 },
-    down: { name: 'Soco meteoro', anim: 'meteor_punch', dur: 0.6, active: [0.26, 0.38], damage: 56, range: 1.9, arc: 120, lunge: 1, finisher: 'knockdown', sound: 'swing', hitSound: 'heavyPunch', impactScale: 1.8, hitstop: 0.1 },
-    forward: { name: 'Avanço', anim: 'dash_punch', dur: 0.5, active: [0.18, 0.3], damage: 46, range: 1.8, arc: 90, knockback: 5, motion: [{ t: [0, 0.3], fwd: 4.6, stopClose: true }], sound: 'swing', hitSound: 'heavyPunch', impactFx: 'sigil', impactScale: 1.5 },
+    up: { name: 'Gancho ascendente', anim: 'uppercut', dur: 0.4, active: [0.12, 0.22], damage: 42, range: 1.9, arc: 120, lunge: 1.0, finisher: 'launchHigh', launcher: true, sound: 'swing', hitSound: 'heavyPunch' },
+    down: { name: 'Soco meteoro', anim: 'meteor_punch', dur: 0.5, active: [0.2, 0.3], damage: 52, range: 1.9, arc: 120, lunge: 1, finisher: 'knockdown', sound: 'swing', hitSound: 'heavyPunch', impactScale: 1.8, hitstop: 0.09 },
+    // frente + ○: avança e já abre combo (empurra pouco)
+    forward: { name: 'Avanço', anim: 'dash_punch', dur: 0.42, active: [0.14, 0.26], damage: 36, range: 1.8, arc: 100, knockback: 1.4, motion: [{ t: [0, 0.26], fwd: 5.0, stopClose: true }], sound: 'swing', hitSound: 'heavyPunch', impactFx: 'sigil', impactScale: 1.3 },
     // trás + ○: agarra e empurra para longe (reposicionamento)
-    back: { name: 'Agarrão e empurrão', anim: 'shove', dur: 0.5, active: [0.2, 0.32], damage: 34, range: 1.4, arc: 90, finisher: 'push', sound: 'swing', hitSound: 'heavyPunch', impactScale: 1.4 },
-    side: { name: 'Gancho em movimento', anim: 'hook_r', dur: 0.4, active: [0.13, 0.23], damage: 38, range: 1.6, arc: 130, knockback: 2.6, motion: [{ t: [0, 0.22], side: 2.4 }], sound: 'swing', hitSound: 'heavyPunch', impactScale: 1.3 },
-    air: { name: 'Soco meteoro', anim: 'meteor_punch', dur: 0.5, active: [0.18, 0.4], damage: 44, range: 1.9, arc: 110, knockback: 4, slam: 18, vertical: 2.5, sound: 'swing', hitSound: 'heavyPunch', impactFx: 'sigil', impactScale: 1.6 },
+    back: { name: 'Agarrão e empurrão', anim: 'shove', dur: 0.42, active: [0.16, 0.26], damage: 32, range: 1.5, arc: 100, finisher: 'push', sound: 'swing', hitSound: 'heavyPunch', impactScale: 1.4 },
+    side: { name: 'Gancho em movimento', anim: 'hook_r', dur: 0.32, active: [0.1, 0.19], damage: 30, range: 1.8, arc: 140, knockback: 1.1, motion: [{ t: [0, 0.2], side: 2.6 }], sound: 'swing', hitSound: 'heavyPunch', impactScale: 1.2 },
+    air: { name: 'Soco meteoro aéreo', anim: 'meteor_punch', dur: 0.44, active: [0.14, 0.34], damage: 40, range: 1.9, arc: 110, knockback: 4, slam: 18, vertical: 2.5, sound: 'swing', hitSound: 'heavyPunch', impactFx: 'sigil', impactScale: 1.5 },
   },
 
   ranged: {

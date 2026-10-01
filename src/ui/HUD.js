@@ -97,7 +97,7 @@ export class HUD {
         <div class="abilities">${abil.map((a) => `
           <div class="ab ${a.none ? 'none' : ''}" data-k="${a.key}"><div class="cd"></div><div class="k"></div><div class="n">${a.name}</div><div class="s"></div></div>`).join('')}
         </div>
-        ${f.assists ? `<div class="assists">${f.assists.map((a, k) => `<div class="as" data-k="${k}" style="--ac:${a.def.color}"><i class="ak"></i><b>${a.def.name}</b><span class="acd"></span></div>`).join('')}</div>` : ''}
+        ${f.assists ? `<div class="assists">${f.assists.map((a, k) => `<div class="as" data-k="${k}" style="--ac:${a.def.color}"><i class="ak"></i><b>${a.def.name}</b><span class="acd"></span><i class="sk" title="Trocar de personagem"></i></div>`).join('')}</div>` : ''}
         <div class="buff"></div>
         <div class="msg"></div>`;
       return {
@@ -159,6 +159,10 @@ export class HUD {
           el.querySelector('.acd').textContent = a.cooldown > 0 ? Math.ceil(a.cooldown) : '';
           el.style.setProperty('--p', `${(a.cooldown / 18) * 100}%`);
           el.querySelector('.ak').textContent = actionLabel(i, k ? 'assist2' : 'assist1', f.input.source);
+          // troca de personagem (analógico direito): mostra a tecla e se está liberada
+          const sk = el.querySelector('.sk');
+          sk.textContent = `⇄ ${actionLabel(i, k ? 'switch2' : 'switch1', f.input.source)}`;
+          sk.classList.toggle('off', f.cooldowns.switch > 0 || !!a.active);
         });
       }
       e.dodgePips.forEach((pip, k) => pip.classList.toggle('on', f.dodges > k));

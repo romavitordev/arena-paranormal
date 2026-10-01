@@ -50,8 +50,13 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 - **Seleção:** Y/△ escolhe personagem ou cenário **aleatório**; B/○ na seleção de personagens (com ninguém confirmado) volta para a tela inicial.
 - **Opções** (menu principal e pausa): Tutorial (comandos na tela) · Tempo da luta · **Movimento**: direções da tela
   (padrão) ou relativo ao inimigo (↑ aproxima, ↓ recua, ←/→ orbitam).
-- **Batalha em equipe:** líder + 2 assistências. D-pad ← / → (ou analógico direito; teclado P1 Z / C, P2 N / M)
-  chama a assistência: com você **andando** ela apoia (buff, névoa, puxão, cura); **parado** ela ataca. Recarga de 18 s.
+- **Combo infinito (estilo Storm):** na sequência de ○, antes do finalizador, aperte **△ + ×** depois de acertar: o
+  personagem dá um rush atrás do alvo e a sequência de ○ recomeça do 1º golpe — dá para repetir ○○○ → △+× → ○○○...
+  Cada rush gasta 8 de sanidade; o dano cai com a escala de combo e quem apanha pode usar a Substituição.
+- **Batalha em equipe:** líder + 2 assistências. **D-pad ◀ / ▶** (teclado P1 Z / C, P2 N / M) **chama** a assistência:
+  com você **andando** ela apoia (buff, névoa, puxão, cura); **parado** ela ataca. Recarga de 18 s.
+  **Analógico direito ◀ / ▶** (teclado P1 X / V, P2 Numpad / e * ou , e .) **troca** o personagem em campo pelo daquela
+  assistência (estilo Storm 4): vida e sanidade são da equipe; quem sai vira a assistência. Recarga de 5 s.
 - **Treinamento:** alvo parado (ou defendendo, ou CPU), vida que volta depois do combo, sanidade infinita, recargas
   sem espera — tudo na pausa. Select (Tab no teclado) reinicia a posição.
 - **Tela de vitória:** vencedor no centro (render 3D na pose de vitória), fala conforme quem ele derrotou e a equipe.
@@ -67,7 +72,7 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 | JOUI JOUKI | Ordo Realitas | Conhecimento | Sombra Rasteira | ○ Olhar do Desespero (△ + × Teleporte das Sombras) | Shi no Kage | Golpe pelas costas · Decepar |
 | AGHATA | Ordo Realitas | Sangue | Faca Arremessada | □ Amaldiçoar Arma (Sangue) | Descarnar | Colar Banhado em Sangue |
 | DANTE | Ordo Realitas | Morte | Decadenza (fumaça que apodrece) | □ Embaralhar "Trinitá" (3 clones com IA, 50% do dano) · ○ Tentáculos de Lodo · △ Cicatrização "Paradiso" | Invocação: A Marionete (NPC por 18 s, barra preta, pode ser destruída) | Concentração Inquebrável (rituais −10% de sanidade) |
-| ERIN PARKER | Ordo Realitas | Energia | Escopeta calibre 12 (leque de chumbo) | □ Granada "Supernova" · × Granada "Nebulosa" (névoa) · ○ Bênção Maldita · △ Black Hole (cura) | Kaboom! (três granadas) | Amuleto Elétrico (choque em quem bate nela) |
+| ERIN PARKER | Ordo Realitas | Energia | Escopeta calibre 12 (leque de chumbo) | □ Granada "Supernova" · × Granada "Nebulosa" (névoa) · ○ Bênção Maldita · △ Black Hole (cura) | Supernova (corre, tiro de escopeta e granada) | Amuleto Elétrico (choque em quem bate nela) |
 | GAL SAL | Escriptas | Conhecimento | Corrente de Captura (procura, prende e puxa) | □ Corrente Gancho · × Teletransporte | Injustiça né? | Cura que cobra sanidade · Desviar de Balas · Bloqueio Perfeito |
 | KIAN | Escriptas | Conhecimento | Impacto Sigilar | □ Teletransporte · ○ Lâmina do Medo · △ Transcendência · × Rejeitar Névoa | Inexistir (1x por partida, +1 ao Transcender) | Precognição |
 | AGUIAR | Mascarados | Sangue | Machado na Corda (arremessa, sangra e puxa) | ○ Máscara do Mutilador Noturno · L2 Armadilha de Urso · × Predador de Sangue | Finalização do Mutilador | Filho da Dor (apanhando seguido, resiste mais) |

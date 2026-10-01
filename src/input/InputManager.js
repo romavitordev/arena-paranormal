@@ -1,6 +1,6 @@
 import { KEYBOARD_LAYOUTS, GAMEPAD_LAYOUT, GAMEPAD_DEADZONE, PLAYER_DEVICES } from '../config/controls.js';
 
-const ACTIONS = ['physical', 'ranged', 'carga', 'jump', 'block', 'dodge', 'mod', 'start', 'select', 'assist1', 'assist2'];
+const ACTIONS = ['physical', 'ranged', 'carga', 'jump', 'block', 'dodge', 'mod', 'start', 'select', 'assist1', 'assist2', 'switch1', 'switch2'];
 const DIRS = ['up', 'down', 'left', 'right'];
 
 // Estado de entrada de UM jogador, já normalizado (teclado + controle somados).
@@ -93,10 +93,11 @@ export class InputManager {
           // gatilhos (LT/RT) são analógicos: considera apertado acima de 35%
           const btn = (ids) => ids.some((id) => pad.buttons[id] && (pad.buttons[id].pressed || pad.buttons[id].value > 0.35));
           for (const a of ACTIONS) if (GAMEPAD_LAYOUT[a] && btn(GAMEPAD_LAYOUT[a])) held[a] = true;
-          // analógico direito ←/→ também chama as assistências
+          // analógico direito ◀/▶: TROCA o personagem em campo pelo da assistência 1/2
+          // (as assistências são chamadas pelos botões laterais do D-pad)
           const rx = pad.axes[2] || 0;
-          if (rx < -0.6) held.assist1 = true;
-          if (rx > 0.6) held.assist2 = true;
+          if (rx < -0.6) held.switch1 = true;
+          if (rx > 0.6) held.switch2 = true;
           let ax = pad.axes[0] || 0;
           let ay = -(pad.axes[1] || 0);
           const mag = Math.hypot(ax, ay);

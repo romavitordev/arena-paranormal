@@ -206,7 +206,7 @@ export const VICTORY_LINES = {
     cineraria: 'O sermão vem agora, Kaiser.',
   },
   erin: {
-    default: 'Kaboom! Viu? Bomba perfeita.',
+    default: 'Supernova! Viu? Bomba perfeita.',
     mascarado: 'Vai ficar tudo bem, Joui. Eu prometo.',
     injustica: 'Dessa vez quem sobrou fui eu, Gal.',
     cineraria: 'Viu como explode bonito, Kaiser?',

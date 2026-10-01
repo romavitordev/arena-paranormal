@@ -12,8 +12,8 @@ import { distXZ } from '../core/util.js';
 export const CPU_LEVELS = {
   easy: { think: [0.45, 0.8], block: 0.025, dodge: 0.02, perfect: 0, subst: 0.006, mistake: 0.3, combo: [1, 3], ability: 0.06, special: 0.12, vertical: 0, tech: 0.1, ranged: 0.35 },
   normal: { think: [0.25, 0.45], block: 0.06, dodge: 0.05, perfect: 0, subst: 0.015, mistake: 0.15, combo: [2, 4], ability: 0.12, special: 0.22, vertical: 0.25, tech: 0.35, ranged: 0.45 },
-  hard: { think: [0.15, 0.3], block: 0.12, dodge: 0.09, perfect: 0.15, subst: 0.03, mistake: 0.07, combo: [3, 5], ability: 0.16, special: 0.3, vertical: 0.5, tech: 0.6, ranged: 0.5 },
-  veryhard: { think: [0.1, 0.2], block: 0.2, dodge: 0.14, perfect: 0.35, subst: 0.05, mistake: 0.03, combo: [4, 6], ability: 0.2, special: 0.35, vertical: 0.7, tech: 0.85, ranged: 0.5 },
+  hard: { think: [0.15, 0.3], block: 0.12, dodge: 0.09, perfect: 0.15, subst: 0.03, mistake: 0.07, combo: [3, 5], ability: 0.16, special: 0.3, vertical: 0.5, tech: 0.6, ranged: 0.5, rush: 0.35 },
+  veryhard: { think: [0.1, 0.2], block: 0.2, dodge: 0.14, perfect: 0.35, subst: 0.05, mistake: 0.03, combo: [4, 6], ability: 0.2, special: 0.35, vertical: 0.7, tech: 0.85, ranged: 0.5, rush: 0.6 },
 };
 
 const rnd = (a, b) => a + Math.random() * (b - a);
@@ -42,6 +42,14 @@ export class CpuController {
     const L = this.L;
     const n = Math.round(rnd(L.combo[0], L.combo[1]));
     for (let i = 0; i < n; i++) this.tap('physical');
+    // estilo Storm: rush △+× antes do finalizador e mais uma sequência (às vezes duas)
+    if (L.rush && Math.random() < L.rush) {
+      const loops = Math.random() < 0.4 ? 2 : 1;
+      for (let k = 0; k < loops; k++) {
+        this.queue.push({ t: 0.06, held: { carga: true, jump: true } }, { t: 0.18, held: {} });
+        for (let i = 0; i < 3; i++) this.tap('physical');
+      }
+    }
     if (Math.random() < L.vertical) {
       if (Math.random() < 0.6) {
         this.tap('physical', {}, [0, 1]); // ↑ + ○
@@ -169,6 +177,14 @@ export class CpuController {
       if (opp.state === 'downed') {
         if (f.energy < 80 && d > 3) this.holdCharge = rnd(0.4, 0.8);
         return out;
+      }
+      // batalha em equipe: às vezes TROCA de personagem (vida baixa troca mais)
+      if (f.assists && f.cooldowns.switch <= 0 && r < (lowHp ? 0.05 : 0.015)) {
+        const k3 = f.assists.findIndex((a) => !a.active);
+        if (k3 >= 0) {
+          this.queue.push({ t: 0.06, held: { [k3 ? 'switch2' : 'switch1']: true } }, { t: 0.05, held: {} });
+          return out;
+        }
       }
       // batalha em equipe: chama uma assistência pronta (parado = ataque; andando = apoio)
       if (f.assists && r < L.ability * 0.6) {

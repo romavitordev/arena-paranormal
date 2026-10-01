@@ -82,6 +82,10 @@
   especial Finalização do Mutilador. Nova origem MASCARADOS na tela inicial e no banco de lore.
 - ✅ Seleção estilo Storm 4: grade do P1 à esquerda e do P2 à direita (3 × 3), lutadores em 3D animados no centro
   (entram deslizando, pose de vitória ao confirmar; na equipe as assistências ficam atrás). Tela inicial sem os personagens.
+- ✅ Equipe: D-pad ◀/▶ chama a assistência; analógico direito ◀/▶ TROCA de personagem (vida da equipe, recarga 5 s).
+- ✅ Kian com físico ágil e encadeado (8 acertos em 2,1 s, empurrão baixo, rajada sigilar).
+- ✅ Especial da Erin virou SUPERNOVA cinemático (corre com a escopeta, tiro, granada na mão, explosão, ela sorrindo).
+- ✅ Combo infinito estilo Storm: △+× depois de acertar reinicia a sequência de ○ (custa 8 de sanidade por rush).
 - Telemetria (1 luta por par, CPU normal): Kaiser 69%, Kian 69%, Dante 63%, Aguiar 63%, Erin 56%, Joui 38%,
   Aghata 38%, Gal 38%, Arthur 19% — Arthur precisa de atenção na próxima rodada de equilíbrio.
 

@@ -107,7 +107,7 @@ ok(inj.special.approach === 'chain' && inj.special.applyMeleePassives === false,
 
 // ---------------- Desconjurado ----------------
 const des = get('desconjurado');
-const fistAnims = ['jab', 'cross', 'hook_l', 'hook_r', 'uppercut', 'heavy_punch', 'wave_punch', 'body_blow', 'dash_punch', 'shove', 'meteor_punch'];
+const fistAnims = ['jab', 'cross', 'hook_l', 'hook_r', 'uppercut', 'heavy_punch', 'wave_punch', 'body_blow', 'dash_punch', 'shove', 'meteor_punch', 'flurry'];
 ok(des.unarmed && allStrikes(des).every((s) => fistAnims.includes(s.anim) && !s.trail), 'Desconjurado: físico só com punhos');
 ok(des.special.type === 'erase' && des.special.usesPerMatch === 1 && des.special.unblockable && des.special.resistDamage > 0, 'Kian: especial Inexistir (1x por partida, indefensável, resiste com sanidade cheia)');
 ok(des.special.bonusUseOnTranscend === 1, 'Kian: Transcender libera mais um Inexistir');
@@ -168,7 +168,7 @@ const agu = get('aguiar');
 ok(eri && eri.origin === 'Ordo Realitas' && eri.ranged.name.startsWith('Escopeta') && eri.ranged.count > 1, 'Erin: Ordo Realitas, □ escopeta calibre 12 (leque de chumbo)');
 ok(eri && ['supernova', 'nebulosa'].every((id) => eri.abilities.some((a) => a.id === id && a.projectile && a.projectile.explode)), 'Erin: granadas Supernova e Nebulosa explodem em área');
 ok(eri && eri.abilities.some((a) => a.type === 'blessing') && eri.abilities.some((a) => a.id === 'blackHole'), 'Erin: rituais Bênção Maldita e Black Hole');
-ok(eri && pas('erin', 'electricAmulet') && eri.special.type === 'kaboom', 'Erin: Amuleto Elétrico e especial Kaboom!');
+ok(eri && pas('erin', 'electricAmulet') && eri.special.type === 'supernova', 'Erin: Amuleto Elétrico e especial Supernova (escopeta + granada)');
 ok(agu && agu.origin === 'Mascarados' && agu.element === 'sangue', 'Aguiar: Mascarados (Sangue)');
 ok(agu && agu.melee.name.includes('Machado') && agu.melee.strikes.at(-1).bleed, 'Aguiar: machado do Mutilador (o finalizador faz sangrar)');
 ok(agu && ['maskForm', 'bearTrap', 'predatorScent'].every((t) => agu.abilities.some((a) => a.type === t)), 'Aguiar: Máscara do Mutilador, Armadilha de Urso e Predador de Sangue');

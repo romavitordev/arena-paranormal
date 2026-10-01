@@ -30,6 +30,8 @@ export class Match {
       });
     }
     this.world.onKO = () => { this.koPending = true; };
+    // troca de personagem na equipe: a HUD passa a mostrar o novo (nome, habilidades, assistências)
+    this.world.onSwitch = () => this.hud.bind(this.world.fighters);
     // Injustiça: o inimigo recupera Y de vida e perde sanidade (energia)
     this.world.onDrain = (attacker, victim, heal, removed) => {
       hud.popup(victim.index, `+${fmt(heal)} VIDA`, '#7dffb0');
