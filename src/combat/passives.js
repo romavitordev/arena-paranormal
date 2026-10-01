@@ -77,6 +77,14 @@ export const PASSIVES = {
       return (victim.comboHits || 0) >= (passive.after ?? 3) ? passive.mult ?? 0.75 : 1;
     },
   },
+  // Labirinto — Mente Labiríntica: atordoamentos duram menos (lido em Fighter.stun)
+  mentalMaze: {},
+  // Xande — Gladiador Paranormal: cada golpe físico que acerta devolve um pouco de sanidade
+  paranormalGladiator: {
+    onMeleeHit({ attacker, passive }) {
+      attacker.addEnergy && attacker.addEnergy(passive.energy ?? 2);
+    },
+  },
   meleeDrain: {
     onMeleeHit({ attacker, victim, strike, dealt, attempted, passive, world }) {
       const { heal, energyRemoved } = computeDrain({

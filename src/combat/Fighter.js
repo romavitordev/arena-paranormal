@@ -288,6 +288,9 @@ export class Fighter {
   // Atordoamento genérico (quebra de defesa, medo, contra-ataque recebido)
   stun(time, anim = 'stagger') {
     if (this.state === 'ko') return;
+    // Mente Labiríntica (Labirinto): a mente se protege — atordoamentos duram menos
+    const mm = (this.def.passives || []).find((p) => p.type === 'mentalMaze');
+    if (mm) time *= mm.stunMult ?? 0.6;
     this.cancelAction();
     this.carga.stage = 0;
     this.setState('stun');
@@ -856,6 +859,9 @@ export class Fighter {
     out.addScaledVector(b.forward, this.input.moveY);
     // Controle Mental (Gal): o corpo obedece ao contrário
     if (this.buffs && this.buffs.some((x) => x.invertMove)) out.negate();
+    // Labirinto Mental: o corpo anda numa direção que muda sozinha (como perdido num labirinto)
+    const maze = this.buffs && this.buffs.find((x) => x.mazeMove);
+    if (maze && out.lengthSq() > 0) out.applyAxisAngle(new THREE.Vector3(0, 1, 0), maze.mazeAngle || 0);
     return out;
   }
 

@@ -107,7 +107,17 @@ export function applyHit(world, attacker, victim, o) {
     o = { ...o, launch: true, lowLaunch: true, knockback: Math.max(o.knockback || 0, 4), hitstun: 1.0 };
     victim.notify('DASH INTERROMPIDO', true);
   }
-  const dealt = victim.takeDamage(Math.round(attempted * comboScale(victim, o)));
+  let incoming = Math.round(attempted * comboScale(victim, o));
+  // escudo (ex.: Tela de Ruído): absorve dano de impacto, corte e projétil até acabar
+  const shield = (victim.buffs || []).find((b) => b.shield > 0 && (!b.shieldKinds || b.shieldKinds.includes(o.kind)));
+  if (shield && incoming > 0) {
+    const absorbed = Math.min(shield.shield, incoming);
+    shield.shield -= absorbed;
+    incoming -= absorbed;
+    world.fx.burst(victim.chestPos(), { count: 10, color: shield.color ?? 0x7ad0ff, speed: 3, life: 0.25, size: 0.18 });
+    if (shield.shield <= 0) { shield.time = 0; victim.notify('TELA ROMPIDA', true); }
+  }
+  const dealt = victim.takeDamage(incoming);
   victim.comboHits = (victim.comboHits || 0) + 1;
   victim.comboDamage = (victim.comboDamage || 0) + dealt;
 

@@ -350,6 +350,93 @@ export function mutilatorAxe() {
   return g;
 }
 
+// A Antena (Labirinto): cabo de ferro enrolado em arame, parabólica no topo e varetas espetadas.
+// Empunhada no meio do cabo: a parabólica fica para cima/frente (-Y é a ponta de baixo, a "lança").
+export function antenna() {
+  const g = new THREE.Group();
+  const iron = 0x4a4a4e;
+  const pole = part(new THREE.CylinderGeometry(0.022, 0.026, 2.0, 8), iron);
+  pole.position.y = -0.2;
+  g.add(pole);
+  // arame enrolado no cabo
+  for (let i = 0; i < 14; i++) {
+    const r = part(new THREE.TorusGeometry(0.028, 0.006, 4, 10), 0x6a6a70, { outline: false });
+    r.rotation.x = Math.PI / 2 + 0.3;
+    r.position.y = -0.7 + i * 0.09;
+    g.add(r);
+  }
+  const head = new THREE.Group();
+  head.position.y = -1.2; // na pose de luta o -Y do soquete aponta para cima: a parabólica fica no alto
+  const dish = part(new THREE.SphereGeometry(0.3, 16, 8, 0, Math.PI * 2, 0, Math.PI * 0.42), 0x9a9a98, { mat: toon(0x9a9a98, { side: THREE.DoubleSide }) });
+  dish.rotation.x = Math.PI * 1.4;
+  dish.position.z = 0.08;
+  head.add(dish);
+  const feed = part(new THREE.CylinderGeometry(0.012, 0.012, 0.42, 5), iron);
+  feed.rotation.x = Math.PI / 2;
+  feed.position.z = 0.24;
+  head.add(feed);
+  // varetas espetadas em volta (como raios)
+  for (let i = 0; i < 9; i++) {
+    const a = (i / 9) * Math.PI * 2;
+    const rod = part(new THREE.CylinderGeometry(0.007, 0.007, 0.5, 4), 0x5a5a60, { outline: false });
+    rod.position.set(Math.cos(a) * 0.12, 0.12, Math.sin(a) * 0.12);
+    rod.rotation.set(Math.sin(a) * 1.1, 0, -Math.cos(a) * 1.1);
+    head.add(rod);
+  }
+  g.add(head);
+  // ponta de baixo (lança)
+  const tip = part(new THREE.ConeGeometry(0.035, 0.22, 6), 0x6a6a70);
+  tip.position.y = 0.9; // ponta de lança na outra extremidade
+  g.add(tip);
+  return g;
+}
+
+// Taco de baseball do Xande: madeira, fita na empunhadura, arame farpado e corrente até o braço
+export function barbedBat() {
+  const g = new THREE.Group();
+  const wood = part(new THREE.CylinderGeometry(0.052, 0.024, 0.86, 10), 0x7a4a26);
+  wood.position.y = -0.38;
+  g.add(wood);
+  const tape = part(new THREE.CylinderGeometry(0.027, 0.027, 0.22, 8), 0xd8d4c8);
+  tape.position.y = 0.06;
+  g.add(tape);
+  for (let i = 0; i < 9; i++) {
+    const w = part(new THREE.TorusGeometry(0.045 - i * 0.002, 0.005, 4, 10), 0x9a9aa0, { outline: false });
+    w.rotation.x = Math.PI / 2 + (i % 2 ? 0.4 : -0.4);
+    w.position.y = -0.7 + i * 0.065;
+    g.add(w);
+    // farpas
+    const sp = part(new THREE.ConeGeometry(0.008, 0.035, 3), 0x9a9aa0, { outline: false });
+    sp.position.set(Math.cos(i * 2.1) * 0.05, -0.7 + i * 0.065, Math.sin(i * 2.1) * 0.05);
+    sp.rotation.z = Math.cos(i * 2.1) * -1.4;
+    g.add(sp);
+  }
+  return g;
+}
+
+// Skate Caótico (na mão esquerda do Xande)
+export function chaosSkate() {
+  const g = new THREE.Group();
+  const deck = part(new THREE.BoxGeometry(0.03, 0.78, 0.22), 0xe8bc22);
+  deck.position.y = -0.3;
+  g.add(deck);
+  for (const y of [-0.04, -0.56]) for (const z of [-0.08, 0.08]) {
+    const wh = part(new THREE.CylinderGeometry(0.035, 0.035, 0.04, 8), 0x3a3a3a);
+    wh.rotation.z = Math.PI / 2;
+    wh.position.set(-0.045, y, z);
+    g.add(wh);
+    const spike = part(new THREE.ConeGeometry(0.012, 0.05, 4), 0xb8b8c0, { outline: false });
+    spike.rotation.z = Math.PI / 2;
+    spike.position.set(-0.085, y, z);
+    g.add(spike);
+  }
+  const sig = new THREE.Mesh(new THREE.PlaneGeometry(0.16, 0.62), glowMat(0x5aff6a, 0.4));
+  sig.rotation.y = -Math.PI / 2;
+  sig.position.set(-0.017, -0.3, 0);
+  g.add(sig);
+  return g;
+}
+
 // Escopeta calibre 12 da Erin (com um desenho na lateral)
 export function shotgun() {
   const g = new THREE.Group();

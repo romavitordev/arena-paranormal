@@ -139,6 +139,43 @@ Object.assign(PAIR_LINES, {
   },
 });
 
+// Labirinto (cânone): reuniu os Assassinos; nos Mascarados é o corpo do Remi (líder); a Agatha fez o ritual.
+// Xande (cânone): Os Cinco (Sinais do Outro Lado), skatista ocultista; também conhece Cinerária e Descarnar.
+Object.assign(PAIR_LINES, {
+  'aguiar+labirinto': {
+    labirinto: 'Fui eu que juntei vocês. Lembra?',
+    aguiar: 'Lembro. E lembro de não confiar em você.',
+  },
+  'labirinto+vampira': {
+    vampira: 'Esse corpo é emprestado, sabia? Cuida dele.',
+    labirinto: 'O corpo é só um caminho. O labirinto é a resposta.',
+  },
+  'desconjurado+labirinto': {
+    desconjurado: 'Um labirinto? Eu escrevi o primeiro mapa do Outro Lado.',
+    labirinto: 'E mesmo assim você está perdido.',
+  },
+  'labirinto+xande': {
+    xande: 'Cara... que capacete bizarro é esse?',
+    labirinto: 'Os caminhos convergem. Você já está dentro.',
+  },
+  'cineraria+xande': {
+    xande: 'Cinerária? Eu também sei fazer essa névoa aí.',
+    cineraria: 'Então vamos ver de quem a névoa gosta mais.',
+  },
+  'vampira+xande': {
+    vampira: 'Descarnar, é? Vamos ver quem corta mais fundo.',
+    xande: 'Por eles... não vou perder pra uma ocultista qualquer.',
+  },
+  'erin+xande': {
+    erin: 'Um skate com raios verdes? Isso explode?',
+    xande: 'Não. Mas acerta e volta. Kaboom é com você.',
+  },
+  'aguiar+xande': {
+    aguiar: 'Skatista... sempre fugindo dos cachorros.',
+    xande: 'Cachorro eu temo. Você não.',
+  },
+});
+
 export const SOLO_LINES = {
   cineraria: 'A névoa está do meu lado.',
   abutre: 'Eu sou um Gaudério. A gente morre por quem ama.',
@@ -149,6 +186,8 @@ export const SOLO_LINES = {
   dante: 'É ironia do destino. Uma Divina Comédia.',
   erin: 'Só o Caos não tem fim. Eu sou o Caos.',
   aguiar: 'Ha ha ha... Jovens...',
+  labirinto: 'O que espera no final do labirinto... é você.',
+  xande: 'Por eles... Por eles... Por eles...',
 };
 
 // ---------------- FALAS DE VITÓRIA: [vencedor][derrotado] (ou .default)
@@ -213,6 +252,18 @@ export const VICTORY_LINES = {
     dante: 'Tá, talvez eu confie um pouquinho em você agora.',
     desconjurado: 'Previu essa, Deus do Conhecimento?',
     aguiar: 'Corre agora, Mutilador. Corre.',
+  },
+  labirinto: {
+    default: 'Perdido. O labirinto cresce.',
+    aguiar: 'Você também é só um caminho, Aguiar.',
+    desconjurado: 'Nem o Deus do Conhecimento acha a saída.',
+    xande: 'Sua música acabou, garoto.',
+  },
+  xande: {
+    default: 'Eu já sabia. Por eles.',
+    labirinto: 'Achei a saída, careca.',
+    cineraria: 'Minha névoa é mais bonita, mano.',
+    aguiar: 'Esse não me pegou.',
   },
   aguiar: {
     default: 'A próxima rodada sou eu.',

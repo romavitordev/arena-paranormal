@@ -136,6 +136,35 @@ const VISUALS = {
     g.userData.tumble = spin;
     return g;
   },
+  // Skate Caótico (Xande): prancha amarela com raios verdes, girando
+  skate(color) {
+    const g = new THREE.Group();
+    const spin = new THREE.Group();
+    const deck = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.03, 0.8), new THREE.MeshStandardMaterial({ color, roughness: 0.5 }));
+    spin.add(deck);
+    for (const z of [-0.26, 0.26]) for (const x of [-0.09, 0.09]) {
+      const wh = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.04, 8), new THREE.MeshStandardMaterial({ color: 0x3a3a3a }));
+      wh.rotation.z = Math.PI / 2;
+      wh.position.set(x, -0.04, z);
+      spin.add(wh);
+    }
+    const glow = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.01, 0.7), glowMat(0x5aff6a, 0.6));
+    glow.position.y = -0.025;
+    spin.add(glow);
+    g.add(spin);
+    g.userData.spinY = spin;
+    return g;
+  },
+  // Rajada Caótica (Labirinto): esfera de energia com coroa de faíscas
+  chaos(color) {
+    const g = new THREE.Group();
+    g.add(new THREE.Mesh(new THREE.SphereGeometry(0.2, 10, 8), glowMat(0xffffff, 0.9)));
+    g.add(new THREE.Mesh(new THREE.SphereGeometry(0.42, 10, 8), glowMat(color, 0.45)));
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.4, 0.03, 4, 16), glowMat(color, 0.9));
+    g.add(ring);
+    g.userData.spin = ring;
+    return g;
+  },
   // chumbo de escopeta: pontinho brilhante
   pellet(color) {
     const m = new THREE.Mesh(new THREE.SphereGeometry(0.05, 5, 4), glowMat(color, 1));
@@ -246,6 +275,24 @@ export class Projectiles {
         }
         if (z.projectileSlow) speed *= 1 - z.projectileSlow;
       }
+      // bumerangue (Skate Caótico): vai até a metade do alcance e volta para a mão de quem jogou
+      if (a.boomerang) {
+        if (!p.back && p.traveled >= a.range * 0.5) p.back = true;
+        if (p.back) {
+          const home = p.owner.chestPos();
+          const to = home.clone().sub(p.pos);
+          if (to.length() < 0.9 || p.age > 3) {
+            w.scene.remove(p.mesh);
+            p.mesh.traverse((o) => { if (o.material) o.material.dispose(); });
+            this.list.splice(i, 1);
+            continue;
+          }
+          p.dir.lerp(to.normalize(), Math.min(1, dt * 10)).normalize();
+          p.traveled = 0; // não "acaba o alcance" na volta
+        }
+        if (p.mesh.userData.spinY) p.mesh.userData.spinY.rotation.y += dt * 18;
+      }
+      if (a.visual === 'chaos' && Math.random() < 0.7) w.fx.lightning(p.pos, p.pos.clone().add(new THREE.Vector3((Math.random() - 0.5), (Math.random() - 0.5), (Math.random() - 0.5)).multiplyScalar(1.4)), { color: a.color, life: 0.08 });
       // projétil que procura o alvo (ex.: Corrente de Captura): gira devagar na direção dele
       if (a.homing) {
         const tg = w.opponentOf(p.owner);
@@ -309,13 +356,14 @@ export class Projectiles {
           break;
         }
         const target = w.opponentOf(p.owner);
-        if (target && target.state !== 'ko' && !target.isInvulnerable() && target.hitTestPoint(p.pos, a.radius)) {
+        if (!p.hitOnce && target && target.state !== 'ko' && !target.isInvulnerable() && target.hitTestPoint(p.pos, a.radius)) {
           const res = applyHit(w, p.owner, target, {
             damage: a.damage, kind: a.kind || 'ranged', knockback: a.knockback, hitstun: a.hitstun,
             dir: p.dir, color: a.color, sound: a.hitSound, scale: a.impactScale || 1, pos: p.pos.clone(),
             reaction: !(a.onHit && a.onHit.pull),
           });
           if (typeof res === 'number' && res >= 0) this.applyOnHit(p, target);
+          if (a.boomerang && !p.back) { p.back = true; p.hitOnce = true; break; }
           if (a.cursed) {
             for (let k = 0; k < 4; k++) w.fx.lightning(p.pos, p.pos.clone().add(new THREE.Vector3((Math.random() - 0.5) * 3, Math.random() * 2, (Math.random() - 0.5) * 3)), { color: a.color, life: 0.2 });
             w.fx.burst(p.pos, { count: 30, color: a.color, speed: 8, life: 0.5, size: 0.3 });
@@ -328,7 +376,7 @@ export class Projectiles {
           dead = true;
           break;
         }
-        if (p.traveled >= a.range) {
+        if (p.traveled >= a.range && !a.boomerang) {
           w.fx.burst(p.pos, { count: 8, color: a.color, speed: 2, life: 0.3, size: 0.25 });
           dead = true;
         }

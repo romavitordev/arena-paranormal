@@ -86,7 +86,13 @@
 - ✅ Kian com físico ágil e encadeado (8 acertos em 2,1 s, empurrão baixo, rajada sigilar).
 - ✅ Especial da Erin virou SUPERNOVA cinemático (corre com a escopeta, tiro, granada na mão, explosão, ela sorrindo).
 - ✅ Combo infinito estilo Storm: △+× depois de acertar reinicia a sequência de ○ (custa 8 de sanidade por rush).
-- Telemetria (1 luta por par, CPU normal): Kaiser 69%, Kian 69%, Dante 63%, Aguiar 63%, Erin 56%, Joui 38%,
+- ✅ LABIRINTO (Mascarados, Energia): A Antena, Rajada Caótica, Labirinto Mental, Consumir Momento, Capacete do ???,
+  especial O Labirinto é a Resposta (muros sobem em volta do alvo + Tempestade Caótica), Mente Labiríntica.
+- ✅ XANDE (Os Cinco, Sangue): taco com arame farpado, Skate Caótico (vai e volta), Amaldiçoar Arma, Polarização Caótica,
+  Tela de Ruído (escudo), Velocidade Mortal, Gladiador Paranormal, especial Por Eles. Nova origem OS CINCO.
+- Telemetria com 11 (1 luta por par): Dante 65%, Kian 65%, Joui/Aghata/Erin 55%, Kaiser 50%, Gal/Aguiar/Labirinto 45%,
+  Arthur 35% (era 19%), Xande 35% (reforçado: skate 38, escudo 140).
+- Telemetria anterior (1 luta por par, CPU normal): Kaiser 69%, Kian 69%, Dante 63%, Aguiar 63%, Erin 56%, Joui 38%,
   Aghata 38%, Gal 38%, Arthur 19% — Arthur precisa de atenção na próxima rodada de equilíbrio.
 
 ---
@@ -237,7 +243,7 @@ Leitura rápida: **Kian está forte demais** (maior combo + Lâmina do Medo 160 
 ### 2.6 Gal 🟡
 - Cânone ✔: Ereshkigal (lâminas duplas presas por correntes nos braços, arremessam e puxam; os cortes
   **sangram e curam** — "mecanismo de tortura"): é exatamente a regra X/Y. Bloqueio Perfeito ✔.
-- **Teletransporte em faíscas douradas atrás do alvo** (usou em Arthur e Erin) — falta no kit. Candidato a R1+×.
+- ✅ **Teletransporte em faíscas douradas atrás do alvo** (usou em Arthur e Erin) — no kit como R1+×.
 - **Desviar de Balas** (cânone): esquivar projéteis sem gastar reação → passiva: esquiva contra projéteis não
   gasta carga (ou 50% de chance de desviar tiros quando parado).
 - **Arremessar** (cânone): acertos arremessam o alvo → o agarrão dele pode jogar mais longe.
@@ -320,7 +326,8 @@ acima. Precisa rodar no navegador (Three.js) → script em `src/dev/balance.js` 
 5. 3.4 Transcender universal + 1.4 falas de intro.
 6. V3 visual com os detalhes canônicos acima (perguntar sobre a Agatha antes).
 
-## 5. Dúvidas para o usuário
+## 5. Dúvidas para o usuário (✅ respondidas: nome AGHATA com o visual da referência; nerf do Kian e Precognição ok;
+elementos só nos rituais; Transcender com o nome do cânone)
 - Agatha: grafia "Agatha" (wiki) ou "Aghata"? Visual canônico (corpo do Gabriel, cabelo curto, manca) ou o da referência atual?
 - Kian: aceita o nerf do combo e a Precognição como passiva?
 - Elementos com vantagem/desvantagem: quer esse sistema ou só como visual/temática?

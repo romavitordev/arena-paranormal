@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { glowMat } from './rig.js';
-import { m4, sniper, guitarCase, bloodArm, knife, sickleBlade, mutilatorAxe, shotgun, handGrenade } from './weapons.js';
+import { m4, sniper, guitarCase, bloodArm, knife, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate } from './weapons.js';
 export { addMascaradoProps } from './characters/mascarado.js';
 
 // Armas e acessórios adicionados em código sobre os modelos do Blender.
@@ -107,6 +107,41 @@ export function addAguiarProps(rig) {
   sockets.handR.add(axe);
   props.axe = axe;
   if (props.maskOn) rig.showProp('maskOn', false);
+}
+
+// LABIRINTO: a Antena na mão direita; o elmo do sorriso (do Blender) fica escondido
+export function addLabirintoProps(rig) {
+  const { sockets, props } = rig;
+  const ant = antenna();
+  ant.rotation.x = -0.35;
+  ant.position.y = 0.05;
+  sockets.handR.add(ant);
+  props.antenna = ant;
+  if (props.helmetOn) rig.showProp('helmetOn', false);
+  if (props.helmetOn_papers) {
+    // papéis colados fazem parte do elmo: ligam e desligam juntos
+    const hp = props.helmetOn;
+    const pp = props.helmetOn_papers;
+    props.helmetOn = {
+      get visible() { return hp.visible; },
+      set visible(v) { hp.visible = v; pp.visible = v; },
+      traverse(fn) { hp.traverse(fn); pp.traverse(fn); },
+    };
+    rig.showProp('helmetOn', false);
+  }
+}
+
+// XANDE: taco com arame farpado na mão direita, Skate Caótico na esquerda
+export function addXandeProps(rig) {
+  const { sockets, props } = rig;
+  const bat = barbedBat();
+  bat.rotation.x = -0.3;
+  sockets.handR.add(bat);
+  props.bat = bat;
+  const sk = chaosSkate();
+  sk.rotation.set(0.2, 0, 0.1);
+  sockets.handL.add(sk);
+  props.skate = sk;
 }
 
 export function addInjusticaProps(rig) {

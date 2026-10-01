@@ -377,3 +377,83 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
 ### Especial: Finalização do Mutilador
 
 250 de dano · custo 50 · cooldown 14 s.
+
+---
+
+## LABIRINTO
+
+*Controla o espaço: perde o inimigo num labirinto e consome o chão onde ele pisa* · arma: A Antena (lança com parabólica)
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Estocada | 28 | 2.5 m |  |
+| ○ 2 | Varrida | 30 | 2.5 m |  |
+| ○ 3 | Varrida de volta | 30 | 2.5 m |  |
+| ○ 4 | Golpe da parabólica | 38 | 2.4 m |  |
+| ○ 5 | Giro da Antena | 58 | 3 m | finalizador: lança |
+| Frente + ○ | Investida da lança | 34 | 2.6 m |  |
+| Trás + ○ | Recua e estoca | 34 | 2.4 m | invulnerável no começo |
+| Lado + ○ | Varrida lateral | 30 | 2.5 m |  |
+| No ar + ○ | Antena do alto | 36 | 2.4 m | desce com impacto |
+| ↑ + ○ (no combo) | Antena para cima | 40 | 2.4 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Antena no chão | 46 | 2.4 m | finalizador: derruba |
+
+### Principal (□ / X): Rajada Caótica
+
+- Dano 52 · alcance 20 m · cooldown 2.4 s · custo 0
+
+### Habilidades
+
+- **Labirinto Mental** — R1 + □ / RB + X · custo 30 · cooldown 18 s · alcance 11 m
+  Prende a mente do alvo num labirinto: por alguns segundos ele anda numa direção que muda sozinha. Com o capacete vira Labirinto Abissal (dura mais).
+- **Consumir Momento** — R1 + ○ / RB + B · custo 30 · cooldown 12 s · dano 70
+  Marca o chão onde o alvo pisa com uma espiral; ao estalar os dedos ela estoura e destrói a área (Morte). Dá para sair de cima se perceber a marca. Com o capacete, a área e o dano crescem.
+- **Capacete do ???** — R1 + △ / RB + Y · custo 35 · cooldown 30 s
+  Põe o elmo do sorriso: por alguns segundos os rituais e a Rajada ficam mais fortes (Tempestade Caótica), o Labirinto Mental vira Abissal e o Consumir Momento cresce.
+
+### Especial: O Labirinto é a Resposta
+
+250 de dano · custo 50 · cooldown 14 s.
+
+---
+
+## XANDE
+
+*Brigão versátil: amaldiçoa o taco, puxa ou repele com magnetismo e se protege com a Tela de Ruído* · arma: Taco com arame farpado e o Skate Caótico
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Tacada | 30 | 2 m |  |
+| ○ 2 | Tacada de volta | 30 | 2 m |  |
+| ○ 3 | Skate na cara | 28 | 1.8 m |  |
+| ○ 4 | Tacada por cima | 38 | 2 m |  |
+| ○ 5 | Home run | 58 | 2.1 m | finalizador: lança |
+| Frente + ○ | Manobra de skate | 34 | 2 m |  |
+| Trás + ○ | Recua e rebate | 34 | 2 m | invulnerável no começo |
+| Lado + ○ | Tacada em movimento | 30 | 2 m |  |
+| No ar + ○ | Tacada aérea | 36 | 2 m | desce com impacto |
+| ↑ + ○ (no combo) | Tacada para cima | 40 | 2 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Tacada no chão | 46 | 2 m | finalizador: derruba |
+
+### Principal (□ / X): Skate Caótico
+
+- Dano 38 · alcance 16 m · cooldown 2.2 s · custo 0
+
+### Habilidades
+
+- **Amaldiçoar Arma com Sangue** — R1 + □ / RB + X · custo 25 · cooldown 16 s
+  Imbui o taco com Sangue: por alguns segundos cada golpe físico e o skate abrem um sangramento.
+- **Polarização Caótica** — R1 + ○ / RB + B · custo 30 · cooldown 14 s · alcance 11 m
+  Aura magnética: o inimigo LONGE é atraído até ele; o inimigo PERTO é repelido para longe e cai.
+- **Tela de Ruído** — R1 + △ / RB + Y · custo 30 · cooldown 22 s
+  Película de Energia que absorve até 140 de dano físico e de projétil por alguns segundos.
+- **Velocidade Mortal** — R1 + × / RB + A · custo 25 · cooldown 20 s
+  Distorce o tempo em volta de si: fica muito mais rápido e recupera todas as esquivas.
+
+### Especial: Por Eles
+
+250 de dano · custo 50 · cooldown 14 s.

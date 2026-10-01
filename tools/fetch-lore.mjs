@@ -57,10 +57,19 @@ export const ORIGINS = {
   // Equipe Mascarados (Hexatombe): agentes da Ordem nos corpos dos assassinos do Natal Macabro
   Mascarados: [
     { page: 'Jonas Aguiar', name: 'Aguiar (Mutilador Noturno)', id: 'aguiar' },
+    { page: 'Labirinto', id: 'labirinto' },
     { page: 'Park Jae-Yoon' },
     { page: 'Dalmo Magno' },
     { page: 'Kemi' },
-    { page: 'Labirinto' },
+  ],
+  // Os Cinco (Sinais do Outro Lado): o grupo de Morato Vertaler
+  'Os Cinco': [
+    { page: 'Alexandre', name: 'Xande (Alexandre)', id: 'xande' },
+    { page: 'Dara Alice Venturini' },
+    { page: 'Francisco Albuquerque' },
+    { page: 'Lírio Tellini' },
+    { page: 'Voytek Nowak' },
+    { page: 'Morato Vertaler' },
   ],
 };
 

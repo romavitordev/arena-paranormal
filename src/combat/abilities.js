@@ -285,7 +285,7 @@ export const ABILITY_TYPES = {
         swirl.stop();
         world.fx.burst(hand(), { count: 30, color: a.color, speed: 4, life: 0.5, size: 0.2 });
         world.fx.flash(hand(), { color: a.color, size: 1.4, life: 0.15 });
-        const knives = [f.rig.props.knife, f.rig.props.knifeThrow].filter(Boolean);
+        const knives = (a.props || ['knife', 'knifeThrow']).map((n) => f.rig.props[n]).filter(Boolean);
         const tint = (on) => knives.forEach((k) => k.traverse((o) => {
           if (o.isMesh && o.material && o.material.emissive) {
             o.material.emissive.set(on ? a.color : 0x000000);
@@ -1184,6 +1184,200 @@ Object.assign(ABILITY_TYPES, {
       });
       tl.end(0.6);
       return seqFrom(tl, { cancel: () => sparks.stop() });
+    },
+  },
+});
+
+// ------------------------------------------------------------------ LABIRINTO e XANDE
+Object.assign(ABILITY_TYPES, {
+  // Labirinto — Labirinto Mental: prende a mente do alvo num labirinto; por alguns segundos ele anda numa
+  // direção que muda sozinha. Com o capacete vira Labirinto Abissal (dura mais).
+  mentalMaze: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      if (opp) f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('point', { restart: true, duration: a.windup + a.recovery });
+      world.audio.play('fearGaze', { pitch: 0.8 });
+      tl.add(a.windup, () => {
+        if (!inCone(f, opp, a.range, a.arc) || opp.isInvulnerable()) { f.notify('ERROU', true); return; }
+        const abyss = !!f.findBuff('helmet');
+        const dur = a.duration * (abyss ? a.helmetMult ?? 1.6 : 1);
+        const head = () => opp.rig.joints.hd.getWorldPosition(new THREE.Vector3()).add(new THREE.Vector3(0, 0.5, 0));
+        const glyph = world.fx.emitter({ rate: 26, follow: head, particle: { color: a.color, speed: 0.3, spread: 0.35, life: 0.45, size: 0.12 } });
+        world.fx.ring(new THREE.Vector3(opp.pos.x, 0.06, opp.pos.z), { color: a.color, radius: 1.6, life: 0.6 });
+        const old = opp.findBuff('maze');
+        if (old) old.time = dur;
+        else {
+          let k = 0;
+          const buff = {
+            type: 'maze', name: abyss ? 'LABIRINTO ABISSAL' : 'LABIRINTO MENTAL', time: dur, duration: dur, mazeMove: true, mazeAngle: Math.PI * 0.75,
+            onTick(dt) {
+              k += dt;
+              // a cada meio segundo o "corredor" vira para outro lado
+              if (k > 0.5) { k = 0; buff.mazeAngle = (Math.random() < 0.5 ? 1 : -1) * (Math.PI * (0.5 + Math.random() * 0.5)); }
+            },
+            onEnd() { glyph.stop(); },
+          };
+          opp.addBuff(buff);
+        }
+        opp.notify(abyss ? 'LABIRINTO ABISSAL' : 'LABIRINTO MENTAL', true);
+        world.onHit && world.onHit(f, opp, 0, { kind: 'ability', ability: a.id });
+      });
+      tl.end(a.windup + a.recovery);
+      return seqFrom(tl);
+    },
+  },
+
+  // Labirinto — Consumir Momento: marca o chão onde o alvo está com uma espiral; ao estalar os dedos,
+  // a espiral estoura e destrói a área (dano de Morte). Dá para sair de cima se perceber a marca.
+  consumeMoment: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      if (!opp || opp.state === 'ko') return null;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('concentrate', { restart: true, duration: 0.5 });
+      const helmet = !!f.findBuff('helmet');
+      const R = a.radius * (helmet ? 1.35 : 1);
+      const dmg = Math.round(a.damage * (helmet ? 1.3 : 1));
+      const center = new THREE.Vector3(opp.pos.x, 0.05, opp.pos.z);
+      // espiral no chão
+      const spiral = new THREE.Group();
+      const mat = new THREE.MeshBasicMaterial({ color: a.color, transparent: true, opacity: 0.0, depthWrite: false, side: THREE.DoubleSide });
+      for (let i = 0; i < 4; i++) {
+        const ring = new THREE.Mesh(new THREE.RingGeometry(R * (0.25 + i * 0.25) - 0.06, R * (0.25 + i * 0.25), 40, 1, i * 0.8, Math.PI * 1.6), mat);
+        ring.rotation.x = -Math.PI / 2;
+        spiral.add(ring);
+      }
+      spiral.position.copy(center);
+      world.scene.add(spiral);
+      let t = 0;
+      world.addTicker({
+        update(dt) {
+          t += dt;
+          mat.opacity = Math.min(0.85, t * 1.6);
+          spiral.rotation.y += dt * (1 + t * 3);
+          return t >= a.delay;
+        },
+        dispose() { world.scene.remove(spiral); mat.dispose(); },
+      });
+      // a explosão acontece depois: o Labirinto já fica livre para agir enquanto a espiral gira
+      world.after(a.delay - 0.15, () => { if (f.state === 'idle') f.anim.play('point', { restart: true, duration: 0.3 }); world.audio.play('chainPull', { volume: 0.5 }); });
+      world.after(a.delay, () => {
+        world.fx.flash(center.clone().setY(1), { color: a.color, size: R * 2, life: 0.2 });
+        world.fx.ring(center, { color: a.color, radius: R, life: 0.45 });
+        world.fx.burst(center.clone().setY(0.6), { count: 50, color: 0x0c0a0e, kind: 'smoke', speed: 4, up: 1.5, life: 0.9, size: 0.8, grow: 1 });
+        world.fx.burst(center.clone().setY(0.6), { count: 40, color: a.color, speed: 8, life: 0.5, size: 0.25 });
+        world.audio.play('explosion', { volume: 0.8 });
+        world.cameraRig.shake(0.3, 0.2);
+        if (opp.state !== 'ko' && !opp.isInvulnerable() && Math.hypot(opp.pos.x - center.x, opp.pos.z - center.z) <= R + opp.radius) {
+          applyHit(world, f, opp, { damage: dmg, kind: 'ability', element: 'morte', knockback: 3, launch: true, lowLaunch: true, color: a.color, sound: 'heavyPunch', scale: 1.5, pos: opp.chestPos() });
+        }
+      });
+      tl.end(0.5);
+      return seqFrom(tl);
+    },
+  },
+
+  // Labirinto — Capacete do ???: põe o elmo do sorriso; por alguns segundos os rituais ficam mais fortes
+  // (Rajada Caótica vira Tempestade Caótica, Labirinto Mental vira Abissal, Consumir Momento cresce).
+  helmetForm: {
+    start(f, a, world) {
+      if (f.findBuff('helmet')) { f.notify('JÁ COM O CAPACETE'); return null; }
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.anim.play('concentrate', { restart: true, duration: 0.7 });
+      world.audio.play('maskOn', { pitch: 0.8 });
+      tl.add(0.4, () => {
+        const head = f.rig.joints.hd.getWorldPosition(new THREE.Vector3()).add(new THREE.Vector3(0, 0.15, 0));
+        if (f.rig.props.helmetOn) f.rig.showProp('helmetOn', true);
+        world.fx.burst(head, { count: 24, color: a.color, speed: 3, life: 0.5, size: 0.18 });
+        world.fx.flash(head, { color: a.color, size: 1.6, life: 0.15 });
+        const aura = world.fx.emitter({ rate: 16, follow: () => f.chestPos(), particle: { color: a.color, speed: 0.6, up: 0.6, spread: 0.6, life: 0.6, size: 0.14 } });
+        f.addBuff({
+          type: 'helmet', name: 'CAPACETE DO ???', time: a.duration, duration: a.duration,
+          mult: a.damageMult, affects: ['ranged', 'ability'],
+          onEnd() { aura.stop(); if (f.rig.props.helmetOn) f.rig.showProp('helmetOn', false); },
+        });
+        f.notify('???', true);
+      });
+      tl.end(0.7);
+      return seqFrom(tl);
+    },
+  },
+
+  // Xande — Polarização Caótica: aura magnética. Alvo LONGE é puxado até ele; alvo PERTO é repelido e cai.
+  polarize: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      if (!opp || opp.state === 'ko') return null;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('cast_up', { restart: true, duration: a.windup + a.recovery });
+      world.audio.play('shockwave', { pitch: 1.3 });
+      const aura = world.fx.emitter({ rate: 60, follow: () => f.chestPos(), particle: { color: a.color, speed: 2, spread: 1, life: 0.3, size: 0.12 } });
+      tl.add(a.windup, () => {
+        aura.stop();
+        const d = distXZ(f.pos, opp.pos);
+        if (d > a.range || opp.isInvulnerable()) { f.notify('FORA DE ALCANCE', true); return; }
+        for (let k = 0; k < 4; k++) world.fx.lightning(f.chestPos(), opp.chestPos(), { color: a.color, life: 0.15 });
+        if (d > a.near) {
+          // atrai: puxa para a frente dele
+          const F = new THREE.Vector3().subVectors(opp.pos, f.pos).setY(0).normalize();
+          const res = applyHit(world, f, opp, { damage: a.pullDamage, kind: 'ability', knockback: 0, hitstun: 0.5, reaction: false, color: a.color, sound: 'chainPull' });
+          if (typeof res === 'number') opp.pullTo(new THREE.Vector3(f.pos.x + F.x * 1.5, opp.pos.y, f.pos.z + F.z * 1.5), { time: 0.3, after: 0.5 });
+          opp.notify('ATRAÍDO', true);
+        } else {
+          // repele: empurra para longe e derruba
+          applyHit(world, f, opp, { damage: a.pushDamage, kind: 'ability', knockback: 9, launch: true, lowLaunch: true, color: a.color, sound: 'shockwave', scale: 1.4 });
+          world.fx.ring(f.chestPos(), { color: a.color, radius: 2.4, life: 0.35, vertical: true, yaw: f.yaw });
+          opp.notify('REPELIDO', true);
+        }
+      });
+      tl.end(a.windup + a.recovery);
+      return seqFrom(tl, { cancel: () => aura.stop() });
+    },
+  },
+
+  // Xande — Tela de Ruído: película de Energia que absorve dano físico e de projétil (escudo de vida extra)
+  noiseScreen: {
+    start(f, a, world) {
+      if (f.findBuff('noise')) { f.notify('TELA JÁ ATIVA'); return null; }
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.anim.play('concentrate', { restart: true, duration: 0.5 });
+      world.audio.play('ritual', { volume: 0.5, pitch: 1.4 });
+      tl.add(0.3, () => {
+        const film = world.fx.emitter({ rate: 30, follow: () => f.chestPos().add(new THREE.Vector3((Math.random() - 0.5) * 1.2, (Math.random() - 0.3) * 1.6, (Math.random() - 0.5) * 1.2)), particle: { color: a.color, speed: 0.1, spread: 0.05, life: 0.25, size: 0.09 } });
+        world.fx.ring(f.chestPos(), { color: a.color, radius: 1.3, life: 0.4, vertical: true, yaw: f.yaw });
+        f.addBuff({ type: 'noise', name: 'TELA DE RUÍDO', time: a.duration, duration: a.duration, shield: a.shield, shieldKinds: ['melee', 'ranged'], color: a.color, onEnd() { film.stop(); } });
+        f.notify('TELA DE RUÍDO', true);
+      });
+      tl.end(0.5);
+      return seqFrom(tl);
+    },
+  },
+
+  // Buff simples em si mesmo (ex.: Velocidade Mortal do Xande)
+  selfBuff: {
+    start(f, a, world) {
+      if (f.findBuff(a.buffType)) { f.notify('JÁ ATIVO'); return null; }
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.anim.play(a.anim || 'concentrate', { restart: true, duration: 0.45 });
+      world.audio.play('ritual', { volume: 0.5 });
+      tl.add(0.25, () => {
+        const trail = world.fx.emitter({ rate: 24, follow: () => f.chestPos(), particle: { color: a.color, speed: 0.4, spread: 0.4, life: 0.4, size: 0.16 } });
+        if (a.refillDodges) f.dodges = Math.max(f.dodges, a.refillDodges);
+        f.addBuff({ type: a.buffType, name: a.label || a.name.toUpperCase(), time: a.duration, duration: a.duration, speedMult: a.speedMult, mult: a.damageMult, affects: a.affects, onEnd() { trail.stop(); } });
+        f.notify(a.label || a.name.toUpperCase(), true);
+      });
+      tl.end(0.45);
+      return seqFrom(tl);
     },
   },
 });

@@ -181,6 +181,45 @@ const ACTIONS = {
       return tl;
     },
   },
+  // LABIRINTO: andando → Labirinto Mental no inimigo (anda perdido); parado → Rajada Caótica
+  labirinto: {
+    moving: (c) => {
+      const tl = new Timeline();
+      c.as.face(c.opp);
+      c.as.play('point', 0.7);
+      tl.add(0.4, () => {
+        if (c.opp.isInvulnerable() || distXZ(c.as.pos, c.opp.pos) > 12) return;
+        if (!c.opp.findBuff('maze')) {
+          const buff = { type: 'maze', name: 'LABIRINTO MENTAL', time: 2, duration: 2, mazeMove: true, mazeAngle: Math.PI * 0.75 };
+          c.opp.addBuff(buff);
+        }
+        c.world.fx.ring(new THREE.Vector3(c.opp.pos.x, 0.06, c.opp.pos.z), { color: 0x9a6aff, radius: 1.6, life: 0.6 });
+        c.opp.notify('LABIRINTO MENTAL', true);
+      });
+      return tl.end(0.8);
+    },
+    still: (c) => {
+      const tl = new Timeline();
+      c.as.face(c.opp);
+      c.as.play('point', 0.7);
+      tl.add(0.35, () => {
+        const from = c.as.chest();
+        const dir = c.opp.chestPos().sub(from).normalize();
+        c.world.projectiles.spawn(c.owner, { ...c.def.ranged, damage: Math.round(c.def.ranged.damage * ASSIST.damageMult * 1.4), element: c.def.element }, from, dir);
+        c.world.audio.play('shockwave');
+      });
+      return tl.end(0.8);
+    },
+  },
+  // XANDE: andando → Tela de Ruído no parceiro (escudo); parado → tacada por cima que faz sangrar
+  xande: {
+    moving: (c) => buffOwner(c, 'concentrate', { type: 'noise', name: 'TELA DE RUÍDO (XANDE)', time: 6, shield: 80, shieldKinds: ['melee', 'ranged'], color: 0x7ad0ff }, 0x7ad0ff, 'TELA DE RUÍDO'),
+    still: (c) => {
+      const tl = rushStrike(c, 'slash_v', [[0.4, 62]], 'heavyPunch', { knockback: 4 });
+      tl.add(0.45, () => { if (c.opp.state !== 'ko') c.opp.applyBleed({ dps: 4, duration: 2.5 }, c.owner); });
+      return tl;
+    },
+  },
 };
 
 function buffOwner(c, anim, buff, color, label) {

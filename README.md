@@ -75,6 +75,8 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 | ERIN PARKER | Ordo Realitas | Energia | Escopeta calibre 12 (leque de chumbo) | □ Granada "Supernova" · × Granada "Nebulosa" (névoa) · ○ Bênção Maldita · △ Black Hole (cura) | Supernova (corre, tiro de escopeta e granada) | Amuleto Elétrico (choque em quem bate nela) |
 | GAL SAL | Escriptas | Conhecimento | Corrente de Captura (procura, prende e puxa) | □ Corrente Gancho · × Teletransporte | Injustiça né? | Cura que cobra sanidade · Desviar de Balas · Bloqueio Perfeito |
 | KIAN | Escriptas | Conhecimento | Impacto Sigilar | □ Teletransporte · ○ Lâmina do Medo · △ Transcendência · × Rejeitar Névoa | Inexistir (1x por partida, +1 ao Transcender) | Precognição |
+| LABIRINTO | Mascarados | Energia | Rajada Caótica (raio da Antena) | □ Labirinto Mental · ○ Consumir Momento · △ Capacete do ??? | O Labirinto é a Resposta | Mente Labiríntica (atordoamentos −40%) |
+| XANDE | Os Cinco | Sangue | Skate Caótico (vai e volta) | □ Amaldiçoar Arma · ○ Polarização Caótica · △ Tela de Ruído (escudo de 140) · × Velocidade Mortal | Por Eles | Gladiador Paranormal (+2 sanidade por golpe) |
 | AGUIAR | Mascarados | Sangue | Machado na Corda (arremessa, sangra e puxa) | ○ Máscara do Mutilador Noturno · L2 Armadilha de Urso · × Predador de Sangue | Finalização do Mutilador | Filho da Dor (apanhando seguido, resiste mais) |
 
 Todos os especiais ofensivos causam 250 de 1000 de vida (`COMBAT.specialDamage`), nenhum é hitkill.

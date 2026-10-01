@@ -266,6 +266,23 @@ function glyphs(g, x0, y0, w, h, color, size = 11, density = 0.7) {
 
 const LATIN = 'iustitia lex propterea moveat fiat justitia ruat caelum dura lex sed lex nemo iudex in causa sua veritas audi alteram partem poena culpa ius vindicta sententia ';
 
+// desenha um padrão de labirinto (linhas retas que viram em ângulo reto) numa área
+function mazeLines(g, x0, y0, w, h, cell, color, width = 1.6) {
+  g.strokeStyle = color;
+  g.lineWidth = width;
+  g.lineCap = 'square';
+  for (let y = y0; y < y0 + h; y += cell) {
+    for (let x = x0; x < x0 + w; x += cell) {
+      g.beginPath();
+      const r = Math.random();
+      if (r < 0.35) { g.moveTo(x, y); g.lineTo(x + cell, y); g.lineTo(x + cell, y + cell); }
+      else if (r < 0.7) { g.moveTo(x, y); g.lineTo(x, y + cell); g.lineTo(x + cell * 0.6, y + cell); }
+      else { g.moveTo(x + cell * 0.5, y); g.lineTo(x + cell * 0.5, y + cell * 0.5); g.lineTo(x, y + cell * 0.5); }
+      g.stroke();
+    }
+  }
+}
+
 export const MATERIAL_TEXTURES = {
   // ---------------- CINERARIA: queimadura no lado ESQUERDO (x > 256)
   face_cineraria: face((g) => {
@@ -418,6 +435,101 @@ export const MATERIAL_TEXTURES = {
     g.strokeStyle = 'rgba(40,30,25,0.6)'; g.lineWidth = 1.5;
     g.beginPath(); g.moveTo(w * 0.7, h * 0.3); g.lineTo(w * 0.74, h * 0.4); g.lineTo(w * 0.71, h * 0.46); g.stroke();
   }),
+
+  // ---------------- LABIRINTO: pele pálida coberta de cicatrizes geométricas (escarificação em labirinto)
+  skin_labirinto: () => canvasTex(512, 512, (g) => {
+    g.fillStyle = '#e2d2c6'; g.fillRect(0, 0, 512, 512);
+    mazeLines(g, 0, 0, 512, 512, 16, 'rgba(150,80,72,0.75)', 2.2);
+    mazeLines(g, 4, 4, 512, 512, 16, 'rgba(250,225,215,0.5)', 0.8); // brilho da cicatriz
+  }, { wrap: true }),
+  face_labirinto: face((g) => {
+    // cabeça raspada: o labirinto sobe pela testa e pelo crânio, contornando os olhos
+    g.save();
+    g.beginPath(); g.rect(0, 0, W, HT); g.ellipse(CX - 32, EYE_Y, 26, 16, 0, 0, Math.PI * 2); g.ellipse(CX + 32, EYE_Y, 26, 16, 0, 0, Math.PI * 2); g.ellipse(CX, 175, 30, 18, 0, 0, Math.PI * 2);
+    g.clip('evenodd');
+    mazeLines(g, 0, 0, W, HT, 14, 'rgba(150,80,72,0.7)', 2);
+    g.restore();
+  }, {
+    skin: '#e2d2c6',
+    eye: { iris: '#8a9098', irisLight: '#c0c8d0', tilt: 0, bags: true },
+    brow: { angry: 0, thick: 2, color: '#b8a89a' },
+    mouth: { mouthW: 12, smile: -1, lip: 'rgba(160,110,110,0.35)' },
+  }),
+  // retalhos de tecido desenhados com labirintos (saia por baixo da túnica)
+  patch_skirt: () => canvasTex(256, 256, (g) => {
+    const cols = ['#8a5a44', '#a07a5a', '#6a3a30', '#b08a6a'];
+    for (let y = 0; y < 256; y += 32) for (let x = 0; x < 256; x += 32) {
+      g.fillStyle = cols[(x / 32 + y / 32 * 3) % cols.length];
+      g.fillRect(x + 1, y + 1, 30, 30);
+      mazeLines(g, x + 4, y + 4, 24, 24, 8, 'rgba(40,20,16,0.6)', 1);
+    }
+    g.fillStyle = 'rgba(120,10,10,0.35)';
+    for (let i = 0; i < 18; i++) { g.beginPath(); g.arc(Math.random() * 256, 200 + Math.random() * 56, 6 + Math.random() * 10, 0, Math.PI * 2); g.fill(); } // sangue na barra
+  }, { wrap: true }),
+  feet_labirinto: () => canvasTex(128, 128, (g) => {
+    g.fillStyle = '#d8c6b8'; g.fillRect(0, 0, 128, 128);
+    g.fillStyle = 'rgba(110,20,16,0.6)';
+    for (let i = 0; i < 30; i++) { g.beginPath(); g.arc(Math.random() * 128, 60 + Math.random() * 68, 3 + Math.random() * 8, 0, Math.PI * 2); g.fill(); }
+  }, { wrap: true }),
+  // elmo de ferro arranhado com o SORRISO enorme (u 0,5 = frente; boca em y ≈ 0,62–0,8)
+  helmet_labirinto: () => canvasTex(512, 512, (g) => {
+    const w = 512, h = 512;
+    g.fillStyle = '#7a7470'; g.fillRect(0, 0, w, h);
+    g.strokeStyle = 'rgba(40,36,34,0.45)'; g.lineWidth = 1;
+    for (let i = 0; i < 160; i++) { const x = Math.random() * w, y = Math.random() * h; g.beginPath(); g.moveTo(x, y); g.lineTo(x + (Math.random() - 0.5) * 40, y + (Math.random() - 0.5) * 10); g.stroke(); }
+    g.fillStyle = 'rgba(120,60,30,0.35)';
+    for (let i = 0; i < 40; i++) { g.beginPath(); g.arc(Math.random() * w, Math.random() * h, 4 + Math.random() * 14, 0, Math.PI * 2); g.fill(); } // ferrugem
+    // rebites
+    g.fillStyle = '#4a4440';
+    for (let x = 0; x < w; x += 24) { g.beginPath(); g.arc(x, h * 0.18, 4, 0, Math.PI * 2); g.fill(); }
+    // lábios carnudos
+    const cx = w * 0.5, cy = h * 0.71, mw = w * 0.2, mh = h * 0.11;
+    g.fillStyle = '#b8484a';
+    g.beginPath(); g.ellipse(cx, cy, mw, mh, 0, 0, Math.PI * 2); g.fill();
+    g.fillStyle = '#5a0e10';
+    g.beginPath(); g.ellipse(cx, cy, mw * 0.86, mh * 0.72, 0, 0, Math.PI * 2); g.fill();
+    // dentes enormes (fileira de cima e de baixo)
+    g.fillStyle = '#efe6d4'; g.strokeStyle = '#8a7a66'; g.lineWidth = 2;
+    const n = 9;
+    for (let i = 0; i < n; i++) {
+      const x = cx - mw * 0.8 + (i / (n - 1)) * mw * 1.6;
+      const tw = (mw * 1.6) / n;
+      const curve = Math.cos(((i / (n - 1)) - 0.5) * Math.PI) * mh * 0.12;
+      g.fillRect(x - tw / 2, cy - mh * 0.62 - curve * 0.5, tw - 2, mh * 0.55); g.strokeRect(x - tw / 2, cy - mh * 0.62 - curve * 0.5, tw - 2, mh * 0.55);
+      g.fillRect(x - tw / 2, cy + mh * 0.08 + curve * 0.3, tw - 2, mh * 0.5); g.strokeRect(x - tw / 2, cy + mh * 0.08 + curve * 0.3, tw - 2, mh * 0.5);
+    }
+    g.fillStyle = 'rgba(200,120,120,0.6)'; // gengiva
+    g.fillRect(cx - mw * 0.8, cy - mh * 0.7, mw * 1.6, mh * 0.1);
+  }),
+  paper_maze: () => canvasTex(128, 256, (g) => {
+    g.fillStyle = '#e8e0cc'; g.fillRect(0, 0, 128, 256);
+    mazeLines(g, 8, 8, 112, 240, 12, 'rgba(30,24,20,0.7)', 1.4);
+  }, { wrap: true }),
+
+  // ---------------- XANDE: olhos azuis, rosto jovem; camiseta amarela com 3 triângulos e "oculto"
+  face_xande: face((g) => {
+    stubble(g, 'rgba(120,90,50,0.15)', 500);
+    g.strokeStyle = 'rgba(160,80,70,0.6)'; g.lineWidth = 1.6; // arranhão de skate na bochecha
+    g.beginPath(); g.moveTo(CX + 50, 150); g.lineTo(CX + 62, 158); g.stroke();
+  }, {
+    skin: '#e6bea2',
+    eye: { iris: '#3a7ac0', irisLight: '#7ab8f0', tilt: -0.04 },
+    brow: { angry: 1, thick: 3.5, color: '#6a4a24' },
+    mouth: { mouthW: 13, smile: 1 },
+  }),
+  shirt_xande: () => canvasTex(512, 256, (g) => {
+    g.fillStyle = '#e8bc22'; g.fillRect(0, 0, 512, 256);
+    // frente do tronco = meio da textura (u ≈ 0,5)
+    g.fillStyle = '#141414';
+    const tri = (x, y, s) => { g.beginPath(); g.moveTo(x, y - s); g.lineTo(x + s * 0.9, y + s * 0.6); g.lineTo(x - s * 0.9, y + s * 0.6); g.closePath(); g.fill(); };
+    tri(256, 70, 26); tri(226, 118, 22); tri(286, 118, 22);
+    g.fillStyle = '#e8bc22';
+    tri(256, 76, 12); tri(226, 122, 9); tri(286, 122, 9);
+    g.fillStyle = '#141414'; g.font = 'bold 22px monospace'; g.textAlign = 'center';
+    g.fillText('oculto', 256, 168);
+    g.strokeStyle = 'rgba(120,90,10,0.35)'; g.lineWidth = 1;
+    for (let y = 0; y < 256; y += 6) { g.beginPath(); g.moveTo(0, y); g.lineTo(512, y); g.stroke(); }
+  }, { wrap: true }),
 
   // ---------------- MASCARADO: cicatriz em X na bochecha esquerda
   face_mascarado: face((g) => {

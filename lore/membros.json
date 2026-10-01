@@ -2549,6 +2549,79 @@
         "arsenal": ""
       },
       {
+        "name": "Labirinto",
+        "page": "Labirinto",
+        "url": "https://ordemparanormal.fandom.com/wiki/Labirinto",
+        "id": "labirinto",
+        "origin": "Mascarados",
+        "element": "energia",
+        "afinidade": null,
+        "classe": "Ocultista",
+        "trilha": null,
+        "associacao": [
+          "Ocultismo",
+          "Acampamento Lua da Benquerença",
+          "Assassinos",
+          "Tenebris"
+        ],
+        "status": "Desconhecido",
+        "resumo": "Labirinto, também conhecido como ???, é um assassino em série e um ocultista que possui uma intensa obsessão pelos formatos e criação de labirintos. Ele também foi quem reuniu a equipe dos Assassinos para o Hexatombe. Ele teve sua primeira aparição no final da , tendo sido mostrada apenas sua silhueta, junto dos outros assassinos. Ele teve sua aparência revelada no , quando Remi desperta em seu corpo preso em uma das celas de uma delegacia na cidade de São Paulo.",
+        "aparencia": "Labirinto é uma pessoa com 1,95m de altura, de pele branca pálida e cabeça raspada, coberta por marcas geométricas que se conectam em linhas contínuas, realizadas por meio do processo de escarificação, formando desenhos semelhantes a um labirinto. Seus olhos são acinzentados, o rosto é angular e liso. O seu corpo é magro, com as mesmas marcas se estendendo pelos braços, peito e pernas, gravadas na pele como cicatrizes antigas.\nEle usa uma túnica verde-escura de tecido gasto, rasgada em várias partes, amarrada na cintura por cordas. Sob a túnica, há pedaços de tecido desenhados que juntos formam uma espécie de saia que cobre parte das pernas. Anda descalço, e as solas dos pés estão manchadas de sangue e sujeira. As mãos são finas e apresentam as mesmas inscrições que cobrem o corpo. Labirinto carrega como arma uma espécie de antena parabólica improvisada em formato de lança.\nAo colocar seu elmo sorridente, Labirinto tapa completamente seu rosto, revelando uma face sem característica alguma, apenas um enorme sorriso carnoso macabro, que ocupa a frente de seu capacete de ferro arranhado, com diversos papeis com labirintos colados, tanto na parte de trás do capacete, quanto em seu interior, que descem pela abertura e se espalham até a altura do peito.",
+        "rituais": [
+          {
+            "nome": "Rajada Caótica",
+            "descricao": "O usuário dispara um raio que causa 8d8 pontos de dano de Energia em um ser em alcance médio.",
+            "tipo": "Rituais",
+            "fase": ""
+          },
+          {
+            "nome": "Labirinto Mental",
+            "descricao": "O alvo desse ritual, pelas próximas 1d4 rodadas, é obrigado a gastar suas ações para se mover em uma direção aleatória, como se sua mente estivesse presa dentro de um labirinto.",
+            "tipo": "Rituais",
+            "fase": ""
+          },
+          {
+            "nome": "Capturar Momento",
+            "descricao": "O usuário marca um local ou área com um símbolo invisível. O símbolo capta imagens e sons próximos dele. O usuário pode ver e ouvir qualquer coisa captada pelo símbolo.",
+            "tipo": "Rituais",
+            "fase": ""
+          },
+          {
+            "nome": "Mapa Sanguíneo",
+            "descricao": "O usuário desenha um mapa com gotas de sangue que sinalizam em tempo real a localização de todos os seres em um raio de 1km a partir dele.",
+            "tipo": "Rituais",
+            "fase": ""
+          }
+        ],
+        "habilidades": [
+          {
+            "nome": "Tempestade Caótica",
+            "descricao": "Labirinto dispara um raio que causa 8d10 pontos de dano de Energia em um ser em alcance médio.",
+            "tipo": "Capacete do ???",
+            "fase": ""
+          },
+          {
+            "nome": "Labirinto Abissal",
+            "descricao": "O alvo desse ritual, pelas próximas 1d4 rodadas, é obrigado a gastar suas ações para se mover em uma direção escolhida por Labirinto.",
+            "tipo": "Capacete do ???",
+            "fase": ""
+          },
+          {
+            "nome": "Consumir Momento",
+            "descricao": "O usuário marca um local ou área com um simbolo com uma natureza violenta que deteriora o local só de existir. Após conjurar isso, Labirinto estala os dedos fazendo a espiral estourar e destruir uma área causando 32 de dano médio de morte.",
+            "tipo": "Capacete do ???",
+            "fase": ""
+          },
+          {
+            "nome": "Revelação Sanguínea",
+            "descricao": "Labirinto desenha um mapa com gotas de sangue que sinalizam em tempo real a localização, intenção geral e condições de saúde entre \"ileso\", \"machucado\" e \"morrendo\" de todos os seres em um raio de 1km a partir dele até o fim da cena.",
+            "tipo": "Capacete do ???",
+            "fase": ""
+          }
+        ],
+        "arsenal": ""
+      },
+      {
         "name": "Park Jae-Yoon",
         "page": "Park Jae-Yoon",
         "url": "https://ordemparanormal.fandom.com/wiki/Park_Jae-Yoon",
@@ -2693,79 +2766,346 @@
           }
         ],
         "arsenal": ""
-      },
+      }
+    ],
+    "Os Cinco": [
       {
-        "name": "Labirinto",
-        "page": "Labirinto",
-        "url": "https://ordemparanormal.fandom.com/wiki/Labirinto",
-        "id": null,
-        "origin": "Mascarados",
-        "element": null,
+        "name": "Xande (Alexandre)",
+        "page": "Alexandre",
+        "url": "https://ordemparanormal.fandom.com/wiki/Alexandre",
+        "id": "xande",
+        "origin": "Os Cinco",
+        "element": "sangue",
         "afinidade": null,
         "classe": "Ocultista",
-        "trilha": null,
+        "trilha": "Lâmina Paranormal",
         "associacao": [
           "Ocultismo",
-          "Acampamento Lua da Benquerença",
-          "Assassinos",
-          "Tenebris"
+          "Os Cinco"
         ],
-        "status": "Desconhecido",
-        "resumo": "Labirinto, também conhecido como ???, é um assassino em série e um ocultista que possui uma intensa obsessão pelos formatos e criação de labirintos. Ele também foi quem reuniu a equipe dos Assassinos para o Hexatombe. Ele teve sua primeira aparição no final da , tendo sido mostrada apenas sua silhueta, junto dos outros assassinos. Ele teve sua aparência revelada no , quando Remi desperta em seu corpo preso em uma das celas de uma delegacia na cidade de São Paulo.",
-        "aparencia": "Labirinto é uma pessoa com 1,95m de altura, de pele branca pálida e cabeça raspada, coberta por marcas geométricas que se conectam em linhas contínuas, realizadas por meio do processo de escarificação, formando desenhos semelhantes a um labirinto. Seus olhos são acinzentados, o rosto é angular e liso. O seu corpo é magro, com as mesmas marcas se estendendo pelos braços, peito e pernas, gravadas na pele como cicatrizes antigas.\nEle usa uma túnica verde-escura de tecido gasto, rasgada em várias partes, amarrada na cintura por cordas. Sob a túnica, há pedaços de tecido desenhados que juntos formam uma espécie de saia que cobre parte das pernas. Anda descalço, e as solas dos pés estão manchadas de sangue e sujeira. As mãos são finas e apresentam as mesmas inscrições que cobrem o corpo. Labirinto carrega como arma uma espécie de antena parabólica improvisada em formato de lança.\nAo colocar seu elmo sorridente, Labirinto tapa completamente seu rosto, revelando uma face sem característica alguma, apenas um enorme sorriso carnoso macabro, que ocupa a frente de seu capacete de ferro arranhado, com diversos papeis com labirintos colados, tanto na parte de trás do capacete, quanto em seu interior, que descem pela abertura e se espalham até a altura do peito.",
+        "status": "Falecido",
+        "resumo": "Alexandre (Alexandre), mais conhecido como Xande, foi um dos protagonistas da série Ordem Paranormal, presente em Sinais do Outro Lado. Xande foi um dos membros do grupo Os Cinco, fundado por Morato Vertaler, ex-membro de uma organização que combate o paranormal. Em seu cartão de identificação, sua função no grupo era ser o responsável pelos conhecimentos do oculto, podendo identificar as presenças das entidades paranormais. Xande tem sua primeira aparição no , saindo da van de Francisco Albuquerque e avançando contra um Rastejador Sombrio com seu taco amaldiçoado.",
+        "aparencia": "Alexandre era um jovem com pele clara, de 1,75 metros de altura, longos cabelos ondulados de tom loiro escuro e olhos azuis. Ele usava um boné amarelo virado para trás com alguns triângulos brancos e vários riscos em formato de triângulo. Ele também usava uma balaclava bandana preta com alguns triângulos brancos, assim como em seu boné. Ele utilizava como vestimenta uma camiseta amarela de mangas cinzas com uma estampa de 3 triângulos pretos, com \"oculto\" escrito, e uma blusa preta com as mangas arregaçadas por baixo, além de usar uma bermuda preta com joelheiras. Ele também usa no meio de seu peito um broche dourado com o símbolo dos Os Cinco. \nEm seu corpo, havia diversas bolsas e bandoleiras com vários objetos, incluindo uma faca, um discman e pequenos frascos. Percorrendo seu corpo, haviam correntes prateadas, mais aparentes em seu braço direito e tornozelo esquerdo, que enrolavam um taco de baseball cheio de arame farpado. No seu outro braço, carregava consigo um skate amarelo com vários detalhes e adornos de metal nas bordas, além de espinhos em suas rodas e com sigilos e raios verdes na parte inferior do skate. Também possuía diversos machucados em ambas as pernas, alguns sendo arranhões ocasionados por quedas ao andar de skate e outros por mordidas de cães.",
         "rituais": [
           {
-            "nome": "Rajada Caótica",
-            "descricao": "O usuário dispara um raio que causa 8d8 pontos de dano de Energia em um ser em alcance médio.",
+            "nome": "Amaldiçoar Arma com Sangue",
+            "descricao": "O usuário imbui sua arma ou munição com o Elemento de Sangue, fazendo com que causem +1d6 de dano de Sangue, ou, em sua versão Discente, +2d6.",
             "tipo": "Rituais",
             "fase": ""
           },
           {
-            "nome": "Labirinto Mental",
-            "descricao": "O alvo desse ritual, pelas próximas 1d4 rodadas, é obrigado a gastar suas ações para se mover em uma direção aleatória, como se sua mente estivesse presa dentro de um labirinto.",
+            "nome": "Polarização Caótica",
+            "descricao": "O usuário cria uma aura magnética paranormal, sendo capaz de levitar objetos e pessoas, ou até repelir e atrair estes.",
             "tipo": "Rituais",
             "fase": ""
           },
           {
-            "nome": "Capturar Momento",
-            "descricao": "O usuário marca um local ou área com um símbolo invisível. O símbolo capta imagens e sons próximos dele. O usuário pode ver e ouvir qualquer coisa captada pelo símbolo.",
+            "nome": "Descarnar",
+            "descricao": "Esse ritual faz com que lacerações se manifestem na pele e órgãos do alvo, que sofre 6d8 de dano de Sangue e fica com uma hemorragia severa. No início de cada turno dele, o alvo deve fazer um teste de Fortitude, se falhar, sofre 2d8 pontos de dano de Sangue.",
             "tipo": "Rituais",
             "fase": ""
           },
           {
-            "nome": "Mapa Sanguíneo",
-            "descricao": "O usuário desenha um mapa com gotas de sangue que sinalizam em tempo real a localização de todos os seres em um raio de 1km a partir dele.",
+            "nome": "Tela de Ruído",
+            "descricao": "Este ritual cria uma película de Energia que recobre o corpo do usuário e absorve energia cinética. O usuário recebe 30 PV temporários, mas apenas contra dano balístico, de corte, de impacto ou de perfuração. Alternativamente, este ritual pode ser usado como uma reação quando sofrer dano, fazendo com que o usuário receba 15 de resistência apenas contra esse dano.",
+            "tipo": "Rituais",
+            "fase": ""
+          },
+          {
+            "nome": "Tecer Ilusão",
+            "descricao": "Este ritual cria uma ilusão visual ou sonora, podendo criar apenas imagens ou sons simples.",
+            "tipo": "Rituais",
+            "fase": ""
+          },
+          {
+            "nome": "Cinerária",
+            "descricao": "O usuário manifesta uma névoa carregada de essência paranormal, fazendo com que rituais conjurados dentro da área sejam fortalecidos.",
+            "tipo": "Rituais",
+            "fase": ""
+          },
+          {
+            "nome": "Velocidade Mortal",
+            "descricao": "O usuário distorce a passagem do tempo ao redor do alvo, tornando-o extremamente veloz. O alvo recebe uma ação de movimento adicional por turno, ou, em sua versão Discente, uma ação padrão adicional por turno.",
+            "tipo": "Rituais",
+            "fase": ""
+          },
+          {
+            "nome": "Amaldiçoar Arma com Conhecimento",
+            "descricao": "O usuário imbui uma arma ou munição com o Elemento de Conhecimento, fazendo com que causem +1d6 de dano de Conhecimento, ou, em sua versão Discente, +2d6.",
+            "tipo": "Rituais",
+            "fase": ""
+          },
+          {
+            "nome": "Perturbação",
+            "descricao": "O usuário dá uma ordem que o alvo deve ser capaz de ouvir (mas não precisa entender). Se falhar na resistência, ele deve obedecer à ordem em seu próprio turno da melhor maneira possível.",
+            "tipo": "Rituais",
+            "fase": ""
+          },
+          {
+            "nome": "Cicatrização",
+            "descricao": "O usuário acelera o tempo ao redor das feridas do alvo, que cicatrizam instantaneamente. O alvo recupera 3d8+3 PV, mas envelhece 1 ano automaticamente.",
+            "tipo": "Rituais",
+            "fase": ""
+          },
+          {
+            "nome": "Armadura de Sangue",
+            "descricao": "O sangue do conjurador escorre para fora do corpo, cobrindo-o sob a forma de uma carapaça que fornece +5 em Defesa.",
+            "tipo": "Rituais",
+            "fase": ""
+          },
+          {
+            "nome": "Luz",
+            "descricao": "Faz um objeto emitir luz de cores alternadas e brilhantes (mas não produzindo calor) em uma área com 9m de raio.",
+            "tipo": "Rituais",
+            "fase": ""
+          },
+          {
+            "nome": "Sopro do Caos",
+            "descricao": "O usuário consegue alterar os movimentos de massas de ar de forma caótica, podendo ser conjurada de várias formas diferentes.",
             "tipo": "Rituais",
             "fase": ""
           }
         ],
         "habilidades": [
           {
-            "nome": "Tempestade Caótica",
-            "descricao": "Labirinto dispara um raio que causa 8d10 pontos de dano de Energia em um ser em alcance médio.",
-            "tipo": "Capacete do ???",
+            "nome": "Lâmina Maldita",
+            "descricao": "Quando conjura o ritual Amaldiçoar Arma, o usuário pode usar Ocultismo para testes de ataque com a arma amaldiçoada.",
+            "tipo": "Habilidades",
             "fase": ""
           },
           {
-            "nome": "Labirinto Abissal",
-            "descricao": "O alvo desse ritual, pelas próximas 1d4 rodadas, é obrigado a gastar suas ações para se mover em uma direção escolhida por Labirinto.",
-            "tipo": "Capacete do ???",
+            "nome": "Camuflar Ocultismo",
+            "descricao": "O usuário pode gastar uma ação livre para esconder símbolos que estejam desenhados em sua pele, tornando-os invisíveis para outras pessoas além dele mesmo. Além disso, quando lança um ritual, pode gastar +2 PE para lançá-lo sem usar componentes ritualísticos e sem gesticular, usando apenas concentração.",
+            "tipo": "Habilidades",
             "fase": ""
           },
           {
-            "nome": "Consumir Momento",
-            "descricao": "O usuário marca um local ou área com um simbolo com uma natureza violenta que deteriora o local só de existir. Após conjurar isso, Labirinto estala os dedos fazendo a espiral estourar e destruir uma área causando 32 de dano médio de morte.",
-            "tipo": "Capacete do ???",
+            "nome": "Gladiador Paranormal",
+            "descricao": "Sempre que acerta um ataque corpo a corpo em um inimigo, o usuário recebe 2 PE temporários.",
+            "tipo": "Habilidades",
             "fase": ""
           },
           {
-            "nome": "Revelação Sanguínea",
-            "descricao": "Labirinto desenha um mapa com gotas de sangue que sinalizam em tempo real a localização, intenção geral e condições de saúde entre \"ileso\", \"machucado\" e \"morrendo\" de todos os seres em um raio de 1km a partir dele até o fim da cena.",
-            "tipo": "Capacete do ???",
+            "nome": "Eu Já Sabia",
+            "descricao": "O usuário recebe resistência mental igual ao valor de seu Intelecto.",
+            "tipo": "Habilidades",
+            "fase": ""
+          }
+        ],
+        "arsenal": "Skate Caótico: O skate de Alexandre com sigilos e raios verdes em sua parte inferior. Não se sabe ao certo quando ele foi amaldiçoado, mas existe uma espécie de \"consciência caótica\" dentro dele que fornece +5 de Defesa ao usuário.\nTênis Lépidos: Um par de tênis próprios para andar de skate. Tem partes queimadas e cabos neon passando ao seu redor. Esses sapatos amplificam a mobilidade do usuário, deixando-o mais veloz e mais resistente a quedas.\nVislumbre do Fim: Um par de óculos escuros repleto de símbolos e espirais em sua armação metálica. Quando se olha para uma criatura por suas lentes, revela suas maiores fraquezas e vulnerabilidades."
+      },
+      {
+        "name": "Dara Alice Venturini",
+        "page": "Dara Alice Venturini",
+        "url": "https://ordemparanormal.fandom.com/wiki/Dara_Alice_Venturini",
+        "id": null,
+        "origin": "Os Cinco",
+        "element": null,
+        "afinidade": null,
+        "classe": "Especialista",
+        "trilha": "Médica de Campo",
+        "associacao": [
+          "Os Cinco"
+        ],
+        "status": "Viva",
+        "resumo": "Dara Alice Venturini (Dara Alice Venturini) é uma das protagonistas da série Ordem Paranormal, presente em Sinais do Outro Lado.  Dara é um dos membros do grupo Os Cinco, fundado pelo ex-membro de uma organização que combate o paranormal, Morato Vertaler. Em seu cartão de identificação, sua função no grupo é ser o suporte médico, auxiliando e protegendo seus aliados, além de também ser uma ótima investigadora. Dara aparece no , dentro da van de Francisco Albuquerque durante uma emboscada do grupo contra um Rastejador Sombrio.",
+        "aparencia": "Dara é uma mulher jovem de 19 anos com 1,57 metros de altura, de pele clara, cabelo castanho curto e olhos escuros, tendo uma faixa azul ciano amarrada em sua cabeça. Em seu pescoço, possui uma gargantilha vermelha com detalhes em dourado. Ela utiliza como vestimenta um sobretudo preto, com um óculos modelo aviador vermelho de armação dourada pendurado em sua blusa esverdeada da banda The Pression, com detalhes brancos e um laço vermelho na gola, além de uma evidente simples maquiagem composta por sombra e delineado. Na parte de baixo, usa uma calça marrom com as barras dobradas, sapatos marrons com uma meia vermelha em seu pé direito e uma meia azul ciano em seu pé esquerdo.\nPor cima de suas roupas, possui diversas bolsas e bandoleiras com vários objetos, como uma lanterna UV, uma espécie de radar e um alicate. Também possui um walkie-talkie em seu braço esquerdo, que junto a sua mão, veste uma luva marrom e ciano. Pendurada em seu ombro, há uma enorme bolsa que sobressai seu corpo.",
+        "rituais": [],
+        "habilidades": [
+          {
+            "nome": "Paramédico",
+            "descricao": "O usuário pode usar uma ação padrão e 2 PE para curar 2d10 pontos de vida de um aliado adjacente.",
+            "tipo": "",
+            "fase": ""
+          },
+          {
+            "nome": "Eclético",
+            "descricao": "Quando faz um teste de uma perícia, o usuário pode gastar 2 PE para receber os benefícios de ser treinado nela.",
+            "tipo": "",
+            "fase": ""
+          },
+          {
+            "nome": "Perito",
+            "descricao": "O usuário escolhe duas perícias nas quais é treinado. Quando faz um teste de uma dessas pericias, pode gastar 2 PE para somar +1d6 no resultado do teste.",
+            "tipo": "",
+            "fase": ""
+          },
+          {
+            "nome": "Dedicação",
+            "descricao": "O usuário recebe +1 PE, e mais 1 PE adicional a cada NEX ímpar. Além disso, seu limite de PE por turno aumenta em 1.",
+            "tipo": "",
             "fase": ""
           }
         ],
         "arsenal": ""
+      },
+      {
+        "name": "Francisco Albuquerque",
+        "page": "Francisco Albuquerque",
+        "url": "https://ordemparanormal.fandom.com/wiki/Francisco_Albuquerque",
+        "id": null,
+        "origin": "Os Cinco",
+        "element": null,
+        "afinidade": null,
+        "classe": "Especialista",
+        "trilha": "Técnico",
+        "associacao": [
+          "Os Cinco"
+        ],
+        "status": "Vivo",
+        "resumo": "Francisco \"Chico\" Albuquerque (Francisco Albuquerque) é um dos protagonistas da série Ordem Paranormal, presente em Sinais do Outro Lado. Chico é um dos membros do grupo Os Cinco, um grupo formado pelo ex-membro de uma organização que combate o paranormal, Morato Vertaler. Em seu cartão de identificação, sua função no grupo é ser o especialista em tecnologia do grupo, tendo criatividade e improviso no manuseio de aparelhos tecnológicos. Chico aparece no , dirigindo sua van e acendendo o farol na direção de um Rastejador Sombrio, o impossibilitando de fugir e permitindo que seus companheiros o combatam.",
+        "aparencia": "Chico é um homem de pele clara, tendo 1,47 metros de altura, possui olhos e cabelos castanhos longos e bagunçados, com um cavanhaque por fazer. Um piercing na sobrancelha e espirais vermelhas em suas bochechas, em sua cabeça usa um óculos refletivo com diversas cores, que possui um objeto metálico com fios elétricos colado com fita silver tape, além de fones de ouvido em seu pescoço. \nComo vestimenta ele utiliza uma blusa preta da banda The Pression, com mangas alternando entre amarelo e preto, com a manga do seu braço direito arregaçada, nesse mesmo braço usando uma luva marrom com amarelo e em seu pulso duas pulseiras: uma de espinhos e outra com uma espécie de visor. Por cima de sua blusa ele usa um macacão bege, além de uma pochete e diversas bolsas e bandoleiras com vários objetos como ferramentas e um walkie-talkie com seu nome. Usa calças largas e botas estilo coturno. É possível ver pendurado em seu ombro uma bolsa com vários objetos tecnológicos, incluindo um toca-discos e uma espécie de antena. Em sua cintura há um pequeno broche dourado. \nPosteriormente aos acontecimentos do , Chico passa a utilizar dois piercings paranormais: um na orelha, na parte de cima e outro no meio na língua, ambos com coloração dourada e adornados com sigilos de Conhecimento em sua estrutura.",
+        "rituais": [],
+        "habilidades": [
+          {
+            "nome": "Inventário Otimizado",
+            "descricao": "O usuário soma seu Intelecto à sua Força para calcular sua capacidade de carga.",
+            "tipo": "",
+            "fase": ""
+          },
+          {
+            "nome": "Nerd",
+            "descricao": "Uma vez por cena, o usuário pode gastar 2 PE para fazer um teste de Atualidades. Se passar, recebe uma informação útil.",
+            "tipo": "",
+            "fase": ""
+          },
+          {
+            "nome": "Perito",
+            "descricao": "O usuário escolhe duas perícias nas quais é treinado. Quando faz um teste de uma dessas perícias, pode gastar 2 PE para somar +1d6 no resultado do teste.",
+            "tipo": "",
+            "fase": ""
+          },
+          {
+            "nome": "Eclético",
+            "descricao": "Quando faz um teste de uma perícia, o usuário pode gastar 2 PE para receber os benefícios de ser treinado nela.",
+            "tipo": "",
+            "fase": ""
+          },
+          {
+            "nome": "Engenhosidade",
+            "descricao": "Quando usar a habilidade Eclético, o usuário pode gastar 2 PE adicionais para receber os benefícios de ser veterano em uma perícia.",
+            "tipo": "",
+            "fase": ""
+          },
+          {
+            "nome": "Remendão",
+            "descricao": "O usuário pode gastar uma ação completa e 1 PE para remover a condição quebrado de um equipamento adjacente até o final da cena. Além disso, todos os equipamentos gerais têm sua categoria diminuída em 1.",
+            "tipo": "",
+            "fase": ""
+          }
+        ],
+        "arsenal": "===Itens Paranormais===\nScanner de Manifestação Paranormal de Energia: Um dispositivo com Sigilos e conectado com diversos objetos d'Os Cinco. Esse item é capaz se identificar toda e qualquer manifestação paranormal de Energia ao seu redor, além de criaturas de outros elementos que possuem Energia como complemento.\n===Itens Amaldiçoados===\nJoias de Escudo Mental: Um piercing e um brinco dourados com Sigilos de Conhecimento em toda sua extensão. Esses acessórios geram uma barreira psíquica, fazendo com que o portador receba 10 de Resistência Mental.\nTeclado de Conexão Neural: Um teclado USB coberto de glifos de Energia brilhando em roxo. Ao ser conectado a um aparelho, o item gera ondas eletromagnéticas que enviam os sinais do sistema diretamente para as sinapses do cérebro do usuário, efetivamente conectando sua mente com a máquina."
+      },
+      {
+        "name": "Lírio Tellini",
+        "page": "Lírio Tellini",
+        "url": "https://ordemparanormal.fandom.com/wiki/L%C3%ADrio_Tellini",
+        "id": null,
+        "origin": "Os Cinco",
+        "element": null,
+        "afinidade": null,
+        "classe": "Combatente",
+        "trilha": "Tropa de Choque",
+        "associacao": [
+          "Os Cinco"
+        ],
+        "status": "Vivo",
+        "resumo": "Lírio Tellini (Lirio Tellini) é um dos protagonistas da série Ordem Paranormal, presente em Sinais do Outro Lado. Lírio é um dos membros do grupo Os Cinco, um grupo formado pelo ex-membro de uma organização que combate o paranormal, Morato Vertaler. Em seu cartão de identificação, sua função no grupo é ser a parede. Lírio aparece no , pulando do telhado do estacionamento da Café's Pizzaria e destruindo um Rastejador Sombrio com sua marreta Leonora.",
+        "aparencia": "Lírio é um homem alto e robusto de pele clara, com 1,85 metros de altura, cabelos loiros longos que vão até o ombro com a parte de cima jogada pra trás e com uma mecha laranja, além de ter uma barba aparada com a costeleta maior. Como vestimenta ele utiliza uma camisa azul de mangas rasgadas com uma pata animal estampada, um sobretudo azul escuro com uma pelugem branca nas extremidades, uma luva marrom e azul com pelugem e uma pata dourada em sua mão direita, um pano laranja amarrado em sua mão esquerda, uma calça cinza e sapatos marrons. Em seus braços é visível diversas cicatrizes de corte e ataduras. Ele usa em seu pescoço um colar militar com o nome \"Voytek\" escrito.\nPor cima de suas roupas há diversas proteções como ombreiras e joelheiras, conectadas por alças com várias bolsas e bandoleiras, cujo possuem diversos objetos, como um saco de flores; um capacete azul com uma listra branca; um broche dourado e uma pata animal dourada e um walkie-talkie com seu nome.",
+        "rituais": [],
+        "habilidades": [
+          {
+            "nome": "Sangue de Ferro",
+            "descricao": "O usuário recebe +2 pontos de vida por NEX.",
+            "tipo": "",
+            "fase": ""
+          },
+          {
+            "nome": "Casca Grossa",
+            "descricao": "O usuário recebe +1 ponto de vida adicional por NEX e, quando faz um bloqueio, soma seu Vigor na resistência a dano recebida.",
+            "tipo": "",
+            "fase": ""
+          },
+          {
+            "nome": "Ataque Especial",
+            "descricao": "Quando faz um ataque, você pode gastar 2 PE para receber +5 no teste de ataque ou na rolagem de dano. Você pode gastar +1 PE para receber mais um bônus de +5. Que podem ser aplicados em um mesmo teste, para receber +10 no mesmo, ou em testes diferentes, para receber +5 no teste de ataque e na rolagem de dano.",
+            "tipo": "",
+            "fase": ""
+          },
+          {
+            "nome": "Golpe Pesado",
+            "descricao": "O dano das armas corpo a corpo do usuário aumenta em mais um dado do mesmo tipo.",
+            "tipo": "",
+            "fase": ""
+          },
+          {
+            "nome": "Mão Pesada",
+            "descricao": "O usuário recebe +2 em rolagens de dano com ataques corpo a corpo.",
+            "tipo": "",
+            "fase": ""
+          },
+          {
+            "nome": "Cai Dentro",
+            "descricao": "O usuário pode gastar uma reação e 1 PE para fazer com que um oponente que ataque um de seus aliados faça um teste de Vontade. Se falhar, o oponente deve atacá-lo em vez de seu aliado.",
+            "tipo": "",
+            "fase": ""
+          },
+          {
+            "nome": "Proteção Pesada",
+            "descricao": "O usuário recebe proficiência com Proteções Pesadas, podendo usá-las sem penalidades.",
+            "tipo": "",
+            "fase": ""
+          }
+        ],
+        "arsenal": "Amarras de Sangue \"Magras\": Nomeada de \"Magras\" por Lírio, é uma espécie de corda de Sangue feita de tripas entrelaçadas, que reagem mediante ao ambiente. Essas amarras são preparadas para imobilizar criaturas de Conhecimento, por serem vulneráveis ao elemento que as compõem."
+      },
+      {
+        "name": "Voytek Nowak",
+        "page": "Voytek Nowak",
+        "url": "https://ordemparanormal.fandom.com/wiki/Voytek_Nowak",
+        "id": null,
+        "origin": "Os Cinco",
+        "element": null,
+        "afinidade": null,
+        "classe": null,
+        "trilha": null,
+        "associacao": [
+          "Os Cinco"
+        ],
+        "status": "Falecido",
+        "resumo": "Voytek Nowak foi um antigo membro do grupo Os Cinco, um grupo liderado por Morato Vertaler, um ex-membro da Ordo Realitas. Ele era um amigo próximo de todos os membros da equipe, sendo principalmente de Lírio Tellini. Voytek foi considerado morto após sua primeira missão oficial com a equipe, onde depois de desobedecer as ordens de Morato, acabou sendo pego desprevenido por uma manada de criaturas paranormais, que desmembraram muitos de seus membros e forçou o grupo a deixa-lo para trás. Todos os membros se culparam muito com sua perda, considerando terem perdido seu amigo por causa de uma \"decisão idiota\".",
+        "aparencia": "Voytek era um homem de pele clara, de olhos castanhos, cabelos raspados, um pequeno bigode e óculos escuros. Como vestimenta utilizava um casaco vermelho por cima de uma camisa branca com uma pata de urso azul estampada, uma calça preta e tênis vermelhos. Em seu pescoço usava um colar de identificação militar com seu nome escrito.\nEle tinha algumas proteções como ombreiras e joelheiras por cima de suas roupas, além de algumas bolsas e bandoleiras e um broche dourado com o símbolo de seu grupo em seu ombro esquerdo.",
+        "rituais": [],
+        "habilidades": [],
+        "arsenal": ""
+      },
+      {
+        "name": "Morato Vertaler",
+        "page": "Morato Vertaler",
+        "url": "https://ordemparanormal.fandom.com/wiki/Morato_Vertaler",
+        "id": null,
+        "origin": "Os Cinco",
+        "element": null,
+        "afinidade": null,
+        "classe": null,
+        "trilha": null,
+        "associacao": [
+          "Ordo Realitas (anteriormente)",
+          "Os Cinco (Mentor)"
+        ],
+        "status": "Falecido",
+        "resumo": "Morato Vertaler foi um ex-agente da Ordo Realitas, que após sua expulsão criou uma equipe denominada Os Cinco para lidar com criaturas paranormais conhecidas como Alheios. Ele teve sua primeira aparição no , onde seus pupilos o libertam da cápsulas em que estava aprisionado após seu sequestro durante sua investigação sobre a origem dos Alheios. Porém logo nos momentos finais da missão, no , Morato avança contra o Estrangeiro na tentativa de proteger Os Cinco, se sacrificando e garantindo que eles entrassem nas cápsulas do Sino de Transmissão, sendo derretido em gosma verde pela equipe.",
+        "aparencia": "Morato era um homem negro com um olhar cansado, tendo cabelos trançados em um coque com algumas tranças soltas, escondendo uma cicatriz de Conhecimento na parte esquerda da sua cabeça, além de uma pequena barba por fazer. Ele usava uma faixa vermelha amarrada em sua testa, uma camisa social cinza escura e uma jaqueta azul com alguns detalhes vermelhos nos ombros, além de um colar de identificação militar em seu pescoço.",
+        "rituais": [
+          {
+            "nome": "\"Tamo com Ele\"",
+            "descricao": "Todos os aliados de Morato recebem +5 em Iniciativa no início de um combate.",
+            "tipo": "",
+            "fase": ""
+          }
+        ],
+        "habilidades": [],
+        "arsenal": "Larva da Fúria \"Calabresa\": Nomeada de \"Calabresa\" por Lírio Tellini, é uma Larva de Sangue gosmenta com 15cm e dentes longos. Esse item, quando ingerido, faz com que o usuário fique tomado pelo ódio."
       }
     ]
   }

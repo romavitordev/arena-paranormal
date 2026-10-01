@@ -18,8 +18,8 @@ const allStrikes = (c) => [...c.melee.strikes, ...['forward', 'back', 'side', 'a
 
 // ---------------- base preservada ----------------
 const ids = ROSTER.map((c) => c.id);
-ok(['cineraria', 'abutre', 'mascarado', 'vampira', 'dante', 'erin', 'injustica', 'desconjurado', 'aguiar'].every((i) => ids.includes(i)), `elenco com os 9 personagens (${ids.join(', ')})`);
-ok(ROSTER.map((c) => c.name).join() === 'KAISER,ARTHUR CERVERO,JOUI JOUKI,AGHATA,DANTE,ERIN PARKER,GAL SAL,KIAN,AGUIAR', 'nomes: Kaiser, Arthur Cervero, Joui Jouki, Aghata, Dante, Erin Parker, Gal Sal, Kian, Aguiar');
+ok(['cineraria', 'abutre', 'mascarado', 'vampira', 'dante', 'erin', 'injustica', 'desconjurado', 'aguiar', 'labirinto', 'xande'].every((i) => ids.includes(i)), `elenco com os 11 personagens (${ids.join(', ')})`);
+ok(ROSTER.map((c) => c.name).join() === 'KAISER,ARTHUR CERVERO,JOUI JOUKI,AGHATA,DANTE,ERIN PARKER,GAL SAL,KIAN,AGUIAR,LABIRINTO,XANDE', 'nomes: Kaiser, Arthur Cervero, Joui Jouki, Aghata, Dante, Erin Parker, Gal Sal, Kian, Aguiar, Labirinto, Xande');
 const banners = Object.fromEntries(ROSTER.map((c) => [c.id, c.special.banner]));
 ok(banners.injustica === 'Injustiça né?' && banners.cineraria === 'Cinerária!' && banners.mascarado === 'Shi no Kage!' && banners.vampira === 'Descarnar!' && banners.abutre === 'Arma de Sangue!' && banners.desconjurado === 'Inexistir', 'textos dos especiais na tela');
 ok(COMBAT.maxHealth === 1000 && COMBAT.maxEnergy === 100, 'vida 1000 e energia 100');
@@ -174,6 +174,12 @@ ok(agu && agu.melee.name.includes('Machado') && agu.melee.strikes.at(-1).bleed, 
 ok(agu && ['maskForm', 'bearTrap', 'predatorScent'].every((t) => agu.abilities.some((a) => a.type === t)), 'Aguiar: Máscara do Mutilador, Armadilha de Urso e Predador de Sangue');
 ok(agu && agu.abilities.find((a) => a.type === 'maskForm').noBlock, 'Aguiar: mascarado não consegue defender (intenção assassina)');
 ok(agu && pas('aguiar', 'sonOfPain'), 'Aguiar: Filho da Dor');
+const lab = get('labirinto');
+const xan = get('xande');
+ok(lab && lab.origin === 'Mascarados' && lab.melee.name === 'A Antena' && lab.ranged.name === 'Rajada Caótica', 'Labirinto: Mascarados, A Antena e Rajada Caótica');
+ok(lab && ['mentalMaze', 'consumeMoment', 'helmetForm'].every((t) => abil('labirinto', t)) && lab.special.type === 'abyssMaze', 'Labirinto: Labirinto Mental, Consumir Momento, Capacete do ??? e especial do labirinto');
+ok(xan && xan.origin === 'Os Cinco' && xan.melee.name.includes('Taco') && xan.ranged.boomerang, 'Xande: Os Cinco, taco com arame farpado e Skate Caótico que volta');
+ok(xan && ['curseWeapon', 'polarize', 'noiseScreen', 'selfBuff'].every((t) => abil('xande', t)) && pas('xande', 'paranormalGladiator'), 'Xande: Amaldiçoar Arma, Polarização Caótica, Tela de Ruído, Velocidade Mortal, Gladiador Paranormal');
 
 // ---------------- V2.3: combos verticais ----------------
 ok(ROSTER.every((c) => c.melee.up && c.melee.up.launcher && c.melee.up.finisher === 'launchHigh'), 'todos com ↑ + ○ (lançador próprio)');

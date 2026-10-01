@@ -7,11 +7,13 @@ import desconjurado from './desconjurado.js';
 import dante from './dante.js';
 import erin from './erin.js';
 import aguiar from './aguiar.js';
+import labirinto from './labirinto.js';
+import xande from './xande.js';
 
 // Elenco jogável, na ordem da tela de seleção.
 // Para adicionar um personagem: crie o arquivo de definição aqui, registre o
 // modelo em models/index.js e acrescente nesta lista.
-export const ROSTER = [cineraria, abutre, mascarado, vampira, dante, erin, injustica, desconjurado, aguiar];
+export const ROSTER = [cineraria, abutre, mascarado, vampira, dante, erin, injustica, desconjurado, aguiar, labirinto, xande];
 
 export function getCharacter(id) {
   return ROSTER.find((c) => c.id === id);

@@ -81,7 +81,7 @@ export class HomeScreen {
       <div class="logo">
         <div class="kicker">UM JOGO DE LUTA PARANORMAL</div>
         <h1>ARENA<br><span>PARANORMAL</span></h1>
-        <div class="tag">ORDO REALITAS <i>×</i> ESCRIPTAS <i>×</i> MASCARADOS</div>
+        <div class="tag">ORDO REALITAS <i>×</i> ESCRIPTAS <i>×</i> MASCARADOS <i>×</i> OS CINCO</div>
       </div>
       <div class="press">PRESSIONE <b>START</b>, <b>${OK}</b> OU <kbd>ENTER</kbd></div>
       <div class="menu-home">
