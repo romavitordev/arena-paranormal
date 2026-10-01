@@ -17,18 +17,24 @@ export default {
     tagline: 'Por eles... Por eles... Por eles...',
   },
   stats: { moveSpeed: 8.6 }, // Tênis Lépidos
-  anims: { idle: 'idle_knife', run: 'run', charge: 'charge', victory: 'victory', block: 'block_weapon' },
+  // anda um instante e SOBE no Skate Caótico: bem mais rápido; parar, atacar ou apanhar desce
+  mount: { prop: 'skate', after: 0.35, speedMult: 1.4, anim: 'skate_ride', lift: 0.1, height: 0.06, center: 0.3, color: 0x5aff6a },
+  anims: { idle: 'idle_knife', run: 'run', charge: 'charge', victory: 'victory', block: 'block_skate' },
+  // pegada: skate na mão esquerda; ao bater vai para as costas e o taco é seguro com as duas mãos
+  grip: { prop: 'skate', reach: 0.42 },
+  // o skate de escudo: bloqueio perfeito com janela um pouco maior
+  defense: { perfectBlock: { window: 0.14, counterStun: 0.45 } },
   chargeFx: { style: 'default', color: 0xf2c230 },
   dodge: { style: 'default', distance: 5.0 },
 
   melee: {
     name: 'Taco com arame farpado',
     strikes: [
-      { name: 'Tacada', anim: 'slash_h', dur: 0.32, active: [0.1, 0.18], damage: 30, range: 2.0, arc: 130, knockback: 1.0, lunge: 1.2, sound: 'swing', hitSound: 'heavyPunch', trail: { color: 0xf2c230, tilt: 0.05 } },
-      { name: 'Tacada de volta', anim: 'slash_h_back', dur: 0.32, active: [0.1, 0.18], damage: 30, range: 2.0, arc: 130, knockback: 1.0, lunge: 1.1, sound: 'swing', hitSound: 'heavyPunch', trail: { color: 0xf2c230, flip: true } },
+      { name: 'Tacada', anim: 'slash_h', dur: 0.32, active: [0.1, 0.18], damage: 33, range: 2.0, arc: 130, knockback: 1.0, lunge: 1.2, sound: 'swing', hitSound: 'heavyPunch', trail: { color: 0xf2c230, tilt: 0.05 } },
+      { name: 'Tacada de volta', anim: 'slash_h_back', dur: 0.32, active: [0.1, 0.18], damage: 33, range: 2.0, arc: 130, knockback: 1.0, lunge: 1.1, sound: 'swing', hitSound: 'heavyPunch', trail: { color: 0xf2c230, flip: true } },
       { name: 'Skate na cara', anim: 'dual_l', dur: 0.3, active: [0.09, 0.17], damage: 28, range: 1.8, arc: 110, knockback: 1.0, lunge: 1.1, sound: 'swing', hitSound: 'heavyPunch' },
-      { name: 'Tacada por cima', anim: 'slash_v', dur: 0.42, active: [0.16, 0.26], damage: 38, range: 2.0, arc: 70, knockback: 1.6, lunge: 1.0, guardCrush: 20, sound: 'swing', hitSound: 'heavyPunch', trail: { color: 0xf2c230, roll: 1.55 } },
-      { name: 'Home run', anim: 'slash_finisher', dur: 0.58, active: [0.28, 0.4], damage: 58, range: 2.1, arc: 100, lunge: 1.8, finisher: 'launch', bleed: { dps: 5, duration: 3 }, sound: 'slashFinal', hitSound: 'heavyPunch', trail: { color: 0xf2c230, roll: 1.5, big: true } },
+      { name: 'Tacada por cima', anim: 'slash_v', dur: 0.42, active: [0.16, 0.26], damage: 42, range: 2.0, arc: 70, knockback: 1.6, lunge: 1.0, guardCrush: 20, sound: 'swing', hitSound: 'heavyPunch', trail: { color: 0xf2c230, roll: 1.55 } },
+      { name: 'Home run', anim: 'slash_finisher', dur: 0.58, active: [0.28, 0.4], damage: 62, range: 2.1, arc: 100, lunge: 1.8, finisher: 'launch', bleed: { dps: 5, duration: 3 }, sound: 'slashFinal', hitSound: 'heavyPunch', trail: { color: 0xf2c230, roll: 1.5, big: true } },
     ],
     up: { name: 'Tacada para cima', anim: 'slash_up', dur: 0.44, active: [0.15, 0.27], damage: 40, range: 2.0, arc: 120, lunge: 0.9, finisher: 'launchHigh', launcher: true, sound: 'swing', hitSound: 'heavyPunch', trail: { color: 0xf2c230, tilt: -1.3 } },
     down: { name: 'Tacada no chão', anim: 'slash_d', dur: 0.5, active: [0.2, 0.3], damage: 46, range: 2.0, arc: 120, lunge: 1, finisher: 'knockdown', sound: 'swing', hitSound: 'heavyPunch', impactScale: 1.4, trail: { color: 0xf2c230, roll: 1.2, big: true } },
@@ -86,7 +92,7 @@ export default {
       type: 'polarize',
       description: 'Aura magnética: o inimigo LONGE é atraído até ele; o inimigo PERTO é repelido para longe e cai.',
       energyCost: 30,
-      cooldown: 14,
+      cooldown: 12,
       windup: 0.4,
       recovery: 0.3,
       range: 11,
@@ -122,6 +128,18 @@ export default {
       refillDodges: 4,
       color: 0xa7a3ad,
     },
+    {
+      id: 'cicatrizacao',
+      name: 'Cicatrização',
+      input: 'mod+dodge', // R1 + L2 / RB + LT
+      type: 'healOverTime',
+      description: 'Ritual de Sangue: as feridas fecham sozinhas, recuperando vida aos poucos.',
+      energyCost: 30,
+      cooldown: 26,
+      heal: 70,
+      duration: 2.5,
+      color: 0xc01830,
+    },
   ],
 
   // Especial "POR ELES": sobe no skate, atropela, lança o inimigo e acaba com o taco amaldiçoado
@@ -148,6 +166,6 @@ export default {
   },
 
   passives: [
-    { type: 'paranormalGladiator', energy: 2 }, // Gladiador Paranormal: +2 de sanidade a cada golpe físico que acerta
+    { type: 'paranormalGladiator', energy: 3 }, // Gladiador Paranormal: +3 de sanidade a cada golpe físico que acerta
   ],
 };

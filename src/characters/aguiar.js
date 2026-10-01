@@ -101,6 +101,20 @@ export default {
       bleed: { dps: 5, duration: 3 },
     },
     {
+      id: 'caes',
+      name: 'Cães de Caça',
+      input: 'mod+carga', // R1 + △ / RB + Y
+      type: 'huntingDog',
+      description: 'Assobia e um dos Rottweilers do acampamento corre até a vítima, morde (prende por um instante e faz sangrar) e volta.',
+      energyCost: 25,
+      cooldown: 14,
+      damage: 30,
+      hold: 0.8,
+      speed: 13,
+      maxRun: 2.5,
+      bleed: { dps: 4, duration: 2 },
+    },
+    {
       id: 'predador',
       name: 'Predador de Sangue',
       input: 'mod+jump', // R1 + × / RB + A

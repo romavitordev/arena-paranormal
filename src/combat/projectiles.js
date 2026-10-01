@@ -414,10 +414,7 @@ export class Projectiles {
     const E = a.explode;
     const w = this.world;
     const c = p.pos.clone();
-    w.fx.flash(c, { color: E.color ?? 0xffb040, size: E.radius * 1.6, life: 0.18 });
-    w.fx.ring(new THREE.Vector3(c.x, 0.08, c.z), { color: E.color ?? 0xff8030, radius: E.radius, life: 0.4 });
-    w.fx.burst(c, { count: 40, color: E.color ?? 0xff9a30, speed: 9, up: 2, life: 0.5, size: 0.35 });
-    w.fx.burst(c, { count: 16, color: 0x2a2420, kind: 'smoke', speed: 2.5, up: 1.2, life: 1.1, size: 1.1, grow: 1 });
+    w.fx.play('FX_EXPLOSION', c, { color: E.color ?? 0xff9a30, scale: E.radius });
     w.audio.play(E.sound || 'explosion', { volume: 1 });
     w.cameraRig.shake(0.35, 0.25);
     if (E.mist) {
@@ -430,7 +427,7 @@ export class Projectiles {
       if (d <= E.radius + target.radius && Math.abs(target.chestPos().y - c.y) < E.radius + 1) {
         const res = applyHit(w, p.owner, target, {
           damage: E.damage, kind: a.kind || 'ranged', knockback: E.knockback ?? 4, hitstun: E.hitstun ?? 0.5,
-          launch: !!E.launch, lowLaunch: !!E.launch, guardCrush: E.guardCrush, element: a.element,
+          launch: !!E.launch, lowLaunch: !!E.launch, guardCrush: E.guardCrush, element: a.element, stun: E.stun,
           dir: new THREE.Vector3(target.pos.x - c.x, 0, target.pos.z - c.z).normalize(), color: E.color ?? 0xff8030, sound: 'heavyPunch', scale: 1.4,
         });
         if (typeof res === 'number' && res >= 0) this.applyOnHit(p, target);

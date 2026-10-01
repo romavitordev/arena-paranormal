@@ -32,6 +32,8 @@ M = {
 }
 coat = material('coat', '#26252a', 0.9)
 red = material('trim_red', '#8a1018', 0.7)
+twist_red = material('rope_twist_red', '#ffffff', 0.85)    # corda trançada vermelha e escura (textura)
+twist_cream = material('rope_twist_cream', '#ffffff', 0.9)  # cordão cru trançado (textura)
 rope = material('rope', '#b8a07a', 0.9)
 wrapm = material('wraps', '#2a2a2e', 0.9)
 hairm = material('hair', '#0e0e10', 0.6)
@@ -85,11 +87,31 @@ b.add('rope_knot', merge(ellipsoid((0, -0.088, 1.53), (0.03, 0.022, 0.035), 8, 6
                          tube([(0, -0.092, 1.51, 0.012, 0.012), (0.012, -0.1, 1.4, 0.011, 0.011)], 6),
                          tube([(0, -0.092, 1.51, 0.012, 0.012), (-0.01, -0.1, 1.42, 0.011, 0.011)], 6)), rope, region='torso', subdiv=0)
 # corda vermelha grossa na cintura, com nó e pontas soltas
-b.add('belt_rope', merge(tube([(0, 0, hz + 0.04, 0.205, 0.152), (0, 0, hz + 0.075, 0.207, 0.154)], 20),
-                         tube([(0, 0, hz + 0.085, 0.204, 0.151), (0, 0, hz + 0.115, 0.203, 0.15)], 20)), red, region='torso', subdiv=0)
-b.add('belt_knot', ellipsoid((0.11, -0.15, hz + 0.07), (0.035, 0.025, 0.035), 8, 6), red, region='torso', subdiv=0)
+# corda trançada na cintura (três voltas), nó e laçadas penduradas do lado esquerdo — como na arte
+b.add('belt_rope', merge(tube([(0, 0, hz + 0.03, 0.206, 0.153), (0, 0, hz + 0.06, 0.208, 0.155)], 24),
+                         tube([(0, 0, hz + 0.07, 0.205, 0.152), (0, 0, hz + 0.1, 0.205, 0.152)], 24),
+                         tube([(0, 0, hz + 0.11, 0.203, 0.15), (0, 0, hz + 0.135, 0.202, 0.149)], 24)), twist_red, region='torso', subdiv=0)
+b.add('belt_knot', ellipsoid((0.11, -0.15, hz + 0.07), (0.04, 0.03, 0.04), 8, 6), twist_red, region='torso', subdiv=0)
 for k, dx in enumerate((0.1, 0.13)):
-    b.add(f'belt_end{k}', tube([(dx, -0.155, hz + 0.05, 0.013, 0.013), (dx + 0.03, -0.16, hz - 0.12, 0.012, 0.012), (dx + 0.01, -0.16, hz - 0.3, 0.011, 0.011)], 6), red, region='skirt', subdiv=0)
+    b.add(f'belt_end{k}', tube([(dx, -0.155, hz + 0.05, 0.014, 0.014), (dx + 0.03, -0.16, hz - 0.12, 0.013, 0.013), (dx + 0.01, -0.16, hz - 0.3, 0.012, 0.012)], 6), twist_red, region='skirt', subdiv=0)
+# laçadas de corda penduradas no quadril esquerdo
+loops = []
+for k in range(3):
+    c = Vector((0.2 - k * 0.012, -0.06 + k * 0.03, hz - 0.02 - k * 0.04))
+    pts = []
+    for j in range(13):
+        a = j / 12 * TAU
+        pts.append((c.x + math.sin(a) * 0.012, c.y + math.cos(a) * 0.05, c.z - 0.09 + math.cos(a) * 0.09, 0.011, 0.011))
+    loops.append(tube(pts, 6, cap_start=False, cap_end=False))
+b.add('rope_loops', merge(*loops), twist_red, region='skirt', subdiv=0)
+# cordão cru cruzado em X no peito, logo abaixo da gola, com pingente de corda
+lace = []
+for k in range(3):
+    z0 = 1.53 - k * 0.04
+    lace.append(cone((-0.035, -0.145, z0), (0.035, -0.148, z0 - 0.035), 0.006, 4))
+    lace.append(cone((0.035, -0.145, z0), (-0.035, -0.148, z0 - 0.035), 0.006, 4))
+b.add('chest_lace', merge(*lace), twist_cream, region='torso', subdiv=0)
+b.add('pendant', merge(tube([(0, -0.15, 1.4, 0.016, 0.01), (0, -0.152, 1.33, 0.014, 0.009)], 6), ellipsoid((0, -0.153, 1.32), (0.02, 0.012, 0.022), 8, 6)), twist_cream, region='torso', subdiv=0)
 
 # pulseira de miçangas com as bandeiras do Brasil, Itália e Japão (punho esquerdo)
 flags = [('#1f9a3a', '#f2d22a'), ('#1f9a3a', '#f4f4f0', '#d42a2a'), ('#f4f4f0', '#d42a2a')]

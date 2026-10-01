@@ -122,6 +122,13 @@ export class CpuController {
     const lowHp = f.health < f.maxHealth * 0.3;
     const defensive = lowHp ? 1.8 : 1;
 
+    // adversário preparando o especial: um tiro pode interromper (quanto mais difícil, mais a CPU tenta)
+    if (opp.state === 'specialStart' && !this.triedInterrupt && (f.state === 'idle' || f.state === 'charging')) {
+      this.triedInterrupt = true;
+      if (f.cooldowns.ranged <= 0 && Math.random() < 1 - this.L.mistake * 2.5) { this.tap('ranged'); return out; }
+    }
+    if (opp.state !== 'specialStart') this.triedInterrupt = false;
+
     if (this.holdCharge > 0) {
       this.holdCharge -= dt;
       out.held.carga = true;

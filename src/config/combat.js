@@ -14,6 +14,9 @@ export const COMBAT = {
   specialDamage: 250,
   specialEnergyCost: 50,
   specialCooldown: 14,
+  // preparo do especial: o lutador concentra a energia e fica VULNERÁVEL — um projétil (ou qualquer golpe)
+  // nesse momento interrompe o especial (a sanidade gasta se perde; recarga curta)
+  specialStartup: { time: 0.45, interruptedCooldown: 4 },
 
   // Sequência CARGA → CARGA → ATAQUE FÍSICO
   cargaWindow: 2.5, // segundos para continuar a sequência após cada etapa

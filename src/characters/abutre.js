@@ -23,9 +23,9 @@ export default {
   melee: {
     name: 'Combate de um braço',
     strikes: [
-      { name: 'Chute baixo', anim: 'kick_low', dur: 0.36, active: [0.12, 0.22], damage: 36, range: 1.8, arc: 90, knockback: 1.8, lunge: 1.2, sound: 'swing', hitSound: 'kick' },
-      { name: 'Joelhada', anim: 'knee', dur: 0.38, active: [0.12, 0.22], damage: 42, range: 1.4, arc: 90, knockback: 2.2, lunge: 1.3, sound: 'swing', hitSound: 'heavyPunch' },
-      { name: 'Chute circular', anim: 'kick_round', dur: 0.45, active: [0.16, 0.28], damage: 46, range: 1.9, arc: 140, knockback: 2.4, lunge: 1.0, sound: 'swing', hitSound: 'kick' },
+      { name: 'Chute baixo', anim: 'kick_low', dur: 0.32, active: [0.1, 0.19], damage: 36, range: 1.9, arc: 100, knockback: 0.9, lunge: 1.3, sound: 'swing', hitSound: 'kick' },
+      { name: 'Joelhada', anim: 'knee', dur: 0.34, active: [0.1, 0.2], damage: 42, range: 1.7, arc: 100, knockback: 1.0, lunge: 1.4, sound: 'swing', hitSound: 'heavyPunch' },
+      { name: 'Chute circular', anim: 'kick_round', dur: 0.4, active: [0.13, 0.25], damage: 46, range: 1.9, arc: 140, knockback: 1.2, lunge: 1.1, sound: 'swing', hitSound: 'kick' },
       { name: 'Chute giratório', anim: 'spin_kick', dur: 0.6, active: [0.22, 0.38], damage: 60, range: 2.0, arc: 160, lunge: 1.8, finisher: 'launch', sound: 'swing', hitSound: 'heavyPunch' },
     ],
 
@@ -54,7 +54,7 @@ export default {
     spread: 0,
     knockback: 5, // grande impacto
     hitstun: 0.45,
-    cooldown: 3.6,
+    cooldown: 3.2,
     energyCost: 0,
     visual: 'sniper',
     color: 0xfff2c0,
@@ -110,6 +110,20 @@ export default {
       arc: 70,
       stun: 0.9,
       color: 0xff1f3a,
+    },
+    {
+      id: 'armaduraSangue',
+      name: 'Armadura de Sangue',
+      input: 'mod+dodge', // R1 + L2 / RB + LT
+      type: 'noiseScreen',
+      description: 'O sangue endurece sobre a pele como uma couraça vermelha: absorve golpes e tiros até se romper.',
+      energyCost: 25,
+      cooldown: 18,
+      buffType: 'bloodArmor',
+      label: 'ARMADURA DE SANGUE',
+      shield: 130,
+      duration: 8,
+      color: 0xb01020,
     },
   ],
 

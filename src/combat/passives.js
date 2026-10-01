@@ -77,6 +77,12 @@ export const PASSIVES = {
       return (victim.comboHits || 0) >= (passive.after ?? 3) ? passive.mult ?? 0.75 : 1;
     },
   },
+  // Kaiser — Afinidade Elemental: conectado à Energia, os rituais dele (habilidades e especial) batem mais forte
+  elementalAffinity: {
+    damageMod({ kind, passive }) {
+      return kind === 'ability' || kind === 'special' ? passive.mult ?? 1.15 : 1;
+    },
+  },
   // Labirinto — Mente Labiríntica: atordoamentos duram menos (lido em Fighter.stun)
   mentalMaze: {},
   // Xande — Gladiador Paranormal: cada golpe físico que acerta devolve um pouco de sanidade

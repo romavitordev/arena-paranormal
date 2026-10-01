@@ -15,7 +15,7 @@ if (!existsSync(BLENDER)) {
 }
 
 const jobs = readdirSync(here)
-  .filter((f) => /^(char|arena)_.+\.py$/.test(f))
+  .filter((f) => /^(char|arena)_.+\.py$/.test(f) && f !== 'arena_lib.py') // arena_lib.py é biblioteca, não cenário
   .map((f) => {
     const [kind, id] = f.replace('.py', '').split(/_(.+)/);
     const dir = kind === 'char' ? 'models' : 'arenas';

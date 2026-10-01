@@ -2,18 +2,27 @@ import * as THREE from 'three';
 import { Timeline } from '../../core/util.js';
 import { faceClose, orbit } from '../../camera/shots.js';
 import { createMistZone } from '../abilities.js';
+import { applyHit } from '../damage.js';
+import { splitDamage } from './common.js';
+import { COMBAT } from '../../config/combat.js';
+import { yawTo, forwardFromYaw } from '../../core/util.js';
 
-// Especial "Cinerária" (Cineraria): névoa paranormal que envolve a personagem e
-// altera o ambiente ao redor. NÃO causa dano direto. Durante o efeito:
+// Especial "Cinerária" (Kaiser): solta a névoa Cinerária e, dentro dela, conjura a ACÁCIA
+// amplificada pela névoa (é a Acácia que causa o dano; o letreiro continua "Cinerária").
+// Depois, a névoa fica PARADA no mapa onde foi solta por um tempo. Enquanto o Kaiser estiver dentro:
 //  - bônus de dano moderado nos ataques (damageBonus)
 //  - esquiva melhor: mais invulnerabilidade e menos cooldown (evasion)
 //  - leitura visual difícil: corpo parcialmente translúcido (opacity)
-//  - área paranormal que segue a Cineraria (area): inimigos dentro ficam mais
+//  - área paranormal fixa no chão (area): inimigos dentro ficam mais
 //    lentos, não regeneram energia e projéteis inimigos perdem velocidade
 export const mistField = {
   canStart: () => true,
   start(f, sp, world) {
-    world.beginCinematic(f, null);
+    // com flowerStorm: dentro da névoa ele amplifica a Acácia sobre o inimigo (o especial passa a causar dano)
+    const opp = f.opponent;
+    const storm = sp.flowerStorm && opp && opp.state !== 'ko' ? sp.flowerStorm : null;
+    world.beginCinematic(f, storm ? opp : null);
+    if (storm) f.yaw = yawTo(f.pos, opp.pos);
     const tl = new Timeline();
     const mouth = () => f.rig.sockets.mouth.getWorldPosition(new THREE.Vector3());
     const fwd = () => new THREE.Vector3(Math.sin(f.yaw), 0.1, Math.cos(f.yaw));
@@ -57,24 +66,68 @@ export const mistField = {
       world.showBanner(sp.banner || f.def.name, f.def.color);
       world.audio.play('powerUp');
     });
+    // TEMPESTADE DE ACÁCIA: flores roxas caem sobre o inimigo, cada vez mais rápidas; a última explode
+    let rain = null;
+    let tEnd = 1.85;
+    if (storm) {
+      const total = sp.damage ?? COMBAT.specialDamage;
+      const parts = splitDamage(total, storm.shares);
+      const t0 = 1.35;
+      tl.add(t0 - 0.2, () => {
+        f.anim.play('cast_up', { restart: true, duration: 0.6 });
+        world.cameraRig.playShots([orbit(opp, { dur: 1.6, radius: 4.5, height: 2.2, a0: -0.7, a1: 0.7, lookH: 1.0, fov: 50 })]);
+        world.audio.play('rebirth', { volume: 0.7, pitch: 1.3 });
+        f.notify('ACÁCIA (CINERÁRIA)');
+      });
+      tl.add(t0, () => {
+        const c = opp.pos.clone();
+        rain = world.fx.emitter({
+          rate: 220,
+          follow: () => { const a = Math.random() * Math.PI * 2; const r = Math.sqrt(Math.random()) * 2.2; return new THREE.Vector3(c.x + Math.sin(a) * r, 4.5 + Math.random() * 2, c.z + Math.cos(a) * r); },
+          particle: { color, speed: 0.4, up: -7, spread: 0.3, life: 0.9, size: 0.2, gravity: 3 },
+        });
+        opp.anim.play('hit', { restart: true });
+      });
+      storm.shares.forEach((_, i) => {
+        const last = i === storm.shares.length - 1;
+        tl.add(t0 + 0.15 + i * storm.interval, () => {
+          applyHit(world, f, opp, { damage: parts[i], kind: 'special', reaction: false, ignoreInvuln: true, color, sound: 'clawHit', scale: last ? 2.2 : 0.9 });
+          world.fx.burst(opp.chestPos(), { count: last ? 70 : 14, color, speed: last ? 10 : 4, life: 0.6, size: last ? 0.3 : 0.18 });
+          if (last) {
+            world.fx.flash(opp.chestPos(), { color, size: 6, life: 0.3 });
+            world.fx.ring(new THREE.Vector3(opp.pos.x, 0.06, opp.pos.z), { color, radius: 4, life: 0.5 });
+            world.cameraRig.shake(0.6, 0.35);
+            if (opp.state !== 'ko') opp.anim.play('launched', { restart: true });
+          } else if (opp.state !== 'ko') opp.anim.play('hit', { restart: true });
+        });
+      });
+      tEnd = t0 + 0.4 + storm.shares.length * storm.interval;
+    }
     // efeito ativado
-    tl.add(1.85, () => {
+    tl.add(tEnd, () => {
       mouthSmoke && mouthSmoke.stop();
       spread && spread.stop();
+      rain && rain.stop();
       activate(f, sp, world);
     });
-    tl.add(2.05, () => world.endCinematic());
-    tl.end(2.1);
+    tl.add(tEnd + 0.2, () => {
+      world.endCinematic();
+      if (storm && opp.state !== 'ko') opp.react({ dir: forwardFromYaw(yawTo(f.pos, opp.pos)), knockback: 4, hitstun: COMBAT.launchHitstun, launch: true, lowLaunch: true });
+    });
+    tl.end(tEnd + 0.25);
     return {
       update: (dt) => tl.update(dt),
-      cancel: () => { mouthSmoke && mouthSmoke.stop(); spread && spread.stop(); world.endCinematic(); },
+      cancel: () => { mouthSmoke && mouthSmoke.stop(); spread && spread.stop(); rain && rain.stop(); world.endCinematic(); },
     };
   },
 };
 
 function activate(f, sp, world) {
+  // a névoa fica no mapa onde foi solta (não acompanha o Kaiser)
+  const center = new THREE.Vector3(f.pos.x, 0, f.pos.z);
+  const inside = () => Math.hypot(f.pos.x - center.x, f.pos.z - center.z) <= sp.area;
   const zone = createMistZone(world, f, {
-    center: () => f.pos,
+    center: () => center,
     radius: sp.area,
     slow: sp.enemySlow,
     enemyRegen: sp.enemyRegen,
@@ -85,7 +138,7 @@ function activate(f, sp, world) {
   // 4: personagem parcialmente envolvida pela fumaça
   const wrap = world.fx.emitter({
     rate: 30 * sp.smokeIntensity,
-    follow: () => new THREE.Vector3(f.pos.x + (Math.random() - 0.5) * 0.8, f.pos.y + 0.2 + Math.random() * 1.6, f.pos.z + (Math.random() - 0.5) * 0.8),
+    follow: () => inside() && new THREE.Vector3(f.pos.x + (Math.random() - 0.5) * 0.8, f.pos.y + 0.2 + Math.random() * 1.6, f.pos.z + (Math.random() - 0.5) * 0.8),
     particle: { color: sp.color, kind: 'smoke', speed: 0.6, up: 1.0, spread: 0.3, life: 0.9, size: 0.5, grow: 1.2 },
   });
   const mouth = world.fx.emitter({
@@ -94,6 +147,7 @@ function activate(f, sp, world) {
   });
   f.buffTint = { color: sp.color, base: 0.16 };
   f.addBuff({
+    when: inside, // bônus só valem dentro da névoa
     type: 'mist',
     name: 'CINERÁRIA',
     mult: sp.damageBonus,

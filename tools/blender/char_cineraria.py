@@ -11,7 +11,7 @@ from lib import *
 from mathutils import Vector
 
 OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'cineraria.glb'
-b = Builder(width=1.0, bulk=1.05, height=1.0)
+b = Builder(width=1.0, bulk=1.05, height=0.97)  # 1,75 m
 sk, H = b.sk, 1.0
 hz = sk['hips'].z
 
@@ -36,22 +36,43 @@ hc = b.body(M, [(-0.12, 0.17), (0.0, 0.17), (0.18, 0.165), (0.38, 0.215), (0.5, 
 # gola alta canelada
 b.add('collar', tube([(0, 0, 1.58, 0.072, 0.07), (0, 0, 1.69, 0.068, 0.066)], 14), M['torso'], region='torso', subdiv=0)
 # jaqueta aberta na frente (cobre tronco), com barra e capuz
-jk = [(hz - 0.1, 0.19, 0.135), (hz + 0.1, 0.185, 0.13), (hz + 0.33, 0.235, 0.155), (hz + 0.47, 0.246, 0.16), (hz + 0.56, 0.17, 0.12), (hz + 0.62, 0.11, 0.09)]
-b.add('jacket_body', open_tube(jk, gap=0.06, seg=22), jacket, region='torso')
-# forro roxo nas bordas da frente
-for s in (1, -1):
-    b.add(f'lining{s}', box((s * 0.06, -0.15, hz + 0.22), (0.022, 0.012, 0.6)), purple, region='torso', subdiv=0)
+# jaqueta acolchoada (mais volumosa que o corpo, com leve "gomo" na cintura e no peito)
+jk = [(hz - 0.1, 0.2, 0.145), (hz + 0.02, 0.205, 0.15), (hz + 0.1, 0.195, 0.142), (hz + 0.22, 0.215, 0.152), (hz + 0.33, 0.245, 0.165), (hz + 0.47, 0.255, 0.17), (hz + 0.56, 0.178, 0.128), (hz + 0.62, 0.115, 0.095)]
+b.add('jacket_body', open_tube(jk, gap=0.07, seg=26), jacket, region='torso')
+# forro roxo POR DENTRO (aparece na abertura da frente, como na arte)
+b.add('jacket_lining', open_tube([(z, rx * 0.965, ry * 0.965) for z, rx, ry in jk], gap=0.07, seg=26), purple, region='torso')
+# barra em ribana mais escura
+b.add('jacket_hem', open_tube([(hz - 0.12, 0.2, 0.145), (hz - 0.07, 0.202, 0.147)], gap=0.07, seg=26), material('rib_grey', '#a8a69e', 0.9), region='torso', subdiv=0)
+# botões de pressão nas abas dos bolsos e no fechamento
+snaps = [ellipsoid((s * 0.12, -0.185, hz + 0.045), (0.009, 0.005, 0.009), 6, 4) for s in (1, -1)]
+snaps += [ellipsoid((s * 0.12, -0.18, hz + 0.385), (0.008, 0.005, 0.008), 6, 4) for s in (1, -1)]
+snaps += [ellipsoid((0.062, -0.17, hz + 0.05 + k * 0.12), (0.008, 0.005, 0.008), 6, 4) for k in range(4)]
+b.add('snaps', merge(*snaps), material('snap_metal', '#9a9aa2', 0.3, metal=0.8), region='torso', subdiv=0)
 # bolsos com aba
 for s in (1, -1):
     b.add(f'pocket{s}', box((s * 0.12, -0.17, hz + 0.02), (0.1, 0.02, 0.07)), jacket, region='torso', subdiv=0)
     b.add(f'chestpocket{s}', box((s * 0.12, -0.165, hz + 0.36), (0.08, 0.018, 0.06)), jacket, region='torso', subdiv=0)
 # capuz caído atrás
-hood = ellipsoid((0, 0.11, 1.6), (0.18, 0.12, 0.13), 16, 10, theta_max=math.pi * 0.62)
+hood = ellipsoid((0, 0.12, 1.6), (0.2, 0.14, 0.15), 18, 12, theta_max=math.pi * 0.64)
 b.add('hood', xform(hood, lambda p: Vector((p.x, p.y + max(0, (1.66 - p.z)) * 0.3, p.z))), jacket, region='torso')
 # mangas da jaqueta mais largas por cima do braço (até o punho)
 for side in ('L', 'R'):
     s, e, h = sk['s' + side], sk['e' + side], sk['hand' + side]
-    b.add('cuff' + side, tube(limb_rings(e.lerp(h, 0.8), e.lerp(h, 0.9), 0.056, 0.056, n=1), 12), jacket, region='arm' + side, subdiv=0)
+    # manga fofa: mais larga que o braço, com dois "gomos" (acolchoado)
+    sl = [s + Vector((0, 0, 0.03)), s.lerp(e, 0.5), e, e.lerp(h, 0.5), e.lerp(h, 0.82)]
+    rr = [0.082, 0.078, 0.07, 0.068, 0.062]
+    rings = []
+    for k in range(len(sl) - 1):
+        for j in range(3):
+            t = j / 3
+            p = sl[k].lerp(sl[k + 1], t)
+            r = rr[k] + (rr[k + 1] - rr[k]) * t
+            r *= 1 + 0.08 * math.sin(t * math.pi)  # gomo
+            rings.append((p.x, p.y, p.z, r, r))
+    p = sl[-1]
+    rings.append((p.x, p.y, p.z, rr[-1], rr[-1]))
+    b.add('puffsleeve' + side, tube(rings, 14), jacket, region='arm' + side)
+    b.add('cuff' + side, tube(limb_rings(e.lerp(h, 0.8), e.lerp(h, 0.92), 0.058, 0.056, n=1), 12), material('rib_grey', '#a8a69e', 0.9), region='arm' + side, subdiv=0)
 # faixas na mão/antebraço direito
 e, h = sk['eR'], sk['handR']
 b.add('bandage', tube(limb_rings(e.lerp(h, 0.55), e.lerp(h, 1.02), 0.05, 0.05, n=4), 12), M['handR'], region='armR')
@@ -59,7 +80,9 @@ b.add('bandage', tube(limb_rings(e.lerp(h, 0.55), e.lerp(h, 1.02), 0.05, 0.05, n
 b.add('crossstrap', xform(box((0, -0.16, hz + 0.32), (0.035, 0.012, 0.66)), lambda p: Vector((p.x + (p.z - (hz + 0.32)) * 0.75, p.y, p.z))), strap, region='torso', subdiv=0)
 for s in (1, -1):
     b.add(f'bagstrap{s}', tube([(s * 0.13, -0.125, hz + 0.6, 0.018, 0.008), (s * 0.15, -0.162, hz + 0.42, 0.018, 0.008), (s * 0.16, -0.16, hz + 0.2, 0.018, 0.008)], 6), purple, region='torso', subdiv=0)
-b.add('backpack', box((0, 0.17, hz + 0.38), (0.26, 0.12, 0.3)), material('backpack', '#2a2430', 0.8), region='torso', subdiv=1)
+# mochila preta por cima da jaqueta (que ficou mais volumosa), com bolso frontal e alças roxas
+b.add('backpack', merge(box((0, 0.22, hz + 0.36), (0.3, 0.13, 0.34)), box((0, 0.3, hz + 0.3), (0.2, 0.05, 0.14))), material('backpack', '#22202a', 0.8), region='torso', subdiv=1)
+b.add('backpack_zip', box((0, 0.29, hz + 0.53), (0.24, 0.012, 0.012)), purple, region='torso', subdiv=0)
 # tênis com faixa roxa
 for side in ('L', 'R'):
     f = sk['foot' + side]
@@ -104,12 +127,13 @@ for i in range(6):
     locks.append(lock(root, d, 0.1, 0.035, curl=0.6))
 b.add('hair_locks', merge(*locks), hair, region='head', subdiv=0)
 # franja: mechas grossas caindo sobre a testa, mais longas do lado ESQUERDO (queimado)
-for i in range(6):
-    x = -0.07 + i * 0.03
-    root = Vector((x, -0.12, hc.z + 0.14))
-    d = Vector((0.25 + 0.1 * (i % 2), -0.35, -1))
+# (mais finas: a franja cobre só o olho do lado queimado, como na arte; o rosto continua visível)
+for i in range(5):
+    x = -0.05 + i * 0.028
+    root = Vector((x, -0.125, hc.z + 0.15))
+    d = Vector((0.45 + 0.1 * (i % 2), -0.3, -1))
     d.normalize()
-    b.add(f'bang{i}', lock(root, d, 0.09 + (0.03 if x > 0 else 0), 0.03, curl=0.1), hair, region='head', subdiv=0)
+    b.add(f'bang{i}', lock(root, d, 0.06 + (0.04 if x > 0.02 else 0), 0.02, curl=0.12), hair, region='head', subdiv=0)
 # cigarro no canto da boca (lado direito)
 mouth = Vector((-0.04, -0.15, hc.z - 0.075))
 b.add('prop_cigarette', merge(

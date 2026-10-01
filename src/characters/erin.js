@@ -128,6 +128,23 @@ export default {
       duration: 2.5,
       color: 0x141018,
     },
+    {
+      id: 'granadaLuz',
+      name: 'Granada de Luz',
+      input: 'mod+dodge', // R1 + L2 / RB + LT
+      type: 'throwProjectile',
+      description: 'Uma granada de clarão: explode numa luz branca que deixa o inimigo atordoado por um instante.',
+      energyCost: 20,
+      cooldown: 16,
+      anim: 'throw_r',
+      windup: 0.3,
+      recovery: 0.3,
+      startSound: 'grenadePin',
+      projectile: {
+        visual: 'grenade', color: 0xf4f0e0, speed: 16, range: 15, radius: 0.4, gravity: 18, damage: 0, lobTo: 'feet', trail: 0xfff6d0,
+        explode: { radius: 2.6, damage: 25, knockback: 0.5, color: 0xfff6d0, stun: 1.1 },
+      },
+    },
   ],
 
   // Especial SUPERNOVA (cinemático): corre com a escopeta, atira à queima-roupa, o inimigo voa longe,
@@ -146,6 +163,6 @@ export default {
   },
 
   passives: [
-    { type: 'electricAmulet', damage: 6, color: 0x5ae8ff }, // Amuleto Elétrico: choque em quem bate nela
+    { type: 'electricAmulet', damage: 4, color: 0x5ae8ff }, // Amuleto Elétrico: choque em quem bate nela
   ],
 };

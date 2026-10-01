@@ -119,6 +119,27 @@ export default {
       duration: 2.5,
       color: 0xffcf4a,
     },
+    {
+      id: 'correnteGiratoria',
+      name: 'Corrente Giratória',
+      input: 'mod+dodge', // R1 + L2 / RB + LT
+      type: 'sweepStrike',
+      description: 'Gira as duas lâminas presas às correntes em volta do corpo: três cortes em área, o último lança.',
+      energyCost: 25,
+      cooldown: 13,
+      anim: 'chain_sweep',
+      startSound: 'chainThrow',
+      windup: 0.2,
+      hits: 3,
+      interval: 0.16,
+      recovery: 0.3,
+      radius: 3.4,
+      damage: 75,
+      knockback: 6,
+      launch: true,
+      element: 'conhecimento',
+      color: 0xd4a64a,
+    },
   ],
 
   special: {

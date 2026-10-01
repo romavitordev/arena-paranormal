@@ -13,7 +13,7 @@ from lib import *
 from mathutils import Vector
 
 OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'xande.glb'
-b = Builder(width=0.96, bulk=0.95, height=0.99)
+b = Builder(width=0.96, bulk=0.95, height=0.97)  # 1,75 m
 sk = b.sk
 H = sk.h
 hz = sk['hips'].z
@@ -69,6 +69,19 @@ for k in range(3):
 b.add('brooch', ellipsoid((0, -0.155 * H, hz + 0.5 * H), (0.028, 0.01, 0.028), 10, 6), gold, region='torso', subdiv=0)
 # bandana/balaclava preta abaixada no pescoço
 b.add('bandana', tube([(0, -0.005, 1.56 * H, 0.085 * H, 0.08 * H), (0, -0.01, 1.62 * H, 0.09 * H, 0.085 * H), (0, 0, 1.66 * H, 0.075 * H, 0.07 * H)], 16), black, region='torso')
+# fones de ouvido no pescoço (ele vive ouvindo música) e o discman no cinto
+phone = material('headphone', '#2a2a2e', 0.5)
+b.add('headphone_band', tube([(-0.075 * H, -0.02, 1.6 * H, 0.012, 0.012), (0, -0.095 * H, 1.57 * H, 0.012, 0.012), (0.075 * H, -0.02, 1.6 * H, 0.012, 0.012)], 6), phone, region='torso', subdiv=0)
+for s in (1, -1):
+    b.add(f'headphone_cup{s}', ellipsoid((s * 0.08 * H, -0.03, 1.6 * H), (0.022, 0.035, 0.035), 8, 6), phone, region='torso', subdiv=0)
+b.add('discman', merge(ellipsoid((0.15 * H, -0.12 * H, hz + 0.02 * H), (0.055, 0.016, 0.055), 12, 4), box((0.15 * H, -0.135 * H, hz + 0.02 * H), (0.02, 0.004, 0.02))), material('discman', '#9a9aa4', 0.3, metal=0.6), region='torso', subdiv=0)
+# Tênis Lépidos: cabos neon passando em volta do cano
+neon = material('neon_green', '#5aff6a', 0.3, emission='#5aff6a', strength=1.5)
+for side in ('L', 'R'):
+    k, f = sk['k' + side], sk['foot' + side]
+    p0 = k.lerp(f, 0.85)
+    b.add('neon' + side, tube([(p0.x - 0.05, p0.y - 0.04, p0.z, 0.006, 0.006), (p0.x, p0.y - 0.065, p0.z - 0.04, 0.006, 0.006), (p0.x + 0.05, p0.y - 0.03, p0.z - 0.08, 0.006, 0.006)], 5), neon, region='k' + side, subdiv=0)
+
 # correntes: braço direito e tornozelo esquerdo
 chains = []
 eR, hR = sk['eR'], sk['handR']

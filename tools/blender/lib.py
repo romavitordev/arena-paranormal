@@ -22,7 +22,33 @@ def reset():
     bpy.ops.wm.read_factory_settings(use_empty=True)
 
 
+# V4 (etapa 7): materiais com nome padronizado MAT_<CATEGORIA>_<nome>. A categoria sai do nome/propriedades;
+# o jogo tira o prefixo para achar a textura (MATERIAL_TEXTURES / ARENA_TEXTURES continuam com o nome curto).
+MAT_KEYWORDS = [
+    ('EFFECT', ('glow', 'ember', 'neon', 'lens', 'eyeglow', 'emission', 'flashlight')),
+    ('SKIN', ('skin', 'face', 'arms_', 'hand_', 'feet_', 'lips')),
+    ('HAIR', ('hair', 'beard', 'mustache', 'bun')),
+    ('METAL', ('metal', 'gold', 'silver', 'brass', 'steel', 'buckle', 'snap', 'chain', 'button', 'pin', 'earring', 'brooch', 'spur', 'goggle', 'badge', 'discman')),
+    ('LEATHER', ('leather', 'belt', 'strap', 'boot', 'holster', 'glove', 'pouch', 'sole', 'sneaker', 'shoe')),
+    ('WEAPON', ('weapon', 'blade', 'axe', 'bat', 'antenna', 'gun', 'knife', 'sword', 'katana', 'shotgun', 'grenade', 'gren_')),
+]
+
+
+def mat_category(name, metal=0.0, emission=None):
+    n = name.lower()
+    if emission is not None:
+        return 'EFFECT'
+    for cat, words in MAT_KEYWORDS:
+        if any(w in n for w in words):
+            return cat
+    if metal >= 0.5:
+        return 'METAL'
+    return 'CLOTH'
+
+
 def material(name, color, rough=0.75, metal=0.0, emission=None, strength=1.0, alpha=1.0):
+    if not name.startswith('MAT_'):
+        name = 'MAT_' + mat_category(name, metal, emission) + '_' + name
     m = bpy.data.materials.get(name)
     if m:
         return m
@@ -310,6 +336,15 @@ class Skeleton:
             'kR': Vector((-lx * H, 0, 0.48 * H)),
             'footR': Vector((-lx * H, 0, 0.03 * H)),
             'top': Vector((0, 0, 1.98 * H)),
+            # V4 etapa 12: ossos extras (raiz, peito, pescoço, mãos e pés)
+            'root': Vector((0, 0, 0)),
+            'rootTip': Vector((0, 0, 0.1 * H)),
+            'chest': Vector((0, 0, 1.32 * H)),
+            'neck': Vector((0, 0, 1.56 * H)),
+            'handTipL': Vector((sx * H, 0, 0.86 * H)),
+            'handTipR': Vector((-sx * H, 0, 0.86 * H)),
+            'toeL': Vector((lx * H, -0.14 * H, 0.03 * H)),
+            'toeR': Vector((-lx * H, -0.14 * H, 0.03 * H)),
         }
 
     def __getitem__(self, k):
@@ -318,17 +353,26 @@ class Skeleton:
 
 BONES = [
     # nome, cabeça, cauda, pai
-    ('hips', 'hips', 'sp', None),
-    ('sp', 'sp', 'hd', 'hips'),
-    ('hd', 'hd', 'top', 'sp'),
-    ('sL', 'sL', 'eL', 'sp'),
+    # V4 etapa 12: root → pelvis (hips) → spine (sp) → chest → neck → head (hd); braços → mãos; pernas → pés.
+    # Os ossos novos (root, chest, neck, handL/R, footL/R) ainda não recebem rotação das poses: seguem o pai.
+    ('root', 'root', 'rootTip', None),
+    ('hips', 'hips', 'sp', 'root'),
+    ('sp', 'sp', 'chest', 'hips'),
+    ('chest', 'chest', 'neck', 'sp'),
+    ('neck', 'neck', 'hd', 'chest'),
+    ('hd', 'hd', 'top', 'neck'),
+    ('sL', 'sL', 'eL', 'chest'),
     ('eL', 'eL', 'handL', 'sL'),
-    ('sR', 'sR', 'eR', 'sp'),
+    ('handL', 'handL', 'handTipL', 'eL'),
+    ('sR', 'sR', 'eR', 'chest'),
     ('eR', 'eR', 'handR', 'sR'),
+    ('handR', 'handR', 'handTipR', 'eR'),
     ('lL', 'lL', 'kL', 'hips'),
     ('kL', 'kL', 'footL', 'lL'),
+    ('footL', 'footL', 'toeL', 'kL'),
     ('lR', 'lR', 'kR', 'hips'),
     ('kR', 'kR', 'footR', 'lR'),
+    ('footR', 'footR', 'toeR', 'kR'),
 ]
 
 
@@ -369,6 +413,18 @@ def auto_weights(sk, p, region=None):
     """
     x, y, z = p
     H = sk.h
+    # peças presas ao antebraço/canela: o que fica abaixo do punho/tornozelo vai para a mão/pé
+    if region in ('eL', 'eR'):
+        s = region[1]
+        wh = smoothstep(sk['hand' + s].z + 0.03 * H, sk['hand' + s].z - 0.02 * H, z)
+        return {region: 1 - wh, 'hand' + s: wh}
+    if region in ('kL', 'kR'):
+        s = region[1]
+        wf = smoothstep(sk['foot' + s].z + 0.075 * H, sk['foot' + s].z + 0.035 * H, z)
+        return {region: 1 - wf, 'foot' + s: wf}
+    if region == 'neck':
+        t = smoothstep(sk['neck'].z, sk['hd'].z + 0.03 * H, z)
+        return {'neck': 1 - t, 'hd': t}
     if region in BONE_NAMES:
         return {region: 1.0}
     if region == 'head':
@@ -392,9 +448,11 @@ def auto_weights(sk, p, region=None):
         sz = sk['s' + s].z
         w_fore = smoothstep(ez + 0.05 * H, ez - 0.05 * H, z)
         w_sh = 1 - w_fore
-        # perto do ombro mistura com o tronco
+        # perto do ombro mistura com o peito
         w_sp = smoothstep(sz - 0.06 * H, sz + 0.06 * H, z) * 0.6 * w_sh
-        return {'e' + s: w_fore, 's' + s: w_sh - w_sp, 'sp': w_sp}
+        # abaixo do punho: mão
+        w_hand = smoothstep(sk['hand' + s].z + 0.03 * H, sk['hand' + s].z - 0.02 * H, z) * w_fore
+        return {'e' + s: w_fore - w_hand, 'hand' + s: w_hand, 's' + s: w_sh - w_sp, 'chest': w_sp}
     if region in ('legL', 'legR'):
         s = 'L' if region == 'legL' else 'R'
         kz = sk['k' + s].z
@@ -402,15 +460,18 @@ def auto_weights(sk, p, region=None):
         w_shin = smoothstep(kz + 0.05 * H, kz - 0.05 * H, z)
         w_th = 1 - w_shin
         w_hip = smoothstep(hz - 0.1 * H, hz + 0.04 * H, z) * 0.5 * w_th
-        return {'k' + s: w_shin, 'l' + s: w_th - w_hip, 'hips': w_hip}
+        # abaixo do tornozelo: pé
+        w_foot = smoothstep(sk['foot' + s].z + 0.075 * H, sk['foot' + s].z + 0.035 * H, z) * w_shin
+        return {'k' + s: w_shin - w_foot, 'foot' + s: w_foot, 'l' + s: w_th - w_hip, 'hips': w_hip}
     if region == 'skirt':
         # casaco/poncho: segue o quadril e um pouco das pernas
         side = 'L' if x > 0 else 'R'
         drop = smoothstep(sk['hips'].z, sk['kL'].z, z)
         return {'hips': 1 - drop * 0.45, 'l' + side: drop * 0.45}
-    # tronco
+    # tronco: quadril → coluna → peito
     w_sp = smoothstep(sk['hips'].z - 0.02 * H, sk['hips'].z + 0.22 * H, z)
-    return {'sp': w_sp, 'hips': 1 - w_sp}
+    w_ch = smoothstep(sk['chest'].z - 0.08 * H, sk['chest'].z + 0.06 * H, z)
+    return {'chest': w_sp * w_ch, 'sp': w_sp * (1 - w_ch), 'hips': 1 - w_sp}
 
 
 def skin(obj, arm, sk, region=None, weight_fn=None):
@@ -503,9 +564,31 @@ def foot_part(sk, side, length=0.24, width=0.1, height=0.075):
     return box((f.x, f.y - 0.05, f.z + height / 2 - 0.03), (width, length, height))
 
 
-def head_part(sk, radii=(0.15, 0.16, 0.175), seg=24, rings=18):
+# relevo do rosto (V4 — escultura): posições batem com a textura do rosto (textures.js: olhos em y≈0,47,
+# nariz ≈0,57, boca ≈0,66 da altura; u=0,5 é a frente; cada olho a ±0,0625 em u)
+def face_relief(du, fy):
+    g = lambda x, s: math.exp(-(x / s) ** 2)
+    nose = 0.024 * g(du, 0.02) * g(fy - 0.545, 0.05) + 0.01 * g(du, 0.03) * g(fy - 0.585, 0.022)
+    brow = 0.009 * g(fy - 0.425, 0.024) * g(du, 0.12)
+    sockets = -0.008 * g(abs(du) - 0.0625, 0.028) * g(fy - 0.47, 0.03)
+    cheek = 0.006 * g(abs(du) - 0.1, 0.04) * g(fy - 0.56, 0.05)
+    lips = 0.006 * g(du, 0.05) * g(fy - 0.665, 0.022)
+    chin = 0.009 * g(du, 0.06) * g(fy - 0.79, 0.05)
+    return nose + brow + sockets + cheek + lips + chin
+
+
+def head_part(sk, radii=(0.15, 0.16, 0.175), seg=48, rings=36):
     c = sk['hd'] + Vector((0, 0, 0.16 * sk.h))
     v, f, u = sphere_front_u(c, tuple(r * sk.h for r in radii), seg, rings)
+    # relevo facial (nariz, sobrancelhas, olhos, maçãs, lábios, queixo) empurrando a superfície para fora
+    sculpted = []
+    for (x, y, z), (uu, vv) in zip(v, u):
+        d = Vector((x - c.x, y - c.y, z - c.z))
+        amt = face_relief(uu - 0.5, 1 - vv) * sk.h
+        if amt and d.length > 1e-6:
+            d = d.normalized() * (d.length + amt)
+        sculpted.append((c.x + d.x, c.y + d.y, c.z + d.z))
+    v = sculpted
     # mandíbula mais estreita e queixo levemente à frente
     out = []
     for x, y, z in v:
@@ -654,8 +737,9 @@ class Builder:
         sk = self.sk
         H = sk.h
         self.add('torso', torso_part(sk, torso_profile), torso_mat or M.get('torso', M['skin']), region='torso')
-        self.add('neck', tube([(0, 0, 1.58 * H, neck_r * H, neck_r * H), (0, 0, 1.72 * H, neck_r * 0.95 * H, neck_r * 0.95 * H)], 12), M['skin'], region='head', subdiv=0)
-        self.add('head', head_part(sk, radii=head_r), M['face'], region='head')
+        self.add('neck', tube([(0, 0, 1.58 * H, neck_r * H, neck_r * H), (0, 0, 1.72 * H, neck_r * 0.95 * H, neck_r * 0.95 * H)], 12), M['skin'], region='neck', subdiv=0)
+        # a cabeça já tem resolução alta para o relevo do rosto: sem subdivisão extra (economiza ~10k triângulos)
+        self.add('head', head_part(sk, radii=head_r), M['face'], region='head', subdiv=0)
         hc = head_center(sk)
         for s in (1, -1):
             self.add(f'ear{s}', ellipsoid((s * (head_r[0] - 0.002) * H, 0.0, hc.z - 0.01 * H), (0.02 * H, 0.034 * H, 0.044 * H), 8, 6), M['skin'], region='head', subdiv=0)
@@ -673,7 +757,25 @@ class Builder:
                     self.add('foot' + side, ellipsoid((f.x, f.y - 0.045 * H, f.z + 0.015 * H), (0.048 * H, 0.11 * H, 0.04 * H), 10, 8), M.get('feet', M['skin']), region='k' + side)
         return hc
 
-    def export(self, path):
+    def merge_by_material(self):
+        """
+        Otimização (V4 etapa 20): junta as peças que usam o MESMO material numa só malha (menos chamadas de
+        desenho no jogo). Peças prop_* (liga/desliga em jogo) continuam separadas. Os pesos são preservados.
+        """
+        groups = {}
+        for o in self.parts:
+            if not _alive(o) or o.type != 'MESH' or o.name.startswith('prop_'):
+                continue
+            m = o.data.materials[0].name if o.data.materials else '_none'
+            groups.setdefault(m, []).append(o)
+        for m, objs in groups.items():
+            if len(objs) > 1:
+                join(objs, 'part_' + m)
+        self.parts = [o for o in self.parts if _alive(o)]
+
+    def export(self, path, merge=True):
+        if merge:
+            self.merge_by_material()
         export_glb(path)
 
 

@@ -13,7 +13,7 @@ from lib import *
 from mathutils import Vector
 
 OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'erin.glb'
-b = Builder(width=0.9, bulk=0.9, height=0.98)
+b = Builder(width=0.9, bulk=0.9, height=0.945)  # 1,70 m
 sk = b.sk
 H = sk.h
 hz = sk['hips'].z

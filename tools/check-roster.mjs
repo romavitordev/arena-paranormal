@@ -128,6 +128,9 @@ ok(pas('desconjurado', 'precognition') && abil('desconjurado', 'rejectMist'), 'K
 ok(get('desconjurado').melee.strikes.reduce((n, s) => n + s.damage, 0) <= 215, 'Kian: combo reduzido (≤ 215)');
 ok(get('desconjurado').abilities.find((a) => a.type === 'transcend').endDrain > 0, 'Kian: Transcendência cobra sanidade');
 ok(pas('cineraria', 'resistant') && abil('cineraria', 'flowerRain') && get('cineraria').special.area === 5, 'Kaiser: Resistente, Acácia, Cinerária em 5 m');
+// RB + LT (mod+dodge): todo personagem tem um golpe nesse comando
+ok(ROSTER.every((c) => (c.abilities || []).some((a) => a.input === 'mod+dodge')), 'todos têm habilidade em RB + LT (R1 + L2)');
+ok(abil('cineraria', 'rootTrap') && abil('cineraria', 'cursedShots') && pas('cineraria', 'elementalAffinity') && get('cineraria').special.flowerStorm, 'Kaiser: Dendrobium, Balas Amaldiçoadas, Afinidade Elemental e Cinerária com tempestade de Acácia');
 ok(abil('abutre', 'hatredTemple') && abil('abutre', 'bloodParalysis'), 'Arthur: Templo do Ódio + Dystopia');
 ok(pas('mascarado', 'decepar') && get('mascarado').melee.strikes.slice(0, -1).every((s) => s.range <= 2.2), 'Joui: Decepar, sequência com alcance ≤ 2,2 m');
 ok(pas('vampira', 'bloodNecklace'), 'Agatha: Colar Banhado em Sangue');
@@ -171,7 +174,7 @@ ok(eri && eri.abilities.some((a) => a.type === 'blessing') && eri.abilities.some
 ok(eri && pas('erin', 'electricAmulet') && eri.special.type === 'supernova', 'Erin: Amuleto Elétrico e especial Supernova (escopeta + granada)');
 ok(agu && agu.origin === 'Mascarados' && agu.element === 'sangue', 'Aguiar: Mascarados (Sangue)');
 ok(agu && agu.melee.name.includes('Machado') && agu.melee.strikes.at(-1).bleed, 'Aguiar: machado do Mutilador (o finalizador faz sangrar)');
-ok(agu && ['maskForm', 'bearTrap', 'predatorScent'].every((t) => agu.abilities.some((a) => a.type === t)), 'Aguiar: Máscara do Mutilador, Armadilha de Urso e Predador de Sangue');
+ok(agu && ['maskForm', 'bearTrap', 'predatorScent', 'huntingDog'].every((t) => agu.abilities.some((a) => a.type === t)), 'Aguiar: Máscara do Mutilador, Armadilha de Urso, Predador de Sangue e Cães de Caça');
 ok(agu && agu.abilities.find((a) => a.type === 'maskForm').noBlock, 'Aguiar: mascarado não consegue defender (intenção assassina)');
 ok(agu && pas('aguiar', 'sonOfPain'), 'Aguiar: Filho da Dor');
 const lab = get('labirinto');

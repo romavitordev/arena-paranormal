@@ -98,6 +98,26 @@ export default {
       stun: 0.9, // breve: não tira o controle por tempo exagerado
       color: 0xd01830,
     },
+    {
+      id: 'corteSombras',
+      name: 'Corte das Sombras',
+      input: 'mod+dodge', // R1 + L2 / RB + LT
+      type: 'dashStrike',
+      description: 'Avança como uma sombra em linha reta e corta com a katana o primeiro que estiver no caminho.',
+      energyCost: 20,
+      cooldown: 10,
+      anim: 'dash_slash',
+      windup: 0.15,
+      distance: 9,
+      speed: 28,
+      range: 1.4,
+      recovery: 0.35,
+      damage: 70,
+      knockback: 5,
+      hitstun: 0.7,
+      element: 'conhecimento',
+      color: 0x2a1a3a,
+    },
   ],
 
   special: {

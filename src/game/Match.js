@@ -176,6 +176,7 @@ export class Match {
         f.setState('intro');
         f.vel.set(0, f.vel.y, 0);
         if (this.fighters.indexOf(f) === winner) f.anim.play('victory', { restart: true });
+        else if (winner >= 0) f.anim.play('defeat', { restart: true }); // perdeu no tempo: cai de joelho
       }
     }
   }

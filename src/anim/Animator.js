@@ -17,6 +17,8 @@ export class Animator {
     this.blend = 1;
     this.blendTime = 0.08;
     this.pose = emptyPose();
+    this.poseFilter = null; // (pose) → pose: ajuste aplicado só na hora de mostrar (não altera o clipe)
+    this.twist = 0; // giro das pernas (rad) com o tronco compensando: correr de lado ainda olhando o adversário
   }
 
   resolve(name) {
@@ -60,7 +62,10 @@ export class Animator {
   apply() {
     if (this.rig.applyPose) {
       // rig com esqueleto vindo do Blender
-      this.rig.applyPose(this.pose);
+      let p = this.pose;
+      if (this.twist || this.poseFilter) p = clonePose(p);
+      if (this.twist) applyTwist(p, this.twist);
+      this.rig.applyPose(this.poseFilter ? this.poseFilter(p) : p);
       return;
     }
     const r = this.rig.joints;
@@ -79,6 +84,13 @@ function emptyPose() {
   const p = { h: 0 };
   for (const j of JOINTS) p[j] = [0, 0, 0];
   return p;
+}
+
+// gira o quadril (e com ele as pernas) e devolve o giro no tronco/cabeça: o peito continua de frente
+function applyTwist(p, a) {
+  p.hip[1] += a;
+  p.sp[1] -= a * 0.8;
+  p.hd[1] -= a * 0.2;
 }
 
 function clonePose(p) {

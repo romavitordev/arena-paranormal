@@ -13,7 +13,7 @@ from lib import *
 from mathutils import Vector
 
 OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'abutre.glb'
-b = Builder(width=1.0, bulk=1.0, height=1.0)
+b = Builder(width=1.0, bulk=1.06, height=0.93)  # 1,65 m (mais baixo e forte)
 sk = b.sk
 hz = sk['hips'].z
 
@@ -45,14 +45,22 @@ b.add('rolled_sleeve', tube(limb_rings(eR + Vector((0, 0, 0.03)), eR.lerp(hR, 0.
 # lado esquerdo: ombro com manga vazia dobrada e presa (fixa no tronco)
 sL = sk['sL']
 b.add('stump', ellipsoid((sL.x, 0, sL.z - 0.02), (0.075, 0.075, 0.08), 12, 8), M['arm'], region='sp')
-b.add('pinned_sleeve', xform(box((sL.x - 0.01, -0.03, sL.z - 0.12), (0.07, 0.035, 0.16)), lambda p: Vector((p.x + (p.z - (sL.z - 0.12)) * -0.25, p.y, p.z))), M['arm'], region='sp')
-b.add('pin', ellipsoid((sL.x - 0.01, -0.05, sL.z - 0.04), (0.012, 0.006, 0.012), 6, 4), metal, region='sp', subdiv=0)
+# manga vazia caindo até o quadril (achatada, sem braço dentro), com o punho dobrado — como na arte
+sleeve = [(sL.x + 0.01, 0.0, sL.z - 0.02, 0.07, 0.065), (sL.x + 0.03, -0.01, sL.z - 0.2, 0.06, 0.032), (sL.x + 0.035, -0.015, sL.z - 0.42, 0.055, 0.026), (sL.x + 0.03, -0.02, sL.z - 0.58, 0.052, 0.024)]
+b.add('empty_sleeve', tube(sleeve, 12), M['arm'], region='sp')
+b.add('empty_cuff', tube([(sL.x + 0.03, -0.02, sL.z - 0.56, 0.056, 0.028), (sL.x + 0.03, -0.02, sL.z - 0.62, 0.056, 0.028)], 12), M['arm'], region='sp', subdiv=0)
 
 # colete com botões e broche de abutre
 vest_rings = [(hz - 0.04, 0.185, 0.13), (hz + 0.15, 0.178, 0.125), (hz + 0.35, 0.226, 0.15), (hz + 0.47, 0.232, 0.152), (hz + 0.56, 0.16, 0.115)]
 b.add('vest', open_tube(vest_rings, gap=0.03, seg=22), vest, region='torso')
-for i in range(5):
-    b.add(f'button{i}', ellipsoid((0.012, -0.152, hz + 0.06 + i * 0.075), (0.01, 0.006, 0.01), 6, 4), button, region='torso', subdiv=0)
+# colete TRESPASSADO: duas fileiras de botões, lapelas em V e ponta na barra da frente
+for i in range(4):
+    for s in (1, -1):
+        b.add(f'button{i}{s}', ellipsoid((s * 0.05, -0.156, hz + 0.08 + i * 0.08), (0.011, 0.006, 0.011), 6, 4), button, region='torso', subdiv=0)
+for s in (1, -1):
+    lap = [(s * 0.05, -0.14, hz + 0.56, 0.035, 0.008), (s * 0.08, -0.155, hz + 0.47, 0.045, 0.008), (s * 0.06, -0.158, hz + 0.39, 0.02, 0.006)]
+    b.add(f'lapel{s}', tube(lap, 5), vest, region='torso', subdiv=0)
+    b.add(f'vestpoint{s}', cone((s * 0.06, -0.135, hz - 0.03), (s * 0.03, -0.14, hz - 0.1), 0.05, 4), vest, region='torso', subdiv=0)
 b.add('brooch', merge(ellipsoid((0.11, -0.158, hz + 0.4), (0.022, 0.008, 0.02), 8, 6),
                       xform(box((0.11, -0.16, hz + 0.41), (0.07, 0.005, 0.02)), lambda p: p)), brooch, region='torso', subdiv=0)
 # gola aberta da camisa

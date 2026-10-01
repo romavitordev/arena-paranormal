@@ -76,6 +76,22 @@ export default {
       bleed: { dps: 7, duration: 3 }, // dano por segundo e duração do sangramento (renova a cada acerto)
       color: 0xe0204a,
     },
+    {
+      id: 'facasAmaldicoadas',
+      name: 'Facas Amaldiçoadas',
+      input: 'mod+dodge', // R1 + L2 / RB + LT
+      type: 'cursedShots',
+      description: 'Arremessa três facas banhadas em sangue, em leque, que se curvam atrás do alvo.',
+      energyCost: 20,
+      cooldown: 11,
+      anim: 'throw_r',
+      shotSound: 'knifeThrow',
+      windup: 0.15,
+      interval: 0.14,
+      count: 3,
+      spread: 18,
+      projectile: { visual: 'knife', color: 0xe0204a, speed: 34, range: 24, radius: 0.35, damage: 24, knockback: 1, hitstun: 0.3, homing: 1.0, kind: 'ability', element: 'sangue', hitSound: 'bladeHit' },
+    },
   ],
 
   // Especial DESCARNAR (substitui a antiga "Dança Carmesim")

@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { FX_LIBRARY } from './library.js';
 
 // Sistema de efeitos leve: dois pools de partículas (brilho aditivo e fumaça)
 // + efeitos de malha descartáveis (cortes, anéis, traçantes, clarões).
@@ -347,11 +348,16 @@ export class Effects {
     return h;
   }
 
+  // Efeito da biblioteca pelo nome (FX_HIT_SMALL, FX_BLOCK, ... — ver fx/library.js)
+  play(name, pos, o = {}) {
+    const f = FX_LIBRARY[name];
+    if (!f) { console.warn('efeito desconhecido:', name); return; }
+    f(this, pos, o);
+  }
+
   // Impacto padrão: faíscas + clarão + anel.
   impact(pos, color = 0xffffff, strength = 1) {
-    this.flash(pos, { color, size: 1.4 * strength, life: 0.1 });
-    this.burst(pos, { count: Math.round(14 * strength), color, speed: 7 * strength, life: 0.35, size: 0.18, gravity: 6 });
-    this.ring(pos, { color, radius: 1.1 * strength, life: 0.2, vertical: true, yaw: Math.random() * Math.PI });
+    this.play('FX_HIT_SMALL', pos, { color, scale: strength });
   }
 
   update(dt) {

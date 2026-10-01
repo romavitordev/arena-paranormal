@@ -53,9 +53,52 @@ for s2 in (1, -1):
 top = 1.6 * H
 b.add('shawl_roll', tube([(0, 0.0, top - 0.04 * H, 0.13 * H, 0.12 * H), (0, -0.004, top + 0.005 * H, 0.142 * H, 0.13 * H),
                           (0, 0.0, top + 0.05 * H, 0.122 * H, 0.112 * H), (0, 0.004, top + 0.075 * H, 0.098 * H, 0.09 * H)], 24), shawl, region='torso')
-cape = [(top - 0.02 * H, 0.13 * H, 0.115 * H), (top - 0.06 * H, 0.3 * H, 0.18 * H), (top - 0.16 * H, 0.36 * H, 0.2 * H),
-        (top - 0.3 * H, 0.35 * H, 0.21 * H), (top - 0.42 * H, 0.33 * H, 0.21 * H)]
-b.add('shawl_cape', open_tube(cape, gap=0.24, seg=30), shawl, region='torso')
+# MANTO: o xale grande que cobre ombros e braços e cai até os joelhos (aberto na frente), com dobras
+K_TX, K_TY = b.k_tx, b.k_ty
+GAP = 0.13  # abertura da frente (fração da volta)
+SEG, ROWS = 56, 16
+
+
+def cloak_len(a):
+    # mais comprido atrás e nos lados; as pontas da frente um pouco mais curtas
+    return (0.88 - 0.16 * max(0.0, math.cos(a)) ** 2) * H
+
+
+def cloak_pt(a, v, out=1.0):
+    s = min(1.0, v * 4.0) ** 0.6
+    rx = 0.14 * H + (0.37 * H - 0.14 * H) * s + v * 0.02 * H
+    ry = 0.12 * H + (0.22 * H - 0.12 * H) * s + v * 0.05 * H
+    fold = 1 + 0.06 * v * math.sin(a * 9)  # dobras verticais do pano
+    z = top - 0.02 * H - v * cloak_len(a)
+    return (math.sin(a) * rx * fold * out / K_TX, -math.cos(a) * ry * fold * out / K_TY, z)
+
+
+def cloak_mesh(out=1.0, flip=False):
+    verts, faces, uvs = [], [], []
+    for i in range(ROWS + 1):
+        v = i / ROWS
+        for s in range(SEG + 1):
+            t = GAP + (1 - 2 * GAP) * s / SEG  # pula a abertura da frente
+            verts.append(cloak_pt(t * TAU, v, out))
+            uvs.append((s / SEG, 1 - v))
+    row = SEG + 1
+    for i in range(ROWS):
+        for s in range(SEG):
+            p = i * row + s
+            f = (p, p + 1, p + 1 + row, p + row)
+            faces.append(tuple(reversed(f)) if flip else f)
+    return verts, faces, uvs
+
+
+def cloak_weights(p):
+    side = 'L' if p.x > 0 else 'R'
+    w_arm = smoothstep(0.14 * H, 0.32 * H, abs(p.x)) * smoothstep(top - 0.6 * H, top - 0.1 * H, p.z) * 0.6
+    w_hip = smoothstep(hz + 0.1 * H, hz - 0.3 * H, p.z) * (1 - w_arm) * 0.7
+    return {'s' + side: w_arm, 'hips': w_hip, 'sp': max(0.0, 1 - w_arm - w_hip)}
+
+
+b.add('shawl_cape', cloak_mesh(), shawl, region='torso', weight_fn=cloak_weights, subdiv=0)  # já tem resolução própria
+b.add('shawl_cape_in', cloak_mesh(0.975, flip=True), shawl_dark, region='torso', weight_fn=cloak_weights, subdiv=0)
 # pontas do xale caindo na frente (assimétricas, como pano enrolado)
 # pano macio: ondula de lado, alarga no meio, gira um pouco e termina em franja desfiada
 for s2, ln in ((1, 0.38), (-1, 0.28)):
@@ -75,9 +118,6 @@ for s2, ln in ((1, 0.38), (-1, 0.28)):
     fr = [cone((ex + (j - 2) * 0.012 * H, ey, ez + 0.01 * H), (ex + (j - 2) * 0.014 * H, ey - 0.003 * H, ez - (0.04 + 0.012 * (j % 2)) * H), 0.006, 4) for j in range(5)]
     b.add(f'shawl_fringe{s2}', merge(*fr), shawl_dark, region='torso', subdiv=0)
 # dobras: faixas mais escuras sobre a capa
-for k in range(3):
-    zz = top - (0.12 + k * 0.1) * H
-    b.add(f'shawl_fold{k}', open_tube([(zz, 0.358 * H, 0.203 * H), (zz - 0.012 * H, 0.36 * H, 0.205 * H)], gap=0.28, seg=30), shawl_dark, region='torso', subdiv=0)
 b.add('shawl_pin', ellipsoid((0.07 * H, -0.15 * H, top - 0.03 * H), (0.014, 0.008, 0.014), 8, 6), gem, region='torso', subdiv=0)
 
 # cinto de couro com bolsas e lanterna
@@ -97,12 +137,19 @@ for side in ('L', 'R'):
 # cabelo: franja sobre a testa, laterais presas e COQUE alto (com algumas mechas soltas)
 b.add('hair_cap', hair_cap((hc.x, hc.y + 0.004, hc.z + 0.014), (0.149 * H, 0.159 * H, 0.172 * H), front=0.22, side=0.4, back=0.62), hairm, region='head')
 # franja: lâminas finas descendo pela testa (o sigilo do infinito fica visível embaixo)
-for k in range(6):
-    s3 = 1 if k < 3 else -1
-    j = k % 3
-    x0 = s3 * (0.03 + j * 0.03) * H
-    lock = [(x0, -0.142 * H, hc.z + 0.14, 0.013, 0.005), (x0 + s3 * 0.012 * H, -0.155 * H, hc.z + 0.105, 0.012, 0.005), (x0 + s3 * 0.03 * H, -0.157 * H, hc.z + 0.075 + j * 0.008, 0.008, 0.004)]
-    b.add(f'bang{k}', tube(lock, 6), hairm if j % 2 else hair_dark, region='head', subdiv=0)
+for k in range(9):
+    x0 = (-0.1 + k * 0.025) * H
+    curve = 1 - (abs(x0) / (0.12 * H)) ** 2  # acompanha a curva da testa
+    yf = -(0.14 + 0.012 * curve) * H
+    ln = 0.07 + (0.012 if k % 3 == 1 else 0) - (0.01 if k % 4 == 0 else 0)  # pontas desencontradas
+    lock = [(x0, yf + 0.008, hc.z + 0.15, 0.017, 0.008), (x0 * 1.06, yf - 0.002, hc.z + 0.115, 0.016, 0.007), (x0 * 1.1, yf - 0.004, hc.z + ln + abs(x0) * 0.3, 0.008, 0.004)]
+    b.add(f'bang{k}', tube(lock, 6), hairm if k % 2 else hair_dark, region='head', subdiv=0)
+# laterais lisas cobrindo as orelhas até a mandíbula (cabelo em "cortina")
+for s2 in (1, -1):
+    for j in range(3):
+        y0 = (-0.08 + j * 0.055) * H
+        side = [(s2 * 0.136 * H, y0, hc.z + 0.12, 0.016, 0.018), (s2 * 0.146 * H, y0, hc.z + 0.04, 0.015, 0.017), (s2 * 0.146 * H, y0 + 0.004, hc.z - 0.03 - j * 0.01, 0.007, 0.008)]
+        b.add(f'side_hair{s2}{j}', tube(side, 6), hairm, region='head', subdiv=0)
 # volume puxado para trás até o coque
 b.add('hair_back', ellipsoid((hc.x, hc.y + 0.04, hc.z + 0.03), (0.146 * H, 0.13 * H, 0.15 * H), 16, 10, theta_max=math.pi * 0.7, phi=(0.6, 1.4)), hairm, region='head')
 b.add('bun', merge(ellipsoid((0, 0.05, hc.z + 0.2), (0.055, 0.05, 0.05), 12, 8),

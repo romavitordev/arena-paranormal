@@ -10,7 +10,7 @@ from lib import *
 from mathutils import Vector
 
 OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'vampira.glb'
-b = Builder(width=0.9, bulk=0.92, height=0.97)
+b = Builder(width=0.9, bulk=0.92, height=0.9)  # 1,62 m
 sk = b.sk
 H = sk.h
 hz = sk['hips'].z
@@ -64,6 +64,22 @@ for i in range(8):
     base = Vector((hc.x + math.sin(a) * 0.1, hc.y - math.cos(a) * 0.1, hc.z + 0.05))
     tip = base + Vector((math.sin(a) * 0.05, -math.cos(a) * 0.06, -0.12))
     b.add(f'backlock{i}', cone(tuple(base), tuple(tip), 0.045, 6), hairm, region='head', subdiv=0)
+# colar: cordão preto com pingente de argola prateada (presente nas duas artes)
+silver = material('silver_vampira', '#b8b8c0', 0.3, metal=0.9)
+b.add('necklace', tube([(-0.06 * H, -0.06 * H, 1.6 * H, 0.004, 0.004), (0, -0.135 * H, 1.47 * H, 0.004, 0.004), (0.06 * H, -0.06 * H, 1.6 * H, 0.004, 0.004)], 5), material('cord_black', '#101012', 0.6), region='torso', subdiv=0)
+b.add('pendant', tube([(0, -0.14 * H, 1.455 * H, 0.016, 0.016), (0, -0.142 * H, 1.462 * H, 0.016, 0.016)], 10, cap_start=False, cap_end=False), silver, region='torso', subdiv=0)
+# cinto com fivela e corrente pendurada
+b.add('belt_v', tube([(0, 0, hz + 0.1 * H, 0.168 * H, 0.122 * H), (0, 0, hz + 0.135 * H, 0.168 * H, 0.122 * H)], 20), material('belt_black', '#141416', 0.6), region='torso', subdiv=0)
+b.add('buckle_v', box((0, -0.124 * H, hz + 0.118 * H), (0.05, 0.01, 0.035)), silver, region='torso', subdiv=0)
+chain = [tube([(0.06 + k * 0.02, -0.12 * H, hz + 0.09 * H - math.sin(k / 6 * math.pi) * 0.06, 0.007, 0.007), (0.07 + k * 0.02, -0.12 * H, hz + 0.09 * H - math.sin((k + 1) / 6 * math.pi) * 0.06, 0.007, 0.007)], 5) for k in range(6)]
+b.add('belt_chain', merge(*chain), silver, region='torso', subdiv=0)
+# rasgos nos joelhos do jeans (pele aparecendo)
+for side in ('L', 'R'):
+    k = sk['k' + side]
+    b.add('rip' + side, ellipsoid((k.x, k.y - 0.062, k.z + 0.01), (0.038, 0.01, 0.026), 8, 6), M['skin'], region='l' + side, subdiv=0)
+# mecha vermelha no cabelo (lado direito da franja)
+b.add('red_streak', merge(*[cone((-0.05 * H - k * 0.012, -0.12 * H, hc.z + 0.1 * H), (-0.07 * H - k * 0.015, -0.135 * H, hc.z + 0.02 * H), 0.024, 6) for k in range(2)]), material('hair_red', '#a8182a', 0.6), region='head', subdiv=0)
+
 # brinco de pena (orelha esquerda)
 b.add('feather', cone((0.138 * H, 0.0, hc.z - 0.05), (0.14 * H, 0.0, hc.z - 0.17), 0.016, 5), feather, region='head', subdiv=0)
 

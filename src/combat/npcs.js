@@ -156,7 +156,8 @@ export class DanteClone {
 
 // ================================================================== A MARIONETE
 // NPC autônomo: aparece do Lodo, persegue e ataca o adversário do Dante por um tempo limitado.
-// Se o adversário estiver muito longe e o Dante perto dela, às vezes (10–20%) ataca o próprio Dante.
+// Autônoma e instável: a cada troca de alvo pode se voltar contra o próprio Dante — bem mais provável
+// quanto mais perto ele estiver dela (e se ele estiver mais perto que o adversário).
 export const MARIONETTE = {
   hp: 350,
   duration: 20,
@@ -167,7 +168,8 @@ export const MARIONETTE = {
     lunge: { windup: 0.32, active: 0.18, recovery: 0.5, range: 1.8, arc: 120, damage: 34, cd: 4.5, knockback: 5, dash: 12 },
     special: { windup: 0.75, active: 0.2, recovery: 0.75, range: 3.4, arc: 360, damage: 40, cd: 9, knockback: 3, stun: 0.9 },
   },
-  betrayChance: 0.15, // chance de atacar o Dante quando o adversário está longe e o Dante perto
+  // chance (por sorteio, a cada 2 s) de atacar o Dante: base + bônus de proximidade
+  betray: { base: 0.08, near: 0.22, nearDist: 6, closer: 0.15, oppFar: 0.12, oppFarDist: 10 },
 };
 
 export class Marionette {
@@ -211,10 +213,16 @@ export class Marionette {
     const opp = this.owner.opponent;
     const dOpp = opp ? distXZ(this.pos, opp.pos) : 99;
     const dDante = distXZ(this.pos, this.owner.pos);
-    // autônoma: com o adversário longe e o Dante perto, às vezes vira contra ele
-    if (opp && dOpp > 12 && dDante < 4 && Math.random() < MARIONETTE.betrayChance) {
+    // autônoma: às vezes vira contra o Dante (mais provável com ele por perto)
+    const B = MARIONETTE.betray;
+    let chance = B.base;
+    if (dDante < B.nearDist) chance += B.near;
+    if (dDante < dOpp) chance += B.closer;
+    if (dOpp > B.oppFarDist) chance += B.oppFar;
+    if (this.owner.state !== 'ko' && Math.random() < chance) {
+      if (this.target !== this.owner) this.owner.notify('A MARIONETE SE VOLTOU CONTRA VOCÊ!', true);
       this.target = this.owner;
-      this.owner.notify('A MARIONETE SE VOLTOU CONTRA VOCÊ!', true);
+      this.retarget = 5; // persegue o Dante até golpear (ou por até 5 s)
     } else this.target = opp;
   }
 
@@ -250,7 +258,8 @@ export class Marionette {
     }
     // ---- IA: procura, aproxima, escolhe ataque, executa, reposiciona
     this.retarget -= dt;
-    if (this.retarget <= 0 || !this.target || this.target.state === 'ko') { this.retarget = 2; this.chooseTarget(); }
+    // troca de alvo só fora de um ataque (senão o golpe já mirado no outro erra e a "traição" se perde)
+    if (this.state !== 'attack' && (this.retarget <= 0 || !this.target || this.target.state === 'ko')) { this.retarget = 2; this.chooseTarget(); }
     const tg = this.target;
     if (!tg) return;
     const d = distXZ(this.pos, tg.pos);
@@ -265,7 +274,7 @@ export class Marionette {
       else if (d < 2.6 && this.cds.quick <= 0) pick = 'quick';
       else if (d > 4 && d < 10 && this.cds.lunge <= 0) pick = 'lunge';
       if (pick && tg.state !== 'downed') {
-        this.atk = { name: pick, ...A[pick], hit: false };
+        this.atk = { name: pick, ...A[pick], hit: false, vsOwner: tg === this.owner };
         this.setState('attack');
         w.audio.play(pick === 'special' ? 'fearGaze' : 'swing', { volume: 0.7 });
       } else if (d > 1.6) {
@@ -299,7 +308,7 @@ export class Marionette {
         this.cds[a.name] = a.cd;
         this.atk = null;
         this.setState('chase');
-        if (tg === this.owner) this.target = this.owner.opponent; // só um golpe "traidor"
+        if (a.vsOwner) { this.target = this.owner.opponent; this.retarget = 2; } // só um golpe "traidor"
       }
     }
     resolveBody(w.arena, this.pos, this.radius);

@@ -75,6 +75,7 @@ export class Fighter {
   }
 
   reset() {
+    if (this.riding) this.mount(false);
     this.health = this.maxHealth;
     this.energy = COMBAT.startEnergy;
     this.guard = this.maxGuard;
@@ -141,7 +142,7 @@ export class Fighter {
 
   damageMultiplier(kind) {
     let m = 1;
-    for (const b of this.buffs) if (b.mult && b.affects && b.affects.includes(kind)) m *= b.mult;
+    for (const b of this.buffs) if (b.mult && b.affects && b.affects.includes(kind) && (!b.when || b.when())) m *= b.mult;
     return m;
   }
 
@@ -174,7 +175,7 @@ export class Fighter {
   dodgeParams() {
     const d = { ...this.dodgeCfg };
     for (const b of this.buffs) {
-      if (b.dodge) {
+      if (b.dodge && (!b.when || b.when())) {
         d.iframes *= b.dodge.iframesMult ?? 1;
         d.cooldown *= b.dodge.cooldownMult ?? 1;
         d.distance *= b.dodge.distanceMult ?? 1;
@@ -223,6 +224,11 @@ export class Fighter {
 
   // ---------------------------------------------------------------- estados
   setState(s) {
+    if (s !== 'idle' && this.anim) this.anim.twist = 0; // giro das pernas só existe andando
+    // preparo do especial interrompido por qualquer outro estado (golpe, projétil, agarrão...)
+    if (this.state === 'specialStart' && s !== 'special' && s !== 'specialStart') this.interruptSpecial();
+    // montaria (skate): só continua andando/pulando ou no dash; qualquer outra ação desce
+    if (this.riding && s !== 'idle' && s !== 'dashing') this.mount(false);
     if (!COMBO_STATES.has(s)) { this.comboHits = 0; this.comboLaunches = 0; this.comboDamage = 0; this.comboDashes = 0; }
     if (this.state === 'charging' && s !== 'charging') this.stopCharging();
     if (this.state === 'attack' && s !== 'attack') this.stopStrikeFx();
@@ -377,7 +383,7 @@ export class Fighter {
           acc -= n;
           self.takeDamage(n);
           self.flash = 0;
-          if (Math.random() < 0.5) self.world.fx.burst(self.chestPos(), { count: 3, color: bleed.color ?? 0x9a0010, speed: 1.5, life: 0.5, size: 0.14, gravity: 7 });
+          if (Math.random() < 0.5) self.world.fx.play('FX_BLOOD', self.chestPos(), { color: bleed.color ?? 0x9a0010 });
           self.world.onHit && self.world.onHit(source, self, n, { kind: 'bleed' });
         }
       },
@@ -408,8 +414,7 @@ export class Fighter {
     this.cooldowns.switch = S.cooldown;
     this.cooldownMax.switch = S.cooldown;
     this.invuln = Math.max(this.invuln, S.invuln);
-    w.fx.burst(this.chestPos(), { count: 26, color: newDef.energyColor ?? 0xffffff, speed: 5, life: 0.4, size: 0.22 });
-    w.fx.ring(new THREE.Vector3(this.pos.x, 0.06, this.pos.z), { color: newDef.energyColor ?? 0xffffff, radius: 2, life: 0.4 });
+    w.fx.play('FX_TELEPORT', this.chestPos(), { color: newDef.energyColor ?? 0xffffff, kind: 'ring' });
     w.audio.play('teleport');
     this.notify(`TROCA: ${newDef.name}!`, true);
     w.onSwitch && w.onSwitch(this, oldDef, newDef);
@@ -418,6 +423,11 @@ export class Fighter {
 
   // troca a definição (personagem) deste lutador mantendo vida, sanidade, posição e placar
   applyDef(def, rig) {
+    this.mount(false);
+    this.mountHolder = null;
+    this.gripHome = null;
+    this.gripSlot = null;
+    if (this.anim) this.anim.poseFilter = null;
     this.stopCharging();
     this.stopStrikeFx();
     this.endBuffs();
@@ -543,6 +553,7 @@ export class Fighter {
       case 'block': this.updateBlock(dt); break;
       case 'dodge': this.updateDodge(dt); break;
       case 'dashing': this.updateDash(dt); break;
+      case 'specialStart': this.updateSpecialStart(dt); break;
       case 'ranged':
       case 'ability':
       case 'special':
@@ -589,9 +600,13 @@ export class Fighter {
   }
 
   updateVisuals(dt) {
-    this.anim.update(dt);
+    this.updateGrip();
+    // posiciona o modelo ANTES de animar: o ajuste de pés/chão do rig usa a posição deste quadro
     this.rig.root.position.copy(this.pos);
     this.rig.root.rotation.y = this.yaw;
+    // pés presos ao chão só com o lutador apoiado (no ar, sendo lançado ou caído, a pose manda)
+    this.rig.groundLock = this.onGround && !['launched', 'ko', 'downed', 'grabbed', 'pulled', 'special'].includes(this.state);
+    this.anim.update(dt);
     this.glowClock = (this.glowClock || 0) + dt;
     if (this.flash > 0) {
       this.flash -= dt;
@@ -613,7 +628,7 @@ export class Fighter {
     }
     // translucidez de buffs (névoa) / esquivas especiais
     let op = 1;
-    for (const b of this.buffs) if (b.opacity) op = Math.min(op, b.opacity);
+    for (const b of this.buffs) if (b.opacity && (!b.when || b.when())) op = Math.min(op, b.opacity);
     if (this.state === 'dodge' && this.dodgeCfg.style === 'inexistir') op = Math.min(op, 0.25 + Math.abs(Math.sin(this.stateTime * 60)) * 0.3);
     this.setOpacity(op);
   }
@@ -692,7 +707,7 @@ export class Fighter {
     this.anim.play('dash', { restart: true });
     this.world.audio.play(kind === 'long' ? 'blink' : 'jump', { volume: 0.7 });
     const col = this.def.energyColor;
-    this.world.fx.burst(v2.set(this.pos.x, this.pos.y + 0.4, this.pos.z), { count: kind === 'long' ? 20 : 8, color: kind === 'long' ? col : 0x8a8090, kind: kind === 'long' ? 'glow' : 'smoke', speed: 2, life: 0.4, size: 0.4 });
+    this.world.fx.play('FX_DASH', v2.set(this.pos.x, this.pos.y + 0.4, this.pos.z), { color: col, kind });
   }
 
   tryComboDash() {
@@ -861,7 +876,13 @@ export class Fighter {
     if (this.buffs && this.buffs.some((x) => x.invertMove)) out.negate();
     // Labirinto Mental: o corpo anda numa direção que muda sozinha (como perdido num labirinto)
     const maze = this.buffs && this.buffs.find((x) => x.mazeMove);
-    if (maze && out.lengthSq() > 0) out.applyAxisAngle(new THREE.Vector3(0, 1, 0), maze.mazeAngle || 0);
+    if (maze && out.lengthSq() > 0) {
+      if (maze.pullTo && maze.pullTo.state !== 'ko') {
+        // Labirinto Abissal: qualquer direção vira "na direção de quem lançou"
+        const len = out.length();
+        out.set(maze.pullTo.pos.x - this.pos.x, 0, maze.pullTo.pos.z - this.pos.z).normalize().multiplyScalar(len);
+      } else out.applyAxisAngle(new THREE.Vector3(0, 1, 0), maze.mazeAngle || 0);
+    }
     return out;
   }
 
@@ -887,7 +908,9 @@ export class Fighter {
     const mag = Math.min(1, dir.length());
     let buffSpeed = 1;
     for (const b of this.buffs) if (b.speedMult) buffSpeed *= b.speedMult;
-    const speed = this.moveSpeed * buffSpeed * (this.onGround ? 1 : 0.85) * this.world.speedFactor(this);
+    this.updateMount(dt, mag);
+    const ride = this.riding ? this.def.mount.speedMult : 1;
+    const speed = this.moveSpeed * buffSpeed * ride * (this.onGround ? 1 : 0.85) * this.world.speedFactor(this);
     if (mag > 0.05) {
       dir.normalize();
       this.vel.x = dir.x * speed * mag;
@@ -901,6 +924,9 @@ export class Fighter {
     if (this.surprised > 0) {
       // surpreendido (ex.: Mascarado surgiu pelas costas): não se vira sozinho
       this.surprised -= dt;
+    } else if (this.riding && mag > 0.05) {
+      // no skate: o corpo vira para onde está andando (não fica travado no adversário)
+      this.yaw = turnTowards(this.yaw, Math.atan2(dir.x, dir.z), dt * 9);
     } else if (this.lockOn && opp) this.yaw = turnTowards(this.yaw, yawTo(this.pos, opp.pos), dt * 12);
     else if (mag > 0.05) this.yaw = turnTowards(this.yaw, Math.atan2(dir.x, dir.z), dt * 14);
 
@@ -924,12 +950,123 @@ export class Fighter {
     if (!this.onGround) {
       if (this.vel.y < 0) this.anim.play('fall');
     } else if (mag > 0.05) {
-      this.anim.play('run');
-      this.anim.speed = 0.6 + mag * 0.5;
+      // analógico até a metade: caminha; daí para cima: corre (com folga para não ficar alternando)
+      this.walking = mag < (this.walking ? 0.6 : 0.5);
+      if (this.riding) { this.anim.play(this.def.mount.anim); this.anim.speed = 1; this.anim.twist = 0; }
+      else {
+        // direção do movimento em relação a para onde ele olha (travado no adversário = anda de lado/de costas)
+        const fd = dir.x * Math.sin(this.yaw) + dir.z * Math.cos(this.yaw);
+        const ld = dir.x * Math.cos(this.yaw) - dir.z * Math.sin(this.yaw);
+        let clip;
+        let twist = 0;
+        if (fd <= -0.6) clip = 'walk_back'; // recuo de frente para o adversário
+        else if (this.walking) clip = fd >= 0.7 ? 'walk' : ld > 0 ? 'strafe_L' : 'strafe_R';
+        else {
+          // correndo de lado/diagonal: as pernas viram para onde vai (até 70°), o peito segue no adversário
+          clip = 'run';
+          twist = clamp(Math.atan2(ld, fd), -1.22, 1.22);
+        }
+        this.anim.play(clip, { blend: 0.15 });
+        this.anim.twist += (twist - this.anim.twist) * Math.min(1, dt * 10);
+        this.anim.speed = this.strideSpeed(this.anim.current, Math.hypot(this.vel.x, this.vel.z));
+      }
     } else {
       this.anim.play('idle');
       this.anim.speed = 1;
+      this.anim.twist = 0;
     }
+  }
+
+  // velocidade do clipe de locomoção casada com o deslocamento (o pé de apoio não escorrega — V4 etapa 17)
+  strideSpeed(clip, v) {
+    if (!clip || !clip.stride) return 1;
+    const dist = clip.stride * (this.rig.hipHeight || 0.95); // metros por ciclo
+    return clamp((v * clip.dur) / dist, 0.5, 1.9);
+  }
+
+  // Pegada da arma (def.grip): Xande guarda o skate nas costas ao bater e segura o taco com as duas mãos;
+  // na defesa ergue o skate como escudo; parado/andando leva o skate na mão esquerda.
+  updateGrip() {
+    const G = this.def.grip;
+    if (!G || this.riding) { if (this.anim.poseFilter && !G) this.anim.poseFilter = null; return; }
+    const prop = this.rig.props[G.prop];
+    if (!prop) return;
+    const attacking = this.state === 'attack';
+    const slot = attacking ? 'back' : 'hand';
+    if (!this.gripHome) this.gripHome = { parent: prop.parent, pos: prop.position.clone(), rot: prop.rotation.clone() };
+    if (this.gripSlot !== slot) {
+      this.gripSlot = slot;
+      if (slot === 'back') {
+        this.rig.sockets.back.add(prop);
+        prop.position.set(0.02, 0.1, -0.06);
+        prop.rotation.set(0, 0, 0.5); // atravessado nas costas
+      } else {
+        this.gripHome.parent.add(prop);
+        prop.position.copy(this.gripHome.pos);
+        prop.rotation.copy(this.gripHome.rot);
+      }
+    }
+    // duas mãos no taco: o braço esquerdo acompanha o direito (as mãos se encontram no cabo)
+    this.anim.poseFilter = attacking ? (p) => {
+      const r = p.sR;
+      const e = p.eR;
+      p.sL = [r[0], r[1] - (G.reach ?? 0.42), -0.05];
+      p.eL = [Math.min(e[0], -0.25) - 0.15, e[1], e[2]];
+      return p;
+    } : null;
+  }
+
+  // Montaria (Xande — Skate Caótico): andando um instante ele sobe no skate e fica mais rápido;
+  // parar, atacar, defender ou apanhar faz descer. Configurado em def.mount.
+  updateMount(dt, mag) {
+    const M = this.def.mount;
+    if (!M) return;
+    if (mag > 0.5) {
+      this.mountStill = 0;
+      if (!this.riding) {
+        this.mountT = (this.mountT || 0) + dt;
+        if (this.mountT >= M.after && this.onGround) this.mount(true);
+      } else if (this.onGround && Math.random() < 0.35) {
+        // faíscas verdes das rodas
+        this.world.fx.burst(new THREE.Vector3(this.pos.x, 0.08, this.pos.z), { count: 1, color: M.color ?? 0x5aff6a, speed: 1.2, up: 0.4, life: 0.25, size: 0.08 });
+      }
+    } else {
+      this.mountT = 0;
+      if (this.riding) {
+        this.mountStill = (this.mountStill || 0) + dt;
+        if (this.mountStill > 0.25) this.mount(false);
+      }
+    }
+  }
+
+  mount(on) {
+    const M = this.def.mount;
+    const prop = M && this.rig.props[M.prop];
+    if (!prop || !!this.riding === on) { if (!on) this.riding = false; return; }
+    if (!this.mountHolder) {
+      // suporte deitado no chão, alinhado com a frente do personagem
+      this.mountHolder = new THREE.Group();
+      this.mountHolder.rotation.x = -Math.PI / 2;
+      this.mountHolder.position.set(0, M.height ?? 0.06, 0);
+      this.rig.root.add(this.mountHolder);
+      this.mountHome = { parent: prop.parent, pos: prop.position.clone(), rot: prop.rotation.clone() };
+    }
+    this.riding = on;
+    if (on) {
+      this.mountHolder.add(prop);
+      prop.position.set(0, M.center ?? 0.3, 0);
+      prop.rotation.set(0, -Math.PI / 2, 0);
+      this.rig.body.position.y = M.lift ?? 0.1;
+      this.world.fx.burst(new THREE.Vector3(this.pos.x, 0.15, this.pos.z), { count: 10, color: M.color ?? 0x5aff6a, speed: 2, life: 0.3, size: 0.12 });
+      this.anim.play(M.anim, { restart: true, blend: 0.1 });
+    } else {
+      this.mountHome.parent.add(prop);
+      prop.position.copy(this.mountHome.pos);
+      prop.rotation.copy(this.mountHome.rot);
+      this.rig.body.position.y = 0;
+    }
+    this.mountT = 0;
+    this.mountStill = 0;
   }
 
   // Lock-on: a parte lateral do movimento vira órbita (corrige o raio que abriria a cada quadro)
@@ -1081,7 +1218,7 @@ export class Fighter {
     const dir = v1.subVectors(this.pos, attacker.pos).setY(0).normalize();
     this.vel.x = dir.x * B.pushback;
     this.vel.z = dir.z * B.pushback;
-    this.world.fx.burst(this.chestPos().addScaledVector(dir, -0.4), { count: 14, color: 0xbfe6ff, speed: 6, life: 0.25, size: 0.2 });
+    this.world.fx.play('FX_BLOCK', this.chestPos(), { dir });
     this.world.audio.play('blockHit');
     if (this.guard <= 0) this.guardBreak();
   }
@@ -1942,9 +2079,44 @@ export class Fighter {
     this.energy -= this.specialCost();
     this.specialUses++;
     this.cooldowns.special = this.cooldownMax.special;
-    this.setState('special');
     this.vel.set(0, this.vel.y, 0);
-    this.seq = impl.start(this, sp, this.world);
+    // PREPARO: concentra a energia (vulnerável); se não for atingido, o especial começa de verdade
+    const S = COMBAT.specialStartup;
+    const w = this.world;
+    this.setState('specialStart');
+    this.anim.play('charge', { restart: true, blend: 0.05 });
+    const col = this.def.energyColor ?? 0xffffff;
+    w.fx.ring(new THREE.Vector3(this.pos.x, 0.06, this.pos.z), { color: col, radius: 2.2, life: S.time + 0.1 });
+    const aura = w.fx.emitter({ rate: 70, follow: () => this.chestPos(), particle: { color: col, speed: 2, spread: 0.6, up: 1, life: 0.35, size: 0.2 } });
+    w.audio.play('carga', { pitch: 1.4 });
+    this.pendingSpecial = { impl, sp, t: 0, aura };
+  }
+
+  updateSpecialStart(dt) {
+    const p = this.pendingSpecial;
+    if (!p) { this.setState('idle'); return; }
+    p.t += dt;
+    const opp = this.opponent;
+    if (opp) this.yaw = turnTowards(this.yaw, yawTo(this.pos, opp.pos), dt * 10);
+    this.vel.x = 0;
+    this.vel.z = 0;
+    if (p.t >= COMBAT.specialStartup.time) {
+      p.aura.stop();
+      this.pendingSpecial = null;
+      this.setState('special');
+      this.seq = p.impl.start(this, p.sp, this.world);
+    }
+  }
+
+  // golpe recebido durante o preparo: o especial é cancelado
+  interruptSpecial() {
+    const p = this.pendingSpecial;
+    if (!p) return;
+    p.aura.stop();
+    this.pendingSpecial = null;
+    this.cooldowns.special = Math.min(this.cooldowns.special, COMBAT.specialStartup.interruptedCooldown);
+    this.notify('ESPECIAL INTERROMPIDO!', true);
+    this.world.fx.burst(this.chestPos(), { count: 24, color: 0x8a8090, kind: 'smoke', speed: 3, life: 0.5, size: 0.4 });
   }
 
   // ------------------------------------------------ dano recebido
@@ -2039,8 +2211,7 @@ export class Fighter {
     const col = ELEMENTS[this.def.element] ? new THREE.Color(ELEMENTS[this.def.element].color).getHex() : this.def.energyColor;
     const from = this.chestPos();
     // "tronco": nuvem no lugar onde estava + faíscas do elemento
-    this.world.fx.burst(from, { count: 30, color: 0xd8d0c0, kind: 'smoke', speed: 2.5, life: 0.6, size: 0.7, grow: 1 });
-    this.world.fx.burst(from, { count: 18, color: col, speed: 5, life: 0.35, size: 0.18 });
+    this.world.fx.play('FX_TELEPORT', from, { color: col, kind: 'smoke' });
     this.world.audio.play('teleport', { volume: 0.8 });
     const behind = opp.yaw + Math.PI;
     const tx = opp.pos.x + Math.sin(behind) * S.behind;

@@ -79,9 +79,7 @@ export function applyHit(world, attacker, victim, o) {
       if (pb && !victim.guardMoving && world.inputTime - victim.blockPressTime <= pb.window) {
         // Bloqueio Perfeito: nega o dano e abre janela de contra-ataque
         const p = victim.chestPos();
-        world.fx.flash(p, { color: victim.def.energyColor, size: 3.5, life: 0.2 });
-        world.fx.ring(p, { color: victim.def.energyColor, radius: 2.4, life: 0.35, vertical: true, yaw: victim.yaw });
-        world.fx.burst(p, { count: 30, color: victim.def.energyColor, speed: 8, life: 0.4, size: 0.25 });
+        world.fx.play('FX_PERFECT_BLOCK', p, { color: victim.def.energyColor, yaw: victim.yaw });
         world.audio.play('perfectBlock');
         world.hitstop(0.12);
         victim.notify('BLOQUEIO PERFEITO!', true);
@@ -155,10 +153,8 @@ export function applyHit(world, attacker, victim, o) {
   const p = o.pos || victim.chestPos();
   const color = o.color ?? attacker.def.energyColor;
   const scale = o.scale ?? (launch ? 1.5 : 1);
-  world.fx.impact(p, color, scale);
-  if (attacker.buffMultiplierActive(o.kind)) {
-    world.fx.burst(p, { count: 10, color: 0xa46bff, speed: 4, life: 0.6, size: 0.35, kind: 'glow' });
-  }
+  world.fx.play(launch || scale >= 1.5 ? 'FX_HIT_HEAVY' : 'FX_HIT_SMALL', p, { color, scale });
+  if (attacker.buffMultiplierActive(o.kind)) world.fx.play('FX_ENERGY', p);
   world.audio.play(o.sound || 'impact', { volume: launch ? 1.1 : 0.9 });
   world.hitstop(hitstopFor({ ...o, launch }, dealt));
   world.cameraRig.shake(launch ? 0.35 : 0.15, 0.2);

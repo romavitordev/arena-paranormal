@@ -54,6 +54,10 @@ export function rigFromGLB(gltf, { scale = 1, outline = 0.012 } = {}) {
     joints[name] = b;
   }
   joints.hip = joints.hips;
+  // V4 etapa 12: ossos extras (root, chest, neck, handL/R, footL/R). Ainda não recebem pose (seguem o pai);
+  // servem de ponto de encaixe — armas presas no osso da MÃO, mochila/capa no PEITO. .glb antigos funcionam sem eles.
+  const extra = {};
+  body.traverse((o) => { if (o.isBone && ['root', 'chest', 'neck', 'handL', 'handR', 'footL', 'footR'].includes(o.name)) extra[o.name] = o; });
 
   // dados de repouso
   const rest = {};
@@ -62,6 +66,14 @@ export function rigFromGLB(gltf, { scale = 1, outline = 0.012 } = {}) {
     const pq = b.parent.getWorldQuaternion(new THREE.Quaternion());
     rest[name] = { A: pq.clone().invert(), B: wq, pos: b.position.clone() };
   }
+  // ossos extras: repouso (para o pescoço e os pés automáticos)
+  const extraRest = {};
+  for (const [name, b] of Object.entries(extra)) {
+    extraRest[name] = { A: b.parent.getWorldQuaternion(new THREE.Quaternion()).invert(), B: b.getWorldQuaternion(new THREE.Quaternion()), local: b.quaternion.clone() };
+  }
+  const rootRestQ = root.getWorldQuaternion(new THREE.Quaternion());
+  // altura do tornozelo em repouso (pé apoiado no chão)
+  const ankleRestY = extra.footL ? extra.footL.getWorldPosition(new THREE.Vector3()).y - root.getWorldPosition(new THREE.Vector3()).y : 0;
   const hipsParentQ = joints.hips.parent.getWorldQuaternion(new THREE.Quaternion()).invert();
   const hipsParentScale = joints.hips.parent.getWorldScale(new THREE.Vector3());
   const upLocal = new THREE.Vector3(0, 1, 0).applyQuaternion(hipsParentQ).divide(hipsParentScale);
@@ -77,7 +89,9 @@ export function rigFromGLB(gltf, { scale = 1, outline = 0.012 } = {}) {
     o.frustumCulled = false;
     const src = o.material;
     if (!convert.has(src)) {
-      let tex = MATERIAL_TEXTURES[src.name] ? MATERIAL_TEXTURES[src.name]() : null;
+      // nomes vêm como MAT_<CATEGORIA>_<nome> (V4); a textura é procurada pelo nome curto
+      const key = src.name.replace(/^MAT_[A-Z]+_/, '');
+      let tex = MATERIAL_TEXTURES[key] ? MATERIAL_TEXTURES[key]() : null;
       let emissiveMap = null;
       let texEmissive = null;
       if (tex && !tex.isTexture) {
@@ -142,10 +156,10 @@ export function rigFromGLB(gltf, { scale = 1, outline = 0.012 } = {}) {
   };
   const H = (wp('hd').y - wp('hips').y) / 0.73; // altura relativa ao padrão
   const sockets = {
-    handR: makeSocket(joints.eR, wp('eR').add(new THREE.Vector3(0, -0.3 * H, 0))),
-    handL: makeSocket(joints.eL, wp('eL').add(new THREE.Vector3(0, -0.3 * H, 0))),
-    back: makeSocket(joints.sp, wp('sp').add(new THREE.Vector3(0, 0.35 * H, -0.13 * H))),
-    chest: makeSocket(joints.sp, wp('sp').add(new THREE.Vector3(0, 0.35 * H, 0.1 * H))),
+    handR: makeSocket(extra.handR || joints.eR, wp('eR').add(new THREE.Vector3(0, -0.3 * H, 0))),
+    handL: makeSocket(extra.handL || joints.eL, wp('eL').add(new THREE.Vector3(0, -0.3 * H, 0))),
+    back: makeSocket(extra.chest || joints.sp, wp('sp').add(new THREE.Vector3(0, 0.35 * H, -0.13 * H))),
+    chest: makeSocket(extra.chest || joints.sp, wp('sp').add(new THREE.Vector3(0, 0.35 * H, 0.1 * H))),
     mouth: makeSocket(joints.hd, wp('hd').add(new THREE.Vector3(0, 0.09 * H, 0.15 * H))),
     hip: makeSocket(joints.hips, wp('hips').add(new THREE.Vector3(0.18 * H, 0.02 * H, 0))),
     head: makeSocket(joints.hd, wp('hd')),
@@ -153,8 +167,71 @@ export function rigFromGLB(gltf, { scale = 1, outline = 0.012 } = {}) {
 
   const qE = new THREE.Quaternion();
   const eul = new THREE.Euler();
+  const qN = new THREE.Quaternion();
+  const qI = new THREE.Quaternion();
+  const qT = new THREE.Quaternion();
+  const qP = new THREE.Quaternion();
+  const vF = new THREE.Vector3();
+  const vR = new THREE.Vector3();
+  const vU = new THREE.Vector3();
+  const UP = new THREE.Vector3(0, 1, 0);
+  const H0 = H; // altura relativa do personagem
+  const hipsRestInv = rest.hips.B.clone().invert();
+  const NECK_SHARE = 0.4; // parte da rotação da cabeça que vai para o pescoço
+  const FOOT_MAX = Math.PI / 4; // o pé "assenta" no chão até 45°
+  const sstep = (a, b, x) => { const t = Math.max(0, Math.min(1, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+  // V4: movimento secundário automático dos ossos extras —
+  //  pescoço: divide a rotação da cabeça (a cabeça não gira "solta" sobre o pescoço);
+  //  tornozelos: com o pé perto do chão e o corpo em pé, o pé fica plano no chão em vez de inclinar com a canela.
+  function secondary(p) {
+    if (extra.neck) {
+      const r = rest.hd;
+      const n = extraRest.neck;
+      eul.set(p.hd[0], p.hd[1], p.hd[2], 'XYZ');
+      qE.setFromEuler(eul);
+      qN.copy(qI.identity()).slerp(qE, NECK_SHARE);
+      extra.neck.quaternion.copy(n.A).multiply(qN).multiply(n.B);
+      qT.copy(qN).invert().multiply(qE); // o resto fica na cabeça
+      joints.hd.quaternion.copy(r.A).multiply(qT).multiply(r.B);
+    }
+    if (!extra.footL && !extra.footR) return;
+    root.updateMatrixWorld(true);
+    const rootQ = root.getWorldQuaternion(qP);
+    const baseY = root.getWorldPosition(vR).y;
+    // contato com o chão: se a pose afunda um pé no piso, o quadril sobe o necessário (só no chão e em pé)
+    if (rig.groundLock && extra.footL && extra.footR) {
+      const low = Math.min(extra.footL.getWorldPosition(vF).y, extra.footR.getWorldPosition(vU).y) - baseY;
+      const sink = (ankleRestY - low) / root.scale.y;
+      if (sink > 0.002) {
+        joints.hips.position.addScaledVector(upLocal, sink);
+        root.updateMatrixWorld(true);
+      }
+    }
+    // corpo em pé? (o "para cima" do quadril perto do vertical)
+    // rotação atual do quadril em relação ao repouso, no espaço do personagem
+    qT.copy(rootQ).invert().multiply(joints.hips.getWorldQuaternion(qN)).multiply(hipsRestInv);
+    const upright = sstep(0.75, 0.95, vU.copy(UP).applyQuaternion(qT).y);
+    for (const s of ['footL', 'footR']) {
+      const b = extra[s];
+      if (!b) continue;
+      const e = extraRest[s];
+      b.quaternion.copy(e.local);
+      const rel = (b.getWorldPosition(vF).y - baseY) / H0;
+      const w = upright * sstep(0.3, 0.08, rel);
+      if (w <= 0.001) continue;
+      // orientação de repouso do pé, só girada com o personagem
+      qT.copy(rootQ).multiply(qN.copy(rootRestQ).invert()).multiply(e.B);
+      const parentQ = b.parent.getWorldQuaternion(new THREE.Quaternion());
+      qT.premultiply(parentQ.invert()); // → local
+      const ang = e.local.angleTo(qT);
+      const k = ang > FOOT_MAX ? FOOT_MAX / ang : 1;
+      b.quaternion.copy(e.local).slerp(qT, w * k);
+    }
+  }
   const rig = {
-    root, body, joints, sockets, props,
+    root, body, joints, sockets, props, bones: extra,
+    autoSecondary: true, // pescoço/tornozelos automáticos (false = ossos extras parados)
+    groundLock: false, // o Fighter liga quando está no chão: pés não afundam no piso
     hipHeight: rest.hips.pos.y,
     skinned: true,
     // prende um objeto numa junta com a orientação de repouso do mundo
@@ -179,6 +256,8 @@ export function rigFromGLB(gltf, { scale = 1, outline = 0.012 } = {}) {
         qE.setFromEuler(eul);
         bone.quaternion.copy(r.A).multiply(qE).multiply(r.B);
       }
+      if (rig.autoSecondary) secondary(p);
+      else for (const [n, b] of Object.entries(extra)) b.quaternion.copy(extraRest[n].local);
     },
     finish() {
       rig._mats = [...mats];

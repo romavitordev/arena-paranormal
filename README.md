@@ -50,6 +50,8 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 - **Seleção:** Y/△ escolhe personagem ou cenário **aleatório**; B/○ na seleção de personagens (com ninguém confirmado) volta para a tela inicial.
 - **Opções** (menu principal e pausa): Tutorial (comandos na tela) · Tempo da luta · **Movimento**: direções da tela
   (padrão) ou relativo ao inimigo (↑ aproxima, ↓ recua, ←/→ orbitam).
+- **Especial pode ser interrompido:** ao ativar, o lutador concentra a energia por 0,45 s e fica vulnerável — um projétil
+  (ou qualquer golpe) nesse momento cancela o especial (a sanidade gasta se perde; recarga curta de 4 s).
 - **Combo infinito (estilo Storm):** na sequência de ○, antes do finalizador, aperte **△ + ×** depois de acertar: o
   personagem dá um rush atrás do alvo e a sequência de ○ recomeça do 1º golpe — dá para repetir ○○○ → △+× → ○○○...
   Cada rush gasta 8 de sanidade; o dano cai com a escala de combo e quem apanha pode usar a Substituição.
@@ -67,17 +69,17 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 
 | Personagem | Origem | Elemento | □ principal | R1/RB + botão | Especial | Passiva |
 |---|---|---|---|---|---|---|
-| KAISER | Ordo Realitas | Energia | M4 (varia com a direção) | □ Baforada Cinerária · ○ Acácia | Cinerária (névoa, sem dano direto) | Resistente (−10% de dano físico) |
-| ARTHUR CERVERO | Ordo Realitas | Sangue | Sniper (segure □: ajoelha e mira — mais tempo, mais dano) | □ Rebirth · ○ Ódio Incontrolável "Templo do Ódio" · △ Paralisia de Sangue "Dystopia" | Arma de Sangue | — (luta só com chutes: tem um braço) |
-| JOUI JOUKI | Ordo Realitas | Conhecimento | Sombra Rasteira | ○ Olhar do Desespero (△ + × Teleporte das Sombras) | Shi no Kage | Golpe pelas costas · Decepar |
-| AGHATA | Ordo Realitas | Sangue | Faca Arremessada | □ Amaldiçoar Arma (Sangue) | Descarnar | Colar Banhado em Sangue |
-| DANTE | Ordo Realitas | Morte | Decadenza (fumaça que apodrece) | □ Embaralhar "Trinitá" (3 clones com IA, 50% do dano) · ○ Tentáculos de Lodo · △ Cicatrização "Paradiso" | Invocação: A Marionete (NPC por 18 s, barra preta, pode ser destruída) | Concentração Inquebrável (rituais −10% de sanidade) |
-| ERIN PARKER | Ordo Realitas | Energia | Escopeta calibre 12 (leque de chumbo) | □ Granada "Supernova" · × Granada "Nebulosa" (névoa) · ○ Bênção Maldita · △ Black Hole (cura) | Supernova (corre, tiro de escopeta e granada) | Amuleto Elétrico (choque em quem bate nela) |
-| GAL SAL | Escriptas | Conhecimento | Corrente de Captura (procura, prende e puxa) | □ Corrente Gancho · × Teletransporte | Injustiça né? | Cura que cobra sanidade · Desviar de Balas · Bloqueio Perfeito |
+| KAISER | Ordo Realitas | Energia | M4 (varia com a direção) | □ Baforada Cinerária · ○ Acácia · △ Dendrobium (raízes) · × Balas Amaldiçoadas (Desert Eagle) · L2 Granada Nebulosa | Cinerária (névoa → Acácia amplificada, 250; a névoa fica no mapa) | Resistente · Afinidade Elemental (rituais +15%) |
+| ARTHUR CERVERO | Ordo Realitas | Sangue | Sniper (segure □: ajoelha e mira — mais tempo, mais dano) | □ Rebirth · ○ Ódio Incontrolável "Templo do Ódio" · △ Paralisia de Sangue "Dystopia" · L2 Armadura de Sangue (escudo) | Arma de Sangue | — (luta só com chutes: tem um braço) |
+| JOUI JOUKI | Ordo Realitas | Conhecimento | Sombra Rasteira | ○ Olhar do Desespero · L2 Corte das Sombras (investida) (△ + × Teleporte das Sombras) | Shi no Kage | Golpe pelas costas · Decepar |
+| AGHATA | Ordo Realitas | Sangue | Faca Arremessada | □ Amaldiçoar Arma (Sangue) · L2 Facas Amaldiçoadas (3 em leque) | Descarnar | Colar Banhado em Sangue |
+| DANTE | Ordo Realitas | Morte | Decadenza (fumaça que apodrece) | □ Embaralhar "Trinitá" (3 clones com IA, 50% do dano) · ○ Tentáculos de Lodo · △ Cicatrização "Paradiso" · L2 Poça de Lodo (lentidão) | Invocação: A Marionete (NPC por 18 s, barra preta, pode ser destruída) | Concentração Inquebrável (rituais −10% de sanidade) |
+| ERIN PARKER | Ordo Realitas | Energia | Escopeta calibre 12 (leque de chumbo) | □ Granada "Supernova" · × Granada "Nebulosa" (névoa) · ○ Bênção Maldita · △ Black Hole (cura) · L2 Granada de Luz (atordoa) | Supernova (corre, tiro de escopeta e granada) | Amuleto Elétrico (choque em quem bate nela) |
+| GAL SAL | Escriptas | Conhecimento | Corrente de Captura (procura, prende e puxa) | □ Corrente Gancho · × Teletransporte · L2 Corrente Giratória (área) | Injustiça né? | Cura que cobra sanidade · Desviar de Balas · Bloqueio Perfeito |
 | KIAN | Escriptas | Conhecimento | Impacto Sigilar | □ Teletransporte · ○ Lâmina do Medo · △ Transcendência · × Rejeitar Névoa | Inexistir (1x por partida, +1 ao Transcender) | Precognição |
-| LABIRINTO | Mascarados | Energia | Rajada Caótica (raio da Antena) | □ Labirinto Mental · ○ Consumir Momento · △ Capacete do ??? | O Labirinto é a Resposta | Mente Labiríntica (atordoamentos −40%) |
-| XANDE | Os Cinco | Sangue | Skate Caótico (vai e volta) | □ Amaldiçoar Arma · ○ Polarização Caótica · △ Tela de Ruído (escudo de 140) · × Velocidade Mortal | Por Eles | Gladiador Paranormal (+2 sanidade por golpe) |
-| AGUIAR | Mascarados | Sangue | Machado na Corda (arremessa, sangra e puxa) | ○ Máscara do Mutilador Noturno · L2 Armadilha de Urso · × Predador de Sangue | Finalização do Mutilador | Filho da Dor (apanhando seguido, resiste mais) |
+| LABIRINTO | Mascarados | Energia | Rajada Caótica (raio da Antena) | □ Labirinto Mental · ○ Consumir Momento · △ Capacete do ??? · L2 Tempestade Caótica (5 descargas) | O Labirinto é a Resposta | Mente Labiríntica (atordoamentos −40%) |
+| XANDE | Os Cinco | Sangue | Skate Caótico (vai e volta) | □ Amaldiçoar Arma · ○ Polarização Caótica · △ Tela de Ruído (escudo de 140) · × Velocidade Mortal · L2 Cicatrização | Por Eles | Gladiador Paranormal (+3 sanidade por golpe) |
+| AGUIAR | Mascarados | Sangue | Machado na Corda (arremessa, sangra e puxa) | ○ Máscara do Mutilador Noturno · L2 Armadilha de Urso · × Predador de Sangue · △ Cães de Caça | Finalização do Mutilador | Filho da Dor (apanhando seguido, resiste mais) |
 
 Todos os especiais ofensivos causam 250 de 1000 de vida (`COMBAT.specialDamage`), nenhum é hitkill.
 Números de tudo em [HABILIDADES.md](HABILIDADES.md). Banco de outros membros das origens (para novos lutadores):
@@ -136,7 +138,9 @@ src/
                  teleportStrike, ritual)
   camera/        CameraRig (enquadramento, colisão) e shots.js (planos de cinematic)
   arena/         arenas (ruinas.js) + registro
-  fx/ audio/     partículas, correntes, marcas de corte, distorções; sons substituíveis
+  fx/ audio/     partículas, correntes, marcas de corte, distorções; sons substituíveis;
+                 fx/library.js = efeitos com nome (FX_HIT_SMALL, FX_HIT_HEAVY, FX_DASH, FX_BLOCK,
+                 FX_PERFECT_BLOCK, FX_BLOOD, FX_ENERGY, FX_EXPLOSION, FX_TELEPORT) via world.fx.play(nome, pos, opções)
   ui/ game/ ai/  HUD, telas, partida/rodadas, mundo da luta (zonas de névoa), CPU opcional
   dev/           ferramentas de teste usadas no console do navegador
 ```

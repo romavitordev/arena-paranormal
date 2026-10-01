@@ -84,7 +84,7 @@ export function createGLBArena(cfg) {
         // texturas pintadas pelo nome do material
         const mats = Array.isArray(o.material) ? o.material : [o.material];
         for (const m of mats) {
-          const key = m.name;
+          const key = m.name.replace(/^MAT_[A-Z]+_/, ''); // nomes MAT_<CATEGORIA>_<nome> (V4)
           if (ARENA_TEXTURES[key] && !m.userData.textured) {
             const t = texCache[key] || (texCache[key] = ARENA_TEXTURES[key]());
             const tex = t.isTexture ? t : t.map;

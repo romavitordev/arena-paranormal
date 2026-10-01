@@ -7,6 +7,7 @@ import { hasPassive } from './passives.js';
 import { buildModel } from '../models/index.js';
 import { Animator } from '../anim/Animator.js';
 import { DanteClone, CLONE } from './npcs.js';
+import { buildHuntingDog } from '../models/dog.js';
 
 // Paga um custo em vida (rituais de Sangue) sem nunca se matar
 function payHealth(f, n) {
@@ -1213,6 +1214,7 @@ Object.assign(ABILITY_TYPES, {
           let k = 0;
           const buff = {
             type: 'maze', name: abyss ? 'LABIRINTO ABISSAL' : 'LABIRINTO MENTAL', time: dur, duration: dur, mazeMove: true, mazeAngle: Math.PI * 0.75,
+            pullTo: abyss ? f : null, // Abissal: a direção é escolhida pelo Labirinto (anda até ele)
             onTick(dt) {
               k += dt;
               // a cada meio segundo o "corredor" vira para outro lado
@@ -1309,6 +1311,217 @@ Object.assign(ABILITY_TYPES, {
     },
   },
 
+  // Kaiser — Dendrobium: raízes roxas e uma flor brotam do chão sob o alvo e o prendem (ritual de Energia)
+  rootTrap: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      if (!opp || opp.state === 'ko' || distXZ(f.pos, opp.pos) > a.range) { f.notify('ALVO LONGE DEMAIS'); return null; }
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('point', { restart: true, duration: a.delay + 0.2 });
+      world.audio.play('ritual', { volume: 0.5, pitch: 1.5 });
+      const c = new THREE.Vector3(opp.pos.x, 0.05, opp.pos.z);
+      world.fx.ring(c, { color: a.color, radius: a.radius, life: a.delay + 0.1 });
+      tl.add(a.delay, () => {
+        // raízes subindo em volta (efeito) + flor no centro
+        const roots = new THREE.Group();
+        const mat = new THREE.MeshStandardMaterial({ color: 0x4a2a6a, roughness: 0.8, emissive: a.color, emissiveIntensity: 0.25 });
+        for (let i = 0; i < 9; i++) {
+          const ang = (i / 9) * Math.PI * 2;
+          const root = new THREE.Mesh(new THREE.ConeGeometry(0.07, 1.4 + Math.random() * 0.6, 5), mat);
+          root.position.set(Math.sin(ang) * 0.55, 0.6, Math.cos(ang) * 0.55);
+          root.rotation.set(Math.cos(ang) * -0.5, 0, Math.sin(ang) * 0.5);
+          roots.add(root);
+        }
+        const flower = new THREE.Mesh(new THREE.SphereGeometry(0.22, 8, 6), new THREE.MeshBasicMaterial({ color: a.color }));
+        flower.scale.set(1.3, 0.5, 1.3);
+        flower.position.y = 1.9;
+        roots.add(flower);
+        roots.position.copy(c);
+        roots.scale.setScalar(0.01);
+        world.scene.add(roots);
+        let t = 0;
+        world.addTicker({
+          update(dt) { t += dt; roots.scale.setScalar(Math.min(1, t * 6)); if (t > a.hold) roots.position.y -= dt * 4; return t > a.hold + 0.4; },
+          dispose() { world.scene.remove(roots); roots.traverse((o) => o.geometry && o.geometry.dispose()); mat.dispose(); },
+        });
+        world.fx.burst(c.clone().setY(0.5), { count: 30, color: a.color, speed: 4, up: 2, life: 0.5, size: 0.18 });
+        if (!opp.isInvulnerable() && Math.hypot(opp.pos.x - c.x, opp.pos.z - c.z) <= a.radius + opp.radius) {
+          const res = applyHit(world, f, opp, { damage: a.damage, kind: 'ability', knockback: 0, hitstun: 0.3, reaction: false, color: a.color, sound: 'clawHit' });
+          if (typeof res === 'number' && opp.state !== 'ko') { opp.stun(a.hold, 'stagger'); opp.vel.set(0, 0, 0); opp.notify('PRESO PELAS RAÍZES', true); }
+        }
+      });
+      tl.end(a.delay + 0.2);
+      return seqFrom(tl);
+    },
+  },
+
+  // Kaiser — Balas Amaldiçoadas: saca a Desert Eagle e dispara uma rajada de balas carregadas de Energia
+  cursedShots: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      if (opp) f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play(a.anim || 'shoot_rifle', { restart: true, duration: a.windup + a.count * a.interval + 0.2 });
+      for (let i = 0; i < a.count; i++) {
+        tl.add(a.windup + i * a.interval, () => {
+          const from = f.rig.sockets.handR.getWorldPosition(new THREE.Vector3());
+          from.y = Math.max(from.y, 1.2);
+          const target = f.opponent && f.opponent.state !== 'ko' ? f.opponent.chestPos() : from.clone().add(forwardFromYaw(f.yaw).multiplyScalar(10));
+          const dir = target.sub(from).normalize();
+          // leque: cada tiro sai um pouco aberto para os lados (spread em graus)
+          if (a.spread) dir.applyAxisAngle(new THREE.Vector3(0, 1, 0), ((i - (a.count - 1) / 2) / Math.max(1, a.count - 1)) * a.spread * DEG);
+          world.projectiles.spawn(f, { ...a.projectile, volley: (f.cursedVolley = (f.cursedVolley || 0) + (i === 0 ? 1 : 0)) + 10000 }, from, dir);
+          world.fx.flash(from, { color: a.projectile.color, size: 1, life: 0.08 });
+          world.audio.play(a.shotSound || 'sniper', { volume: 0.5, pitch: 1.4 });
+        });
+      }
+      tl.end(a.windup + a.count * a.interval + 0.2);
+      return seqFrom(tl);
+    },
+  },
+
+  // Golpe giratório em volta do corpo (Gal — Corrente Giratória): vários acertos numa área, o último lança
+  sweepStrike: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      if (opp) f.yaw = yawTo(f.pos, opp.pos);
+      const total = a.windup + a.hits * a.interval + a.recovery;
+      f.anim.play(a.anim || 'spin_kick', { restart: true, duration: total });
+      world.audio.play(a.startSound || 'swing', { volume: 0.8 });
+      const parts = splitDamage(a.damage, Array(a.hits).fill(1));
+      for (let i = 0; i < a.hits; i++) {
+        tl.add(a.windup + i * a.interval, () => {
+          const c = new THREE.Vector3(f.pos.x, f.pos.y + 1.1, f.pos.z);
+          world.fx.slash(c, f.yaw + i * 2.1, { color: a.color, radius: a.radius, arc: 6.2, life: 0.25, width: 0.4, roll: 0.15 * (i % 2 ? 1 : -1) });
+          world.audio.play(a.hitSound ? 'swing' : 'blade', { volume: 0.5 });
+          if (!opp || opp.state === 'ko' || opp.isInvulnerable()) return;
+          if (distXZ(f.pos, opp.pos) - opp.radius > a.radius || Math.abs(opp.pos.y - f.pos.y) > 2) return;
+          const last = i === a.hits - 1;
+          applyHit(world, f, opp, {
+            damage: parts[i], kind: 'ability', element: a.element, knockback: last ? a.knockback : 0.6, hitstun: last ? 0.6 : 0.35,
+            launch: last && !!a.launch, lowLaunch: last && !!a.launch, sound: a.hitSound || 'bladeHit', color: a.color, scale: last ? 1.6 : 0.8,
+            dir: new THREE.Vector3(opp.pos.x - f.pos.x, 0, opp.pos.z - f.pos.z).normalize(),
+          });
+        });
+      }
+      tl.end(total);
+      return seqFrom(tl);
+    },
+  },
+
+  // Investida com corte (Joui — Corte das Sombras): avança rápido em linha reta e corta o primeiro que encontrar
+  dashStrike: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      if (opp) f.yaw = yawTo(f.pos, opp.pos);
+      const dashTime = a.distance / a.speed;
+      f.anim.play(a.anim || 'dash_slash', { restart: true, duration: a.windup + dashTime + a.recovery });
+      world.audio.play(a.startSound || 'blink', { volume: 0.7 });
+      const trail = world.fx.emitter({ rate: 90, follow: () => f.chestPos(), particle: { color: a.color, kind: a.trailKind || 'smoke', speed: 0.5, spread: 0.3, life: 0.35, size: 0.35 } });
+      trail.visible = false;
+      let hit = false;
+      let done = false;
+      tl.each((t) => {
+        const dashing = t >= a.windup && t < a.windup + dashTime && !done;
+        trail.visible = dashing;
+        if (!dashing) { f.vel.x = 0; f.vel.z = 0; return; }
+        const F = forwardFromYaw(f.yaw);
+        f.vel.x = F.x * a.speed;
+        f.vel.z = F.z * a.speed;
+        f.invuln = Math.max(f.invuln, a.iframes ? 0.05 : 0);
+        if (!hit && opp && opp.state !== 'ko' && distXZ(f.pos, opp.pos) - opp.radius <= a.range && Math.abs(angleDiff(f.yaw, yawTo(f.pos, opp.pos))) < 1.2) {
+          hit = true;
+          done = true;
+          world.fx.slash(f.chestPos(), f.yaw, { color: a.color, radius: 2.2, arc: 2.6, life: 0.3, width: 0.45, roll: 0.5 });
+          if (!opp.isInvulnerable()) {
+            applyHit(world, f, opp, {
+              damage: a.damage, kind: 'ability', element: a.element, knockback: a.knockback, hitstun: a.hitstun ?? 0.6,
+              launch: !!a.launch, lowLaunch: !!a.launch, guardCrush: a.guardCrush, sound: a.hitSound || 'bladeHit', color: a.color, scale: 1.6, dir: forwardFromYaw(f.yaw),
+            });
+          }
+        }
+      });
+      tl.add(a.windup + dashTime, () => { trail.stop(); if (!hit) world.fx.slash(f.chestPos(), f.yaw, { color: a.color, radius: 2, arc: 2.4, life: 0.25, width: 0.35 }); });
+      tl.end(a.windup + dashTime + a.recovery);
+      return seqFrom(tl, { cancel: () => trail.stop() });
+    },
+  },
+
+  // Aguiar — Cães de Caça: assobia e um Rottweiler corre até a vítima, morde (prende e faz sangrar) e volta.
+  huntingDog: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      if (!opp || opp.state === 'ko') return null;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('point', { restart: true, duration: 0.45 });
+      world.audio.play('fearGaze', { pitch: 2.2, volume: 0.5 }); // assobio
+      tl.add(0.2, () => {
+        const dog = buildHuntingDog();
+        const R = new THREE.Vector3(Math.cos(f.yaw), 0, -Math.sin(f.yaw));
+        const pos = f.pos.clone().addScaledVector(R, 0.9);
+        dog.root.position.copy(pos);
+        world.scene.add(dog.root);
+        world.fx.burst(pos.clone().setY(0.5), { count: 14, color: 0x2a2420, kind: 'smoke', speed: 1.5, life: 0.5, size: 0.5 });
+        let t = 0;
+        let phase = 'run';
+        let biteT = 0;
+        const away = new THREE.Vector3();
+        world.addTicker({
+          update(dt) {
+            t += dt;
+            const target = f.opponent;
+            if (phase === 'run') {
+              if (!target || target.state === 'ko' || t > a.maxRun) { phase = 'leave'; away.copy(dog.root.position).sub(f.pos).setY(0).normalize(); t = 0; return false; }
+              const to = new THREE.Vector3(target.pos.x - pos.x, 0, target.pos.z - pos.z);
+              const d = to.length();
+              dog.root.rotation.y = Math.atan2(to.x, to.z);
+              if (d <= 0.9) {
+                if (!target.isInvulnerable()) {
+                  const res = applyHit(world, f, target, { damage: a.damage, kind: 'ability', knockback: 0, hitstun: 0.4, reaction: false, sound: 'bladeHit', color: 0x9a0010, pos: target.chestPos() });
+                  if (typeof res === 'number' && target.state !== 'ko') {
+                    target.stun(a.hold, 'stagger');
+                    if (a.bleed) target.applyBleed(a.bleed, f);
+                    target.notify('MORDIDO', true);
+                  }
+                  world.fx.burst(target.chestPos(), { count: 18, color: 0x9a0010, speed: 3, life: 0.5, size: 0.16, gravity: 7 });
+                }
+                phase = 'bite';
+                biteT = 0;
+                return false;
+              }
+              pos.addScaledVector(to.normalize(), Math.min(d - 0.85, a.speed * dt));
+            } else if (phase === 'bite') {
+              biteT += dt;
+              if (biteT > a.hold) { phase = 'leave'; away.set(-Math.sin(dog.root.rotation.y), 0, -Math.cos(dog.root.rotation.y)); t = 0; }
+            } else {
+              pos.addScaledVector(away, a.speed * dt);
+              dog.root.rotation.y = Math.atan2(away.x, away.z);
+              if (t > 0.7) {
+                world.fx.burst(pos.clone().setY(0.5), { count: 10, color: 0x2a2420, kind: 'smoke', speed: 1.5, life: 0.5, size: 0.5 });
+                return true;
+              }
+            }
+            dog.root.position.copy(pos);
+            dog.update(world.time, phase !== 'bite', phase === 'bite');
+            return false;
+          },
+          dispose() { world.scene.remove(dog.root); dog.dispose(); },
+        });
+      });
+      tl.end(0.45);
+      return seqFrom(tl);
+    },
+  },
+
   // Xande — Polarização Caótica: aura magnética. Alvo LONGE é puxado até ele; alvo PERTO é repelido e cai.
   polarize: {
     start(f, a, world) {
@@ -1346,7 +1559,9 @@ Object.assign(ABILITY_TYPES, {
   // Xande — Tela de Ruído: película de Energia que absorve dano físico e de projétil (escudo de vida extra)
   noiseScreen: {
     start(f, a, world) {
-      if (f.findBuff('noise')) { f.notify('TELA JÁ ATIVA'); return null; }
+      const buffType = a.buffType || 'noise';
+      const label = a.label || 'TELA DE RUÍDO';
+      if (f.findBuff(buffType)) { f.notify(label + ' JÁ ATIVA'); return null; }
       const tl = new Timeline();
       f.vel.set(0, 0, 0);
       f.anim.play('concentrate', { restart: true, duration: 0.5 });
@@ -1354,8 +1569,8 @@ Object.assign(ABILITY_TYPES, {
       tl.add(0.3, () => {
         const film = world.fx.emitter({ rate: 30, follow: () => f.chestPos().add(new THREE.Vector3((Math.random() - 0.5) * 1.2, (Math.random() - 0.3) * 1.6, (Math.random() - 0.5) * 1.2)), particle: { color: a.color, speed: 0.1, spread: 0.05, life: 0.25, size: 0.09 } });
         world.fx.ring(f.chestPos(), { color: a.color, radius: 1.3, life: 0.4, vertical: true, yaw: f.yaw });
-        f.addBuff({ type: 'noise', name: 'TELA DE RUÍDO', time: a.duration, duration: a.duration, shield: a.shield, shieldKinds: ['melee', 'ranged'], color: a.color, onEnd() { film.stop(); } });
-        f.notify('TELA DE RUÍDO', true);
+        f.addBuff({ type: buffType, name: label, time: a.duration, duration: a.duration, shield: a.shield, shieldKinds: a.shieldKinds || ['melee', 'ranged'], color: a.color, onEnd() { film.stop(); } });
+        f.notify(label, true);
       });
       tl.end(0.5);
       return seqFrom(tl);

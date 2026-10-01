@@ -15,7 +15,7 @@ from lib import *
 from mathutils import Vector
 
 OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'aguiar.glb'
-b = Builder(width=1.04, bulk=1.1, height=1.03)
+b = Builder(width=1.04, bulk=1.1, height=1.0)  # 1,80 m
 sk = b.sk
 H = sk.h
 hz = sk['hips'].z

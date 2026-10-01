@@ -14,7 +14,7 @@ from lib import *
 from mathutils import Vector
 
 OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'labirinto.glb'
-b = Builder(width=0.92, bulk=0.86, height=1.1)
+b = Builder(width=0.92, bulk=0.86, height=1.085)  # 1,95 m (o mais alto)
 sk = b.sk
 H = sk.h
 hz = sk['hips'].z
@@ -81,7 +81,7 @@ lace = [cone((-0.03, -0.13 * H, hz + 0.5 * H - k * 0.03 * H), (0.03, -0.13 * H, 
 b.add('neck_lace', merge(*lace), rope, region='torso', subdiv=0)
 
 # ---------------- ELMO do sorriso (prop): esfera de ferro que cobre a cabeça + papéis colados
-helmet = ellipsoid((hc.x, hc.y, hc.z + 0.005), (0.158 * H, 0.165 * H, 0.172 * H), 24, 16, theta_max=math.pi * 0.86)
+helmet = ellipsoid((hc.x, hc.y, hc.z + 0.005), (0.162 * H, 0.176 * H, 0.176 * H), 24, 16, theta_max=math.pi * 0.86)
 papers = []
 for i in range(9):
     a = math.pi * 0.35 + (i / 8) * math.pi * 1.3

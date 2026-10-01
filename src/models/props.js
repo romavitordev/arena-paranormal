@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { glowMat } from './rig.js';
-import { m4, sniper, guitarCase, bloodArm, knife, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate } from './weapons.js';
+import { m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate } from './weapons.js';
 export { addMascaradoProps } from './characters/mascarado.js';
 
 // Armas e acessórios adicionados em código sobre os modelos do Blender.
@@ -8,6 +8,11 @@ export { addMascaradoProps } from './characters/mascarado.js';
 
 export function addCinerariaProps(rig) {
   const { sockets, props } = rig;
+  // faca karambit vermelha (cânone) na mão esquerda
+  const kar = karambit();
+  kar.rotation.set(-0.35, Math.PI, 0.5);
+  sockets.handL.add(kar);
+  props.karambit = kar;
   const back = m4();
   back.rotation.set(0, 0, 2.5);
   back.position.set(0, 0, -0.08);

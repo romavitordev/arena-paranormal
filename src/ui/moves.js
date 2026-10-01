@@ -29,7 +29,7 @@ export function moveListHTML(c) {
   html += row('□ / X', r.name, `${r.damage}${r.count > 1 ? ` × ${r.count}` : ''} de dano · recarga ${r.cooldown}s${r.energyCost ? ` · ${r.energyCost} de sanidade` : ''}`);
   if (r.variants) for (const [k, v] of Object.entries(r.variants)) html += row(DIR[k].replace('○', '□'), v.label.toLowerCase().replace(/^./, (x) => x.toUpperCase()), `${v.damage}${(v.count ?? r.count) > 1 ? ` × ${v.count ?? r.count}` : ''} de dano`);
   for (const a of c.abilities || []) html += row(INPUT[a.input] || a.input, a.name, `${a.description || ''} (${a.energyCost} de sanidade · recarga ${a.cooldown}s)`);
-  html += row('△ → △ → ○', `Especial: ${c.special.name}`, c.special.type === 'mistField' ? 'névoa paranormal, sem dano direto' : c.special.type === 'erase' ? 'corpo a corpo, 1x por partida (+1 depois de Transcender), indefensável: o alvo vira pó — só escapa esquivando ou com sanidade cheia (resiste levando muito dano)' : `${c.special.damage ?? COMBAT.specialDamage} de dano`);
+  html += row('△ → △ → ○', `Especial: ${c.special.name}`, c.special.type === 'mistField' ? 'névoa + Acácia amplificada (250 de dano); a névoa fica no mapa' : c.special.type === 'erase' ? 'corpo a corpo, 1x por partida (+1 depois de Transcender), indefensável: o alvo vira pó — só escapa esquivando ou com sanidade cheia (resiste levando muito dano)' : `${c.special.damage ?? COMBAT.specialDamage} de dano`);
   html += row('R2 parado', 'Defesa', 'defende tudo, até especial (quebra depois de muito dano)');
   html += row('R2 + andar', 'Defesa em movimento', 'anda mais rápido, mas fica aberto a golpes');
   html += row('L2 + direção', c.dodge && c.dodge.name ? `Esquiva: ${c.dodge.name}` : 'Esquiva', 'gasta 1 das 4 cargas (recuperam tomando dano)');

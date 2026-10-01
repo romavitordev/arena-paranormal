@@ -347,7 +347,7 @@ export class SelectScreen {
           <dt>Físico ○</dt><dd>${c.melee.name}</dd>
           <dt>Principal □</dt><dd>${c.ranged ? c.ranged.name : '—'}</dd>
           <dt>Habilidades</dt><dd>${extras}</dd>
-          <dt>Especial</dt><dd>${sp ? `${sp.name}${sp.type === 'mistField' ? ' · névoa (sem dano direto)' : sp.type === 'erase' ? ' · 1x por partida' : ` · ${sp.damage ?? COMBAT.specialDamage} dano`}` : '—'}</dd>
+          <dt>Especial</dt><dd>${sp ? `${sp.name}${sp.type === 'mistField' ? ' · névoa + Acácia (250 dano)' : sp.type === 'erase' ? ' · 1x por partida' : ` · ${sp.damage ?? COMBAT.specialDamage} dano`}` : '—'}</dd>
         </dl>`;
       // modelo 3D no centro
       this.stage.show(p, front.id, this.ready[p]);

@@ -92,6 +92,70 @@
   Tela de Ruído (escudo), Velocidade Mortal, Gladiador Paranormal, especial Por Eles. Nova origem OS CINCO.
 - Telemetria com 11 (1 luta por par): Dante 65%, Kian 65%, Joui/Aghata/Erin 55%, Kaiser 50%, Gal/Aguiar/Labirinto 45%,
   Arthur 35% (era 19%), Xande 35% (reforçado: skate 38, escudo 140).
+- ✅ Xande anda de SKATE: andando um instante sobe no Skate Caótico (+40% de velocidade, pose de skatista, faíscas
+  verdes); parar, atacar, defender ou apanhar desce. Configurável por personagem (def.mount).
+### V4 — pipeline de assets (em andamento, do mais essencial/fácil para o mais complexo)
+- ✅ Etapa 21 Exportação: auditoria automática `npm run audit` (ossos obrigatórios, UV, pesos, até 4 influências,
+  escala aplicada, materiais duplicados, orçamento de triângulos). Todos os 11 personagens e 3 cenários passam.
+- ✅ Etapa 20 Otimização: peças com o mesmo material são unidas na exportação (prop_* continuam separadas):
+  de 26–75 malhas por personagem para 7–21 (menos chamadas de desenho). Triângulos: 21k–40k (Gal no limite).
+- ✅ Etapa 15 Teste de pose: 9 poses (T, braço levantado, soco, chute, corrida, salto, agachamento, defesa, arma)
+  em `src/dev/poseTest.js`. Nenhuma deformação de peso; corrigidos: faixas do Kian (viravam luvas gigantes) e a
+  parabólica do Labirinto (tapava o rosto).
+- ✅ Proporções pelo cânone (Joui 1,80 m = escala 1,0): Aghata 1,62 · Arthur 1,65 · Erin 1,70 · Kaiser/Xande 1,75 ·
+  Aguiar 1,80 · Labirinto 1,95 (Dante, Kian e Gal sem altura na wiki: mantidos).
+- ✅ Escultura do rosto (todos): nariz, arco das sobrancelhas, olhos fundos, maçãs, lábios e queixo em relevo, alinhados
+  com a textura do rosto (cabeça com 4× mais resolução).
+- ✅ Revisão por personagem: Kaiser (jaqueta acolchoada com forro roxo, mangas fofas, ribana, botões, mochila, franja
+  mais fina mostrando o rosto); Arthur (colete trespassado com lapelas, manga esquerda vazia caindo até o quadril).
+- ✅ Joui: corda da cintura trançada (3 voltas, textura de fios) com laçadas penduradas, cordão cru em X no peito e pingente.
+- ✅ Aghata (só gráfico, mesmo design): colar com argola, cinto com fivela e corrente, rasgos nos joelhos, mecha vermelha.
+- ✅ Dante: xale virou MANTO até os joelhos (aberto na frente, dobras de geometria, lados acompanham os ombros);
+  cabelo liso com franja reta e laterais rentes (antes espetado).
+- ✅ Kian: pontas das faixas curtas (antes tiras até o cotovelo) e calça cobrindo o quadril (aparecia pele na virilha).
+- ✅ V4 etapa 7 Materiais: nomes MAT_<CATEGORIA>_<nome> (SKIN, HAIR, CLOTH, METAL, LEATHER, WEAPON, EFFECT) gerados
+  automaticamente na exportação; o jogo procura a textura pelo nome curto.
+- ✅ Especial interrompível: preparo de 0,45 s vulnerável; projétil/golpe cancela (CPU tenta interromper com tiro).
+- ✅ Kaiser reforçado com o cânone: combo ágil com a karambit vermelha, Dendrobium (raízes), Balas Amaldiçoadas
+  (Desert Eagle), granada Nebulosa, Afinidade Elemental (+15% em rituais) e especial Cinerária: solta a névoa, conjura a Acácia amplificada por ela (250) e a névoa fica parada no mapa por 10 s (bônus só com o Kaiser dentro).
+- ✅ Xande: no skate o corpo vira para onde anda; ao bater o skate vai para as costas e o taco é seguro com as duas mãos;
+  na defesa ergue o skate como escudo (bloqueio perfeito um pouco mais fácil).
+- Gal, Erin, Aguiar, Labirinto e Xande já foram feitos/revisados com as referências nas rodadas anteriores.
+- ✅ V4 etapa 12 Armature: esqueleto com root → hips → sp → chest → neck → hd, mãos (handL/R) e pés (footL/R),
+  18 ossos em todos os 11 personagens (auditoria exige). Pesos: mão abaixo do punho, pé abaixo do tornozelo, pescoço
+  misturado com a cabeça, peito no tronco de cima. Os ossos novos ainda seguem o pai (poses iguais); as armas agora
+  ficam presas no osso da MÃO e mochila/capa no PEITO.
+- ✅ V4 etapa 19 Efeitos: biblioteca `src/fx/library.js` com FX_HIT_SMALL, FX_HIT_HEAVY, FX_DASH, FX_BLOCK,
+  FX_PERFECT_BLOCK, FX_BLOOD, FX_ENERGY, FX_EXPLOSION e FX_TELEPORT; golpes, defesa, bloqueio perfeito, dash,
+  sangramento, explosões, troca e substituição usam os efeitos pelo nome (`world.fx.play`).
+- ✅ Movimento secundário automático (glbRig): o pescoço leva 40% da rotação da cabeça; com o pé perto do chão e o
+  corpo em pé, o tornozelo deixa o pé plano (agachado: pé de −48° para −5°; no chute/corrida o pé no ar fica livre).
+  Custo ~0,02 ms por quadro. `rig.autoSecondary = false` desliga.
+- ✅ V4 etapa 16 Animações: adicionadas CAMINHADA (analógico até a metade) e DERROTA (perdeu no tempo: cai de joelho,
+  cabisbaixo). Todas as da lista agora existem (idle, caminhada, corrida, dash, salto, defesa, esquiva, ataques, combo,
+  aéreo, especial, queda, levantar, vitória, derrota).
+- ✅ V4 etapa 17 Movimento: com a câmera travada o lutador olha o adversário, então a locomoção agora segue a direção:
+  frente = caminhada/corrida; trás = recuo de guarda (walk_back); lado andando = passo lateral (strafe_L/R);
+  lado correndo = pernas giram até 70° para onde vai e o peito continua no adversário. A velocidade do clipe acompanha
+  o deslocamento (campo `stride` em alturas de quadril; limite 1,9×) para o pé de apoio não patinar.
+  Contato com o chão: se a pose afunda um pé no piso (parado −5 cm, defesa −12 cm), o quadril sobe o necessário.
+- Equilíbrio (2 lutas por par, 40 por personagem): Dante 60%, Kaiser 55%, Erin 53%, Joui/Kian 48%, Xande 40% (era 28%),
+  Arthur 38% (era 15%: chutes com menos empurrão), Gal/Aguiar 35%, Aghata 25%, Labirinto 20% (média de 3 medições 35%:
+  reforçado combo 194 e Rajada 56). Variação entre rodadas ainda é de ±15% — amostras maiores ajudariam.
+- Fidelidade (revisão com a wiki):
+  - Aguiar ✔ visual completo (máscara da mão vermelha, colete rasgado, suspensório em X, esporas, cicatrizes, distintivo),
+    machado vermelho que sangra, machado na corda (cena do píer), armadilha de urso, Predador de Sangue, máscara
+    (Ataque Mutilador/Predador Perfeito). ✅ Adicionados os CÃES DE CAÇA (Rottweilers). Fica de fora: o revólver .38
+    (cânone, removido a pedido) e o cronômetro. "Filho da Dor" é do Jasper (agente no corpo dele em Hexatombe).
+  - Labirinto ✔ visual completo (cicatrizes em labirinto, túnica rasgada, retalhos, descalço, elmo do sorriso com papéis,
+    cesto, a Antena), Rajada/Tempestade Caótica, Labirinto Mental, Consumir Momento, capacete, mente labiríntica.
+    ✅ Labirinto Abissal agora é fiel: a direção é ESCOLHIDA por ele (a vítima anda até o Labirinto).
+    Fica de fora (não são de combate): Capturar Momento e Mapa/Revelação Sanguínea.
+  - Xande ✔ visual (boné, bandana, camiseta "oculto", joelheiras, broche dos Cinco, correntes, taco, skate);
+    ✅ adicionados fones no pescoço, discman e os cabos neon dos Tênis Lépidos. Rituais: Amaldiçoar Arma, Polarização
+    Caótica, Tela de Ruído, Velocidade Mortal e Gladiador Paranormal são fiéis. Ficam de fora: Vislumbre do Fim (óculos),
+    Descarnar, Armadura de Sangue, Cicatrização, Perturbação, Tecer Ilusão, Sopro do Caos e o afinidade de Conhecimento
+    do Amaldiçoar Arma (candidatos a variações futuras).
 - Telemetria anterior (1 luta por par, CPU normal): Kaiser 69%, Kian 69%, Dante 63%, Aguiar 63%, Erin 56%, Joui 38%,
   Aghata 38%, Gal 38%, Arthur 19% — Arthur precisa de atenção na próxima rodada de equilíbrio.
 
@@ -315,6 +379,11 @@ cair) e levantar atacando (custa 10 de energia). Evita repetir o mesmo golpe na 
 Ferramenta `npm run balance`: roda N lutas CPU × CPU para todos os pares (sem renderizar, como os testes atuais
 do navegador) e gera tabela de vitórias, dano médio por golpe e uso de cada habilidade. Base para todos os ajustes
 acima. Precisa rodar no navegador (Three.js) → script em `src/dev/balance.js` chamado pelo console, salvando JSON.
+
+### 3.11 Partidas LAN por código 🟡
+No menu **Jogar**, adicionar **Partida LAN** com as opções **Criar partida** (gera um código para compartilhar) e
+**Entrar em partida** (campo para digitar o código do amigo). Sincronizar os comandos e o estado da luta entre os dois
+jogadores; permitir conexão pela rede virtual do Radmin. O código deve levar o convidado até a partida do anfitrião.
 
 ---
 

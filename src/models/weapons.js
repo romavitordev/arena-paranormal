@@ -45,6 +45,23 @@ export function scabbard() {
   return g;
 }
 
+// Karambit vermelha do Kaiser: lâmina curva em garra e anel no cabo
+export function karambit() {
+  const g = new THREE.Group();
+  const handle = part(new THREE.CylinderGeometry(0.016, 0.016, 0.1, 8), 0x1a1a1c);
+  handle.position.y = 0.02;
+  g.add(handle);
+  const ring = part(new THREE.TorusGeometry(0.026, 0.007, 6, 14), 0x8a8a90);
+  ring.position.y = 0.09;
+  ring.rotation.y = Math.PI / 2;
+  g.add(ring);
+  const blade = part(extrude(bladeShape(0.18, 0.035, 0.09, 0.15), 0.008), 0xb0141e, { mat: toon(0xb0141e, { emissive: 0x2a0004 }) });
+  blade.position.y = -0.03;
+  blade.rotation.y = Math.PI / 2;
+  g.add(blade);
+  return g;
+}
+
 export function knife() {
   const g = new THREE.Group();
   const handle = part(new THREE.CylinderGeometry(0.018, 0.016, 0.12, 8), 0x2a1a14);
@@ -356,7 +373,7 @@ export function antenna() {
   const g = new THREE.Group();
   const iron = 0x4a4a4e;
   const pole = part(new THREE.CylinderGeometry(0.022, 0.026, 2.0, 8), iron);
-  pole.position.y = -0.2;
+  pole.position.y = -0.1;
   g.add(pole);
   // arame enrolado no cabo
   for (let i = 0; i < 14; i++) {
@@ -366,8 +383,8 @@ export function antenna() {
     g.add(r);
   }
   const head = new THREE.Group();
-  head.position.y = -1.2; // na pose de luta o -Y do soquete aponta para cima: a parabólica fica no alto
-  const dish = part(new THREE.SphereGeometry(0.3, 16, 8, 0, Math.PI * 2, 0, Math.PI * 0.42), 0x9a9a98, { mat: toon(0x9a9a98, { side: THREE.DoubleSide }) });
+  head.position.y = -1.0; // na pose de luta o -Y do soquete aponta para cima: a parabólica fica no alto
+  const dish = part(new THREE.SphereGeometry(0.21, 16, 8, 0, Math.PI * 2, 0, Math.PI * 0.42), 0x9a9a98, { mat: toon(0x9a9a98, { side: THREE.DoubleSide }) });
   dish.rotation.x = Math.PI * 1.4;
   dish.position.z = 0.08;
   head.add(dish);
@@ -378,7 +395,7 @@ export function antenna() {
   // varetas espetadas em volta (como raios)
   for (let i = 0; i < 9; i++) {
     const a = (i / 9) * Math.PI * 2;
-    const rod = part(new THREE.CylinderGeometry(0.007, 0.007, 0.5, 4), 0x5a5a60, { outline: false });
+    const rod = part(new THREE.CylinderGeometry(0.006, 0.006, 0.36, 4), 0x5a5a60, { outline: false });
     rod.position.set(Math.cos(a) * 0.12, 0.12, Math.sin(a) * 0.12);
     rod.rotation.set(Math.sin(a) * 1.1, 0, -Math.cos(a) * 1.1);
     head.add(rod);

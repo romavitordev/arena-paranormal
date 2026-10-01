@@ -106,6 +106,22 @@ export default {
       duration: 2.5,
       color: 0x2a2632,
     },
+    {
+      id: 'pocaLodo',
+      name: 'Poça de Lodo',
+      input: 'mod+dodge', // R1 + L2 / RB + LT
+      type: 'throwProjectile',
+      description: 'Arremessa uma bola de Lodo Preto que se espalha no chão: o inimigo dentro anda devagar e não recupera energia.',
+      energyCost: 20,
+      cooldown: 15,
+      anim: 'throw_r',
+      windup: 0.3,
+      recovery: 0.3,
+      projectile: {
+        visual: 'decay', color: 0x2a2632, speed: 15, range: 16, radius: 0.4, gravity: 18, damage: 0, lobTo: 'feet', kind: 'ability', element: 'morte',
+        explode: { radius: 2.2, damage: 35, knockback: 1, color: 0x3a3442, mist: { radius: 3.2, duration: 6, slow: 0.45, enemyRegen: 0, color: 0x1a1620 } },
+      },
+    },
   ],
 
   // INVOCAÇÃO: A MARIONETE — um NPC real (vida, IA, ataques próprios) que fica 25 s em campo.

@@ -38,14 +38,19 @@ for s in (1, -1):
 # faixas nos antebraços e mãos com pontas soltas
 for side in ('L', 'R'):
     e, h = sk['e' + side], sk['hand' + side]
-    b.add('wrap' + side, tube(limb_rings(e.lerp(h, 0.3), h + Vector((0, 0, -0.06 * H)), 0.075, 0.064, n=5), 12), wrap, region='arm' + side)
+    # faixas no antebraço até o punho (não cobrem o punho fechado inteiro: antes viravam 'luvas' gigantes)
+    b.add('wrap' + side, tube(limb_rings(e.lerp(h, 0.3), h + Vector((0, 0, 0.01 * H)), 0.07, 0.06, n=5), 12), wrap, region='arm' + side)
     # pontas soltas das faixas: saem do punho e CAEM (apontam para o cotovelo), como tiras de pano
     for k in range(2):
         dx = (0.022 if k else -0.018)
         p0 = h + Vector((dx, 0.05, 0.02))
-        pts = [(p0.x, p0.y, p0.z, 0.018, 0.004), (p0.x + dx * 0.6, p0.y + 0.035, p0.z + 0.1, 0.016, 0.004),
-               (p0.x + dx * 1.2, p0.y + 0.06, p0.z + 0.2, 0.014, 0.004), (p0.x + dx * 1.6, p0.y + 0.07, p0.z + 0.28 - k * 0.05, 0.011, 0.003)]
+        # pontas curtas e finas (antes viravam tiras longas até o cotovelo)
+        pts = [(p0.x, p0.y, p0.z, 0.011, 0.003), (p0.x + dx * 0.5, p0.y + 0.03, p0.z + 0.06, 0.01, 0.003),
+               (p0.x + dx * 0.9, p0.y + 0.045, p0.z + 0.12 - k * 0.03, 0.007, 0.002)]
         b.add(f'tail{side}{k}', tube(pts, 4), wrap, region='e' + side, subdiv=0)
+# calça cobrindo o quadril (sem pele aparecendo na virilha)
+# (o tronco é engrossado ×k_tx/×k_ty pelo Builder: a calça precisa ficar POR FORA dele)
+b.add('pants_hip', tube([(0, 0, hz + 0.06 * H, 0.214 * H / b.k_tx, 0.16 * H / b.k_ty), (0, 0, hz - 0.04 * H, 0.218 * H / b.k_tx, 0.162 * H / b.k_ty), (0, 0, hz - 0.13 * H, 0.2 * H / b.k_tx, 0.15 * H / b.k_ty)], 20, cap_start=False), M['legs'], region='torso')
 # cós da calça
 b.add('waist', tube([(0, 0, hz + 0.04, 0.188 * H, 0.135 * H), (0, 0, hz + 0.09, 0.19 * H, 0.137 * H)], 18), material('waistband', '#2a2a2e', 0.8), region='torso', subdiv=0)
 # cabelo curto (calota fina) e barba cheia

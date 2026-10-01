@@ -19,16 +19,18 @@ especial = Carga → Carga → ○ (custa 50, ofensivos causam 250, nunca hitkil
 
 ## KAISER
 
-*Controle de espaço + arma de fogo + névoa* · arma: M4
+*Controle de espaço + arma de fogo + névoa* · arma: M4, Desert Eagle e karambit vermelha
 
 ### Físico (○ / B)
 
 | Comando | Golpe | Dano | Alcance | Observações |
 |---|---|---|---|---|
-| ○ 1 | Jab | 32 | 1.6 m |  |
-| ○ 2 | Direto | 38 | 1.7 m |  |
-| ○ 3 | Chute circular | 44 | 1.9 m |  |
-| ○ 4 | Chute giratório | 60 | 2 m | finalizador: lança |
+| ○ 1 | Jab | 26 | 1.7 m |  |
+| ○ 2 | Direto | 28 | 1.7 m |  |
+| ○ 3 | Corte de karambit | 32 | 1.7 m |  |
+| ○ 4 | Chute circular | 36 | 1.9 m |  |
+| ○ 5 | Corte cruzado | 30 | 1.8 m |  |
+| ○ 6 | Chute giratório | 60 | 2 m | finalizador: lança |
 | Frente + ○ | Investida | 40 | 1.8 m |  |
 | Trás + ○ | Rasteira de recuo | 34 | 2.4 m | finalizador: derruba, invulnerável no começo |
 | Lado + ○ | Chute lateral | 38 | 1.9 m |  |
@@ -45,6 +47,12 @@ especial = Carga → Carga → ○ (custa 50, ofensivos causam 250, nunca hitkil
 
 ### Habilidades
 
+- **Sentir Através "Dendrobium"** — R1 + △ / RB + Y · custo 25 · cooldown 14 s · dano 45 · alcance 16 m
+  Raízes roxas e uma flor brotam do chão sob o alvo e o prendem por um instante.
+- **Balas Amaldiçoadas** — R1 + × / RB + A · custo 25 · cooldown 11 s
+  Saca a Desert Eagle e dispara três balas amaldiçoadas com Energia, que procuram o alvo.
+- **Granada "Nebulosa"** — R1 + L2 / RB + LT · custo 20 · cooldown 16 s
+  A granada que a Erin fez para ele: explode numa nuvem que deixa o inimigo lento e engole os tiros.
 - **Baforada Cinerária** — R1 + □ / RB + X · custo 20 · cooldown 12 s
   Sopra uma nuvem de névoa à frente: engole projéteis inimigos, deixa o inimigo lento e sem regenerar energia dentro dela.
 - **Acácia** — R1 + ○ / RB + B · custo 25 · cooldown 13 s · dano 70 · alcance 18 m
@@ -53,7 +61,7 @@ especial = Carga → Carga → ○ (custa 50, ofensivos causam 250, nunca hitkil
 
 ### Especial: Cinerária
 
-Névoa paranormal por 10 s (sem dano direto): +25% de dano, esquiva com 1.6× invulnerabilidade e metade do cooldown, corpo translúcido, área de 5 m onde o inimigo fica 20% mais lento, não regenera energia e os projéteis perdem 50% da velocidade. Custo 50 · cooldown 22 s.
+Solta a névoa e, dentro dela, conjura a **Acácia amplificada pela Cinerária** (250 de dano). Depois a névoa fica **parada no mapa** por 10 s; com o Kaiser dentro dela: +25% de dano, esquiva com 1.6× invulnerabilidade e metade do cooldown, corpo translúcido, área de 5 m onde o inimigo fica 20% mais lento, não regenera energia e os projéteis perdem 50% da velocidade. Custo 50 · cooldown 22 s.
 
 ---
 
@@ -65,8 +73,8 @@ Névoa paranormal por 10 s (sem dano direto): +25% de dano, esquiva com 1.6× in
 
 | Comando | Golpe | Dano | Alcance | Observações |
 |---|---|---|---|---|
-| ○ 1 | Chute baixo | 36 | 1.8 m |  |
-| ○ 2 | Joelhada | 42 | 1.4 m |  |
+| ○ 1 | Chute baixo | 36 | 1.9 m |  |
+| ○ 2 | Joelhada | 42 | 1.7 m |  |
 | ○ 3 | Chute circular | 46 | 1.9 m |  |
 | ○ 4 | Chute giratório | 60 | 2 m | finalizador: lança |
 | Frente + ○ | Chute de avanço | 42 | 2 m |  |
@@ -78,7 +86,7 @@ Névoa paranormal por 10 s (sem dano direto): +25% de dano, esquiva com 1.6× in
 
 ### Principal (□ / X): Sniper
 
-- Dano 110 · alcance 70 m · cooldown 3.6 s · custo 0
+- Dano 110 · alcance 70 m · cooldown 3.2 s · custo 0
 
 ### Habilidades
 
@@ -88,6 +96,8 @@ Névoa paranormal por 10 s (sem dano direto): +25% de dano, esquiva com 1.6× in
   Corta a palma e sangra sobre o olho: ódio intenso por alguns segundos — físico mais forte e mais rápido, mas não consegue defender.
 - **Paralisia de Sangue "Dystopia"** — R1 + △ / RB + Y · custo 25 · cooldown 18 s · alcance 7 m
   Mancha o símbolo com o próprio sangue, abre os olhos vermelhos e paralisa quem estiver à frente por um instante.
+- **Armadura de Sangue** — R1 + L2 / RB + LT · custo 25 · cooldown 18 s
+  O sangue endurece sobre a pele como uma couraça vermelha: absorve golpes e tiros até se romper.
 
 ### Especial: Arma de Sangue
 
@@ -127,6 +137,8 @@ Névoa paranormal por 10 s (sem dano direto): +25% de dano, esquiva com 1.6× in
   Afunda na própria sombra e emerge atrás do adversário, já podendo atacar. Não causa dano.
 - **Olhar do Desespero** — R1 + ○ / RB + B · custo 25 · cooldown 12 s · alcance 8 m
   Encara o adversário e libera uma manifestação de medo: quem estiver à frente fica paralisado por um instante, vulnerável a combo.
+- **Corte das Sombras** — R1 + L2 / RB + LT · custo 20 · cooldown 10 s · dano 70 · alcance 1.4 m
+  Avança como uma sombra em linha reta e corta com a katana o primeiro que estiver no caminho.
 - **Passiva — Decepar:** finalizador +30% em quem está com menos de 20% de vida
 - **Passiva:** golpes físicos pelas costas causam +25%
 
@@ -164,6 +176,8 @@ Névoa paranormal por 10 s (sem dano direto): +25% de dano, esquiva com 1.6× in
 
 - **Amaldiçoar Arma** — R1 + □ / RB + X · custo 25 · cooldown 16 s
   Amaldiçoa a faca com o elemento Sangue: por alguns segundos cada acerto (físico ou faca arremessada) abre um sangramento que continua tirando vida.
+- **Facas Amaldiçoadas** — R1 + L2 / RB + LT · custo 20 · cooldown 11 s
+  Arremessa três facas banhadas em sangue, em leque, que se curvam atrás do alvo.
 - **Passiva — Colar Banhado em Sangue:** −15% de dano de Sangue; sangramento 10% mais forte
 
 ### Especial: Descarnar
@@ -204,6 +218,8 @@ Névoa paranormal por 10 s (sem dano direto): +25% de dano, esquiva com 1.6× in
   Põe a mão no chão: tentáculos de Lodo Preto brotam embaixo do inimigo, prendem e comprimem.
 - **Cicatrização "Paradiso"** — R1 + △ / RB + Y · custo 30 · cooldown 26 s
   Assopra uma névoa preta em espiral que envelhece as próprias feridas até cicatrizarem.
+- **Poça de Lodo** — R1 + L2 / RB + LT · custo 20 · cooldown 15 s
+  Arremessa uma bola de Lodo Preto que se espalha no chão: o inimigo dentro anda devagar e não recupera energia.
 
 ### Especial: Invocação: A Marionete
 
@@ -245,6 +261,8 @@ Névoa paranormal por 10 s (sem dano direto): +25% de dano, esquiva com 1.6× in
   Ritual de Energia: a mão brilha em ciano e ela vê um pedaço do futuro — recupera todas as esquivas e bate mais forte por alguns segundos.
 - **Envelhecimento Localizado "Black Hole"** — R1 + △ / RB + Y · custo 30 · cooldown 26 s
   Segura cinzas, diz "Black Hole" e assopra: as cinzas ficam pretas e envelhecem as próprias feridas até cicatrizarem em espiral.
+- **Granada de Luz** — R1 + L2 / RB + LT · custo 20 · cooldown 16 s
+  Uma granada de clarão: explode numa luz branca que deixa o inimigo atordoado por um instante.
 
 ### Especial: Supernova
 
@@ -285,6 +303,8 @@ Névoa paranormal por 10 s (sem dano direto): +25% de dano, esquiva com 1.6× in
   Some em faíscas douradas e surge atrás do adversário, como fez com Arthur e Erin no orfanato.
 - **Controle Mental** — R1 + ○ / RB + B · custo 35 · cooldown 24 s · alcance 10 m
   Um sigilo dourado sobre a cabeça do alvo: por alguns segundos o corpo dele obedece ao contrário (direções invertidas).
+- **Corrente Giratória** — R1 + L2 / RB + LT · custo 25 · cooldown 13 s · dano 75
+  Gira as duas lâminas presas às correntes em volta do corpo: três cortes em área, o último lança.
 - **Bloqueio Perfeito** — defender no instante exato (0.15 s) anula o dano e atordoa o atacante por 0.7 s
 - **Passiva — Desviar de Balas:** esquivar de um projétil não gasta carga
 - **Passiva:** o físico tira X de vida; o INIMIGO recupera Y (Y < X) e perde Y × 1.5 de sanidade (energia). O Injustiça não se cura.
@@ -371,6 +391,8 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
   Põe a máscara branca da mão vermelha: a intenção assassina toma conta — bate mais forte, anda mais rápido, aguenta 3 golpes sem reagir e todo golpe físico faz sangrar. Mas não consegue mais defender.
 - **Armadilha de Urso** — R1 + L2 / RB + LT · custo 20 · cooldown 12 s · dano 40
   Arma uma armadilha de urso no chão à frente. Quem pisar fica preso, toma dano e sangra. Só uma por vez.
+- **Cães de Caça** — R1 + △ / RB + Y · custo 25 · cooldown 14 s · dano 30
+  Assobia e um dos Rottweilers do acampamento corre até a vítima, morde (prende por um instante e faz sangrar) e volta.
 - **Predador de Sangue** — R1 + × / RB + A · custo 20 · cooldown 20 s
   Memoriza o cheiro da vítima: por alguns segundos rastreia o sangue dela, anda mais rápido e todo ataque contra ela fica mais forte.
 
@@ -388,10 +410,10 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
 
 | Comando | Golpe | Dano | Alcance | Observações |
 |---|---|---|---|---|
-| ○ 1 | Estocada | 28 | 2.5 m |  |
-| ○ 2 | Varrida | 30 | 2.5 m |  |
-| ○ 3 | Varrida de volta | 30 | 2.5 m |  |
-| ○ 4 | Golpe da parabólica | 38 | 2.4 m |  |
+| ○ 1 | Estocada | 30 | 2.5 m |  |
+| ○ 2 | Varrida | 32 | 2.5 m |  |
+| ○ 3 | Varrida de volta | 32 | 2.5 m |  |
+| ○ 4 | Golpe da parabólica | 40 | 2.4 m |  |
 | ○ 5 | Giro da Antena | 58 | 3 m | finalizador: lança |
 | Frente + ○ | Investida da lança | 34 | 2.6 m |  |
 | Trás + ○ | Recua e estoca | 34 | 2.4 m | invulnerável no começo |
@@ -402,7 +424,7 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
 
 ### Principal (□ / X): Rajada Caótica
 
-- Dano 52 · alcance 20 m · cooldown 2.4 s · custo 0
+- Dano 56 · alcance 20 m · cooldown 2.4 s · custo 0
 
 ### Habilidades
 
@@ -412,6 +434,8 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
   Marca o chão onde o alvo pisa com uma espiral; ao estalar os dedos ela estoura e destrói a área (Morte). Dá para sair de cima se perceber a marca. Com o capacete, a área e o dano crescem.
 - **Capacete do ???** — R1 + △ / RB + Y · custo 35 · cooldown 30 s
   Põe o elmo do sorriso: por alguns segundos os rituais e a Rajada ficam mais fortes (Tempestade Caótica), o Labirinto Mental vira Abissal e o Consumir Momento cresce.
+- **Tempestade Caótica** — R1 + L2 / RB + LT · custo 30 · cooldown 15 s
+  A versão forte da Rajada: a parabólica cospe cinco descargas caóticas em leque que procuram o alvo.
 
 ### Especial: O Labirinto é a Resposta
 
@@ -427,11 +451,11 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
 
 | Comando | Golpe | Dano | Alcance | Observações |
 |---|---|---|---|---|
-| ○ 1 | Tacada | 30 | 2 m |  |
-| ○ 2 | Tacada de volta | 30 | 2 m |  |
+| ○ 1 | Tacada | 33 | 2 m |  |
+| ○ 2 | Tacada de volta | 33 | 2 m |  |
 | ○ 3 | Skate na cara | 28 | 1.8 m |  |
-| ○ 4 | Tacada por cima | 38 | 2 m |  |
-| ○ 5 | Home run | 58 | 2.1 m | finalizador: lança |
+| ○ 4 | Tacada por cima | 42 | 2 m |  |
+| ○ 5 | Home run | 62 | 2.1 m | finalizador: lança |
 | Frente + ○ | Manobra de skate | 34 | 2 m |  |
 | Trás + ○ | Recua e rebate | 34 | 2 m | invulnerável no começo |
 | Lado + ○ | Tacada em movimento | 30 | 2 m |  |
@@ -447,12 +471,15 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
 
 - **Amaldiçoar Arma com Sangue** — R1 + □ / RB + X · custo 25 · cooldown 16 s
   Imbui o taco com Sangue: por alguns segundos cada golpe físico e o skate abrem um sangramento.
-- **Polarização Caótica** — R1 + ○ / RB + B · custo 30 · cooldown 14 s · alcance 11 m
+- **Polarização Caótica** — R1 + ○ / RB + B · custo 30 · cooldown 12 s · alcance 11 m
   Aura magnética: o inimigo LONGE é atraído até ele; o inimigo PERTO é repelido para longe e cai.
 - **Tela de Ruído** — R1 + △ / RB + Y · custo 30 · cooldown 22 s
   Película de Energia que absorve até 140 de dano físico e de projétil por alguns segundos.
 - **Velocidade Mortal** — R1 + × / RB + A · custo 25 · cooldown 20 s
   Distorce o tempo em volta de si: fica muito mais rápido e recupera todas as esquivas.
+- **Cicatrização** — R1 + L2 / RB + LT · custo 30 · cooldown 26 s
+  Ritual de Sangue: as feridas fecham sozinhas, recuperando vida aos poucos.
+- **Bloqueio Perfeito** — defender no instante exato (0.14 s) anula o dano e atordoa o atacante por 0.45 s
 
 ### Especial: Por Eles
 

@@ -506,6 +506,38 @@ export const MATERIAL_TEXTURES = {
     mazeLines(g, 8, 8, 112, 240, 12, 'rgba(30,24,20,0.7)', 1.4);
   }, { wrap: true }),
 
+  // ---------------- JOUI: cordas trançadas (listras diagonais = fios torcidos)
+  rope_twist_red: () => canvasTex(64, 64, (g) => {
+    g.fillStyle = '#8a1018'; g.fillRect(0, 0, 64, 64);
+    g.strokeStyle = '#3a0608'; g.lineWidth = 5;
+    for (let x = -64; x < 128; x += 12) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x + 40, 64); g.stroke(); }
+    g.strokeStyle = 'rgba(255,120,120,0.35)'; g.lineWidth = 1.5;
+    for (let x = -64; x < 128; x += 12) { g.beginPath(); g.moveTo(x + 4, 0); g.lineTo(x + 44, 64); g.stroke(); }
+  }, { wrap: true, repeat: [12, 1] }),
+  rope_twist_cream: () => canvasTex(64, 64, (g) => {
+    g.fillStyle = '#c8b08a'; g.fillRect(0, 0, 64, 64);
+    g.strokeStyle = '#7a6448'; g.lineWidth = 4;
+    for (let x = -64; x < 128; x += 12) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x + 40, 64); g.stroke(); }
+  }, { wrap: true, repeat: [6, 1] }),
+
+  // ---------------- KAISER: pesponto do acolchoado na jaqueta e canelado na gola alta
+  jacket: () => canvasTex(256, 256, (g) => {
+    g.fillStyle = '#d6d4cc'; g.fillRect(0, 0, 256, 256);
+    // faixas acolchoadas: costura horizontal + leve sombra embaixo de cada gomo
+    for (let y = 0; y < 256; y += 64) {
+      const grd = g.createLinearGradient(0, y, 0, y + 64);
+      grd.addColorStop(0, 'rgba(255,255,255,0.06)'); grd.addColorStop(0.85, 'rgba(0,0,0,0.03)'); grd.addColorStop(1, 'rgba(0,0,0,0.08)');
+      g.fillStyle = grd; g.fillRect(0, y, 256, 64);
+      g.strokeStyle = 'rgba(90,88,82,0.3)'; g.lineWidth = 1; g.setLineDash([4, 3]);
+      g.beginPath(); g.moveTo(0, y + 63); g.lineTo(256, y + 63); g.stroke();
+    }
+    g.setLineDash([]);
+  }, { wrap: true, repeat: [1, 1] }),
+  turtleneck: () => canvasTex(128, 128, (g) => {
+    g.fillStyle = '#141416'; g.fillRect(0, 0, 128, 128);
+    for (let x = 0; x < 128; x += 6) { g.fillStyle = 'rgba(255,255,255,0.05)'; g.fillRect(x, 0, 3, 128); }
+  }, { wrap: true, repeat: [6, 2] }),
+
   // ---------------- XANDE: olhos azuis, rosto jovem; camiseta amarela com 3 triângulos e "oculto"
   face_xande: face((g) => {
     stubble(g, 'rgba(120,90,50,0.15)', 500);

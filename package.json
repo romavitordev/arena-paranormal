@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "check": "node tools/check-roster.mjs",
     "moves": "node tools/gen-moves.mjs",
-    "lore": "node tools/fetch-lore.mjs"
+    "lore": "node tools/fetch-lore.mjs",
+    "audit": "node tools/blender/audit.mjs"
   },
   "dependencies": {
     "three": "^0.169.0"
