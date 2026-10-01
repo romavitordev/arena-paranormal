@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Galeria do elenco</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #0b0910; color: #eee; font-family: system-ui, sans-serif; overflow: hidden; }
+    #info { position: fixed; top: 12px; left: 16px; font-size: 13px; opacity: .8; }
+    #labels { position: fixed; bottom: 18px; left: 0; right: 0; display: flex; justify-content: space-around; font-weight: 800; letter-spacing: .12em; }
+    select { position: fixed; top: 10px; right: 16px; background: #1a1622; color: #eee; border: 1px solid #444; padding: 4px; }
+  </style>
+</head>
+<body>
+  <div id="info">Galeria (modelos provisórios) — arraste para girar</div>
+  <select id="anim"></select>
+  <div id="labels"></div>
+  <script type="module" src="/src/gallery.js"></script>
+</body>
+</html>

@@ -1,0 +1,1224 @@
+import * as THREE from 'three';
+import { Timeline, yawTo, distXZ, forwardFromYaw, angleDiff, DEG } from '../core/util.js';
+import { findSpotBehind, findFreeSpotNear } from './positioning.js';
+import { applyHit } from './damage.js';
+import { splitDamage } from './specials/common.js';
+import { hasPassive } from './passives.js';
+import { buildModel } from '../models/index.js';
+import { Animator } from '../anim/Animator.js';
+import { DanteClone, CLONE } from './npcs.js';
+
+// Paga um custo em vida (rituais de Sangue) sem nunca se matar
+function payHealth(f, n) {
+  const paid = Math.min(n, Math.max(0, f.health - 1));
+  f.health -= paid;
+  f.world.fx.burst(f.chestPos(), { count: 12, color: 0x9a0010, speed: 2, life: 0.6, size: 0.18, gravity: 7 });
+  return paid;
+}
+
+// Habilidades fora de físico / principal / especial, registradas por tipo.
+// Um personagem novo pode reutilizar qualquer tipo daqui só configurando dados.
+// Cada tipo: start(fighter, cfg, world) → { update(dt)→done, cancel(), cancelable()? } ou null (falhou, sem custo)
+
+const v = new THREE.Vector3();
+
+export function vanishFx(world, pos, color) {
+  const p = v.set(pos.x, pos.y + 1.0, pos.z).clone();
+  world.fx.burst(p, { count: 26, color: 0x0c0608, speed: 3, life: 0.6, size: 0.8, kind: 'smoke', spread: 1, grow: 1.2, jitter: 0.6 });
+  world.fx.burst(p, { count: 20, color, speed: 6, life: 0.35, size: 0.2, jitter: 0.5 });
+  world.fx.flash(p, { color, size: 2.2, life: 0.12 });
+}
+
+// Alvo dentro de alcance e de um cone à frente?
+function inCone(f, target, range, arc) {
+  if (!target || target.state === 'ko') return false;
+  if (distXZ(f.pos, target.pos) > range) return false;
+  return Math.abs(angleDiff(f.yaw, yawTo(f.pos, target.pos))) <= (arc * DEG) / 2;
+}
+
+function seqFrom(tl, extra = {}) {
+  return { update: (dt) => tl.update(dt), ...extra };
+}
+
+export const ABILITY_TYPES = {
+  // ------------------------------------------------------------------ MASCARADO
+  // Teleporte das Sombras: afunda na própria sombra e surge atrás do inimigo.
+  teleportBehind: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      if (!opp) return null;
+      const target = () => ({ x: opp.pos.x, z: opp.pos.z, yaw: opp.yaw });
+      const first = findSpotBehind(world.arena, target(), { distance: a.distance, radius: f.radius });
+      if (!first) {
+        f.notify('SEM ESPAÇO PARA TELEPORTAR');
+        return null;
+      }
+      const tl = new Timeline();
+      const sink = a.vanishTime;
+      f.vel.set(0, 0, 0);
+      f.anim.play('vanish', { restart: true, duration: sink });
+      world.fx.shadowDisc(f.pos, { radius: 1.1, life: sink + 0.35 });
+      world.audio.play('teleport');
+      f.invuln = sink + 0.05;
+      tl.each((time) => {
+        // afunda na sombra
+        if (time <= sink) f.rig.body.position.y = -1.9 * (time / sink);
+      });
+      tl.add(sink, () => {
+        f.setVisible(false);
+        world.fx.burst(new THREE.Vector3(f.pos.x, 0.2, f.pos.z), { count: 18, color: 0x0c0608, kind: 'smoke', speed: 2, up: 1, life: 0.6, size: 0.7 });
+      });
+      tl.add(sink + 0.06, () => {
+        const spot = findSpotBehind(world.arena, target(), { distance: a.distance, radius: f.radius }) || first;
+        f.pos.set(spot.x, Math.max(0, opp.pos.y), spot.z);
+        f.yaw = yawTo(f.pos, opp.pos);
+        world.fx.shadowDisc(f.pos, { radius: 1.1, life: 0.45 });
+        f.rig.body.position.y = -1.6;
+        f.setVisible(true);
+        f.invuln = 0.12;
+        // o adversário demora um instante para perceber de onde ele veio (Precognição evita)
+        if (!hasPassive(opp, 'precognition')) opp.surprised = a.surpriseTime ?? 0.45;
+      });
+      // emerge da sombra já pronto para atacar
+      tl.each((time) => {
+        if (time > sink + 0.06) f.rig.body.position.y = Math.min(0, -1.6 + ((time - sink - 0.06) / 0.1) * 1.6);
+      });
+      tl.add(sink + 0.16, () => {
+        f.rig.body.position.y = 0;
+        world.fx.burst(f.chestPos(), { count: 14, color: a.color, speed: 4, life: 0.3, size: 0.2 });
+        f.anim.play('idle', { restart: true, blend: 0.05 });
+      });
+      tl.end(sink + 0.22);
+      return seqFrom(tl, {
+        cancel: () => { f.setVisible(true); f.rig.body.position.y = 0; },
+        cancelable: () => tl.time > sink + 0.1,
+        finish: () => { f.rig.body.position.y = 0; },
+      });
+    },
+  },
+
+  // Olhar do Desespero: encara o adversário e libera uma manifestação de medo.
+  fearGaze: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      if (opp) f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('gaze', { restart: true, duration: a.windup + a.recovery });
+      world.audio.play('fearGaze');
+      const head = () => f.rig.joints.hd.getWorldPosition(new THREE.Vector3()).add(new THREE.Vector3(0, 0.15, 0));
+      const eyes = world.fx.emitter({ rate: 40, follow: head, particle: { color: a.color, speed: 0.5, spread: 0.3, life: 0.3, size: 0.15 } });
+      tl.add(a.windup, () => {
+        eyes.stop();
+        const F = forwardFromYaw(f.yaw);
+        // onda de medo em cone
+        for (let i = 1; i <= 4; i++) {
+          const p = head().addScaledVector(F, i * 1.6);
+          world.fx.ring(p, { color: 0x1a0610, radius: 0.8 + i * 0.5, life: 0.35 + i * 0.05, vertical: true, yaw: f.yaw + Math.PI / 2, inner: 0.85, opacity: 0.9 });
+          world.fx.ring(p, { color: a.color, radius: 0.7 + i * 0.5, life: 0.3, vertical: true, yaw: f.yaw + Math.PI / 2, inner: 0.92 });
+        }
+        world.fx.flash(head(), { color: a.color, size: 1.2, life: 0.2 });
+        if (inCone(f, opp, a.range, a.arc) && !opp.isInvulnerable()) {
+          opp.stun(a.stun, 'fear');
+          world.fx.burst(opp.chestPos(), { count: 30, color: 0x1a0610, kind: 'smoke', speed: 2, life: 1.0, size: 0.8, grow: 1 });
+          world.fx.burst(opp.chestPos(), { count: 16, color: a.color, speed: 3, life: 0.6, size: 0.2 });
+          opp.notify('DESESPERO', true);
+          world.onHit && world.onHit(f, opp, 0, { kind: 'ability', ability: a.id });
+        }
+      });
+      tl.end(a.windup + a.recovery);
+      return seqFrom(tl, { cancel: () => eyes.stop() });
+    },
+  },
+
+  // ------------------------------------------------------------------ CINERARIA
+  // Baforada Cinerária: sopra uma nuvem de névoa que controla o espaço.
+  mistCloud: {
+    start(f, a, world) {
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      const opp = f.opponent;
+      if (opp) f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('breath', { restart: true, duration: 0.7 });
+      world.audio.play('smoke');
+      const mouth = () => f.rig.sockets.mouth.getWorldPosition(new THREE.Vector3());
+      const F = forwardFromYaw(f.yaw);
+      const breath = world.fx.emitter({ rate: 90, follow: mouth, particle: { color: a.color, kind: 'smoke', speed: 5, spread: 0.25, life: 0.7, size: 0.4, grow: 2.5, dir: F.clone().multiplyScalar(1.2) } });
+      tl.add(0.4, () => {
+        breath.stop();
+        const center = new THREE.Vector3(f.pos.x + F.x * a.distance, 0, f.pos.z + F.z * a.distance);
+        createMistZone(world, f, { center: () => center, radius: a.radius, duration: a.duration, slow: a.enemySlow, enemyRegen: a.enemyRegen, eatsProjectiles: a.eatsProjectiles, color: a.color, density: a.smokeIntensity ?? 1 });
+      });
+      tl.end(0.7);
+      return seqFrom(tl, { cancel: () => breath.stop() });
+    },
+  },
+
+  // ------------------------------------------------------------------ ABUTRE
+  // Rebirth: a arma fica temporariamente amaldiçoada (estado da arma).
+  weaponState: {
+    start(f, a, world) {
+      if (f.findBuff('weaponState')) {
+        f.notify('REBIRTH JÁ ATIVO');
+        return null;
+      }
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.anim.play('rebirth', { restart: true, duration: 0.9 });
+      world.audio.play('rebirth');
+      const body = world.fx.emitter({
+        rate: 70,
+        follow: () => new THREE.Vector3(f.pos.x + (Math.random() - 0.5) * 0.6, f.pos.y + Math.random() * 1.8, f.pos.z + (Math.random() - 0.5) * 0.6),
+        particle: { color: a.color, speed: 1.5, up: 1.2, spread: 0.3, life: 0.5, size: 0.2 },
+      });
+      tl.add(0.3, () => {
+        for (let i = 0; i < 6; i++) {
+          const c = f.chestPos();
+          world.fx.lightning(c, c.clone().add(new THREE.Vector3((Math.random() - 0.5) * 2, Math.random() * 1.5, (Math.random() - 0.5) * 2)), { color: a.color, life: 0.25 });
+        }
+      });
+      tl.add(0.65, () => {
+        body.stop();
+        const back = () => f.rig.sockets.back.getWorldPosition(new THREE.Vector3());
+        const runes = world.fx.runes(() => {
+          const muzzle = f.rig.props.sniperHand && f.rig.props.sniperHand.visible ? f.rig.muzzle.getWorldPosition(new THREE.Vector3()) : back();
+          return muzzle;
+        }, { color: a.color, count: 6, radius: 0.5, shape: 'skull', size: 0.24 });
+        f.rig.showProp('eyes', true);
+        world.fx.flash(back(), { color: a.color, size: 2.5, life: 0.2 });
+        let tick = 0;
+        f.addBuff({
+          type: 'weaponState',
+          name: 'REBIRTH',
+          shots: a.shots,
+          bonusDamage: a.bonusDamage,
+          time: a.duration,
+          duration: a.duration,
+          projectile: a.projectile,
+          onTick(dt) {
+            tick += dt;
+            if (tick > 0.12) {
+              tick = 0;
+              const p = back();
+              world.fx.lightning(p, p.clone().add(new THREE.Vector3((Math.random() - 0.5) * 0.9, (Math.random() - 0.5) * 1.2, (Math.random() - 0.5) * 0.9)), { color: a.color, life: 0.08 });
+            }
+          },
+          onEnd() {
+            runes.stop();
+            f.rig.showProp('eyes', false);
+            world.fx.burst(back(), { count: 16, color: a.color, speed: 2, life: 0.4, size: 0.2 });
+          },
+        });
+      });
+      tl.end(0.9);
+      return seqFrom(tl, { cancel: () => body.stop() });
+    },
+  },
+
+  // ------------------------------------------------------------------ VAMPIRA
+  // Descarnar: ritual que abre cortes sobrenaturais no corpo do alvo à distância.
+  ritualCuts: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      if (opp) f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('point', { restart: true, duration: a.windup + 0.35 });
+      const hand = () => f.rig.sockets.handR.getWorldPosition(new THREE.Vector3());
+      const glow = world.fx.emitter({ rate: 80, follow: hand, particle: { color: a.color, speed: 1, spread: 0.6, life: 0.35, size: 0.22, jitter: 0.1 } });
+      f.glowTint = { color: a.color, base: 0.12 };
+      world.audio.play('ritual', { volume: 0.6 });
+      const parts = splitDamage(a.damage, Array(a.cuts).fill(1));
+      let connected = false;
+      tl.add(a.windup, () => {
+        glow.stop();
+        f.glowTint = null;
+        connected = inCone(f, opp, a.range, a.arc) && !opp.isInvulnerable();
+        const end = connected ? opp.chestPos() : hand().addScaledVector(forwardFromYaw(f.yaw), a.range);
+        world.fx.tracer(hand(), end, { color: a.color, life: 0.18, width: 0.03 });
+        world.audio.play('descarnar');
+        if (!connected) world.fx.burst(end, { count: 10, color: a.color, speed: 2, life: 0.4, size: 0.2 });
+      });
+      for (let i = 0; i < a.cuts; i++) {
+        tl.add(a.windup + 0.05 + i * a.interval, () => {
+          if (!connected || opp.state === 'ko') return;
+          const joints = ['sp', 'hd', 'sL', 'sR', 'eL', 'eR', 'lL', 'lR', 'kL', 'kR'];
+          const j = opp.rig.joints[joints[(i * 3 + 1) % joints.length]];
+          world.fx.cutMark(j, { color: a.color, life: 1.6 });
+          const p = j.getWorldPosition(new THREE.Vector3());
+          world.fx.burst(p, { count: 8, color: a.color, speed: 3, life: 0.4, size: 0.18, gravity: 6 });
+          const last = i === a.cuts - 1;
+          applyHit(world, f, opp, {
+            damage: parts[i], kind: 'ability', reaction: last, knockback: 2, hitstun: 0.45,
+            sound: 'bladeHit', color: a.color, scale: 0.6, ignoreInvuln: !last, pos: p,
+          });
+          if (!last && opp.state !== 'ko' && opp.state !== 'block') opp.anim.play('hit', { restart: true });
+        });
+      }
+      tl.end(a.windup + 0.05 + a.cuts * a.interval + 0.15);
+      return seqFrom(tl, { cancel: () => { glow.stop(); f.glowTint = null; } });
+    },
+  },
+
+  // Amaldiçoar Arma (Sangue): a faca fica amaldiçoada e os acertos abrem sangramento.
+  curseWeapon: {
+    start(f, a, world) {
+      if (f.findBuff('curse')) {
+        f.notify('ARMA JÁ AMALDIÇOADA');
+        return null;
+      }
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.anim.play('concentrate', { restart: true, duration: 0.6 });
+      world.audio.play('ritual', { volume: 0.5 });
+      const hand = () => f.rig.sockets.handR.getWorldPosition(new THREE.Vector3());
+      // sangue subindo do chão em espiral até a faca
+      const swirl = world.fx.emitter({
+        rate: 90,
+        follow: () => {
+          const t = performance.now() / 120;
+          return new THREE.Vector3(f.pos.x + Math.sin(t) * 0.7, f.pos.y + 0.2 + (t % 1) * 1.2, f.pos.z + Math.cos(t) * 0.7);
+        },
+        particle: { color: a.color, speed: 0.8, up: 1.2, spread: 0.2, life: 0.5, size: 0.18 },
+      });
+      tl.add(0.5, () => {
+        swirl.stop();
+        world.fx.burst(hand(), { count: 30, color: a.color, speed: 4, life: 0.5, size: 0.2 });
+        world.fx.flash(hand(), { color: a.color, size: 1.4, life: 0.15 });
+        const knives = [f.rig.props.knife, f.rig.props.knifeThrow].filter(Boolean);
+        const tint = (on) => knives.forEach((k) => k.traverse((o) => {
+          if (o.isMesh && o.material && o.material.emissive) {
+            o.material.emissive.set(on ? a.color : 0x000000);
+            o.material.emissiveIntensity = on ? 1.4 : 0;
+            o.material.userData.keepEmissive = on; // o "flash" de dano não apaga o brilho
+          }
+        }));
+        tint(true);
+        const drip = world.fx.emitter({ rate: 18, follow: hand, particle: { color: 0x9a0010, speed: 0.4, spread: 0.2, life: 0.6, size: 0.12, gravity: 6 } });
+        f.addBuff({
+          type: 'curse',
+          name: 'ARMA AMALDIÇOADA',
+          bleed: a.bleed,
+          time: a.duration,
+          duration: a.duration,
+          onEnd() { drip.stop(); tint(false); },
+        });
+      });
+      tl.end(0.6);
+      return seqFrom(tl, { cancel: () => swirl.stop() });
+    },
+  },
+
+  // ------------------------------------------------------------------ INJUSTIÇA
+  // Corrente: prende no inimigo e puxa o PRÓPRIO Injustiça até ele (aproximação).
+  chainSelfPull: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      if (!opp || distXZ(f.pos, opp.pos) > a.range) {
+        f.notify('ALVO FORA DE ALCANCE');
+        return null;
+      }
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('chain_throw', { restart: true, duration: 0.4 });
+      world.audio.play('chainThrow');
+      const hand = () => f.rig.sockets.handR.getWorldPosition(new THREE.Vector3());
+      const tip = hand();
+      let phase = 'throw';
+      let t = 0;
+      const chain = world.fx.chain(hand, () => tip.clone(), { links: 30, sag: 0.08 });
+      const finish = () => { chain.stop(); f.vel.set(0, 0, 0); };
+      return {
+        update(dt) {
+          t += dt;
+          if (phase === 'throw') {
+            const goal = opp.chestPos();
+            const dir = goal.clone().sub(tip);
+            const step = a.chainSpeed * dt;
+            if (dir.length() <= step + 0.3) {
+              if (opp.isInvulnerable() || opp.state === 'ko') { phase = 'retract'; t = 0; return false; }
+              phase = 'fly';
+              t = 0;
+              world.audio.play('chainPull');
+              f.anim.play('chain_fly', { restart: true });
+              world.fx.burst(goal, { count: 14, color: a.color, speed: 4, life: 0.3, size: 0.2 });
+            } else tip.addScaledVector(dir.normalize(), step);
+            if (t > 1) { phase = 'retract'; t = 0; }
+            return false;
+          }
+          if (phase === 'fly') {
+            tip.copy(opp.chestPos());
+            f.yaw = yawTo(f.pos, opp.pos);
+            const F = forwardFromYaw(f.yaw);
+            f.vel.x = F.x * a.flySpeed;
+            f.vel.z = F.z * a.flySpeed;
+            world.fx.burst(f.chestPos(), { count: 2, color: a.color, speed: 1, life: 0.25, size: 0.3 });
+            if (distXZ(f.pos, opp.pos) <= 1.5 || t > 0.8) {
+              f.vel.set(0, 0, 0);
+              chain.stop();
+              f.anim.play('dual_cross', { restart: true, duration: 0.42 });
+              world.audio.play('blade');
+              world.fx.slash(opp.chestPos(), f.yaw, { color: a.color, radius: 1.8, roll: 0.8, life: 0.3 });
+              world.fx.slash(opp.chestPos(), f.yaw, { color: a.color, radius: 1.8, roll: -0.8, flip: true, life: 0.3 });
+              applyHit(world, f, opp, { damage: a.damage, kind: 'ability', knockback: 1.5, hitstun: a.hitstun, sound: 'bladeHit', dir: F.clone() });
+              phase = 'recover';
+              t = 0;
+            }
+            return false;
+          }
+          if (phase === 'retract') {
+            const back = hand().sub(tip);
+            if (back.length() < 0.5 || t > 0.5) { finish(); return true; }
+            tip.addScaledVector(back.normalize(), a.chainSpeed * dt);
+            return false;
+          }
+          if (phase === 'recover') return t > 0.3;
+          return true;
+        },
+        cancel: finish,
+      };
+    },
+  },
+
+  // ------------------------------------------------------------------ DESCONJURADO
+  // Teletransporte: some numa distorção e reaparece numa posição válida.
+  blink: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      const dir = f.moveInputWorld(new THREE.Vector3());
+      let want;
+      if (dir.length() > 0.3) {
+        dir.normalize();
+        want = { x: f.pos.x + dir.x * a.distance, z: f.pos.z + dir.z * a.distance };
+      } else if (opp) {
+        // sem direção: surge ao lado do adversário
+        const side = yawTo(opp.pos, f.pos) + Math.PI / 2;
+        want = { x: opp.pos.x + Math.sin(side) * a.flankDistance, z: opp.pos.z + Math.cos(side) * a.flankDistance };
+      } else {
+        want = { x: f.pos.x, z: f.pos.z };
+      }
+      const others = opp ? [{ x: opp.pos.x, z: opp.pos.z, r: 0.6 }] : [];
+      const spot = findFreeSpotNear(world.arena, want.x, want.z, { radius: f.radius, others });
+      if (!spot) {
+        f.notify('SEM ESPAÇO');
+        return null;
+      }
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.anim.play('vanish', { restart: true, duration: a.vanishTime });
+      world.audio.play('blink');
+      world.fx.distort(f.chestPos(), { color: a.color, radius: 1.8, life: 0.35 });
+      f.invuln = a.vanishTime + 0.12;
+      tl.add(a.vanishTime * 0.6, () => f.setVisible(false));
+      tl.add(a.vanishTime, () => {
+        f.pos.set(spot.x, 0, spot.z);
+        if (opp) f.yaw = yawTo(f.pos, opp.pos);
+        f.setVisible(true);
+        world.fx.distort(f.chestPos(), { color: a.color, radius: 2.2, life: 0.4 });
+        world.fx.ring(new THREE.Vector3(f.pos.x, 0.06, f.pos.z), { color: a.color, radius: 2.2, life: 0.35 });
+        world.fx.burst(f.chestPos(), { count: 20, color: a.color, speed: 5, life: 0.35, size: 0.2 });
+        f.anim.play('idle', { restart: true, blend: 0.05 });
+      });
+      tl.end(a.vanishTime + 0.15);
+      return seqFrom(tl, { cancel: () => f.setVisible(true), cancelable: () => tl.time > a.vanishTime + 0.02 });
+    },
+  },
+
+  // Transcendência: exposição total; golpes físicos atravessam a defesa por alguns segundos.
+  transcend: {
+    start(f, a, world) {
+      if (f.findBuff('transcend')) {
+        f.notify('JÁ EM TRANSCENDÊNCIA');
+        return null;
+      }
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.anim.play('charge_fists', { restart: true, duration: 0.7 });
+      world.audio.play('rebirth', { volume: 0.7 });
+      world.fx.distort(f.chestPos(), { color: a.color, radius: 2.4, life: 0.5 });
+      tl.add(0.45, () => {
+        world.fx.ring(new THREE.Vector3(f.pos.x, 0.06, f.pos.z), { color: a.color, radius: 4, life: 0.6 });
+        world.fx.burst(f.chestPos(), { count: 50, color: a.color, speed: 7, life: 0.6, size: 0.25 });
+        world.screenFlash && world.screenFlash('#fff2c8', 0.06);
+        const glow = world.fx.emitter({
+          rate: 50,
+          follow: () => new THREE.Vector3(f.pos.x + (Math.random() - 0.5) * 0.8, f.pos.y + Math.random() * 1.9, f.pos.z + (Math.random() - 0.5) * 0.8),
+          particle: { color: a.color, speed: 0.6, up: 1.2, spread: 0.3, life: 0.5, size: 0.14 },
+        });
+        f.buffTint = { color: a.color, base: 0.3 };
+        // Kian: a primeira Transcendência da partida libera mais um uso do especial (Inexistir)
+        const bonus = f.def.special && f.def.special.bonusUseOnTranscend;
+        if (bonus && !f.transcendBonusGiven) {
+          f.transcendBonusGiven = true;
+          f.specialBonusUses += bonus;
+          f.notify(`${f.def.special.name.toUpperCase()} +${bonus}`, true);
+        }
+        f.addBuff({
+          type: 'transcend',
+          name: 'TRANSCENDÊNCIA',
+          time: a.duration,
+          duration: a.duration,
+          noRegen: true, // transcender cobra sanidade: não regenera enquanto dura...
+          onEnd() { glow.stop(); f.buffTint = null; f.drainEnergy(a.endDrain || 0); }, // ...e drena no fim
+        });
+      });
+      tl.end(0.7);
+      return seqFrom(tl);
+    },
+  },
+
+  // Lâmina do Medo: manifestação translúcida na mão para um golpe devastador.
+  fearBlade: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      if (opp && distXZ(f.pos, opp.pos) < 8) f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('fear_blade', { restart: true, duration: a.duration });
+      world.audio.play('fearGaze', { volume: 0.6 });
+      f.rig.showProp('fearBlade', true);
+      const hand = () => f.rig.sockets.handR.getWorldPosition(new THREE.Vector3());
+      const aura = world.fx.emitter({ rate: 70, follow: hand, particle: { color: a.color, speed: 1, spread: 0.6, life: 0.4, size: 0.25 } });
+      let hit = false;
+      tl.each((time) => {
+        // avanço curto durante o golpe
+        if (time > a.active[0] - 0.1 && time < a.active[1]) {
+          const F = forwardFromYaw(f.yaw);
+          const close = opp && distXZ(f.pos, opp.pos) < 1.2;
+          f.vel.x = close ? 0 : F.x * 7;
+          f.vel.z = close ? 0 : F.z * 7;
+        } else {
+          f.vel.x = 0;
+          f.vel.z = 0;
+        }
+        if (!hit && time >= a.active[0] && time <= a.active[1] && opp && opp.state !== 'ko') {
+          const d = distXZ(f.pos, opp.pos) - opp.radius;
+          if (d <= a.range && Math.abs(angleDiff(f.yaw, yawTo(f.pos, opp.pos))) <= (a.arc * DEG) / 2) {
+            hit = true;
+            const res = applyHit(world, f, opp, {
+              damage: a.damage, kind: 'ability', guardBreak: true, element: 'medo', knockback: 9, launch: true, hitstun: a.hitstun,
+              sound: 'fearBlade', color: a.color, scale: 2.2, dir: forwardFromYaw(f.yaw),
+            });
+            if (typeof res === 'number' && res > 0) world.fx.distort(opp.chestPos(), { color: a.color, radius: 2.6, life: 0.45 });
+          }
+        }
+      });
+      tl.add(a.active[0], () => {
+        world.audio.play('fearBlade');
+        world.fx.slash(f.chestPos(), f.yaw, { color: a.color, radius: 2.6, arc: 2.8, life: 0.4, width: 0.6, roll: 0.4 });
+        world.fx.slash(f.chestPos(), f.yaw, { color: 0x000000, radius: 2.4, arc: 2.6, life: 0.3, width: 0.25, roll: 0.4 });
+      });
+      tl.add(a.active[1] + 0.1, () => { f.rig.showProp('fearBlade', false); aura.stop(); });
+      // errar deixa o Desconjurado exposto por mais tempo
+      tl.end(a.duration + a.whiffRecovery);
+      return {
+        update: (dt) => {
+          const done = tl.update(dt);
+          return done || (hit && tl.time >= a.duration);
+        },
+        cancel: () => { f.rig.showProp('fearBlade', false); aura.stop(); },
+      };
+    },
+  },
+};
+
+// ------------------------------------------------------------------ NOVAS (cânone)
+Object.assign(ABILITY_TYPES, {
+  // Kaiser — Dissipar Espíritos "Acácia": chuva de pequenas flores roxas sobre o alvo.
+  flowerRain: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      if (!opp || distXZ(f.pos, opp.pos) > a.range) {
+        f.notify('ALVO LONGE DEMAIS');
+        return null;
+      }
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('cast_up', { restart: true, duration: a.castTime + 0.25 });
+      world.audio.play('rebirth', { volume: 0.5, pitch: 1.4 });
+      const center = new THREE.Vector3(opp.pos.x, 0, opp.pos.z);
+      world.fx.ring(new THREE.Vector3(center.x, 0.06, center.z), { color: a.color, radius: a.radius, life: a.castTime + 0.2 });
+      let rain = null;
+      tl.add(a.castTime, () => {
+        world.fx.flash(f.chestPos(), { color: a.color, size: 1.6, life: 0.15 });
+        rain = world.fx.emitter({
+          rate: 120,
+          follow: () => {
+            const ang = Math.random() * Math.PI * 2;
+            const r = Math.sqrt(Math.random()) * a.radius;
+            return new THREE.Vector3(center.x + Math.sin(ang) * r, 4 + Math.random() * 1.5, center.z + Math.cos(ang) * r);
+          },
+          particle: { color: a.color, speed: 0.4, up: -5, spread: 0.2, life: 0.9, size: 0.16, gravity: 2 },
+        });
+        // a chuva continua sozinha depois que o Kaiser volta a agir
+        for (let i = 0; i < a.hits; i++) {
+          world.after(0.15 + i * a.interval, () => {
+            if (opp.state === 'ko' || distXZ(opp.pos, center) > a.radius + opp.radius) return;
+            applyHit(world, f, opp, {
+              damage: a.damage / a.hits, kind: 'ability', knockback: 0.6, hitstun: 0.28, sound: 'clawHit',
+              color: a.color, scale: 0.8, dir: new THREE.Vector3().subVectors(opp.pos, center).setY(0).normalize(), hitstop: 0.03,
+            });
+          });
+        }
+        world.after(0.35 + a.hits * a.interval, () => rain && rain.stop());
+      });
+      tl.add(a.castTime + 0.2, () => f.anim.play('idle', { blend: 0.1 }));
+      tl.end(a.castTime + 0.3);
+      return seqFrom(tl, { cancel: () => rain && rain.stop() });
+    },
+  },
+
+  // Arthur — Paralisia de Sangue "Dystopia": suja o símbolo com o próprio sangue e paralisa o alvo.
+  bloodParalysis: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      if (opp) f.yaw = yawTo(f.pos, opp.pos);
+      payHealth(f, a.healthCost);
+      f.anim.play('gaze', { restart: true, duration: a.windup + a.recovery });
+      world.audio.play('bloodClaw', { volume: 0.8 });
+      const head = () => f.rig.joints.hd.getWorldPosition(new THREE.Vector3()).add(new THREE.Vector3(0, 0.12, 0));
+      const eyes = world.fx.emitter({ rate: 40, follow: head, particle: { color: a.color, speed: 0.4, spread: 0.2, life: 0.3, size: 0.12 } });
+      tl.add(a.windup, () => {
+        eyes.stop();
+        world.fx.flash(head(), { color: a.color, size: 1.4, life: 0.2 });
+        world.screenFlash && world.screenFlash('#5a0008', 0.05);
+        if (inCone(f, opp, a.range, a.arc) && !opp.isInvulnerable()) {
+          opp.stun(a.stun, 'stagger');
+          const p = opp.chestPos();
+          world.fx.ring(p, { color: a.color, radius: 1.6, life: 0.6, vertical: true, yaw: f.yaw });
+          world.fx.ring(new THREE.Vector3(opp.pos.x, 0.06, opp.pos.z), { color: a.color, radius: 1.4, life: a.stun });
+          world.fx.burst(p, { count: 24, color: 0x9a0010, speed: 2, life: 0.8, size: 0.2, gravity: 5 });
+          opp.notify('DYSTOPIA', true);
+          world.onHit && world.onHit(f, opp, 0, { kind: 'ability', ability: a.id });
+        }
+      });
+      tl.end(a.windup + a.recovery);
+      return seqFrom(tl, { cancel: () => eyes.stop() });
+    },
+  },
+
+  // Arthur — Arma de Sangue: projeta uma lâmina do próprio sangue (golpes com mais alcance e sangramento).
+  bloodBlade: {
+    start(f, a, world) {
+      if (f.findBuff('bloodBlade')) {
+        f.notify('LÂMINA JÁ ATIVA');
+        return null;
+      }
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      payHealth(f, a.healthCost);
+      f.anim.play('charge', { restart: true, duration: 0.5 });
+      world.audio.play('bloodClaw');
+      const hand = () => f.rig.sockets.handR.getWorldPosition(new THREE.Vector3());
+      tl.add(0.3, () => {
+        world.fx.burst(hand(), { count: 26, color: a.color, speed: 4, life: 0.4, size: 0.2 });
+        const drip = world.fx.emitter({ rate: 35, follow: hand, particle: { color: a.color, speed: 0.4, spread: 0.15, life: 0.45, size: 0.14, gravity: 4 } });
+        f.addBuff({
+          type: 'bloodBlade', name: 'ARMA DE SANGUE', time: a.duration, duration: a.duration,
+          rangeBonus: a.rangeBonus, bleed: a.bleed,
+          onEnd() { drip.stop(); },
+        });
+      });
+      tl.end(0.5);
+      return seqFrom(tl);
+    },
+  },
+
+  // Arthur — Ódio Incontrolável "Templo do Ódio": força sobre-humana temporária, mas não defende.
+  hatredTemple: {
+    start(f, a, world) {
+      const target = a.target || f; // a assistência pode aplicar em outro lutador
+      if (target.findBuff('hatred')) {
+        f.notify('JÁ COM ÓDIO');
+        return null;
+      }
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      if (a.healthCost) payHealth(f, a.healthCost);
+      f.anim.play('gaze', { restart: true, duration: 0.5 });
+      world.audio.play('bloodClaw');
+      tl.add(0.3, () => {
+        const head = () => target.rig.joints.hd.getWorldPosition(new THREE.Vector3());
+        world.fx.burst(head(), { count: 24, color: a.color, speed: 3, life: 0.5, size: 0.18 });
+        const veins = world.fx.emitter({ rate: 30, follow: () => target.chestPos(), particle: { color: a.color, speed: 0.8, up: 0.5, spread: 0.5, life: 0.4, size: 0.14 } });
+        const prevTint = target.buffTint;
+        target.buffTint = { color: a.color, base: 0.18 };
+        target.addBuff({
+          type: 'hatred', name: 'ÓDIO', time: a.duration, duration: a.duration,
+          mult: a.damageMult, affects: ['melee'], speedMult: a.speedMult, noBlock: true,
+          onEnd() { veins.stop(); if (target.buffTint && target.buffTint.color === a.color) target.buffTint = prevTint || null; },
+        });
+        target.notify('ÓDIO INCONTROLÁVEL', true);
+      });
+      tl.end(0.5);
+      return seqFrom(tl);
+    },
+  },
+
+  // Kian — Toque da Morte: toca o alvo e o envelhece rápido (ritual de MORTE): bate mais fraco,
+  // fica mais lento e definha por alguns segundos. Curto alcance e lento para sair — dá para esquivar.
+  deathTouch: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      if (opp && distXZ(f.pos, opp.pos) < 6) f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('point', { restart: true, duration: a.windup + a.recovery });
+      world.audio.play('drain', { volume: 0.7 });
+      const hand = () => f.rig.sockets.handR.getWorldPosition(new THREE.Vector3());
+      const aura = world.fx.emitter({ rate: 40, follow: hand, particle: { color: 0x2a2632, kind: 'smoke', speed: 0.4, spread: 0.2, life: 0.5, size: 0.25 } });
+      tl.each((t) => {
+        // passo curto à frente durante a investida
+        if (t > a.windup - 0.12 && t < a.windup + 0.06 && opp && distXZ(f.pos, opp.pos) > 1.1) {
+          const F = forwardFromYaw(f.yaw);
+          f.vel.x = F.x * 6;
+          f.vel.z = F.z * 6;
+        } else { f.vel.x = 0; f.vel.z = 0; }
+      });
+      tl.add(a.windup, () => {
+        aura.stop();
+        if (!opp || opp.state === 'ko' || opp.isInvulnerable()) return;
+        if (distXZ(f.pos, opp.pos) - opp.radius > a.range) { f.notify('ERROU', true); return; }
+        const res = applyHit(world, f, opp, { damage: a.damage, kind: 'ability', element: 'morte', unblockable: true, knockback: 1.5, hitstun: 0.4, sound: 'drain', color: 0x8a8090, scale: 1.2 });
+        if (typeof res !== 'number' || opp.state === 'ko') return;
+        world.fx.burst(opp.chestPos(), { count: 30, color: 0x8a8090, kind: 'smoke', speed: 1.5, up: 0.6, life: 1, size: 0.5 });
+        const old = opp.findBuff('aging');
+        if (old) old.time = a.duration;
+        else {
+          let acc = 0;
+          const prevTint = opp.buffTint;
+          opp.buffTint = { color: 0x5a5660, base: 0.25 };
+          opp.addBuff({
+            type: 'aging', name: 'ENVELHECENDO', time: a.duration, duration: a.duration,
+            mult: a.weaken, affects: ['melee', 'ranged', 'ability'], speedMult: a.slow,
+            onTick(dt) {
+              if (opp.state === 'ko') return;
+              acc += a.dps * dt;
+              if (acc >= 1) { const n = Math.floor(acc); acc -= n; opp.takeDamage(n); opp.flash = 0; }
+              if (Math.random() < 0.15) world.fx.burst(opp.chestPos(), { count: 1, color: 0x8a8090, kind: 'smoke', speed: 0.3, up: 0.5, life: 0.6, size: 0.3 });
+            },
+            onEnd() { if (opp.buffTint && opp.buffTint.color === 0x5a5660) opp.buffTint = prevTint || null; },
+          });
+        }
+        opp.notify('TOQUE DA MORTE', true);
+      });
+      tl.end(a.windup + a.recovery);
+      return seqFrom(tl, { cancel: () => aura.stop() });
+    },
+  },
+
+  // Gal — Controle Mental: sigilo dourado sobre o alvo; por alguns segundos o corpo dele obedece ao contrário
+  // (direções invertidas). À distância, em cone — esquivar na hora escapa.
+  mindControl: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      if (opp) f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('point', { restart: true, duration: a.windup + a.recovery });
+      world.audio.play('fearGaze', { pitch: 1.3 });
+      tl.add(a.windup, () => {
+        if (!inCone(f, opp, a.range, a.arc) || opp.isInvulnerable()) { f.notify('ERROU', true); return; }
+        const head = () => opp.rig.joints.hd.getWorldPosition(new THREE.Vector3()).add(new THREE.Vector3(0, 0.45, 0));
+        world.fx.ring(head(), { color: a.color, radius: 0.6, life: a.duration, vertical: false });
+        const sig = world.fx.emitter({ rate: 30, follow: head, particle: { color: a.color, speed: 0.3, spread: 0.3, life: 0.4, size: 0.12 } });
+        const old = opp.findBuff('mindControl');
+        if (old) old.time = a.duration;
+        else opp.addBuff({ type: 'mindControl', name: 'CONTROLADO', time: a.duration, duration: a.duration, invertMove: true, onEnd() { sig.stop(); } });
+        opp.notify('CONTROLE MENTAL', true);
+        world.onHit && world.onHit(f, opp, 0, { kind: 'ability', ability: a.id });
+      });
+      tl.end(a.windup + a.recovery);
+      return seqFrom(tl);
+    },
+  },
+
+  // Gal — Teletransporte: some em faíscas douradas e surge atrás do alvo.
+  sparkTeleport: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      if (!opp) return null;
+      const spot = findSpotBehind(world.arena, { x: opp.pos.x, z: opp.pos.z, yaw: opp.yaw }, { distance: a.distance, radius: f.radius });
+      if (!spot) {
+        f.notify('SEM ESPAÇO PARA TELEPORTAR');
+        return null;
+      }
+      const tl = new Timeline();
+      const sparks = (p) => {
+        world.fx.burst(p, { count: 34, color: a.color, speed: 5, life: 0.45, size: 0.14, gravity: 3 });
+        world.fx.flash(p, { color: a.color, size: 1.8, life: 0.12 });
+      };
+      f.vel.set(0, 0, 0);
+      f.anim.play('vanish', { restart: true, duration: a.vanishTime });
+      world.audio.play('blink', { pitch: 1.3 });
+      f.invuln = a.vanishTime + 0.1;
+      tl.add(a.vanishTime * 0.5, () => { sparks(f.chestPos()); f.setVisible(false); });
+      tl.add(a.vanishTime, () => {
+        f.pos.set(spot.x, Math.max(0, opp.pos.y), spot.z);
+        f.yaw = yawTo(f.pos, opp.pos);
+        f.setVisible(true);
+        sparks(f.chestPos());
+        if (!hasPassive(opp, 'precognition')) opp.surprised = a.surpriseTime ?? 0.35;
+        f.anim.play('idle', { restart: true, blend: 0.05 });
+      });
+      tl.end(a.vanishTime + 0.12);
+      return seqFrom(tl, { cancel: () => f.setVisible(true), cancelable: () => tl.time > a.vanishTime + 0.02, finish: () => {} });
+    },
+  },
+
+  // Kian — Rejeitar Névoa: enfraquece drasticamente os rituais na área.
+  rejectMist: {
+    start(f, a, world) {
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.anim.play('charge_fists', { restart: true, duration: 0.6 });
+      world.audio.play('blink', { pitch: 0.7 });
+      tl.add(0.3, () => {
+        world.fx.ring(new THREE.Vector3(f.pos.x, 0.06, f.pos.z), { color: a.color, radius: a.radius, life: 0.6 });
+        world.fx.distort(f.chestPos(), { color: a.color, radius: a.radius * 0.6, life: 0.5 });
+        // dissipa as zonas paranormais do inimigo que estiverem na área
+        let cleared = 0;
+        for (const z of world.zones) {
+          if (z.owner === f || !z.alive) continue;
+          const zc = z.center();
+          if (Math.hypot(zc.x - f.pos.x, zc.z - f.pos.z) <= a.radius + (z.radius || 0)) {
+            if (z.end) z.end();
+            else z.alive = false;
+            cleared++;
+          }
+        }
+        const opp = f.opponent;
+        if (opp && opp.state !== 'ko' && distXZ(opp.pos, f.pos) <= a.radius) {
+          const old = opp.findBuff('ritualWeak');
+          if (old) old.time = a.duration;
+          else opp.addBuff({ type: 'ritualWeak', name: 'RITUAIS ENFRAQUECIDOS', time: a.duration, duration: a.duration, mult: a.weaken, affects: ['ability', 'ranged'] });
+          opp.notify('RITUAIS ENFRAQUECIDOS', true);
+        }
+        if (cleared) f.notify('NÉVOA REJEITADA', true);
+      });
+      tl.end(0.6);
+      return seqFrom(tl);
+    },
+  },
+});
+
+// ------------------------------------------------------------------ DANTE (Morte)
+Object.assign(ABILITY_TYPES, {
+  // Embaralhar "Trinitá": vira vulto, troca de lugar e cria 3 CLONES (Dante + 3 = 4 em campo).
+  // Cada clone tem IA própria, pode ser destruído e causa METADE do dano do Dante (combat/npcs.js).
+  shadowClones: {
+    start(f, a, world) {
+      if (world.npcs.some((n) => n.isClone && n.owner === f && n.alive)) {
+        f.notify('CÓPIAS JÁ EM CAMPO');
+        return null;
+      }
+      const opp = f.opponent;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.anim.play('vanish', { restart: true, duration: 0.25 });
+      world.audio.play('teleport');
+      f.invuln = 0.35;
+      const smoke = (p) => {
+        world.fx.burst(new THREE.Vector3(p.x, 1.0, p.z), { count: 28, color: 0x0c0a0e, kind: 'smoke', speed: 2.5, life: 0.6, size: 0.8, grow: 1.2 });
+        world.fx.burst(new THREE.Vector3(p.x, 1.1, p.z), { count: 12, color: f.def.energyColor, speed: 4, life: 0.35, size: 0.16 });
+      };
+      tl.add(0.12, () => {
+        smoke(f.pos);
+        const origin = f.pos.clone();
+        // troca de lugar: passo para o lado em relação ao adversário
+        const fwd = opp ? new THREE.Vector3().subVectors(opp.pos, f.pos).setY(0).normalize() : forwardFromYaw(f.yaw);
+        const side = new THREE.Vector3(-fwd.z, 0, fwd.x).multiplyScalar(Math.random() < 0.5 ? 1 : -1);
+        const others = opp ? [{ x: opp.pos.x, z: opp.pos.z, r: 0.6 }] : [];
+        const spot = findFreeSpotNear(world.arena, f.pos.x + side.x * a.sidestep, f.pos.z + side.z * a.sidestep, { radius: f.radius, others });
+        if (spot) f.pos.set(spot.x, 0, spot.z);
+        if (opp) f.yaw = yawTo(f.pos, opp.pos);
+        smoke(f.pos);
+        for (let k = 0; k < a.clones; k++) {
+          const cl = new DanteClone(f, world, k, a.duration);
+          cl.pos.copy(k === 0 ? origin : f.pos).add(new THREE.Vector3((Math.random() - 0.5) * 1.2, 0, (Math.random() - 0.5) * 1.2));
+          world.addNpc(cl);
+          smoke(cl.pos);
+        }
+        f.notify('TRINITÁ', true);
+      });
+      tl.add(0.25, () => f.anim.play('idle', { restart: true, blend: 0.05 }));
+      tl.end(0.3);
+      return seqFrom(tl);
+    },
+  },
+  // Tentáculos de Lodo: tentáculos pretos brotam do chão embaixo do inimigo, prendem e comprimem.
+  lodoTentacles: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      if (!opp || distXZ(f.pos, opp.pos) > a.range) {
+        f.notify('ALVO LONGE DEMAIS');
+        return null;
+      }
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('concentrate', { restart: true, duration: a.castTime + 0.2 });
+      world.audio.play('drain', { volume: 0.8 });
+      const center = new THREE.Vector3(opp.pos.x, 0, opp.pos.z);
+      world.fx.ring(new THREE.Vector3(center.x, 0.06, center.z), { color: 0x2a2632, radius: a.radius, life: a.castTime + 0.1 });
+      world.fx.burst(new THREE.Vector3(center.x, 0.1, center.z), { count: 20, color: 0x0c0a0e, kind: 'smoke', speed: 1.5, up: 0.5, life: a.castTime, size: 0.6 });
+      tl.add(a.castTime, () => {
+        // geometria dos tentáculos (cilindros curvos que sobem e depois recolhem)
+        const mat = new THREE.MeshStandardMaterial({ color: a.color, roughness: 0.25, metalness: 0.1 });
+        const group = new THREE.Group();
+        group.position.copy(center);
+        const tentacles = [];
+        for (let i = 0; i < 7; i++) {
+          const ang = (i / 7) * Math.PI * 2 + Math.random() * 0.4;
+          const r = a.radius * (0.35 + Math.random() * 0.55);
+          const h = 1.4 + Math.random() * 1.0;
+          const curve = new THREE.CatmullRomCurve3([
+            new THREE.Vector3(0, 0, 0),
+            new THREE.Vector3(-Math.sin(ang) * 0.25, h * 0.4, -Math.cos(ang) * 0.25),
+            new THREE.Vector3(-Math.sin(ang) * r * 0.6, h * 0.8, -Math.cos(ang) * r * 0.6),
+            new THREE.Vector3(-Math.sin(ang) * r * 0.9, h, -Math.cos(ang) * r * 0.9),
+          ]);
+          const geo = new THREE.TubeGeometry(curve, 12, 0.11, 6, false);
+          const m = new THREE.Mesh(geo, mat);
+          m.position.set(Math.sin(ang) * r, 0, Math.cos(ang) * r);
+          m.scale.set(1, 0.01, 1);
+          group.add(m);
+          tentacles.push(m);
+        }
+        world.scene.add(group);
+        world.audio.play('chainPull', { pitch: 0.6 });
+        world.fx.burst(new THREE.Vector3(center.x, 0.3, center.z), { count: 30, color: 0x0c0a0e, kind: 'smoke', speed: 3, up: 1, life: 0.7, size: 0.7 });
+        let t = 0;
+        let hit = false;
+        world.addTicker({
+          update(dt) {
+            t += dt;
+            const up = Math.min(1, t / 0.18);
+            const down = t > a.hold ? Math.max(0, 1 - (t - a.hold) / 0.3) : 1;
+            for (const m of tentacles) m.scale.y = Math.max(0.01, up * down);
+            if (!hit && t >= 0.12) {
+              hit = true;
+              if (opp.state !== 'ko' && !opp.isInvulnerable() && distXZ(opp.pos, center) <= a.radius + opp.radius) {
+                const res = applyHit(world, f, opp, { damage: a.damage, kind: 'ability', knockback: 0, hitstun: 0.3, sound: 'clawHit', color: 0x6a6478, scale: 1.4, reaction: false });
+                if (typeof res === 'number' && opp.state !== 'ko') {
+                  opp.stun(a.stun, 'stagger');
+                  opp.notify('PRESO NO LODO', true);
+                }
+              }
+            }
+            return t > a.hold + 0.3;
+          },
+          dispose() {
+            world.scene.remove(group);
+            for (const m of tentacles) m.geometry.dispose();
+            mat.dispose();
+          },
+        });
+      });
+      // eco do Trinitá: um clone (o mais perto do alvo) repete com metade do dano e área menor
+      const echo = world.npcs.filter((n) => n.isClone && n.owner === f && n.alive).sort((x, y) => distXZ(x.pos, opp.pos) - distXZ(y.pos, opp.pos))[0];
+      if (echo) {
+        tl.add(a.castTime + 0.35, () => {
+          if (!echo.alive || opp.state === 'ko' || opp.isInvulnerable()) return;
+          world.fx.burst(new THREE.Vector3(opp.pos.x, 0.3, opp.pos.z), { count: 20, color: 0x0c0a0e, kind: 'smoke', speed: 2, up: 1, life: 0.6, size: 0.6 });
+          applyHit(world, f, opp, { damage: Math.round(a.damage * CLONE.damageMult), kind: 'ability', knockback: 0, hitstun: 0.25, sound: 'clawHit', color: 0x6a6478, scale: 1, reaction: false, element: 'morte' });
+        });
+      }
+      tl.end(a.castTime + 0.25);
+      return seqFrom(tl);
+    },
+  },
+
+  // Cicatrização "Paradiso": névoa preta em espiral que cicatriza as feridas aos poucos.
+  healOverTime: {
+    start(f, a, world) {
+      if (f.findBuff('paradiso')) {
+        f.notify('JÁ CICATRIZANDO');
+        return null;
+      }
+      if (f.health >= f.maxHealth) {
+        f.notify('VIDA CHEIA');
+        return null;
+      }
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.anim.play('breath', { restart: true, duration: 0.6 });
+      world.audio.play('smoke');
+      tl.add(0.3, () => {
+        let given = 0;
+        let ang = 0;
+        const spiral = world.fx.emitter({
+          rate: 60,
+          follow: () => {
+            ang += 0.35;
+            const r = 0.7 + Math.sin(ang * 0.3) * 0.2;
+            return new THREE.Vector3(f.pos.x + Math.sin(ang) * r, f.pos.y + 0.3 + ((ang * 0.08) % 1.6), f.pos.z + Math.cos(ang) * r);
+          },
+          particle: { color: 0x141018, kind: 'smoke', speed: 0.2, up: 0.4, spread: 0.1, life: 0.6, size: 0.35 },
+        });
+        f.addBuff({
+          type: 'paradiso', name: 'PARADISO', time: a.duration, duration: a.duration,
+          onTick(dt) {
+            if (f.state === 'ko') return;
+            const n = Math.min(a.heal - given, (a.heal / a.duration) * dt);
+            given += n;
+            f.health = Math.min(f.maxHealth, f.health + n);
+          },
+          onEnd() { spiral.stop(); },
+        });
+      });
+      tl.end(0.6);
+      return seqFrom(tl);
+    },
+  },
+});
+
+// ------------------------------------------------------------------ ERIN PARKER e AGUIAR
+Object.assign(ABILITY_TYPES, {
+  // Arremessa um objeto (granada, machado na corda...) usando um projétil configurado em `projectile`.
+  throwProjectile: {
+    start(f, a, world) {
+      const tl = new Timeline();
+      const opp = f.opponent;
+      f.vel.set(0, 0, 0);
+      if (opp) f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play(a.anim || 'throw_r', { restart: true, duration: a.windup + a.recovery });
+      if (a.hideProp) f.rig.showProp(a.hideProp, false);
+      if (a.showProp) f.rig.showProp(a.showProp, true);
+      if (a.startSound) world.audio.play(a.startSound);
+      const restore = () => {
+        if (a.showProp) f.rig.showProp(a.showProp, false);
+        if (a.hideProp) f.rig.showProp(a.hideProp, true);
+      };
+      tl.add(a.windup, () => {
+        if (a.showProp) f.rig.showProp(a.showProp, false); // o objeto sai da mão
+        const origin = f.rig.sockets.handR.getWorldPosition(new THREE.Vector3());
+        origin.y = Math.max(origin.y, 1.3);
+        const target = opp && opp.state !== 'ko' ? opp.chestPos() : origin.clone().add(forwardFromYaw(f.yaw).multiplyScalar(10));
+        const dir = target.sub(origin).normalize();
+        world.projectiles.spawn(f, { ...a.projectile, element: a.element }, origin, dir);
+        world.audio.play(a.sound || 'knifeThrow');
+      });
+      tl.add(a.windup + a.recovery - 0.02, () => { if (a.hideProp) f.rig.showProp(a.hideProp, true); });
+      tl.end(a.windup + a.recovery);
+      return seqFrom(tl, { cancel: restore });
+    },
+  },
+
+  // Aguiar — coloca a máscara do Mutilador Noturno: mais dano, mais rápido, aguenta golpes e
+  // cada golpe físico faz sangrar. Mas a intenção assassina toma conta: não consegue defender.
+  maskForm: {
+    start(f, a, world) {
+      if (f.findBuff('mask')) {
+        f.notify('JÁ MASCARADO');
+        return null;
+      }
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.anim.play('concentrate', { restart: true, duration: 0.75 });
+      world.audio.play('maskOn');
+      const face = () => f.rig.joints.hd.getWorldPosition(new THREE.Vector3()).add(new THREE.Vector3(0, 0.15, 0));
+      tl.add(0.45, () => {
+        if (f.rig.props.maskOn) f.rig.showProp('maskOn', true);
+        world.fx.burst(face(), { count: 30, color: a.color, speed: 3, life: 0.6, size: 0.2, gravity: 5 });
+        world.fx.flash(face(), { color: a.color, size: 1.6, life: 0.15 });
+        world.cameraRig.shake(0.2, 0.2);
+        const prevTint = f.buffTint;
+        f.buffTint = { color: a.color, base: 0.1 };
+        f.armorHits = (f.armorHits || 0) + (a.armor || 0);
+        const aura = world.fx.emitter({ rate: 14, follow: () => f.chestPos(), particle: { color: 0x5a0008, kind: 'smoke', speed: 0.3, up: 0.6, spread: 0.4, life: 0.8, size: 0.5 } });
+        f.addBuff({
+          type: 'mask', name: 'MUTILADOR NOTURNO', time: a.duration, duration: a.duration,
+          mult: a.damageMult, affects: ['melee', 'ranged'], speedMult: a.speedMult, noBlock: a.noBlock,
+          meleeBleed: a.bleed,
+          onEnd() {
+            aura.stop();
+            if (f.rig.props.maskOn) f.rig.showProp('maskOn', false);
+            f.armorHits = 0;
+            if (f.buffTint && f.buffTint.color === a.color) f.buffTint = prevTint || null;
+          },
+        });
+        f.notify('MUTILADOR NOTURNO', true);
+      });
+      tl.end(0.75);
+      return seqFrom(tl);
+    },
+  },
+
+  // Aguiar — Armadilha de urso: arma no chão à frente; quem pisa fica preso (atordoado), toma dano e sangra.
+  // Só uma armadilha por vez; some depois de um tempo.
+  bearTrap: {
+    start(f, a, world) {
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.anim.play('sniper_kneel', { restart: true, duration: 0.55 });
+      tl.add(0.35, () => {
+        if (f.trap) f.trap.remove();
+        const F = forwardFromYaw(f.yaw);
+        const pos = new THREE.Vector3(f.pos.x + F.x * (a.distance ?? 1.4), 0.03, f.pos.z + F.z * (a.distance ?? 1.4));
+        const mesh = new THREE.Group();
+        const steel = new THREE.MeshStandardMaterial({ color: 0x6a6460, metalness: 0.8, roughness: 0.45 });
+        const base = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.14, 0.04, 10), steel);
+        mesh.add(base);
+        const jaws = [];
+        for (const s of [-1, 1]) {
+          const jaw = new THREE.Group();
+          const arc = new THREE.Mesh(new THREE.TorusGeometry(0.34, 0.02, 4, 18, Math.PI), steel);
+          arc.rotation.x = -Math.PI / 2;
+          jaw.add(arc);
+          for (let k = 1; k < 8; k++) {
+            const ang = (k / 8) * Math.PI;
+            const tooth = new THREE.Mesh(new THREE.ConeGeometry(0.025, 0.09, 4), steel);
+            tooth.position.set(Math.cos(ang) * 0.34, 0.04, Math.sin(ang) * 0.34 * -1);
+            jaw.add(tooth);
+          }
+          jaw.rotation.order = 'YXZ';
+          jaw.rotation.y = s > 0 ? 0 : Math.PI;
+          mesh.add(jaw);
+          jaws.push(jaw);
+        }
+        mesh.position.copy(pos);
+        world.scene.add(mesh);
+        world.audio.play('grenadePin', { volume: 0.6 });
+        let t = 0;
+        let sprung = false;
+        let shut = 0;
+        let done = false;
+        const self = {
+          update(dt) {
+            t += dt;
+            if (done) return true;
+            const opp = f.opponent;
+            if (sprung) {
+              shut = Math.min(1.45, shut + dt * 20);
+              for (const j of jaws) j.rotation.x = -shut; // as duas mandíbulas sobem e se fecham
+              if (t > 1.2) done = true;
+              return done;
+            }
+            if (t > (a.life ?? 14)) return (done = true);
+            if (t < (a.armTime ?? 0.4) || !opp || opp.state === 'ko' || !opp.onGround || opp.isInvulnerable()) return false;
+            if (Math.hypot(opp.pos.x - pos.x, opp.pos.z - pos.z) > (a.radius ?? 0.7)) return false;
+            // fecha!
+            sprung = true;
+            t = 0;
+            world.audio.play('trapSnap');
+            world.fx.burst(new THREE.Vector3(pos.x, 0.3, pos.z), { count: 26, color: 0x9a0010, speed: 4, up: 1.5, life: 0.6, size: 0.2, gravity: 8 });
+            const res = applyHit(world, f, opp, { damage: a.damage, kind: 'ability', knockback: 0, hitstun: 0.3, reaction: false, sound: 'bladeHit', color: 0x9a0010, pos: new THREE.Vector3(pos.x, 0.4, pos.z), unblockable: true });
+            if (typeof res === 'number' && opp.state !== 'ko') {
+              opp.stun(a.stun ?? 1.2, 'stagger');
+              opp.vel.set(0, 0, 0);
+              if (a.bleed) opp.applyBleed(a.bleed, f);
+              opp.notify('PRESO NA ARMADILHA', true);
+            }
+            return false;
+          },
+          dispose() { world.scene.remove(mesh); mesh.traverse((o) => { if (o.geometry) o.geometry.dispose(); }); if (f.trap === self) f.trap = null; },
+          remove() { done = true; },
+        };
+        f.trap = self;
+        world.addTicker(self);
+      });
+      tl.end(0.55);
+      return seqFrom(tl);
+    },
+  },
+
+  // Aguiar — Predador de Sangue: memoriza o cheiro do alvo; por alguns segundos todos os ataques
+  // contra ele ficam mais fortes e o rastro de sangue dele fica visível.
+  predatorScent: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      if (!opp || opp.state === 'ko') return null;
+      if (f.findBuff('scent')) {
+        f.notify('JÁ FAREJANDO');
+        return null;
+      }
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('breath', { restart: true, duration: 0.55 });
+      world.audio.play('heartbeat', { volume: 0.8 });
+      tl.add(0.3, () => {
+        const trail = world.fx.emitter({ rate: 10, follow: () => opp.chestPos(), particle: { color: 0xb0101c, speed: 0.2, spread: 0.3, life: 1.2, size: 0.16, gravity: 2 } });
+        world.fx.ring(opp.chestPos(), { color: a.color, radius: 1.2, life: 0.5, vertical: true, yaw: f.yaw });
+        f.addBuff({
+          type: 'scent', name: 'PREDADOR DE SANGUE', time: a.duration, duration: a.duration,
+          mult: a.damageMult, affects: ['melee', 'ranged', 'ability'], speedMult: a.speedMult,
+          onEnd() { trail.stop(); },
+        });
+        opp.notify('FAREJADO', true);
+      });
+      tl.end(0.55);
+      return seqFrom(tl);
+    },
+  },
+
+  // Erin — Bênção Maldita: perto de eletricidade, a mão brilha em ciano e ela vê o futuro:
+  // recupera todas as esquivas e os próximos ataques ficam mais fortes por alguns segundos.
+  blessing: {
+    start(f, a, world) {
+      if (f.findBuff('blessing')) {
+        f.notify('JÁ ABENÇOADA');
+        return null;
+      }
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.anim.play('concentrate', { restart: true, duration: 0.6 });
+      world.audio.play('ritual', { volume: 0.6 });
+      const hand = () => f.rig.sockets.handL.getWorldPosition(new THREE.Vector3());
+      const sparks = world.fx.emitter({ rate: 40, follow: hand, particle: { color: a.color, speed: 1.4, spread: 0.5, life: 0.25, size: 0.1 } });
+      tl.add(0.4, () => {
+        for (let k = 0; k < 5; k++) world.fx.lightning(hand(), hand().add(new THREE.Vector3((Math.random() - 0.5) * 2, Math.random() * 1.5, (Math.random() - 0.5) * 2)), { color: a.color, life: 0.2 });
+        world.fx.flash(f.chestPos(), { color: a.color, size: 2.2, life: 0.18 });
+        f.dodges = Math.max(f.dodges, a.dodges ?? 4);
+        f.addBuff({
+          type: 'blessing', name: 'BÊNÇÃO MALDITA', time: a.duration, duration: a.duration,
+          mult: a.damageMult, affects: ['melee', 'ranged', 'ability'],
+          onEnd() { sparks.stop(); },
+        });
+        f.notify('BÊNÇÃO MALDITA', true);
+      });
+      tl.end(0.6);
+      return seqFrom(tl, { cancel: () => sparks.stop() });
+    },
+  },
+});
+
+// Zona de névoa da Cineraria (usada pela Baforada e pelo especial Cinerária)
+export function createMistZone(world, owner, o) {
+  const zone = world.addZone({
+    owner, center: o.center, radius: o.radius, slow: o.slow, enemyRegen: o.enemyRegen,
+    projectileSlow: o.projectileSlow, eatsProjectiles: o.eatsProjectiles,
+  });
+  const smoke = world.fx.emitter({
+    rate: 22 * (o.density ?? 1) * (o.radius / 3),
+    follow: () => {
+      const c = o.center();
+      const a = Math.random() * Math.PI * 2;
+      const r = Math.sqrt(Math.random()) * o.radius;
+      return new THREE.Vector3(c.x + Math.sin(a) * r, 0.3 + Math.random() * 1.2, c.z + Math.cos(a) * r);
+    },
+    particle: { color: o.color, kind: 'smoke', speed: 0.3, up: 0.2, spread: 0.3, life: 2.2, size: 2.4, grow: 0.9, drag: 0.5 },
+  });
+  const ring = world.fx.emitter({
+    rate: 14,
+    follow: () => {
+      const c = o.center();
+      const a = Math.random() * Math.PI * 2;
+      return new THREE.Vector3(c.x + Math.sin(a) * o.radius, 0.1, c.z + Math.cos(a) * o.radius);
+    },
+    particle: { color: o.color, speed: 0.3, up: 0.6, spread: 0.1, life: 0.9, size: 0.25 },
+  });
+  const end = () => {
+    zone.alive = false;
+    smoke.stop();
+    ring.stop();
+  };
+  if (o.duration) world.after(o.duration, end);
+  zone.end = end;
+  return zone;
+}

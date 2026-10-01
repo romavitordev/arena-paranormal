@@ -1,0 +1,150 @@
+import * as THREE from 'three';
+import { glowMat } from './rig.js';
+import { m4, sniper, guitarCase, bloodArm, knife, sickleBlade, mutilatorAxe, shotgun, handGrenade } from './weapons.js';
+export { addMascaradoProps } from './characters/mascarado.js';
+
+// Armas e acessórios adicionados em código sobre os modelos do Blender.
+// Usam só `sockets`, `attach()` e `props`, que existem nos dois tipos de rig.
+
+export function addCinerariaProps(rig) {
+  const { sockets, props } = rig;
+  const back = m4();
+  back.rotation.set(0, 0, 2.5);
+  back.position.set(0, 0, -0.08);
+  sockets.back.add(back);
+  props.m4Back = back;
+  const hand = m4();
+  hand.rotation.x = -0.1;
+  hand.position.y = -0.03;
+  sockets.handR.add(hand);
+  hand.visible = false;
+  props.m4Hand = hand;
+  rig.muzzle = hand.userData.muzzle;
+}
+
+export function addAbutreProps(rig) {
+  const { sockets, props } = rig;
+  const kase = guitarCase();
+  kase.rotation.z = -0.35;
+  kase.position.set(0, -0.05, -0.12);
+  sockets.back.add(kase);
+  props.case = kase;
+  const rifle = sniper();
+  rifle.position.y = -0.02;
+  sockets.handR.add(rifle);
+  rifle.visible = false;
+  props.sniperHand = rifle;
+  rig.muzzle = rifle.userData.muzzle;
+  // Arma de Sangue: braço de sangue no lugar do braço esquerdo (escondido até o especial)
+  const wp = (j) => rig.joints[j].getWorldPosition(new THREE.Vector3());
+  const upperLen = wp('sL').distanceTo(wp('eL'));
+  const arm = bloodArm(upperLen, upperLen * 0.95);
+  rig.attach('sL', arm.upper);
+  rig.attach('eL', arm.fore);
+  // as duas partes ligam/desligam juntas
+  const claw = {
+    get visible() { return arm.upper.visible; },
+    set visible(v) { arm.upper.visible = v; arm.fore.visible = v; },
+    traverse(fn) { arm.upper.traverse(fn); arm.fore.traverse(fn); },
+  };
+  claw.visible = false;
+  props.claw = claw;
+  // olhos amaldiçoados do Rebirth
+  const eyes = new THREE.Group();
+  for (const s of [-1, 1]) {
+    const e = new THREE.Mesh(new THREE.SphereGeometry(0.02, 8, 6), glowMat(0x3aff6a, 1));
+    e.position.set(s * 0.05, 0.175, 0.14);
+    eyes.add(e);
+    const halo = new THREE.Mesh(new THREE.SphereGeometry(0.045, 8, 6), glowMat(0x3aff6a, 0.35));
+    halo.position.copy(e.position);
+    eyes.add(halo);
+  }
+  eyes.visible = false;
+  sockets.head.add(eyes);
+  props.eyes = eyes;
+}
+
+export function addVampiraProps(rig) {
+  const { sockets, props } = rig;
+  const blade = knife();
+  blade.rotation.x = -0.35;
+  blade.scale.setScalar(1.15);
+  sockets.handR.add(blade);
+  props.knife = blade;
+  const spare = knife();
+  spare.visible = false;
+  sockets.handR.add(spare);
+  props.knifeThrow = spare;
+}
+
+// ERIN: uma adaga em cada mão; a escopeta aparece no disparo; granada na mão antes do arremesso
+export function addErinProps(rig) {
+  const { sockets, props } = rig;
+  for (const s of ['R', 'L']) {
+    const d = knife();
+    d.rotation.set(-0.35, s === 'L' ? Math.PI : 0, 0);
+    d.scale.setScalar(1.05);
+    sockets['hand' + s].add(d);
+    props['dagger' + s] = d;
+  }
+  const gun = shotgun();
+  gun.position.y = -0.02;
+  sockets.handR.add(gun);
+  gun.visible = false;
+  props.shotgun = gun;
+  rig.muzzle = gun.userData.muzzle;
+  const gr = handGrenade(0xff3050);
+  gr.visible = false;
+  sockets.handR.add(gr);
+  props.grenade = gr;
+}
+
+// AGUIAR: machado do Mutilador na mão direita (sem arma de fogo); máscara (do Blender) escondida
+export function addAguiarProps(rig) {
+  const { sockets, props } = rig;
+  const axe = mutilatorAxe();
+  axe.rotation.x = -0.25;
+  sockets.handR.add(axe);
+  props.axe = axe;
+  if (props.maskOn) rig.showProp('maskOn', false);
+}
+
+export function addInjusticaProps(rig) {
+  const { sockets, props } = rig;
+  const right = sickleBlade();
+  right.rotation.x = -0.3;
+  right.scale.setScalar(1.1);
+  sockets.handR.add(right);
+  props.bladeR = right;
+  const left = sickleBlade();
+  left.rotation.set(-0.3, Math.PI, 0);
+  left.scale.setScalar(1.1);
+  sockets.handL.add(left);
+  props.bladeL = left;
+}
+
+// Desconjurado: NENHUMA arma. Só a manifestação translúcida da Lâmina do Medo,
+// que aparece apenas durante a habilidade.
+export function addDesconjuradoProps(rig) {
+  const blade = new THREE.Group();
+  const shape = new THREE.Shape();
+  shape.moveTo(-0.07, 0);
+  shape.quadraticCurveTo(-0.05, -0.5, 0.02, -0.95);
+  shape.quadraticCurveTo(0.09, -0.45, 0.07, 0);
+  shape.lineTo(-0.07, 0);
+  const geo = new THREE.ShapeGeometry(shape);
+  const core = new THREE.Mesh(geo, glowMat(0xffffff, 0.75));
+  core.material.side = THREE.DoubleSide;
+  core.rotation.y = Math.PI / 2;
+  blade.add(core);
+  const haze = new THREE.Mesh(geo, glowMat(0xffd88a, 0.45));
+  haze.material.side = THREE.DoubleSide;
+  haze.scale.set(1.8, 1.15, 1.8);
+  haze.rotation.y = Math.PI / 2;
+  blade.add(haze);
+  blade.add(new THREE.Mesh(new THREE.SphereGeometry(0.12, 10, 8), glowMat(0xffe2a8, 0.4)));
+  blade.rotation.x = -0.35;
+  blade.visible = false;
+  rig.sockets.handR.add(blade);
+  rig.props.fearBlade = blade;
+}

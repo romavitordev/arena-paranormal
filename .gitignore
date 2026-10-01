@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.log
+
+# artes de referência de terceiros (ficam só na máquina)
+Referencias visuais/**
+!Referencias visuais/
+!Referencias visuais/**/
+!Referencias visuais/**/*.md
