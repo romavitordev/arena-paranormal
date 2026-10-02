@@ -729,7 +729,7 @@ class Builder:
             return res
 
     def body(self, M, torso_profile, arms=('L', 'R'), arm_r=(0.07, 0.056, 0.047), leg_r=(0.088, 0.07, 0.054),
-             head_r=(0.138, 0.148, 0.162), sleeve=None, legs=True, feet='shoe', torso_mat=None, neck_r=0.058):
+             head_r=(0.138, 0.148, 0.162), sleeve=None, legs=True, feet='shoe', torso_mat=None, neck_r=0.058, head=True):
         """
         Corpo base: tronco, pescoço, cabeça (material de rosto), orelhas, braços, mãos, pernas, pés.
         M: dict de materiais com chaves skin, face, e opcionais torso, arm (manga), forearm, hand, legs, feet.
@@ -739,9 +739,11 @@ class Builder:
         self.add('torso', torso_part(sk, torso_profile), torso_mat or M.get('torso', M['skin']), region='torso')
         self.add('neck', tube([(0, 0, 1.58 * H, neck_r * H, neck_r * H), (0, 0, 1.72 * H, neck_r * 0.95 * H, neck_r * 0.95 * H)], 12), M['skin'], region='neck', subdiv=0)
         # a cabeça já tem resolução alta para o relevo do rosto: sem subdivisão extra (economiza ~10k triângulos)
-        self.add('head', head_part(sk, radii=head_r), M['face'], region='head', subdiv=0)
+        # head=False: o personagem monta a própria cabeça (ex.: o crânio baixo do Deus da Morte)
+        if head:
+            self.add('head', head_part(sk, radii=head_r), M['face'], region='head', subdiv=0)
         hc = head_center(sk)
-        for s in (1, -1):
+        for s in ((1, -1) if head else ()):
             self.add(f'ear{s}', ellipsoid((s * (head_r[0] - 0.002) * H, 0.0, hc.z - 0.01 * H), (0.02 * H, 0.034 * H, 0.044 * H), 8, 6), M['skin'], region='head', subdiv=0)
         for side in arms:
             arm_mat = M.get('arm' + side, M.get('arm', M['skin']))

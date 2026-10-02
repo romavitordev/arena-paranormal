@@ -77,6 +77,28 @@ export const PASSIVES = {
       return (victim.comboHits || 0) >= (passive.after ?? 3) ? passive.mult ?? 0.75 : 1;
     },
   },
+  // Juan — Faca Predadora: a faca absorve o sangue do golpe e o devolve ao Juan (cura uma parte do dano físico)
+  lifesteal: {
+    onMeleeHit({ attacker, dealt, passive, world }) {
+      if (!(dealt > 0) || attacker.state === 'ko') return;
+      const heal = Math.round(dealt * (passive.ratio ?? 0.15));
+      attacker.health = Math.min(attacker.maxHealth, attacker.health + heal);
+      if (heal > 0 && Math.random() < 0.5) world.fx.burst(attacker.chestPos(), { count: 4, color: 0xc01828, speed: 1, life: 0.4, size: 0.12 });
+    },
+  },
+  // Juan — Masoquista: gosta da dor; cada golpe recebido devolve sanidade
+  masochist: {
+    onHitTaken({ victim, dealt, passive }) {
+      if (dealt > 0) victim.energy = Math.min(victim.maxEnergy, victim.energy + dealt * (passive.ratio ?? 0.12));
+    },
+  },
+  // Miguel — Sanidade em Queda: o paranormal pesa na mente dele; cada golpe recebido também tira sanidade
+  // (quando zera, vira Luzidio — ver def.onSanityZero)
+  fragileSanity: {
+    onHitTaken({ victim, dealt, passive }) {
+      if (dealt > 0) victim.energy = Math.max(0, victim.energy - dealt * (passive.mult ?? 0.25));
+    },
+  },
   // Lírio — Sangue de Ferro: mais vitalidade (a vida extra está em stats.maxHealth; aqui só identifica a passiva)
   ironBlood: {},
   // Lírio — Casca Grossa: aguenta melhor os impactos — é empurrado menos (lançamentos ainda lançam) e, defendendo,
@@ -109,6 +131,21 @@ export const PASSIVES = {
   },
   // Labirinto — Mente Labiríntica: atordoamentos duram menos (lido em Fighter.stun)
   mentalMaze: {},
+  // Kemi — Sede de Vingança (o poder de intenção da Lena no corpo dela): ao cair abaixo de passive.below de vida pela
+  // primeira vez no round, revida com tudo — mais dano e velocidade por um tempo e sanidade de volta
+  revenge: {
+    onHitTaken({ victim, dealt, passive, world }) {
+      if (!(dealt > 0) || victim.state === 'ko' || victim.health <= 0 || victim.revengeUsed) return;
+      if (victim.health / victim.maxHealth > (passive.below ?? 0.3)) return;
+      victim.revengeUsed = true;
+      const d = passive.duration ?? 8;
+      victim.addBuff({ type: 'revenge', name: 'SEDE DE VINGANÇA', time: d, duration: d, mult: passive.mult ?? 1.3, affects: ['melee', 'ranged', 'ability'], speedMult: passive.speedMult ?? 1.1 });
+      victim.energy = Math.min(victim.maxEnergy, victim.energy + (passive.energy ?? 35));
+      victim.notify('SEDE DE VINGANÇA', true);
+      world.fx.burst(victim.chestPos(), { count: 26, color: 0xe8c070, speed: 4, life: 0.5, size: 0.18 });
+      world.fx.ring(victim.pos.clone().setY(0.06), { color: 0xe8c070, radius: 2, life: 0.5 });
+    },
+  },
   // Xande — Gladiador Paranormal: cada golpe físico que acerta devolve um pouco de sanidade
   paranormalGladiator: {
     onMeleeHit({ attacker, passive }) {

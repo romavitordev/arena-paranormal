@@ -89,6 +89,9 @@ export class CameraRig {
     // pulo mexe pouco na altura do alvo
     // combo aéreo: a câmera sobe junto (mantém os dois no quadro)
     m.y = Math.max(a.pos.y, b.pos.y) * 0.6 + CAMERA_CFG.lookHeight;
+    // forma gigante (Deus da Morte, size 2): mira mais alto para caber o corpo inteiro
+    const big = Math.max(a.size || 1, b.size || 1);
+    if (big > 1) m.y += (big - 1) * 0.9;
     return m;
   }
 
@@ -107,7 +110,8 @@ export class CameraRig {
     const hfov = 2 * Math.atan(Math.tan(vfov / 2) * this.camera.aspect);
     const fitW = (sep / 2 + CAMERA_CFG.margin) / Math.tan(hfov / 2);
     const vert = Math.abs(a.pos.y - b.pos.y);
-    const fitH = (vert / 2 + 1.6) / Math.tan(vfov / 2);
+    const big = Math.max(a.size || 1, b.size || 1);
+    const fitH = (vert / 2 + 1.6 * big) / Math.tan(vfov / 2);
     return clamp(Math.max(fitW, fitH), CAMERA_CFG.minDistance, CAMERA_CFG.maxDistance);
   }
 

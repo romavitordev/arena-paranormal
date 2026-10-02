@@ -221,13 +221,14 @@ export class Effects {
   chain(fromFn, toFn, o = {}) {
     // corrente de metal comum (aço cinza)
     // o.rope: corda de fibra (segmentos cilíndricos marrons) em vez de elos de aço
+    // o.thick: espessura da corda; o.twist/o.turns/o.phase: o fio gira em hélice em volta do eixo (cordas trançadas)
     const { links = 22, color = o.rope ? 0x8a6a44 : 0x9a9ea6, glow = o.rope ? 0x1a1208 : 0x2a2c30 } = o;
-    const geo = o.rope ? new THREE.CylinderGeometry(0.016, 0.016, 1, 5).rotateX(Math.PI / 2) : new THREE.TorusGeometry(0.045, 0.014, 5, 8);
+    const geo = o.rope ? new THREE.CylinderGeometry(o.thick ?? 0.016, o.thick ?? 0.016, 1, 6).rotateX(Math.PI / 2) : new THREE.TorusGeometry(0.045, 0.014, 5, 8);
     const mat = new THREE.MeshToonMaterial({ color, emissive: glow, emissiveIntensity: 0.3 });
     const mesh = new THREE.InstancedMesh(geo, mat, links);
     mesh.frustumCulled = false;
     this.scene.add(mesh);
-    const h = { mesh, fromFn, toFn, links, alive: true, sag: o.sag ?? 0.25, rope: !!o.rope };
+    const h = { mesh, fromFn, toFn, links, alive: true, sag: o.sag ?? 0.25, rope: !!o.rope, twist: o.twist || 0, turns: o.turns ?? 5, phase: o.phase || 0 };
     h.stop = () => {
       h.alive = false;
       this.scene.remove(mesh);
@@ -250,19 +251,32 @@ export class Effects {
     const len = dir.length();
     const up = new THREE.Vector3(0, 0, 1);
     const fwd = dir.clone().normalize();
-    for (let i = 0; i < h.links; i++) {
-      const t = (i + 0.5) / h.links;
+    // hélice: base perpendicular ao eixo
+    const sideV = new THREE.Vector3().crossVectors(fwd, new THREE.Vector3(0, 1, 0));
+    if (sideV.lengthSq() < 1e-6) sideV.set(1, 0, 0);
+    sideV.normalize();
+    const upV = new THREE.Vector3().crossVectors(sideV, fwd);
+    const at = (t) => {
       const p = new THREE.Vector3().lerpVectors(a, b, t);
       p.y -= Math.sin(t * Math.PI) * h.sag * Math.min(1, len / 6);
+      if (h.twist) {
+        const ang = h.phase + t * h.turns * Math.PI * 2;
+        p.addScaledVector(sideV, Math.cos(ang) * h.twist).addScaledVector(upV, Math.sin(ang) * h.twist);
+      }
+      return p;
+    };
+    for (let i = 0; i < h.links; i++) {
+      const t = (i + 0.5) / h.links;
+      const p = at(t);
       q.setFromUnitVectors(up, fwd);
       if (h.rope) {
         // cada pedaço da corda acompanha a curva (de um ponto da barriga ao próximo)
         const t2 = Math.min(1, (i + 1.5) / h.links);
-        const p2 = new THREE.Vector3().lerpVectors(a, b, t2);
-        p2.y -= Math.sin(t2 * Math.PI) * h.sag * Math.min(1, len / 6);
+        const p2 = at(t2);
         const seg = p2.clone().sub(p);
-        q.setFromUnitVectors(up, seg.lengthSq() > 1e-8 ? seg.normalize() : fwd);
-        m.compose(p, q, new THREE.Vector3(1, 1, (len / h.links) * 1.15));
+        const sl = seg.length();
+        q.setFromUnitVectors(up, sl > 1e-4 ? seg.normalize() : fwd);
+        m.compose(p, q, new THREE.Vector3(1, 1, Math.max(len / h.links, sl) * 1.2));
       } else {
         if (i % 2) q.multiply(new THREE.Quaternion().setFromAxisAngle(up, Math.PI / 2));
         m.compose(p, q, new THREE.Vector3(1, 1, 1));

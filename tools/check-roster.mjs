@@ -19,7 +19,7 @@ const allStrikes = (c) => [...c.melee.strikes, ...['forward', 'back', 'side', 'a
 // ---------------- base preservada ----------------
 const ids = ROSTER.map((c) => c.id);
 ok(['cineraria', 'abutre', 'mascarado', 'vampira', 'dante', 'erin', 'injustica', 'desconjurado', 'aguiar', 'labirinto', 'xande', 'lirio'].every((i) => ids.includes(i)), `elenco com os 12 personagens (${ids.join(', ')})`);
-ok(ROSTER.map((c) => c.name).join() === 'KAISER,ARTHUR CERVERO,JOUI JOUKI,AGHATA,DANTE,ERIN PARKER,GAL SAL,KIAN,AGUIAR,LABIRINTO,XANDE,LÍRIO', 'nomes: Kaiser, Arthur Cervero, Joui Jouki, Aghata, Dante, Erin Parker, Gal Sal, Kian, Aguiar, Labirinto, Xande, Lírio');
+ok(ROSTER.map((c) => c.name).join() === 'KAISER,ARTHUR CERVERO,JOUI JOUKI,AGHATA,DANTE,ERIN PARKER,GAL SAL,KIAN,AGUIAR,LABIRINTO,XANDE,LÍRIO,MIGUEL CARIAD,JUAN,KEMI', 'nomes: Kaiser, Arthur Cervero, Joui Jouki, Aghata, Dante, Erin Parker, Gal Sal, Kian, Aguiar, Labirinto, Xande, Lírio, Miguel Cariad, Juan, Kemi');
 const banners = Object.fromEntries(ROSTER.map((c) => [c.id, c.special.banner]));
 ok(banners.injustica === 'Injustiça né?' && banners.cineraria === 'Cinerária!' && banners.mascarado === 'Shi no Kage!' && banners.vampira === 'Descarnar!' && banners.abutre === 'Arma de Sangue!' && banners.desconjurado === 'Inexistir', 'textos dos especiais na tela');
 ok(COMBAT.maxHealth === 1000 && COMBAT.maxEnergy === 100, 'vida 1000 e energia 100');
@@ -183,6 +183,23 @@ ok(lab && lab.origin === 'Mascarados' && lab.melee.name === 'A Antena' && lab.ra
 ok(lab && ['mentalMaze', 'consumeMoment', 'helmetForm'].every((t) => abil('labirinto', t)) && lab.special.type === 'abyssMaze', 'Labirinto: Labirinto Mental, Consumir Momento, Capacete do ??? e especial do labirinto');
 ok(xan && xan.origin === 'Os Cinco' && xan.melee.name.includes('Taco') && xan.ranged.boomerang, 'Xande: Os Cinco, taco com arame farpado e Skate Caótico que volta');
 ok(xan && ['curseWeapon', 'polarize', 'noiseScreen', 'selfBuff'].every((t) => abil('xande', t)) && pas('xande', 'paranormalGladiator'), 'Xande: Amaldiçoar Arma, Polarização Caótica, Tela de Ruído, Velocidade Mortal, Gladiador Paranormal');
+const mig = get('miguel');
+ok(mig && mig.onSanityZero && mig.onSanityZero.form === 'miguel_luzidio' && pas('miguel', 'fragileSanity'), 'Miguel: Sanidade em Queda e vira Luzidio com a sanidade zerada');
+{
+  const { getForm } = await import('../src/characters/forms/index.js');
+  const luz = getForm('miguel_luzidio');
+  const deus = getForm('deus_morte');
+  ok(luz && luz.special.type === 'santoPact' && luz.special.minEnergy === 0.85 && luz.special.window === 45 && luz.special.form === 'deus_morte', 'Luzidio: Pacto do Santo exige 85% de sanidade e dura 45 s');
+  ok(deus && deus.boss && deus.stats.size === 2 && deus.weakTo.fire > 1 && deus.weakTo.energia > 1 && deus.regen && deus.poise, 'Deus da Morte: chefe, 2x maior, fraco contra fogo e Energia, regenera e não fica preso em combo');
+  ok(deus && ['timelockGrab', 'deadHands', 'timeWarp'].every((t) => deus.abilities.some((a) => a.type === t)), 'Deus da Morte: Espiral Descendente, Controlar Mortos, Senhor do Tempo');
+}
+const jua = get('juan');
+ok(jua && jua.element === 'sangue' && ['ritualCuts', 'command', 'bloodLink', 'heavyProtection'].every((t) => abil('juan', t)) && pas('juan', 'lifesteal') && jua.special.type === 'devilPact' && jua.special.form === 'diabo' && !jua.special.duration && jua.special.usesPerMatch === 1, 'Juan: Descarnar, Perturbação, Vínculo de Sangue, Armadura de Sangue, Faca Predadora e o Renascimento (Trono do Diabo até o fim do round)');
+{
+  const { getForm } = await import('../src/characters/forms/index.js');
+  const dia = getForm('diabo');
+  ok(dia && dia.regen && ['bloodBind', 'selfBuff', 'teleportBehind', 'summonBlood', 'bloodGeysers'].every((t) => dia.abilities.some((a) => a.type === t)) && dia.special.type === 'devilDeal' && dia.melee.strikes.every((x) => x.bleed), 'Diabo (Portador do Trono): Veias de Sangue, Ódio do Diabo, Transportar pelo Sangue, Senhor do Sangue, Sangue nos Arredores, Amaldiçoar Arma, Regeneração e Pacto');
+}
 const lir = get('lirio');
 ok(lir && lir.origin === 'Os Cinco' && lir.melee.name === 'Leonora' && lir.stats.maxHealth > 1000 && lir.stats.moveSpeed < Math.min(...ROSTER.filter((c) => c.id !== 'lirio').map((c) => c.stats.moveSpeed)), 'Lírio: Os Cinco, Leonora, mais vida e o mais lento do elenco');
 ok(lir && ['heavyBlow', 'caiDentro', 'bloodBind', 'curseWeapon', 'heavyProtection'].every((t) => abil('lirio', t)) && ['ironBlood', 'thickSkin', 'heavyHand'].every((t) => pas('lirio', t)), 'Lírio: Golpe Pesado, Cai Dentro, Amarras de Sangue, Leonora Amaldiçoada, Proteção Pesada + Sangue de Ferro, Casca Grossa, Mão Pesada');

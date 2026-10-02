@@ -16,27 +16,35 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 
 ## Controles
 
-| Ação | PlayStation | Xbox | P1 teclado | P2 teclado |
-|---|---|---|---|---|
-| Mover | Analógico | Analógico | W A S D | Setas |
-| Ataque físico | ○ | B | F | Num1 / K |
-| Ataque/habilidade principal | □ | X | G | Num2 / L |
-| Carga de Poder (segurar = energia) | △ | Y | H | Num3 / Ç |
-| Pulo | × | A | Espaço | Num0 / J |
-| Defesa (segurar) | R2 | RT | Q | Num4 / U |
-| **Esquiva** (+ direção) | L2 | LT | Shift esq. | Num . / P |
-| **Dash** | × + × | A + A | Espaço + Espaço | Num0 + Num0 |
-| **Dash longo** (Mascarado: teleporte) | △ + × | Y + A | H + Espaço | Num3 + Num0 |
-| **Agarrão** (não defensável) | R2 + ○ | RT + B | Q + F | Num4 + Num1 |
-| **Físico forte** | △ + ○ | Y + B | H + F | Num3 + Num1 |
-| **Principal forte** | △ + □ | Y + X | H + G | Num3 + Num2 |
-| Modificador (segurar + botão) | R1 | RB | R | Num6 / O |
-| Pausa | Start | Start | Esc | Backspace |
+| Ação | PlayStation | Xbox | P1 teclado | P2 teclado | Celular |
+|---|---|---|---|---|---|
+| Mover | Analógico | Analógico | W A S D | Setas | Joystick |
+| Carga de Poder (segurar = energia) | △ | Y | **I** | Num8 | △ |
+| Ataque/habilidade principal | □ | X | **J** | Num4 | □ |
+| Ataque físico | ○ | B | **L** | Num6 | ○ |
+| Pulo | × | A | **K** / Espaço | Num2 / Num0 | × |
+| Modificador (segurar + botão) | R1 | RB | **Q** | Num7 | R1 |
+| Defesa (segurar) | R2 | RT | **E** | Num9 | DEF |
+| **Esquiva** (+ direção) | L2 | LT | Shift | Num1 | ESQ |
+| **Dash** | × + × | A + A | K + K | Num2 + Num2 | × + × |
+| **Dash longo** (Mascarado: teleporte) | △ + × | Y + A | I + K | Num8 + Num2 | △ + × |
+| **Agarrão** (não defensável) | R2 + ○ | RT + B | E + L | Num9 + Num6 | DEF + ○ |
+| **Físico forte** | △ + ○ | Y + B | I + L | Num8 + Num6 | △ + ○ |
+| **Principal forte** | △ + □ | Y + X | I + J | Num8 + Num4 | △ + □ |
+| **Especial** | △ → △ → ○ | Y → Y → B | I → I → L | Num8 → Num8 → Num6 | ESPECIAL |
+| Assistências / troca (equipe) | D-pad ◀ ▶ / analógico dir. | D-pad ◀ ▶ / analógico dir. | 1 2 / 3 4 | N/ N* / N- N+ | AS1 AS2 / ⇄1 ⇄2 |
+| Página da seleção | L1 / R1 | LB / RB | Q / E | PgUp / PgDn | ◀ ▶ na grade |
+| Pausa | Start | Start | Esc | Backspace | II |
+
+- **Teclado:** os quatro botões de ação ficam em **losango (I J K L)**, na mesma posição do △ □ × ○ do controle;
+  a mão esquerda fica com WASD + Q (R1) + E (R2) + Shift (L2). O jogador 2 usa o mesmo losango no teclado numérico.
+- **Celular/tablet:** os botões aparecem sozinhos com tela de toque (no PC dá para testar com `?touch=1`); jogue
+  com o aparelho deitado. Os cartões e opções dos menus também aceitam toque direto.
 
 - **Variações do físico:** ○ parado = sequência · frente + ○ = avanço · trás + ○ = defensivo/evasivo ·
   lado + ○ = golpe com passo lateral · no ar + ○ = golpe aéreo. A sequência termina num finalizador
   (lança, derruba, afasta ou atordoa).
-- **Especial:** △ → △ → ○ (Y → Y → B). Custa 50 de sanidade.
+- **Especial:** △ → △ → ○ (Y → Y → B; teclado I → I → L). Custa 50 de sanidade.
 - **Habilidades secundárias:** R1/RB + botão (veja cada personagem).
 - **Dash:** × + × (toque duplo no pulo) avança rápido. △ + × é o dash longo, que persegue o adversário (10 de sanidade); no Mascarado, △ + × é o Teleporte das Sombras.
 - **Agarrão:** Defesa + ○ (RT + B). Pega de perto e arremessa; não pode ser defendido, só esquivado. Errar deixa você exposto.
@@ -79,6 +87,8 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 | KIAN | Escriptas | Conhecimento | Impacto Sigilar | □ Teletransporte · ○ Lâmina do Medo · △ Transcendência · × Rejeitar Névoa | Inexistir (1x por partida, +1 ao Transcender) | Precognição |
 | LABIRINTO | Mascarados | Energia | Rajada Caótica (raio da Antena) | □ Labirinto Mental · ○ Consumir Momento · △ Capacete do ??? · L2 Tempestade Caótica (5 descargas) | O Labirinto é a Resposta | Mente Labiríntica (atordoamentos −40%) |
 | LÍRIO | Os Cinco | Sangue | Canivete de osso (curto e fraco: ele é de perto) | △ Golpe Pesado · ○ Cai Dentro (corre, ombrada, provoca) · □ Amarras de Sangue "Magras" · × Leonora Amaldiçoada · L2 Proteção Pesada | Leonora ("Hoje 'cê vai conhecer a Leonora!") | Sangue de Ferro (+15% de vida) · Casca Grossa (menos recuo e desgaste na defesa) · Mão Pesada (mais impacto) |
+| MIGUEL CARIAD | Ordo Realitas | Morte | Magnum (um tiro pesado) | ○ Lábia · △ Pose de Fisiculturista · □ Tiro na Testa · L2 Marca Espiral (zera a sanidade) | Equipe Kelvin · **Luzidio:** Pacto do Santo (sanidade > 85%, 45 s) | Sanidade em Queda — **sanidade zerada → LUZIDIO** (Espada Consumidora); **morrer no pacto → DEUS DA MORTE** (chefe 2x maior, barra preta, fraco a fogo e Energia, regenera) |
+| JUAN | Mascarados | Sangue | Lâmina de Sangue | △ Descarnar Discente · ○ Perturbação Discente · □ Vínculo de Sangue · L2 Armadura de Sangue Diabólica | Pacto do Hexatombe → **O DIABO** por 40 s (4 braços, Veias de Sangue, Ódio do Diabo, Transportar pelo Sangue) | Faca Predadora (cura 15%) · Masoquista (apanhar dá sanidade) |
 | XANDE | Os Cinco | Sangue | Skate Caótico (vai e volta) | □ Amaldiçoar Arma · ○ Polarização Caótica · △ Tela de Ruído (escudo de 140) · × Velocidade Mortal · L2 Cicatrização | Por Eles | Gladiador Paranormal (+3 sanidade por golpe) |
 | AGUIAR | Mascarados | Sangue | Machado na Corda (arremessa, sangra e puxa) | ○ Máscara do Mutilador Noturno · L2 Armadilha de Urso · × Predador de Sangue · △ Cães de Caça | Finalização do Mutilador | Filho da Dor (apanhando seguido, resiste mais) |
 

@@ -37,6 +37,41 @@ const VISUALS = {
     g.add(halo);
     return g;
   },
+  // Kemi / Fantasma: bala de Morte — núcleo cinza-claro com uma espiral de lodo preto girando em volta
+  deathSpiral(color) {
+    const g = new THREE.Group();
+    const core = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 1.6, 6), glowMat(color, 1));
+    core.geometry.rotateX(Math.PI / 2);
+    g.add(core);
+    const spiral = new THREE.Group();
+    const dark = new THREE.MeshBasicMaterial({ color: 0x0a080c });
+    for (let i = 0; i < 14; i++) {
+      const b = new THREE.Mesh(new THREE.SphereGeometry(0.05 - i * 0.0022, 6, 4), dark);
+      const ang = i * 0.9;
+      b.position.set(Math.cos(ang) * 0.14, Math.sin(ang) * 0.14, -i * 0.12);
+      spiral.add(b);
+    }
+    g.add(spiral);
+    g.userData.spin = spiral;
+    return g;
+  },
+  // Pistola Transtornada: bala enrolada em arame farpado
+  barbed(color) {
+    const g = new THREE.Group();
+    const core = new THREE.Mesh(new THREE.SphereGeometry(0.07, 8, 6), glowMat(color, 1));
+    g.add(core);
+    const wire = new THREE.Mesh(new THREE.TorusGeometry(0.11, 0.012, 4, 14), new THREE.MeshBasicMaterial({ color: 0x8a8a90 }));
+    g.add(wire);
+    for (let i = 0; i < 6; i++) {
+      const s = new THREE.Mesh(new THREE.ConeGeometry(0.012, 0.07, 3), new THREE.MeshBasicMaterial({ color: 0x8a8a90 }));
+      const a = (i / 6) * Math.PI * 2;
+      s.position.set(Math.cos(a) * 0.11, Math.sin(a) * 0.11, 0);
+      s.rotation.z = a - Math.PI / 2;
+      wire.add(s);
+    }
+    g.userData.spin = wire;
+    return g;
+  },
   knife(color) {
     const g = new THREE.Group();
     const k = knife();
@@ -256,6 +291,12 @@ export class Projectiles {
     }
     if (a.onHit.stun) target.stun(a.onHit.stun, a.onHit.stunAnim || 'stagger');
     if (a.onHit.bleed) target.applyBleed(a.onHit.bleed, p.owner); // ex.: decadência da Decadenza
+    if (a.onHit.slow) {
+      // ex.: arame farpado da Pistola Transtornada
+      const old = target.findBuff(a.onHit.slow.type || 'projSlow');
+      if (old) old.time = a.onHit.slow.time;
+      else target.addBuff({ type: a.onHit.slow.type || 'projSlow', name: a.onHit.slow.name || 'LENTO', time: a.onHit.slow.time, duration: a.onHit.slow.time, speedMult: a.onHit.slow.mult });
+    }
   }
 
   update(dt) {
@@ -356,8 +397,12 @@ export class Projectiles {
         }
         const target = w.opponentOf(p.owner);
         if (!p.hitOnce && target && target.state !== 'ko' && !target.isInvulnerable() && target.hitTestPoint(p.pos, a.radius)) {
+          // Sniper da Morte: quem já está morrendo (pouca vida) leva o tiro inteiro da espiral
+          const exec = a.execute && target.health / target.maxHealth <= a.execute.below ? a.execute.mult : 1;
+          if (exec > 1) target.notify('ESPIRAL DA MORTE', true);
           const res = applyHit(w, p.owner, target, {
-            damage: a.damage, kind: a.kind || 'ranged', knockback: a.knockback, hitstun: a.hitstun,
+            damage: Math.round(a.damage * exec), kind: a.kind || 'ranged', knockback: a.knockback, hitstun: a.hitstun,
+            unblockable: !!a.unblockable, element: a.element,
             dir: p.dir, color: a.color, sound: a.hitSound, scale: a.impactScale || 1, pos: p.pos.clone(),
             reaction: !(a.onHit && a.onHit.pull),
           });
@@ -370,7 +415,7 @@ export class Projectiles {
           dead = true;
           break;
         }
-        if (w.arena.blocksPoint(p.pos, a.radius * 0.5)) {
+        if (!a.ghost && w.arena.blocksPoint(p.pos, a.radius * 0.5)) {
           w.fx.impact(p.pos, a.color, 0.6);
           dead = true;
           break;
@@ -381,6 +426,16 @@ export class Projectiles {
         }
       }
       p.mesh.position.copy(p.pos);
+      if (a.spiral) {
+        // balas curvas puxadas pelas faixas: a bala desenha uma espiral em volta da linha de tiro
+        const side = new THREE.Vector3().crossVectors(p.dir, new THREE.Vector3(0, 1, 0));
+        if (side.lengthSq() < 1e-6) side.set(1, 0, 0);
+        side.normalize();
+        const up = new THREE.Vector3().crossVectors(side, p.dir);
+        const ang = p.age * (a.spiralFreq || 26);
+        const amp = a.spiral * Math.min(1, p.age * 6);
+        p.mesh.position.addScaledVector(side, Math.cos(ang) * amp).addScaledVector(up, Math.sin(ang) * amp);
+      }
       if (p.mesh.userData.spin) p.mesh.userData.spin.rotation.z += dt * 30;
       if (p.mesh.userData.pulse) {
         const s = 1 + Math.sin(p.age * 30) * 0.12 + p.age * 0.6;
@@ -388,6 +443,10 @@ export class Projectiles {
       }
       // rastro
       if (a.visual === 'sniper') w.fx.burst(p.pos, { count: 2, color: 0xffd090, speed: 0.3, life: 0.5, size: 0.25, kind: 'smoke' });
+      if (a.visual === 'deathSpiral') {
+        w.fx.burst(p.mesh.position, { count: 2, color: 0x0a080c, kind: 'smoke', speed: 0.3, life: 0.6, size: 0.3 });
+        if (a.drip && Math.random() < 0.5) w.fx.burst(p.mesh.position, { count: 1, color: 0x050406, speed: 0.2, life: 0.6, size: 0.1, gravity: 9 }); // lodo pingando
+      }
       if (a.visual === 'crossWave') w.fx.burst(p.pos, { count: 2, color: a.color, speed: 1, life: 0.3, size: 0.3 });
       if (a.visual === 'shockwave') {
         w.fx.burst(p.pos.clone().setY(0.1), { count: 3, color: a.color, speed: 2, life: 0.4, size: 0.35, up: 0.8 });
@@ -426,7 +485,7 @@ export class Projectiles {
       if (d <= E.radius + target.radius && Math.abs(target.chestPos().y - c.y) < E.radius + 1) {
         const res = applyHit(w, p.owner, target, {
           damage: E.damage, kind: a.kind || 'ranged', knockback: E.knockback ?? 4, hitstun: E.hitstun ?? 0.5,
-          launch: !!E.launch, lowLaunch: !!E.launch, guardCrush: E.guardCrush, element: a.element, stun: E.stun,
+          launch: !!E.launch, lowLaunch: !!E.launch, guardCrush: E.guardCrush, element: a.element, stun: E.stun, fire: E.fire !== false,
           dir: new THREE.Vector3(target.pos.x - c.x, 0, target.pos.z - c.z).normalize(), color: E.color ?? 0xff8030, sound: 'heavyPunch', scale: 1.4,
         });
         if (typeof res === 'number' && res >= 0) this.applyOnHit(p, target);

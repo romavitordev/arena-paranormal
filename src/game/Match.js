@@ -32,6 +32,7 @@ export class Match {
     this.world.onKO = () => { this.koPending = true; };
     // troca de personagem na equipe: a HUD passa a mostrar o novo (nome, habilidades, assistências)
     this.world.onSwitch = () => this.hud.bind(this.world.fighters);
+    this.world.onTransform = () => this.hud.bind(this.world.fighters); // forma nova (Luzidio, Deus da Morte, Diabo): HUD com o nome e as habilidades dela
     // Injustiça: o inimigo recupera Y de vida e perde sanidade (energia)
     this.world.onDrain = (attacker, victim, heal, removed) => {
       hud.popup(victim.index, `+${fmt(heal)} VIDA`, '#7dffb0');

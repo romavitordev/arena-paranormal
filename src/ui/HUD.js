@@ -206,11 +206,15 @@ export class HUD {
       }).join(' | ');
       e.msg.textContent = f.message ? f.message.text : '';
     });
-    // A Marionete: barra de vida preta no topo + vinheta escura nas bordas enquanto ela existir
+    // A Marionete e os CHEFES (Deus da Morte): barra de vida preta no topo + vinheta escura nas bordas
     const mar = match && match.world && match.world.npcs.find((n) => n.isMarionette && n.alive);
-    this.vignette.classList.toggle('on', !!mar);
-    this.npcBar.classList.toggle('on', !!mar);
-    if (mar) {
+    const boss = match && match.fighters && match.fighters.find((f) => f.def.boss && f.state !== 'ko');
+    this.vignette.classList.toggle('on', !!(mar || boss));
+    this.npcBar.classList.toggle('on', !!(mar || boss));
+    if (boss) {
+      this.npcBar.querySelector('b').textContent = boss.def.name;
+      this.npcBar.querySelector('.fill').style.width = `${Math.max(0, boss.health / boss.maxHealth) * 100}%`;
+    } else if (mar) {
       this.npcBar.querySelector('b').textContent = `${mar.name} · ${mar.owner.def.name}`;
       this.npcBar.querySelector('.fill').style.width = `${Math.max(0, mar.hp / mar.maxHp) * 100}%`;
     }

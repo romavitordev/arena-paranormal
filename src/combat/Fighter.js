@@ -11,6 +11,7 @@ import { SPECIALS } from './specials/index.js';
 import { hasPassive } from './passives.js';
 import { ELEMENTS } from '../config/elements.js';
 import { SETTINGS } from '../config/settings.js';
+import { updateForm, revertForm } from './forms.js';
 
 // estados em que o alvo continua "dentro do combo" (contadores de escala não zeram)
 const COMBO_STATES = new Set(['hitstun', 'stun', 'pulled', 'grabbed', 'ko', 'downed']);
@@ -46,7 +47,8 @@ export class Fighter {
     this.maxHealth = s.maxHealth ?? COMBAT.maxHealth;
     this.maxEnergy = s.maxEnergy ?? COMBAT.maxEnergy;
     this.moveSpeed = s.moveSpeed ?? COMBAT.moveSpeed;
-    this.radius = COMBAT.bodyRadius;
+    this.size = s.size ?? 1; // formas gigantes (Deus da Morte = 2): raio, peito e área de acerto acompanham
+    this.radius = COMBAT.bodyRadius * this.size;
     this.dodgeCfg = { ...COMBAT.dodge, ...(def.dodge || {}) };
     this.maxGuard = COMBAT.block.maxGuard;
 
@@ -76,6 +78,9 @@ export class Fighter {
 
   reset() {
     if (this.riding) this.mount(false);
+    if (this.baseForm) revertForm(this, { keepHealth: false });
+    this.lethalHook = null;
+    this.revengeUsed = false; // Sede de Vingança (Kemi): uma vez por round
     this.health = this.maxHealth;
     this.energy = COMBAT.startEnergy;
     this.guard = this.maxGuard;
@@ -127,12 +132,12 @@ export class Fighter {
 
   // ---------------------------------------------------------------- consultas
   chestPos(out = new THREE.Vector3()) {
-    return out.set(this.pos.x, this.pos.y + 1.15, this.pos.z);
+    return out.set(this.pos.x, this.pos.y + 1.15 * (this.size || 1), this.pos.z);
   }
 
   hitTestPoint(p, r = 0) {
     const dy = p.y - this.pos.y;
-    if (dy < -0.2 - r || dy > COMBAT.bodyHeight + r) return false;
+    if (dy < -0.2 - r || dy > COMBAT.bodyHeight * (this.size || 1) + r) return false;
     return Math.hypot(p.x - this.pos.x, p.z - this.pos.z) <= this.radius + r;
   }
 
@@ -168,6 +173,8 @@ export class Fighter {
   }
 
   specialAvailable() {
+    const sp = this.def.special;
+    if (sp && sp.minEnergy && this.energy < sp.minEnergy * this.maxEnergy) return false;
     return !!this.def.special && !this.specialUsedUp() && this.cooldowns.special <= 0 && this.energy >= this.specialCost();
   }
 
@@ -197,6 +204,11 @@ export class Fighter {
       if (this.dodges < COMBAT.dodge.charges) this.dodges++;
     }
     this.flash = 0.12;
+    if (this.health <= 0 && this.lethalHook) {
+      const hook = this.lethalHook;
+      this.lethalHook = null;
+      if (hook(this)) return dealt;
+    }
     if (this.health <= 0) this.knockOut();
     return dealt;
   }
@@ -400,6 +412,7 @@ export class Fighter {
     const S = COMBAT.switch;
     if (this.cooldowns.switch > 0) { this.notify('TROCA RECARREGANDO'); return false; }
     if (as.active) { this.notify('ASSISTÊNCIA EM CAMPO'); return false; }
+    if (this.baseForm) { this.notify('TRANSFORMADO: NÃO PODE TROCAR'); return false; }
     if (!['idle', 'charging', 'block', 'dashing'].includes(this.state) || !this.onGround || this.world.cinematic) return false;
     const w = this.world;
     const newDef = as.def;
@@ -444,6 +457,8 @@ export class Fighter {
     rig.body.position.y = 0;
     const s = def.stats || {};
     this.moveSpeed = s.moveSpeed ?? COMBAT.moveSpeed;
+    this.size = s.size ?? 1;
+    this.radius = COMBAT.bodyRadius * this.size;
     this.dodgeCfg = { ...COMBAT.dodge, ...(def.dodge || {}) };
     this.cooldownMax.ranged = def.ranged?.cooldown || 1;
     this.cooldownMax.special = def.special?.cooldown ?? COMBAT.specialCooldown;
@@ -490,6 +505,7 @@ export class Fighter {
     }
     this.stateTime += dt;
     if (this.invuln > 0) this.invuln -= dt;
+    updateForm(this, dt);
     if (this.message) {
       this.message.time -= dt;
       if (this.message.time <= 0) this.message = null;
@@ -1816,6 +1832,7 @@ export class Fighter {
     this.vel.z = 0;
     this.anim.play('sniper_kneel', { restart: true, duration: C.draw });
     if (base.showProp) this.rig.showProp(base.showProp, true);
+    if (base.hideProp) this.rig.showProp(base.hideProp, false);
     const self = this;
     const w = this.world;
     let t = 0;
@@ -2116,10 +2133,15 @@ export class Fighter {
       this.notify('SEM SANIDADE');
       return;
     }
+    // especiais que exigem a sanidade alta (Pacto do Santo: acima de 85%)
+    if (sp.minEnergy && this.energy < sp.minEnergy * this.maxEnergy) {
+      this.notify(`PRECISA DE ${Math.round(sp.minEnergy * 100)}% DE SANIDADE`);
+      return;
+    }
     const impl = SPECIALS[sp.type];
     if (!impl) return;
     if (impl.canStart && !impl.canStart(this, sp, this.world)) {
-      this.notify('ALVO FORA DE ALCANCE');
+      this.notify(impl.blockMsg || 'ALVO FORA DE ALCANCE');
       return;
     }
     this.energy -= this.specialCost();

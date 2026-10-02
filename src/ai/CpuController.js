@@ -242,6 +242,12 @@ export class CpuController {
         } else this.tap('ranged');
         return out;
       }
+      // especial que exige sanidade alta (Pacto do Santo: 85%): de longe, carrega até chegar lá
+      const spx = def.special;
+      if (spx && spx.minEnergy && f.cooldowns.special <= 0 && f.energy < spx.minEnergy * f.maxEnergy && d > 4.5 && r < 0.45) {
+        this.holdCharge = rnd(1.0, 1.8);
+        return out;
+      }
       // Transcender com a vida baixa: segura △
       if (f.canAwaken() && d > 4 && r < 0.35) {
         this.holdCharge = 1.3;

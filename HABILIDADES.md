@@ -526,3 +526,85 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
 ### Especial: Leonora
 
 250 de dano · custo 50 · cooldown 14 s.
+
+---
+
+## MIGUEL CARIAD
+
+*Se transforma: Miguel → Luzidio (sanidade zerada) → Deus da Morte (morrer durante o Pacto do Santo)* · arma: Punhos, revólver Magnum e a lábia
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Jab | 28 | 1.8 m |  |
+| ○ 2 | Direto | 30 | 1.8 m |  |
+| ○ 3 | Gancho | 34 | 1.8 m |  |
+| ○ 4 | Soco no estômago | 38 | 1.7 m |  |
+| ○ 5 | Supino invertido | 62 | 1.9 m | finalizador: lança |
+| Frente + ○ | Ombrada | 36 | 1.8 m |  |
+| Trás + ○ | Agarrão e empurrão | 32 | 1.5 m | finalizador: afasta |
+| Lado + ○ | Passo e gancho | 32 | 1.8 m |  |
+| No ar + ○ | Soco aéreo | 36 | 1.9 m | desce com impacto |
+| ↑ + ○ (no combo) | Uppercut | 42 | 1.9 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Martelada com os punhos | 50 | 1.9 m | finalizador: derruba |
+
+### Principal (□ / X): Magnum
+
+- Dano 46 · alcance 30 m · cooldown 2.6 s · custo 0
+
+### Habilidades
+
+- **Lábia** — R1 + ○ / RB + B · custo 20 · cooldown 12 s · alcance 5 m
+  O charme do Miguel: o inimigo à frente hesita um instante e bate 20% mais fraco por 5 s.
+- **Pose de Fisiculturista** — R1 + △ / RB + Y · custo 20 · cooldown 16 s
+  Contrai os músculos: socos 25% mais fortes por 7 s.
+- **Tiro na Testa** — R1 + □ / RB + X · custo 20 · cooldown 11 s
+  Mira com calma e dispara a Magnum na cabeça: um tiro só, muito forte.
+- **Marca Espiral** — R1 + L2 / RB + LT · custo 0 · cooldown 30 s
+  Crava o Símbolo Espiral no próprio peito: perde um pouco de vida e TODA a sanidade — vira Luzidio na hora.
+
+### Especial: Equipe Kelvin
+
+250 de dano · custo 50 · cooldown 14 s.
+
+---
+
+## JUAN
+
+*Masoquista e imprevisível: quanto mais apanha, mais sanidade; o Pacto do Hexatombe o transforma no Diabo* · arma: Faca Predadora (lâmina ondulada que absorve sangue)
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Corte rápido | 24 | 1.7 m |  |
+| ○ 2 | Corte de volta | 24 | 1.7 m |  |
+| ○ 3 | Estocada | 28 | 1.9 m |  |
+| ○ 4 | Corte descendente | 30 | 1.7 m |  |
+| ○ 5 | Banho de Sangue | 54 | 1.9 m | finalizador: lança |
+| Frente + ○ | Bote | 32 | 1.9 m |  |
+| Trás + ○ | Recua e corta | 30 | 1.8 m | invulnerável no começo |
+| Lado + ○ | Corte em movimento | 28 | 1.8 m |  |
+| No ar + ○ | Faca aérea | 32 | 1.8 m | desce com impacto |
+| ↑ + ○ (no combo) | Corte para cima | 38 | 1.8 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Faca no chão | 44 | 1.8 m | finalizador: derruba |
+
+### Principal (□ / X): Lâmina de Sangue
+
+- Dano 28 · alcance 18 m · cooldown 2 s · custo 0
+
+### Habilidades
+
+- **Descarnar Discente** — R1 + △ / RB + Y · custo 30 · cooldown 14 s · dano 80 · alcance 9 m
+  Ritual de Sangue: cortes surgem no corpo do alvo, um atrás do outro (dano alto e sangramento).
+- **Perturbação Discente** — R1 + ○ / RB + B · custo 20 · cooldown 12 s · dano 30 · alcance 5 m
+  Uma ordem simples a quem está perto: "PARE!" (paralisa), "VENHA!" (puxa) ou "AJOELHE!" (derruba). Sai uma ao acaso.
+- **Vínculo de Sangue** — R1 + □ / RB + X · custo 25 · cooldown 20 s · alcance 9 m
+  Marca o próprio corpo e o do alvo: por 8 s, 40% do dano que o Juan recebe é replicado no alvo.
+- **Armadura de Sangue Diabólica** — R1 + L2 / RB + LT · custo 30 · cooldown 24 s
+  O próprio sangue endurece numa armadura com espinhos: recebe 30% menos dano, aguenta 2 golpes sem recuar e fica mais rápido.
+
+### Especial: Pacto do Hexatombe
+
+250 de dano · custo 50 · cooldown 60 s.

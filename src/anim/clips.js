@@ -471,6 +471,11 @@ Object.assign(CLIPS, {
   },
 });
 
+// DEUS DA MORTE: postura curvada de primata, braços longos pendurados, cabeça à frente (calma de superioridade)
+const DM = { h: -0.1, hip: [0, -0.15, 0], sp: [0.45, 0.1, 0], hd: [-0.2, -0.1, 0], sL: [-0.25, 0, 0.35], eL: [-0.5, 0, 0], sR: [-0.25, 0, -0.35], eR: [-0.5, 0, 0], lL: [-0.2, 0, 0.16], kL: [0.35, 0, 0], lR: [0.2, 0, -0.16], kR: [0.35, 0, 0] };
+CLIPS.idle_hunch = { dur: 2.4, loop: true, keys: [k(0, DM), k(0.5, { ...DM, h: -0.14, sp: [0.5, 0.1, 0], sL: [-0.2, 0, 0.38], sR: [-0.2, 0, -0.38] }), k(1, DM)] };
+CLIPS.block_hunch = { dur: 0.8, loop: true, keys: [k(0, { ...DM, sp: [0.55, 0, 0], sL: [-1.4, -0.4, 0.2], eL: [-1.9, 0, 0], sR: [-1.4, 0.4, -0.2], eR: [-1.9, 0, 0] }), k(1, { ...DM, sp: [0.57, 0, 0], sL: [-1.4, -0.4, 0.2], eL: [-1.9, 0, 0], sR: [-1.4, 0.4, -0.2], eR: [-1.9, 0, 0] })] };
+
 // ---------- locomoção travada no adversário (V4 etapa 17: o pé não "patina" andando de lado/de costas)
 // guarda em cima, pernas fazendo o passo na direção certa
 const GUARD_TOP = { sp: GUARD.sp, hd: GUARD.hd, sL: GUARD.sL, eL: GUARD.eL, sR: GUARD.sR, eR: GUARD.eR };

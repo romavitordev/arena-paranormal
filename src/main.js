@@ -252,6 +252,9 @@ game.devStart = async ({ kind = 'cpu', team = false, picks, arenaId = DEFAULT_AR
   return game.match;
 };
 
+// Atalho de desenvolvimento: abre a seleção de personagens direto (__game.toSelect('cpu'))
+game.toSelect = (kind = 'cpu', team = false) => { game.mode = { kind, cpu: kind !== 'pvp', team }; toSelect(); };
+
 // Atalho de desenvolvimento: __game.quick('mascarado', 'injustica', true)
 game.quick = (a, b, cpu = false, arenaId = DEFAULT_ARENA, dialogue = false) => {
   setOverlay(null, null);

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { glowMat } from './rig.js';
-import { m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora } from './weapons.js';
+import { m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma } from './weapons.js';
 export { addMascaradoProps } from './characters/mascarado.js';
 
 // Armas e acessórios adicionados em código sobre os modelos do Blender.
@@ -166,6 +166,34 @@ export function addLirioProps(rig) {
   props.helmet = helmet;
 }
 
+// MIGUEL CARIAD: luta com os punhos; a Magnum só aparece na mão direita no tiro
+export function addMiguelProps(rig) {
+  const { sockets, props } = rig;
+  const gun = magnum();
+  gun.visible = false;
+  gun.rotation.x = -1.4;
+  sockets.handR.add(gun);
+  props.gun = gun;
+}
+
+// MIGUEL LUZIDIO (Ferreiro): a Espada Consumidora (duas mãos)
+export function addLuzidioProps(rig) {
+  const { sockets, props } = rig;
+  const sword = espadaConsumidora();
+  sword.rotation.x = -0.25;
+  sockets.handR.add(sword);
+  props.sword = sword;
+}
+
+// JUAN: a Faca Predadora na mão direita
+export function addJuanProps(rig) {
+  const { sockets, props } = rig;
+  const k = facaPredadora();
+  k.rotation.x = -0.3;
+  sockets.handR.add(k);
+  props.knife = k;
+}
+
 // XANDE: taco com arame farpado na mão direita, Skate Caótico na esquerda
 
 export function addXandeProps(rig) {
@@ -218,4 +246,45 @@ export function addDesconjuradoProps(rig) {
   blade.visible = false;
   rig.sockets.handR.add(blade);
   rig.props.fearBlade = blade;
+}
+
+// KEMI / A FANTASMA: faca na mão direita, a Sniper Fantasma pendurada nas costas (vai para a mão no tiro) e o
+// revólver .38 / Pistola Transtornada (aparece só nos tiros). 'stowed' = faca + rifle das costas (somem juntos
+// quando ela ajoelha para mirar). ghost: na forma Fantasma o rifle pinga lodo.
+function kemiProps(rig, ghost) {
+  const { sockets, props } = rig;
+  const k = knife();
+  k.rotation.x = -0.3;
+  sockets.handR.add(k);
+  props.knife = k;
+  const back = sniperFantasma({ drip: ghost });
+  back.rotation.set(0, 0, 2.6);
+  back.position.set(0, 0.05, -0.1);
+  sockets.back.add(back);
+  props.rifleBack = back;
+  const hand = sniperFantasma({ drip: ghost });
+  hand.position.y = -0.02;
+  hand.visible = false;
+  sockets.handR.add(hand);
+  props.sniperHand = hand;
+  rig.muzzle = hand.userData.muzzle;
+  const gun = magnum();
+  gun.scale.setScalar(0.9);
+  gun.rotation.x = -1.4;
+  gun.visible = false;
+  sockets.handR.add(gun);
+  props.pistol = gun;
+  props.stowed = {
+    get visible() { return k.visible; },
+    set visible(v) { k.visible = v; back.visible = v; },
+    traverse(fn) { k.traverse(fn); back.traverse(fn); },
+  };
+}
+
+export function addKemiProps(rig) {
+  kemiProps(rig, false);
+}
+
+export function addFantasmaProps(rig) {
+  kemiProps(rig, true);
 }

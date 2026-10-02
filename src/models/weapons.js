@@ -152,6 +152,64 @@ export function sniper() {
   return g;
 }
 
+// SNIPER FANTASMA (Kemi): rifle preto de cano longo com silenciador, luneta, todo enrolado em faixas claras com
+// pontas soltas penduradas. drip: na forma Fantasma o cano pinga lodo preto. Mesma orientação do sniper(): cano em -Y.
+export function sniperFantasma({ drip = false } = {}) {
+  const g = new THREE.Group();
+  const black = 0x161618;
+  const band = 0xd8ccb0;
+  const body = part(new THREE.BoxGeometry(0.06, 0.55, 0.085), black);
+  body.position.y = -0.1;
+  g.add(body);
+  const stock = part(new THREE.BoxGeometry(0.05, 0.28, 0.12), black);
+  stock.position.set(0, 0.28, -0.02);
+  g.add(stock);
+  const grip = part(new THREE.BoxGeometry(0.035, 0.1, 0.05), black);
+  grip.position.set(0, 0.06, -0.07);
+  grip.rotation.x = 0.4;
+  g.add(grip);
+  const barrel = part(new THREE.CylinderGeometry(0.014, 0.016, 0.8, 8), black);
+  barrel.position.y = -0.75;
+  g.add(barrel);
+  const silencer = part(new THREE.CylinderGeometry(0.026, 0.026, 0.2, 10), 0x0c0c0e);
+  silencer.position.y = -1.2;
+  g.add(silencer);
+  const scope = part(new THREE.CylinderGeometry(0.026, 0.03, 0.32, 10), black);
+  scope.position.set(0, -0.16, 0.085);
+  g.add(scope);
+  // faixas enroladas: no corpo, na luneta e no cano (com duas pontas soltas penduradas)
+  for (const [y, r, z] of [[0.2, 0.072, -0.02], [-0.02, 0.066, 0], [-0.2, 0.066, 0], [-0.1, 0.034, 0.085], [-0.25, 0.034, 0.085], [-0.55, 0.022, 0], [-0.85, 0.022, 0]]) {
+    const w = part(new THREE.CylinderGeometry(r, r, 0.045, 10, 1, true), band, { mat: toon(band, { side: THREE.DoubleSide }) });
+    w.position.set(0, y, z);
+    w.rotation.x = 0.12;
+    g.add(w);
+  }
+  for (const [y, len] of [[-0.55, 0.32], [-0.02, 0.24]]) {
+    const strip = part(new THREE.PlaneGeometry(0.035, len), band, { mat: toon(band, { side: THREE.DoubleSide }) });
+    strip.position.set(0.01, y - 0.02, -0.04 - len / 2);
+    strip.rotation.x = Math.PI / 2 - 0.25;
+    g.add(strip);
+  }
+  if (drip) {
+    // lodo preto escorrendo do cano
+    const lodo = toon(0x050406, { emissive: 0x0a0508 });
+    for (const [y, l] of [[-1.28, 0.14], [-1.12, 0.09], [-0.9, 0.11]]) {
+      const d = part(new THREE.CylinderGeometry(0.008, 0.016, l, 6), 0x050406, { mat: lodo });
+      d.position.set(0, y, -0.03 - l / 2);
+      d.rotation.x = Math.PI / 2;
+      g.add(d);
+      const drop = part(new THREE.SphereGeometry(0.016, 6, 4), 0x050406, { mat: lodo });
+      drop.position.set(0, y, -0.035 - l);
+      g.add(drop);
+    }
+  }
+  const muzzle = new THREE.Object3D();
+  muzzle.position.y = -1.32;
+  g.add(muzzle);
+  g.userData.muzzle = muzzle;
+  return g;
+}
+
 // Suporte nas costas semelhante a um case de violão
 export function guitarCase() {
   const g = new THREE.Group();
@@ -540,6 +598,87 @@ export function leonora() {
     head.add(paw);
   }
   g.userData.head = head; // ponto de impacto (poeira/faíscas) e onde a maldição de Sangue se enrosca
+  return g;
+}
+
+// MAGNUM (Miguel Cariad): revólver grande de cano longo, preto com cabo de madeira
+export function magnum() {
+  const g = new THREE.Group();
+  const grip = part(new THREE.BoxGeometry(0.03, 0.11, 0.045), 0x5a3a22);
+  grip.position.set(0, 0.03, -0.01);
+  grip.rotation.x = 0.25;
+  g.add(grip);
+  const frame = part(new THREE.BoxGeometry(0.03, 0.06, 0.07), 0x1c1c20);
+  frame.position.set(0, -0.04, 0.02);
+  g.add(frame);
+  const drum = part(new THREE.CylinderGeometry(0.026, 0.026, 0.05, 6), 0x2a2a30);
+  drum.rotation.x = Math.PI / 2;
+  drum.position.set(0, -0.05, 0.05);
+  g.add(drum);
+  const barrel = part(new THREE.CylinderGeometry(0.011, 0.011, 0.2, 8), 0x1c1c20);
+  barrel.rotation.x = Math.PI / 2;
+  barrel.position.set(0, -0.045, 0.17);
+  g.add(barrel);
+  return g;
+}
+
+// ESPADA CONSUMIDORA (Ferreiro): lâmina enorme e larga, cabo vermelho com pedras pretas; arma amaldiçoada.
+// Empunhada no cabo (origem); a lâmina segue para -Y, o fio virado para +Z.
+export function espadaConsumidora() {
+  const g = new THREE.Group();
+  const handle = part(new THREE.CylinderGeometry(0.03, 0.032, 0.38, 10), 0x8a1418);
+  handle.position.y = 0.06;
+  g.add(handle);
+  for (const y of [0.18, 0.1, 0.02, -0.06]) {
+    const stone = part(new THREE.OctahedronGeometry(0.022), 0x0a0a0c, { mat: toon(0x0a0a0c, { emissive: 0x150818 }) });
+    stone.position.set(0, y, 0.03);
+    g.add(stone);
+  }
+  const pommel = part(new THREE.SphereGeometry(0.04, 10, 8), 0x2a2a2e);
+  pommel.position.y = 0.27;
+  g.add(pommel);
+  const guard = part(new THREE.BoxGeometry(0.06, 0.05, 0.32), 0x3a3a40);
+  guard.position.y = -0.14;
+  g.add(guard);
+  const shape = new THREE.Shape();
+  shape.moveTo(-0.09, 0);
+  shape.lineTo(-0.1, -1.05);
+  shape.lineTo(0, -1.3);
+  shape.lineTo(0.1, -1.05);
+  shape.lineTo(0.09, 0);
+  shape.lineTo(-0.09, 0);
+  const blade = part(extrude(shape, 0.022), 0x8a8c94, { mat: toon(0x8a8c94) });
+  blade.rotation.y = -Math.PI / 2; // fio para a frente (+Z)
+  blade.position.y = -0.16;
+  g.add(blade);
+  // sulco escuro no meio da lâmina
+  const fuller = part(new THREE.BoxGeometry(0.03, 0.85, 0.03), 0x3a3a42, { outline: false });
+  fuller.position.set(0, -0.62, 0);
+  g.add(fuller);
+  return g;
+}
+
+// FACA PREDADORA (Juan): faca bonita com a lâmina toda em ondas (como um kris), cabo escuro com anel de metal.
+export function facaPredadora() {
+  const g = new THREE.Group();
+  const grip = part(new THREE.CylinderGeometry(0.02, 0.022, 0.12, 8), 0x2a1a1a);
+  grip.position.y = 0.04;
+  g.add(grip);
+  const ring = part(new THREE.TorusGeometry(0.024, 0.006, 5, 10), 0xb8b8c0, { outline: false });
+  ring.rotation.x = Math.PI / 2;
+  ring.position.y = -0.02;
+  g.add(ring);
+  // lâmina ondulada: contorno senoidal
+  const s = new THREE.Shape();
+  const len = 0.3;
+  const N = 14;
+  s.moveTo(-0.022, 0);
+  for (let i = 1; i <= N; i++) { const t = i / N; s.lineTo(-0.022 * (1 - t * 0.85) + Math.sin(t * Math.PI * 5) * 0.01, -len * t); }
+  for (let i = N; i >= 0; i--) { const t = i / N; s.lineTo(0.022 * (1 - t * 0.85) + Math.sin(t * Math.PI * 5) * 0.01, -len * t); }
+  const blade = part(extrude(s, 0.006), 0xc8c8d0, { mat: toon(0xc8c8d0) });
+  blade.rotation.y = -Math.PI / 2;
+  blade.position.y = -0.03;
+  g.add(blade);
   return g;
 }
 

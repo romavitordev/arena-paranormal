@@ -1,6 +1,6 @@
 import { KEYBOARD_LAYOUTS, PLAYER_DEVICES, BUTTON_LABELS } from '../config/controls.js';
 
-const NAMES = { Space: 'Espaço', Semicolon: 'Ç', Escape: 'Esc', Backspace: '⌫', ArrowUp: '↑', ArrowDown: '↓', ArrowLeft: '←', ArrowRight: '→' };
+const NAMES = { Space: 'Espaço', Semicolon: 'Ç', Escape: 'Esc', Backspace: '⌫', ArrowUp: '↑', ArrowDown: '↓', ArrowLeft: '←', ArrowRight: '→', ShiftLeft: 'Shift', ShiftRight: 'Shift D', PageUp: 'PgUp', PageDown: 'PgDn', NumpadDivide: 'N/', NumpadMultiply: 'N*', NumpadSubtract: 'N-', NumpadAdd: 'N+', NumpadDecimal: 'N,' };
 
 export function keyName(code) {
   if (NAMES[code]) return NAMES[code];

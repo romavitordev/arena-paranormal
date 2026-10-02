@@ -1,7 +1,7 @@
 import { buildCineraria } from './characters/cineraria.js';
 import { buildAbutre } from './characters/abutre.js';
 import { buildMascarado } from './characters/mascarado.js';
-import { addCinerariaProps, addAbutreProps, addMascaradoProps, addVampiraProps, addInjusticaProps, addDesconjuradoProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps } from './props.js';
+import { addCinerariaProps, addAbutreProps, addMascaradoProps, addVampiraProps, addInjusticaProps, addDesconjuradoProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps, addMiguelProps, addLuzidioProps, addJuanProps, addKemiProps, addFantasmaProps } from './props.js';
 import { buildVampira } from './characters/vampira.js';
 import { buildInjustica } from './characters/injustica.js';
 import { buildDesconjurado } from './characters/desconjurado.js';
@@ -25,6 +25,13 @@ export const MODEL_BUILDERS = {
   labirinto: buildDesconjurado,
   xande: buildCineraria,
   lirio: buildAbutre,
+  miguel: buildAbutre,
+  miguel_luzidio: buildAbutre,
+  deus_morte: buildAbutre,
+  juan: buildVampira,
+  diabo: buildVampira,
+  kemi: buildVampira,
+  fantasma: buildVampira,
 };
 
 // Modelos do Blender + armas/acessórios adicionados em código
@@ -41,6 +48,13 @@ const BLENDER_MODELS = {
   labirinto: { url: 'models/labirinto.glb', props: addLabirintoProps },
   xande: { url: 'models/xande.glb', props: addXandeProps },
   lirio: { url: 'models/lirio.glb', props: addLirioProps },
+  miguel: { url: 'models/miguel.glb', props: addMiguelProps },
+  miguel_luzidio: { url: 'models/miguel_luzidio.glb', props: addLuzidioProps }, // forma Luzidia (Ferreiro)
+  deus_morte: { url: 'models/deus_morte.glb', props: null }, // forma de chefe (sem armas)
+  juan: { url: 'models/juan.glb', props: addJuanProps },
+  diabo: { url: 'models/diabo.glb', props: null }, // Portador do Trono (garras)
+  kemi: { url: 'models/kemi.glb', props: addKemiProps },
+  fantasma: { url: 'models/fantasma.glb', props: addFantasmaProps }, // forma das Faixas
 };
 
 const loaded = {};

@@ -153,6 +153,19 @@
     Pesado também contra quem defende → 52% (variação grande entre rodadas). Contra o Kaiser perdeu 5 de 6 nas duas
     rodadas: o kit dele é cheio de lentidão (névoa, Nebulosa, Dendrobium), que pune o personagem mais lento — contra
     natural, mantido. Vence com folga quem luta colado (Arthur, Joui, Gal, Kian).
+- ✅ NOVO: MIGUEL CARIAD (3 formas). Sanidade em Queda (apanhar tira sanidade); sanidade zerada → LUZIDIO (2,20 m,
+  pele cinza, barba branca, Espada Consumidora; especial PACTO DO SANTO exige 85% e dura 45 s); morrer no pacto →
+  DEUS DA MORTE (chefe 2x maior, 1300 de vida, barra preta no centro, fraco a fogo/Energia ×1,5, regenera 60 a cada
+  6 s, inabalável após 3 golpes seguidos; Espiral Descendente, Controlar Mortos, Senhor do Tempo). Sistema genérico de
+  FORMAS (combat/forms.js + characters/forms/), câmera se ajusta ao tamanho, HUD troca nome/habilidades.
+- ✅ NOVO: JUAN (Henri) — Faca Predadora (cura), Descarnar Discente, Perturbação Discente, Vínculo de Sangue, Armadura
+  de Sangue Diabólica, Masoquista; especial PACTO DO HEXATOMBE → O DIABO por 40 s (+350 de vida que se perde ao voltar).
+- ✅ Seleção com páginas de 15 (3×5, sem rolagem); LB/RB, Q/E ou PgUp/PgDn trocam de página.
+- ✅ Teclado refeito: losango I J K L = △ □ × ○ (como no controle), Q = R1, E = R2, Shift = L2, 1-4 equipe; P2 no numérico.
+- ✅ Celular: joystick, losango, R1/DEF/ESQ, ESPECIAL, pausa e equipe na tela; menus com setas/OK/VOLTAR; HUD e menus
+  compactos em tela baixa; aviso para girar em retrato. Some sozinho quando o jogador usa teclado/controle.
+- ⏭ Polir: Diabo (chifres finos, braços extras e pernas de bode pouco visíveis), jaqueta do Miguel, enquadramento dos
+  retratos das formas grandes; equilíbrio do Miguel (perdeu de Kaiser/Erin) e do Juan; animações próprias das formas.
 - Gal, Erin, Aguiar, Labirinto e Xande já foram feitos/revisados com as referências nas rodadas anteriores.
 - ✅ V4 etapa 12 Armature: esqueleto com root → hips → sp → chest → neck → hd, mãos (handL/R) e pés (footL/R),
   18 ossos em todos os 11 personagens (auditoria exige). Pesos: mão abaixo do punho, pé abaixo do tornozelo, pescoço

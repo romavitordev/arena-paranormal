@@ -1,0 +1,108 @@
+import * as THREE from 'three';
+import { yawTo, distXZ } from '../../core/util.js';
+import { COMBAT } from '../../config/combat.js';
+import { applyHit } from '../damage.js';
+import { trySpecialBlock } from './common.js';
+import { faceClose, overShoulder, pullBack } from '../../camera/shots.js';
+
+// DISPARO ESPIRAL (A Fantasma): o mundo para, ela ajoelha e as faixas puxam o rifle — a bala sai em curva, desenhando
+// uma espiral de Morte no ar, contorna qualquer cobertura e atravessa o alvo. Se ele já estava morrendo
+// (vida ≤ sp.executeBelow), a espiral termina o serviço (sp.executeMult).
+export const spiralSnipe = {
+  canStart(f, sp) {
+    const opp = f.opponent;
+    return !!opp && opp.state !== 'ko' && opp.visible && distXZ(f.pos, opp.pos) <= (sp.range ?? 40);
+  },
+
+  start(f, sp, world) {
+    const opp = f.opponent;
+    if (trySpecialBlock(world, f, opp, sp)) return { update: () => true, cancel() {} };
+    const show = (v) => {
+      if (sp.showProp && f.rig.props[sp.showProp]) f.rig.showProp(sp.showProp, v);
+      if (sp.hideProp && f.rig.props[sp.hideProp]) f.rig.showProp(sp.hideProp, !v);
+    };
+    world.beginCinematic(f, opp);
+    f.vel.set(0, 0, 0);
+    f.yaw = yawTo(f.pos, opp.pos);
+    opp.anim.play('idle', { restart: true });
+    show(true);
+    f.anim.play('sniper_kneel', { restart: true, duration: 0.5 });
+    world.audio.play('fearGaze', { volume: 0.7, pitch: 0.4 });
+    world.cameraRig.playShots([
+      faceClose(f, { dur: 0.9, from: 1.9, to: 1.2, side: -0.3, height: 1.1 }),
+      overShoulder(f, opp, { dur: 0.9, back: 1.4, side: 0.6, height: 1.3, fov: 34 }),
+      pullBack(f, opp, { dur: 1.1, from: 3, to: 7, height: 2.4 }),
+    ]);
+    const muzzle = () => (f.rig.muzzle && f.rig.muzzle.parent && f.rig.muzzle.parent.visible ? f.rig.muzzle.getWorldPosition(new THREE.Vector3()) : f.chestPos());
+    let t = 0;
+    let fired = false;
+    let hit = false;
+    let bullet = null;
+    let from = null;
+    const color = sp.color ?? 0xd8d4dc;
+    world.showBanner(sp.banner || sp.name, f.def.color);
+    return {
+      update(dt) {
+        t += dt;
+        if (!fired && t < 1.5 && Math.random() < 0.6) {
+          // a mira: linha fina que treme e se firma
+          world.fx.tracer(muzzle(), opp.chestPos(), { color: 0xd8d4dc, life: 0.05, width: 0.008 + t * 0.01 });
+        }
+        if (!fired && t >= 1.5) {
+          fired = true;
+          from = muzzle();
+          f.anim.play('sniper_fire', { restart: true, duration: 0.7 });
+          world.audio.play('sniper', { volume: 1.2 });
+          world.fx.flash(from, { color, size: 2.6, life: 0.14 });
+          world.fx.burst(from, { count: 14, color: 0x0a080c, kind: 'smoke', speed: 1.5, life: 0.8, size: 0.5, grow: 1 });
+          bullet = new THREE.Mesh(new THREE.SphereGeometry(0.09, 8, 6), new THREE.MeshBasicMaterial({ color }));
+          world.scene.add(bullet);
+        }
+        if (bullet && !hit) {
+          // a bala curva: espiral larga que fecha no alvo
+          const k = Math.min(1, (t - 1.5) / 0.45);
+          const to = opp.chestPos();
+          const p = from.clone().lerp(to, k);
+          const dir = to.clone().sub(from).normalize();
+          const side = new THREE.Vector3().crossVectors(dir, new THREE.Vector3(0, 1, 0)).normalize();
+          const up = new THREE.Vector3().crossVectors(side, dir);
+          const amp = Math.sin(k * Math.PI) * 0.9;
+          const ang = k * Math.PI * 6;
+          p.addScaledVector(side, Math.cos(ang) * amp).addScaledVector(up, Math.sin(ang) * amp);
+          bullet.position.copy(p);
+          world.fx.burst(p, { count: 3, color: 0x0a080c, kind: 'smoke', speed: 0.2, life: 0.9, size: 0.35 });
+          world.fx.burst(p, { count: 1, color, speed: 0.1, life: 0.5, size: 0.12 });
+          if (k >= 1) {
+            hit = true;
+            world.scene.remove(bullet);
+            bullet.geometry.dispose();
+            bullet.material.dispose();
+            bullet = null;
+            const base = sp.damage ?? COMBAT.specialDamage;
+            const exec = opp.health / opp.maxHealth <= (sp.executeBelow ?? 0) ? sp.executeMult ?? 1 : 1;
+            applyHit(world, f, opp, { damage: Math.round(base * exec), kind: 'special', element: 'morte', reaction: false, ignoreInvuln: true, sound: 'heavyPunch', color, scale: 2.2 });
+            const c = opp.chestPos();
+            world.fx.distort(c, { color: 0xa7a3ad, radius: 3, life: 0.5 });
+            for (let i = 0; i < 4; i++) world.after(i * 0.08, () => world.fx.ring(c, { color: 0x1a1620, radius: 0.6 + i * 0.6, life: 0.5, vertical: true, yaw: f.yaw }));
+            world.fx.burst(c, { count: 40, color: 0x0a080c, kind: 'smoke', speed: 4, life: 0.9, size: 0.5, grow: 1 });
+            world.cameraRig.shake(0.6, 0.35);
+            if (exec > 1) opp.notify('ESPIRAL DA MORTE', true);
+            if (opp.state !== 'ko') opp.anim.play('launched', { restart: true });
+          }
+        }
+        if (t >= 2.6) {
+          show(false);
+          world.endCinematic();
+          if (opp.state !== 'ko') opp.stun(0.4, 'stagger');
+          return true;
+        }
+        return false;
+      },
+      cancel() {
+        if (bullet) { world.scene.remove(bullet); bullet = null; }
+        show(false);
+        world.endCinematic();
+      },
+    };
+  },
+};

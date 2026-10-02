@@ -1,0 +1,19 @@
+// FORMAS: definições completas de personagem que NÃO aparecem na seleção — o lutador vira uma delas no meio da luta
+// (ver combat/forms.js). Ex.: Miguel → Luzidio → Deus da Morte; Juan → Diabo; Kemi → Fantasma.
+import miguelLuzidio from './miguel_luzidio.js';
+import deusMorte from './deus_morte.js';
+import diabo from './diabo.js';
+import fantasma from './fantasma.js';
+
+export const FORMS = {};
+
+export function registerForm(def) {
+  FORMS[def.id] = def;
+  return def;
+}
+
+export function getForm(id) {
+  return FORMS[id];
+}
+
+[miguelLuzidio, deusMorte, diabo, fantasma].forEach(registerForm);

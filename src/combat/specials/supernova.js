@@ -128,7 +128,7 @@ export const supernova = {
       world.screenFlash && world.screenFlash('#fff2d0', 0.14);
       world.audio.play('explosion', { volume: 1.4 });
       world.cameraRig.shake(0.8, 0.45);
-      applyHit(world, f, opp, { damage: blastDmg, kind: 'special', reaction: false, ignoreInvuln: true, sound: 'heavyPunch', color, scale: 2.4 });
+      applyHit(world, f, opp, { damage: blastDmg, kind: 'special', fire: true, reaction: false, ignoreInvuln: true, sound: 'heavyPunch', color, scale: 2.4 });
       if (opp.state !== 'ko') opp.anim.play('launched', { restart: true });
       world.showBanner(sp.banner || 'SUPERNOVA', f.def.color);
       // close nela sorrindo, com o clarão atrás

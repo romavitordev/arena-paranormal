@@ -283,6 +283,23 @@ function mazeLines(g, x0, y0, w, h, cell, color, width = 1.6) {
   }
 }
 
+// feixes de tendão (Deus da Morte): cordas paralelas onduladas, escuras no meio e claras nas bordas
+function tendonRopes(g, w, h) {
+  g.fillStyle = '#0c0b0e'; g.fillRect(0, 0, w, h);
+  let x = 0;
+  while (x < w) {
+    const bw = 5 + Math.random() * 9;
+    const ph = Math.random() * 6;
+    for (const [off, col, lw] of [[0, 'rgba(18,16,22,1)', bw], [-bw * 0.35, 'rgba(92,88,100,0.55)', 1.4], [bw * 0.3, 'rgba(40,38,46,0.9)', 1]]) {
+      g.strokeStyle = col; g.lineWidth = lw;
+      g.beginPath();
+      for (let y = 0; y <= h; y += 16) g.lineTo(x + off + Math.sin(y * 0.025 + ph) * 5, y);
+      g.stroke();
+    }
+    x += bw * 0.85;
+  }
+}
+
 export const MATERIAL_TEXTURES = {
   // ---------------- CINERARIA: queimadura no lado ESQUERDO (x > 256)
   face_cineraria: face((g) => {
@@ -628,6 +645,239 @@ export const MATERIAL_TEXTURES = {
     g.strokeStyle = 'rgba(150,140,128,0.45)'; g.lineWidth = 1;
     for (let i = 0; i < 600; i++) { const x = Math.random() * 128; const y = Math.random() * 128; g.beginPath(); g.moveTo(x, y); g.lineTo(x + (Math.random() - 0.5) * 6, y + 4 + Math.random() * 5); g.stroke(); }
   }, { wrap: true, repeat: [3, 2] }),
+
+  // ---------------- MIGUEL CARIAD: rosto quadrado de fisiculturista, barba rala; tatuagem tribal no antebraço direito
+  face_miguel: face((g) => {
+    stubble(g, 'rgba(25,18,14,0.3)', 1100, { y0: 150, y1: 225, w: 86 });
+  }, {
+    skin: '#e2b89a',
+    eye: { iris: '#4a2e1a', irisLight: '#7a5030', tilt: 0.02 },
+    brow: { angry: 3, thick: 6.5, color: '#121214' },
+    mouth: { mouthW: 15, smile: 1, smirk: 2 },
+  }),
+  arms_miguel: () => canvasTex(256, 256, (g) => {
+    g.fillStyle = '#e2b89a'; g.fillRect(0, 0, 256, 256);
+    // tribal: faixas pretas grossas que dão a volta no antebraço, com pontas de espinho (como na arte da Equipe Kelvin)
+    g.fillStyle = '#141214';
+    for (const [y, hgt] of [[150, 14], [178, 22], [214, 12]]) {
+      g.fillRect(0, y, 256, hgt);
+      for (let x = 0; x < 256; x += 32) {
+        g.beginPath(); g.moveTo(x, y); g.lineTo(x + 16, y - 16); g.lineTo(x + 26, y); g.closePath(); g.fill();
+        g.beginPath(); g.moveTo(x + 6, y + hgt); g.lineTo(x + 20, y + hgt + 14); g.lineTo(x + 30, y + hgt); g.closePath(); g.fill();
+      }
+    }
+  }, { wrap: true }),
+  tee_miguel: () => canvasTex(256, 128, (g) => {
+    g.fillStyle = '#3a4436'; g.fillRect(0, 0, 256, 128);
+    g.strokeStyle = 'rgba(0,0,0,0.12)'; g.lineWidth = 1;
+    for (let y = 0; y < 128; y += 4) { g.beginPath(); g.moveTo(0, y); g.lineTo(256, y); g.stroke(); }
+    // gola em V
+    g.strokeStyle = '#2a3226'; g.lineWidth = 4;
+    g.beginPath(); g.moveTo(108, 0); g.lineTo(128, 22); g.lineTo(148, 0); g.stroke();
+  }, { wrap: true }),
+
+  // ---------------- MIGUEL LUZIDIO (Ferreiro): pele cinza, olhos todo pretos, faixas pretas dos olhos às bochechas e do
+  // nariz subindo pela cabeça; queimaduras nos braços
+  face_luzidio: face((g) => {
+    g.fillStyle = 'rgba(12,12,14,0.92)';
+    // faixa do nariz subindo pela testa
+    g.beginPath(); g.moveTo(CX - 7, 150); g.lineTo(CX - 10, 0); g.lineTo(CX + 10, 0); g.lineTo(CX + 7, 150); g.closePath(); g.fill();
+    // faixas que descem dos olhos curvando para as bochechas
+    for (const s of [-1, 1]) {
+      g.beginPath();
+      g.moveTo(CX + s * 22, EYE_Y + 4);
+      g.quadraticCurveTo(CX + s * 30, EYE_Y + 50, CX + s * 58, EYE_Y + 78);
+      g.lineTo(CX + s * 66, EYE_Y + 70);
+      g.quadraticCurveTo(CX + s * 44, EYE_Y + 40, CX + s * 40, EYE_Y + 4);
+      g.closePath(); g.fill();
+    }
+    // queimadura parcial no rosto (lado direito)
+    g.fillStyle = 'rgba(120,70,60,0.45)';
+    g.beginPath(); g.ellipse(CX - 70, 180, 26, 34, 0.3, 0, Math.PI * 2); g.fill();
+  }, {
+    skin: '#8e9096',
+    eye: { iris: '#050506', irisLight: '#101012', sclera: '#0a0a0c', tilt: 0.04 },
+    brow: { angry: 4, thick: 6, color: '#d8d6d0' },
+    mouth: { mouthW: 14, smile: 0 },
+  }),
+  arms_luzidio: () => canvasTex(256, 256, (g) => {
+    g.fillStyle = '#8e9096'; g.fillRect(0, 0, 256, 256);
+    // queimaduras do molotov (manchas avermelhadas com bordas mais escuras)
+    for (let i = 0; i < 26; i++) {
+      const x = Math.random() * 256; const y = 90 + Math.random() * 166; const r = 8 + Math.random() * 22;
+      g.fillStyle = Math.random() < 0.5 ? 'rgba(130,70,62,0.55)' : 'rgba(150,96,86,0.45)';
+      g.beginPath(); g.ellipse(x, y, r, r * 0.7, Math.random() * 3, 0, Math.PI * 2); g.fill();
+      g.strokeStyle = 'rgba(60,30,26,0.5)'; g.lineWidth = 1.2; g.stroke();
+    }
+  }, { wrap: true }),
+
+  // ---------------- DEUS DA MORTE: tendões de Lodo preto, espiral no peito, crânio com as faixas Luzidias
+  // tendões: cordas fibrosas pretas e cinza, com as bordas de cada feixe mais claras (como nas artes)
+  lodo_tendon: () => canvasTex(256, 256, (g) => tendonRopes(g, 256, 256), { wrap: true, repeat: [2, 1] }),
+  // peito: os tendões se retorcem numa ESPIRAL, que brilha em vermelho (emissiveMap)
+  lodo_chest: () => {
+    const spiral = (g, glow) => {
+      for (let k = 0; k < (glow ? 2 : 3); k++) {
+        g.strokeStyle = glow ? (k ? 'rgba(255,120,90,0.9)' : 'rgba(255,40,30,0.95)') : k === 1 ? 'rgba(120,114,126,0.9)' : 'rgba(8,6,10,0.95)';
+        g.lineWidth = glow ? (k ? 2 : 6) : k === 1 ? 3 : 8;
+        g.beginPath();
+        for (let t = 0; t < 1; t += 0.008) {
+          const a = t * Math.PI * 7;
+          const r = 5 + t * 78 + k * 2;
+          const x = 256 + Math.cos(a) * r;
+          const y = 186 + Math.sin(a) * r * 0.6; // no tronco o V cresce de baixo para cima: 186 ≈ meio do peito
+          if (t === 0) g.moveTo(x, y); else g.lineTo(x, y);
+        }
+        g.stroke();
+      }
+    };
+    const map = canvasTex(512, 256, (g) => { tendonRopes(g, 512, 256); spiral(g, false); }, { wrap: true });
+    const emissiveMap = canvasTex(512, 256, (g) => {
+      g.fillStyle = '#000'; g.fillRect(0, 0, 512, 256);
+      const grd = g.createRadialGradient(256, 186, 4, 256, 186, 90);
+      grd.addColorStop(0, 'rgba(120,10,8,0.8)'); grd.addColorStop(1, 'rgba(0,0,0,0)');
+      g.fillStyle = grd; g.fillRect(150, 100, 212, 156);
+      spiral(g, true);
+    }, { wrap: true });
+    return { map, emissiveMap, emissive: 0xff3a2a };
+  },
+  face_skull: () => canvasTex(W, HT, (g) => {
+    // crânio exposto (osso amarelado), órbitas fundas, nariz triangular e dentes; faixas Luzidias no osso
+    g.fillStyle = '#d8d0bc'; g.fillRect(0, 0, W, HT);
+    g.fillStyle = 'rgba(150,140,120,0.5)';
+    for (let i = 0; i < 300; i++) g.fillRect(Math.random() * W, Math.random() * HT, 2, 2);
+    g.fillStyle = '#060506';
+    for (const s of [-1, 1]) { g.beginPath(); g.ellipse(CX + s * 32, EYE_Y + 2, 22, 18, 0, 0, Math.PI * 2); g.fill(); }
+    g.beginPath(); g.moveTo(CX, 140); g.lineTo(CX - 11, 170); g.lineTo(CX + 11, 170); g.closePath(); g.fill();
+    g.fillStyle = '#efe8d6';
+    for (let i = -4; i <= 4; i++) { g.fillRect(CX + i * 9 - 3.5, 186, 7, 14); }
+    g.strokeStyle = '#3a342c'; g.lineWidth = 1.5;
+    g.strokeRect(CX - 40, 186, 80, 14);
+    g.fillStyle = 'rgba(12,12,14,0.85)';
+    g.fillRect(CX - 7, 0, 14, 128); // faixa preta vertical do topo do crânio até o nariz
+    for (const s of [-1, 1]) { g.beginPath(); g.moveTo(CX + s * 30, EYE_Y + 18); g.lineTo(CX + s * 52, EYE_Y + 78); g.lineTo(CX + s * 62, EYE_Y + 72); g.lineTo(CX + s * 42, EYE_Y + 16); g.closePath(); g.fill(); }
+  }, { wrap: true }),
+
+  // ---------------- JUAN (Henri): olho ESQUERDO perdido (buraco com cicatriz), o direito esbranquiçado, piercings na
+  // boca e no olho, olheiras; torso cheio de cortes e frases tatuadas (menos o peito/braço esquerdo)
+  // KEMI: pele negra, olhos âmbar, piercing no septo
+  face_kemi: face((g) => {
+    g.strokeStyle = '#c8c8d0'; g.lineWidth = 2.4;
+    g.beginPath(); g.arc(CX, NOSE_Y + 6, 5, 0.2, Math.PI - 0.2); g.stroke();
+  }, {
+    skin: '#5a3a28',
+    eye: { iris: '#b8801a', irisLight: '#f0b040', tilt: 0.02, lashes: true },
+    brow: { angry: 3, thick: 4, color: '#2a1810' },
+    mouth: { mouthW: 15, lip: 'rgba(60,30,26,0.6)' },
+  }),
+  // A FANTASMA: rosto todo enfaixado; só os olhos âmbar numa fenda de escuridão
+  face_fantasma: () => canvasTex(W, HT, (g) => {
+    g.fillStyle = '#ddd2ba'; g.fillRect(0, 0, W, HT);
+    g.strokeStyle = 'rgba(120,100,70,0.55)'; g.lineWidth = 2;
+    for (let y = 6; y < HT; y += 14) { g.beginPath(); g.moveTo(0, y); g.lineTo(W, y + 10); g.stroke(); }
+    g.fillStyle = '#060406'; g.fillRect(0, EYE_Y - 16, W, 30);
+    g.fillStyle = '#f0a020';
+    for (const s of [-1, 1]) { g.beginPath(); g.arc(CX + s * 32, EYE_Y, 4.5, 0, Math.PI * 2); g.fill(); }
+  }, { wrap: true }),
+  face_juan: face((g) => {
+    // olho esquerdo arrancado: órbita escura com cicatriz e sangue seco
+    g.fillStyle = '#2a0e0c';
+    g.beginPath(); g.ellipse(CX + 32, EYE_Y, 17, 10, 0.08, 0, Math.PI * 2); g.fill();
+    g.strokeStyle = 'rgba(140,40,36,0.85)'; g.lineWidth = 3; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(CX + 26, EYE_Y - 30); g.lineTo(CX + 40, EYE_Y + 34); g.stroke();
+    // piercings: três no canto esquerdo da boca e três em volta do olho perdido
+    g.fillStyle = '#d8d8de';
+    for (const [x, y] of [[CX + 17, 196], [CX + 20, 203], [CX + 15, 209], [CX + 52, EYE_Y - 14], [CX + 56, EYE_Y - 2], [CX + 52, EYE_Y + 10]]) { g.beginPath(); g.arc(x, y, 2.4, 0, Math.PI * 2); g.fill(); }
+    // olheiras e respingos de sangue
+    g.fillStyle = 'rgba(90,40,50,0.35)';
+    g.beginPath(); g.ellipse(CX - 32, EYE_Y + 12, 16, 5, 0, 0, Math.PI * 2); g.fill();
+    g.fillStyle = 'rgba(140,16,20,0.55)';
+    for (let i = 0; i < 14; i++) { g.beginPath(); g.arc(CX - 80 + Math.random() * 160, 140 + Math.random() * 90, 1.5 + Math.random() * 2.5, 0, Math.PI * 2); g.fill(); }
+    // "psycho" tatuado na lateral da cabeça
+    g.fillStyle = 'rgba(25,20,24,0.85)'; g.font = 'italic 16px serif';
+    g.fillText('psycho', CX - 175, 70);
+  }, {
+    skin: '#d8a888',
+    eye: { iris: '#d8d4cc', irisLight: '#f4f2ee', irisL: '#2a0e0c', tilt: 0.1 },
+    brow: { angry: 3, thick: 4.5, color: '#3a2412' },
+    mouth: { mouthW: 17, smile: 5, smirk: 3, lip: 'rgba(150,60,60,0.4)' },
+  }),
+  torso_juan: () => canvasTex(512, 256, (g) => {
+    g.fillStyle = '#d8a888'; g.fillRect(0, 0, 512, 256);
+    // frases sombrias tatuadas (como as dos Escriptas), menos no peito esquerdo (x entre 256 e 330 na frente)
+    g.fillStyle = 'rgba(25,20,24,0.8)'; g.font = '10px serif';
+    const L = 'sangue livre dor desejo novo começo não quero morrer correntes quebradas o diabo escuta ';
+    for (let y = 14; y < 256; y += 13) {
+      let x = (y % 26) - 10;
+      while (x < 512) {
+        const w = 90;
+        if (!(x > 250 && x < 330)) g.fillText(L.slice((x + y) % 40, ((x + y) % 40) + 14), x, y);
+        x += w;
+      }
+    }
+    // cortes (vermelhos, alguns frescos)
+    for (let i = 0; i < 22; i++) {
+      const x = Math.random() * 512; const y = Math.random() * 256; const len = 10 + Math.random() * 28; const a = -1 + Math.random() * 2;
+      g.strokeStyle = Math.random() < 0.5 ? 'rgba(170,30,34,0.85)' : 'rgba(120,50,46,0.7)'; g.lineWidth = 1.5 + Math.random() * 1.5;
+      g.beginPath(); g.moveTo(x, y); g.lineTo(x + Math.cos(a) * len, y + Math.sin(a) * len); g.stroke();
+    }
+  }, { wrap: true }),
+  arms_juan: () => canvasTex(256, 256, (g) => {
+    g.fillStyle = '#d8a888'; g.fillRect(0, 0, 256, 256);
+    g.fillStyle = 'rgba(25,20,24,0.75)'; g.font = '10px serif';
+    for (let y = 14; y < 256; y += 13) g.fillText('dor desejo liberdade sangue', (y * 3) % 40 - 20, y);
+    g.fillStyle = 'rgba(140,16,20,0.5)';
+    for (let i = 0; i < 30; i++) { g.beginPath(); g.arc(Math.random() * 256, Math.random() * 256, 1 + Math.random() * 3, 0, Math.PI * 2); g.fill(); }
+  }, { wrap: true }),
+
+  // ---------------- O DIABO (Juan Portador do Trono): sorriso enorme e dentado, olho preto de íris amarela (o outro
+  // perdido, como o do Juan), nariz grande; torso com o símbolo de Sangue, boca vertical no umbigo e Sigilos de
+  // Conhecimento DOURADOS brilhando no lado direito
+  face_diabo: face((g) => {
+    g.fillStyle = '#1a0606';
+    g.beginPath(); g.ellipse(CX + 32, EYE_Y, 17, 10, 0.08, 0, Math.PI * 2); g.fill();
+    // sorriso de orelha a orelha com dentes pontudos
+    g.fillStyle = '#140404';
+    g.beginPath(); g.moveTo(CX - 74, 180); g.quadraticCurveTo(CX, 238, CX + 74, 180); g.quadraticCurveTo(CX, 214, CX - 74, 180); g.fill();
+    g.fillStyle = '#efe4cc';
+    for (let i = -6; i <= 6; i++) {
+      const x = CX + i * 11; const y = 186 + (1 - Math.abs(i) / 7) * 16;
+      g.beginPath(); g.moveTo(x - 4.5, y - 4); g.lineTo(x + 4.5, y - 4); g.lineTo(x, y + 7); g.closePath(); g.fill();
+    }
+    g.fillStyle = '#d8d8de';
+    for (const [x, y] of [[CX + 60, 196], [CX + 64, 204], [CX + 58, 211]]) { g.beginPath(); g.arc(x, y, 2.4, 0, Math.PI * 2); g.fill(); }
+  }, {
+    skin: '#a01818',
+    eye: { iris: '#e8b020', irisLight: '#ffe070', sclera: '#060404', irisL: '#060404', tilt: 0.18 },
+    brow: { angry: 9, thick: 6, color: '#3a0606' },
+    mouth: { mouthW: 0, smile: 0 },
+  }),
+  torso_diabo: () => {
+    const sigils = (g, color) => {
+      g.fillStyle = color; g.font = '15px serif';
+      const set = 'ᚠᚢᚦᚨᚱᚲᚷᚹᚺᚾᛁᛃᛇᛈᛉᛊᛏᛒ⊕⊗';
+      // lado DIREITO do corpo (na frente, x < 256)
+      for (let y = 16; y < 250; y += 18) for (let x = 120; x < 240; x += 14) if (Math.random() < 0.7) g.fillText(set[Math.floor(Math.random() * set.length)], x, y);
+    };
+    const map = canvasTex(512, 256, (g) => {
+      g.fillStyle = '#a01818'; g.fillRect(0, 0, 512, 256);
+      // símbolo de Sangue enorme no peito (frente = meio)
+      g.strokeStyle = '#3a0406'; g.lineWidth = 7; g.lineCap = 'round';
+      g.beginPath(); g.arc(256, 92, 46, 0, Math.PI * 2); g.stroke();
+      g.beginPath(); g.moveTo(256, 30); g.lineTo(256, 154); g.moveTo(214, 70); g.lineTo(298, 114); g.moveTo(298, 70); g.lineTo(214, 114); g.stroke();
+      // boca vertical dentada no umbigo
+      g.fillStyle = '#140404';
+      g.beginPath(); g.ellipse(256, 210, 10, 40, 0, 0, Math.PI * 2); g.fill();
+      g.fillStyle = '#efe4cc';
+      for (let i = -3; i <= 3; i++) { g.beginPath(); g.moveTo(247, 210 + i * 10); g.lineTo(255, 214 + i * 10); g.lineTo(247, 218 + i * 10); g.fill(); g.beginPath(); g.moveTo(265, 210 + i * 10); g.lineTo(257, 214 + i * 10); g.lineTo(265, 218 + i * 10); g.fill(); }
+      sigils(g, '#e8c060');
+    }, { wrap: true });
+    const emissiveMap = canvasTex(512, 256, (g) => {
+      g.fillStyle = '#000'; g.fillRect(0, 0, 512, 256);
+      sigils(g, '#ffd27a');
+    }, { wrap: true });
+    return { map, emissiveMap, emissive: 0xffd27a };
+  },
 
   // ---------------- MASCARADO: cicatriz em X na bochecha esquerda
   face_mascarado: face((g) => {

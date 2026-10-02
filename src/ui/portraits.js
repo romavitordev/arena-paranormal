@@ -37,6 +37,12 @@ export function renderPortraits(roster, renderer, { w = 300, h = 400, anim: anim
   renderer.setClearColor(0x000000, 0);
 
   for (const def of roster) {
+    // formas grandes (Deus da Morte = 2): a câmera afasta e sobe na mesma proporção
+    const k = (def.stats && def.stats.size) || 1;
+    if (full) { cam.position.set(0.9 * k, 1.3 * k, 6.2 * k); cam.lookAt(0, 1.0 * k, 0); }
+    else { cam.position.set(0.9 * k, 1.5 * k, 3.6 * k); cam.lookAt(0, 1.15 * k, 0); }
+    cam.far = 20 * k;
+    cam.updateProjectionMatrix();
     const rig = buildModel(def.model);
     const anim = new Animator(rig, def.anims);
     anim.play(animName, { blend: 0 });

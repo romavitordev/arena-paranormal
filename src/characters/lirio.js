@@ -128,7 +128,7 @@ export default {
       name: 'Amarras de Sangue "Magras"',
       input: 'mod+ranged', // R1 + □ / RB + X
       type: 'bloodBind',
-      description: 'Estala a corda de tripas entrelaçadas no alvo e o prende por um instante (ritual de Sangue: mais forte contra Conhecimento). Ferramenta para segurar quem foge.',
+      description: 'Estala as Magras — corda de tripas carnudas trançadas — no alvo, e as voltas se enrolam no corpo dele e o prendem. Feitas para prender criaturas de Conhecimento: seguram 60% mais tempo quem é de Conhecimento.',
       energyCost: 25,
       cooldown: 15,
       windup: 0.3,
@@ -136,6 +136,8 @@ export default {
       arc: 40,
       hold: 1.0,
       damage: 30,
+      gut: true, // visual das Magras (tripas trançadas + voltas no corpo)
+      vsConhecimento: 1.6,
     },
     {
       id: 'leonoraAmaldicoada',

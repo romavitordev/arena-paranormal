@@ -3,6 +3,7 @@ import { PASSIVES } from './passives.js';
 import { COMBAT } from '../config/combat.js';
 import { angleDiff, yawTo, DEG } from '../core/util.js';
 import { elementMultiplier } from '../config/elements.js';
+import { weaknessMult } from './forms.js';
 
 // Pausa no impacto conforme o peso do golpe
 function hitstopFor(o, dealt) {
@@ -67,6 +68,10 @@ export function applyHit(world, attacker, victim, o) {
     if (P && P.damageTakenMod) mult *= P.damageTakenMod({ attacker, victim, kind: o.kind, element, passive: p, world, o });
   }
   for (const b of victim.buffs || []) if (b.takenMult && (!b.takenKinds || b.takenKinds.includes(o.kind))) mult *= b.takenMult;
+  // fraquezas da forma (Deus da Morte: fogo e Energia)
+  const weak = weaknessMult(victim, attacker, o);
+  if (weak > 1 && !o.noWeakFx) victim.notify('FRAQUEZA!', true);
+  mult *= weak;
   const attempted = Math.round(o.damage * mult);
   // passivas de peso: quem bate empurra/atordoa mais (Mão Pesada); quem apanha é empurrado menos (Casca Grossa)
   let kbMult = 1;
@@ -159,6 +164,11 @@ export function applyHit(world, attacker, victim, o) {
     victim.notify('AGUENTOU!', true);
   }
 
+  // firmeza de chefe (def.poise): depois de N golpes seguidos no mesmo combo, para de reagir (não fica preso em combo)
+  if (reaction && victim.def.poise && victim.comboHits > victim.def.poise.hits && !o.grab && o.kind !== 'special') {
+    reaction = false;
+    if (victim.comboHits === victim.def.poise.hits + 1) { victim.notify('INABALÁVEL', true); world.fx.play('FX_BLOCK', victim.chestPos(), { color: 0x6a6670 }); }
+  }
   // resistência DURANTE golpes pesados (victim.superArmor): um golpe pequeno não cancela um golpe pesado já avançado.
   // Golpes fortes, lançamentos, agarrões, quebras de defesa e especiais continuam interrompendo.
   const sa = victim.superArmor;
@@ -209,6 +219,16 @@ export function applyHit(world, attacker, victim, o) {
     if (o.strike && o.strike.bleed) victim.applyBleed(o.strike.bleed, attacker);
     const mb = (attacker.buffs || []).find((b) => b.meleeBleed);
     if (mb) victim.applyBleed(mb.meleeBleed, attacker);
+  }
+  // Vínculo de Sangue (Juan): parte do dano que ele recebe é replicada no alvo marcado pelo outro símbolo
+  const link = victim.findBuff && victim.findBuff('bloodLink');
+  if (link && dealt > 0 && link.target && link.target.state !== 'ko') {
+    const back = Math.round(dealt * link.ratio);
+    if (back > 0) {
+      link.target.takeDamage(back);
+      world.fx.tracer(victim.chestPos(), link.target.chestPos(), { color: 0xc01828, life: 0.15, width: 0.04 });
+      world.fx.burst(link.target.chestPos(), { count: 8, color: 0x9a0010, speed: 2, life: 0.4, size: 0.14, gravity: 6 });
+    }
   }
   // passivas de quem apanha (ex.: Amuleto Elétrico)
   for (const p of victim.def.passives || []) {

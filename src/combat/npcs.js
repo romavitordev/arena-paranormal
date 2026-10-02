@@ -382,3 +382,25 @@ export class Marionette {
     });
   }
 }
+
+// ================================================================== ZUMBI DE SANGUE
+// Senhor do Sangue (O Diabo, Portador do Trono): invoca um monstro de Sangue que luta por ele por alguns segundos.
+// Usa o corpo e a IA da Marionete, mas é de carne viva vermelha, sai de uma poça de sangue e NUNCA trai o dono.
+export class BloodZombie extends Marionette {
+  constructor(owner, world, pos, o = {}) {
+    super(owner, world, pos, o);
+    this.name = 'ZUMBI DE SANGUE';
+    this.pool.material.color.set(0x5a0008);
+    this.model.root.traverse((m) => {
+      if (m.isMesh && m.material && m.material.color) {
+        m.material = m.material.clone();
+        m.material.color.lerp(new THREE.Color(0xa01018), 0.75);
+      }
+    });
+  }
+
+  // leal: sempre ataca o adversário do dono
+  chooseTarget() {
+    this.target = this.owner.opponent;
+  }
+}
