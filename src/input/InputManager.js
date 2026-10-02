@@ -1,6 +1,6 @@
 import { KEYBOARD_LAYOUTS, GAMEPAD_LAYOUT, GAMEPAD_DEADZONE, PLAYER_DEVICES } from '../config/controls.js';
 
-const ACTIONS = ['physical', 'ranged', 'carga', 'jump', 'block', 'dodge', 'mod', 'start', 'select', 'assist1', 'assist2', 'switch1', 'switch2'];
+const ACTIONS = ['physical', 'ranged', 'carga', 'jump', 'block', 'dodge', 'mod', 'start', 'select', 'assist1', 'assist2', 'switch1', 'switch2', 'pageL', 'pageR'];
 const DIRS = ['up', 'down', 'left', 'right'];
 
 // Estado de entrada de UM jogador, já normalizado (teclado + controle somados).
@@ -36,6 +36,8 @@ export class InputManager {
     // toques que aconteceram desde o último frame (não perde toque rápido)
     this.tapped = new Set();
     this.frameTaps = new Set();
+    // controles de toque na tela (celular): somados ao jogador 1 — ver ui/touchControls.js
+    this.touch = { active: false, moveX: 0, moveY: 0, held: {}, taps: new Set() };
     window.addEventListener('keydown', (e) => {
       if (e.repeat) return;
       this.keys.add(e.code);
@@ -89,6 +91,15 @@ export class InputManager {
         mx += (kbHeld(layout.right) ? 1 : 0) - (kbHeld(layout.left) ? 1 : 0);
         my += (kbHeld(layout.up) ? 1 : 0) - (kbHeld(layout.down) ? 1 : 0);
 
+        // toque na tela (celular): botões e joystick virtuais do jogador 1
+        const T = this.touch;
+        if (i === 0 && T.active) {
+          for (const a of ACTIONS) if (T.held[a] || T.taps.has(a)) held[a] = true;
+          if (Math.abs(T.moveX) > Math.abs(mx)) mx = T.moveX;
+          if (Math.abs(T.moveY) > Math.abs(my)) my = T.moveY;
+          if (T.moveX || T.moveY || T.taps.size || ACTIONS.some((a) => T.held[a])) p.source = 'touch';
+          T.taps.clear();
+        }
         if (pad) {
           // gatilhos (LT/RT) são analógicos: considera apertado acima de 35%
           const btn = (ids) => ids.some((id) => pad.buttons[id] && (pad.buttons[id].pressed || pad.buttons[id].value > 0.35));
@@ -109,7 +120,7 @@ export class InputManager {
           if (Math.abs(ay) > Math.abs(my)) my = ay;
           if (ax || ay || ACTIONS.some((a) => GAMEPAD_LAYOUT[a] && btn(GAMEPAD_LAYOUT[a]))) p.source = 'gamepad';
           else if (mx || my || ACTIONS.some((a) => held[a])) p.source = 'keyboard';
-        } else {
+        } else if (p.source !== 'touch') {
           p.source = 'keyboard';
         }
       }

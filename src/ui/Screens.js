@@ -88,7 +88,7 @@ export class HomeScreen {
         <div class="hlist"></div>
         <div class="hdesc"></div>
       </div>
-      <div class="foot"><span><b>${OK}</b> confirmar · <b>${BACK}</b> voltar</span><span>Teclado: P1 WASD · P2 setas</span></div>`);
+      <div class="foot"><span><b>${OK}</b> confirmar · <b>${BACK}</b> voltar</span><span>Teclado: P1 WASD + losango I J K L · P2 setas + numérico 8 4 6 2</span></div>`);
     this.desc = this.el.querySelector('.hdesc');
     this.listEl = this.el.querySelector('.hlist');
     this.list = HOME_OPTIONS;
@@ -258,6 +258,7 @@ export const MODES = {
 // Seleção de personagem no estilo Storm 4: a grade do P1 fica à esquerda e a do P2 à direita;
 // no centro, os lutadores em 3D (SelectStage) entram deslizando ao serem olhados e fazem pose ao confirmar.
 const SEL_COLS = 3;
+const SEL_PAGE = 15; // 15 lutadores por página (3 × 5), sem barra de rolagem; LB/RB trocam de página
 const INPUT_NAMES = { 'carga+jump': 'Energia + Pulo', 'mod+ranged': 'R1 + □', 'mod+physical': 'R1 + ○', 'mod+carga': 'R1 + △', 'mod+jump': 'R1 + ×', 'mod+dodge': 'R1 + L2' };
 
 export class SelectScreen {
@@ -273,6 +274,7 @@ export class SelectScreen {
     const side = (p) => `
       <div class="sel-side s${p + 1}">
         <div class="sel-head"><span class="tag">${this.M.slots[p]}</span><span class="st"></span></div>
+        <div class="sel-pages"><b class="pg-prev">◀ <kbd>LB</kbd></b><span class="pg-n"></span><b class="pg-next"><kbd>RB</kbd> ▶</b></div>
         <div class="sel-grid">${ROSTER.map((c, i) => `
           <div class="card" data-i="${i}" style="--c:${c.color}">
             <img src="${portraits[c.id]}" alt="${c.name}">
@@ -299,6 +301,13 @@ export class SelectScreen {
     this.dets = this.sides.map((sd) => sd.querySelector('.det'));
     this.heads = this.sides.map((sd) => sd.querySelector('.sel-head .st'));
     this.plates = [this.el.querySelector('.plate.p1'), this.el.querySelector('.plate.p2')];
+    this.pages = this.sides.map((sd) => sd.querySelector('.sel-pages'));
+    this.pageCount = Math.max(1, Math.ceil(ROSTER.length / SEL_PAGE));
+    // setas clicáveis (mouse / toque)
+    this.pages.forEach((pg, p) => {
+      pg.querySelector('.pg-prev').addEventListener('click', () => { this.turnPage(p, -1); this.render(); });
+      pg.querySelector('.pg-next').addEventListener('click', () => { this.turnPage(p, 1); this.render(); });
+    });
     this.hint = this.el.querySelector('.hint');
     this.cards.forEach((list, p) => list.forEach((c, i) => c.addEventListener('click', () => {
       // no modo contra CPU o lado 2 só é escolhido depois do 1
@@ -322,7 +331,12 @@ export class SelectScreen {
       const front = this.team && this.ready[p] ? ROSTER[this.picks[p][0]] : c;
       this.sides[p].classList.toggle('waiting', act >= 0 && act !== p && !this.ready[p]);
       this.sides[p].classList.toggle('done', this.ready[p]);
+      // só os 15 da página do cursor aparecem
+      const page = Math.floor(this.cursor[p] / SEL_PAGE);
+      this.pages[p].classList.toggle('single', this.pageCount < 2);
+      this.pages[p].querySelector('.pg-n').textContent = `PÁGINA ${page + 1} / ${this.pageCount}`;
       this.cards[p].forEach((card, i) => {
+        card.classList.toggle('off', Math.floor(i / SEL_PAGE) !== page);
         card.classList.toggle('on', this.cursor[p] === i);
         card.classList.toggle('picked', this.team && this.picks[p].includes(i));
       });
@@ -358,7 +372,8 @@ export class SelectScreen {
       ? `<b>P1</b> escolhe o próprio lutador (esquerda) e depois o da <b>CPU</b> (direita) · ${moveLabel(0)} mover · <kbd>${actionLabel(0, 'jump')}</kbd>/<kbd>Enter</kbd> confirmar · <kbd>${actionLabel(0, 'physical')}</kbd>/<kbd>Esc</kbd> voltar`
       : `<b>P1</b> ${moveLabel(0)} mover · <kbd>${actionLabel(0, 'jump')}</kbd> confirmar · <kbd>${actionLabel(0, 'physical')}</kbd> voltar &nbsp;|&nbsp;
          <b>P2</b> setas · <kbd>${actionLabel(1, 'jump')}</kbd> confirmar · <kbd>${actionLabel(1, 'physical')}</kbd> voltar`)
-      + ` · <b>${OK}</b> confirmar · <b>${RAND}</b> aleatório · <b>${BACK}</b> voltar`;
+      + ` · <b>${OK}</b> confirmar · <b>${RAND}</b> aleatório · <b>${BACK}</b> voltar`
+      + (this.pageCount > 1 ? ` · <b>LB/RB</b> · <kbd>${actionLabel(0, 'pageL')}</kbd>/<kbd>${actionLabel(0, 'pageR')}</kbd> trocar página` : '');
   }
 
   // Retorna { p1, p2 } quando os dois estão prontos, ou 'back' para voltar ao menu
@@ -412,12 +427,19 @@ export class SelectScreen {
     if (this.team && back(p) && this.picks[slot].length) { this.picks[slot].pop(); this.audio.play('select'); return true; }
     if (back(p) && this.cpu && slot === 1) { this.ready[0] = false; if (this.team) this.picks[0].pop(); return true; }
     const n = ROSTER.length;
-    let c = this.cursor[slot];
-    if (p.menu.left) c = (c + n - 1) % n;
-    if (p.menu.right) c = (c + 1) % n;
-    if (p.menu.up) c = c - SEL_COLS >= 0 ? c - SEL_COLS : c + SEL_COLS * Math.floor((n - 1 - c) / SEL_COLS);
-    if (p.menu.down) c = c + SEL_COLS < n ? c + SEL_COLS : c % SEL_COLS;
     let changed = false;
+    // LB / RB (Q / E · PgUp / PgDn): troca de página mantendo a posição na grade
+    if (p.pressed.pageL || p.pressed.pageR) { this.turnPage(slot, p.pressed.pageR ? 1 : -1); changed = true; }
+    // setas andam dentro da página (de uma ponta passa para a próxima página)
+    const page = Math.floor(this.cursor[slot] / SEL_PAGE);
+    const start = page * SEL_PAGE;
+    const count = Math.min(SEL_PAGE, n - start);
+    let c = this.cursor[slot] - start;
+    if (p.menu.left) c = (c + count - 1) % count;
+    if (p.menu.right) c = (c + 1) % count;
+    if (p.menu.up) c = c - SEL_COLS >= 0 ? c - SEL_COLS : c + SEL_COLS * Math.floor((count - 1 - c) / SEL_COLS);
+    if (p.menu.down) c = c + SEL_COLS < count ? c + SEL_COLS : c % SEL_COLS;
+    c += start;
     if (c !== this.cursor[slot]) { this.cursor[slot] = c; this.audio.play('select'); changed = true; }
     if (confirm(p)) { this.lockPick(slot); this.audio.play('confirm'); changed = true; }
     else if (random(p)) {
@@ -428,6 +450,17 @@ export class SelectScreen {
       changed = true;
     }
     return changed;
+  }
+
+  // página anterior/seguinte (circular), mantendo a mesma posição na grade quando existe
+  turnPage(slot, dir) {
+    if (this.pageCount < 2 || this.ready[slot]) return;
+    const n = ROSTER.length;
+    const page = Math.floor(this.cursor[slot] / SEL_PAGE);
+    const pos = this.cursor[slot] % SEL_PAGE;
+    const np = (page + dir + this.pageCount) % this.pageCount;
+    this.cursor[slot] = Math.min(np * SEL_PAGE + pos, n - 1);
+    this.audio.play('select');
   }
 
   // confirma a escolha do lado; na equipe só fica pronto com 3 personagens diferentes
@@ -575,12 +608,15 @@ export class StageSelectScreen {
         </div>`).join('')}
       </div>
       <div class="stageinfo"><div class="sprev"></div><div class="stxt"></div></div>
+      <button class="stage-confirm" type="button">CONFIRMAR CENÁRIO</button>
       <div class="hint">◀ ▶ escolher · <b>${OK}</b>, <kbd>${actionLabel(0, 'jump')}</kbd> ou <kbd>Enter</kbd> confirmar · <b>${RAND}</b> ou <kbd>${actionLabel(0, 'carga')}</kbd> aleatório · <b>${BACK}</b>, <kbd>${actionLabel(0, 'physical')}</kbd> ou <kbd>Esc</kbd> voltar</div>`);
     this.cards = [...this.el.querySelectorAll('.stagecard')];
     this.info = this.el.querySelector('.stageinfo .stxt');
     this.prev = this.el.querySelector('.stageinfo .sprev');
+    this.confirmEl = this.el.querySelector('.stage-confirm');
     this.thumbs = thumbs;
     this.cards.forEach((c, i) => c.addEventListener('click', () => { this.index = i; this.render(); }));
+    this.confirmEl.addEventListener('click', () => { this.confirmClicked = true; });
     this.render();
   }
   // os previews são gerados depois do carregamento: troca a pintura pela imagem assim que existir
@@ -610,6 +646,10 @@ export class StageSelectScreen {
   }
   update(input) {
     if (!this.thumbsDone) this.render();
+    if (this.confirmClicked) {
+      this.confirmClicked = false;
+      return this.choose();
+    }
     for (const p of input.players) {
       const n = this.list.length;
       if (p.menu.left || p.menu.up) { this.index = (this.index + n - 1) % n; this.audio.play('select'); this.render(); }

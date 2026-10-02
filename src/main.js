@@ -13,6 +13,7 @@ import { Match } from './game/Match.js';
 import { CpuController } from './ai/CpuController.js';
 import { ARENAS, DEFAULT_ARENA, preloadArenas } from './arena/index.js';
 import { SETTINGS, toggleSetting, cycleSetting, TIMER_OPTIONS, timerLabel } from './config/settings.js';
+import { TouchControls, isTouchDevice } from './ui/touchControls.js';
 
 // Avisa no console se alguma definição de personagem estiver inconsistente
 for (const def of ROSTER) for (const p of validatePassives(def)) console.warn(p);
@@ -292,7 +293,12 @@ game.step = (n = 1, dt = 1 / 60) => {
   render();
 };
 
+// celular/tablet: botões na tela (alimentam o jogador 1)
+const touch = isTouchDevice() ? new TouchControls(input) : null;
+game.touch = touch;
+
 function tick(dt) {
+  if (touch) touch.sync(game.state, !!input.teamMode);
   input.update(dt);
   if (input.anyPressed) audio.unlock();
 
