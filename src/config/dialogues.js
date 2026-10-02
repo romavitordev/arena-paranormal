@@ -195,16 +195,17 @@ export const SOLO_LINES = {
   labirinto: 'O que espera no final do labirinto... é você.',
   xande: 'Por eles... Por eles... Por eles...',
   lirio: "Hoje 'cê vai conhecer a Leonora!",
-  miguel: 'Relaxa. Eu sou o cara mais bonito dessa luta, e o mais forte também.',
+  ferreiro: 'Eu não posso permitir que vocês destruam minha cidade.',
   juan: 'Eu não quero morrer... eu quero um novo começo.',
   kemi: 'Um contrato é um contrato. Nada pessoal.',
 };
 
 // ---------------- FALAS DE VITÓRIA: [vencedor][derrotado] (ou .default)
 export const VICTORY_LINES = {
-  miguel: {
-    default: 'Viu? Músculo e charme. Ninguém resiste aos dois.',
-    lirio: 'Leonora pesada, hein? Mas eu levanto mais que isso no supino.',
+  ferreiro: {
+    default: 'Santo Berço continua de pé. Volte para a floresta, Ignaro.',
+    lirio: 'Martelo forte... mas a Espada Consumidora come qualquer ferro.',
+    kemi: 'Nem a Fantasma se esconde do Ferreiro dentro da cidade dele.',
   },
   juan: {
     default: 'Doeu? Que bom. Eu senti cada pedaço.',

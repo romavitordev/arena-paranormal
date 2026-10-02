@@ -187,6 +187,17 @@
 - ✅ Controles: o △/Y virou o MODIFICADOR de ○ e □ — △ + ○ e △ + □ soltam as habilidades que eram R1 + ○ / R1 + □
   (juntos, logo em seguida ou segurando △ enquanto carrega). Saíram as "versões fortes" (mesmo golpe com mais dano).
   R1/RB + △, × e L2 continuam; o especial continua △ → △ → ○. CPU, HUD, lista de golpes e tutorial atualizados.
+- ✅ Controles revisados: L1 / R1 chamam as assistências; R2 defesa; L2 esquiva/substituição; sem botão modificador —
+  habilidades em △ + ○ / □ / L2 e R2 + △ / × (R2 + ○ agarrão). Segurando △ para carregar, L2 esquiva (dá para fugir
+  no meio da carga). O D-pad volta a andar na batalha em equipe; a troca de personagem fica no analógico direito.
+- ✅ Assistências do Ferreiro, Juan e Kemi (antes não saíam: faltava a ação delas) + assistência genérica para
+  qualquer lutador novo.
+- ✅ Magras da Lírio: errando, a corda vai até o alcance (ou até um obstáculo) e volta para a mão; nunca fica presa.
+- ✅ Miguel humano removido: o personagem é o FERREIRO (Luzidio, Espada Consumidora) → Pacto do Santo → Deus da Morte.
+  O HUD volta para o nome da forma base quando a transformação termina (antes ficava "O DEUS DA MORTE").
+- ✅ A Fantasma (Kemi) dura até o fim do round.
+- ✅ Modo TUTORIAL no menu inicial: escolhe o personagem e ensina passo a passo todos os golpes dele (detecta cada
+  ação de verdade). Saiu a opção "Tutorial ON/OFF": os comandos aparecem sempre nos ícones da HUD.
 - ⏭ Animações próprias das formas (Deus da Morte e Diabo ainda usam as animações humanas).
 - Gal, Erin, Aguiar, Labirinto e Xande já foram feitos/revisados com as referências nas rodadas anteriores.
 - ✅ V4 etapa 12 Armature: esqueleto com root → hips → sp → chest → neck → hd, mãos (handL/R) e pés (footL/R),

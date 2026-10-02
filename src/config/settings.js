@@ -2,7 +2,6 @@
 const KEY = 'arena-paranormal:settings';
 
 const DEFAULTS = {
-  tutorial: false, // mostra os comandos dos ataques na HUD durante a luta
   timer: 99, // segundos por round; 0 = infinito
   cpuLevel: 'normal', // easy | normal | hard | veryhard
   rounds: 2, // rounds para vencer
@@ -56,8 +55,3 @@ export function saveSettings() {
   }
 }
 
-export function toggleSetting(name) {
-  SETTINGS[name] = !SETTINGS[name];
-  saveSettings();
-  return SETTINGS[name];
-}

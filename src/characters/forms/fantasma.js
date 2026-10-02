@@ -1,5 +1,5 @@
 // A FANTASMA (Kemi com as faixas, Hexatombe). Não aparece na seleção: a Kemi vira esta forma com o especial VESTIR AS
-// FAIXAS e fica assim por 40 s. Sobretudo marrom de couro com gola alta, faixas cobrindo o rosto (só os olhos na
+// FAIXAS e fica assim até o fim do round. Sobretudo marrom de couro com gola alta, faixas cobrindo o rosto (só os olhos na
 // escuridão) e o rifle pingando lodo preto. Poderes (wiki): Analítica e Disparo Espiral — as faixas puxam o rifle e
 // as balas saem em curva, contornando cobertura e ignorando resistência; Sniper da Morte e a Sede de Vingança.
 export default {
@@ -15,10 +15,10 @@ export default {
   info: {
     weapon: 'Sniper Fantasma pingando lodo + faixas',
     style: 'Balas curvas que não erram, faixas que prendem e some na escuridão',
-    identity: 'Forma das Faixas (40 s)',
+    identity: 'Forma das Faixas (até o fim do round)',
     tagline: 'Ninguém vê a Fantasma.',
   },
-  stats: { moveSpeed: 8.6, maxHealth: 1150 }, // cabe a vida extra das faixas (+150)
+  stats: { moveSpeed: 8.6, maxHealth: 1100 }, // cabe a vida extra das faixas (+100)
   anims: { idle: 'idle_knife', run: 'run', charge: 'charge', victory: 'victory', block: 'block' },
   chargeFx: { style: 'default', color: 0x1a1620 },
   dodge: { style: 'default', distance: 6 },

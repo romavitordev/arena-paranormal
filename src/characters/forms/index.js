@@ -1,6 +1,5 @@
 // FORMAS: definições completas de personagem que NÃO aparecem na seleção — o lutador vira uma delas no meio da luta
-// (ver combat/forms.js). Ex.: Miguel → Luzidio → Deus da Morte; Juan → Diabo; Kemi → Fantasma.
-import miguelLuzidio from './miguel_luzidio.js';
+// (ver combat/forms.js). Ex.: Ferreiro → Deus da Morte; Juan → Diabo; Kemi → Fantasma.
 import deusMorte from './deus_morte.js';
 import diabo from './diabo.js';
 import fantasma from './fantasma.js';
@@ -16,4 +15,4 @@ export function getForm(id) {
   return FORMS[id];
 }
 
-[miguelLuzidio, deusMorte, diabo, fantasma].forEach(registerForm);
+[deusMorte, diabo, fantasma].forEach(registerForm);

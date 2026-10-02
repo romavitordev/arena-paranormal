@@ -11,6 +11,8 @@ import { ELEMENTS } from '../config/elements.js';
 // que depende do contexto e vai embora. Não substitui o lutador principal.
 //  - jogador ANDANDO  → ação de apoio (buff, zona, puxão...);
 //  - jogador PARADO   → ação ofensiva contra o inimigo.
+export { ACTIONS as ASSIST_ACTIONS };
+
 export const ASSIST = {
   cooldown: 18, // segundos por assistência
   damageMult: 0.6, // dano das assistências é reduzido
@@ -232,7 +234,63 @@ const ACTIONS = {
       return tl;
     },
   },
+  // FERREIRO: andando → amaldiçoa a arma do parceiro com o Lodo (sangramento); parado → o Golpe do Ferreiro
+  ferreiro: {
+    moving: (c) => buffOwner(c, 'concentrate', { type: 'curse', name: 'ARMA CONSUMIDORA (FERREIRO)', time: 7, bleed: { dps: 4, duration: 3, color: 0x2a2632 } }, 0x6a6670, 'ARMA CONSUMIDORA'),
+    still: (c) => rushStrike(c, 'slash_v', [[0.42, 66]], 'heavyPunch', { knockback: 4.5 }),
+  },
+  // JUAN: andando → Armadura de Sangue Diabólica no parceiro; parado → Descarnar Discente no inimigo
+  juan: {
+    moving: (c) => buffOwner(c, 'powerup', { type: 'bloodArmor', name: 'ARMADURA DE SANGUE (JUAN)', time: 6, takenMult: 0.75 }, 0xc01828, 'ARMADURA DE SANGUE'),
+    still: (c) => ritualCuts(c, 0xc01828, 75, 'DESCARNAR'),
+  },
+  // KEMI: andando → Perita (o inimigo fica analisado e recebe mais dano); parado → um tiro da Sniper Fantasma
+  kemi: {
+    moving: (c) => debuffOpp(c, 'turn_look', { type: 'analyzed', name: 'ANALISADO (KEMI)', time: 6, takenMult: 1.12 }, 0xe8c070, 'PERITA'),
+    still: (c) => shoot(c, 'sniper_fire', 1, 70, 'sniper'),
+  },
 };
+
+// Personagem sem ações próprias (ex.: um lutador novo): parado → golpe do fim da sequência; andando → um tiro
+// do ataque principal. Assim a assistência nunca deixa de sair.
+function genericActions(def) {
+  const fin = def.melee.strikes.at(-1);
+  return {
+    still: (c) => rushStrike(c, fin.anim, [[0.4, Math.round(fin.damage * 1.2)]], fin.hitSound || 'heavyPunch', { knockback: 4 }),
+    moving: (c) => (def.ranged ? shoot(c, def.ranged.anim || 'throw_r', def.ranged.count || 1, Math.round((def.ranged.damage || 30) * 1.4), def.ranged.sound) : rushStrike(c, fin.anim, [[0.4, fin.damage]], fin.hitSound || 'heavyPunch')),
+  };
+}
+
+// a assistência atira com o ataque principal dela (count tiros, dano por tiro já com o multiplicador de assistência)
+function shoot(c, anim, count, damage, sound) {
+  const tl = new Timeline();
+  c.as.face(c.opp);
+  c.as.play(anim, 0.4 + count * 0.1 + 0.3);
+  for (let i = 0; i < count; i++) {
+    tl.add(0.35 + i * 0.1, () => {
+      const from = c.as.chest().add(forwardFromYaw(c.as.yaw, tmp).multiplyScalar(0.6));
+      const dir = c.opp.chestPos().sub(from).normalize();
+      c.world.projectiles.spawn(c.owner, { ...c.def.ranged, chargeShot: undefined, damage: Math.round(damage * ASSIST.damageMult), count: 1, element: c.def.element }, from, dir);
+      c.world.audio.play(sound || 'swing', { volume: 0.6 });
+    });
+  }
+  return tl.end(0.5 + count * 0.1 + 0.3);
+}
+
+// enfraquece o inimigo (ex.: Perita da Kemi)
+function debuffOpp(c, anim, buff, color, label) {
+  const tl = new Timeline();
+  c.as.face(c.opp);
+  c.as.play(anim, 0.6);
+  tl.add(0.3, () => {
+    const old = c.opp.findBuff(buff.type);
+    if (old) old.time = buff.time;
+    else c.opp.addBuff({ ...buff, duration: buff.time });
+    c.world.fx.ring(c.opp.chestPos(), { color, radius: 1, life: 0.5, vertical: true, yaw: c.as.yaw });
+    c.opp.notify(label, true);
+  });
+  return tl.end(0.7);
+}
 
 // LÍRIO — CAI DENTRO como assistência: identifica que o parceiro está apanhando, entra CORRENDO (sem teletransporte)
 // entre os dois, dá uma ombrada no inimigo, provoca e dá espaço para o parceiro se recuperar.
@@ -383,8 +441,7 @@ export class Assist {
     if (!opp || opp.state === 'ko' || ['ko', 'intro', 'special', 'grabbed'].includes(o.state) || w.cinematic) return false;
     // contexto: jogador andando ou parado
     const moving = Math.hypot(o.input.moveX, o.input.moveY) > 0.3 || o.state === 'dashing';
-    const acts = ACTIONS[this.def.id];
-    if (!acts) return false;
+    const acts = ACTIONS[this.def.id] || genericActions(this.def);
     // entra ao lado do parceiro (lado da assistência 1 = esquerda, 2 = direita)
     const fwd = new THREE.Vector3().subVectors(opp.pos, o.pos).setY(0).normalize();
     const side = new THREE.Vector3(-fwd.z, 0, fwd.x).multiplyScalar(this.slot === 0 ? 1 : -1);

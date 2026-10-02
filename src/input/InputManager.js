@@ -105,7 +105,7 @@ export class InputManager {
           const btn = (ids) => ids.some((id) => pad.buttons[id] && (pad.buttons[id].pressed || pad.buttons[id].value > 0.35));
           for (const a of ACTIONS) if (GAMEPAD_LAYOUT[a] && btn(GAMEPAD_LAYOUT[a])) held[a] = true;
           // analógico direito ◀/▶: TROCA o personagem em campo pelo da assistência 1/2
-          // (as assistências são chamadas pelos botões laterais do D-pad)
+          // (as assistências são chamadas por L1/LB e R1/RB)
           const rx = pad.axes[2] || 0;
           if (rx < -0.6) held.switch1 = true;
           if (rx > 0.6) held.switch2 = true;
@@ -113,8 +113,7 @@ export class InputManager {
           let ay = -(pad.axes[1] || 0);
           const mag = Math.hypot(ax, ay);
           if (mag < GAMEPAD_DEADZONE) { ax = 0; ay = 0; }
-          // na batalha em equipe o D-pad ←/→ é das assistências (o analógico continua movendo)
-          if (!this.teamMode) ax += (btn(GAMEPAD_LAYOUT.right) ? 1 : 0) - (btn(GAMEPAD_LAYOUT.left) ? 1 : 0);
+          ax += (btn(GAMEPAD_LAYOUT.right) ? 1 : 0) - (btn(GAMEPAD_LAYOUT.left) ? 1 : 0);
           ay += (btn(GAMEPAD_LAYOUT.up) ? 1 : 0) - (btn(GAMEPAD_LAYOUT.down) ? 1 : 0);
           if (Math.abs(ax) > Math.abs(mx)) mx = ax;
           if (Math.abs(ay) > Math.abs(my)) my = ay;

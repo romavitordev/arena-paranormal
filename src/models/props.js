@@ -166,18 +166,8 @@ export function addLirioProps(rig) {
   props.helmet = helmet;
 }
 
-// MIGUEL CARIAD: luta com os punhos; a Magnum só aparece na mão direita no tiro
-export function addMiguelProps(rig) {
-  const { sockets, props } = rig;
-  const gun = magnum();
-  gun.visible = false;
-  gun.rotation.x = -1.4;
-  sockets.handR.add(gun);
-  props.gun = gun;
-}
-
-// MIGUEL LUZIDIO (Ferreiro): a Espada Consumidora (duas mãos)
-export function addLuzidioProps(rig) {
+// FERREIRO: a Espada Consumidora (duas mãos)
+export function addFerreiroProps(rig) {
   const { sockets, props } = rig;
   const sword = espadaConsumidora();
   sword.rotation.x = -0.25;

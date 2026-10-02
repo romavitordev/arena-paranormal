@@ -23,7 +23,7 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 | Ataque/habilidade principal | □ | X | **J** | Num4 | □ |
 | Ataque físico | ○ | B | **L** | Num6 | ○ |
 | Pulo | × | A | **K** / Espaço | Num2 / Num0 | × |
-| Modificador R1 (segurar + △ / × / L2) | R1 | RB | **Q** | Num7 | R1 |
+| **Assistência 1 / 2** (equipe) | L1 / R1 | LB / RB | **Q** / **R** (ou 1 / 2) | Num7 / Num3 | AS1 / AS2 |
 | Defesa (segurar) | R2 | RT | **E** | Num9 | DEF |
 | **Esquiva** (+ direção) | L2 | LT | Shift | Num1 | ESQ |
 | **Dash** | × + × | A + A | K + K | Num2 + Num2 | × + × |
@@ -31,13 +31,16 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 | **Agarrão** (não defensável) | R2 + ○ | RT + B | E + L | Num9 + Num6 | DEF + ○ |
 | **Habilidade de △ + ○** | △ + ○ | Y + B | I + L | Num8 + Num6 | △ + ○ |
 | **Habilidade de △ + □** | △ + □ | Y + X | I + J | Num8 + Num4 | △ + □ |
+| **Habilidade de △ + L2** | △ + L2 | Y + LT | I + Shift | Num8 + Num1 | △ + ESQ |
+| **Habilidade de R2 + △** | R2 + △ | RT + Y | E + I | Num9 + Num8 | DEF + △ |
+| **Habilidade de R2 + ×** | R2 + × | RT + A | E + K | Num9 + Num2 | DEF + × |
 | **Especial** | △ → △ → ○ | Y → Y → B | I → I → L | Num8 → Num8 → Num6 | ESPECIAL |
-| Assistências / troca (equipe) | D-pad ◀ ▶ / analógico dir. | D-pad ◀ ▶ / analógico dir. | 1 2 / 3 4 | N/ N* / N- N+ | AS1 AS2 / ⇄1 ⇄2 |
+| Trocar de personagem (equipe) | analógico dir. ◀ ▶ | analógico dir. ◀ ▶ | 3 / 4 | N- / N+ | ⇄1 ⇄2 |
 | Página da seleção | L1 / R1 | LB / RB | Q / E | PgUp / PgDn | ◀ ▶ na grade |
 | Pausa | Start | Start | Esc | Backspace | II |
 
 - **Teclado:** os quatro botões de ação ficam em **losango (I J K L)**, na mesma posição do △ □ × ○ do controle;
-  a mão esquerda fica com WASD + Q (R1) + E (R2) + Shift (L2). O jogador 2 usa o mesmo losango no teclado numérico.
+  a mão esquerda fica com WASD + E (R2) + Shift (L2), e Q / R são o L1 / R1 (assistências). O jogador 2 usa o mesmo losango no teclado numérico.
 - **Celular/tablet:** os botões aparecem sozinhos com tela de toque (no PC dá para testar com `?touch=1`); jogue
   com o aparelho deitado. Os cartões e opções dos menus também aceitam toque direto.
 
@@ -45,27 +48,31 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
   lado + ○ = golpe com passo lateral · no ar + ○ = golpe aéreo. A sequência termina num finalizador
   (lança, derruba, afasta ou atordoa).
 - **Especial:** △ → △ → ○ (Y → Y → B; teclado I → I → L). Custa 50 de sanidade.
-- **Habilidades secundárias:** o **△ é o modificador de ○ e □** — △ + ○ e △ + □ (juntos, logo em seguida ou
-  segurando △ enquanto carrega) soltam habilidades; R1/RB + △, × ou L2 soltam as outras (veja cada personagem).
+- **Habilidades secundárias** (sem botão modificador): **△ + ○**, **△ + □** e **△ + L2** (juntos ou △ logo antes;
+  △ + ○/□ também saem segurando △ enquanto carrega) e **R2 + △** / **R2 + ×** (segurando a defesa). R2 + ○ é o agarrão.
+  Segurando △ para carregar, L2 sozinho continua sendo **esquiva** — dá para fugir no meio da carga.
 - **Dash:** × + × (toque duplo no pulo) avança rápido. △ + × é o dash longo, que persegue o adversário (10 de sanidade); no Mascarado, △ + × é o Teleporte das Sombras.
 - **Agarrão:** Defesa + ○ (RT + B). Pega de perto e arremessa; não pode ser defendido, só esquivado. Errar deixa você exposto.
-- **Câmera:** sempre travada no adversário. L1/LB fica livre para funções futuras.
+- **Câmera:** sempre travada no adversário. **L1 / R1** chamam as assistências na batalha em equipe.
 - Cada jogador lê teclado **e** controle ao mesmo tempo.
 - **Menus:** A/× (Pulo, Enter) confirma · B/○ (Ataque físico, Esc) volta.
-- **Fluxo:** Tela inicial → Batalha Solo / Batalha em Equipe (P1 VS P2, P1 VS CPU, CPU VS CPU) ou Treinamento →
+- **Fluxo:** Tela inicial → Batalha Solo / Batalha em Equipe (P1 VS P2, P1 VS CPU, CPU VS CPU), Tutorial ou Treinamento →
   Personagens (os dois confirmam) → **COMEÇAR** → **Configurações** (tempo 30/60/90/99/120/∞, dificuldade da CPU
   Fácil/Normal/Difícil/Muito Difícil, rounds 1–3) → Cenário (com preview) → Carregamento → 3, 2, 1, LUTAR.
 - **Seleção:** Y/△ escolhe personagem ou cenário **aleatório**; B/○ na seleção de personagens (com ninguém confirmado) volta para a tela inicial.
-- **Opções** (menu principal e pausa): Tutorial (comandos na tela) · Tempo da luta · **Movimento**: direções da tela
+- **Opções** (menu principal e pausa): Tempo da luta · **Movimento**: direções da tela
   (padrão) ou relativo ao inimigo (↑ aproxima, ↓ recua, ←/→ orbitam).
 - **Especial pode ser interrompido:** ao ativar, o lutador concentra a energia por 0,45 s e fica vulnerável — um projétil
   (ou qualquer golpe) nesse momento cancela o especial (a sanidade gasta se perde; recarga curta de 4 s).
 - **Combo infinito (estilo Storm):** na sequência de ○, antes do finalizador, aperte **△ + ×** depois de acertar: o
   personagem dá um rush atrás do alvo e a sequência de ○ recomeça do 1º golpe — dá para repetir ○○○ → △+× → ○○○...
   Cada rush gasta 8 de sanidade; o dano cai com a escala de combo e quem apanha pode usar a Substituição.
-- **Batalha em equipe:** líder + 2 assistências. **D-pad ◀ / ▶** (teclado P1 Z / C, P2 N / M) **chama** a assistência:
+- **Tutorial:** escolha um personagem e aprenda todos os golpes dele, passo a passo, contra um alvo parado: o cartão
+  mostra o comando com as teclas do aparelho que você está usando e só avança quando você faz o golpe (a pausa pula
+  um passo). Os comandos de cada ataque também aparecem sempre nos ícones da HUD.
+- **Batalha em equipe:** líder + 2 assistências. **L1 / R1** (teclado P1 Q / R ou 1 / 2, P2 Num7 / Num3) **chama** a assistência:
   com você **andando** ela apoia (buff, névoa, puxão, cura); **parado** ela ataca. Recarga de 18 s.
-  **Analógico direito ◀ / ▶** (teclado P1 X / V, P2 Numpad / e * ou , e .) **troca** o personagem em campo pelo daquela
+  **Analógico direito ◀ / ▶** (teclado P1 3 / 4, P2 Num- / Num+) **troca** o personagem em campo pelo daquela
   assistência (estilo Storm 4): vida e sanidade são da equipe; quem sai vira a assistência. Recarga de 5 s.
 - **Treinamento:** alvo parado (ou defendendo, ou CPU), vida que volta depois do combo, sanidade infinita, recargas
   sem espera — tudo na pausa. Select (Tab no teclado) reinicia a posição.
@@ -75,7 +82,7 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 
 ## Elenco
 
-| Personagem | Origem | Elemento | □ principal | Habilidades (□ e ○ = △ + □ / △ + ○ · △, × e L2 = R1 + botão) | Especial | Passiva |
+| Personagem | Origem | Elemento | □ principal | Habilidades (□ / ○ / L2 = △ + botão · △ / × = R2 + botão) | Especial | Passiva |
 |---|---|---|---|---|---|---|
 | KAISER | Ordo Realitas | Energia | M4 (varia com a direção) | □ Baforada Cinerária · ○ Acácia · △ Dendrobium (raízes) · × Balas Amaldiçoadas (Desert Eagle) · L2 Granada Nebulosa | Cinerária (névoa → Acácia amplificada, 250; a névoa fica no mapa) | Resistente · Afinidade Elemental (rituais +15%) |
 | ARTHUR CERVERO | Ordo Realitas | Sangue | Sniper (segure □: ajoelha e mira — mais tempo, mais dano) | □ Rebirth · ○ Ódio Incontrolável "Templo do Ódio" · △ Paralisia de Sangue "Dystopia" · L2 Armadura de Sangue (escudo) | Arma de Sangue | — (luta só com chutes: tem um braço) |
@@ -87,9 +94,9 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 | KIAN | Escriptas | Conhecimento | Impacto Sigilar | □ Teletransporte · ○ Lâmina do Medo · △ Transcendência · × Rejeitar Névoa | Inexistir (1x por partida, +1 ao Transcender) | Precognição |
 | LABIRINTO | Mascarados | Energia | Rajada Caótica (raio da Antena) | □ Labirinto Mental · ○ Consumir Momento · △ Capacete do ??? · L2 Tempestade Caótica (5 descargas) | O Labirinto é a Resposta | Mente Labiríntica (atordoamentos −40%) |
 | LÍRIO | Os Cinco | Sangue | Canivete de osso (curto e fraco: ele é de perto) | △ Golpe Pesado · ○ Cai Dentro (corre, ombrada, provoca) · □ Amarras de Sangue "Magras" · × Leonora Amaldiçoada · L2 Proteção Pesada | Leonora ("Hoje 'cê vai conhecer a Leonora!") | Sangue de Ferro (+15% de vida) · Casca Grossa (menos recuo e desgaste na defesa) · Mão Pesada (mais impacto) |
-| MIGUEL CARIAD | Ordo Realitas | Morte | Magnum (um tiro pesado) | ○ Lábia · △ Pose de Fisiculturista · □ Tiro na Testa · L2 Marca Espiral (zera a sanidade) | Equipe Kelvin · **Luzidio:** Pacto do Santo (sanidade > 85%, 45 s) | Sanidade em Queda — **sanidade zerada → LUZIDIO** (Espada Consumidora); **morrer no pacto → DEUS DA MORTE** (chefe 2x maior, barra preta, fraco a fogo e Energia, regenera) |
+| FERREIRO | Luzidios | Morte | Lodo arremessado | ○ Hipnose Espiral · × Espada Consumidora (sangra) · △ Conforto de Santo Berço (cura) · L2 Armadura do Ferreiro | Pacto do Santo (sanidade > 85%, 45 s): **morrer no pacto → DEUS DA MORTE** (chefe 2x maior, barra preta, fraco a fogo e Energia, regenera) | Corpo de Luzidio (−8% de dano físico) |
 | JUAN | Mascarados | Sangue | Lâmina de Sangue | △ Descarnar Discente · ○ Perturbação Discente · □ Vínculo de Sangue · L2 Armadura de Sangue Diabólica | Renascimento (1x por partida) → sobe no Trono do Diabo e vira **O PORTADOR DO TRONO** até o fim do round (Senhor do Sangue, Sangue nos Arredores, Amaldiçoar Arma, Veias, Ódio, Transportar, Regeneração; especial Pacto deixa o alvo Transtornado) | Faca Predadora (cura 15%) · Masoquista (apanhar dá sanidade) |
-| KEMI | Mascarados | Morte | Sniper Fantasma (segurar para mirar) | △ Disparo da Morte (tempo lento) · ○ Pistola Transtornada (arame farpado) · □ Perita · L2 Revólver .38 | Vestir as Faixas → **A FANTASMA** por 40 s (Disparo Espiral: balas curvas que procuram o alvo, atravessam cobertura e gastam muito da defesa · Sniper da Morte · Faixas · Some na Escuridão · Analítica) | Sede de Vingança (abaixo de 30% de vida: mais dano, velocidade e sanidade, 1x por round) |
+| KEMI | Mascarados | Morte | Sniper Fantasma (segurar para mirar) | △ Disparo da Morte (tempo lento) · ○ Pistola Transtornada (arame farpado) · □ Perita · L2 Revólver .38 | Vestir as Faixas → **A FANTASMA** até o fim do round (Disparo Espiral: balas curvas que procuram o alvo, atravessam cobertura e gastam muito da defesa · Sniper da Morte · Faixas · Some na Escuridão · Analítica) | Sede de Vingança (abaixo de 30% de vida: mais dano, velocidade e sanidade, 1x por round) |
 | XANDE | Os Cinco | Sangue | Skate Caótico (vai e volta) | □ Amaldiçoar Arma · ○ Polarização Caótica · △ Tela de Ruído (escudo de 140) · × Velocidade Mortal · L2 Cicatrização | Por Eles | Gladiador Paranormal (+3 sanidade por golpe) |
 | AGUIAR | Mascarados | Sangue | Machado na Corda (arremessa, sangra e puxa) | ○ Máscara do Mutilador Noturno · L2 Armadilha de Urso · × Predador de Sangue · △ Cães de Caça | Finalização do Mutilador | Filho da Dor (apanhando seguido, resiste mais) |
 

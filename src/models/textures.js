@@ -653,37 +653,7 @@ export const MATERIAL_TEXTURES = {
     for (let i = 0; i < 600; i++) { const x = Math.random() * 128; const y = Math.random() * 128; g.beginPath(); g.moveTo(x, y); g.lineTo(x + (Math.random() - 0.5) * 6, y + 4 + Math.random() * 5); g.stroke(); }
   }, { wrap: true, repeat: [3, 2] }),
 
-  // ---------------- MIGUEL CARIAD: rosto quadrado de fisiculturista, barba rala; tatuagem tribal no antebraço direito
-  face_miguel: face((g) => {
-    stubble(g, 'rgba(25,18,14,0.3)', 1100, { y0: 150, y1: 225, w: 86 });
-  }, {
-    skin: '#e2b89a',
-    eye: { iris: '#4a2e1a', irisLight: '#7a5030', tilt: 0.02 },
-    brow: { angry: 3, thick: 6.5, color: '#121214' },
-    mouth: { mouthW: 15, smile: 1, smirk: 2 },
-  }),
-  arms_miguel: () => canvasTex(256, 256, (g) => {
-    g.fillStyle = '#e2b89a'; g.fillRect(0, 0, 256, 256);
-    // tribal: faixas pretas grossas que dão a volta no antebraço, com pontas de espinho (como na arte da Equipe Kelvin)
-    g.fillStyle = '#141214';
-    for (const [y, hgt] of [[150, 14], [178, 22], [214, 12]]) {
-      g.fillRect(0, y, 256, hgt);
-      for (let x = 0; x < 256; x += 32) {
-        g.beginPath(); g.moveTo(x, y); g.lineTo(x + 16, y - 16); g.lineTo(x + 26, y); g.closePath(); g.fill();
-        g.beginPath(); g.moveTo(x + 6, y + hgt); g.lineTo(x + 20, y + hgt + 14); g.lineTo(x + 30, y + hgt); g.closePath(); g.fill();
-      }
-    }
-  }, { wrap: true }),
-  tee_miguel: () => canvasTex(256, 128, (g) => {
-    g.fillStyle = '#3a4436'; g.fillRect(0, 0, 256, 128);
-    g.strokeStyle = 'rgba(0,0,0,0.12)'; g.lineWidth = 1;
-    for (let y = 0; y < 128; y += 4) { g.beginPath(); g.moveTo(0, y); g.lineTo(256, y); g.stroke(); }
-    // gola em V
-    g.strokeStyle = '#2a3226'; g.lineWidth = 4;
-    g.beginPath(); g.moveTo(108, 0); g.lineTo(128, 22); g.lineTo(148, 0); g.stroke();
-  }, { wrap: true }),
-
-  // ---------------- MIGUEL LUZIDIO (Ferreiro): pele cinza, olhos todo pretos, faixas pretas dos olhos às bochechas e do
+  // ---------------- FERREIRO (Luzidio): pele cinza, olhos todo pretos, faixas pretas dos olhos às bochechas e do
   // nariz subindo pela cabeça; queimaduras nos braços
   face_luzidio: face((g) => {
     g.fillStyle = 'rgba(12,12,14,0.92)';

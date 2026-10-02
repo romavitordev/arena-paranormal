@@ -92,13 +92,6 @@ export const PASSIVES = {
       if (dealt > 0) victim.energy = Math.min(victim.maxEnergy, victim.energy + dealt * (passive.ratio ?? 0.12));
     },
   },
-  // Miguel — Sanidade em Queda: o paranormal pesa na mente dele; cada golpe recebido também tira sanidade
-  // (quando zera, vira Luzidio — ver def.onSanityZero)
-  fragileSanity: {
-    onHitTaken({ victim, dealt, passive }) {
-      if (dealt > 0) victim.energy = Math.max(0, victim.energy - dealt * (passive.mult ?? 0.25));
-    },
-  },
   // Lírio — Sangue de Ferro: mais vitalidade (a vida extra está em stats.maxHealth; aqui só identifica a passiva)
   ironBlood: {},
   // Lírio — Casca Grossa: aguenta melhor os impactos — é empurrado menos (lançamentos ainda lançam) e, defendendo,

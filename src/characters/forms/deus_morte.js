@@ -1,11 +1,11 @@
-// O DEUS DA MORTE (Relíquia de Morte no corpo do Ferreiro). Não aparece na seleção: o Miguel vira o Deus da Morte se
+// O DEUS DA MORTE (Relíquia de Morte no corpo do Ferreiro). Não aparece na seleção: o Ferreiro vira o Deus da Morte se
 // morrer durante o Pacto do Santo. CHEFE: o dobro do tamanho, barra de vida preta no centro da tela, fraco contra
 // FOGO e ENERGIA (os Luzidios renegam a Energia, até o fogo), regenera de tempo em tempo e não fica preso em combos.
 // Habilidades do cânone: Espiral Descendente, Controlar Mortos, Senhor do Tempo e Regeneração.
 export default {
   id: 'deus_morte',
   form: true,
-  baseId: 'miguel',
+  baseId: 'ferreiro',
   boss: true,
   name: 'O DEUS DA MORTE',
   model: 'deus_morte',
@@ -16,7 +16,7 @@ export default {
   info: {
     weapon: 'Punhos de Lodo',
     style: 'Chefe gigante: agarra e envelhece, controla os mortos e distorce o tempo',
-    identity: 'Forma de chefe do Miguel (morreu durante o Pacto do Santo)',
+    identity: 'Forma de chefe do Ferreiro (morreu durante o Pacto do Santo)',
     tagline: 'É possível destruir a própria Morte?',
   },
   stats: { moveSpeed: 5.4, size: 2, maxHealth: 850 }, // última resistência, não uma luta nova

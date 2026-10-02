@@ -137,7 +137,7 @@ export default {
     },
   ],
 
-  // VESTIR AS FAIXAS: as faixas enrolam o rosto e o corpo, a escuridão esconde quem ela é — A FANTASMA por 40 s
+  // VESTIR AS FAIXAS: as faixas enrolam o rosto e o corpo, a escuridão esconde quem ela é — A FANTASMA até o fim do round
   special: {
     name: 'Vestir as Faixas',
     banner: 'Vestir as Faixas',
@@ -145,8 +145,8 @@ export default {
     energyCost: 50,
     cooldown: 60,
     form: 'fantasma',
-    duration: 40,
-    bonusHealth: 150,
+    duration: 0, // até o fim do round
+    bonusHealth: 100,
     color: 0xa7a3ad,
   },
 

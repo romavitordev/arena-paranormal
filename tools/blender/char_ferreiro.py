@@ -1,5 +1,5 @@
 """
-MIGUEL CARIAD — forma LUZIDIA (O Ferreiro) — public/models/miguel_luzidio.glb
+FERREIRO (o Luzidio de Santo Berço) — public/models/ferreiro.glb
 Referência: arte dos Luzidios no Livro de Regras e miniaturas (wiki). 2,20 m, o maior humano da série. Pele
 acinzentada, olhos todo pretos, orelhas pontudas, faixas pretas no rosto (dos olhos às bochechas e do nariz subindo
 pela cabeça). Cabelo branco penteado para trás e barba branca longa. Peitoral e braceletes de metal, pano vermelho na
@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from lib import *
 from mathutils import Vector
 
-OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'miguel_luzidio.glb'
+OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'ferreiro.glb'
 b = Builder(width=1.12, bulk=1.32, height=1.22)  # 2,20 m, enorme
 sk = b.sk
 H = sk.h

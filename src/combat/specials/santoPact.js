@@ -3,7 +3,7 @@ import { Timeline } from '../../core/util.js';
 import { faceClose, orbit } from '../../camera/shots.js';
 import { transform } from '../forms.js';
 
-// PACTO DO SANTO (Miguel na forma Luzidia): crava o Símbolo Espiral no próprio peito e se entrega ao Parasita de
+// PACTO DO SANTO (Ferreiro): crava o Símbolo Espiral no próprio peito e se entrega ao Parasita de
 // Dimensões. Exige a sanidade acima de sp.minEnergy (85%). Por sp.window segundos (45), se ele MORRER, o Lodo
 // toma o corpo e ele se ergue como O DEUS DA MORTE (sp.form) — um chefe com vida própria.
 export const santoPact = {

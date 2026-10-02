@@ -1673,14 +1673,42 @@ Object.assign(ABILITY_TYPES, {
       tl.add(a.windup, () => {
         const connected = opp && opp.state !== 'ko' && !opp.isInvulnerable() && distXZ(f.pos, opp.pos) <= a.range
           && Math.abs(angleDiff(f.yaw, yawTo(f.pos, opp.pos))) <= (a.arc * DEG) / 2;
-        const end = connected ? opp.chestPos() : hand().addScaledVector(forwardFromYaw(f.yaw), a.range);
-        tip = end;
+        // errou: a ponta vai até o alcance (ou até bater num obstáculo no caminho)
+        let end = connected ? opp.chestPos() : null;
+        if (!end) {
+          const from = hand();
+          const fwd = forwardFromYaw(f.yaw);
+          end = from.clone();
+          for (let d = 0.5; d <= a.range; d += 0.5) {
+            const pnt = from.clone().addScaledVector(fwd, d);
+            if (world.arena.blocksPoint(pnt, 0.1)) break;
+            end = pnt;
+          }
+        }
+        tip = end.clone();
         const toFn = () => (caught && opp.state !== 'ko' ? opp.chestPos() : tip);
         if (a.gut) {
           // MAGRAS: duas cordas de tripas carnudas trançadas uma na outra
           rope = [0, Math.PI].map((phase) => world.fx.chain(hand, toFn, { rope: true, links: 44, thick: 0.034, twist: 0.035, turns: 7, phase, color: 0xa8343c, glow: 0x4a0008, sag: 0.12 }));
         } else rope = [world.fx.chain(hand, toFn, { rope: true, links: 26, thick: a.ropeThick, color: a.ropeColor ?? 0x8a1018, glow: a.ropeGlow ?? 0x3a0004, sag: 0.08 })];
-        if (!connected) return;
+        const stopRope = () => { if (rope) { rope.forEach((x) => x.alive && x.stop()); rope = null; } };
+        if (!connected) {
+          // a corda estica até a ponta e VOLTA para a mão; só então some (não fica presa no cenário)
+          const out = 0.14;
+          const back = 0.3;
+          let t = 0;
+          world.addTicker({
+            update(dt) {
+              t += dt;
+              const h = hand();
+              if (t < out) tip.lerpVectors(h, end, t / out);
+              else tip.lerpVectors(end, h, Math.min(1, (t - out) / back));
+              return t >= out + back;
+            },
+            dispose: stopRope,
+          });
+          return;
+        }
         const res = applyHit(world, f, opp, { damage: a.damage, kind: 'ability', element: a.element || 'sangue', knockback: 0, hitstun: 0.3, reaction: false, sound: 'chainPull', color: a.ropeColor ?? 0xc01828, scale: 1 });
         if (typeof res === 'number' && opp.state !== 'ko') {
           caught = true;
@@ -1688,15 +1716,15 @@ Object.assign(ABILITY_TYPES, {
           const hold = a.hold * (opp.def.element === 'conhecimento' ? (a.vsConhecimento || 1) : 1);
           opp.stun(hold, 'stagger');
           if (a.gut) wrapCoils(world, opp, hold, rope);
+          else world.after(hold * 0.85, stopRope);
           opp.vel.set(0, 0, 0);
           opp.notify(a.caughtMsg || 'PRESO PELAS AMARRAS', true);
           world.fx.burst(opp.chestPos(), { count: 18, color: 0x9a0010, speed: 3, life: 0.5, size: 0.18, gravity: 8 });
-        }
+        } else stopRope(); // acertou mas não prendeu (defendeu, por exemplo): a corda some
       });
-      // a corda some quando o alvo se solta (com as Magras, as voltas no corpo cuidam disso)
-      tl.add(a.windup + (a.hold * 0.85), () => { if (rope && !(a.gut && caught)) { rope.forEach((r) => r.stop()); rope = null; } });
       tl.end(a.windup + 0.35);
-      return seqFrom(tl, { cancel: () => { if (rope && !(a.gut && caught)) rope.forEach((r) => r.stop()); } });
+      // interrompida antes do arremesso: não sobra corda (depois dele, quem cuida é o ticker/temporizador acima)
+      return seqFrom(tl, { cancel: () => { if (rope && !caught && tl.time < a.windup) rope.forEach((x) => x.stop()); } });
     },
   },
 
@@ -1721,51 +1749,6 @@ Object.assign(ABILITY_TYPES, {
         f.notify(label, true);
       });
       tl.end(0.5);
-      return seqFrom(tl);
-    },
-  },
-
-  // ------------------------------------------------------------------ MIGUEL CARIAD
-  // LÁBIA: o charme do Miguel — o inimigo à frente hesita um instante e bate mais fraco por alguns segundos
-  charm: {
-    start(f, a, world) {
-      const opp = f.opponent;
-      const tl = new Timeline();
-      f.vel.set(0, 0, 0);
-      if (opp) f.yaw = yawTo(f.pos, opp.pos);
-      f.anim.play('point', { restart: true, duration: a.windup + 0.35 });
-      world.audio.play('fearGaze', { volume: 0.4, pitch: 1.4 });
-      tl.add(a.windup, () => {
-        world.fx.ring(f.chestPos(), { color: a.color, radius: 1.4, life: 0.35, vertical: true, yaw: f.yaw });
-        if (!inCone(f, opp, a.range, a.arc) || opp.isInvulnerable()) { f.notify('NÃO COLOU', true); return; }
-        opp.stun(a.stun, 'stagger');
-        const old = opp.findBuff('charmed');
-        if (old) old.time = a.duration;
-        else opp.addBuff({ type: 'charmed', name: 'ENCANTADO (LÁBIA)', time: a.duration, duration: a.duration, mult: a.weaken, affects: ['melee', 'ranged', 'ability'] });
-        world.fx.burst(opp.chestPos(), { count: 16, color: a.color, speed: 2, life: 0.6, size: 0.16 });
-        opp.notify('ENCANTADO', true);
-      });
-      tl.end(a.windup + 0.35);
-      return seqFrom(tl);
-    },
-  },
-
-  // MARCA ESPIRAL: crava o Símbolo Espiral no próprio peito com a faca — perde vida e TODA a sanidade (abre o caminho
-  // para a forma Luzidia, como no cânone)
-  spiralMark: {
-    start(f, a, world) {
-      const tl = new Timeline();
-      f.vel.set(0, 0, 0);
-      f.anim.play('concentrate', { restart: true, duration: a.duration });
-      world.audio.play('descarnar', { volume: 0.7, pitch: 0.8 });
-      tl.add(a.duration * 0.6, () => {
-        for (let i = 0; i < 3; i++) world.after(i * 0.1, () => world.fx.ring(f.chestPos(), { color: 0x1a1620, radius: 0.4 + i * 0.4, life: 0.4, vertical: true, yaw: f.yaw }));
-        world.fx.burst(f.chestPos(), { count: 24, color: 0x9a0010, speed: 2.5, life: 0.5, size: 0.16, gravity: 7 });
-        f.takeDamage(a.selfDamage);
-        f.energy = 0;
-        f.notify('A ESPIRAL FOI CRAVADA', true);
-      });
-      tl.end(a.duration);
       return seqFrom(tl);
     },
   },

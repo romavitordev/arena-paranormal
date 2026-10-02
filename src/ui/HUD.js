@@ -68,11 +68,6 @@ export class HUD {
     if (this.extraReset) this.extraReset();
   }
 
-  // Tutorial ligado: mostra os comandos dos ataques nos ícones da HUD
-  setTutorial(on) {
-    this.root.classList.toggle('tutorial', !!on);
-  }
-
   bind(fighters) {
     this.fighters = fighters;
     this.els = fighters.map((f, i) => {
@@ -174,8 +169,7 @@ export class HUD {
       const avail = f.specialAvailable();
       e.go.classList.toggle('ready', armed && avail);
       e.go.classList.toggle('blocked', armed && !avail);
-      const tut = SETTINGS.tutorial;
-      e.go.textContent = armed ? (avail ? (tut ? `${actionLabel(i, 'physical', f.input.source)} → ESPECIAL!` : 'ESPECIAL!') : (f.cooldowns.special > 0 ? 'RECARREGANDO' : 'SEM SANIDADE')) : 'ESPECIAL';
+      e.go.textContent = armed ? (avail ? `${actionLabel(i, 'physical', f.input.source)} → ESPECIAL!` : (f.cooldowns.special > 0 ? 'RECARREGANDO' : 'SEM SANIDADE')) : 'ESPECIAL';
 
       // ícones de habilidade com cooldown
       const source = f.input.source;

@@ -788,7 +788,9 @@ export class Fighter {
   comboAbility() {
     const inp = this.input;
     const abs = this.def.abilities || [];
-    if (inp.pressed.dodge && (inp.held.carga || inp.pressed.carga || this.recent('carga'))) {
+    // △ + L2: os dois juntos ou em sequência rápida (vale o MOMENTO do aperto do △; segurando △ para carregar por mais
+    // tempo, L2 continua sendo ESQUIVA — fugir vem antes)
+    if (inp.pressed.dodge && (inp.pressed.carga || this.recent('carga'))) {
       const a = abs.find((x) => x.input === 'carga+dodge');
       if (a) return a;
     }
@@ -1167,7 +1169,8 @@ export class Fighter {
       return;
     }
     if (inp.pressed.carga) this.advanceCarga();
-    if (inp.pressed.physical || inp.pressed.ranged || inp.pressed.block || this.comboPressed()) {
+    // sair da carga: ataque, defesa, habilidade ou ESQUIVA (fugir no meio da carga)
+    if (inp.pressed.physical || inp.pressed.ranged || inp.pressed.block || this.comboPressed() || this.wantsDodge()) {
       this.setState('idle');
       this.handleCommands();
       return;

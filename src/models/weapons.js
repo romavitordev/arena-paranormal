@@ -619,7 +619,7 @@ export function leonora() {
   return g;
 }
 
-// MAGNUM (Miguel Cariad): revólver grande de cano longo, preto com cabo de madeira
+// MAGNUM: revólver grande (o .38 da Kemi) de cano longo, preto com cabo de madeira
 export function magnum() {
   const g = new THREE.Group();
   const grip = part(new THREE.BoxGeometry(0.03, 0.11, 0.045), 0x5a3a22);

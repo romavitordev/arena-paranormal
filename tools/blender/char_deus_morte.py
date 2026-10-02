@@ -1,7 +1,7 @@
 """
 O DEUS DA MORTE (Relíquia de Morte no corpo do Ferreiro) — public/models/deus_morte.glb
 Referências: arte do Livro de Regras, cinemática, Toca dos Monstros e a HQ (wiki / enviadas pelo usuário).
-O DOBRO do tamanho do Miguel (~3,9 m) e com silhueta de GORILA:
+O DOBRO do tamanho do Ferreiro (~3,9 m) e com silhueta de GORILA:
   - trapézio e ombros gigantes formando uma corcunda que sobe ACIMA da cabeça; cintura mais estreita;
   - braços enormes e compridos (punhos quase nos joelhos), pernas grossas, pés grandes descalços;
   - o corpo todo é de TENDÕES de Lodo preto/cinza (cordas fibrosas), com fios de Lodo ondulando nos ombros/costas;

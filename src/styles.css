@@ -214,9 +214,6 @@ kbd { display: inline-block; padding: 0 5px; border: 1px solid #5a5268; border-b
 .controls-table th { color: var(--muted); }
 
 /* Tutorial desligado: sem comandos de ataque na tela de luta */
-#hud:not(.tutorial) .ab .k { display: none; }
-#hud:not(.tutorial) .ab .n { bottom: auto; top: 50%; transform: translateY(-50%); }
-#hud:not(.tutorial) .ab .s { align-items: flex-end; padding-bottom: 1px; font-size: 18px; }
 
 .menu .sub { text-align: center; color: var(--muted); margin: -4px 0 8px; }
 .menu .opt.disabled { opacity: .4; }
@@ -493,3 +490,30 @@ body.touch-ui .hint { display: none; }
   #home .hdesc { display: none; }
 }
 #touch.away { display: none; }
+
+/* ---------------- MODO TUTORIAL: cartão do passo atual (topo, abaixo do HUD) */
+#tutorial-panel { position: absolute; left: 50%; top: 215px; transform: translateX(-50%); z-index: 6; pointer-events: none; width: min(560px, calc(100vw - 32px)); }
+#tutorial-panel .t-card { background: rgba(12, 8, 20, 0.86); border: 1px solid rgba(164, 107, 255, 0.55); border-radius: 12px; padding: 12px 16px 10px; color: #eee6ff; text-align: center; box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45); transition: border-color 0.2s, background 0.2s; }
+#tutorial-panel .t-card.ok { border-color: #6aff9a; background: rgba(10, 30, 18, 0.9); }
+#tutorial-panel .t-top { display: flex; justify-content: space-between; font-size: 11px; letter-spacing: 0.14em; color: #b8a8e0; }
+#tutorial-panel .t-bar { height: 4px; background: rgba(255, 255, 255, 0.12); border-radius: 2px; margin: 6px 0 8px; overflow: hidden; }
+#tutorial-panel .t-bar i { display: block; height: 100%; background: #a46bff; }
+#tutorial-panel h3 { margin: 2px 0 6px; font-size: 20px; letter-spacing: 0.06em; }
+#tutorial-panel .t-card.ok h3 { color: #6aff9a; }
+#tutorial-panel .t-cmd { font-size: 17px; margin-bottom: 6px; }
+#tutorial-panel kbd { display: inline-block; min-width: 26px; padding: 2px 8px; margin: 0 2px; border-radius: 6px; background: #2a2040; border: 1px solid #6a58a0; color: #fff; font-family: inherit; font-weight: 700; }
+#tutorial-panel p { margin: 0; font-size: 13px; color: #cfc6e6; line-height: 1.35; }
+#tutorial-panel .t-hint { margin-top: 6px; font-size: 10px; color: #8a7ab0; letter-spacing: 0.08em; }
+#tutorial-panel .fin h3 { color: #ffd84a; }
+@media (max-height: 500px) { #tutorial-panel { top: 128px; } #tutorial-panel h3 { font-size: 16px; } #tutorial-panel p { font-size: 11px; } }
+
+/* ---------------- versão (menu) e NOVIDADES */
+#home .ver { position: absolute; left: 3vw; bottom: 34px; font-size: 13px; font-weight: 800; letter-spacing: .12em; color: #b8a8e0; opacity: .85; }
+#changelog .news { max-width: 640px; }
+#changelog .news-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+#changelog .news-ver { font-size: 12px; color: #b8a8e0; letter-spacing: .08em; }
+#changelog .news-title { font-size: 18px; font-weight: 800; color: #ffd84a; letter-spacing: .04em; }
+#changelog .news-date { font-size: 11px; color: #8a7ab0; margin: 2px 0 8px; }
+#changelog ul { margin: 0; padding-left: 20px; }
+#changelog li { margin: 6px 0; line-height: 1.4; color: #e6dcf8; font-size: 14px; }
+#changelog .hint { margin-top: 10px; font-size: 11px; color: #8a7ab0; }

@@ -6,6 +6,7 @@ import { ARENAS, ARENA_ORDER } from '../arena/index.js';
 import { actionLabel, moveLabel } from './labels.js';
 import { COMBAT } from '../config/combat.js';
 import { moveListHTML } from './moves.js';
+import { VERSION, CHANGELOG } from '../config/version.js';
 
 // Telas fora da luta. Todas recebem as entradas normalizadas dos dois jogadores.
 // Fluxo: Título → Menu principal (P1 VS P2 / P1 VS CPU / Opções) → Personagens →
@@ -42,9 +43,11 @@ const VS_OPTIONS = (prefix, team) => [
 ];
 const HOME_OPTIONS = [
   { id: 'solo', label: 'BATALHA SOLO', desc: '1 contra 1.', sub: VS_OPTIONS('solo', false) },
-  { id: 'team', label: 'BATALHA EM EQUIPE', desc: 'Líder + 2 assistências (D-pad ← / →).', sub: VS_OPTIONS('team', true) },
+  { id: 'team', label: 'BATALHA EM EQUIPE', desc: 'Líder + 2 assistências (L1 / R1).', sub: VS_OPTIONS('team', true) },
+  { id: 'tutorial', label: 'TUTORIAL', desc: 'Escolha um personagem e aprenda, passo a passo, todos os golpes dele.' },
   { id: 'training', label: 'TREINAMENTO', desc: 'Pratique combos num alvo parado. A vida dele se recupera.' },
-  { id: 'options', label: 'OPÇÕES', desc: 'Tutorial, tempo da luta e modo de movimento.' },
+  { id: 'news', label: 'NOVIDADES', desc: `O que mudou na versão v.${VERSION}.` },
+  { id: 'options', label: 'OPÇÕES', desc: 'Tempo da luta e modo de movimento.' },
 ];
 
 function sigilSVG() {
@@ -88,6 +91,7 @@ export class HomeScreen {
         <div class="hlist"></div>
         <div class="hdesc"></div>
       </div>
+      <div class="ver">v.${VERSION}</div>
       <div class="foot"><span><b>${OK}</b> confirmar · <b>${BACK}</b> voltar</span><span>Teclado: P1 WASD + losango I J K L · P2 setas + numérico 8 4 6 2</span></div>`);
     this.desc = this.el.querySelector('.hdesc');
     this.listEl = this.el.querySelector('.hlist');
@@ -253,6 +257,7 @@ export const MODES = {
   cpu: { title: 'P1 VS CPU', slots: ['P1', 'CPU'], single: true },
   cvc: { title: 'CPU VS CPU', slots: ['CPU 1', 'CPU 2'], single: true },
   training: { title: 'TREINAMENTO', slots: ['P1', 'ALVO'], single: true },
+  tutorial: { title: 'TUTORIAL', slots: ['P1', 'ALVO'], single: true },
 };
 
 // Seleção de personagem no estilo Storm 4: a grade do P1 fica à esquerda e a do P2 à direita;
@@ -682,7 +687,7 @@ const TIPS = [
   'Segure △/Y para carregar energia. △ → △ → ○ solta o especial.',
   'Direção + ○ muda o golpe: avanço, recuo, passo lateral ou golpe aéreo.',
   'Bater na defesa do inimigo deixa você exposto a contra-ataque.',
-  'O Tutorial (comandos na tela) pode ser ligado em Opções ou na Pausa.',
+  'No menu inicial, o modo TUTORIAL ensina passo a passo os golpes do personagem que você escolher.',
 ];
 
 export class LoadingScreen {
@@ -706,6 +711,41 @@ export class LoadingScreen {
 }
 
 // PAUSE → COMANDOS: controles gerais + lista de golpes de cada lutador
+// NOVIDADES: o changelog, uma versão por vez (◀ ▶ navegam; começa na mais nova)
+export class ChangelogScreen {
+  constructor(root) {
+    this.page = 0;
+    this.el = el(root, 'screen clear', 'changelog', `
+      <div class="cmdbox news">
+        <div class="news-head"><h3>NOVIDADES</h3><span class="news-ver"></span></div>
+        <div class="content"></div>
+        <div class="hint">◀ ▶ outras versões · <b>${OK}</b> ou <b>${BACK}</b> fechar</div>
+      </div>`);
+    this.content = this.el.querySelector('.content');
+    this.verEl = this.el.querySelector('.news-ver');
+    this.el.addEventListener('click', () => { this.clicked = true; });
+    this.render();
+  }
+  render() {
+    const c = CHANGELOG[this.page];
+    this.verEl.textContent = `v.${c.v}${c.v === VERSION ? ' · ATUAL' : ''} — ${this.page + 1} / ${CHANGELOG.length}`;
+    this.content.innerHTML = `<div class="news-title">v.${c.v} — ${c.title}</div><div class="news-date">${c.date.split('-').reverse().join('/')}</div><ul>${c.items.map((i) => `<li>${i}</li>`).join('')}</ul>`;
+  }
+  update(input) {
+    if (this.clicked) { this.clicked = false; return 'back'; }
+    for (const p of controllers(input, null)) {
+      if (p.menu.left) { this.page = (this.page + CHANGELOG.length - 1) % CHANGELOG.length; this.render(); }
+      if (p.menu.right) { this.page = (this.page + 1) % CHANGELOG.length; this.render(); }
+      if (back(p) || confirm(p) || p.pressed.start) return 'back';
+    }
+    if (input.keyPressedOnce('Escape') || input.keyPressedOnce('Enter')) return 'back';
+    return null;
+  }
+  dispose() {
+    this.el.remove();
+  }
+}
+
 export class CommandsScreen {
   constructor(root, { defs, owner = null }) {
     this.defs = defs;

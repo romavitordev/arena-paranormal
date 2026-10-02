@@ -1,7 +1,7 @@
 import { buildModel } from '../models/index.js';
 import { getForm } from '../characters/forms/index.js';
 
-// FORMAS (transformações no meio da luta): Miguel → Luzidio → Deus da Morte, Juan → Diabo.
+// FORMAS (transformações no meio da luta): Ferreiro → Deus da Morte, Juan → Diabo, Kemi → Fantasma.
 // Uma forma é uma definição de personagem completa (modelo, golpes, habilidades, especial) que NÃO aparece na
 // seleção (src/characters/forms). O lutador troca de modelo e de kit mantendo posição, placar e (por padrão) vida.
 // No fim do round tudo volta para a forma base.
@@ -52,6 +52,8 @@ export function revertForm(f, { keepHealth = true } = {}) {
   else f.health = Math.max(1, Math.round(base.maxHealth * Math.min(1, ratio)));
   f.baseForm = null;
   f.form = null;
+  // o HUD volta para o nome e as habilidades da forma base (antes ficava o nome da forma)
+  f.world.onTransform && f.world.onTransform(f, base.def);
 }
 
 // Chamado a cada quadro pelo Fighter: tempo de forma, regeneração e gatilhos da forma
@@ -79,13 +81,6 @@ export function updateForm(f, dt) {
     w.fx.burst(f.chestPos(), { count: 30, color: 0x7a0010, kind: 'smoke', speed: 2, life: 0.7, size: 0.7, grow: 1 });
     f.notify('A FORMA SE DESFEZ', true);
     cb && cb(f);
-  }
-  // sanidade zerada vira outra forma (Miguel → Luzidio)
-  const Z = def.onSanityZero;
-  if (Z && f.energy <= 0.5 && ['idle', 'block', 'charging', 'dashing', 'hitstun', 'stun'].includes(f.state)) {
-    transform(f, Z.form, { banner: Z.banner });
-    if (Z.energy != null) f.energy = Z.energy;
-    f.notify(Z.notify || 'TRANSFORMAÇÃO', true);
   }
 }
 
