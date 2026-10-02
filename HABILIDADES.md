@@ -517,7 +517,7 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
 - **Cai Dentro** — R1 + ○ / RB + B · custo 20 · cooldown 14 s · alcance 11 m
   Chama a atenção do inimigo e assume o confronto: longe, corre e dá uma ombrada; perto, grita. O inimigo fica PROVOCADO (só ataca no corpo a corpo por 4 s) e o Lírio recebe 20% menos dano.
 - **Amarras de Sangue "Magras"** — R1 + □ / RB + X · custo 25 · cooldown 15 s · dano 30 · alcance 9 m
-  Estala a corda de tripas entrelaçadas no alvo e o prende por um instante (ritual de Sangue: mais forte contra Conhecimento). Ferramenta para segurar quem foge.
+  Estala as Magras — corda de tripas carnudas trançadas — no alvo, e as voltas se enrolam no corpo dele e o prendem. Feitas para prender criaturas de Conhecimento: seguram 60% mais tempo quem é de Conhecimento.
 - **Leonora Amaldiçoada (Sangue)** — R1 + × / RB + A · custo 25 · cooldown 18 s
   Amaldiçoa a Leonora com Sangue: por alguns segundos cada marretada abre um sangramento.
 - **Proteção Pesada** — R1 + L2 / RB + LT · custo 25 · cooldown 22 s
@@ -572,7 +572,7 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
 
 ## JUAN
 
-*Masoquista e imprevisível: quanto mais apanha, mais sanidade; o Pacto do Hexatombe o transforma no Diabo* · arma: Faca Predadora (lâmina ondulada que absorve sangue)
+*Masoquista e imprevisível: quanto mais apanha, mais sanidade; no Renascimento senta no Trono e vira o Diabo* · arma: Faca Predadora (lâmina ondulada que absorve sangue)
 
 ### Físico (○ / B)
 
@@ -605,6 +605,47 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
 - **Armadura de Sangue Diabólica** — R1 + L2 / RB + LT · custo 30 · cooldown 24 s
   O próprio sangue endurece numa armadura com espinhos: recebe 30% menos dano, aguenta 2 golpes sem recuar e fica mais rápido.
 
-### Especial: Pacto do Hexatombe
+### Especial: Renascimento
+
+250 de dano · custo 50 · cooldown 60 s.
+
+---
+
+## KEMI
+
+*Assassina silenciosa: vestindo as faixas vira A Fantasma* · arma: Sniper Fantasma (rifle de Morte), faca e revólver .38
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Corte rápido | 24 | 1.7 m |  |
+| ○ 2 | Corte de volta | 24 | 1.7 m |  |
+| ○ 3 | Coronhada | 30 | 1.6 m |  |
+| ○ 4 | Estocada no pescoço | 30 | 1.9 m |  |
+| ○ 5 | Execução | 52 | 1.9 m | finalizador: lança |
+| Frente + ○ | Bote silencioso | 32 | 1.9 m |  |
+| Trás + ○ | Recua e corta | 30 | 1.8 m | invulnerável no começo |
+| Lado + ○ | Corte rodando | 28 | 1.8 m |  |
+| No ar + ○ | Faca aérea | 32 | 1.8 m | desce com impacto |
+| ↑ + ○ (no combo) | Corte para cima | 38 | 1.8 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Rasteira e faca | 42 | 1.8 m | finalizador: derruba |
+
+### Principal (□ / X): Sniper Fantasma
+
+- Dano 100 · alcance 70 m · cooldown 3 s · custo 0
+
+### Habilidades
+
+- **Disparo da Morte** — R1 + △ / RB + Y · custo 30 · cooldown 16 s
+  Ajoelha e o tempo desacelera em volta do alvo (fica bem lento) — ela mira com calma e dispara um tiro certeiro de Morte.
+- **Pistola Transtornada** — R1 + ○ / RB + B · custo 20 · cooldown 11 s
+  Três tiros com balas enroladas em arame farpado: cada uma faz sangrar e deixa o alvo mais lento.
+- **Perita** — R1 + □ / RB + X · custo 20 · cooldown 18 s · alcance 30 m
+  Estuda o alvo com olho de assassina: por 8 s ele recebe 12% a mais de dano de tudo.
+- **Revólver .38** — R1 + L2 / RB + LT · custo 20 · cooldown 10 s
+  Saque rápido do revólver: seis tiros em leque, rápidos, para quem chega perto demais.
+
+### Especial: Vestir as Faixas
 
 250 de dano · custo 50 · cooldown 60 s.

@@ -112,13 +112,13 @@ export function buildThrone() {
   }
   // Coroa de Espinhos
   const halo = new THREE.Group();
-  halo.position.set(0, 3.15, -0.82);
-  halo.add(new THREE.Mesh(new THREE.TorusGeometry(1.05, 0.06, 8, 36), gold));
+  halo.position.set(0, 3.4, -0.85);
+  halo.add(new THREE.Mesh(new THREE.TorusGeometry(1.5, 0.09, 8, 40), gold));
   for (let i = 0; i < 20; i++) {
     const a = (i / 20) * Math.PI * 2;
-    const len = 0.55 + (i % 2) * 0.35;
+    const len = 0.7 + (i % 2) * 0.7;
     const sp = new THREE.Mesh(new THREE.ConeGeometry(0.06, len, 5), gold);
-    sp.position.set(Math.cos(a) * (1.05 + len / 2), Math.sin(a) * (1.05 + len / 2), 0);
+    sp.position.set(Math.cos(a) * (1.5 + len / 2), Math.sin(a) * (1.5 + len / 2), 0);
     sp.rotation.z = a - Math.PI / 2;
     halo.add(sp);
   }

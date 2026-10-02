@@ -18,7 +18,7 @@ export default {
     identity: 'Forma das Faixas (45 s)',
     tagline: 'Ninguém vê a Fantasma.',
   },
-  stats: { moveSpeed: 8.6 },
+  stats: { moveSpeed: 8.6, maxHealth: 1200 }, // cabe a vida extra das faixas (+200)
   anims: { idle: 'idle_knife', run: 'run', charge: 'charge', victory: 'victory', block: 'block' },
   chargeFx: { style: 'default', color: 0x1a1620 },
   dodge: { style: 'default', distance: 6 },

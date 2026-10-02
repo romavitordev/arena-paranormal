@@ -164,7 +164,12 @@
 - ✅ Teclado refeito: losango I J K L = △ □ × ○ (como no controle), Q = R1, E = R2, Shift = L2, 1-4 equipe; P2 no numérico.
 - ✅ Celular: joystick, losango, R1/DEF/ESQ, ESPECIAL, pausa e equipe na tela; menus com setas/OK/VOLTAR; HUD e menus
   compactos em tela baixa; aviso para girar em retrato. Some sozinho quando o jogador usa teclado/controle.
-- ⏭ Polir: Diabo (chifres finos, braços extras e pernas de bode pouco visíveis), jaqueta do Miguel, enquadramento dos
+- ✅ Juan: Renascimento no Trono do Diabo (Portador do Trono até o fim do round, poderes do cânone); modelo do Diabo pela
+  referência (galhada clara, cabelo preto longo, 4 braços, asas de braços, pernas de bode); Juan com boca costurada,
+  ferida em cruz e alargadores.
+- ✅ Kemi / A Fantasma; Magras da Lírio (tripas trançadas que enrolam o alvo, +60% contra Conhecimento).
+- ✅ Aguiar (gola de pelo, lenço, mangas, riscos da máscara) e elmo do Labirinto (sorriso entre faixas rebitadas, gola).
+- ⏭ Polir: jaqueta do Miguel, enquadramento dos
   retratos das formas grandes; equilíbrio do Miguel (perdeu de Kaiser/Erin) e do Juan; animações próprias das formas.
 - Gal, Erin, Aguiar, Labirinto e Xande já foram feitos/revisados com as referências nas rodadas anteriores.
 - ✅ V4 etapa 12 Armature: esqueleto com root → hips → sp → chest → neck → hd, mãos (handL/R) e pés (footL/R),

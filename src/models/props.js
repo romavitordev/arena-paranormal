@@ -259,7 +259,8 @@ function kemiProps(rig, ghost) {
   props.knife = k;
   const back = sniperFantasma({ drip: ghost });
   back.rotation.set(0, 0, 2.6);
-  back.position.set(0, 0.05, -0.1);
+  back.position.set(0, -0.12, -0.11);
+  back.scale.setScalar(0.78); // nas costas, sem passar muito da cabeça
   sockets.back.add(back);
   props.rifleBack = back;
   const hand = sniperFantasma({ drip: ghost });

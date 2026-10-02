@@ -88,7 +88,12 @@ for i in range(9):
     x, y = math.sin(a) * 0.15 * H, -math.cos(a) * 0.15 * H
     ln = (0.12 + random.random() * 0.12) * H
     papers.append(xform(box((x, y, hc.z - 0.16 * H - ln / 2), (0.05, 0.004, ln)), lambda p, a=a: Vector((p.x, p.y, p.z))))
-b.add('prop_helmetOn', merge(helmet), helm, region='head', subdiv=0)
+# gola de metal rebitada fechando o pescoço (parte do elmo)
+gorget = [tube([(0, 0, 1.57 * H, 0.1 * H, 0.095 * H), (0, 0, 1.63 * H, 0.092 * H, 0.088 * H), (0, 0, 1.66 * H, 0.08 * H, 0.078 * H)], 20)]
+for i in range(14):
+    a = i / 14 * TAU
+    gorget.append(ellipsoid((math.sin(a) * 0.101 * H, -math.cos(a) * 0.096 * H, 1.595 * H), (0.008, 0.008, 0.008), 5, 4))
+b.add('prop_helmetOn', merge(helmet, *gorget), helm, region='head', subdiv=0)
 b.add('prop_helmetOn_papers', merge(*papers), paper, region='head', subdiv=0)
 
 b.export(OUT)

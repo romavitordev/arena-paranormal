@@ -54,35 +54,43 @@ def curve_tube(base, d1, d2, ln, r0, r1=0.003, n=10, seg=8):
     return tube(pts, seg)
 
 
-# ---------------- chifres grossos: par de cima (sobe e abre) e par em FOICE (sai para o lado e cai para frente)
+# ---------------- GALHADA: dois chifres grandes e claros que sobem e abrem com pontas (como galhada de cervo) e
+# uma coroa de chifres curtos no alto da cabeça (referência da forma do Diabo)
 horns = []
 for s in (1, -1):
-    horns.append(curve_tube(Vector((s * 0.075 * H, hc.y - 0.03 * H, hc.z + 0.11 * H)), Vector((s * 0.3, 0.15, 1)).normalized(), Vector((s * 0.55, 0.5, 0.15)), 0.36 * H, 0.048 * H, n=12))
-    horns.append(curve_tube(Vector((s * 0.12 * H, hc.y + 0.01 * H, hc.z + 0.05 * H)), Vector((s * 1, 0.35, 0.35)).normalized(), Vector((s * 0.1, -0.55, -1.2)), 0.34 * H, 0.042 * H, n=12))
-b.add('horns', merge(*horns), horn, region='head', subdiv=0)
-
-# ---------------- COROA DE ESPINHOS: halo dourado atrás da cabeça, espinhos para fora e alguns trançados no anel
-cc = Vector((hc.x, hc.y + 0.17 * H, hc.z + 0.06 * H))
-R = 0.25 * H
-crown = []
-ring = []
-for i in range(41):
-    a = i / 40 * TAU
-    ring.append((cc.x + math.cos(a) * R, cc.y, cc.z + math.sin(a) * R, 0.014 * H, 0.014 * H))
-crown.append(tube(ring, 8, cap_start=False, cap_end=False))
-random.seed(11)
-for i in range(22):
-    a = i / 22 * TAU + random.uniform(-0.05, 0.05)
-    base = Vector((cc.x + math.cos(a) * R, cc.y, cc.z + math.sin(a) * R))
-    out = Vector((math.cos(a), random.uniform(-0.25, 0.1), math.sin(a))).normalized()
-    ln = (0.1 + (i % 2) * 0.08 + random.uniform(0, 0.04)) * H
-    crown.append(cone(tuple(base), tuple(base + out * ln), 0.016 * H, 5))
-for i in range(16):
-    a = i / 16 * TAU + 0.2
-    base = Vector((cc.x + math.cos(a) * R, cc.y, cc.z + math.sin(a) * R))
-    crown.append(cone(tuple(base), tuple(base + Vector((math.cos(a + 1.4) * 0.05 * H, -0.04 * H, math.sin(a + 1.4) * 0.05 * H))), 0.008 * H, 4))
-b.add('crown', merge(*crown), gold, region='head', subdiv=0)
-
+    base = Vector((s * 0.09 * H, hc.y - 0.01 * H, hc.z + 0.1 * H))
+    d1 = Vector((s * 0.55, 0.1, 1)).normalized()
+    d2 = Vector((s * 0.6, 0.2, -0.25))
+    ln = 0.42 * H
+    horns.append(curve_tube(base, d1, d2, ln, 0.038 * H, n=12))
+    # pontas (galhos) saindo do chifre principal, viradas para cima
+    for k, (t, l2, out) in enumerate(((0.35, 0.16, 0.15), (0.6, 0.2, 0.05), (0.82, 0.14, -0.1))):
+        p = base + d1 * (ln * t) + d2 * (ln * t * t)
+        horns.append(curve_tube(p, Vector((s * out, 0.05, 1)).normalized(), Vector((s * 0.15, 0.05, 0)), l2 * H, 0.022 * H, n=6))
+for k in range(5):
+    x = (k - 2) * 0.035 * H
+    p = Vector((x, hc.y - 0.02 * H, hc.z + 0.15 * H))
+    horns.append(curve_tube(p, Vector((x * 2, 0.05, 1)).normalized(), Vector((0, 0.1, 0)), (0.13 - abs(k - 2) * 0.025) * H, 0.016 * H, n=5))
+b.add('horns', merge(*horns), material('antler', '#a89060', 0.65), region='head', subdiv=0)
+# orelhas pontudas
+ears = [cone((s * 0.13 * H, hc.y + 0.01, hc.z + 0.0), (s * 0.24 * H, hc.y + 0.04 * H, hc.z + 0.07 * H), 0.035, 6) for s in (1, -1)]
+b.add('ears', merge(*ears), skin, region='head', subdiv=0)
+# cabelo PRETO longo e liso caindo até o peito e as costas
+hairm = material('hair_diabo', '#141012', 0.6)
+b.add('hair_cap', hair_cap((hc.x, hc.y + 0.006, hc.z + 0.014), (0.146 * H, 0.156 * H, 0.168 * H), front=0.2, side=0.42, back=0.62), hairm, region='head')
+strands = []
+for i in range(18):
+    a = -2.3 + i / 17 * 4.6  # de um lado ao outro, passando por trás
+    r0 = Vector((math.sin(a) * 0.14 * H, hc.y + math.cos(a) * 0.14 * H, hc.z + 0.05 * H))
+    front = abs(a) > 1.6
+    ln = (0.5 if front else 0.62) * H
+    pts = []
+    for k in range(6):
+        t = k / 5
+        p = r0 + Vector((math.sin(a) * 0.05 * H * t, (math.cos(a) * 0.06 - (0.06 if front else 0)) * H * t, -ln * t))
+        pts.append((p.x, p.y, p.z, 0.03 * (1 - 0.5 * t) + 0.006, 0.014))
+    strands.append(tube(pts, 6))
+b.add('hair_long', merge(*strands), hairm, region='head', subdiv=0)
 
 # ---------------- ASAS DE BRAÇOS: das costas saem braços vermelhos que se ramificam e terminam em mãos abertas
 def open_hand(p, d, sz):
@@ -121,9 +129,14 @@ for s in (1, -1):
         branch(root, d, ln * H, 0.032 * H, 1 if k < 3 else 0, wings)
 b.add('arm_wings', merge(*wings), wing, region='chest', subdiv=0)
 
-# ---------------- capuz do Juan (rasgado, aberto no rosto) e manto curto nos ombros
-b.add('hood', ellipsoid((hc.x, hc.y + 0.03 * H, hc.z + 0.02 * H), (0.17 * H, 0.17 * H, 0.18 * H), 16, 10, theta_max=math.pi * 0.62, phi=(0.15, 0.85)), red, region='head', subdiv=0)
-b.add('cape', tube([(0, 0.035 * H, top + 0.02 * H, 0.21 * H, 0.15 * H), (0, 0.05 * H, top - 0.2 * H, 0.27 * H, 0.18 * H), (0, 0.06 * H, hz + 0.05 * H, 0.28 * H, 0.19 * H)], 20, cap_start=False, cap_end=False), red_dk, region='chest')
+# ---------------- tanga vermelha rasgada na cintura
+loin = [tube([(0, 0.0, hz + 0.06 * H, 0.17 * H, 0.125 * H), (0, 0.0, hz - 0.1 * H, 0.19 * H, 0.14 * H)], 20, cap_start=False, cap_end=False)]
+random.seed(9)
+for i in range(16):
+    a = i / 16 * TAU
+    p0 = Vector((math.sin(a) * 0.19 * H, -math.cos(a) * 0.14 * H, hz - 0.1 * H))
+    loin.append(cone(tuple(p0), tuple(p0 + Vector((math.sin(a) * 0.01, -math.cos(a) * 0.01, -(0.06 + random.random() * 0.1) * H))), 0.035, 4))
+b.add('loincloth', merge(*loin), red_dk, region='skirt', subdiv=0)
 # espinhos da Armadura de Sangue saindo do ombro esquerdo
 random.seed(4)
 spikes = []

@@ -21,7 +21,7 @@ H = sk.h
 hz = sk['hips'].z
 
 M = {
-    'skin': material('skin_aguiar', '#d9ad8e', 0.8),
+    'skin': material('skin_aguiar', '#9a6644', 0.8),
     'face': material('face_aguiar', '#ffffff', 0.8),
     'torso': material('shirt_white', '#e4e0d6', 0.85),
     'arm': material('arms_aguiar', '#ffffff', 0.8),  # cicatrizes
@@ -64,6 +64,26 @@ for i in range(30):
     base = Vector((math.sin(a) * 0.2 * H, -math.cos(a) * 0.15 * H, hz - 0.055 * H))
     torn.append(cone(tuple(base), tuple(base + Vector((0, 0, -0.03 - random.random() * 0.04))), 0.018, 3))
 b.add('jacket_torn', merge(*torn), red_d, region='torso', subdiv=0)
+
+# ---------------- gola de PELO vermelha rasgada, grande, por cima dos ombros (referência), lenço marrom no pescoço
+# e mangas curtas da camiseta aparecendo pelas cavas
+random.seed(12)
+fur = []
+for i in range(46):
+    a = i / 46 * TAU
+    if abs(math.sin(a)) < 0.25 and math.cos(a) < 0:
+        continue  # frente aberta
+    rx, ry = 0.2 * H, 0.15 * H
+    base = Vector((math.sin(a) * rx * 0.9, -math.cos(a) * ry * 0.95, 1.56 * H))
+    out = Vector((math.sin(a) * 1.0, -math.cos(a) * 0.7, -0.35 + random.uniform(-0.2, 0.25)))
+    out.normalize()
+    ln = (0.09 + random.random() * 0.08) * H
+    fur.append(cone(tuple(base), tuple(base + out * ln), 0.035, 4))
+b.add('fur_collar', merge(*fur), red, region='torso', subdiv=0)
+b.add('neck_wrap', tube([(0, 0, 1.6 * H, 0.085 * H, 0.08 * H), (0, -0.005, 1.66 * H, 0.08 * H, 0.076 * H)], 16), leather, region='torso', subdiv=0)
+for side in ('L', 'R'):
+    sh, e = sk['s' + side], sk['e' + side]
+    b.add('tee_sleeve' + side, tube(limb_rings(sh + Vector((0, 0, 0.03)), sh.lerp(e, 0.4), 0.086, 0.082, n=2), 14), M['torso'], region='arm' + side, subdiv=0)
 
 # ---------------- suspensório de couro em X (frente e costas) + cinto de utilidades
 for s in (1, -1):

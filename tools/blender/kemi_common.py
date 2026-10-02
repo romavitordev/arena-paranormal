@@ -20,20 +20,20 @@ def build(ghost, OUT):
     hz = sk['hips'].z
     top = 1.55 * H
 
-    skin = material('skin_kemi', '#5a3a28', 0.75)
+    skin = material('skin_kemi', '#3a2216', 0.75)
     band = material('bandage', '#ddd2ba', 0.95)
     band_dk = material('bandage_dirty', '#b8aa8c', 0.95)
     boots = material('boots_kemi', '#141416', 0.55)
     laces = material('laces_kemi', '#c8c0b0', 0.8)
     silver = material('silver_kemi', '#c0c0c8', 0.3, metal=0.9)
-    hairm = material('dreads_kemi', '#e6d9aa', 0.75)
+    hairm = material('dreads_kemi', '#c8b47a', 0.8)
     if ghost:
         M = {
             'skin': skin,
             'face': material('face_fantasma', '#ffffff', 0.85),
             'torso': material('coat_fantasma', '#3e2e22', 0.7),
             'arm': material('coat_fantasma', '#3e2e22', 0.7),
-            'legs': material('pants_fantasma', '#4a3c2e', 0.9),
+            'legs': material('pants_fantasma', '#2e241a', 0.9),
             'feet': boots,
         }
     else:
@@ -42,7 +42,7 @@ def build(ghost, OUT):
             'face': material('face_kemi', '#ffffff', 0.75),
             'torso': material('top_kemi', '#e8e4dc', 0.8),  # regata branca
             'arm': skin,
-            'legs': material('pants_kemi', '#6e5a44', 0.9),
+            'legs': material('pants_kemi', '#3e3024', 0.9),
             'feet': boots,
         }
     hc = b.body(M, [(-0.11, 0.158), (0.0, 0.15), (0.17, 0.132), (0.36, 0.182), (0.47, 0.19), (0.57, 0.104), (0.63, 0.062)],
@@ -137,12 +137,13 @@ def build(ghost, OUT):
     else:
         # ---------------- faixa preta na cintura, pano marrom longo caindo do lado esquerdo até a canela,
         # faixas enroladas nas pernas e a mochila cinza nas costas (referência de costas)
-        brown = material('coat_kemi', '#5a4632', 0.85)
+        brown = material('coat_kemi', '#3a2c20', 0.85)
+        b.add('hips_pants', tube([(0, 0, hz - 0.13 * H, 0.165 * H, 0.125 * H), (0, 0, hz + 0.05 * H, 0.158 * H, 0.12 * H)], 20), M['legs'], region='torso', subdiv=0)
         b.add('waistband', tube([(0, 0, hz + 0.04 * H, 0.162 * H, 0.122 * H), (0, 0, hz + 0.1 * H, 0.16 * H, 0.12 * H)], 20), material('band_black', '#141416', 0.7), region='torso', subdiv=0)
         b.add('drape', tube([(0.1 * H, 0.02, hz + 0.04 * H, 0.09 * H, 0.05 * H), (0.13 * H, 0.03, hz - 0.3 * H, 0.1 * H, 0.05 * H), (0.13 * H, 0.03, hz - 0.68 * H, 0.1 * H, 0.05 * H)], 12, cap_start=False, cap_end=False), brown, region='legL')
         for side in ('L', 'R'):
             l, k, f = sk['l' + side], sk['k' + side], sk['foot' + side]
-            wr = [tube(limb_rings(l.lerp(f, 0.3 + i * 0.13), l.lerp(f, 0.33 + i * 0.13), 0.09, 0.089, n=1), 14) for i in range(4)]
+            wr = [tube(limb_rings(l.lerp(f, 0.36 + i * 0.17) + Vector((0, 0, 0.012 * (1 if i % 2 else -1))), l.lerp(f, 0.38 + i * 0.17), 0.087, 0.086, n=1), 14) for i in range(3)]
             b.add('leg_wraps' + side, merge(*wr), band, region='leg' + side, subdiv=0)
         grey = material('backpack', '#3a3e42', 0.7)
         b.add('backpack', box((0, 0.17 * H, hz + 0.38 * H), (0.26 * H, 0.1 * H, 0.3 * H), bevel=0.02), grey, region='chest', subdiv=0)
@@ -159,14 +160,14 @@ def build(ghost, OUT):
         a = i / 14 * TAU
         root = Vector((hc.x + math.sin(a) * 0.12 * H, hc.y - math.cos(a) * 0.12 * H, hc.z + 0.05 * H))
         dr.append(tube([(root.x, root.y, root.z, 0.015, 0.015), (tie.x, tie.y, tie.z, 0.013, 0.013)], 6))
-    for i in range(14):
-        a = i / 14 * TAU
+    for i in range(22):
+        a = i / 22 * TAU
         pts = []
         ln = (0.5 + 0.15 * random.random()) * H
         for k in range(8):
             t = k / 7
             p = tie + Vector((math.sin(a) * (0.03 + 0.05 * t), 0.03 + math.cos(a) * 0.03 + 0.06 * t - 0.05 * t * t, 0.04 * (1 - t) * 2 - ln * t * t))
-            pts.append((p.x, p.y, p.z, 0.014, 0.014))
+            pts.append((p.x, p.y, p.z, 0.019, 0.019))
         dr.append(tube(pts, 6))
     for sx in (1, -1):
         for j in range(2):

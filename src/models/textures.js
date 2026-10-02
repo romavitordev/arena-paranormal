@@ -395,14 +395,14 @@ export const MATERIAL_TEXTURES = {
     g.strokeStyle = '#a0685a'; g.lineWidth = 2.2; g.lineCap = 'round';
     g.beginPath(); g.moveTo(CX - 22, 196); g.lineTo(CX - 12, 210); g.stroke();
   }, {
-    skin: '#d9ad8e',
+    skin: '#9a6644',
     eye: { iris: '#3a2a20', irisLight: '#6a5040', tilt: 0.08 },
     brow: { angry: 7, thick: 6.5, color: '#0e0d0f' },
     mouth: { mouthW: 13, smile: -1 },
   }),
   // braços com várias cicatrizes
   arms_aguiar: () => canvasTex(256, 256, (g) => {
-    g.fillStyle = '#d9ad8e'; g.fillRect(0, 0, 256, 256);
+    g.fillStyle = '#9a6644'; g.fillRect(0, 0, 256, 256);
     g.lineCap = 'round';
     for (let i = 0; i < 22; i++) {
       const x = Math.random() * 256, y = Math.random() * 256, a = Math.random() * Math.PI, l = 10 + Math.random() * 26;
@@ -428,10 +428,10 @@ export const MATERIAL_TEXTURES = {
       g.lineWidth = r * 2; g.strokeStyle = '#b8141a'; g.lineCap = 'round';
       g.beginPath(); g.moveTo(x0, y0); g.lineTo(x1, y1); g.stroke();
     };
-    finger(w * 0.42, h * 0.58, w * 0.36, h * 0.2, 17);
-    finger(w * 0.48, h * 0.56, w * 0.46, h * 0.13, 18);
-    finger(w * 0.54, h * 0.56, w * 0.56, h * 0.14, 18);
-    finger(w * 0.6, h * 0.58, w * 0.66, h * 0.22, 16);
+    finger(w * 0.41, h * 0.62, w * 0.39, h * 0.12, 9);
+    finger(w * 0.47, h * 0.6, w * 0.465, h * 0.08, 9);
+    finger(w * 0.53, h * 0.6, w * 0.535, h * 0.08, 9);
+    finger(w * 0.59, h * 0.62, w * 0.61, h * 0.12, 9);
     finger(w * 0.38, h * 0.7, w * 0.24, h * 0.62, 17); // polegar
     // escorridos de tinta
     g.strokeStyle = 'rgba(160,15,20,0.85)';
@@ -500,7 +500,7 @@ export const MATERIAL_TEXTURES = {
     g.fillStyle = '#4a4440';
     for (let x = 0; x < w; x += 24) { g.beginPath(); g.arc(x, h * 0.18, 4, 0, Math.PI * 2); g.fill(); }
     // lábios carnudos
-    const cx = w * 0.5, cy = h * 0.71, mw = w * 0.2, mh = h * 0.11;
+    const cx = w * 0.5, cy = h * 0.68, mw = w * 0.22, mh = h * 0.15;
     g.fillStyle = '#b8484a';
     g.beginPath(); g.ellipse(cx, cy, mw, mh, 0, 0, Math.PI * 2); g.fill();
     g.fillStyle = '#5a0e10';
@@ -515,8 +515,15 @@ export const MATERIAL_TEXTURES = {
       g.fillRect(x - tw / 2, cy - mh * 0.62 - curve * 0.5, tw - 2, mh * 0.55); g.strokeRect(x - tw / 2, cy - mh * 0.62 - curve * 0.5, tw - 2, mh * 0.55);
       g.fillRect(x - tw / 2, cy + mh * 0.08 + curve * 0.3, tw - 2, mh * 0.5); g.strokeRect(x - tw / 2, cy + mh * 0.08 + curve * 0.3, tw - 2, mh * 0.5);
     }
-    g.fillStyle = 'rgba(200,120,120,0.6)'; // gengiva
+    g.fillStyle = 'rgba(170,40,44,0.75)'; // gengiva
     g.fillRect(cx - mw * 0.8, cy - mh * 0.7, mw * 1.6, mh * 0.1);
+    // duas faixas de metal rebitadas emoldurando o sorriso (dão a volta no elmo)
+    for (const y of [cy - mh * 1.08, cy + mh * 0.9]) {
+      g.fillStyle = '#4e4a48'; g.fillRect(0, y, w, h * 0.045);
+      g.fillStyle = 'rgba(255,255,255,0.12)'; g.fillRect(0, y, w, 3);
+      g.fillStyle = '#7a3a20';
+      for (let x = 12; x < w; x += 40) { g.beginPath(); g.arc(x, y + h * 0.022, 4, 0, Math.PI * 2); g.fill(); }
+    }
   }),
   paper_maze: () => canvasTex(128, 256, (g) => {
     g.fillStyle = '#e8e0cc'; g.fillRect(0, 0, 128, 256);
@@ -765,7 +772,7 @@ export const MATERIAL_TEXTURES = {
     g.strokeStyle = '#c8c8d0'; g.lineWidth = 2.4;
     g.beginPath(); g.arc(CX, NOSE_Y + 6, 5, 0.2, Math.PI - 0.2); g.stroke();
   }, {
-    skin: '#5a3a28',
+    skin: '#3a2216',
     eye: { iris: '#b8801a', irisLight: '#f0b040', tilt: 0.02, lashes: true },
     brow: { angry: 3, thick: 4, color: '#2a1810' },
     mouth: { mouthW: 15, lip: 'rgba(60,30,26,0.6)' },
@@ -783,11 +790,20 @@ export const MATERIAL_TEXTURES = {
     // olho esquerdo arrancado: órbita escura com cicatriz e sangue seco
     g.fillStyle = '#2a0e0c';
     g.beginPath(); g.ellipse(CX + 32, EYE_Y, 17, 10, 0.08, 0, Math.PI * 2); g.fill();
-    g.strokeStyle = 'rgba(140,40,36,0.85)'; g.lineWidth = 3; g.lineCap = 'round';
-    g.beginPath(); g.moveTo(CX + 26, EYE_Y - 30); g.lineTo(CX + 40, EYE_Y + 34); g.stroke();
-    // piercings: três no canto esquerdo da boca e três em volta do olho perdido
-    g.fillStyle = '#d8d8de';
-    for (const [x, y] of [[CX + 17, 196], [CX + 20, 203], [CX + 15, 209], [CX + 52, EYE_Y - 14], [CX + 56, EYE_Y - 2], [CX + 52, EYE_Y + 10]]) { g.beginPath(); g.arc(x, y, 2.4, 0, Math.PI * 2); g.fill(); }
+    // ferida em CRUZ sobre o olho perdido (sangue escorrendo) e os pontos de metal que a costuram
+    g.strokeStyle = 'rgba(150,20,24,0.9)'; g.lineWidth = 7; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(CX + 32, EYE_Y - 34); g.lineTo(CX + 32, EYE_Y + 30); g.moveTo(CX + 8, EYE_Y - 6); g.lineTo(CX + 58, EYE_Y - 6); g.stroke();
+    g.strokeStyle = 'rgba(120,10,14,0.6)'; g.lineWidth = 3;
+    for (const dx of [-6, 2, 9]) { g.beginPath(); g.moveTo(CX + 32 + dx, EYE_Y + 28); g.lineTo(CX + 33 + dx, EYE_Y + 52 + Math.random() * 18); g.stroke(); }
+    g.strokeStyle = '#c8c8d0'; g.lineWidth = 2;
+    for (let k = 0; k < 5; k++) { const y = EYE_Y - 26 + k * 12; g.beginPath(); g.moveTo(CX + 25, y); g.lineTo(CX + 39, y + 3); g.stroke(); }
+    // BOCA COSTURADA: grampos de metal verticais atravessando os lábios
+    g.strokeStyle = '#d0d0d8'; g.lineWidth = 2.6;
+    for (let k = -3; k <= 3; k++) { const x = CX + k * 5; g.beginPath(); g.moveTo(x, MOUTH_Y - 8); g.lineTo(x + 1, MOUTH_Y + 9); g.stroke(); }
+    g.fillStyle = 'rgba(90,30,30,0.55)';
+    for (let k = -3; k <= 3; k++) { for (const y of [MOUTH_Y - 9, MOUTH_Y + 10]) { g.beginPath(); g.arc(CX + k * 5, y, 1.6, 0, Math.PI * 2); g.fill(); } }
+    // barba por fazer no queixo
+    stubble(g, 'rgba(70,45,30,0.4)', 700, { y0: 175, y1: 225, w: 70 });
     // olheiras e respingos de sangue
     g.fillStyle = 'rgba(90,40,50,0.35)';
     g.beginPath(); g.ellipse(CX - 32, EYE_Y + 12, 16, 5, 0, 0, Math.PI * 2); g.fill();

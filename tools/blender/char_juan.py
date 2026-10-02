@@ -125,7 +125,13 @@ b.add('hair_tie', tube([(0, hc.y + 0.148 * H, hc.z + 0.045 * H, 0.03, 0.03), (0,
 fringe = []
 for kk in range(6):
     t = kk / 5
-    fringe.append((0.06 * H + 0.02 * H * t, hc.y - 0.14 * H - 0.01 * t, hc.z + 0.1 * H - 0.2 * H * t, 0.026 * (1 - 0.4 * t) + 0.004, 0.012))
+    fringe.append((0.11 * H + 0.02 * H * t, hc.y - 0.14 * H - 0.01 * t, hc.z + 0.1 * H - 0.2 * H * t, 0.026 * (1 - 0.4 * t) + 0.004, 0.012))
 b.add('fringe', tube(fringe, 6), hairm, region='head', subdiv=0)
+# alargadores pretos nas orelhas (referência)
+gauges = []
+for s in (1, -1):
+    x = s * (0.136 * H + 0.008)
+    gauges.append(tube([(x, hc.y + 0.01, hc.z - 0.035, 0.016, 0.016), (x + s * 0.008, hc.y + 0.01, hc.z - 0.035, 0.016, 0.016)], 10))
+b.add('gauges', merge(*gauges), material('gauge_black', '#0e0e10', 0.4), region='head', subdiv=0)
 
 b.export(OUT)
