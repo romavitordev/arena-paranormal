@@ -2,7 +2,7 @@ import { COMBAT } from '../config/combat.js';
 import * as THREE from 'three';
 import { applyHit } from './damage.js';
 import { glowMat } from '../models/rig.js';
-import { knife } from '../models/weapons.js';
+import { knife, mutilatorAxe } from '../models/weapons.js';
 import { createMistZone } from './abilities.js';
 
 // Gerencia projéteis (balas, faca arremessada, ondas de corte, ondas de impacto).
@@ -127,11 +127,10 @@ const VISUALS = {
   axe(color) {
     const g = new THREE.Group();
     const spin = new THREE.Group();
-    const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.03, 0.75, 6), new THREE.MeshStandardMaterial({ color: 0x6a4428, roughness: 0.8 }));
-    spin.add(handle);
-    const blade = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.26, 0.24), new THREE.MeshStandardMaterial({ color, roughness: 0.35, metalness: 0.6 }));
-    blade.position.set(0, 0.26, 0.12);
-    spin.add(blade);
+    // o mesmo machado da mão do Aguiar, girando em volta do meio do cabo
+    const axe = mutilatorAxe();
+    axe.position.y = 0.3;
+    spin.add(axe);
     g.add(spin);
     g.userData.tumble = spin;
     return g;

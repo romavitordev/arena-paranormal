@@ -351,19 +351,43 @@ export function mutilatorAxe() {
   const grip = part(new THREE.CylinderGeometry(0.03, 0.03, 0.14, 8), 0x2a1a10, { outline: false });
   grip.position.y = 0.06;
   g.add(grip);
+  // cabeça: lâmina vermelha (cânone) desenhada no plano XY e girada para a frente (+X do desenho → +Z)
+  const head = new THREE.Group();
+  head.rotation.y = -Math.PI / 2;
+  head.position.y = -0.5;
+  g.add(head);
   const shape = new THREE.Shape();
-  shape.moveTo(0, 0.07);
-  shape.lineTo(0.2, 0.13);
-  shape.quadraticCurveTo(0.25, 0, 0.2, -0.13);
-  shape.lineTo(0, -0.07);
-  shape.lineTo(0, 0.07);
-  const blade = part(extrude(shape, 0.014), 0xb01818, { mat: toon(0xb01818, { emissive: 0x200000 }) });
-  blade.rotation.y = Math.PI / 2; // lâmina para a frente (+Z)
-  blade.position.y = -0.5;
-  g.add(blade);
-  const edge = part(new THREE.BoxGeometry(0.016, 0.26, 0.02), 0xd8d0c8, { outline: false });
-  edge.position.set(0, -0.5, 0.24);
-  g.add(edge);
+  shape.moveTo(0.02, 0.06);
+  shape.lineTo(0.17, 0.12);
+  shape.quadraticCurveTo(0.215, 0, 0.17, -0.12);
+  shape.lineTo(0.02, -0.06);
+  shape.lineTo(0.02, 0.06);
+  const blade = part(extrude(shape, 0.016), 0xb01818, { mat: toon(0xb01818, { emissive: 0x200000 }) });
+  head.add(blade);
+  // fio de aço: faixa curva que segue o gume e encosta na lâmina (antes era uma caixa solta do outro lado)
+  const bit = new THREE.Shape();
+  bit.moveTo(0.17, 0.12);
+  bit.quadraticCurveTo(0.215, 0, 0.17, -0.12);
+  bit.lineTo(0.205, -0.135);
+  bit.quadraticCurveTo(0.255, 0, 0.205, 0.135);
+  bit.lineTo(0.17, 0.12);
+  const edge = part(extrude(bit, 0.01), 0xc8c4c0, { mat: toon(0xc8c4c0) });
+  head.add(edge);
+  // olho de ferro que prende a lâmina no cabo + contrapeso atrás
+  const eye = part(new THREE.BoxGeometry(0.07, 0.15, 0.06), 0x2e2a2a);
+  head.add(eye);
+  const poll = part(new THREE.BoxGeometry(0.05, 0.08, 0.05), 0x2e2a2a);
+  poll.position.x = -0.05;
+  head.add(poll);
+  // manchas de sangue escuro na lâmina
+  for (const [x, y, r] of [[0.1, 0.03, 0.022], [0.14, -0.06, 0.016], [0.07, -0.03, 0.012]]) {
+    for (const sz of [1, -1]) {
+      const spot = part(new THREE.CircleGeometry(r, 8), 0x4a0408, { outline: false });
+      spot.position.set(x, y, sz * 0.0125);
+      if (sz < 0) spot.rotation.y = Math.PI;
+      head.add(spot);
+    }
+  }
   return g;
 }
 
@@ -428,6 +452,94 @@ export function barbedBat() {
     sp.rotation.z = Math.cos(i * 2.1) * -1.4;
     g.add(sp);
   }
+  return g;
+}
+
+// LEONORA (Lírio): marreta de madeira enorme. Cabeça em forma de tambor (eixo em Z: as faces batem para a
+// frente/trás do golpe), cintas de ferro, duas fileiras de espinhos de madeira em volta e a PATA dourada nas
+// duas faces (como na arte). Cabo comprido com empunhadura de couro e colar de ferro. Feita para parecer pesada.
+export function leonora() {
+  const g = new THREE.Group();
+  const woodDark = 0x6a4224;
+  const woodHead = 0x8a5a32;
+  const iron = 0x3a3a40;
+  // cabo: da ponta de baixo (pomo, +Y) até a cabeça (-Y)
+  const handle = part(new THREE.CylinderGeometry(0.03, 0.036, 1.06, 10), woodDark);
+  handle.position.y = -0.33;
+  g.add(handle);
+  const grip = part(new THREE.CylinderGeometry(0.038, 0.038, 0.3, 10), 0x3e2614);
+  grip.position.y = 0.02;
+  g.add(grip);
+  for (let i = 0; i < 6; i++) {
+    const wrapRing = part(new THREE.TorusGeometry(0.039, 0.005, 4, 10), 0x2a180a, { outline: false });
+    wrapRing.rotation.x = Math.PI / 2 + 0.35;
+    wrapRing.position.y = -0.1 + i * 0.05;
+    g.add(wrapRing);
+  }
+  const pommel = part(new THREE.CylinderGeometry(0.045, 0.04, 0.05, 10), iron);
+  pommel.position.y = 0.2;
+  g.add(pommel);
+  const collar = part(new THREE.CylinderGeometry(0.046, 0.04, 0.12, 10), iron);
+  collar.position.y = -0.72;
+  g.add(collar);
+  // cabeça (tambor)
+  const head = new THREE.Group();
+  head.position.y = -0.88;
+  g.add(head);
+  const R = 0.19;
+  const L = 0.42;
+  const drum = part(new THREE.CylinderGeometry(R, R, L, 18), woodHead);
+  drum.rotation.x = Math.PI / 2; // eixo do tambor em Z
+  head.add(drum);
+  // anéis da madeira nas faces (discos um pouco mais escuros)
+  for (const z of [L / 2 + 0.002, -L / 2 - 0.002]) {
+    const face = part(new THREE.CircleGeometry(R * 0.96, 18), 0x7a4c28, { outline: false });
+    face.position.z = z;
+    if (z < 0) face.rotation.y = Math.PI;
+    head.add(face);
+    for (const rr of [0.11, 0.06]) {
+      const ring = part(new THREE.RingGeometry(rr, rr + 0.006, 18), 0x5a361a, { outline: false });
+      ring.position.z = z + Math.sign(z) * 0.001;
+      if (z < 0) ring.rotation.y = Math.PI;
+      head.add(ring);
+    }
+  }
+  // cintas de ferro nas bordas
+  for (const z of [L / 2 - 0.03, -L / 2 + 0.03]) {
+    const band = part(new THREE.TorusGeometry(R + 0.004, 0.014, 6, 22), iron);
+    band.position.z = z;
+    head.add(band);
+  }
+  // espinhos de madeira em volta (duas fileiras alternadas)
+  for (let row = 0; row < 2; row++) {
+    const z = row ? 0.07 : -0.07;
+    for (let i = 0; i < 12; i++) {
+      const a = (i / 12) * Math.PI * 2 + (row ? Math.PI / 12 : 0);
+      const len = 0.12 + ((i * 7 + row * 3) % 5) * 0.012;
+      const spike = part(new THREE.ConeGeometry(0.016, len, 5), 0xd2b07a);
+      spike.position.set(Math.cos(a) * (R + len / 2 - 0.01), Math.sin(a) * (R + len / 2 - 0.01), z);
+      spike.rotation.z = a - Math.PI / 2;
+      head.add(spike);
+    }
+  }
+  // PATA dourada nas duas faces: almofada + 4 dedos
+  for (const sz of [1, -1]) {
+    const paw = new THREE.Group();
+    paw.position.z = sz * (L / 2 + 0.012);
+    if (sz < 0) paw.rotation.y = Math.PI;
+    const pad = part(new THREE.SphereGeometry(0.055, 12, 8), 0xd0a640, { mat: toon(0xd0a640, { emissive: 0x2a1a00 }) });
+    pad.scale.set(1.15, 0.9, 0.25);
+    pad.position.y = -0.025;
+    paw.add(pad);
+    for (const [x, y] of [[-0.062, 0.035], [-0.024, 0.07], [0.024, 0.07], [0.062, 0.035]]) {
+      const toe = part(new THREE.SphereGeometry(0.024, 10, 6), 0xd0a640, { mat: toon(0xd0a640, { emissive: 0x2a1a00 }) });
+      toe.scale.set(0.9, 1.15, 0.3);
+      toe.position.set(x, y, 0);
+      paw.add(toe);
+    }
+    head.add(paw);
+  }
+  g.userData.head = head; // ponto de impacto (poeira/faíscas) e onde a maldição de Sangue se enrosca
   return g;
 }
 

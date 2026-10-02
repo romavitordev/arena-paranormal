@@ -322,6 +322,155 @@ for (const n of ['claw_raise', 'slash_h', 'slash_h_back', 'slash_d', 'slash_up',
   if (c) CLIPS[n + '_L'] = { ...c, keys: c.keys.map((key) => ({ t: key.t, pose: mirrorPose(key.pose) })) };
 }
 
+// ---------- LÍRIO + LEONORA: golpes pesados com o corpo inteiro (quadril, tronco, pernas). A mão esquerda vai para
+// o cabo automaticamente (def.grip.twoHand), então aqui só o braço direito conduz a marreta.
+const L_LEGS = { h: -0.13, lL: [-0.38, 0, 0.2], kL: [0.52, 0, 0], lR: [0.36, 0, -0.2], kR: [0.48, 0, 0] };
+const L_STANCE = { ...L_LEGS, hip: [0, -0.35, 0], sp: [0.15, 0.35, 0], hd: [0, -0.3, 0], sR: [-0.8, 0.5, -0.3], eR: [-1.1, 0, 0], sL: [-0.8, -0.4, 0.2], eL: [-1.2, 0, 0] };
+const L_LUNGE = { h: -0.26, lL: [-0.85, 0, 0.12], kL: [0.95, 0, 0], lR: [0.62, 0, -0.12], kR: [0.42, 0, 0] };
+Object.assign(CLIPS, {
+  // postura: pés bem plantados, joelhos dobrados, Leonora atravessada à frente
+  idle_hammer: {
+    dur: 1.8, loop: true, keys: [
+      k(0, L_STANCE),
+      k(0.5, { ...L_STANCE, h: -0.16, sp: [0.2, 0.35, 0], sR: [-0.84, 0.5, -0.3] }),
+      k(1, L_STANCE),
+    ],
+  },
+  // arrancada física: inclina o corpo, empurra com as pernas e carrega a marreta para trás
+  dash_heavy: {
+    dur: 0.45, loop: true, keys: [
+      k(0, { h: -0.24, sp: [0.7, -0.2, 0], hd: [-0.45, 0.15, 0], sR: [0.5, 0, -0.35], eR: [-0.5, 0, 0], sL: [0.7, 0, 0.3], eL: [-0.5, 0, 0], lL: [-1.1, 0, 0], kL: [0.9, 0, 0], lR: [0.9, 0, 0], kR: [1.3, 0, 0] }),
+      k(0.5, { h: -0.18, sp: [0.65, -0.2, 0], hd: [-0.4, 0.15, 0], sR: [0.55, 0, -0.35], eR: [-0.5, 0, 0], sL: [0.6, 0, 0.3], eL: [-0.5, 0, 0], lL: [0.7, 0, 0], kL: [1.2, 0, 0], lR: [-1.0, 0, 0], kR: [0.8, 0, 0] }),
+      k(1, { h: -0.24, sp: [0.7, -0.2, 0], hd: [-0.45, 0.15, 0], sR: [0.5, 0, -0.35], eR: [-0.5, 0, 0], sL: [0.7, 0, 0.3], eL: [-0.5, 0, 0], lL: [-1.1, 0, 0], kL: [0.9, 0, 0], lR: [0.9, 0, 0], kR: [1.3, 0, 0] }),
+    ],
+  },
+  // defesa: cabo na horizontal à frente, pés fincados e afastados
+  block_hammer: {
+    dur: 0.9, loop: true, keys: [
+      k(0, { h: -0.22, hip: [0, -0.2, 0], sp: [0.25, 0.15, 0], hd: [0.05, -0.15, 0], sR: [-1.3, 0.95, -0.2], eR: [-1.0, 0, 0], lL: [-0.5, 0, 0.26], kL: [0.7, 0, 0], lR: [0.48, 0, -0.26], kR: [0.62, 0, 0] }),
+      k(1, { h: -0.24, hip: [0, -0.2, 0], sp: [0.27, 0.15, 0], hd: [0.05, -0.15, 0], sR: [-1.3, 0.95, -0.2], eR: [-1.0, 0, 0], lL: [-0.5, 0, 0.26], kL: [0.72, 0, 0], lR: [0.48, 0, -0.26], kR: [0.64, 0, 0] }),
+    ],
+  },
+  // bloqueio pesado: absorve com o corpo, afunda nas pernas, recua um pouco e volta firme
+  block_heavy: {
+    dur: 0.42, keys: [
+      k(0, { h: -0.34, hip: [0, -0.2, 0], sp: [0.42, 0.15, 0], hd: [0.2, -0.15, 0], sR: [-1.25, 0.95, -0.2], eR: [-1.1, 0, 0], lL: [-0.6, 0, 0.3], kL: [1.0, 0, 0], lR: [0.6, 0, -0.3], kR: [0.95, 0, 0] }),
+      k(0.35, { h: -0.3, hip: [0, -0.2, 0], sp: [0.05, 0.15, 0], hd: [-0.1, -0.15, 0], sR: [-1.35, 0.95, -0.2], eR: [-0.9, 0, 0], lL: [-0.55, 0, 0.3], kL: [0.9, 0, 0], lR: [0.55, 0, -0.3], kR: [0.85, 0, 0] }),
+      k(1, { h: -0.24, hip: [0, -0.2, 0], sp: [0.27, 0.15, 0], hd: [0.05, -0.15, 0], sR: [-1.3, 0.95, -0.2], eR: [-1.0, 0, 0], lL: [-0.5, 0, 0.26], kL: [0.72, 0, 0], lR: [0.48, 0, -0.26], kR: [0.64, 0, 0] }),
+    ],
+  },
+  // 1) horizontal: gira o quadril para trás e varre da direita para a esquerda com passo à frente
+  hammer_h: {
+    dur: 0.42, keys: [
+      k(0, L_STANCE),
+      k(0.18, { ...L_LEGS, hip: [0, 0.4, 0], sp: [0.1, 0.9, 0], hd: [0, -0.6, 0], sR: [-1.4, -1.3, 0], eR: [-0.5, 0, 0], lL: [-0.55, 0, 0.2], kL: [0.65, 0, 0] }),
+      k(0.4, { ...L_LUNGE, hip: [0, -0.35, 0], sp: [0.25, -0.8, 0], hd: [0, 0.6, 0], sR: [-1.5, 1.1, 0], eR: [-0.1, 0, 0] }),
+      k(1, { ...L_STANCE, sp: [0.2, -0.1, 0] }),
+    ],
+  },
+  // 2) diagonal: do alto à direita até embaixo à esquerda, o tronco desce junto
+  hammer_diag: {
+    dur: 0.5, keys: [
+      k(0, L_STANCE),
+      k(0.38, { ...L_LEGS, h: -0.06, hip: [0, 0.3, 0], sp: [-0.2, 0.75, 0], hd: [0, -0.5, 0], sR: [-2.6, -0.9, 0], eR: [-0.5, 0, 0] }),
+      k(0.58, { ...L_LUNGE, hip: [0, -0.25, 0], sp: [0.55, -0.6, 0], hd: [0.1, 0.4, 0], sR: [-0.85, 0.9, 0], eR: [-0.05, 0, 0] }),
+      k(1, L_STANCE),
+    ],
+  },
+  // 3) vertical: ergue a Leonora acima da cabeça com as duas mãos e desce com o corpo inteiro
+  hammer_v: {
+    dur: 0.56, keys: [
+      k(0, L_STANCE),
+      k(0.42, { ...L_LEGS, h: -0.02, hip: [0, -0.1, 0], sp: [-0.32, 0.15, 0], hd: [-0.25, 0, 0], sR: [-3.0, 0, 0], eR: [-0.5, 0, 0] }),
+      k(0.6, { ...L_LUNGE, h: -0.34, hip: [0, -0.1, 0], sp: [0.7, 0, 0], hd: [0.2, 0, 0], sR: [-0.45, 0.05, 0], eR: [0, 0, 0] }),
+      k(1, L_STANCE),
+    ],
+  },
+  // finalizador: arma bem alto atrás das costas, gira o corpo inteiro num arco enorme e termina abaixado
+  hammer_finisher: {
+    dur: 0.82, keys: [
+      k(0, L_STANCE),
+      k(0.42, { ...L_LEGS, h: -0.04, hip: [0, 1.0, 0], sp: [-0.1, 1.3, 0], hd: [0, -1.0, 0], sR: [-2.4, -1.6, 0], eR: [-0.3, 0, 0], lL: [-0.3, 0, 0.3], kL: [0.5, 0, 0] }),
+      k(0.6, { ...L_LUNGE, h: -0.32, hip: [0, -0.8, 0], sp: [0.35, -1.2, 0], hd: [0.1, 0.9, 0], sR: [-1.2, 1.3, 0], eR: [0, 0, 0] }),
+      k(0.78, { ...L_LUNGE, h: -0.34, hip: [0, -0.9, 0], sp: [0.4, -1.35, 0], hd: [0.1, 1.0, 0], sR: [-1.0, 1.5, 0], eR: [0, 0, 0] }),
+      k(1, L_STANCE),
+    ],
+  },
+  // para cima (lançador): agacha com a marreta baixa e sobe arrancando o alvo do chão
+  hammer_up: {
+    dur: 0.52, keys: [
+      k(0, L_STANCE),
+      k(0.36, { ...L_LEGS, h: -0.34, hip: [0, -0.2, 0], sp: [0.55, -0.3, 0], hd: [0.2, 0.2, 0], sR: [-0.25, 0.6, 0], eR: [-0.1, 0, 0], kL: [1.0, 0, 0], kR: [0.95, 0, 0] }),
+      k(0.56, { ...L_LEGS, h: 0.0, hip: [0, 0.15, 0], sp: [-0.3, 0.4, 0], hd: [-0.3, -0.2, 0], sR: [-2.8, -0.5, 0], eR: [-0.2, 0, 0], kL: [0.25, 0, 0], kR: [0.2, 0, 0] }),
+      k(1, L_STANCE),
+    ],
+  },
+  // contra o chão (descendente / em quem está caído): ergue e crava a Leonora no piso à frente
+  hammer_ground: {
+    dur: 0.62, keys: [
+      k(0, L_STANCE),
+      k(0.4, { ...L_LEGS, h: -0.02, sp: [-0.35, 0.1, 0], hd: [-0.2, 0, 0], sR: [-3.05, 0, 0], eR: [-0.4, 0, 0] }),
+      k(0.6, { h: -0.48, lL: [-1.1, 0, 0.15], kL: [1.3, 0, 0], lR: [0.75, 0, -0.15], kR: [0.85, 0, 0], sp: [0.95, 0, 0], hd: [0.3, 0, 0], sR: [0.1, 0.1, 0], eR: [0, 0, 0] }),
+      k(0.82, { h: -0.48, lL: [-1.1, 0, 0.15], kL: [1.3, 0, 0], lR: [0.75, 0, -0.15], kR: [0.85, 0, 0], sp: [0.95, 0, 0], hd: [0.3, 0, 0], sR: [0.12, 0.1, 0], eR: [0, 0, 0] }),
+      k(1, L_STANCE),
+    ],
+  },
+  // aproximação: inclina, avança correndo, levanta a Leonora e acerta de baixo para cima na diagonal
+  hammer_charge: {
+    dur: 0.62, keys: [
+      k(0, { h: -0.22, sp: [0.6, -0.2, 0], hd: [-0.4, 0.15, 0], sR: [0.5, 0, -0.35], eR: [-0.5, 0, 0], lL: [-1.0, 0, 0], kL: [0.9, 0, 0], lR: [0.8, 0, 0], kR: [1.2, 0, 0] }),
+      k(0.3, { h: -0.18, sp: [0.55, 0.4, 0], hd: [-0.3, -0.2, 0], sR: [-0.6, -1.1, 0], eR: [-0.3, 0, 0], lL: [0.6, 0, 0], kL: [1.1, 0, 0], lR: [-0.9, 0, 0], kR: [0.7, 0, 0] }),
+      k(0.5, { ...L_LUNGE, hip: [0, -0.3, 0], sp: [0.2, -0.7, 0], hd: [-0.1, 0.5, 0], sR: [-2.3, 0.8, 0], eR: [-0.1, 0, 0] }),
+      k(1, L_STANCE),
+    ],
+  },
+  // aéreo: ergue no ar e desce a marreta com o peso do corpo (não é acrobático)
+  hammer_air: {
+    dur: 0.5, keys: [
+      k(0, { sp: [-0.3, 0, 0], sR: [-3.0, 0, 0], eR: [-0.6, 0, 0], lL: [-0.7, 0, 0], kL: [1.3, 0, 0], lR: [-0.2, 0, 0], kR: [1.1, 0, 0] }),
+      k(0.45, { sp: [0.75, 0, 0], hd: [0.2, 0, 0], sR: [-0.4, 0.1, 0], eR: [0, 0, 0], lL: [-0.5, 0, 0], kL: [0.9, 0, 0], lR: [0.1, 0, 0], kR: [0.7, 0, 0] }),
+      k(1, { sp: [0.55, 0, 0], sR: [-0.5, 0.1, 0], eR: [-0.1, 0, 0], lL: [-0.5, 0, 0], kL: [1.0, 0, 0], lR: [0.1, 0, 0], kR: [0.8, 0, 0] }),
+    ],
+  },
+  // GOLPE PESADO: 1 prepara (marreta ao ombro) → 2 concentra (alto, pés fincados) → 3 desloca o corpo à frente
+  // → 4 golpe → 5 impacto (fica cravado) → 6 recupera
+  hammer_heavy: {
+    dur: 1.4, keys: [
+      k(0, L_STANCE),
+      k(0.14, { ...L_LEGS, sp: [0.05, 0.5, 0], hd: [0, -0.4, 0], sR: [-1.9, -0.6, -0.2], eR: [-1.6, 0, 0] }),
+      k(0.4, { h: -0.2, lL: [-0.45, 0, 0.3], kL: [0.7, 0, 0], lR: [0.5, 0, -0.3], kR: [0.7, 0, 0], hip: [0, 0.15, 0], sp: [-0.4, 0.35, 0], hd: [-0.3, -0.2, 0], sR: [-3.0, -0.3, 0], eR: [-0.6, 0, 0] }),
+      k(0.5, { h: -0.12, lL: [-0.8, 0, 0.2], kL: [0.7, 0, 0], lR: [0.5, 0, -0.2], kR: [0.5, 0, 0], hip: [0, 0.05, 0], sp: [-0.35, 0.2, 0], hd: [-0.3, 0, 0], sR: [-3.1, -0.2, 0], eR: [-0.4, 0, 0] }),
+      k(0.6, { h: -0.5, lL: [-1.15, 0, 0.15], kL: [1.35, 0, 0], lR: [0.8, 0, -0.15], kR: [0.85, 0, 0], sp: [1.0, 0, 0], hd: [0.35, 0, 0], sR: [0.05, 0.1, 0], eR: [0, 0, 0] }),
+      k(0.8, { h: -0.5, lL: [-1.15, 0, 0.15], kL: [1.35, 0, 0], lR: [0.8, 0, -0.15], kR: [0.85, 0, 0], sp: [1.0, 0, 0], hd: [0.35, 0, 0], sR: [0.08, 0.1, 0], eR: [0, 0, 0] }),
+      k(1, L_STANCE),
+    ],
+  },
+  // CAI DENTRO: estufa o peito, abre os braços e grita para o inimigo (a Leonora erguida na direita)
+  taunt_roar: {
+    dur: 0.9, keys: [
+      k(0, L_STANCE),
+      k(0.35, { ...L_LEGS, h: -0.08, sp: [-0.35, 0, 0], hd: [-0.4, 0, 0], sR: [-2.3, 0.3, -0.6], eR: [-0.8, 0, 0], sL: [-0.9, 0, 0.95], eL: [-0.9, 0, 0] }),
+      k(0.75, { ...L_LEGS, h: -0.1, sp: [-0.3, 0, 0], hd: [-0.35, 0, 0], sR: [-2.35, 0.3, -0.6], eR: [-0.75, 0, 0], sL: [-0.95, 0, 1.0], eL: [-0.85, 0, 0] }),
+      k(1, L_STANCE),
+    ],
+  },
+  // ombrada no fim da corrida do Cai Dentro
+  shoulder_charge: {
+    dur: 0.4, keys: [
+      k(0, { h: -0.22, sp: [0.6, 0.6, 0], hd: [-0.3, -0.5, 0], sR: [0.5, 0, -0.35], eR: [-0.6, 0, 0], sL: [-0.3, 0, 0.4], eL: [-1.8, 0, 0], lL: [-1.0, 0, 0], kL: [0.9, 0, 0], lR: [0.8, 0, 0], kR: [1.2, 0, 0] }),
+      k(0.5, { h: -0.26, sp: [0.45, 1.0, 0], hd: [-0.2, -0.8, 0], sR: [0.4, 0, -0.35], eR: [-0.6, 0, 0], sL: [-0.2, 0, 0.3], eL: [-2.0, 0, 0], lL: [-0.9, 0, 0], kL: [1.0, 0, 0], lR: [0.7, 0, 0], kR: [0.5, 0, 0] }),
+      k(1, L_STANCE),
+    ],
+  },
+  // vitória: Leonora apoiada no ombro e o punho esquerdo erguido, sorrindo
+  victory_hammer: {
+    dur: 1.2, keys: [
+      k(0, L_STANCE),
+      k(1, { h: -0.04, sp: [-0.12, 0.15, 0], hd: [-0.2, -0.1, 0], sR: [-2.6, 0.5, -0.5], eR: [-2.2, 0, 0], sL: [-2.8, 0, 0.35], eL: [-0.3, 0, 0], lL: [-0.2, 0, 0.18], kL: [0.2, 0, 0], lR: [0.2, 0, -0.18], kR: [0.2, 0, 0] }),
+    ],
+  },
+});
+
 // ---------- locomoção travada no adversário (V4 etapa 17: o pé não "patina" andando de lado/de costas)
 // guarda em cima, pernas fazendo o passo na direção certa
 const GUARD_TOP = { sp: GUARD.sp, hd: GUARD.hd, sL: GUARD.sL, eL: GUARD.eL, sR: GUARD.sR, eR: GUARD.eR };
@@ -336,6 +485,8 @@ CLIPS.strafe_L = {
   ],
 };
 CLIPS.strafe_R = { ...CLIPS.strafe_L, axis: 'right', keys: CLIPS.strafe_L.keys.map((key) => ({ t: key.t, pose: mirrorPose(key.pose) })) };
+// arremesso com a mão ESQUERDA (Lírio: a direita segura a Leonora)
+CLIPS.throw_l = { ...CLIPS.throw_r, keys: CLIPS.throw_r.keys.map((key) => ({ t: key.t, pose: mirrorPose(key.pose) })) };
 // recuo: a caminhada tocada ao contrário, com a guarda erguida
 CLIPS.walk_back = {
   ...CLIPS.walk, axis: 'back',

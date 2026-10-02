@@ -211,6 +211,18 @@ const ACTIONS = {
       return tl.end(0.8);
     },
   },
+  // LÍRIO: com o parceiro apanhando → CAI DENTRO (entra correndo, ombrada, provoca); senão:
+  // andando → Muralha no parceiro (recebe menos dano); parado → marretada vertical que derruba
+  lirio: {
+    auto: (c) => caiDentro(c),
+    moving: (c) => (underPressure(c) ? caiDentro(c) : buffOwner(c, 'taunt_roar', { type: 'wall', name: 'MURALHA (LÍRIO)', time: 6, takenMult: 0.75 }, 0xd8c8a0, 'MURALHA')),
+    still: (c) => {
+      if (underPressure(c)) return caiDentro(c);
+      const tl = rushStrike(c, 'hammer_v', [[0.42, 70]], 'heavyPunch', { knockback: 5, launch: true, lowLaunch: true, color: 0xd8c8a0 });
+      tl.add(0.43, () => c.world.fx.play('FX_GROUND_SMASH', c.opp.pos, { scale: 0.9 }));
+      return tl;
+    },
+  },
   // XANDE: andando → Tela de Ruído no parceiro (escudo); parado → tacada por cima que faz sangrar
   xande: {
     moving: (c) => buffOwner(c, 'concentrate', { type: 'noise', name: 'TELA DE RUÍDO (XANDE)', time: 6, shield: 80, shieldKinds: ['melee', 'ranged'], color: 0x7ad0ff }, 0x7ad0ff, 'TELA DE RUÍDO'),
@@ -221,6 +233,50 @@ const ACTIONS = {
     },
   },
 };
+
+// LÍRIO — CAI DENTRO como assistência: identifica que o parceiro está apanhando, entra CORRENDO (sem teletransporte)
+// entre os dois, dá uma ombrada no inimigo, provoca e dá espaço para o parceiro se recuperar.
+function underPressure(c) {
+  const o = c.owner;
+  return ['hitstun', 'stun', 'launched', 'block'].includes(o.state) || (c.opp.state === 'attack' && distXZ(c.opp.pos, o.pos) < 3);
+}
+
+function caiDentro(c) {
+  const tl = new Timeline();
+  const o = c.owner;
+  const opp = c.opp;
+  // começa um pouco atrás/ao lado e corre até ficar entre o parceiro e o inimigo
+  const from = c.as.pos.clone();
+  const mid = new THREE.Vector3().lerpVectors(o.pos, opp.pos, 0.55);
+  const spot = findFreeSpotNear(c.world.arena, mid.x, mid.z, { radius: 0.5, others: [{ x: o.pos.x, z: o.pos.z, r: 0.6 }, { x: opp.pos.x, z: opp.pos.z, r: 0.7 }] }) || { x: mid.x, z: mid.z };
+  c.as.face(opp);
+  c.as.play('dash_heavy', 0.45);
+  tl.each((t) => {
+    if (t > 0.32) return;
+    const k = Math.min(1, t / 0.32);
+    c.as.pos.set(from.x + (spot.x - from.x) * k, 0, from.z + (spot.z - from.z) * k);
+    c.as.face(opp);
+    if (Math.random() < 0.5) c.world.fx.burst(new THREE.Vector3(c.as.pos.x, 0.2, c.as.pos.z), { count: 1, color: 0x9a8a72, kind: 'smoke', speed: 0.8, up: 0.4, life: 0.4, size: 0.45, grow: 1 });
+  });
+  tl.add(0.33, () => {
+    c.as.play('shoulder_charge', 0.4);
+    c.hit(55, { knockback: 6, stun: 0.35, sound: 'heavyPunch', color: 0xd8c8a0 });
+    c.world.fx.play('FX_DUST', opp.pos, { scale: 1 });
+    c.world.cameraRig.shake(0.25, 0.2);
+    // o parceiro sai do combo e fica protegido por um instante
+    if (['hitstun', 'stun'].includes(o.state)) o.setState('idle');
+    o.invuln = Math.max(o.invuln, 0.6);
+    if (!o.findBuff('protected')) o.addBuff({ type: 'protected', name: 'PROTEGIDO (LÍRIO)', time: 3, duration: 3, takenMult: 0.6 });
+    if (opp.state !== 'ko' && !opp.findBuff('provoked')) opp.addBuff({ type: 'provoked', name: 'PROVOCADO (CAI DENTRO)', time: 3, duration: 3 });
+    o.notify('LÍRIO: CAI DENTRO!', true);
+  });
+  tl.add(0.75, () => {
+    c.as.play('taunt_roar', 0.6);
+    c.world.audio.play('fearGaze', { volume: 0.45, pitch: 0.55 });
+    c.world.fx.play('FX_DUST', c.as.pos, { scale: 1.1 });
+  });
+  return tl.end(1.4);
+}
 
 function buffOwner(c, anim, buff, color, label) {
   const tl = new Timeline();
@@ -269,6 +325,19 @@ function rushStrike(c, anim, hits, sound, extra = {}) {
   return tl.end(0.85);
 }
 
+// arma de duas mãos (Lírio): a mão esquerda acompanha a direita no cabo, como no lutador principal
+function twoHandFilter(def) {
+  const G = def.grip;
+  if (!G || !G.twoHand) return null;
+  return (p) => {
+    const r = p.sR;
+    const e = p.eR;
+    p.sL = [r[0], r[1] - (G.reach ?? 0.42), -0.05];
+    p.eL = [Math.min(e[0], -0.25) - 0.15, e[1], e[2]];
+    return p;
+  };
+}
+
 // ---------------------------------------------------------------- entidade
 export class Assist {
   constructor(def, owner, world, slot) {
@@ -282,6 +351,7 @@ export class Assist {
     this.yaw = 0;
     this.rig = buildModel(def.model);
     this.anim = new Animator(this.rig, def.anims);
+    this.anim.poseFilter = twoHandFilter(def);
     this.anim.play('idle', { blend: 0 });
     this.color = ELEMENTS[def.element] ? new THREE.Color(ELEMENTS[def.element].color).getHex() : def.energyColor;
   }
@@ -302,7 +372,7 @@ export class Assist {
     return new THREE.Vector3(this.pos.x, this.pos.y + 1.15, this.pos.z);
   }
 
-  call() {
+  call({ auto = false } = {}) {
     const o = this.owner;
     const w = this.world;
     const opp = o.opponent;
@@ -335,7 +405,8 @@ export class Assist {
         return applyHit(w, o, opp, { damage: Math.round(dmg * ASSIST.damageMult), kind: 'ability', knockback: 3, element: this.def.element, dir, color: this.color, scale: 1.3, ...opts });
       },
     };
-    this.active = (moving ? acts.moving : acts.still)(ctx);
+    this.active = (auto && acts.auto ? acts.auto : moving ? acts.moving : acts.still)(ctx);
+    this.autoCall = auto;
     this.update(0);
     return true;
   }
@@ -348,6 +419,10 @@ export class Assist {
 
   update(dt) {
     if (this.cooldown > 0) this.cooldown = Math.max(0, this.cooldown - dt);
+    // proteção automática (Lírio): o parceiro tomou vários golpes seguidos → entra sozinho para proteger
+    const A = this.def.assistAuto;
+    const o = this.owner;
+    if (A && this.ready && !this.world.cinematic && (o.comboHits || 0) >= A.comboHits && ['hitstun', 'stun'].includes(o.state)) this.call({ auto: true });
     if (!this.active) return;
     const done = this.active.update(dt);
     this.anim.update(dt);
@@ -361,7 +436,8 @@ export class Assist {
     this.active = null;
     this.poof();
     this.world.scene.remove(this.rig.root);
-    this.cooldown = ASSIST.cooldown;
+    this.cooldown = ASSIST.cooldown * (this.autoCall && this.def.assistAuto ? this.def.assistAuto.cooldownMult : 1);
+    this.autoCall = false;
   }
 
   // troca de personagem: passa a ser quem acabou de sair de campo (com o modelo dele)
@@ -370,6 +446,7 @@ export class Assist {
     this.def = def;
     this.rig = rig;
     this.anim = new Animator(rig, def.anims);
+    this.anim.poseFilter = twoHandFilter(def);
     this.anim.play('idle', { blend: 0 });
     this.color = ELEMENTS[def.element] ? new THREE.Color(ELEMENTS[def.element].color).getHex() : def.energyColor;
   }

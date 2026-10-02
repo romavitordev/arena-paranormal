@@ -42,6 +42,13 @@ export function specialHitFx(world, actor, target, fx = {}, color) {
         }
       }
       break;
+    case 'smash': {
+      // impacto físico da marreta: pó, pedras e onda no chão (o último crava no piso)
+      world.fx.play(big ? 'FX_HIT_HEAVY' : 'FX_HIT_SMALL', c, { color: 0xf0e0c0, scale: big ? 2.2 : 1.4 });
+      world.fx.play(big ? 'FX_GROUND_SMASH' : 'FX_DUST', target.pos, { scale: big ? 1.5 : 0.8 });
+      world.cameraRig.shake(big ? 0.7 : 0.25, big ? 0.4 : 0.15);
+      break;
+    }
     case 'claw': {
       // Arma de Sangue: três rasgos paralelos, sangue paranormal e marcas no corpo
       for (let i = -1; i <= 1; i++) {

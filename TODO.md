@@ -41,8 +41,9 @@
 - ✅ Y/△ = personagem e cenário aleatórios.
 - ✅ Bar Suvaco Seco: porta de 4,6 m sem a parede invisível (retângulos andáveis com sobreposição de verdade + checagem automática), mesa tirada da frente da porta, rua grande andável (calçadas dos dois lados, faixa, beco), árvores, prédios vizinhos com letreiros, postes, carros, ponto de ônibus.
 - ✅ Telemetria (CPU × CPU, 5 lutas por par, 150 lutas): antes dos ajustes a Aghata vencia 98%; depois de faca mais lenta para sair (0,06 → 0,09 s), sangramento menor, Gal +4 por golpe, Arma de Sangue 7/s e Kaiser Resistente −10%, ficou: Kian 58% · Arthur 56% · Aghata 56% · Kaiser 44% · Gal 44% · Joui 42%.
-- ⏳ Falta: 3.5 (dash longo pode ser agarrado), 3.8 (limite de projéteis e repetição do mesmo golpe), habilidades
-  extras de ideia (Templo do Ódio, Mira de Elite, Toque da Morte, Controle Mental), visuais da V3.
+- ✅ (revisado em 2026-10-01) 3.5 dash longo derrubável por agarrão/quebra, 3.8 limite de rajadas por dono
+  (`COMBAT.maxVolleys`) e repetição do mesmo golpe (`COMBAT.repeat`), Templo do Ódio, Toque da Morte, Controle
+  Mental e os visuais da V3 já estão no jogo.
 
 ### V2.3 (2026-10-01) — implementado por fases e testado no jogo
 - ✅ Fase 1: limpeza entre partidas (HUD, marcadores, falas, NPCs, timers), fluxo Seleção → COMEÇAR → Configurações
@@ -120,6 +121,38 @@
   (Desert Eagle), granada Nebulosa, Afinidade Elemental (+15% em rituais) e especial Cinerária: solta a névoa, conjura a Acácia amplificada por ela (250) e a névoa fica parada no mapa por 10 s (bônus só com o Kaiser dentro).
 - ✅ Xande: no skate o corpo vira para onde anda; ao bater o skate vai para as costas e o taco é seguro com as duas mãos;
   na defesa ergue o skate como escudo (bloqueio perfeito um pouco mais fácil).
+- ✅ RB+LT (mod + esquiva) para todos: Armadura de Sangue (Arthur), Poça de Lodo (Dante), Granada de Luz (Erin,
+  atordoa), Corrente Giratória (Gal), Tempestade Caótica (Labirinto), Corte das Sombras (Joui), Facas Amaldiçoadas
+  (Aghata) e Cicatrização (Xande); Kaiser, Aguiar e Kian já tinham. Tipos novos: `sweepStrike` e `dashStrike`.
+- ✅ Toque da Morte (Kian): recarga 55 s, alcance 1,3 m (colado, como o Inexistir) e o alvo fica FRACO (−20% de dano)
+  até o fim do round.
+- ✅ Machado do Aguiar: o fio branco flutuava do outro lado do cabo (era uma caixa reta); agora é uma faixa de aço
+  curva no gume, com olho de ferro, contrapeso e manchas de sangue. O machado arremessado usa o mesmo modelo.
+- ✅ NOVO: LÍRIO TELLINI (Os Cinco, Sinais do Outro Lado) — "a parede", Combatente Tropa de Choque (wiki).
+  - Visual (arte promocional + miniaturas): 1,85 m robusto, cabelo loiro longo com mecha laranja, barba e costeleta;
+    camisa azul de mangas rasgadas com emblema; sobretudo azul-escuro com pelugem branca; ombreira, joelheiras, alças,
+    bolsas, walkie-talkie e broche de pata; luva com pata dourada (dir.) e pano laranja (esq.); plaqueta "Voytek";
+    cicatrizes e ataduras. 36k triângulos, 18 ossos (auditoria ok).
+  - LEONORA (código): cabeça-tambor de madeira com cintas de ferro, duas fileiras de espinhos e a pata dourada nas
+    faces; cabo longo. Duas mãos sempre (grip.twoHand); andando/correndo vai no ombro; capacete azul na Proteção Pesada.
+  - Kit: combo de 4 (horizontal → diagonal → vertical pesado → finalizador com resistência), ↑ lançador, ↓ crava no
+    chão, golpe no chão em quem está CAÍDO (1 por queda), investida de aproximação, aéreo que crava. Habilidades:
+    Golpe Pesado (6 fases, aguenta um golpe pequeno, errar deixa aberto), Cai Dentro (corre/ombrada, provoca: o inimigo
+    só ataca de perto por 4 s), Amarras de Sangue "Magras", Leonora Amaldiçoada (Sangue), Proteção Pesada (capacete).
+    Passivas: Sangue de Ferro (+15% vida), Casca Grossa (menos recuo, menos desgaste na defesa), Mão Pesada (mais
+    impacto). Especial "Leonora" físico (pó, pedras, tremor). Bloqueio pesado com animação própria.
+  - Equipe: como assistência, se o parceiro está apanhando entra CORRENDO (sem teletransporte), ombrada, provoca e dá
+    3 s protegido ao parceiro; após 3 golpes seguidos no parceiro entra sozinho (recarga ×1,35).
+  - IA: dicas por habilidade (Golpe Pesado só com abertura, Cai Dentro de longe, Proteção com vida baixa), golpe no
+    chão quando o rival cai e sem repetir a mesma habilidade em seguida.
+  - Sistemas genéricos novos: passivas knockbackMod/knockbackTakenMod/hitstunBonus/blockChipMod/guardDamageMod,
+    `superArmor` temporária, golpes `otg`, buffs `takenMult`, `provoked`, FX_DUST e FX_GROUND_SMASH, efeito
+    de especial 'smash', `runBalance({ focus })`.
+  - Equilíbrio (CPU × CPU, 66 lutas por rodada contra todo o elenco): 1ª rodada 29% — a marretada de abertura era
+    interrompida em ~35% das vezes (acertava aos 0,17 s); abertura mais rápida (0,11 s) → 52%. IA passou a usar o Golpe
+    Pesado também contra quem defende → 52% (variação grande entre rodadas). Contra o Kaiser perdeu 5 de 6 nas duas
+    rodadas: o kit dele é cheio de lentidão (névoa, Nebulosa, Dendrobium), que pune o personagem mais lento — contra
+    natural, mantido. Vence com folga quem luta colado (Arthur, Joui, Gal, Kian).
 - Gal, Erin, Aguiar, Labirinto e Xande já foram feitos/revisados com as referências nas rodadas anteriores.
 - ✅ V4 etapa 12 Armature: esqueleto com root → hips → sp → chest → neck → hd, mãos (handL/R) e pés (footL/R),
   18 ossos em todos os 11 personagens (auditoria exige). Pesos: mão abaixo do punho, pé abaixo do tornozelo, pescoço
@@ -202,13 +235,13 @@ Cuidado: com 2 de Sangue e 2 de Conhecimento o ciclo fica desigual — validar c
   (já se fala "sanidade" nos popups). Opcional depois: barra de **Exposição Paranormal** que sobe com o uso de rituais
   (ver 3.4, Despertar).
 
-### 1.3 Transcender tem custo 🟡
+### 1.3 Transcender tem custo ✅ (não regenera e drena no fim)
 
 No cânone, transcender aumenta o poder, mas **custa sanidade** (e é como Kian virou Marcado). Hoje a Transcendência
 do Kian custa só 35 de energia. **Proposta:** durante a Transcendência o Kian não regenera energia, e ela termina
 drenando 15 de energia — combina com o "+1 Inexistir" sem deixar de graça.
 
-### 1.4 Falas/intro de luta por par de personagens 🟢
+### 1.4 Falas/intro de luta por par de personagens ✅ (`src/config/dialogues.js`)
 
 A wiki dá relações fortes para usar em diálogos antes do 3, 2, 1 (estilo Storm):
 - Kian × Kaiser: Kaiser foi **apagado** pelo Inexistir de Kian ao se sacrificar pelos amigos.
@@ -322,60 +355,60 @@ Leitura rápida: **Kian está forte demais** (maior combo + Lâmina do Medo 160 
 
 ## 3. Mecânicas — o que os jogos de luta fazem e falta aqui
 
-### 3.1 Escala de dano em combos 🔴
+### 3.1 Escala de dano em combos ✅ (`comboScale` em damage.js)
 Quase todo jogo de luta reduz o dano de cada golpe seguinte no mesmo combo, para combos longos não decidirem a
 luta. Proposta: `COMBAT.comboScaling = [1, 1, 0.9, 0.8, 0.7, 0.6]` (mínimo 0.5) por acerto consecutivo sem o
 alvo voltar a neutro; especial e agarrão com piso de 0.7. Contador `victim.comboHits` zera quando sai do hitstun.
 Arquivo: `damage.js`. Mostrar "N HITS" na HUD (estilo Storm). Resolve parte da diferença entre combos de 4 e 6
 golpes.
 
-### 3.2 Substituição (escape no meio do combo) 🔴
+### 3.2 Substituição (escape no meio do combo) ✅ (`trySubstitution`)
 No Storm 4 a **substituição** usa a mesma barra de 4 cargas e funciona **enquanto você apanha** — o jogo já tem 4
 cargas de esquiva que recuperam tomando dano (igual ao Storm), mas a esquiva só sai do neutro. Proposta: L2 durante
 o hitstun gasta 1 carga (ou 2) e teleporta o personagem para as costas/lado do atacante com um tronco/efeito do
 elemento dele (fumaça preta Kaiser, sangue Agatha, sigilos Kian...). Bloquear durante especiais e agarrões.
 Arquivos: `Fighter.updateHitstun`, `tryDodge` com flag `substitution`.
 
-### 3.3 Escapar do agarrão (throw tech) 🟡
+### 3.3 Escapar do agarrão (throw tech) ✅ ("ESCAPOU!")
 Em jogos tradicionais, quem é agarrado pode apertar o botão de agarrão na hora para se soltar. Proposta: se a
 vítima apertar R2+○ nos primeiros 0,2 s do agarrão, os dois se empurram (sem dano). Hoje só a esquiva escapa.
 Arquivo: `Fighter.tryGrab` (checar `caught.input.pressed.physical && caught.input.held.block`).
 
-### 3.4 Despertar / Transcender universal 🟡
+### 3.4 Despertar / Transcender universal ✅ (`COMBAT.awaken`)
 No Storm 4, o **Despertar** fica disponível com a vida baixa (perdeu a 1ª barra + 25% da 2ª) e dá buffs ou
 transforma o personagem. Em Ordem Paranormal isso é **Transcender**. Proposta: com vida ≤ 30%, segurar △ por 1 s
 → cada personagem entra na sua forma (Arthur com os olhos vermelhos de Sangue, Joui com a máscara/Medo, Gal com as
 correntes douradas, Agatha com veias e dentes, Kaiser envolto na névoa, Kian já transcende pelo kit, então ganha
 outra coisa). Buffs: +15% de dano, superarmor em um golpe, 1 vez por partida. Comeback mecânico e fiel ao tema.
 
-### 3.5 Dash de energia e guarda com "quebra" (Storm) 🟢
+### 3.5 Dash de energia e guarda com "quebra" (Storm) ✅
 O Storm 4 tem **Chakra Dash** (energia + pulo) — já é o dash longo △+× ✔ — e um **Guard Break** que vence
 defesa, dash e investidas. O novo agarrão já cumpre esse papel. Ajustar: dash longo agora pode ser **agarrado** e
 **derrubado** por golpe com `guardBreak` (hoje ele só para perto do alvo).
 
-### 3.6 Buffer de comandos e hitstop variável 🟡
+### 3.6 Buffer de comandos e hitstop variável ✅ (`buffered`, `hitstopFor`)
 - Jogos de luta guardam o comando apertado por alguns quadros antes da hora (buffer de ~4–6 quadros) para
   combos não "engolirem" botões. Hoje: `queued` só para ○ dentro do golpe. Proposta: buffer genérico de
   0,1 s para ○ □ △ L2 em qualquer estado de recuperação (`InputManager.pressTime` já existe).
 - O hitstop já existe (0,055 s; ×2 no lançamento). Variar por golpe: leve 0,04, pesado 0,08, finalizador 0,12.
   Dá peso e ajuda a confirmar combos.
 
-### 3.7 Levantar do chão (wakeup) 🟡
+### 3.7 Levantar do chão (wakeup) ✅ (`COMBAT.wakeupInvuln`, rolagem)
 Depois de ser lançado/derrubado: invulnerável ao levantar (~0,3 s), opção de rolar para os lados (direção ao
 cair) e levantar atacando (custa 10 de energia). Evita repetir o mesmo golpe na pessoa caída (*okizeme* infinito).
 
-### 3.8 Proteções contra repetição 🟢
+### 3.8 Proteções contra repetição ✅
 - Limite de lançamentos por combo (um 2º lançamento vira empurrão).
 - Projéteis no ar: no máximo 2 do mesmo dono por vez.
 - Repetir o mesmo golpe 3× seguidas → escala mais forte (incentiva variar).
 
-### 3.9 Equilíbrio do novo kit universal 🟡
+### 3.9 Equilíbrio do novo kit universal ✅ (△+○ gasta 60 de defesa)
 - O △+○ (físico forte) hoje sai com o finalizador de cada um ×1,6 e **quebra a defesa** com 100 de resistência
   (testado: 96 de dano direto no Arthur). Pode ficar forte demais contra defesa: trocar `guardBreak` por gastar
   60 de defesa (quebra só se a defesa já estiver gasta).
 - O agarrão (70) ignora a defesa; a defesa só escapa esquivando — com o throw tech (3.3) fica justo.
 
-### 3.10 Telemetria de equilíbrio 🔴
+### 3.10 Telemetria de equilíbrio ✅ (`src/dev/balance.js`)
 Ferramenta `npm run balance`: roda N lutas CPU × CPU para todos os pares (sem renderizar, como os testes atuais
 do navegador) e gera tabela de vitórias, dano médio por golpe e uso de cada habilidade. Base para todos os ajustes
 acima. Precisa rodar no navegador (Three.js) → script em `src/dev/balance.js` chamado pelo console, salvando JSON.
@@ -395,12 +428,8 @@ jogadores; permitir conexão pela rede virtual do Radmin. O código deve levar o
 5. 3.4 Transcender universal + 1.4 falas de intro.
 6. V3 visual com os detalhes canônicos acima (perguntar sobre a Agatha antes).
 
-## 5. Dúvidas para o usuário (✅ respondidas: nome AGHATA com o visual da referência; nerf do Kian e Precognição ok;
-elementos só nos rituais; Transcender com o nome do cânone)
-- Agatha: grafia "Agatha" (wiki) ou "Aghata"? Visual canônico (corpo do Gabriel, cabelo curto, manca) ou o da referência atual?
-- Kian: aceita o nerf do combo e a Precognição como passiva?
-- Elementos com vantagem/desvantagem: quer esse sistema ou só como visual/temática?
-- Transcender universal no lugar de um "Despertar": ok usar o nome do cânone?
+## 5. Dúvidas para o usuário — ✅ todas respondidas: nome AGHATA com o visual da referência; nerf do Kian e
+Precognição ok; elementos só nos rituais; Transcender com o nome do cânone.
 
 ---
 

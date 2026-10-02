@@ -180,7 +180,12 @@ export class CpuController {
         else if (m < 0.55 && d > 3) this.tap('physical');
         return out;
       }
-      // adversário caído: não adianta bater (fica invulnerável) — reposiciona ou carrega
+      // adversário caído: quem tem golpe no chão (Lírio) aproveita uma vez; os outros reposicionam ou carregam
+      const G = def.melee && def.melee.ground;
+      if (opp.state === 'downed' && G && !opp.otgTaken && opp.invuln <= 0 && d < G.range + 0.9 && Math.random() < 0.7) {
+        this.tap('physical');
+        return out;
+      }
       if (opp.state === 'downed') {
         if (f.energy < 80 && d > 3) this.holdCharge = rnd(0.4, 0.8);
         return out;
@@ -203,12 +208,15 @@ export class CpuController {
         }
       }
       // habilidades secundárias (R1/RB + botão)
-      const mods = (def.abilities || []).filter((a) => a.input.startsWith('mod+') && f.cooldowns[a.id] <= 0 && f.energy >= (f.abilityCost ? f.abilityCost(a) : a.energyCost || 0) + 5);
+      let mods = (def.abilities || []).filter((a) => a.input.startsWith('mod+') && f.cooldowns[a.id] <= 0 && f.energy >= (f.abilityCost ? f.abilityCost(a) : a.energyCost || 0) + 5 && this.aiOk(a, d, opp, lowHp));
+      // não repetir a mesma habilidade seguida quando houver outra
+      if (mods.length > 1) mods = mods.filter((a) => a.id !== this.lastAbility);
       if (mods.length && r < L.ability) {
         const a = mods[Math.floor(Math.random() * mods.length)];
+        this.lastAbility = a.id;
         const btn = a.input.slice(4);
         const range = a.range || 10;
-        if (d <= range || ['weaponState', 'blink', 'mistCloud', 'healOverTime', 'hatredTemple', 'shadowClones'].includes(a.type)) {
+        if (d <= range || ['weaponState', 'blink', 'mistCloud', 'healOverTime', 'hatredTemple', 'shadowClones', 'heavyProtection', 'noiseScreen'].includes(a.type)) {
           this.queue.push({ t: 0.05, held: { mod: true } }, { t: 0.06, held: { mod: true, [btn]: true } }, { t: 0.05, held: {} });
           return out;
         }
@@ -279,5 +287,26 @@ export class CpuController {
     out.moveX = mx * b.right.x + mz * b.right.z;
     out.moveY = mx * b.forward.x + mz * b.forward.z;
     return out;
+  }
+
+  // dicas de uso por habilidade (a.ai): when 'opening' (só com o inimigo aberto), 'far' (de longe), 'hurt' (vida baixa);
+  // min/max limitam a distância. Sem dica: usa como antes.
+  aiOk(a, d, opp, lowHp) {
+    const h = a.ai;
+    if (!h) return true;
+    if (h.max && d > h.max) return false;
+    if (h.min && d < h.min) return false;
+    const f = this.fighter;
+    if (h.when === 'hurt') return lowHp || f.health < f.maxHealth * 0.6;
+    if (h.when === 'far') return d >= (h.min || 4);
+    if (h.when === 'opening') {
+      // defendendo também é abertura para golpes que gastam a defesa (guardCrush)
+      if (['stun', 'hitstun', 'ability', 'ranged', 'specialStart', 'dashing'].includes(opp.state)) return true;
+      if (opp.state === 'block' && a.guardCrush) return true;
+      const c = opp.combo;
+      // recuperação de um golpe (já passou da janela de acerto)
+      return opp.state === 'attack' && c && c.windows && opp.stateTime > c.windows[c.windows.length - 1][1];
+    }
+    return true;
   }
 }

@@ -18,8 +18,8 @@ const allStrikes = (c) => [...c.melee.strikes, ...['forward', 'back', 'side', 'a
 
 // ---------------- base preservada ----------------
 const ids = ROSTER.map((c) => c.id);
-ok(['cineraria', 'abutre', 'mascarado', 'vampira', 'dante', 'erin', 'injustica', 'desconjurado', 'aguiar', 'labirinto', 'xande'].every((i) => ids.includes(i)), `elenco com os 11 personagens (${ids.join(', ')})`);
-ok(ROSTER.map((c) => c.name).join() === 'KAISER,ARTHUR CERVERO,JOUI JOUKI,AGHATA,DANTE,ERIN PARKER,GAL SAL,KIAN,AGUIAR,LABIRINTO,XANDE', 'nomes: Kaiser, Arthur Cervero, Joui Jouki, Aghata, Dante, Erin Parker, Gal Sal, Kian, Aguiar, Labirinto, Xande');
+ok(['cineraria', 'abutre', 'mascarado', 'vampira', 'dante', 'erin', 'injustica', 'desconjurado', 'aguiar', 'labirinto', 'xande', 'lirio'].every((i) => ids.includes(i)), `elenco com os 12 personagens (${ids.join(', ')})`);
+ok(ROSTER.map((c) => c.name).join() === 'KAISER,ARTHUR CERVERO,JOUI JOUKI,AGHATA,DANTE,ERIN PARKER,GAL SAL,KIAN,AGUIAR,LABIRINTO,XANDE,LÍRIO', 'nomes: Kaiser, Arthur Cervero, Joui Jouki, Aghata, Dante, Erin Parker, Gal Sal, Kian, Aguiar, Labirinto, Xande, Lírio');
 const banners = Object.fromEntries(ROSTER.map((c) => [c.id, c.special.banner]));
 ok(banners.injustica === 'Injustiça né?' && banners.cineraria === 'Cinerária!' && banners.mascarado === 'Shi no Kage!' && banners.vampira === 'Descarnar!' && banners.abutre === 'Arma de Sangue!' && banners.desconjurado === 'Inexistir', 'textos dos especiais na tela');
 ok(COMBAT.maxHealth === 1000 && COMBAT.maxEnergy === 100, 'vida 1000 e energia 100');
@@ -183,6 +183,10 @@ ok(lab && lab.origin === 'Mascarados' && lab.melee.name === 'A Antena' && lab.ra
 ok(lab && ['mentalMaze', 'consumeMoment', 'helmetForm'].every((t) => abil('labirinto', t)) && lab.special.type === 'abyssMaze', 'Labirinto: Labirinto Mental, Consumir Momento, Capacete do ??? e especial do labirinto');
 ok(xan && xan.origin === 'Os Cinco' && xan.melee.name.includes('Taco') && xan.ranged.boomerang, 'Xande: Os Cinco, taco com arame farpado e Skate Caótico que volta');
 ok(xan && ['curseWeapon', 'polarize', 'noiseScreen', 'selfBuff'].every((t) => abil('xande', t)) && pas('xande', 'paranormalGladiator'), 'Xande: Amaldiçoar Arma, Polarização Caótica, Tela de Ruído, Velocidade Mortal, Gladiador Paranormal');
+const lir = get('lirio');
+ok(lir && lir.origin === 'Os Cinco' && lir.melee.name === 'Leonora' && lir.stats.maxHealth > 1000 && lir.stats.moveSpeed < Math.min(...ROSTER.filter((c) => c.id !== 'lirio').map((c) => c.stats.moveSpeed)), 'Lírio: Os Cinco, Leonora, mais vida e o mais lento do elenco');
+ok(lir && ['heavyBlow', 'caiDentro', 'bloodBind', 'curseWeapon', 'heavyProtection'].every((t) => abil('lirio', t)) && ['ironBlood', 'thickSkin', 'heavyHand'].every((t) => pas('lirio', t)), 'Lírio: Golpe Pesado, Cai Dentro, Amarras de Sangue, Leonora Amaldiçoada, Proteção Pesada + Sangue de Ferro, Casca Grossa, Mão Pesada');
+ok(lir && lir.melee.ground && lir.melee.ground.otg && lir.melee.strikes.some((s) => s.armor) && lir.assistAuto && lir.grip.twoHand, 'Lírio: golpe no chão, resistência em golpes pesados, Cai Dentro automático na equipe e Leonora com as duas mãos');
 
 // ---------------- V2.3: combos verticais ----------------
 ok(ROSTER.every((c) => c.melee.up && c.melee.up.launcher && c.melee.up.finisher === 'launchHigh'), 'todos com ↑ + ○ (lançador próprio)');

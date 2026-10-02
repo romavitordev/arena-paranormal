@@ -67,7 +67,7 @@ export const ORIGINS = {
     { page: 'Alexandre', name: 'Xande (Alexandre)', id: 'xande' },
     { page: 'Dara Alice Venturini' },
     { page: 'Francisco Albuquerque' },
-    { page: 'Lírio Tellini' },
+    { page: 'Lírio Tellini', id: 'lirio' },
     { page: 'Voytek Nowak' },
     { page: 'Morato Vertaler' },
   ],

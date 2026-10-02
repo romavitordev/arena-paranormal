@@ -1,7 +1,7 @@
 import { buildCineraria } from './characters/cineraria.js';
 import { buildAbutre } from './characters/abutre.js';
 import { buildMascarado } from './characters/mascarado.js';
-import { addCinerariaProps, addAbutreProps, addMascaradoProps, addVampiraProps, addInjusticaProps, addDesconjuradoProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps } from './props.js';
+import { addCinerariaProps, addAbutreProps, addMascaradoProps, addVampiraProps, addInjusticaProps, addDesconjuradoProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps } from './props.js';
 import { buildVampira } from './characters/vampira.js';
 import { buildInjustica } from './characters/injustica.js';
 import { buildDesconjurado } from './characters/desconjurado.js';
@@ -24,6 +24,7 @@ export const MODEL_BUILDERS = {
   aguiar: buildMascarado,
   labirinto: buildDesconjurado,
   xande: buildCineraria,
+  lirio: buildAbutre,
 };
 
 // Modelos do Blender + armas/acessórios adicionados em código
@@ -39,6 +40,7 @@ const BLENDER_MODELS = {
   aguiar: { url: 'models/aguiar.glb', props: addAguiarProps },
   labirinto: { url: 'models/labirinto.glb', props: addLabirintoProps },
   xande: { url: 'models/xande.glb', props: addXandeProps },
+  lirio: { url: 'models/lirio.glb', props: addLirioProps },
 };
 
 const loaded = {};

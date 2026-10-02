@@ -5,7 +5,8 @@
 import { ROSTER } from '../characters/index.js';
 import { CpuController } from '../ai/CpuController.js';
 
-export async function runBalance({ fights = 4, maxTime = 150, ids = ROSTER.map((c) => c.id), arena, level = 'normal' } = {}) {
+// focus: só os pares de um lutador (ex.: personagem novo contra todo o elenco). O resultado também fica em window.__balance.
+export async function runBalance({ fights = 4, maxTime = 150, ids = ROSTER.map((c) => c.id), arena, level = 'normal', focus = null } = {}) {
   const g = window.__game;
   const inp = g.input;
   const stats = Object.fromEntries(ids.map((id) => [id, { wins: 0, fights: 0, dealt: 0, taken: 0, rounds: 0, moves: {} }]));
@@ -14,6 +15,7 @@ export async function runBalance({ fights = 4, maxTime = 150, ids = ROSTER.map((
   for (const a of ids) {
     for (const b of ids) {
       if (a === b) continue;
+      if (focus && a !== focus && b !== focus) continue;
       for (let n = 0; n < fights; n++) {
         const m = g.quick(a, b, true, arena);
         inp.players[0].setVirtual(null);
@@ -55,5 +57,6 @@ export async function runBalance({ fights = 4, maxTime = 150, ids = ROSTER.map((
     return { id, vitorias: `${Math.round((s.wins / s.fights) * 100)}%`, lutas: s.fights, rounds: s.rounds, danoCausado: Math.round(s.dealt / s.fights), danoRecebido: Math.round(s.taken / s.fights) };
   }).sort((x, y) => parseInt(y.vitorias) - parseInt(x.vitorias));
   const moves = Object.fromEntries(ids.map((id) => [id, Object.entries(stats[id].moves).sort((x, y) => y[1] - x[1]).slice(0, 8)]));
+  window.__balance = { table, matrix, moves };
   return { table, matrix, moves };
 }

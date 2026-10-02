@@ -563,6 +563,72 @@ export const MATERIAL_TEXTURES = {
     for (let y = 0; y < 256; y += 6) { g.beginPath(); g.moveTo(0, y); g.lineTo(512, y); g.stroke(); }
   }, { wrap: true }),
 
+  // ---------------- LÍRIO: rosto largo e sorridente, barba loira aparada; camisa azul com o emblema branco;
+  // antebraços com cicatrizes de corte (ataduras são malhas à parte)
+  face_lirio: face((g) => {
+    stubble(g, 'rgba(150,110,40,0.42)', 1600, { y0: 150, y1: 225, w: 92 });
+    // cicatriz pequena no supercílio direito
+    g.strokeStyle = 'rgba(170,90,80,0.65)'; g.lineWidth = 2; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(CX - 52, 96); g.lineTo(CX - 40, 108); g.stroke();
+  }, {
+    skin: '#e8c0a2',
+    eye: { iris: '#5a4a2a', irisLight: '#8a7a4a', tilt: -0.02 },
+    brow: { angry: 2, thick: 6, color: '#8a6a2a' },
+    mouth: { mouthW: 17, smile: 4, smirk: 1 },
+  }),
+  shirt_lirio: () => canvasTex(512, 256, (g) => {
+    g.fillStyle = '#2c4f8a'; g.fillRect(0, 0, 512, 256);
+    // emblema branco no peito (frente = meio da textura): triângulo vazado com a "cabeça" dos Cinco
+    g.fillStyle = '#e8eef4';
+    g.beginPath(); g.moveTo(256, 54); g.lineTo(296, 128); g.lineTo(216, 128); g.closePath(); g.fill();
+    g.fillStyle = '#2c4f8a';
+    g.beginPath(); g.moveTo(256, 80); g.lineTo(279, 120); g.lineTo(233, 120); g.closePath(); g.fill();
+    g.fillStyle = '#e8eef4';
+    g.beginPath(); g.ellipse(256, 108, 9, 11, 0, 0, Math.PI * 2); g.fill();
+    // gola em V amarrada (cadarço)
+    g.strokeStyle = '#1a2e52'; g.lineWidth = 3;
+    g.beginPath(); g.moveTo(240, 0); g.lineTo(256, 36); g.lineTo(272, 0); g.stroke();
+    g.strokeStyle = 'rgba(230,230,230,0.7)'; g.lineWidth = 1.2;
+    for (let y = 8; y < 34; y += 8) { g.beginPath(); g.moveTo(246, y); g.lineTo(266, y + 4); g.stroke(); }
+    // trama do tecido e sujeira
+    g.strokeStyle = 'rgba(10,20,40,0.18)'; g.lineWidth = 1;
+    for (let y = 0; y < 256; y += 5) { g.beginPath(); g.moveTo(0, y); g.lineTo(512, y); g.stroke(); }
+    for (let i = 0; i < 40; i++) { g.fillStyle = 'rgba(60,40,20,0.12)'; g.beginPath(); g.arc(Math.random() * 512, 150 + Math.random() * 100, 4 + Math.random() * 8, 0, Math.PI * 2); g.fill(); }
+  }, { wrap: true }),
+  arms_lirio: () => canvasTex(256, 256, (g) => {
+    g.fillStyle = '#e8c0a2'; g.fillRect(0, 0, 256, 256);
+    // pelos claros e várias cicatrizes de corte (riscos rosados com pontos de sutura)
+    for (let i = 0; i < 500; i++) { g.fillStyle = 'rgba(190,150,80,0.18)'; g.fillRect(Math.random() * 256, Math.random() * 256, 1, 2); }
+    for (let i = 0; i < 11; i++) {
+      const x = 10 + Math.random() * 236; const y = 60 + Math.random() * 180; const len = 14 + Math.random() * 26; const a = -0.6 + Math.random() * 1.2;
+      g.strokeStyle = 'rgba(180,96,86,0.75)'; g.lineWidth = 2.2; g.lineCap = 'round';
+      g.beginPath(); g.moveTo(x, y); g.lineTo(x + Math.cos(a) * len, y + Math.sin(a) * len); g.stroke();
+      g.strokeStyle = 'rgba(120,60,50,0.6)'; g.lineWidth = 1;
+      for (let k = 4; k < len; k += 6) { const cx = x + Math.cos(a) * k; const cy = y + Math.sin(a) * k; g.beginPath(); g.moveTo(cx - Math.sin(a) * 3, cy + Math.cos(a) * 3); g.lineTo(cx + Math.sin(a) * 3, cy - Math.cos(a) * 3); g.stroke(); }
+    }
+  }, { wrap: true }),
+  glove_lirio: () => canvasTex(128, 128, (g) => {
+    // luva marrom com faixas azuis
+    g.fillStyle = '#6a4428'; g.fillRect(0, 0, 128, 128);
+    g.fillStyle = '#2c4f8a'; g.fillRect(0, 40, 128, 14); g.fillRect(0, 84, 128, 10);
+    g.strokeStyle = 'rgba(30,18,8,0.5)'; g.lineWidth = 1; g.setLineDash([3, 3]);
+    g.beginPath(); g.moveTo(0, 38); g.lineTo(128, 38); g.moveTo(0, 56); g.lineTo(128, 56); g.stroke();
+    g.setLineDash([]);
+  }, { wrap: true }),
+  coat_lirio: () => canvasTex(256, 256, (g) => {
+    // lã azul-escura grossa com desgaste nas bordas
+    g.fillStyle = '#1c2a44'; g.fillRect(0, 0, 256, 256);
+    for (let i = 0; i < 2600; i++) { g.fillStyle = Math.random() < 0.5 ? 'rgba(255,255,255,0.035)' : 'rgba(0,0,0,0.08)'; g.fillRect(Math.random() * 256, Math.random() * 256, 2, 1); }
+    const grd = g.createLinearGradient(0, 200, 0, 256);
+    grd.addColorStop(0, 'rgba(0,0,0,0)'); grd.addColorStop(1, 'rgba(60,50,40,0.35)');
+    g.fillStyle = grd; g.fillRect(0, 200, 256, 56);
+  }, { wrap: true }),
+  fur_white: () => canvasTex(128, 128, (g) => {
+    g.fillStyle = '#e8e4dc'; g.fillRect(0, 0, 128, 128);
+    g.strokeStyle = 'rgba(150,140,128,0.45)'; g.lineWidth = 1;
+    for (let i = 0; i < 600; i++) { const x = Math.random() * 128; const y = Math.random() * 128; g.beginPath(); g.moveTo(x, y); g.lineTo(x + (Math.random() - 0.5) * 6, y + 4 + Math.random() * 5); g.stroke(); }
+  }, { wrap: true, repeat: [3, 2] }),
+
   // ---------------- MASCARADO: cicatriz em X na bochecha esquerda
   face_mascarado: face((g) => {
     g.strokeStyle = '#8a3e36'; g.lineWidth = 3.6; g.lineCap = 'round';

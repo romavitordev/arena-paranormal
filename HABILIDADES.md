@@ -350,8 +350,8 @@ Solta a névoa e, dentro dela, conjura a **Acácia amplificada pela Cinerária**
   Manifesta uma lâmina translúcida de medo ao redor da mão para um golpe curto devastador que quebra a defesa. Errar deixa ele exposto.
 - **Rejeitar Névoa** — R1 + × / RB + A · custo 25 · cooldown 16 s
   Enfraquece drasticamente os rituais na área: dissipa névoas e zonas do inimigo e corta o dano dos rituais e do ataque principal dele por alguns segundos.
-- **Toque da Morte** — R1 + L2 / RB + LT · custo 35 · cooldown 22 s · dano 30 · alcance 1.5 m
-  Toca o alvo e o envelhece rápido: ele bate mais fraco, fica mais lento e definha por alguns segundos. Curto alcance e lento para sair — dá para esquivar.
+- **Toque da Morte** — R1 + L2 / RB + LT · custo 40 · cooldown 55 s · dano 30 · alcance 1.3 m
+  Toca o alvo e o envelhece: ele definha e fica lento por alguns segundos e FRACO (−20% de dano) até o fim do round. Curtíssimo alcance, como o Inexistir — dá para esquivar. Recarga muito longa.
 - **Passiva — Precognição:** não é pego desprevenido (sem bônus de costas nem susto de teleporte)
 
 ### Especial: Inexistir
@@ -482,5 +482,47 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
 - **Bloqueio Perfeito** — defender no instante exato (0.14 s) anula o dano e atordoa o atacante por 0.45 s
 
 ### Especial: Por Eles
+
+250 de dano · custo 50 · cooldown 14 s.
+
+---
+
+## LÍRIO
+
+*A parede: aguenta o impacto, chega perto e decide com golpes que derrubam* · arma: Leonora (marreta de madeira com espinhos) e o canivete de osso da avó
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Marretada horizontal | 34 | 2.2 m |  |
+| ○ 2 | Marretada diagonal | 38 | 2.2 m |  |
+| ○ 3 | Marretada vertical | 46 | 2.3 m |  |
+| ○ 4 | Hoje cê conhece a Leonora | 74 | 2.4 m | finalizador: lança |
+| Frente + ○ | Investida com a Leonora | 40 | 2.3 m |  |
+| Trás + ○ | Recua e rebate | 34 | 2.2 m |  |
+| Lado + ○ | Marretada em movimento | 32 | 2.2 m |  |
+| No ar + ○ | Marretada aérea | 40 | 2.2 m | desce com impacto |
+| ↑ + ○ (no combo) | Leonora para cima | 42 | 2.2 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Marretada descendente | 50 | 2.2 m | finalizador: derruba |
+
+### Principal (□ / X): Canivete de osso
+
+- Dano 22 · alcance 13 m · cooldown 2.8 s · custo 0
+
+### Habilidades
+
+- **Golpe Pesado** — R1 + △ / RB + Y · custo 30 · cooldown 12 s · dano 95 · alcance 2.3 m
+  Ergue a Leonora, finca os pés, avança o corpo e crava a marreta: derruba e gasta muito da defesa. Preparação longa (aguenta um golpe pequeno depois de concentrar); errar deixa ele aberto.
+- **Cai Dentro** — R1 + ○ / RB + B · custo 20 · cooldown 14 s · alcance 11 m
+  Chama a atenção do inimigo e assume o confronto: longe, corre e dá uma ombrada; perto, grita. O inimigo fica PROVOCADO (só ataca no corpo a corpo por 4 s) e o Lírio recebe 20% menos dano.
+- **Amarras de Sangue "Magras"** — R1 + □ / RB + X · custo 25 · cooldown 15 s · dano 30 · alcance 9 m
+  Estala a corda de tripas entrelaçadas no alvo e o prende por um instante (ritual de Sangue: mais forte contra Conhecimento). Ferramenta para segurar quem foge.
+- **Leonora Amaldiçoada (Sangue)** — R1 + × / RB + A · custo 25 · cooldown 18 s
+  Amaldiçoa a Leonora com Sangue: por alguns segundos cada marretada abre um sangramento.
+- **Proteção Pesada** — R1 + L2 / RB + LT · custo 25 · cooldown 22 s
+  Põe o capacete azul e se fecha: recebe 25% menos dano e aguenta 2 golpes sem recuar por 7 s, mas fica um pouco mais lento.
+
+### Especial: Leonora
 
 250 de dano · custo 50 · cooldown 14 s.

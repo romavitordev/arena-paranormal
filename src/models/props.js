@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { glowMat } from './rig.js';
-import { m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate } from './weapons.js';
+import { m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora } from './weapons.js';
 export { addMascaradoProps } from './characters/mascarado.js';
 
 // Armas e acessórios adicionados em código sobre os modelos do Blender.
@@ -136,7 +136,38 @@ export function addLabirintoProps(rig) {
   }
 }
 
+// LÍRIO: a LEONORA na mão direita (a esquerda vai para o cabo por pose); o canivete de osso só aparece no arremesso
+export function addLirioProps(rig) {
+  const { sockets, props } = rig;
+  const hammer = leonora();
+  hammer.rotation.x = -0.25;
+  sockets.handR.add(hammer);
+  props.leonora = hammer;
+  const kn = knife();
+  kn.visible = false;
+  kn.rotation.x = -0.3;
+  sockets.handL.add(kn);
+  props.knifeThrow = kn;
+  // capacete azul com listra branca (pendurado no equipamento na arte): aparece na Proteção Pesada
+  const helmet = new THREE.Group();
+  const dome = new THREE.Mesh(new THREE.SphereGeometry(0.175, 18, 10, 0, Math.PI * 2, 0, Math.PI * 0.55), new THREE.MeshToonMaterial({ color: 0x2c5aa0 }));
+  helmet.add(dome);
+  const stripe = new THREE.Mesh(new THREE.TorusGeometry(0.17, 0.014, 6, 24, Math.PI), new THREE.MeshToonMaterial({ color: 0xe8eef4 }));
+  stripe.rotation.y = Math.PI / 2;
+  stripe.position.y = 0.012;
+  helmet.add(stripe);
+  const rim = new THREE.Mesh(new THREE.TorusGeometry(0.176, 0.012, 6, 24), new THREE.MeshToonMaterial({ color: 0x1a3a6a }));
+  rim.rotation.x = Math.PI / 2;
+  rim.position.y = 0.05;
+  helmet.add(rim);
+  helmet.position.set(0, 0.06, -0.01);
+  helmet.visible = false;
+  sockets.head.add(helmet);
+  props.helmet = helmet;
+}
+
 // XANDE: taco com arame farpado na mão direita, Skate Caótico na esquerda
+
 export function addXandeProps(rig) {
   const { sockets, props } = rig;
   const bat = barbedBat();

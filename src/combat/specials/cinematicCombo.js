@@ -31,6 +31,13 @@ const PREP_FX = {
     const mk = (s) => world.fx.emitter({ rate: 90, follow: () => f.rig.sockets[s].getWorldPosition(new THREE.Vector3()), particle: { color: sp.color, speed: 1.4, spread: 0.8, life: 0.4, size: 0.3, jitter: 0.5 } });
     return [mk('handR'), mk('handL')];
   },
+  // Lírio: nada de energia — pisa firme, levanta poeira e ergue a Leonora
+  stomp(f, world) {
+    world.fx.play('FX_DUST', f.pos, { scale: 1.2 });
+    world.cameraRig.shake(0.25, 0.3);
+    world.audio.play('heavyPunch', { volume: 0.6, pitch: 0.55 });
+    return [];
+  },
   fistGlow(f, world, sp) {
     const mk = (s) => world.fx.emitter({ rate: 100, follow: () => f.rig.sockets[s].getWorldPosition(new THREE.Vector3()), particle: { color: sp.color, speed: 1.4, spread: 0.7, life: 0.4, size: 0.32 } });
     return [mk('handR'), mk('handL')];
@@ -74,7 +81,7 @@ export const cinematicCombo = {
     f.anim.play(prep.anim, { restart: true, duration: prep.time });
     world.audio.play(sp.sound || 'specialStart');
     if (prep.fx && PREP_FX[prep.fx]) emitters = PREP_FX[prep.fx](f, world, sp);
-    world.fx.ring(new THREE.Vector3(f.pos.x, 0.06, f.pos.z), { color: sp.color, radius: 3, life: 0.5 });
+    if (!sp.physical) world.fx.ring(new THREE.Vector3(f.pos.x, 0.06, f.pos.z), { color: sp.color, radius: 3, life: 0.5 });
 
     // corrente da aproximação (approach: 'chain')
     let chainFx = null;
@@ -222,7 +229,8 @@ export const cinematicCombo = {
           const F = forwardFromYaw(f.yaw);
           f.vel.x = F.x * dash.speed;
           f.vel.z = F.z * dash.speed;
-          world.fx.burst(f.chestPos(), { count: 2, color: sp.color, speed: 1, life: 0.3, size: 0.4 });
+          if (sp.physical) world.fx.burst(new THREE.Vector3(f.pos.x, 0.2, f.pos.z), { count: 2, color: 0x9a8a72, kind: 'smoke', speed: 1, up: 0.4, life: 0.45, size: 0.5, grow: 1 });
+          else world.fx.burst(f.chestPos(), { count: 2, color: sp.color, speed: 1, life: 0.3, size: 0.4 });
           const d = distXZ(f.pos, opp.pos);
           const reachable = Math.abs(opp.pos.y - f.pos.y) < 1.8 && opp.visible;
           if (d <= dash.contact && reachable) {

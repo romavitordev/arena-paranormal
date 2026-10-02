@@ -176,6 +176,12 @@ Object.assign(PAIR_LINES, {
   },
 });
 
+// Lírio × Xande: amigos de longa data d'Os Cinco, vivem discordando, mas um se arrisca pelo outro
+PAIR_LINES['lirio+xande'] = {
+  lirio: 'Xande, sai da frente que hoje a Leonora tá com saudade!',
+  xande: 'Lírio, tu vai mesmo bater em mim com essa coisa? Mano...',
+};
+
 export const SOLO_LINES = {
   cineraria: 'A névoa está do meu lado.',
   abutre: 'Eu sou um Gaudério. A gente morre por quem ama.',
@@ -188,10 +194,17 @@ export const SOLO_LINES = {
   aguiar: 'Ha ha ha... Jovens...',
   labirinto: 'O que espera no final do labirinto... é você.',
   xande: 'Por eles... Por eles... Por eles...',
+  lirio: "Hoje 'cê vai conhecer a Leonora!",
 };
 
 // ---------------- FALAS DE VITÓRIA: [vencedor][derrotado] (ou .default)
 export const VICTORY_LINES = {
+  lirio: {
+    default: 'A parede ficou de pé. Graças a Deus... e à Leonora.',
+    xande: 'Levanta, Xande. Depois a gente come uma pizza de tomate seco.',
+    labirinto: 'Esquisito... mas a Leonora entende qualquer língua.',
+    aguiar: 'Machado nenhum passa por essa parede.',
+  },
   cineraria: {
     default: 'Eu já perdi gente demais pra perder pra você.',
     desconjurado: 'Dessa vez quem sumiu foi você, Kian.',

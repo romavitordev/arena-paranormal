@@ -705,6 +705,11 @@ Object.assign(ABILITY_TYPES, {
             onEnd() { if (opp.buffTint && opp.buffTint.color === 0x5a5660) opp.buffTint = prevTint || null; },
           });
         }
+        // marca permanente: o alvo fica FRACO até o fim do round (não acumula; sai no próximo round)
+        if (a.roundWeaken && !opp.findBuff('deathMark')) {
+          opp.addBuff({ type: 'deathMark', name: 'TOQUE DA MORTE', time: Infinity, duration: Infinity, mult: a.roundWeaken, affects: ['melee', 'ranged', 'ability', 'special'] });
+          world.fx.ring(new THREE.Vector3(opp.pos.x, 0.06, opp.pos.z), { color: 0x8a8090, radius: 2.4, life: 0.6 });
+        }
         opp.notify('TOQUE DA MORTE', true);
       });
       tl.end(a.windup + a.recovery);
@@ -1451,6 +1456,206 @@ Object.assign(ABILITY_TYPES, {
       tl.add(a.windup + dashTime, () => { trail.stop(); if (!hit) world.fx.slash(f.chestPos(), f.yaw, { color: a.color, radius: 2, arc: 2.4, life: 0.25, width: 0.35 }); });
       tl.end(a.windup + dashTime + a.recovery);
       return seqFrom(tl, { cancel: () => trail.stop() });
+    },
+  },
+
+  // ------------------------------------------------------------------ LÍRIO
+  // GOLPE PESADO: prepara → concentra → desloca o corpo → golpe → impacto → recupera. Difícil de acertar (preparação
+  // visível e alcance curto), muito recompensador quando acerta. Resiste a UM golpe pequeno depois que já concentrou.
+  heavyBlow: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      if (opp && distXZ(f.pos, opp.pos) < 8) f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play(a.anim || 'hammer_heavy', { restart: true, duration: a.duration });
+      world.audio.play('carga', { volume: 0.6, pitch: 0.7 });
+      const now = world.time;
+      f.superArmor = { from: now + a.armorFrom, to: now + a.impact, max: a.armorMax ?? 45, hits: a.armorHits ?? 1 };
+      let hit = false;
+      tl.add(a.armorFrom, () => {
+        // concentração: pés fincados levantam poeira
+        world.fx.play('FX_DUST', f.pos, { scale: 0.6 });
+        world.audio.play('heavyPunch', { volume: 0.3, pitch: 0.5 });
+      });
+      tl.each((t) => {
+        // deslocamento do corpo à frente logo antes do golpe
+        if (t > a.impact - 0.2 && t < a.impact && !(opp && distXZ(f.pos, opp.pos) < 1.3)) {
+          const F = forwardFromYaw(f.yaw);
+          f.vel.x = F.x * a.step;
+          f.vel.z = F.z * a.step;
+        } else { f.vel.x = 0; f.vel.z = 0; }
+      });
+      tl.add(a.impact, () => {
+        const F = forwardFromYaw(f.yaw);
+        const at = new THREE.Vector3(f.pos.x + F.x * a.range * 0.7, 0, f.pos.z + F.z * a.range * 0.7);
+        world.fx.play('FX_GROUND_SMASH', at, { scale: 1.2 });
+        world.cameraRig.shake(0.55, 0.35);
+        world.audio.play('heavyPunch', { volume: 1.1, pitch: 0.6 });
+        if (!opp || opp.state === 'ko') return;
+        const d = distXZ(f.pos, opp.pos) - opp.radius;
+        const inArc = Math.abs(angleDiff(f.yaw, yawTo(f.pos, opp.pos))) <= (a.arc * DEG) / 2;
+        if (d <= a.range && inArc && Math.abs(opp.pos.y - f.pos.y) < 1.6) {
+          hit = true;
+          applyHit(world, f, opp, {
+            damage: a.damage, kind: 'ability', element: a.element, knockback: a.knockback, hitstun: 1.0,
+            launch: true, lowLaunch: true, guardCrush: a.guardCrush, sound: 'heavyPunch', scale: 2.2, hitstop: 0.14,
+            dir: F.clone(), strike: { impactFx: 'smash' },
+          });
+        }
+      });
+      // errou: fica cravado no chão por mais tempo (a recuperação anda devagar) — abertura para o adversário
+      tl.add(a.impact + 0.02, () => { if (!hit) f.anim.speed = a.duration / (a.duration + (a.whiffRecovery || 0)); });
+      tl.end(a.duration);
+      let t = 0;
+      return {
+        update(dt) {
+          t += dt;
+          tl.update(dt);
+          const done = t >= a.duration + (hit ? 0 : a.whiffRecovery || 0);
+          if (done) f.anim.speed = 1;
+          return done;
+        },
+        cancel: () => { f.anim.speed = 1; },
+      };
+    },
+  },
+
+  // CAI DENTRO: Lírio chama a atenção do inimigo e assume o confronto. Longe: avança correndo (pesado, sem
+  // teletransporte) e dá uma ombrada; perto: só o grito. O inimigo fica PROVOCADO (só consegue atacar no corpo a
+  // corpo por alguns segundos) e o Lírio se prepara para apanhar (recebe menos dano).
+  caiDentro: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      if (!opp || opp.state === 'ko') return null;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.yaw = yawTo(f.pos, opp.pos);
+      let phase = distXZ(f.pos, opp.pos) > a.near ? 'run' : 'roar';
+      let t = 0;
+      let roarAt = 0;
+      const dust = world.fx.emitter({ rate: 30, follow: () => new THREE.Vector3(f.pos.x, 0.2, f.pos.z), particle: { color: 0x9a8a72, kind: 'smoke', speed: 0.8, up: 0.4, life: 0.5, size: 0.45, grow: 1 } });
+      dust.visible = phase === 'run';
+      if (phase === 'run') {
+        f.anim.play('dash_heavy', { restart: true });
+        f.superArmor = { from: world.time, to: world.time + a.runTime + 0.3, max: 40, hits: 1 };
+        world.audio.play('jump', { volume: 0.6, pitch: 0.7 });
+      }
+      const roar = () => {
+        phase = 'roar';
+        roarAt = t;
+        dust.visible = false;
+        f.vel.set(0, 0, 0);
+        f.yaw = yawTo(f.pos, opp.pos);
+        f.anim.play('taunt_roar', { restart: true, duration: a.roarTime });
+        world.audio.play('fearGaze', { volume: 0.5, pitch: 0.55 });
+        world.audio.play('heavyPunch', { volume: 0.4, pitch: 0.5 });
+        world.fx.play('FX_DUST', f.pos, { scale: 1.3 });
+        world.fx.ring(f.chestPos(), { color: 0xe8e0c8, radius: 2.6, life: 0.4, vertical: true, yaw: f.yaw });
+        world.cameraRig.shake(0.2, 0.25);
+        if (opp.state !== 'ko' && distXZ(f.pos, opp.pos) <= a.provokeRange) {
+          const old = opp.findBuff('provoked');
+          if (old) old.time = a.duration;
+          else opp.addBuff({ type: 'provoked', name: 'PROVOCADO (CAI DENTRO)', time: a.duration, duration: a.duration, by: f });
+          opp.notify('PROVOCADO!', true);
+        }
+        const mine = f.findBuff('caiDentro');
+        if (mine) mine.time = a.duration;
+        else f.addBuff({ type: 'caiDentro', name: 'CAI DENTRO', time: a.duration, duration: a.duration, takenMult: a.takenMult });
+        f.notify('CAI DENTRO!', true);
+      };
+      if (phase === 'roar') roar();
+      return {
+        update(dt) {
+          t += dt;
+          if (phase === 'run') {
+            f.yaw = yawTo(f.pos, opp.pos);
+            const F = forwardFromYaw(f.yaw);
+            f.vel.x = F.x * a.runSpeed;
+            f.vel.z = F.z * a.runSpeed;
+            const d = distXZ(f.pos, opp.pos);
+            if (d <= 1.5 || t >= a.runTime) {
+              f.vel.set(0, 0, 0);
+              if (d <= 1.9 && !opp.isInvulnerable()) {
+                // ombrada: empurra e desequilibra, abrindo espaço
+                f.anim.play('shoulder_charge', { restart: true, duration: 0.4 });
+                applyHit(world, f, opp, { damage: a.bashDamage, kind: 'ability', knockback: 4.5, hitstun: 0.5, stun: 0.3, sound: 'heavyPunch', scale: 1.4, dir: F.clone() });
+                world.fx.play('FX_DUST', opp.pos, { scale: 0.9 });
+                phase = 'bash';
+                roarAt = t;
+              } else roar();
+            }
+            return false;
+          }
+          if (phase === 'bash') {
+            if (t - roarAt >= 0.35) roar();
+            return false;
+          }
+          if (t - roarAt >= a.roarTime) { dust.stop(); return true; }
+          return false;
+        },
+        cancel: () => dust.stop(),
+      };
+    },
+  },
+
+  // AMARRAS DE SANGUE "Magras": corda de tripas entrelaçadas que estala até o alvo e o prende por um instante.
+  // Ritual de Sangue (mais forte contra Conhecimento pelo ciclo dos elementos).
+  bloodBind: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      if (opp) f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('throw_r', { restart: true, duration: a.windup + 0.35 });
+      world.audio.play('chainThrow', { volume: 0.7, pitch: 0.8 });
+      const hand = () => f.rig.sockets.handL.getWorldPosition(new THREE.Vector3());
+      let tip = null;
+      let rope = null;
+      let caught = false;
+      tl.add(a.windup, () => {
+        const connected = opp && opp.state !== 'ko' && !opp.isInvulnerable() && distXZ(f.pos, opp.pos) <= a.range
+          && Math.abs(angleDiff(f.yaw, yawTo(f.pos, opp.pos))) <= (a.arc * DEG) / 2;
+        const end = connected ? opp.chestPos() : hand().addScaledVector(forwardFromYaw(f.yaw), a.range);
+        tip = end;
+        rope = world.fx.chain(hand, () => (caught && opp.state !== 'ko' ? opp.chestPos() : tip), { rope: true, links: 26, color: 0x8a1018, glow: 0x3a0004, sag: 0.08 });
+        if (!connected) return;
+        const res = applyHit(world, f, opp, { damage: a.damage, kind: 'ability', element: 'sangue', knockback: 0, hitstun: 0.3, reaction: false, sound: 'chainPull', color: 0xc01828, scale: 1 });
+        if (typeof res === 'number' && opp.state !== 'ko') {
+          caught = true;
+          opp.stun(a.hold, 'stagger');
+          opp.vel.set(0, 0, 0);
+          opp.notify('PRESO PELAS AMARRAS', true);
+          world.fx.burst(opp.chestPos(), { count: 18, color: 0x9a0010, speed: 3, life: 0.5, size: 0.18, gravity: 8 });
+        }
+      });
+      tl.add(a.windup + (a.hold * 0.85), () => { if (rope) { rope.stop(); rope = null; } });
+      tl.end(a.windup + 0.35);
+      return seqFrom(tl, { cancel: () => { if (rope) rope.stop(); } });
+    },
+  },
+
+  // PROTEÇÃO PESADA: veste o capacete azul e se fecha: recebe menos dano e aguenta alguns golpes sem recuar,
+  // mas fica um pouco mais lento.
+  heavyProtection: {
+    start(f, a, world) {
+      if (f.findBuff('heavyProtection')) { f.notify('PROTEÇÃO JÁ ATIVA'); return null; }
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.anim.play(f.def.anims.block || 'block', { restart: true, duration: 0.5 });
+      world.audio.play('blockHit', { volume: 0.8, pitch: 0.7 });
+      tl.add(0.3, () => {
+        if (a.prop) f.rig.showProp(a.prop, true);
+        f.armorHits = (f.armorHits || 0) + a.armor;
+        world.fx.play('FX_DUST', f.pos, { scale: 0.8 });
+        f.addBuff({
+          type: 'heavyProtection', name: 'PROTEÇÃO PESADA', time: a.duration, duration: a.duration, takenMult: a.takenMult, speedMult: a.speedMult,
+          onEnd() { if (a.prop) f.rig.showProp(a.prop, false); f.armorHits = Math.max(0, (f.armorHits || 0) - a.armor); },
+        });
+        f.notify('PROTEÇÃO PESADA', true);
+      });
+      tl.end(0.5);
+      return seqFrom(tl);
     },
   },
 

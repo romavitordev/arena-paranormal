@@ -225,6 +225,8 @@ export class Fighter {
   // ---------------------------------------------------------------- estados
   setState(s) {
     if (s !== 'idle' && this.anim) this.anim.twist = 0; // giro das pernas só existe andando
+    if (this.state === 'downed' && s !== 'downed') this.otgTaken = false;
+    if (s !== 'attack' && s !== 'ability') this.superArmor = null;
     // preparo do especial interrompido por qualquer outro estado (golpe, projétil, agarrão...)
     if (this.state === 'specialStart' && s !== 'special' && s !== 'specialStart') this.interruptSpecial();
     // montaria (skate): só continua andando/pulando ou no dash; qualquer outra ação desce
@@ -989,6 +991,21 @@ export class Fighter {
   updateGrip() {
     const G = this.def.grip;
     if (!G || this.riding) { if (this.anim.poseFilter && !G) this.anim.poseFilter = null; return; }
+    if (G.twoHand) {
+      // arma de duas mãos (Lírio — Leonora): a esquerda segura o cabo em quase tudo; andando/correndo carrega no ombro
+      const clip = this.anim.currentName || '';
+      const free = (G.freeLeft || []).includes(clip) || ['ko', 'downed', 'launched'].includes(this.state);
+      const carry = G.carry && ['walk', 'run', 'walk_back', 'strafe_L', 'strafe_R'].includes(clip) && this.state === 'idle';
+      this.anim.poseFilter = free ? null : (p) => {
+        if (carry) { p.sR = [...G.carry.sR]; p.eR = [...G.carry.eR]; }
+        const r = p.sR;
+        const e = p.eR;
+        p.sL = [r[0], r[1] - (G.reach ?? 0.42), -0.05];
+        p.eL = [Math.min(e[0], -0.25) - 0.15, e[1], e[2]];
+        return p;
+      };
+      return;
+    }
     const prop = this.rig.props[G.prop];
     if (!prop) return;
     const attacking = this.state === 'attack';
@@ -1223,6 +1240,19 @@ export class Fighter {
     if (this.guard <= 0) this.guardBreak();
   }
 
+  // Bloqueio pesado (def.anims.blockHeavy): finca os pés, absorve com o corpo e quase não recua
+  heavyBlockReact(attacker) {
+    const name = this.def.anims && this.def.anims.blockHeavy;
+    if (!name) return;
+    this.anim.play(name, { restart: true, blend: 0.02 });
+    this.vel.x *= 0.35;
+    this.vel.z *= 0.35;
+    this.blockRecoil = 0.32;
+    this.world.fx.play('FX_DUST', this.pos, { scale: 0.7 });
+    this.world.cameraRig.shake(0.12, 0.12);
+    this.world.audio.play('heavyPunch', { volume: 0.5, pitch: 0.7 });
+  }
+
   guardBreak() {
     this.guard = this.maxGuard * 0.4;
     this.world.fx.burst(this.chestPos(), { count: 40, color: 0xbfe6ff, speed: 9, life: 0.5, size: 0.3, gravity: 6 });
@@ -1336,6 +1366,11 @@ export class Fighter {
 
   startMelee() {
     const m = this.def.melee;
+    const opp0 = this.opponent;
+    if (m.ground && this.onGround && opp0 && opp0.state === 'downed' && !opp0.otgTaken && distXZ(this.pos, opp0.pos) <= m.ground.range + 1.0) {
+      this.startStrike(m.ground, { branch: true });
+      return;
+    }
     if (!this.onGround && m.air) {
       if (this.airCombo) this.startStrike(this.airStrike(), { air: true });
       else this.startStrike(m.air, { air: true });
@@ -1404,6 +1439,8 @@ export class Fighter {
       this.vel.y = Math.max(this.vel.y, strike.hang ?? 1.5);
     }
     if (strike.iframes) this.invuln = strike.iframes[1];
+    const A = strike.armor;
+    this.superArmor = A ? { from: now + A.from, to: now + A.to, max: A.max ?? 40, hits: A.hits ?? 1 } : null;
     // segmentos de movimento (avanço, recuo, passo lateral)
     const lastActive = c.windows[c.windows.length - 1][1];
     c.motion = strike.motion || (strike.lunge ? [{ t: [0, lastActive], fwd: strike.lunge, stopClose: true }] : []);
@@ -1436,6 +1473,12 @@ export class Fighter {
         c.swung[i] = true;
         this.world.audio.play(s.sound, { volume: 0.8 });
         this.spawnTrail(s);
+        if (s.groundFx) {
+          const F0 = forwardFromYaw(this.yaw, v3);
+          const at = new THREE.Vector3(this.pos.x + F0.x * (s.range * 0.75), 0, this.pos.z + F0.z * (s.range * 0.75));
+          this.world.fx.play(s.groundFx === 'smash' ? 'FX_GROUND_SMASH' : 'FX_DUST', at, { scale: s.groundScale ?? 1 });
+          this.world.cameraRig.shake(s.groundFx === 'smash' ? 0.3 : 0.15, 0.18);
+        }
         if (s.chain) this.startStrikeChain(s, w);
       }
       if (!c.hits[i] && t >= w[0] && t <= w[1]) this.checkMeleeHit(s, i);
@@ -1590,6 +1633,7 @@ export class Fighter {
       guardBreak: s.guardBreak,
       guardCrush: s.guardCrush,
       juggle: !!s.airPop,
+      otg: !!s.otg,
       high: fin && fin.high,
       spike: fin && fin.spike,
       unblockable: !!this.findBuff('transcend'),
@@ -1674,6 +1718,7 @@ export class Fighter {
 
   // ------------------------------------------------ ataque principal (□/X)
   tryRanged(powered = false) {
+    if (this.findBuff('provoked')) { this.notify('PROVOCADO: SÓ NO CORPO A CORPO'); return; }
     const base = this.def.ranged;
     if (!base) {
       this.notify('SEM ATAQUE À DISTÂNCIA');
@@ -2031,6 +2076,7 @@ export class Fighter {
   }
 
   useAbility(a) {
+    if (this.findBuff('provoked')) { this.notify('PROVOCADO: SÓ NO CORPO A CORPO'); return; }
     if (this.cooldowns[a.id] > 0) {
       this.notify(`${a.name.toUpperCase()}: RECARREGANDO`);
       return;

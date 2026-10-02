@@ -202,7 +202,7 @@ export class HUD {
         const extra = b.shots !== undefined ? `${b.shots} tiro(s) amaldiçoado(s)`
           : b.mult ? `${b.mult > 1 ? '+' : '−'}${Math.round(Math.abs(b.mult - 1) * 100)}% dano${b.type === 'mist' ? ' · esquiva melhor' : ''}`
           : b.rangeBonus ? 'mais alcance · sangramento' : b.noRegen ? 'sem regenerar sanidade' : '';
-        return `${b.name} — ${extra} — ${b.time.toFixed(1)}s`;
+        return `${b.name} — ${extra} — ${Number.isFinite(b.time) ? b.time.toFixed(1) + 's' : 'até o fim do round'}`;
       }).join(' | ');
       e.msg.textContent = f.message ? f.message.text : '';
     });

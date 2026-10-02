@@ -77,6 +77,30 @@ export const PASSIVES = {
       return (victim.comboHits || 0) >= (passive.after ?? 3) ? passive.mult ?? 0.75 : 1;
     },
   },
+  // Lírio — Sangue de Ferro: mais vitalidade (a vida extra está em stats.maxHealth; aqui só identifica a passiva)
+  ironBlood: {},
+  // Lírio — Casca Grossa: aguenta melhor os impactos — é empurrado menos (lançamentos ainda lançam) e, defendendo,
+  // a defesa gasta menos e passa menos dano
+  thickSkin: {
+    knockbackTakenMod({ passive, o }) {
+      return o.launch ? 1 : passive.knockback ?? 0.65;
+    },
+    blockChipMod({ passive }) {
+      return passive.chip ?? 0.6;
+    },
+    guardDamageMod({ passive }) {
+      return passive.guard ?? 0.7;
+    },
+  },
+  // Lírio — Mão Pesada: golpes físicos empurram mais e deixam o alvo atordoado um pouco mais (não mexe no dano)
+  heavyHand: {
+    knockbackMod({ kind, passive }) {
+      return kind === 'melee' ? passive.knockback ?? 1.3 : 1;
+    },
+    hitstunBonus({ kind, passive }) {
+      return kind === 'melee' ? passive.hitstun ?? 0.06 : 0;
+    },
+  },
   // Kaiser — Afinidade Elemental: conectado à Energia, os rituais dele (habilidades e especial) batem mais forte
   elementalAffinity: {
     damageMod({ kind, passive }) {

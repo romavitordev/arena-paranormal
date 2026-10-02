@@ -61,6 +61,21 @@ export const FX_LIBRARY = {
     fx.burst(pos, { count: 16, color: 0x2a2420, kind: 'smoke', speed: 2.5, up: 1.2, life: 1.1, size: 1.1, grow: 1 });
   },
 
+  // poeira do chão (golpes pesados, pisadas, aterrissagem): anel de pó + pedrinhas que caem
+  FX_DUST(fx, pos, { scale = 1, color = 0x9a8a72 }) {
+    fx.ring(v.set(pos.x, 0.06, pos.z), { color, radius: 1.6 * scale, life: 0.35 });
+    fx.burst(v.set(pos.x, 0.25, pos.z), { count: Math.round(14 * scale), color, kind: 'smoke', speed: 2.6 * scale, up: 0.6, life: 0.7, size: 0.55 * scale, grow: 1 });
+    fx.burst(v.set(pos.x, 0.2, pos.z), { count: Math.round(10 * scale), color: 0x5a4a3a, speed: 4 * scale, up: 3, life: 0.5, size: 0.09, gravity: 14 });
+  },
+  // marretada no chão: onda de choque física (pó, pedras, rachadura) — sem energia paranormal
+  FX_GROUND_SMASH(fx, pos, { scale = 1, color = 0x9a8a72 }) {
+    fx.ring(v.set(pos.x, 0.06, pos.z), { color, radius: 3.2 * scale, life: 0.5 });
+    fx.ring(v.set(pos.x, 0.07, pos.z), { color: 0x4a3a2a, radius: 1.6 * scale, life: 0.7 });
+    fx.burst(v.set(pos.x, 0.3, pos.z), { count: Math.round(28 * scale), color, kind: 'smoke', speed: 4.5 * scale, up: 0.8, life: 0.9, size: 0.8 * scale, grow: 1.2 });
+    fx.burst(v.set(pos.x, 0.25, pos.z), { count: Math.round(24 * scale), color: 0x5a4a3a, speed: 6 * scale, up: 5, life: 0.7, size: 0.12, gravity: 16 });
+    fx.flash(v.set(pos.x, 0.4, pos.z), { color: 0xfff0d0, size: 1.6 * scale, life: 0.08 });
+  },
+
   // teleporte / troca / substituição: nuvem no lugar + faíscas do elemento (+ anel no chão)
   FX_TELEPORT(fx, pos, { color = 0xffffff, kind = 'blink' }) {
     if (kind === 'smoke') {

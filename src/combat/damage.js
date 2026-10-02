@@ -36,6 +36,9 @@ const src = new THREE.Vector3();
  */
 export function applyHit(world, attacker, victim, o) {
   if (!victim || victim.state === 'ko') return 0;
+  // golpe contra o chão (o.otg): acerta quem está CAÍDO, uma vez por queda (não vale na invulnerabilidade de levantar)
+  const otg = !!o.otg && victim.state === 'downed' && !victim.otgTaken && victim.invuln <= 0 && victim.visible;
+  if (otg) o = { ...o, reaction: false, ignoreInvuln: true };
   if (!o.ignoreInvuln && victim.isInvulnerable()) return 0;
 
 
@@ -63,7 +66,20 @@ export function applyHit(world, attacker, victim, o) {
     const P = PASSIVES[p.type];
     if (P && P.damageTakenMod) mult *= P.damageTakenMod({ attacker, victim, kind: o.kind, element, passive: p, world, o });
   }
+  for (const b of victim.buffs || []) if (b.takenMult && (!b.takenKinds || b.takenKinds.includes(o.kind))) mult *= b.takenMult;
   const attempted = Math.round(o.damage * mult);
+  // passivas de peso: quem bate empurra/atordoa mais (Mão Pesada); quem apanha é empurrado menos (Casca Grossa)
+  let kbMult = 1;
+  let stunBonus = 0;
+  for (const p of attacker.def.passives || []) {
+    const P = PASSIVES[p.type];
+    if (P && P.knockbackMod) kbMult *= P.knockbackMod({ kind: o.kind, passive: p });
+    if (P && P.hitstunBonus) stunBonus += P.hitstunBonus({ kind: o.kind, passive: p });
+  }
+  for (const p of victim.def.passives || []) {
+    const P = PASSIVES[p.type];
+    if (P && P.knockbackTakenMod) kbMult *= P.knockbackTakenMod({ kind: o.kind, passive: p, o });
+  }
 
   // ---------------- defesa ----------------
   const B = COMBAT.block;
@@ -89,10 +105,18 @@ export function applyHit(world, attacker, victim, o) {
         world.onParry && world.onParry(victim, attacker);
         return 'parried';
       }
-      const chip = o.kind === 'melee' ? B.meleeChip : B.rangedChip;
+      let chip = o.kind === 'melee' ? B.meleeChip : B.rangedChip;
+      let guardMod = 1;
+      for (const p of victim.def.passives || []) {
+        const P = PASSIVES[p.type];
+        if (P && P.blockChipMod) chip *= P.blockChipMod({ passive: p });
+        if (P && P.guardDamageMod) guardMod *= P.guardDamageMod({ passive: p });
+      }
       const dealt = victim.takeDamage(Math.round(attempted * chip));
       // golpe forte (guardCrush) já gastou a defesa: não soma o desgaste normal
-      if (victim.state !== 'ko') victim.onBlockedHit(o.guardCrush ? 0 : attempted, attacker);
+      if (victim.state !== 'ko') victim.onBlockedHit(o.guardCrush ? 0 : attempted * guardMod, attacker);
+      // bloqueio pesado: quem tem animação própria finca os pés e absorve o impacto com o corpo
+      if (victim.state === 'block' && (o.guardCrush || attempted >= 40) && victim.heavyBlockReact) victim.heavyBlockReact(attacker);
       world.hitstop(COMBAT.hitstop * 0.6);
       if (o.kind === 'melee') runMeleePassives(world, attacker, victim, o, dealt, attempted);
       world.onHit && world.onHit(attacker, victim, dealt, { ...o, blocked: true });
@@ -121,7 +145,7 @@ export function applyHit(world, attacker, victim, o) {
 
   // limite de lançamentos por combo: o próximo vira empurrão
   let launch = !!o.launch;
-  let knockback = o.knockback ?? 2;
+  let knockback = (o.knockback ?? 2) * kbMult;
   if (launch && !o.juggle && !o.high && (victim.comboLaunches || 0) >= COMBAT.maxLaunchesPerCombo && victim.state !== 'idle') {
     launch = false;
     knockback = Math.max(knockback, 6);
@@ -135,12 +159,22 @@ export function applyHit(world, attacker, victim, o) {
     victim.notify('AGUENTOU!', true);
   }
 
+  // resistência DURANTE golpes pesados (victim.superArmor): um golpe pequeno não cancela um golpe pesado já avançado.
+  // Golpes fortes, lançamentos, agarrões, quebras de defesa e especiais continuam interrompendo.
+  const sa = victim.superArmor;
+  if (reaction && sa && sa.hits > 0 && world.time >= sa.from && world.time <= sa.to && o.kind !== 'special' && !o.grab && !o.guardBreak && !launch && incoming <= sa.max) {
+    sa.hits--;
+    reaction = false;
+    world.fx.play('FX_BLOCK', victim.chestPos(), { color: 0xd8c8a8 });
+    victim.notify('AGUENTOU!', true);
+  }
+
   const dir = o.dir ? tmp.copy(o.dir).setY(0).normalize() : tmp.subVectors(victim.pos, attacker.pos).setY(0).normalize();
   if (reaction) {
     victim.react({
       dir,
       knockback,
-      hitstun: o.hitstun ?? (launch ? COMBAT.launchHitstun : o.launch ? 0.55 : COMBAT.hitstun),
+      hitstun: (o.hitstun ?? (launch ? COMBAT.launchHitstun : o.launch ? 0.55 : COMBAT.hitstun)) + stunBonus,
       launch,
       lowLaunch: !!o.lowLaunch,
       high: !!o.high,
@@ -154,6 +188,12 @@ export function applyHit(world, attacker, victim, o) {
   const color = o.color ?? attacker.def.energyColor;
   const scale = o.scale ?? (launch ? 1.5 : 1);
   world.fx.play(launch || scale >= 1.5 ? 'FX_HIT_HEAVY' : 'FX_HIT_SMALL', p, { color, scale });
+  if (o.strike && o.strike.impactFx === 'smash') world.fx.play('FX_DUST', victim.pos, { scale: Math.min(1.6, scale) });
+  if (otg) {
+    victim.otgTaken = true;
+    world.fx.play('FX_GROUND_SMASH', victim.pos, { scale: 0.9 });
+    victim.notify('NO CHÃO!', true);
+  }
   if (attacker.buffMultiplierActive(o.kind)) world.fx.play('FX_ENERGY', p);
   world.audio.play(o.sound || 'impact', { volume: launch ? 1.1 : 0.9 });
   world.hitstop(hitstopFor({ ...o, launch }, dealt));
