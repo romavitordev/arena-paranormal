@@ -70,7 +70,7 @@ export default {
     {
       id: 'rebirth',
       name: 'Rebirth',
-      input: 'mod+ranged', // R1 + □ / RB + X
+      input: 'carga+ranged', // △ + □ / Y + X
       type: 'weaponState',
       description: 'Energia paranormal percorre o corpo e amaldiçoa o rifle: os próximos tiros da sniper causam dano extra, com raios e runas.',
       energyCost: 30,
@@ -84,7 +84,7 @@ export default {
     {
       id: 'templo',
       name: 'Ódio Incontrolável "Templo do Ódio"',
-      input: 'mod+physical', // R1 + ○ / RB + B
+      input: 'carga+physical', // △ + ○ / Y + B
       type: 'hatredTemple',
       description: 'Corta a palma e sangra sobre o olho: ódio intenso por alguns segundos — físico mais forte e mais rápido, mas não consegue defender.',
       energyCost: 15,
@@ -98,7 +98,7 @@ export default {
     {
       id: 'dystopia',
       name: 'Paralisia de Sangue "Dystopia"',
-      input: 'mod+carga', // R1 + △ / RB + Y
+      input: 'block+carga', // R2 + △ / RT + Y
       type: 'bloodParalysis',
       description: 'Mancha o símbolo com o próprio sangue, abre os olhos vermelhos e paralisa quem estiver à frente por um instante.',
       energyCost: 25,
@@ -114,7 +114,7 @@ export default {
     {
       id: 'armaduraSangue',
       name: 'Armadura de Sangue',
-      input: 'mod+dodge', // R1 + L2 / RB + LT
+      input: 'carga+dodge', // △ + L2 / Y + LT
       type: 'noiseScreen',
       description: 'O sangue endurece sobre a pele como uma couraça vermelha: absorve golpes e tiros até se romper.',
       energyCost: 25,

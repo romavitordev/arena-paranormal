@@ -68,7 +68,7 @@ export default {
     {
       id: 'trinita',
       name: 'Embaralhar "Trinitá"',
-      input: 'mod+ranged', // R1 + □ / RB + X
+      input: 'carga+ranged', // △ + □ / Y + X
       type: 'shadowClones',
       description: 'Vira um vulto preto, troca de lugar e cria 3 cópias com vontade própria (4 Dantes em campo). Cada cópia causa metade do dano dele e some ao ser destruída ou quando o tempo acaba.',
       energyCost: 40,
@@ -81,7 +81,7 @@ export default {
     {
       id: 'tentaculos',
       name: 'Tentáculos de Lodo',
-      input: 'mod+physical', // R1 + ○ / RB + B
+      input: 'carga+physical', // △ + ○ / Y + B
       type: 'lodoTentacles',
       description: 'Põe a mão no chão: tentáculos de Lodo Preto brotam embaixo do inimigo, prendem e comprimem.',
       energyCost: 30,
@@ -97,7 +97,7 @@ export default {
     {
       id: 'paradiso',
       name: 'Cicatrização "Paradiso"',
-      input: 'mod+carga', // R1 + △ / RB + Y
+      input: 'block+carga', // R2 + △ / RT + Y
       type: 'healOverTime',
       description: 'Assopra uma névoa preta em espiral que envelhece as próprias feridas até cicatrizarem.',
       energyCost: 30,
@@ -109,7 +109,7 @@ export default {
     {
       id: 'pocaLodo',
       name: 'Poça de Lodo',
-      input: 'mod+dodge', // R1 + L2 / RB + LT
+      input: 'carga+dodge', // △ + L2 / Y + LT
       type: 'throwProjectile',
       description: 'Arremessa uma bola de Lodo Preto que se espalha no chão: o inimigo dentro anda devagar e não recupera energia.',
       energyCost: 20,

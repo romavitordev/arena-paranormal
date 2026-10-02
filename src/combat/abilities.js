@@ -8,6 +8,7 @@ import { buildModel } from '../models/index.js';
 import { Animator } from '../anim/Animator.js';
 import { DanteClone, CLONE, BloodZombie } from './npcs.js';
 import { buildHuntingDog } from '../models/dog.js';
+import { bloodCoat } from '../models/weapons.js';
 
 // Paga um custo em vida (rituais de Sangue) sem nunca se matar
 function payHealth(f, n) {
@@ -325,13 +326,22 @@ export const ABILITY_TYPES = {
         world.fx.burst(hand(), { count: 30, color: a.color, speed: 4, life: 0.5, size: 0.2 });
         world.fx.flash(hand(), { color: a.color, size: 1.4, life: 0.15 });
         const knives = (a.props || ['knife', 'knifeThrow']).map((n) => f.rig.props[n]).filter(Boolean);
-        const tint = (on) => knives.forEach((k) => k.traverse((o) => {
+        // encanto de SANGUE: a arma fica coberta de sangue (mesmo material da Arma de Sangue do Arthur); outros
+        // elementos (ex.: Morte da Espada Consumidora) brilham na cor do ritual
+        const isBlood = (a.element || f.def.element) === 'sangue';
+        let uncoat = [];
+        const glow = (on) => knives.forEach((k) => k.traverse((o) => {
           if (o.isMesh && o.material && o.material.emissive) {
             o.material.emissive.set(on ? a.color : 0x000000);
             o.material.emissiveIntensity = on ? 1.4 : 0;
             o.material.userData.keepEmissive = on; // o "flash" de dano não apaga o brilho
           }
         }));
+        const tint = (on) => {
+          if (!isBlood) return glow(on);
+          if (on) uncoat = knives.map((k) => bloodCoat(k));
+          else { uncoat.forEach((u) => u()); uncoat = []; }
+        };
         tint(true);
         const drip = world.fx.emitter({ rate: 18, follow: hand, particle: { color: 0x9a0010, speed: 0.4, spread: 0.2, life: 0.6, size: 0.12, gravity: 6 } });
         f.addBuff({
@@ -656,10 +666,12 @@ Object.assign(ABILITY_TYPES, {
       tl.add(0.3, () => {
         world.fx.burst(hand(), { count: 26, color: a.color, speed: 4, life: 0.4, size: 0.2 });
         const drip = world.fx.emitter({ rate: 35, follow: hand, particle: { color: a.color, speed: 0.4, spread: 0.15, life: 0.45, size: 0.14, gravity: 4 } });
+        // a arma fica coberta de sangue (mesmo material da Arma de Sangue do Arthur)
+        const uncoat = (a.props || ['knife', 'knifeThrow']).map((n) => f.rig.props[n]).filter((k) => k && k.traverse).map((k) => bloodCoat(k));
         f.addBuff({
           type: 'bloodBlade', name: 'ARMA DE SANGUE', time: a.duration, duration: a.duration,
           rangeBonus: a.rangeBonus, bleed: a.bleed,
-          onEnd() { drip.stop(); },
+          onEnd() { drip.stop(); uncoat.forEach((u) => u()); },
         });
       });
       tl.end(0.5);

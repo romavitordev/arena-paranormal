@@ -75,7 +75,7 @@ export default {
     {
       id: 'labia',
       name: 'Lábia',
-      input: 'mod+physical', // R1 + ○ / RB + B
+      input: 'carga+physical', // △ + ○ / Y + B
       type: 'charm',
       description: 'O charme do Miguel: o inimigo à frente hesita um instante e bate 20% mais fraco por 5 s.',
       energyCost: 20,
@@ -91,7 +91,7 @@ export default {
     {
       id: 'poseFisiculturista',
       name: 'Pose de Fisiculturista',
-      input: 'mod+carga', // R1 + △ / RB + Y
+      input: 'block+carga', // R2 + △ / RT + Y
       type: 'selfBuff',
       buffType: 'flex',
       label: 'POSE DE FISICULTURISTA',
@@ -107,7 +107,7 @@ export default {
     {
       id: 'tiroNaTesta',
       name: 'Tiro na Testa',
-      input: 'mod+ranged', // R1 + □ / RB + X
+      input: 'carga+ranged', // △ + □ / Y + X
       type: 'cursedShots',
       description: 'Mira com calma e dispara a Magnum na cabeça: um tiro só, muito forte.',
       energyCost: 20,
@@ -121,7 +121,7 @@ export default {
     {
       id: 'marcaEspiral',
       name: 'Marca Espiral',
-      input: 'mod+dodge', // R1 + L2 / RB + LT
+      input: 'carga+dodge', // △ + L2 / Y + LT
       type: 'spiralMark',
       description: 'Crava o Símbolo Espiral no próprio peito: perde um pouco de vida e TODA a sanidade — vira Luzidio na hora.',
       energyCost: 0,

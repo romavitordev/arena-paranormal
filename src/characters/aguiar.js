@@ -72,7 +72,7 @@ export default {
     {
       id: 'mascara',
       name: 'Máscara do Mutilador Noturno',
-      input: 'mod+physical', // R1 + ○ / RB + B
+      input: 'carga+physical', // △ + ○ / Y + B
       type: 'maskForm',
       description: 'Põe a máscara branca da mão vermelha: a intenção assassina toma conta — bate mais forte, anda mais rápido, aguenta 3 golpes sem reagir e todo golpe físico faz sangrar. Mas não consegue mais defender.',
       energyCost: 35,
@@ -88,7 +88,7 @@ export default {
     {
       id: 'armadilha',
       name: 'Armadilha de Urso',
-      input: 'mod+dodge', // R1 + L2 / RB + LT
+      input: 'carga+dodge', // △ + L2 / Y + LT
       type: 'bearTrap',
       description: 'Arma uma armadilha de urso no chão à frente. Quem pisar fica preso, toma dano e sangra. Só uma por vez.',
       energyCost: 20,
@@ -103,7 +103,7 @@ export default {
     {
       id: 'caes',
       name: 'Cães de Caça',
-      input: 'mod+carga', // R1 + △ / RB + Y
+      input: 'block+carga', // R2 + △ / RT + Y
       type: 'huntingDog',
       description: 'Assobia e um dos Rottweilers do acampamento corre até a vítima, morde (prende por um instante e faz sangrar) e volta.',
       energyCost: 25,
@@ -117,7 +117,7 @@ export default {
     {
       id: 'predador',
       name: 'Predador de Sangue',
-      input: 'mod+jump', // R1 + × / RB + A
+      input: 'block+jump', // R2 + × / RT + A
       type: 'predatorScent',
       description: 'Memoriza o cheiro da vítima: por alguns segundos rastreia o sangue dela, anda mais rápido e todo ataque contra ela fica mais forte.',
       energyCost: 20,

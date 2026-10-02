@@ -7,11 +7,11 @@ import { ELEMENTS } from '../src/config/elements.js';
 
 const INPUT = {
   'carga+jump': 'Energia + Pulo (△+× / Y+A)',
-  'mod+ranged': 'R1 + □ / RB + X',
-  'mod+physical': 'R1 + ○ / RB + B',
-  'mod+carga': 'R1 + △ / RB + Y',
-  'mod+jump': 'R1 + × / RB + A',
-  'mod+dodge': 'R1 + L2 / RB + LT',
+  'carga+ranged': '△ + □ / Y + X',
+  'carga+physical': '△ + ○ / Y + B',
+  'block+carga': 'R2 + △ / RT + Y',
+  'block+jump': 'R2 + × / RT + A',
+  'carga+dodge': '△ + L2 / Y + LT',
 };
 const FIN = { launch: 'lança', knockdown: 'derruba', push: 'afasta', stun: 'atordoa' };
 const DIR = { forward: 'Frente + ○', back: 'Trás + ○', side: 'Lado + ○', air: 'No ar + ○', up: '↑ + ○ (no combo)', down: '↓ + ○ (no combo)' };
@@ -43,7 +43,7 @@ especial = Carga → Carga → ○ (custa ${COMBAT.specialEnergyCost}, ofensivos
 **Dash:** × + × na direção do analógico (sem direção, até o adversário). **Dash longo:** △ + × (persegue o adversário, 10 de sanidade) — no Joui, △ + × é o Teleporte das Sombras.
 **Combo vertical:** ↑ + ○ dentro do combo lança e o atacante sobe junto (até ${COMBAT.airCombo.maxHits} golpes aéreos + finalização); ↓ + ○ derruba. × depois de acertar = dash de perseguição (até ${COMBAT.comboDash.maxPerCombo} por combo).
 **Queda:** caído não toma dano; × ou L2 logo ao cair levanta rolando. **Perfect Block:** defesa no instante do impacto (todos). **Carregar andando:** ${COMBAT.chargeMoveSpeed * 100}% da velocidade, ${COMBAT.chargeMoveRate * 100}% da carga.
-**Agarrão:** R2 + ○ (curta distância, ${COMBAT.grab.damage} de dano, não pode ser defendido — só esquivado). **Versões fortes:** △ + ○ = físico forte (×${COMBAT.powered.meleeMult}, gasta ${COMBAT.powered.guardCrush} da defesa, ${COMBAT.powered.meleeCost} de sanidade) · △ + □ = principal forte (×${COMBAT.powered.rangedMult}, +${COMBAT.powered.rangedCost} de energia).
+**Agarrão:** R2 + ○ (curta distância, ${COMBAT.grab.damage} de dano, não pode ser defendido — só esquivado). **△ é o modificador de ○ e □:** △ + ○ e △ + □ soltam habilidades (veja cada personagem); R2 + △ e R2 + × também (L1 e R1 chamam as assistências).
 **Elementos (só nos rituais — habilidades e especiais):** Sangue > Conhecimento > Energia > Morte > Sangue (+${Math.round((COMBAT.elements.advantage - 1) * 100)}% / −${Math.round((1 - COMBAT.elements.disadvantage) * 100)}%). **Escala de combo:** ${COMBAT.comboScaling.join(' → ')}. **Substituição:** L2 apanhando (1 carga). **Escapar do agarrão:** R2 + ○ logo no começo. **Transcender:** vida ≤ ${COMBAT.awaken.healthRatio * 100}% + segurar △ ${COMBAT.awaken.hold} s (1x por partida, +${Math.round((COMBAT.awaken.damageMult - 1) * 100)}% de dano por ${COMBAT.awaken.duration} s, aguenta 1 golpe).
 **Câmera:** sempre travada no adversário.
 `;

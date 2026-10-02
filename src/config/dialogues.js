@@ -195,10 +195,27 @@ export const SOLO_LINES = {
   labirinto: 'O que espera no final do labirinto... é você.',
   xande: 'Por eles... Por eles... Por eles...',
   lirio: "Hoje 'cê vai conhecer a Leonora!",
+  miguel: 'Relaxa. Eu sou o cara mais bonito dessa luta, e o mais forte também.',
+  juan: 'Eu não quero morrer... eu quero um novo começo.',
+  kemi: 'Um contrato é um contrato. Nada pessoal.',
 };
 
 // ---------------- FALAS DE VITÓRIA: [vencedor][derrotado] (ou .default)
 export const VICTORY_LINES = {
+  miguel: {
+    default: 'Viu? Músculo e charme. Ninguém resiste aos dois.',
+    lirio: 'Leonora pesada, hein? Mas eu levanto mais que isso no supino.',
+  },
+  juan: {
+    default: 'Doeu? Que bom. Eu senti cada pedaço.',
+    kemi: 'Nem a Fantasma escapa de quem já sentou no trono.',
+    aguiar: 'Corta mais, Aguiar. Eu gosto.',
+  },
+  kemi: {
+    default: 'Alvo neutralizado. Pagamento confirmado.',
+    juan: 'Trono nenhum aguenta um tiro na cabeça.',
+    labirinto: 'Labirinto ou não, a bala acha o caminho.',
+  },
   lirio: {
     default: 'A parede ficou de pé. Graças a Deus... e à Leonora.',
     xande: 'Levanta, Xande. Depois a gente come uma pizza de tomate seco.',

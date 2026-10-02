@@ -23,7 +23,6 @@ const v2 = new THREE.Vector3();
 const v3 = new THREE.Vector3();
 
 // Botão + modificador (R1/RB) → chave usada em `abilities[].input`
-const MOD_INPUTS = { ranged: 'mod+ranged', physical: 'mod+physical', carga: 'mod+carga', jump: 'mod+jump', dodge: 'mod+dodge' };
 
 /**
  * Lutador genérico. NÃO existe código específico de personagem aqui:
@@ -60,7 +59,7 @@ export class Fighter {
     this.visible = true;
 
     // cooldowns: nome → segundos restantes; cooldownMax para a HUD
-    this.cooldowns = { ranged: 0, special: 0, dodge: 0, dash: 0, grab: 0, powerMelee: 0, substitution: 0, switch: 0 };
+    this.cooldowns = { ranged: 0, special: 0, dodge: 0, dash: 0, grab: 0, substitution: 0, switch: 0 };
     this.cooldownMax = {
       ranged: def.ranged?.cooldown || 1,
       special: def.special?.cooldown ?? COMBAT.specialCooldown,
@@ -584,7 +583,7 @@ export class Fighter {
             // habilidades de movimento (teleportes) emendam direto em ataques
             const s = this.seq;
             const inp = this.input;
-            if (inp.pressed.physical || inp.pressed.ranged || this.wantsDodge() || (inp.held.mod && Object.keys(MOD_INPUTS).some((b) => inp.pressed[b]))) {
+            if (inp.pressed.physical || inp.pressed.ranged || this.wantsDodge() || this.comboPressed()) {
               s.finish && s.finish();
               this.seq = null;
               this.setState('idle');
@@ -769,7 +768,7 @@ export class Fighter {
     // pode emendar ataque no fim do dash
     if (k > 0.55) {
       const inp = this.input;
-      if (inp.pressed.physical || inp.pressed.ranged || (inp.held.mod && Object.keys(MOD_INPUTS).some((b) => inp.pressed[b]))) {
+      if (inp.pressed.physical || inp.pressed.ranged || this.comboPressed()) {
         this.vel.x = 0;
         this.vel.z = 0;
         this.setState('idle');
@@ -784,19 +783,32 @@ export class Fighter {
     }
   }
 
-  // R1/RB + botão
-  tryModifier() {
+  // Combinações de habilidade que não são △ + ○/□ (essas ficam em tryCargaAbility):
+  //   △ + L2 = 'carga+dodge' · R2 (defesa) + △ = 'block+carga' · R2 + × = 'block+jump'  (R2 + ○ é o agarrão)
+  comboAbility() {
     const inp = this.input;
-    if (!inp.held.mod) return false;
-    for (const [btn, key] of Object.entries(MOD_INPUTS)) {
-      if (!inp.pressed[btn]) continue;
-      const a = (this.def.abilities || []).find((x) => x.input === key);
-      if (a) {
-        this.useAbility(a);
-        return true;
-      }
+    const abs = this.def.abilities || [];
+    if (inp.pressed.dodge && (inp.held.carga || inp.pressed.carga || this.recent('carga'))) {
+      const a = abs.find((x) => x.input === 'carga+dodge');
+      if (a) return a;
     }
-    return false;
+    if (inp.held.block) {
+      if (inp.pressed.carga) return abs.find((x) => x.input === 'block+carga') || null;
+      if (inp.pressed.jump) return abs.find((x) => x.input === 'block+jump') || null;
+    }
+    return null;
+  }
+
+  comboPressed() {
+    return !!this.comboAbility();
+  }
+
+  tryComboAbility() {
+    const a = this.comboAbility();
+    if (!a) return false;
+    if (this.input.pressed.dodge && !this.input.pressed.carga && this.carga.stage > 0) this.carga.stage -= 1; // o △ era parte do comando
+    this.useAbility(a);
+    return true;
   }
 
   // Esquiva: botão próprio (L2/LT) + direção (sem direção, recua). Gasta 1 das 4 cargas.
@@ -807,7 +819,7 @@ export class Fighter {
   handleCommands() {
     const inp = this.input;
     if (this.tryChord()) return true;
-    if (this.tryModifier()) return true;
+    if (this.tryComboAbility()) return true;
     if (this.wantsDodge()) {
       this.tryDodge();
       return true;
@@ -821,15 +833,13 @@ export class Fighter {
       if (this.carga.stage >= 2) {
         this.carga.stage = 0;
         this.trySpecial();
-      } else if (this.chordWithCarga()) {
-        this.tryPoweredMelee(); // △ + ○ = físico forte
-      } else {
+      } else if (!this.tryCargaAbility('physical')) {
         this.startMelee();
       }
       return true;
     }
     if (inp.pressed.ranged) {
-      this.tryRanged(this.chordWithCarga()); // △ + □ = principal forte
+      if (!this.tryCargaAbility('ranged')) this.tryRanged();
       return true;
     }
     if (inp.pressed.carga) {
@@ -844,11 +854,19 @@ export class Fighter {
     return false;
   }
 
-  // △/Y apertado junto (janela de comando duplo): vira versão forte e desfaz a etapa de Carga daquele toque
+  // △/Y é o MODIFICADOR de ○ e □: △ + ○ e △ + □ (junto, logo depois ou segurando △) soltam a habilidade daquele
+  // comando ('carga+physical' / 'carga+ranged') e desfazem a etapa de Carga daquele toque
   chordWithCarga() {
     const inp = this.input;
-    if (!inp.pressed.carga && !this.recent('carga')) return false;
+    if (!inp.pressed.carga && !inp.held.carga && !this.recent('carga')) return false;
     if (!inp.pressed.carga && this.carga.stage > 0) this.carga.stage -= 1;
+    return true;
+  }
+
+  tryCargaAbility(btn) {
+    const a = (this.def.abilities || []).find((x) => x.input === 'carga+' + btn);
+    if (!a || !this.chordWithCarga()) return false;
+    this.useAbility(a);
     return true;
   }
 
@@ -1149,7 +1167,7 @@ export class Fighter {
       return;
     }
     if (inp.pressed.carga) this.advanceCarga();
-    if (inp.pressed.physical || inp.pressed.ranged || inp.pressed.block || (inp.held.mod && (inp.pressed.jump))) {
+    if (inp.pressed.physical || inp.pressed.ranged || inp.pressed.block || this.comboPressed()) {
       this.setState('idle');
       this.handleCommands();
       return;
@@ -1184,6 +1202,11 @@ export class Fighter {
     const inp = this.input;
     this.guardIdle = 0;
     const opp = this.opponent;
+    // R2 + △ / R2 + × (e △ + L2) saindo da defesa
+    if (this.tryComboAbility()) {
+      this.guardMoving = false;
+      return;
+    }
     // Defesa + direção (apertada agora) = esquiva, se houver carga na barra
     if (this.wantsDodge()) {
       this.tryDodge();
@@ -1196,7 +1219,7 @@ export class Fighter {
       return;
     }
     // contra-ataque saindo direto da defesa
-    if (inp.pressed.ranged || (inp.held.mod && Object.keys(MOD_INPUTS).some((b) => inp.pressed[b]))) {
+    if (inp.pressed.ranged || this.comboPressed()) {
       this.guardMoving = false;
       this.setState('idle');
       this.handleCommands();
@@ -1329,7 +1352,7 @@ export class Fighter {
     }
     if (k >= d.cancelAfter) {
       const inp = this.input;
-      if (inp.pressed.physical || inp.pressed.ranged || (inp.held.mod && Object.keys(MOD_INPUTS).some((b) => inp.pressed[b]))) {
+      if (inp.pressed.physical || inp.pressed.ranged || this.comboPressed()) {
         this.setState('idle');
         this.handleCommands();
         return;
@@ -1733,7 +1756,7 @@ export class Fighter {
   }
 
   // ------------------------------------------------ ataque principal (□/X)
-  tryRanged(powered = false) {
+  tryRanged() {
     if (this.findBuff('provoked')) { this.notify('PROVOCADO: SÓ NO CORPO A CORPO'); return; }
     const base = this.def.ranged;
     if (!base) {
@@ -1745,26 +1768,12 @@ export class Fighter {
       return;
     }
     const intent = this.dirIntent();
-    if (base.chargeShot && !powered) {
+    if (base.chargeShot) {
       this.startChargeShot(base);
       return;
     }
-    const variant = base.variants && intent.kind !== 'neutral' && !powered ? base.variants[intent.kind] : null;
+    const variant = base.variants && intent.kind !== 'neutral' ? base.variants[intent.kind] : null;
     let r = variant ? { ...base, ...variant } : base;
-    if (powered) {
-      // △ + □: versão forte (mais dano, projétil maior e mais rápido, impacto maior); gasta energia extra
-      const P = COMBAT.powered;
-      r = {
-        ...base,
-        powered: true,
-        damage: Math.round(base.damage * P.rangedMult),
-        radius: (base.radius || 0.3) * 1.35,
-        speed: (base.speed || 30) * 1.15,
-        knockback: (base.knockback || 1) * 1.6 + 1,
-        energyCost: (base.energyCost || 0) + P.rangedCost,
-        onHit: base.onHit && base.onHit.stun ? { ...base.onHit, stun: base.onHit.stun * 1.5 } : base.onHit,
-      };
-    }
     if (!this.spendEnergy(r.energyCost || 0)) {
       this.notify('SEM SANIDADE');
       return;
@@ -1780,7 +1789,6 @@ export class Fighter {
     if (r.showProp) this.rig.showProp(r.showProp, true);
     if (r.hideProp) this.rig.showProp(r.hideProp, false);
     if (variant && variant.label) this.notify(variant.label, true);
-    if (powered) this.poweredFx('△ + □  FORTE!');
     let fired = 0;
     const self = this;
     const side = intent.side ? intent.side.clone() : null;
@@ -1938,46 +1946,6 @@ export class Fighter {
       this.world.fx.distort(this.rig.sockets.handR.getWorldPosition(new THREE.Vector3()), { color: r.color, radius: 1.2, life: 0.3 });
       this.world.cameraRig.shake(0.2, 0.15);
     }
-  }
-
-  poweredFx(label) {
-    const c = this.def.energyColor;
-    this.notify(label, true);
-    this.world.fx.burst(this.chestPos(), { count: 28, color: c, speed: 6, life: 0.45, size: 0.28 });
-    this.world.fx.ring(v2.set(this.pos.x, 0.06, this.pos.z), { color: c, radius: 2.6, life: 0.4 });
-    this.world.fx.flash(this.chestPos(), { color: c, size: 2.4, life: 0.15 });
-    this.world.audio.play('armed', { volume: 0.7 });
-  }
-
-  // ------------------------------------------------ △ + ○: físico forte
-  tryPoweredMelee() {
-    const P = COMBAT.powered;
-    if (this.cooldowns.powerMelee > 0 || !this.onGround) {
-      this.startMelee();
-      return;
-    }
-    if (!this.spendEnergy(P.meleeCost)) {
-      this.notify('SEM SANIDADE');
-      this.startMelee();
-      return;
-    }
-    this.cooldowns.powerMelee = P.meleeCooldown;
-    const m = this.def.melee;
-    const idx = m.strikes.length - 1;
-    const base = m.powered || m.strikes[idx];
-    const strike = {
-      ...base,
-      name: base.name + ' (forte)',
-      damage: Math.round(base.damage * P.meleeMult),
-      guardCrush: P.guardCrush,
-      impactScale: (base.impactScale || 1) * 1.7,
-      finisher: base.finisher || 'launch',
-      trail: base.trail ? { ...base.trail, big: true } : base.trail,
-      powered: true,
-    };
-    this.combo.grace = 0;
-    this.startStrike(strike, { index: idx });
-    this.poweredFx('△ + ○  FORTE!');
   }
 
   // ------------------------------------------------ Defesa + ○: agarrão (não defensável, só esquivável)

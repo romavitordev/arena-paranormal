@@ -19,9 +19,9 @@ export default {
     identity: 'Forma de chefe do Miguel (morreu durante o Pacto do Santo)',
     tagline: 'É possível destruir a própria Morte?',
   },
-  stats: { moveSpeed: 5.4, size: 2, maxHealth: 1300 },
+  stats: { moveSpeed: 5.4, size: 2, maxHealth: 850 }, // última resistência, não uma luta nova
   weakTo: { fire: 1.5, energia: 1.5 },
-  regen: { every: 6, amount: 60, color: 0x0a080c },
+  regen: { every: 7, amount: 45, color: 0x0a080c },
   poise: { hits: 3 },
   anims: { idle: 'idle_hunch', run: 'walk', charge: 'charge', victory: 'victory', block: 'block_hunch' },
   chargeFx: { style: 'default', color: 0x6a6670 },
@@ -67,7 +67,7 @@ export default {
     {
       id: 'espiralDescendente',
       name: 'Espiral Descendente',
-      input: 'mod+physical', // R1 + ○ / RB + B
+      input: 'carga+physical', // △ + ○ / Y + B
       type: 'timelockGrab',
       description: 'Agarra a vítima e a prende no tempo: ela envelhece (dano contínuo), perde sanidade e fica lenta. Não dá para defender.',
       energyCost: 25,
@@ -84,7 +84,7 @@ export default {
     {
       id: 'controlarMortos',
       name: 'Controlar Mortos',
-      input: 'mod+carga', // R1 + △ / RB + Y
+      input: 'block+carga', // R2 + △ / RT + Y
       type: 'deadHands',
       description: 'O Lodo obedece: mãos de Lodo brotam do chão sob o inimigo, três vezes (a última lança).',
       energyCost: 25,
@@ -99,7 +99,7 @@ export default {
     {
       id: 'senhorDoTempo',
       name: 'Senhor do Tempo',
-      input: 'mod+jump', // R1 + × / RB + A
+      input: 'block+jump', // R2 + × / RT + A
       type: 'timeWarp',
       description: 'Distorce o tempo do inimigo: ele fica muito lento por 4 s.',
       energyCost: 30,

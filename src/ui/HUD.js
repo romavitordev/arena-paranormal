@@ -125,8 +125,8 @@ export class HUD {
 
   keyText(i, action, source) {
     if (action === 'special') return `${actionLabel(i, 'carga', source)}·${actionLabel(i, 'carga', source)}·${actionLabel(i, 'physical', source)}`;
-    if (action === 'carga+jump') return `${actionLabel(i, 'carga', source)}+${actionLabel(i, 'jump', source)}`;
-    if (action.startsWith('mod+')) return `${actionLabel(i, 'mod', source)}+${actionLabel(i, action.slice(4), source)}`;
+    if (action.startsWith('carga+')) return `${actionLabel(i, 'carga', source)}+${actionLabel(i, action.slice(6), source)}`;
+    if (action.startsWith('block+')) return `${actionLabel(i, 'block', source)}+${actionLabel(i, action.slice(6), source)}`;
     return actionLabel(i, action, source);
   }
 

@@ -1,5 +1,5 @@
 // A FANTASMA (Kemi com as faixas, Hexatombe). Não aparece na seleção: a Kemi vira esta forma com o especial VESTIR AS
-// FAIXAS e fica assim por 45 s. Sobretudo marrom de couro com gola alta, faixas cobrindo o rosto (só os olhos na
+// FAIXAS e fica assim por 40 s. Sobretudo marrom de couro com gola alta, faixas cobrindo o rosto (só os olhos na
 // escuridão) e o rifle pingando lodo preto. Poderes (wiki): Analítica e Disparo Espiral — as faixas puxam o rifle e
 // as balas saem em curva, contornando cobertura e ignorando resistência; Sniper da Morte e a Sede de Vingança.
 export default {
@@ -15,10 +15,10 @@ export default {
   info: {
     weapon: 'Sniper Fantasma pingando lodo + faixas',
     style: 'Balas curvas que não erram, faixas que prendem e some na escuridão',
-    identity: 'Forma das Faixas (45 s)',
+    identity: 'Forma das Faixas (40 s)',
     tagline: 'Ninguém vê a Fantasma.',
   },
-  stats: { moveSpeed: 8.6, maxHealth: 1200 }, // cabe a vida extra das faixas (+200)
+  stats: { moveSpeed: 8.6, maxHealth: 1150 }, // cabe a vida extra das faixas (+150)
   anims: { idle: 'idle_knife', run: 'run', charge: 'charge', victory: 'victory', block: 'block' },
   chargeFx: { style: 'default', color: 0x1a1620 },
   dodge: { style: 'default', distance: 6 },
@@ -67,7 +67,7 @@ export default {
     spiral: 0.22,
     homing: 5,
     ghost: true, // contorna cobertura
-    unblockable: true, // ignora resistência (a defesa)
+    guardCrush: 25, // ignora resistência: gasta muito da defesa de quem bloqueia
     drip: true, // o rifle pinga lodo
     sound: 'sniper',
     hitSound: 'heavyPunch',
@@ -79,7 +79,7 @@ export default {
     {
       id: 'sniperMorte',
       name: 'Sniper da Morte',
-      input: 'mod+carga', // R1 + △ / RB + Y
+      input: 'block+carga', // R2 + △ / RT + Y
       type: 'deathShot',
       description: 'O tempo quase para em volta do alvo; o tiro sai numa espiral de Morte que procura o alvo — e termina quem já está morrendo (abaixo de 30% de vida: dano ×1,6).',
       energyCost: 30,
@@ -96,7 +96,7 @@ export default {
     {
       id: 'faixas',
       name: 'Faixas da Fantasma',
-      input: 'mod+ranged', // R1 + □ / RB + X
+      input: 'carga+ranged', // △ + □ / Y + X
       type: 'bloodBind',
       description: 'Lança as faixas, que enrolam o alvo e o prendem por um instante.',
       energyCost: 25,
@@ -115,7 +115,7 @@ export default {
     {
       id: 'escuridao',
       name: 'Some na Escuridão',
-      input: 'mod+jump', // R1 + × / RB + A
+      input: 'block+jump', // R2 + × / RT + A
       type: 'blink',
       description: 'Some na escuridão e reaparece onde mirar (ou do lado do adversário).',
       energyCost: 15,
@@ -128,7 +128,7 @@ export default {
     {
       id: 'analitica',
       name: 'Analítica',
-      input: 'mod+physical', // R1 + ○ / RB + B
+      input: 'carga+physical', // △ + ○ / Y + B
       type: 'analyze',
       label: 'ANALISADO (ANALÍTICA)',
       description: 'Os olhos na escuridão leem cada fraqueza: por 8 s o alvo recebe 20% a mais de dano.',
@@ -142,7 +142,7 @@ export default {
     {
       id: 'pistolaTranstornadaF',
       name: 'Pistola Transtornada',
-      input: 'mod+dodge', // R1 + L2 / RB + LT
+      input: 'carga+dodge', // △ + L2 / Y + LT
       type: 'cursedShots',
       description: 'Três tiros com balas de arame farpado: sangramento e lentidão.',
       energyCost: 20,
@@ -154,7 +154,7 @@ export default {
       anim: 'shoot_rifle',
       showProp: 'pistol',
       hideProp: 'knife',
-      projectile: { visual: 'barbed', color: 0xb8b8c0, damage: 20, range: 26, speed: 50, radius: 0.3, knockback: 0.6, hitstun: 0.25, hitSound: 'bladeHit', onHit: { bleed: { dps: 5, duration: 3 }, slow: { type: 'barbedWire', name: 'ARAME FARPADO', mult: 0.7, time: 2 } } },
+      projectile: { visual: 'barbed', color: 0xb8b8c0, damage: 20, range: 26, speed: 50, radius: 0.3, knockback: 0.6, hitstun: 0.25, hitSound: 'bladeHit', onHit: { bleed: { dps: 3, duration: 3 }, slow: { type: 'barbedWire', name: 'ARAME FARPADO', mult: 0.7, time: 2 } } },
     },
   ],
 
@@ -174,6 +174,6 @@ export default {
   },
 
   passives: [
-    { type: 'revenge', below: 0.3, duration: 8, mult: 1.3, speedMult: 1.1, energy: 35 }, // Sede de Vingança
+    { type: 'revenge', below: 0.3, duration: 8, mult: 1.2, speedMult: 1.1, energy: 35 }, // Sede de Vingança
   ],
 };

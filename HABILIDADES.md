@@ -11,7 +11,7 @@ especial = Carga → Carga → ○ (custa 50, ofensivos causam 250, nunca hitkil
 **Dash:** × + × na direção do analógico (sem direção, até o adversário). **Dash longo:** △ + × (persegue o adversário, 10 de sanidade) — no Joui, △ + × é o Teleporte das Sombras.
 **Combo vertical:** ↑ + ○ dentro do combo lança e o atacante sobe junto (até 3 golpes aéreos + finalização); ↓ + ○ derruba. × depois de acertar = dash de perseguição (até Infinity por combo).
 **Queda:** caído não toma dano; × ou L2 logo ao cair levanta rolando. **Perfect Block:** defesa no instante do impacto (todos). **Carregar andando:** 45% da velocidade, 50% da carga.
-**Agarrão:** R2 + ○ (curta distância, 70 de dano, não pode ser defendido — só esquivado). **Versões fortes:** △ + ○ = físico forte (×1.6, gasta 60 da defesa, 15 de sanidade) · △ + □ = principal forte (×1.6, +20 de energia).
+**Agarrão:** R2 + ○ (curta distância, 70 de dano, não pode ser defendido — só esquivado). **△ é o modificador de ○ e □:** △ + ○ e △ + □ soltam habilidades (veja cada personagem); R1 + △/×/L2 continuam.
 **Elementos (só nos rituais — habilidades e especiais):** Sangue > Conhecimento > Energia > Morte > Sangue (+10% / −10%). **Escala de combo:** 1 → 1 → 0.9 → 0.8 → 0.72 → 0.65 → 0.58 → 0.5. **Substituição:** L2 apanhando (1 carga). **Escapar do agarrão:** R2 + ○ logo no começo. **Transcender:** vida ≤ 30% + segurar △ 1 s (1x por partida, +15% de dano por 12 s, aguenta 1 golpe).
 **Câmera:** sempre travada no adversário.
 
@@ -53,9 +53,9 @@ especial = Carga → Carga → ○ (custa 50, ofensivos causam 250, nunca hitkil
   Saca a Desert Eagle e dispara três balas amaldiçoadas com Energia, que procuram o alvo.
 - **Granada "Nebulosa"** — R1 + L2 / RB + LT · custo 20 · cooldown 16 s
   A granada que a Erin fez para ele: explode numa nuvem que deixa o inimigo lento e engole os tiros.
-- **Baforada Cinerária** — R1 + □ / RB + X · custo 20 · cooldown 12 s
+- **Baforada Cinerária** — △ + □ / Y + X · custo 20 · cooldown 12 s
   Sopra uma nuvem de névoa à frente: engole projéteis inimigos, deixa o inimigo lento e sem regenerar energia dentro dela.
-- **Acácia** — R1 + ○ / RB + B · custo 25 · cooldown 13 s · dano 70 · alcance 18 m
+- **Acácia** — △ + ○ / Y + B · custo 25 · cooldown 13 s · dano 70 · alcance 18 m
   Dissipar Espíritos "Acácia": uma chuva de pequenas flores roxas cai sobre o alvo e machuca enquanto ele ficar na área.
 - **Passiva — Resistente:** −10% de dano físico recebido
 
@@ -90,9 +90,9 @@ Solta a névoa e, dentro dela, conjura a **Acácia amplificada pela Cinerária**
 
 ### Habilidades
 
-- **Rebirth** — R1 + □ / RB + X · custo 30 · cooldown 22 s
+- **Rebirth** — △ + □ / Y + X · custo 30 · cooldown 22 s
   Energia paranormal percorre o corpo e amaldiçoa o rifle: os próximos tiros da sniper causam dano extra, com raios e runas.
-- **Ódio Incontrolável "Templo do Ódio"** — R1 + ○ / RB + B · custo 15 · cooldown 20 s
+- **Ódio Incontrolável "Templo do Ódio"** — △ + ○ / Y + B · custo 15 · cooldown 20 s
   Corta a palma e sangra sobre o olho: ódio intenso por alguns segundos — físico mais forte e mais rápido, mas não consegue defender.
 - **Paralisia de Sangue "Dystopia"** — R1 + △ / RB + Y · custo 25 · cooldown 18 s · alcance 7 m
   Mancha o símbolo com o próprio sangue, abre os olhos vermelhos e paralisa quem estiver à frente por um instante.
@@ -135,7 +135,7 @@ Solta a névoa e, dentro dela, conjura a **Acácia amplificada pela Cinerária**
 
 - **Teleporte das Sombras** — Energia + Pulo (△+× / Y+A) · custo 22 · cooldown 5 s
   Afunda na própria sombra e emerge atrás do adversário, já podendo atacar. Não causa dano.
-- **Olhar do Desespero** — R1 + ○ / RB + B · custo 25 · cooldown 12 s · alcance 8 m
+- **Olhar do Desespero** — △ + ○ / Y + B · custo 25 · cooldown 12 s · alcance 8 m
   Encara o adversário e libera uma manifestação de medo: quem estiver à frente fica paralisado por um instante, vulnerável a combo.
 - **Corte das Sombras** — R1 + L2 / RB + LT · custo 20 · cooldown 10 s · dano 70 · alcance 1.4 m
   Avança como uma sombra em linha reta e corta com a katana o primeiro que estiver no caminho.
@@ -174,7 +174,7 @@ Solta a névoa e, dentro dela, conjura a **Acácia amplificada pela Cinerária**
 
 ### Habilidades
 
-- **Amaldiçoar Arma** — R1 + □ / RB + X · custo 25 · cooldown 16 s
+- **Amaldiçoar Arma** — △ + □ / Y + X · custo 25 · cooldown 16 s
   Amaldiçoa a faca com o elemento Sangue: por alguns segundos cada acerto (físico ou faca arremessada) abre um sangramento que continua tirando vida.
 - **Facas Amaldiçoadas** — R1 + L2 / RB + LT · custo 20 · cooldown 11 s
   Arremessa três facas banhadas em sangue, em leque, que se curvam atrás do alvo.
@@ -212,9 +212,9 @@ Solta a névoa e, dentro dela, conjura a **Acácia amplificada pela Cinerária**
 
 ### Habilidades
 
-- **Embaralhar "Trinitá"** — R1 + □ / RB + X · custo 40 · cooldown 45 s
+- **Embaralhar "Trinitá"** — △ + □ / Y + X · custo 40 · cooldown 45 s
   Vira um vulto preto, troca de lugar e cria 3 cópias com vontade própria (4 Dantes em campo). Cada cópia causa metade do dano dele e some ao ser destruída ou quando o tempo acaba.
-- **Tentáculos de Lodo** — R1 + ○ / RB + B · custo 30 · cooldown 14 s · dano 60 · alcance 10 m
+- **Tentáculos de Lodo** — △ + ○ / Y + B · custo 30 · cooldown 14 s · dano 60 · alcance 10 m
   Põe a mão no chão: tentáculos de Lodo Preto brotam embaixo do inimigo, prendem e comprimem.
 - **Cicatrização "Paradiso"** — R1 + △ / RB + Y · custo 30 · cooldown 26 s
   Assopra uma névoa preta em espiral que envelhece as próprias feridas até cicatrizarem.
@@ -253,11 +253,11 @@ Solta a névoa e, dentro dela, conjura a **Acácia amplificada pela Cinerária**
 
 ### Habilidades
 
-- **Granada "Supernova"** — R1 + □ / RB + X · custo 25 · cooldown 7 s
+- **Granada "Supernova"** — △ + □ / Y + X · custo 25 · cooldown 7 s
   A granada com o coração vermelho: arremessa em arco e explode em área, jogando o alvo para cima. Pega quem está defendendo de lado ou parado.
 - **Granada "Nebulosa"** — R1 + × / RB + A · custo 20 · cooldown 14 s
   A granada do emoji (a que ela deu ao Kaiser): explode numa nuvem que deixa o inimigo lento, corta a recuperação dele e engole os tiros que entram nela.
-- **Bênção Maldita** — R1 + ○ / RB + B · custo 30 · cooldown 22 s
+- **Bênção Maldita** — △ + ○ / Y + B · custo 30 · cooldown 22 s
   Ritual de Energia: a mão brilha em ciano e ela vê um pedaço do futuro — recupera todas as esquivas e bate mais forte por alguns segundos.
 - **Envelhecimento Localizado "Black Hole"** — R1 + △ / RB + Y · custo 30 · cooldown 26 s
   Segura cinzas, diz "Black Hole" e assopra: as cinzas ficam pretas e envelhecem as próprias feridas até cicatrizarem em espiral.
@@ -297,11 +297,11 @@ Solta a névoa e, dentro dela, conjura a **Acácia amplificada pela Cinerária**
 
 ### Habilidades
 
-- **Corrente Gancho** — R1 + □ / RB + X · custo 20 · cooldown 8 s · dano 28 · alcance 14 m
+- **Corrente Gancho** — △ + □ / Y + X · custo 20 · cooldown 8 s · dano 28 · alcance 14 m
   Prende a corrente no adversário e puxa o PRÓPRIO Gal até o adversário, chegando com um corte cruzado.
 - **Teletransporte** — R1 + × / RB + A · custo 22 · cooldown 9 s
   Some em faíscas douradas e surge atrás do adversário, como fez com Arthur e Erin no orfanato.
-- **Controle Mental** — R1 + ○ / RB + B · custo 35 · cooldown 24 s · alcance 10 m
+- **Controle Mental** — △ + ○ / Y + B · custo 35 · cooldown 24 s · alcance 10 m
   Um sigilo dourado sobre a cabeça do alvo: por alguns segundos o corpo dele obedece ao contrário (direções invertidas).
 - **Corrente Giratória** — R1 + L2 / RB + LT · custo 25 · cooldown 13 s · dano 75
   Gira as duas lâminas presas às correntes em volta do corpo: três cortes em área, o último lança.
@@ -342,11 +342,11 @@ Solta a névoa e, dentro dela, conjura a **Acácia amplificada pela Cinerária**
 
 ### Habilidades
 
-- **Teletransporte** — R1 + □ / RB + X · custo 20 · cooldown 7 s
+- **Teletransporte** — △ + □ / Y + X · custo 20 · cooldown 7 s
   Some numa distorção e reaparece numa posição válida: na direção do analógico ou, sem direção, ao lado do adversário.
 - **Transcendência** — R1 + △ / RB + Y · custo 35 · cooldown 26 s
   O primeiro ritual: exposição total ao Outro Lado. Por alguns segundos os sigilos brilham, os golpes físicos atravessam a defesa e ganham impacto paranormal.
-- **Lâmina do Medo** — R1 + ○ / RB + B · custo 40 · cooldown 25 s · dano 160 · alcance 2.8 m
+- **Lâmina do Medo** — △ + ○ / Y + B · custo 40 · cooldown 25 s · dano 160 · alcance 2.8 m
   Manifesta uma lâmina translúcida de medo ao redor da mão para um golpe curto devastador que quebra a defesa. Errar deixa ele exposto.
 - **Rejeitar Névoa** — R1 + × / RB + A · custo 25 · cooldown 16 s
   Enfraquece drasticamente os rituais na área: dissipa névoas e zonas do inimigo e corta o dano dos rituais e do ataque principal dele por alguns segundos.
@@ -387,7 +387,7 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
 
 ### Habilidades
 
-- **Máscara do Mutilador Noturno** — R1 + ○ / RB + B · custo 35 · cooldown 30 s
+- **Máscara do Mutilador Noturno** — △ + ○ / Y + B · custo 35 · cooldown 30 s
   Põe a máscara branca da mão vermelha: a intenção assassina toma conta — bate mais forte, anda mais rápido, aguenta 3 golpes sem reagir e todo golpe físico faz sangrar. Mas não consegue mais defender.
 - **Armadilha de Urso** — R1 + L2 / RB + LT · custo 20 · cooldown 12 s · dano 40
   Arma uma armadilha de urso no chão à frente. Quem pisar fica preso, toma dano e sangra. Só uma por vez.
@@ -428,9 +428,9 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
 
 ### Habilidades
 
-- **Labirinto Mental** — R1 + □ / RB + X · custo 30 · cooldown 18 s · alcance 11 m
+- **Labirinto Mental** — △ + □ / Y + X · custo 30 · cooldown 18 s · alcance 11 m
   Prende a mente do alvo num labirinto: por alguns segundos ele anda numa direção que muda sozinha. Com o capacete vira Labirinto Abissal (dura mais).
-- **Consumir Momento** — R1 + ○ / RB + B · custo 30 · cooldown 12 s · dano 70
+- **Consumir Momento** — △ + ○ / Y + B · custo 30 · cooldown 12 s · dano 70
   Marca o chão onde o alvo pisa com uma espiral; ao estalar os dedos ela estoura e destrói a área (Morte). Dá para sair de cima se perceber a marca. Com o capacete, a área e o dano crescem.
 - **Capacete do ???** — R1 + △ / RB + Y · custo 35 · cooldown 30 s
   Põe o elmo do sorriso: por alguns segundos os rituais e a Rajada ficam mais fortes (Tempestade Caótica), o Labirinto Mental vira Abissal e o Consumir Momento cresce.
@@ -469,9 +469,9 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
 
 ### Habilidades
 
-- **Amaldiçoar Arma com Sangue** — R1 + □ / RB + X · custo 25 · cooldown 16 s
+- **Amaldiçoar Arma com Sangue** — △ + □ / Y + X · custo 25 · cooldown 16 s
   Imbui o taco com Sangue: por alguns segundos cada golpe físico e o skate abrem um sangramento.
-- **Polarização Caótica** — R1 + ○ / RB + B · custo 30 · cooldown 12 s · alcance 11 m
+- **Polarização Caótica** — △ + ○ / Y + B · custo 30 · cooldown 12 s · alcance 11 m
   Aura magnética: o inimigo LONGE é atraído até ele; o inimigo PERTO é repelido para longe e cai.
 - **Tela de Ruído** — R1 + △ / RB + Y · custo 30 · cooldown 22 s
   Película de Energia que absorve até 140 de dano físico e de projétil por alguns segundos.
@@ -514,9 +514,9 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
 
 - **Golpe Pesado** — R1 + △ / RB + Y · custo 30 · cooldown 12 s · dano 95 · alcance 2.3 m
   Ergue a Leonora, finca os pés, avança o corpo e crava a marreta: derruba e gasta muito da defesa. Preparação longa (aguenta um golpe pequeno depois de concentrar); errar deixa ele aberto.
-- **Cai Dentro** — R1 + ○ / RB + B · custo 20 · cooldown 14 s · alcance 11 m
+- **Cai Dentro** — △ + ○ / Y + B · custo 20 · cooldown 14 s · alcance 11 m
   Chama a atenção do inimigo e assume o confronto: longe, corre e dá uma ombrada; perto, grita. O inimigo fica PROVOCADO (só ataca no corpo a corpo por 4 s) e o Lírio recebe 20% menos dano.
-- **Amarras de Sangue "Magras"** — R1 + □ / RB + X · custo 25 · cooldown 15 s · dano 30 · alcance 9 m
+- **Amarras de Sangue "Magras"** — △ + □ / Y + X · custo 25 · cooldown 15 s · dano 30 · alcance 9 m
   Estala as Magras — corda de tripas carnudas trançadas — no alvo, e as voltas se enrolam no corpo dele e o prendem. Feitas para prender criaturas de Conhecimento: seguram 60% mais tempo quem é de Conhecimento.
 - **Leonora Amaldiçoada (Sangue)** — R1 + × / RB + A · custo 25 · cooldown 18 s
   Amaldiçoa a Leonora com Sangue: por alguns segundos cada marretada abre um sangramento.
@@ -555,11 +555,11 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
 
 ### Habilidades
 
-- **Lábia** — R1 + ○ / RB + B · custo 20 · cooldown 12 s · alcance 5 m
+- **Lábia** — △ + ○ / Y + B · custo 20 · cooldown 12 s · alcance 5 m
   O charme do Miguel: o inimigo à frente hesita um instante e bate 20% mais fraco por 5 s.
 - **Pose de Fisiculturista** — R1 + △ / RB + Y · custo 20 · cooldown 16 s
   Contrai os músculos: socos 25% mais fortes por 7 s.
-- **Tiro na Testa** — R1 + □ / RB + X · custo 20 · cooldown 11 s
+- **Tiro na Testa** — △ + □ / Y + X · custo 20 · cooldown 11 s
   Mira com calma e dispara a Magnum na cabeça: um tiro só, muito forte.
 - **Marca Espiral** — R1 + L2 / RB + LT · custo 0 · cooldown 30 s
   Crava o Símbolo Espiral no próprio peito: perde um pouco de vida e TODA a sanidade — vira Luzidio na hora.
@@ -598,9 +598,9 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
 
 - **Descarnar Discente** — R1 + △ / RB + Y · custo 30 · cooldown 14 s · dano 80 · alcance 9 m
   Ritual de Sangue: cortes surgem no corpo do alvo, um atrás do outro (dano alto e sangramento).
-- **Perturbação Discente** — R1 + ○ / RB + B · custo 20 · cooldown 12 s · dano 30 · alcance 5 m
+- **Perturbação Discente** — △ + ○ / Y + B · custo 20 · cooldown 12 s · dano 30 · alcance 5 m
   Uma ordem simples a quem está perto: "PARE!" (paralisa), "VENHA!" (puxa) ou "AJOELHE!" (derruba). Sai uma ao acaso.
-- **Vínculo de Sangue** — R1 + □ / RB + X · custo 25 · cooldown 20 s · alcance 9 m
+- **Vínculo de Sangue** — △ + □ / Y + X · custo 25 · cooldown 20 s · alcance 9 m
   Marca o próprio corpo e o do alvo: por 8 s, 40% do dano que o Juan recebe é replicado no alvo.
 - **Armadura de Sangue Diabólica** — R1 + L2 / RB + LT · custo 30 · cooldown 24 s
   O próprio sangue endurece numa armadura com espinhos: recebe 30% menos dano, aguenta 2 golpes sem recuar e fica mais rápido.
@@ -639,9 +639,9 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
 
 - **Disparo da Morte** — R1 + △ / RB + Y · custo 30 · cooldown 16 s
   Ajoelha e o tempo desacelera em volta do alvo (fica bem lento) — ela mira com calma e dispara um tiro certeiro de Morte.
-- **Pistola Transtornada** — R1 + ○ / RB + B · custo 20 · cooldown 11 s
+- **Pistola Transtornada** — △ + ○ / Y + B · custo 20 · cooldown 11 s
   Três tiros com balas enroladas em arame farpado: cada uma faz sangrar e deixa o alvo mais lento.
-- **Perita** — R1 + □ / RB + X · custo 20 · cooldown 18 s · alcance 30 m
+- **Perita** — △ + □ / Y + X · custo 20 · cooldown 18 s · alcance 30 m
   Estuda o alvo com olho de assassina: por 8 s ele recebe 12% a mais de dano de tudo.
 - **Revólver .38** — R1 + L2 / RB + LT · custo 20 · cooldown 10 s
   Saque rápido do revólver: seis tiros em leque, rápidos, para quem chega perto demais.

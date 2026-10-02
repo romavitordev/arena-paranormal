@@ -28,9 +28,13 @@ export async function runBalance({ fights = 4, maxTime = 150, ids = ROSTER.map((
         w.onHit = (att, vic, dmg, o) => {
           prev && prev(att, vic, dmg, o);
           if (!att || !vic || att === vic) return;
-          const sa = stats[att.def.id];
+          // transformados (Diabo, Fantasma...) contam para o personagem de origem; NPCs (zumbi, clone) ficam de fora
+          const idOf = (f) => (f.baseForm ? f.baseForm.def.id : f.def && f.def.id);
+          const sa = stats[idOf(att)];
+          const sv = stats[idOf(vic)];
+          if (!sa || !sv) return;
           sa.dealt += dmg || 0;
-          stats[vic.def.id].taken += dmg || 0;
+          sv.taken += dmg || 0;
           const key = o && o.blocked ? 'defendido' : (o && (o.strike?.name || o.ability || o.kind)) || '?';
           sa.moves[key] = (sa.moves[key] || 0) + 1;
         };

@@ -1,13 +1,17 @@
 """
 COLISEU — public/arenas/coliseu.glb
-Ruínas ao ENTARDECER, SEM plateia (referências: arquibancadas e arcos em vários andares, muretas,
-estandartes vermelhos com emblema dourado, areia rachada, entulho, braseiros de pedra, portão em arco).
-Coordenadas do jogo: arena de areia redonda, raio andável ~22 m; arquibancadas e arcos em volta.
+Arena de areia ao ENTARDECER, cercada por muralhas e torres de pedra em ruínas (sem plateia): trechos de muralha
+derrubados, dois portões, torres quadradas e hexagonais com telhado, estandartes compridos, braseiros acesos, máquinas
+de cerco destruídas e entulho na areia; falésias e árvores do lado de fora.
+Muralhas, torres, portões, estandartes, catapultas, pedras e árvores são PRONTOS do Castle Kit / Nature Kit /
+Graveyard Kit do Kenney (CC0, tools/blender/kenney.py). Feitos aqui: a areia e o fogo dos braseiros.
+Coordenadas do jogo: arena de areia redonda, raio andável ~22,6 m.
 """
 import sys, os, math, random
 sys.path.insert(0, os.path.dirname(__file__))
 from arena_lib import *
 from lib import material, TAU
+from kenney import put
 
 OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'coliseu.glb'
 random.seed(21)
@@ -15,107 +19,85 @@ start()
 
 M = {
     'sand': material('sand', '#c9a46a', 1),
-    'block': material('stone_block', '#b8966a', 0.95),
-    'worn': material('stone_worn', '#a8865a', 0.95),
-    'banner': material('banner_red', '#9a2a1a', 0.9),
-    'gold': material('banner_gold', '#d8a43a', 0.4, metal=0.6),
-    'fire': material('brazier_fire', '#ff8a2a', 0.3, emission='#ff7a1a', strength=6),
-    'dark': material('dark_stone', '#5a4a3a', 1),
-    'wood': material('wood_plank', '#6a4a30', 0.9),
+    'fire': material('brazier_fire', '#ff8a2a', 0.3, emission='#ff7a1a', strength=1.6),
 }
+R_WALL = 26.0
+S = 4.0  # escala do Castle Kit (bloco de muralha de 1 unidade -> 4 m de largura, 5,2 m de altura)
 
-R_ARENA = 23.5   # mureta (podium) em volta da areia
 # ---------------- areia
-cyl('GROUND_sand', (0, -0.2, 0), 26, 0.2, M['sand'], seg=64)
+cyl('GROUND_sand', (0, -0.2, 0), 70, 0.2, M['sand'], seg=64)
 
-# ---------------- mureta do pódio (segmentos que ficam transparentes) com alguns quebrados
-N = 36
-for k in range(N):
-    a = (k + 0.5) / N * TAU
-    if k in (9, 27):
-        continue  # portões de entrada
-    h = 3.0 if random.random() > 0.12 else random.uniform(1.0, 2.0)
-    box(f'OCC_podium{k}', (math.sin(a) * (R_ARENA + 0.4), h / 2, math.cos(a) * (R_ARENA + 0.4)), (R_ARENA * TAU / N + 0.1, h, 0.8), M['block'], rot_y=a)
-    box(f'podium_cap{k}', (math.sin(a) * (R_ARENA + 0.4), h + 0.08, math.cos(a) * (R_ARENA + 0.4)), (R_ARENA * TAU / N + 0.2, 0.16, 1.0), M['worn'], rot_y=a)
+# ---------------- muralha em anel com torres; o lado da câmera inicial (+z) é mais baixo/destruído e fica transparente
+n = int(R_WALL * TAU / S)
+gates = (n // 4, 3 * n // 4)
+for k in range(n):
+    a = (k + 0.5) / n * TAU
+    x, z = math.sin(a) * R_WALL, math.cos(a) * R_WALL
+    front = z > 6
+    if k in gates:
+        put('castle', 'wall-doorway', (x, 0, z), a, S, 'OCC_' if front else '')
+        put('castle', 'gate', (x * 0.99, 0, z * 0.99), a + math.pi / 2, S)
+        continue
+    if k % 6 == 3:
+        # torre: base + meio + topo (quadradas e hexagonais alternadas)
+        hexa = (k // 6) % 2 == 0
+        pre = 'OCC_' if front else ''
+        if hexa:
+            put('castle', 'tower-hexagon-base', (x, 0, z), a, S * 1.2, pre)
+            put('castle', 'tower-hexagon-mid', (x, 1.31 * S * 1.2, z), a, S * 1.2, pre)
+            put('castle', 'tower-hexagon-roof', (x, (1.31 + 0.46) * S * 1.2, z), a, S * 1.2, pre)
+        else:
+            put('castle', 'tower-square-base', (x, 0, z), a, S * 1.1, pre)
+            put('castle', 'tower-square-mid-windows', (x, 1.01 * S * 1.1, z), a, S * 1.1, pre)
+            put('castle', 'tower-square-top-roof', (x, 2.02 * S * 1.1, z), a, S * 1.1, pre)
+        continue
+    if front and random.random() < 0.55:
+        # muralha derrubada: só o pé do muro e pedras
+        put('castle', 'wall-half', (x, 0, z), a, S, 'OCC_')
+        put('castle', 'rocks-large', (x * 0.94, 0, z * 0.94), random.uniform(0, TAU), 2.5)
+        continue
+    piece = 'wall-pillar' if k % 3 == 0 else 'wall'
+    put('castle', piece, (x, 0, z), a, S, 'OCC_' if front else '')
 
-# ---------------- arquibancadas em degraus (anéis), com trechos desabados
-for tier in range(9):
-    r0 = R_ARENA + 1.2 + tier * 1.25
-    y = 3.0 + tier * 0.75
-    for k in range(48):
-        if random.random() < 0.09 + tier * 0.012:
-            continue  # buraco das ruínas
-        a = (k + 0.5) / 48 * TAU
-        box(f'seat{tier}_{k}', (math.sin(a) * r0, y, math.cos(a) * r0), (r0 * TAU / 48 + 0.05, 0.75 + 0.02, 1.3), M['worn'], rot_y=a)
-# escadarias
-for k in range(8):
-    a = k / 8 * TAU + 0.2
-    for s in range(9):
-        r0 = R_ARENA + 1.2 + s * 1.25
-        box(f'stair{k}_{s}', (math.sin(a) * r0, 3.0 + s * 0.75 + 0.2, math.cos(a) * r0), (1.4, 0.4, 1.3), M['block'], rot_y=a)
+# ---------------- estandartes compridos pendurados na parte de dentro da muralha
+for k in range(10):
+    a = (k + 0.25) / 10 * TAU
+    if math.cos(a) > 0.3:
+        continue
+    x, z = math.sin(a) * (R_WALL - 2.3), math.cos(a) * (R_WALL - 2.3)
+    put('castle', 'flag-banner-long', (x, 1.2, z), a + math.pi / 2, 3.2)
 
-# ---------------- muro externo: três andares de arcos, parte em ruínas
-R_OUT = R_ARENA + 13
-for level, (y0, hh) in enumerate([(9.5, 5.5), (15.0, 5.0), (20.0, 4.5)]):
-    n = 40
-    for k in range(n):
-        a = (k + 0.5) / n * TAU
-        # ruína: o lado da câmera inicial (-x) está mais destruído para não esconder a luta
-        broken = (math.sin(a) < -0.3 and level > 0) or random.random() < 0.08 * (level + 1)
-        if broken:
-            if level == 0 and random.random() < 0.6:
-                box(f'stub{level}_{k}', (math.sin(a) * R_OUT, y0 + 1, math.cos(a) * R_OUT), (1.2, 2, 1.4), M['block'], rot_y=a)
-            continue
-        w = R_OUT * TAU / n
-        arch_ring(f'arch{level}_{k}', (math.sin(a) * R_OUT, y0, math.cos(a) * R_OUT), w * 0.62, hh, 1.4, w * 0.19, M['block'], rot_y=a, seg=8)
-        box(f'cornice{level}_{k}', (math.sin(a) * R_OUT, y0 + hh + 0.15, math.cos(a) * R_OUT), (w + 0.05, 0.3, 1.6), M['worn'], rot_y=a)
-# base maciça do muro externo
-for k in range(40):
-    a = (k + 0.5) / 40 * TAU
-    box(f'outerbase{k}', (math.sin(a) * R_OUT, 4.75, math.cos(a) * R_OUT), (R_OUT * TAU / 40 + 0.05, 9.5, 1.6), M['block'], rot_y=a)
-
-# ---------------- portões em arco (dois lados) com estandartes
-for k, a in enumerate((9.5 / 36 * TAU, 27.5 / 36 * TAU)):
-    x, z = math.sin(a) * (R_ARENA + 0.4), math.cos(a) * (R_ARENA + 0.4)
-    arch_ring(f'gate{k}', (x, 0, z), 3.6, 5.2, 1.8, 0.9, M['block'], rot_y=a, seg=12)
-    box(f'gatedark{k}', (math.sin(a) * (R_ARENA + 1.4), 2.2, math.cos(a) * (R_ARENA + 1.4)), (3.6, 4.4, 0.2), M['dark'], rot_y=a)
-# estandartes vermelhos rasgados pendurados nos arcos do primeiro andar
-for k in range(8):
-    a = (k * 5 + 2.5) / 40 * TAU
-    x, z = math.sin(a) * (R_OUT - 0.9), math.cos(a) * (R_OUT - 0.9)
-    plane(f'SWAY_banner{k}', (x, 12.0, z), (2.2, 6.5), M['banner'], rot_y=a + math.pi)
-    box(f'banner_rod{k}', (x, 15.3, z), (2.6, 0.12, 0.12), M['gold'], rot_y=a)
-
-# ---------------- entulho e colunas quebradas na areia (obstáculos)
-rubble = [(-12, 6), (8, -11), (14, 7), (-6, -14), (3, 15), (-16, -4)]
-for k, (x, z) in enumerate(rubble):
-    for j in range(4):
-        box(f'rubble{k}_{j}', (x + random.uniform(-0.8, 0.8), 0.3 + j * 0.15, z + random.uniform(-0.8, 0.8)),
-            (random.uniform(0.6, 1.3), random.uniform(0.4, 0.8), random.uniform(0.6, 1.2)), M['block'], rot_y=random.random() * 3, rot_x=random.uniform(-0.2, 0.2))
-    col_cyl(f'rubble{k}', (x, 0, z), 1.1, 1.2)
-for k, (x, z, h) in enumerate([(10, 2, 4.5), (-9, -8, 2.5), (-4, 10, 3.6)]):
-    cyl(f'OCC_column{k}', (x, 0, z), 0.55, h, M['worn'], seg=14)
-    if h > 3:
-        box(f'colcap{k}', (x, h + 0.15, z), (1.4, 0.3, 1.4), M['block'])
-    col_cyl(f'column{k}', (x, 0, z), 0.6, h)
-# coluna tombada
-cyl('fallen_col', (0, 0.5, -6), 0.5, 5.5, M['worn'], seg=12, rot_y=0.4, rot_z=math.pi / 2)
-col_box('fallen_col', (0, 0.5, -6), (5.0, 1.0, 1.4))
-
-# ---------------- braseiros de pedra com fogo
+# ---------------- braseiros acesos em volta da areia (cesto de fogo do kit + fogo)
 for k in range(6):
     a = (k + 0.5) / 6 * TAU
-    x, z = math.sin(a) * (R_ARENA - 1.6), math.cos(a) * (R_ARENA - 1.6)
-    cyl(f'brazier_base{k}', (x, 0, z), 0.35, 0.9, M['block'], seg=10, r_top=0.25)
-    cyl(f'brazier_bowl{k}', (x, 0.9, z), 0.45, 0.35, M['dark'], seg=12, r_top=0.65)
-    cyl(f'FLICKER_fire{k}', (x, 1.1, z), 0.45, 0.6, M['fire'], seg=8, r_top=0.05)
-    col_cyl(f'brazier{k}', (x, 0, z), 0.7, 1.4)
+    x, z = math.sin(a) * (R_WALL - 4.2), math.cos(a) * (R_WALL - 4.2)
+    put('graveyard', 'pillar-square', (x, 0, z), a, 2.4)
+    put('graveyard', 'fire-basket', (x, 2.3, z), a, 3.0)
+    cyl(f'FLICKER_fire{k}', (x, 2.6, z), 0.45, 0.7, M['fire'], seg=8, r_top=0.05)
+    col_cyl(f'brazier{k}', (x, 0, z), 0.8, 2.8)
 
-# ---------------- falésias ao fundo (o coliseu encostado em rocha, como na referência 1)
-for k in range(14):
-    a = (k / 14) * math.pi + math.pi * 0.25
-    r = R_OUT + 14 + random.uniform(0, 6)
-    h = random.uniform(22, 34)
-    box(f'cliff{k}', (math.sin(a) * r, h / 2 - 2, math.cos(a) * r), (random.uniform(10, 16), h, random.uniform(8, 12)), M['worn'], rot_y=a + random.uniform(-0.3, 0.3))
+# ---------------- obstáculos na areia: máquinas de cerco destruídas e entulho
+for k, (name, x, z, rot) in enumerate((('siege-catapult-demolished', -12, 6, 0.4), ('siege-ram-demolished', 9, -11, 1.2),
+                                         ('siege-trebuchet-demolished', 13, 8, 2.4))):
+    put('castle', name, (x, 0, z), rot, 3.0)
+    col_cyl(f'siege{k}', (x, 0, z), 2.6, 1.6)
+for k, (x, z) in enumerate(((-6, -14), (3, 15), (-16, -4))):
+    put('castle', 'rocks-large', (x, 0, z), random.uniform(0, TAU), 3.0)
+    put('castle', 'rocks-small', (x + 1.6, 0, z + 0.8), random.uniform(0, TAU), 3.0)
+    col_cyl(f'rubble{k}', (x, 0, z), 1.9, 1.4)
+# colunas quebradas
+for k, (x, z, h) in enumerate(((10, 2, 4.5), (-9, -8, 2.6), (-4, 10, 3.6))):
+    put('graveyard', 'column-large', (x, 0, z), random.uniform(0, TAU), h / 1.13, 'OCC_')
+    col_cyl(f'column{k}', (x, 0, z), 0.9, h)
+
+# ---------------- fora: rochedos altos e árvores
+for k in range(16):
+    a = (k / 16) * math.pi * 1.2 + math.pi * 0.2
+    r = R_WALL + 16 + random.uniform(0, 8)
+    put('nature', random.choice(['rock_tallA', 'rock_tallB', 'rock_tallC', 'rock_tallE', 'rock_tallG']), (math.sin(a) * r, 0, math.cos(a) * r), random.uniform(0, TAU), random.uniform(14, 22))
+for k in range(30):
+    a = random.uniform(0, TAU)
+    r = random.uniform(R_WALL + 6, R_WALL + 30)
+    put('castle', random.choice(['tree-large', 'tree-small', 'tree-large']), (math.sin(a) * r, 0, math.cos(a) * r), random.uniform(0, TAU), random.uniform(4, 6))
 
 finalize(OUT)

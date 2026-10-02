@@ -27,7 +27,7 @@ ok(COMBAT.startEnergy === 30 && COMBAT.energyRegen === 2.5 && COMBAT.chargeRate 
 
 // ---------------- controles V2 ----------------
 ok(GAMEPAD_LAYOUT.block[0] === 7, 'defesa no RT / R2');
-ok(GAMEPAD_LAYOUT.mod[0] === 5, 'modificador no RB / R1');
+ok(!GAMEPAD_LAYOUT.mod && GAMEPAD_LAYOUT.assist1[0] === 4 && GAMEPAD_LAYOUT.assist2[0] === 5, 'assistências no L1/LB e R1/RB (sem botão modificador)');
 ok(COMBAT.dodge.charges === 4 && COMBAT.dodge.damagePerCharge > 0, 'barra com 4 esquivas que recupera tomando dano');
 ok(ROSTER.find((c) => c.id === 'abutre').abilities[0].color === 0x3aff6a, 'Rebirth verde');
 ok(!GAMEPAD_LAYOUT.lock, 'sem botão de travar câmera');
@@ -39,7 +39,7 @@ for (const c of ROSTER) {
   ok(['forward', 'back', 'side', 'air'].every((k) => c.melee[k]), `${c.name}: físico com variações neutro/frente/trás/lado/aéreo`);
   ok(c.melee.strikes.at(-1).finisher, `${c.name}: sequência termina com finalizador (${c.melee.strikes.at(-1).finisher})`);
   ok(!!c.ranged, `${c.name}: botão □/X não fica vazio (${c.ranged && c.ranged.name})`);
-  ok((c.abilities || []).some((a) => a.input.startsWith('mod+')), `${c.name}: possui habilidade secundária com R1/RB`);
+  ok((c.abilities || []).some((a) => a.input.startsWith('block+') || a.input.startsWith('carga+')), `${c.name}: possui habilidade secundária (△ + botão ou R2 + botão)`);
   for (const a of c.abilities || []) ok(a.cooldown > 0, `${c.name}: ${a.name} tem cooldown (${a.cooldown}s, custo ${a.energyCost})`);
   ok(validatePassives(c).length === 0, `${c.name}: configuração de passivas válida`);
 }
@@ -66,7 +66,7 @@ const twoArm = ['jab', 'hook_l', 'dual_r', 'dual_l', 'dual_alt', 'dual_cross', '
 ok(abu.oneArm && allStrikes(abu).every((s) => !twoArm.includes(s.anim)) && !twoArm.includes(abu.anims.block), 'Abutre: nenhum golpe/defesa usa um segundo braço');
 ok(abu.ranged.name === 'Sniper' && abu.ranged.damage === 110, 'Abutre: sniper mantida (110)');
 const reb = abu.abilities.find((a) => a.id === 'rebirth');
-ok(reb && reb.input === 'mod+ranged' && reb.type === 'weaponState' && reb.shots > 0 && reb.bonusDamage > 0, 'Rebirth: R1+□, estado temporário da arma com tiros fortalecidos');
+ok(reb && reb.input === 'carga+ranged' && reb.type === 'weaponState' && reb.shots > 0 && reb.bonusDamage > 0, 'Rebirth: △+□, estado temporário da arma com tiros fortalecidos');
 ok(abu.special.name === 'Arma de Sangue', 'Arthur: especial ARMA DE SANGUE (nome correto)');
 ok(abu.ranged.chargeShot && abu.ranged.chargeShot.maxDamage > abu.ranged.chargeShot.minDamage, 'Arthur: sniper com tiro carregado (ajoelha, mais tempo = mais dano)');
 const legOnly = ['kick_low', 'kick_round', 'kick_front', 'spin_kick', 'knee', 'side_kick', 'air_kick', 'sway_kick'];
@@ -129,13 +129,13 @@ ok(get('desconjurado').melee.strikes.reduce((n, s) => n + s.damage, 0) <= 215, '
 ok(get('desconjurado').abilities.find((a) => a.type === 'transcend').endDrain > 0, 'Kian: Transcendência cobra sanidade');
 ok(pas('cineraria', 'resistant') && abil('cineraria', 'flowerRain') && get('cineraria').special.area === 5, 'Kaiser: Resistente, Acácia, Cinerária em 5 m');
 // RB + LT (mod+dodge): todo personagem tem um golpe nesse comando
-ok(ROSTER.every((c) => (c.abilities || []).some((a) => a.input === 'mod+dodge')), 'todos têm habilidade em RB + LT (R1 + L2)');
+ok(ROSTER.every((c) => (c.abilities || []).some((a) => a.input === 'carga+dodge')), 'todos têm habilidade em △ + L2 (Y + LT)');
 ok(abil('cineraria', 'rootTrap') && abil('cineraria', 'cursedShots') && pas('cineraria', 'elementalAffinity') && get('cineraria').special.flowerStorm, 'Kaiser: Dendrobium, Balas Amaldiçoadas, Afinidade Elemental e Cinerária com tempestade de Acácia');
 ok(abil('abutre', 'hatredTemple') && abil('abutre', 'bloodParalysis'), 'Arthur: Templo do Ódio + Dystopia');
 ok(pas('mascarado', 'decepar') && get('mascarado').melee.strikes.slice(0, -1).every((s) => s.range <= 2.2), 'Joui: Decepar, sequência com alcance ≤ 2,2 m');
 ok(pas('vampira', 'bloodNecklace'), 'Agatha: Colar Banhado em Sangue');
 ok(pas('injustica', 'bulletDodge') && abil('injustica', 'sparkTeleport'), 'Gal: Desviar de Balas + Teletransporte');
-const mods = (c) => (c.abilities || []).filter((a) => a.input.startsWith('mod+')).map((a) => a.input);
+const mods = (c) => (c.abilities || []).filter((a) => a.input.startsWith('block+') || a.input.startsWith('carga+')).map((a) => a.input);
 ok(ROSTER.every((c) => new Set(mods(c)).size === mods(c).length), 'nenhum R1 + botão repetido no mesmo personagem');
 ok(COMBAT.comboScaling[0] === 1 && COMBAT.comboScaling.at(-1) >= 0.5 && COMBAT.substitution && COMBAT.grabTech && COMBAT.awaken, 'escala de combo, substituição, escape do agarrão e Transcender configurados');
 
@@ -212,7 +212,7 @@ ok(COMBAT.down && COMBAT.down.lie > 0 && COMBAT.airCombo.maxHits <= 4, 'queda co
 
 // ---------------- Regras gerais V2.1 ----------------
 ok(COMBAT.grab && COMBAT.grab.range < 2 && COMBAT.grab.damage > 0, 'agarrão (Defesa + ○): curta distância');
-ok(COMBAT.powered && COMBAT.powered.meleeMult > 1 && COMBAT.powered.rangedMult > 1 && COMBAT.powered.meleeCost > 0, 'versões fortes △+○ / △+□ com custo de energia');
+ok(!COMBAT.powered && ROSTER.every((c) => !(c.abilities || []).some((a) => a.input.startsWith('mod+'))), 'habilidades em △ + ○/□/L2 e R2 + △/× (sem versões fortes, sem R1 modificador)');
 
 console.log(fails ? `\n${fails} verificação(ões) falharam.` : '\nTudo certo.');
 process.exit(fails ? 1 : 0);

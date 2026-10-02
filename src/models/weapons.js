@@ -269,6 +269,24 @@ function bloodMaterial() {
   return m;
 }
 
+// Reveste uma arma com SANGUE: troca o material de cada peça pelo mesmo sangue molhado da Arma de Sangue do Arthur
+// (textura de sangue, reflexo úmido, luz própria fraca). Retorna a função que devolve os materiais originais.
+export function bloodCoat(root) {
+  const mat = bloodMaterial();
+  const saved = [];
+  root.traverse((o) => {
+    if (!o.isMesh || o.userData.isOutline || o.material === mat) return;
+    if (o.material && o.material.side === THREE.BackSide) return; // contorno preto fica
+    saved.push([o, o.material]);
+    o.material = mat;
+  });
+  return () => {
+    for (const [o, m] of saved) o.material = m;
+    mat.map && mat.map.dispose();
+    mat.dispose();
+  };
+}
+
 // tubo ao longo de uma curva que vai afinando (r(t) = raio no ponto t de 0 a 1)
 function taperedTube(curve, len, r, mat, seg = 24, radial = 7) {
   const geo = new THREE.TubeGeometry(curve, seg, 1, radial, false);

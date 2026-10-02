@@ -1,6 +1,6 @@
 // CONTROLES DE TOQUE (celular / tablet). Ficam por cima do jogo e alimentam o jogador 1 (InputManager.touch).
-//  - Luta: joystick à esquerda; losango △ □ ○ × à direita (mesma posição do controle); R1 (modificador: segure e
-//    toque um botão do losango), DEF (defesa: segure), ESQ (esquiva) e ESPECIAL (faz △ △ ○ sozinho); PAUSA.
+//  - Luta: joystick à esquerda; losango △ □ ○ × à direita (mesma posição do controle); DEF (defesa: segure; DEF + △ / DEF + × soltam
+//    habilidades), ESQ (esquiva) e ESPECIAL (faz △ △ ○ sozinho); PAUSA.
 //    Na batalha em equipe aparecem os botões das assistências e da troca.
 //  - Menus: setas, OK e VOLTAR (os cartões e opções também aceitam toque direto).
 // Aparece sozinho em aparelhos com tela de toque (ou com ?touch=1 na URL para testar no PC).
@@ -17,7 +17,6 @@ const FIGHT_BUTTONS = [
   ['ranged', '□', 'b-sq'],
   ['physical', '○', 'b-ci'],
   ['jump', '×', 'b-x'],
-  ['mod', 'R1', 'b-r1'],
   ['block', 'DEF', 'b-r2'],
   ['dodge', 'ESQ', 'b-l2'],
 ];

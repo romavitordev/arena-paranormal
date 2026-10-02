@@ -91,15 +91,6 @@ export const COMBAT = {
     knockback: 9,
     cooldown: 1.2,
   },
-  // ---- Versões fortes com △/Y (como o dash longo): △+□ e △+○ ----
-  powered: {
-    guardCrush: 60, // △+○ gasta 60 da defesa (quebra só se ela já estiver gasta)
-    meleeCost: 15,
-    meleeMult: 1.6,
-    meleeCooldown: 1.6,
-    rangedCost: 20,
-    rangedMult: 1.6,
-  },
   // ---- Escala de dano em combo: cada acerto seguido no mesmo combo vale menos ----
   comboScaling: [1, 1, 0.9, 0.8, 0.72, 0.65, 0.58, 0.5],
   comboScalingFloor: { special: 0.75, grab: 0.75 }, // especial e agarrão nunca caem abaixo disso

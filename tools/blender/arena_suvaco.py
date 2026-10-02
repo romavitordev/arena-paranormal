@@ -6,6 +6,10 @@ de dardos, geladeira amarela, engradados vermelho/azul/amarelo, cadeiras de plá
 bebedouro, lixeira, quadro-negro com placar, pôsteres ("Choro dos Anjos" e a chama), sinuca,
 mesas, lâmpadas fluorescentes. A porta larga dá para a CALÇADA da esquina (referência 'por fora'):
 piso xadrez, mesas e cadeiras de plástico, placa de madeira "SUVACO SECO", postes, rua.
+Móveis (banquetas, geladeira, lixeira, vasos, caixas, caixa de som), a rua, postes, caçamba, cones, carros, árvores e os
+prédios da vizinhança são PEÇAS PRONTAS dos kits do Kenney (CC0: Furniture, City Roads, City Commercial, Car e Nature
+Kit — tools/blender/kenney.py). Feitos aqui: as paredes de azulejo/tijolo, o balcão com as garrafas, a sinuca, as
+cadeiras de plástico, os engradados e os pôsteres — a cara do bar.
 Coordenadas do jogo: salão x ∈ [-9, 9], z ∈ [-6, 6], altura 3,6; porta de 4,6 m; calçada z ∈ [6.25, 14.5],
 rua z ∈ [14.5, 24.5], calçada da frente até z 27, beco à direita (x 17–20.5) e prédios em volta.
 """
@@ -13,6 +17,7 @@ import sys, os, math, random
 sys.path.insert(0, os.path.dirname(__file__))
 from arena_lib import *
 from lib import material, TAU
+from kenney import put
 
 OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'suvaco.glb'
 random.seed(5)
@@ -85,11 +90,9 @@ for row, y in enumerate((1.5, 2.15, 2.8)):
         m = random.choice(bottle_mats)
         cyl(f'bottle{row}_{k}', (x, y + 0.03, D0 + 0.18), 0.045, h * 0.7, m, seg=8)
         cyl(f'bneck{row}_{k}', (x, y + 0.03 + h * 0.7, D0 + 0.18), 0.018, h * 0.3, m, seg=6)
-# banquetas no balcão
+# banquetas no balcão (kit)
 for k in range(5):
-    x = -5 + k * 1.6
-    cyl(f'stool{k}', (x, 0, D0 + 2.2), 0.04, 0.72, M['metal'], seg=6)
-    cyl(f'stooltop{k}', (x, 0.72, D0 + 2.2), 0.2, 0.06, M['red'], seg=12)
+    put('furniture', 'stoolBar', (-5 + k * 1.6, 0, D0 + 2.2), math.pi, 1.8, center=True)
 
 # ---------------- sinuca
 PX, PZ = 4.6, 1.4
@@ -121,9 +124,13 @@ for k in range(9):
 col_box('stack', (W0 + 2.8, 0.8, D0 + 0.55), (0.6, 1.6, 0.6))
 box('cooler_base', (W0 + 3.8, 0.5, D0 + 0.4), (0.38, 1.0, 0.36), M['white'])
 cyl('cooler_jug', (W0 + 3.8, 1.0, D0 + 0.4), 0.15, 0.45, M['cooler'], seg=12)
-cyl('trash', (W0 + 4.4, 0, D0 + 0.4), 0.2, 0.62, M['metal'], seg=12)
-box('fridge', (W1 - 0.5, 1.0, D0 + 0.55), (0.9, 2.0, 0.8), M['fridge'])
-box('fridge_glass', (W1 - 0.5, 1.05, D0 + 0.96), (0.7, 1.6, 0.03), M['glass'])
+put('furniture', 'trashcan', (W0 + 4.4, 0, D0 + 0.4), 0.0, 1.5, center=True)
+# a geladeira amarela de cerveja (geladeira do kit pintada de amarelo)
+put('furniture', 'kitchenFridgeLarge', (W1 - 0.5, 0, D0 + 0.55), 0.0, 2.2, center=True, tint={'metalLight': (0.85, 0.66, 0.12), 'metalMedium': (0.7, 0.52, 0.08)})
+for k in range(3):
+    put('furniture', 'cardboardBoxClosed', (W1 - 1.6 - k * 0.5, 0.0 if k < 2 else 0.5, D0 + 0.5), 0.2 * k, 1.8, center=True)
+put('furniture', 'speaker', (W0 + 0.4, 0, 3.5), math.pi / 2, 1.6, center=True)
+put('furniture', 'ceilingFan', (-2.5, HH - 0.5, 0.5), 0.0, 2.0, center=True)
 col_box('fridge', (W1 - 0.5, 1.0, D0 + 0.55), (0.95, 2.0, 0.85))
 
 # ---------------- decoração das paredes (planos com a imagem inteira)
@@ -162,60 +169,38 @@ M.update({
 
 
 def tree_round(name, pos, h, r=0.18):
-    """Árvore de rua com copa arredondada (junta em OCC_ para ficar transparente se tampar a luta)."""
+    """Árvore de rua do Nature Kit (fica transparente se tampar a luta) com o canteiro."""
     x, y, z = pos
-    before = set(o.name for o in bpy.context.scene.objects)
-    cyl(f'{name}_trunk', (x, y, z), r, h * 0.55, M['bark'], seg=8, r_top=r * 0.7)
-    for k in range(4):
-        a = k / 4 * TAU + random.random()
-        rr = h * random.uniform(0.2, 0.28)
-        sphere(f'{name}_c{k}', (x + math.sin(a) * h * 0.12, y + h * random.uniform(0.62, 0.8), z + math.cos(a) * h * 0.12), (rr, rr * 0.85, rr), random.choice([M['canopy'], M['canopy2']]), seg=10, rings=7)
+    put('nature', random.choice(['tree_default', 'tree_oak', 'tree_fat']), pos, random.uniform(0, TAU), h / 1.2, 'OCC_')
     box(f'{name}_pit', (x, 0.02, z), (1.1, 0.04, 1.1), M['floor'])
-    new = [o for o in bpy.context.scene.objects if o.name not in before]
-    rebase(join_objs(new, f'OCC_{name}'))
     col_cyl(name, (x, y, z), r + 0.2, h * 0.5)
 
 
-def building(name, x0, x1, z_front, depth, h, wall, facing=1, shop=None, sign=None, sign_mat=None):
-    """Prédio de esquina. facing=1: fachada virada para +z; -1: para -z."""
+COMMERCIAL = ['building-a', 'building-b', 'building-c', 'building-d', 'building-e', 'building-f', 'building-g', 'building-h', 'building-i', 'building-j', 'building-k', 'building-l', 'building-m', 'building-n']
+
+
+def building(name, x0, x1, z_front, depth, h, wall=None, facing=1, shop=None, sign=None, sign_mat=None):
+    """Prédio do City Kit Commercial ocupando de x0 a x1, com a fachada em z_front virada para +z (facing=1) ou -z.
+    sign: placa de loja com letreiro na fachada."""
     cx = (x0 + x1) / 2
     w = x1 - x0
-    cz = z_front - facing * depth / 2
-    box(f'OCC_{name}', (cx, h / 2, cz), (w, h, depth), wall)
-    fz = z_front + facing * 0.03
-    # janelas dos andares de cima
-    for wy in range(4, int(h) - 1, 3):
-        n = max(1, int(w // 3))
-        for k in range(n):
-            wx = x0 + (k + 0.5) * w / n
-            lit = random.random() < 0.4
-            box(f'{name}_w{wy}_{k}', (wx, wy, fz), (1.1, 1.3, 0.05), M['window_lit'] if lit else M['window_dark'])
-    # térreo: porta de aço de loja fechada ou vitrine acesa
-    if shop == 'shutter':
-        box(f'{name}_shutter', (cx, 1.4, fz), (min(w - 1.0, 4.5), 2.6, 0.06), M['shutter'])
-        for k in range(8):
-            box(f'{name}_sl{k}', (cx, 0.3 + k * 0.32, fz + facing * 0.02), (min(w - 1.0, 4.5), 0.03, 0.02), M['metal'])
-    elif shop == 'lit':
-        box(f'{name}_shopwin', (cx, 1.3, fz), (min(w - 1.0, 5.0), 2.0, 0.05), M['window_lit'])
+    model = random.choice(COMMERCIAL)
+    put('commercial', model, (cx, 0, z_front - facing * depth / 2), 0.0 if facing == 1 else math.pi, max(8.0, w / 1.1), 'OCC_')
     if sign:
+        fz = z_front + facing * 0.03
         box(f'{name}_signbox', (cx, 3.15, fz + facing * 0.12), (len(sign) * 0.42 + 0.6, 0.7, 0.18), M['wood'])
-        t = text(f'{name}_sign', sign, (cx, 2.95, fz + facing * 0.23), 0.55, sign_mat, rot_y=0 if facing == 1 else math.pi)
+        text(f'{name}_sign', sign, (cx, 2.95, fz + facing * 0.23), 0.55, sign_mat, rot_y=0 if facing == 1 else math.pi)
 
 
 # chão: calçada do bar em xadrez, resto em cimento; rua de asfalto; calçada da frente
 box('FLOOR_terrace', (0, -0.04, 10.35), (18.5, 0.08, 8.2), M['checker'])
 for s in (-1, 1):
     box(f'FLOOR_sidewalk{s}', (s * 24.6, -0.045, 10.35), (30.7, 0.08, 8.2), M['sidewalk'])
-box('GROUND_street', (0, -0.08, 19.5), (90, 0.08, 10), M['asphalt'])
+# a rua: peças do City Kit Roads (cada peça = 10 m com as duas faixas), uma delas com faixa de pedestres
+for k in range(-4, 5):
+    put('roads', 'road-crossing' if k == -1 else 'road-straight', (k * 10.0 - 4.0, -0.07, 19.5), 0.0, 10.0, up=2.0)
+box('GROUND_under', (0, -0.3, 19.5), (100, 0.1, 12), M['asphalt'])
 box('FLOOR_sidewalk_far', (0, -0.045, 25.75), (90, 0.08, 2.5), M['sidewalk'])
-box('curb', (0, 0.06, 14.5), (80, 0.14, 0.3), M['sidewalk'])
-box('curb_far', (0, 0.06, 24.5), (80, 0.14, 0.3), M['sidewalk'])
-# faixa central tracejada e faixa de pedestres
-for k in range(-11, 12):
-    box(f'lane{k}', (k * 3.6, 0.0, 19.5), (1.8, 0.02, 0.18), M['stripe_y'])
-for k in range(8):
-    box(f'zebra{k}', (-14 + (k - 3.5) * 0.9, 0.0, 19.5), (0.5, 0.02, 9.4), M['stripe'])
-box('manhole', (5, 0.0, 21.5), (0.9, 0.02, 0.9), M['metal'])
 
 # fachada do bar: placa iluminada, segundo andar, ar-condicionado, toldo
 box('OCC_facade_upper', (0, HH + 1.8, D1 + T / 2), (W1 - W0 + 0.5, 3.6, T), M['brick'])
@@ -237,7 +222,7 @@ building('nb_r2', 20.5, 32.0, FZ, 12.5, 10.0, M['plaster'], shop='lit', sign='FA
 # beco: paredes laterais já são os prédios; fundo fechado, caçamba e sacos de lixo
 box('OCC_alley_back', (18.75, 3.0, -5.6), (3.6, 6.0, 0.3), M['brick'])
 box('FLOOR_alley', (18.75, -0.045, 0.3), (3.5, 0.08, 12.0), M['floor'])
-box('dumpster', (19.6, 0.65, -3.6), (1.5, 1.3, 1.0), M['dumpster'])
+put('roads', 'dumpster', (19.6, 0, -3.6), math.pi / 2, 6.0, center=True)
 col_box('dumpster', (19.6, 0.65, -3.6), (1.6, 1.3, 1.1))
 for k in range(5):
     sphere(f'bag{k}', (17.8 + random.random() * 0.6, 0.28, -4.5 + k * 0.45), (0.32, 0.3, 0.3), M['trashbag'])
@@ -251,9 +236,8 @@ for k, (x, z, m) in enumerate([(-7, 9.5, M['red']), (6.5, 9.0, M['yellow']), (-2
     for j, a in enumerate((0.3, math.pi + 0.3)):
         plastic_chair(f'ochair{k}_{j}', (x + math.sin(a) * 0.78, 0, z + math.cos(a) * 0.78), m, rot_y=a + math.pi)
 # vaso com plantas ao lado da porta
-box('planter', (3.6, 0.3, D1 + 0.75), (1.4, 0.6, 0.6), M['brick'])
-for k in range(6):
-    sphere(f'plant{k}', (3.1 + k * 0.2, 0.75 + random.random() * 0.2, D1 + 0.75), (0.2, 0.28, 0.2), M['plant'])
+for k, x in enumerate((3.1, 4.1)):
+    put('furniture', 'pottedPlant', (x, 0, D1 + 0.75), 0.4 * k, 2.2, center=True)
 col_box('planter', (3.6, 0.3, D1 + 0.75), (1.5, 0.6, 0.7))
 
 # árvores na beira da calçada (longe da porta) e do outro lado
@@ -262,29 +246,22 @@ for k, x in enumerate((-24, -15, 13, 25)):
 for k, x in enumerate((-30, -6, 20)):
     tree_round(f'treefar{k}', (x, 0, 25.6), random.uniform(5.0, 6.0))
 
-# postes com luz amarela dos dois lados da rua
-for k, (x, z, d) in enumerate(((-10, 14.1, 1), (10, 14.1, -1), (-24, 24.9, 1), (24, 24.9, -1), (0, 24.9, 1))):
-    side = 1 if z < 20 else -1  # braço do poste aponta para a rua
-    cyl(f'pole{k}', (x, 0, z), 0.08, 5.2, M['metal'], seg=8)
-    box(f'polearm{k}', (x, 5.15, z + side * 0.6), (0.08, 0.08, 1.3), M['metal'])
-    box(f'lamphead{k}', (x, 5.05, z + side * 1.15), (0.3, 0.14, 0.5), M['lamp'])
+# postes curvos do kit dos dois lados da rua (o braço aponta para a rua)
+for k, (x, z) in enumerate(((-10, 14.1), (10, 14.1), (-24, 24.9), (24, 24.9), (0, 24.9))):
+    put('roads', 'light-curved', (x, 0, z), 0.0 if z < 20 else math.pi, 7.8)
     col_cyl(f'pole{k}', (x, 0, z), 0.2, 5)
-# fios entre os postes do lado do bar
-for k, (xa, xb) in enumerate(((-10, 10),)):
-    box(f'wire{k}', ((xa + xb) / 2, 5.0, 14.1), (abs(xb - xa), 0.02, 0.02), M['tire'])
-
+# cones de obra perto do meio-fio
+for k, x in enumerate((15.0, 15.8)):
+    put('roads', 'construction-cone', (x, 0, 14.0), 0.3 * k, 8.0)
 # carros estacionados
-def car(name, x, z, mat, rot=0.0):
-    box(f'{name}_body', (x, 0.55, z), (4.0, 0.7, 1.8), mat, rot_y=rot)
-    box(f'{name}_cabin', (x - 0.2, 1.15, z), (2.2, 0.6, 1.6), M['car_glass'], rot_y=rot)
-    for sx in (-1.3, 1.3):
-        for sz in (-0.85, 0.85):
-            cyl(f'{name}_wheel{sx}{sz}', (x + sx, 0.33, z + sz), 0.33, 0.25, M['tire'], seg=10, rot_x=math.pi / 2)
-    box(f'{name}_lights', (x + 2.0, 0.6, z), (0.05, 0.18, 1.4), M['headlight'], rot_y=rot)
-    col_box(name, (x, 0.6, z), (4.2, 1.4, 2.0))
+def car(name, model, x, z, rot):
+    put('cars', model, (x, 0, z), rot, 1.75)
+    col_box(name, (x, 0.6, z), (4.6, 1.4, 2.2))
 
-car('car1', 7.5, 16.0, M['car_red'])
-car('car2', -21.0, 23.0, M['car_blue'])
+
+car('car1', 'sedan', 7.5, 16.0, math.pi / 2)
+car('car2', 'taxi', -21.0, 23.0, -math.pi / 2)
+car('car3', 'van', 28.0, 23.0, -math.pi / 2)
 
 # ponto de ônibus e hidrante
 box('bus_roof', (12, 2.5, 25.9), (3.2, 0.1, 1.2), M['metal'])

@@ -68,7 +68,7 @@ export default {
     {
       id: 'supernova',
       name: 'Granada "Supernova"',
-      input: 'mod+ranged', // R1 + □ / RB + X
+      input: 'carga+ranged', // △ + □ / Y + X
       type: 'throwProjectile',
       description: 'A granada com o coração vermelho: arremessa em arco e explode em área, jogando o alvo para cima. Pega quem está defendendo de lado ou parado.',
       energyCost: 25,
@@ -87,7 +87,7 @@ export default {
     {
       id: 'nebulosa',
       name: 'Granada "Nebulosa"',
-      input: 'mod+jump', // R1 + × / RB + A
+      input: 'block+jump', // R2 + × / RT + A
       type: 'throwProjectile',
       description: 'A granada do emoji (a que ela deu ao Kaiser): explode numa nuvem que deixa o inimigo lento, corta a recuperação dele e engole os tiros que entram nela.',
       energyCost: 20,
@@ -106,7 +106,7 @@ export default {
     {
       id: 'bencaoMaldita',
       name: 'Bênção Maldita',
-      input: 'mod+physical', // R1 + ○ / RB + B
+      input: 'carga+physical', // △ + ○ / Y + B
       type: 'blessing',
       description: 'Ritual de Energia: a mão brilha em ciano e ela vê um pedaço do futuro — recupera todas as esquivas e bate mais forte por alguns segundos.',
       energyCost: 30,
@@ -119,7 +119,7 @@ export default {
     {
       id: 'blackHole',
       name: 'Envelhecimento Localizado "Black Hole"',
-      input: 'mod+carga', // R1 + △ / RB + Y
+      input: 'block+carga', // R2 + △ / RT + Y
       type: 'healOverTime',
       description: 'Segura cinzas, diz "Black Hole" e assopra: as cinzas ficam pretas e envelhecem as próprias feridas até cicatrizarem em espiral.',
       energyCost: 30,
@@ -131,7 +131,7 @@ export default {
     {
       id: 'granadaLuz',
       name: 'Granada de Luz',
-      input: 'mod+dodge', // R1 + L2 / RB + LT
+      input: 'carga+dodge', // △ + L2 / Y + LT
       type: 'throwProjectile',
       description: 'Uma granada de clarão: explode numa luz branca que deixa o inimigo atordoado por um instante.',
       energyCost: 20,

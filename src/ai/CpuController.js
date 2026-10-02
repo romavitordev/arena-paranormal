@@ -8,7 +8,7 @@ import { distXZ } from '../core/util.js';
 //  - adversário longe → ataque à distância ou aproxima com dash;
 //  - adversário atacando → defende, esquiva ou tenta o perfect block;
 //  - adversário caído → reposiciona/carrega (caído não toma dano);
-//  - adversário defendendo → agarrão ou golpe forte.
+//  - adversário defendendo → agarrão.
 export const CPU_LEVELS = {
   easy: { think: [0.45, 0.8], block: 0.025, dodge: 0.02, perfect: 0, subst: 0.006, mistake: 0.3, combo: [1, 3], ability: 0.06, special: 0.12, vertical: 0, tech: 0.1, ranged: 0.35 },
   normal: { think: [0.25, 0.45], block: 0.06, dodge: 0.05, perfect: 0, subst: 0.015, mistake: 0.15, combo: [2, 4], ability: 0.12, special: 0.22, vertical: 0.25, tech: 0.35, ranged: 0.45 },
@@ -207,17 +207,18 @@ export class CpuController {
           return out;
         }
       }
-      // habilidades secundárias (R1/RB + botão)
-      let mods = (def.abilities || []).filter((a) => a.input.startsWith('mod+') && f.cooldowns[a.id] <= 0 && f.energy >= (f.abilityCost ? f.abilityCost(a) : a.energyCost || 0) + 5 && this.aiOk(a, d, opp, lowHp));
+      // habilidades secundárias: △ + ○/□/L2 e R2 + △/×
+      let mods = (def.abilities || []).filter((a) => (a.input.startsWith('block+') || (a.input.startsWith('carga+') && a.input !== 'carga+jump')) && f.cooldowns[a.id] <= 0 && f.energy >= (f.abilityCost ? f.abilityCost(a) : a.energyCost || 0) + 5 && this.aiOk(a, d, opp, lowHp));
       // não repetir a mesma habilidade seguida quando houver outra
       if (mods.length > 1) mods = mods.filter((a) => a.id !== this.lastAbility);
       if (mods.length && r < L.ability) {
         const a = mods[Math.floor(Math.random() * mods.length)];
         this.lastAbility = a.id;
-        const btn = a.input.slice(4);
+        const [modKey, btn] = a.input.split('+'); // 'carga' (△) ou 'block' (R2)
         const range = a.range || 10;
         if (d <= range || ['weaponState', 'blink', 'mistCloud', 'healOverTime', 'hatredTemple', 'shadowClones', 'heavyProtection', 'noiseScreen'].includes(a.type)) {
-          this.queue.push({ t: 0.05, held: { mod: true } }, { t: 0.06, held: { mod: true, [btn]: true } }, { t: 0.05, held: {} });
+          if (modKey === 'block') this.queue.push({ t: 0.05, held: { block: true } }, { t: 0.06, held: { block: true, [btn]: true } }, { t: 0.05, held: {} });
+          else this.queue.push({ t: 0.05, held: { carga: true, [btn]: true } }, { t: 0.05, held: {} });
           return out;
         }
       }
@@ -257,17 +258,9 @@ export class CpuController {
         this.holdCharge = rnd(0.8, 1.6);
         return out;
       }
-      // contra quem defende: agarrão ou golpe forte
+      // contra quem defende: agarrão
       if (d < 1.8 && f.cooldowns.grab <= 0 && (opp.state === 'block' || r < 0.08)) {
         this.queue.push({ t: 0.05, held: { block: true } }, { t: 0.06, held: { block: true, physical: true } }, { t: 0.05, held: {} });
-        return out;
-      }
-      if (d < 2.3 && (opp.state === 'block' ? r < 0.4 : r < 0.12) && f.cooldowns.powerMelee <= 0 && f.energy > 35) {
-        this.queue.push({ t: 0.05, held: { carga: true, physical: true } }, { t: 0.05, held: {} });
-        return out;
-      }
-      if (def.ranged && f.cooldowns.ranged <= 0 && d > 5 && r > 0.92 && f.energy >= (def.ranged.energyCost || 0) + 40) {
-        this.queue.push({ t: 0.05, held: { carga: true, ranged: true } }, { t: 0.05, held: {} });
         return out;
       }
       // perto: combo (com ↑/↓ conforme a dificuldade)

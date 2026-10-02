@@ -14,7 +14,7 @@ function tex(size, meters, paint, opts = {}) {
   t.wrapS = t.wrapT = THREE.RepeatWrapping;
   t.repeat.set(1 / meters, 1 / meters);
   t.anisotropy = 8;
-  if (opts.roughness !== undefined) return { map: t, roughness: opts.roughness };
+  if (opts.roughness !== undefined || opts.glow) return { map: t, roughness: opts.roughness, glow: opts.glow };
   return t;
 }
 
@@ -286,6 +286,106 @@ export const ARENA_TEXTURES = {
     g.beginPath(); g.arc(s / 2, s / 2, 50, 0, Math.PI * 2); g.moveTo(s / 2, s / 2 - 70); g.lineTo(s / 2, s / 2 + 70); g.moveTo(s / 2 - 50, s / 2 - 20); g.quadraticCurveTo(s / 2, s / 2 - 70, s / 2 + 50, s / 2 - 20); g.stroke();
     noise(g, s, ['#000', '#5a1a10'], 2500, [1, 3], 0.35);
   }),
+
+  // ---------------- Ruínas do Ritual: chão de pedras escuras com o círculo de invocação roxo (brilha: glow)
+  ritual_circle: () => tex(1024, 1, (g) => {
+    g.fillStyle = '#1c1820'; g.fillRect(0, 0, 1024, 1024);
+    for (let i = 0; i < 900; i++) {
+      const v = 22 + Math.random() * 18;
+      g.fillStyle = `rgb(${v},${v - 3},${v + 4})`;
+      const x = Math.random() * 1024, y = Math.random() * 1024, s = 20 + Math.random() * 50;
+      g.fillRect(x, y, s, s * 0.7);
+    }
+    g.strokeStyle = 'rgba(0,0,0,0.35)';
+    for (let i = 0; i < 1024; i += 64) {
+      g.beginPath(); g.moveTo(i, 0); g.lineTo(i, 1024); g.stroke();
+      g.beginPath(); g.moveTo(0, i); g.lineTo(1024, i); g.stroke();
+    }
+    // fora do círculo: transparente aos poucos (o chão de terra aparece)
+    g.save();
+    g.globalCompositeOperation = 'destination-in';
+    const fade = g.createRadialGradient(512, 512, 470, 512, 512, 512);
+    fade.addColorStop(0, 'rgba(0,0,0,1)'); fade.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = fade; g.fillRect(0, 0, 1024, 1024);
+    g.restore();
+    g.translate(512, 512);
+    g.strokeStyle = 'rgba(150,100,230,0.85)';
+    g.shadowColor = '#a46bff'; g.shadowBlur = 8; g.lineWidth = 3;
+    for (const r of [430, 400, 250]) { g.beginPath(); g.arc(0, 0, r, 0, Math.PI * 2); g.stroke(); }
+    g.lineWidth = 2.5;
+    g.beginPath();
+    for (let i = 0; i <= 5; i++) {
+      const a = (i * 4 * Math.PI) / 5 - Math.PI / 2;
+      const x = Math.cos(a) * 400, y = Math.sin(a) * 400;
+      if (i === 0) g.moveTo(x, y); else g.lineTo(x, y);
+    }
+    g.stroke();
+    g.font = 'bold 34px serif'; g.fillStyle = 'rgba(190,140,255,0.9)';
+    const glyphs = 'ᚠᚢᚦᚨᚱᚲᚷᚹᚺᚾᛁᛃᛇᛈᛉᛊᛏᛒᛖᛗᛚᛜᛞᛟ';
+    for (let i = 0; i < 36; i++) { g.save(); g.rotate((i / 36) * Math.PI * 2); g.fillText(glyphs[i % glyphs.length], -10, -408); g.restore(); }
+  }, { glow: 0.35 }),
+  ground_graveyard: () => tex(256, 3, (g, s) => {
+    g.fillStyle = '#3a3442'; g.fillRect(0, 0, s, s);
+    noise(g, s, ['#2a2430', '#4a4252', '#1e1a24', '#5a5060'], 6000, [1, 4], 0.45);
+  }, { roughness: 1 }),
+
+  // ---------------- Santo Berço
+  // reboco claro de casa medieval (as vigas escuras são peças do modelo); manchas de umidade embaixo
+  timber_wall: () => tex(256, 2, (g, s) => {
+    g.fillStyle = '#e4dcc6'; g.fillRect(0, 0, s, s);
+    noise(g, s, ['#c8bea4', '#f2ecdc', '#b0a68c'], 5000, [1, 4], 0.35);
+    const grd = g.createLinearGradient(0, s * 0.7, 0, s);
+    grd.addColorStop(0, 'rgba(90,80,60,0)'); grd.addColorStop(1, 'rgba(90,80,60,0.25)');
+    g.fillStyle = grd; g.fillRect(0, 0, s, s);
+  }),
+  // grama viva e farta (o Santo Berço deixa o solo "perfeito para viver")
+  grass_lush: () => tex(256, 3, (g, s) => {
+    g.fillStyle = '#4a6a2a'; g.fillRect(0, 0, s, s);
+    noise(g, s, ['#3a5a22', '#5a7a32', '#6a8a3a', '#2e4a1e'], 7000, [1, 3], 0.55);
+    g.strokeStyle = 'rgba(30,50,20,0.5)';
+    for (let i = 0; i < 600; i++) { const x = Math.random() * s, y = Math.random() * s; g.beginPath(); g.moveTo(x, y); g.lineTo(x + rnd(-2, 2), y - rnd(3, 7)); g.stroke(); }
+    // florzinhas de cores estranhas
+    for (let i = 0; i < 40; i++) { g.fillStyle = ['#c8a0e8', '#f0d060', '#e87aa0'][i % 3]; g.beginPath(); g.arc(Math.random() * s, Math.random() * s, 1.6, 0, Math.PI * 2); g.fill(); }
+  }, { roughness: 1 }),
+  hay: () => tex(128, 1, (g, s) => {
+    g.fillStyle = '#c8a650'; g.fillRect(0, 0, s, s);
+    g.strokeStyle = 'rgba(120,90,30,0.5)';
+    for (let i = 0; i < 300; i++) { const x = Math.random() * s, y = Math.random() * s, a = rnd(-0.4, 0.4); g.beginPath(); g.moveTo(x, y); g.lineTo(x + Math.cos(a) * 10, y + Math.sin(a) * 10); g.stroke(); }
+  }),
+  // o SÍMBOLO ESPIRAL entalhado na laje da praça: espiral de curvas concêntricas e o anel de sigilos em volta
+  spiral_symbol: () => tex(512, 1, (g, s) => {
+    const c = s / 2;
+    // fundo transparente: o entalhe aparece direto sobre a laje de pedra
+    g.clearRect(0, 0, s, s);
+    g.strokeStyle = 'rgba(30,24,28,0.85)'; g.lineCap = 'round';
+    // anel duplo
+    g.lineWidth = 6; g.beginPath(); g.arc(c, c, s * 0.46, 0, Math.PI * 2); g.stroke();
+    g.lineWidth = 3; g.beginPath(); g.arc(c, c, s * 0.38, 0, Math.PI * 2); g.stroke();
+    // sigilos entre os anéis
+    g.font = 'bold 26px serif'; g.fillStyle = 'rgba(30,24,28,0.85)'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    const sig = 'ᛟᚱᛝᛉᚦᛗᛞᚹᛊᛏᚲᛒ';
+    for (let i = 0; i < 12; i++) {
+      const a = (i / 12) * Math.PI * 2;
+      g.save(); g.translate(c + Math.cos(a) * s * 0.42, c + Math.sin(a) * s * 0.42); g.rotate(a + Math.PI / 2); g.fillText(sig[i], 0, 0); g.restore();
+    }
+    // a espiral: várias curvas saindo do centro e se abrindo
+    for (let k = 0; k < 7; k++) {
+      g.lineWidth = 7 - k * 0.6;
+      g.beginPath();
+      for (let t = 0; t <= 1.001; t += 0.01) {
+        const a = k * 0.9 + t * Math.PI * 2.2;
+        const r = s * (0.03 + 0.31 * t) * (1 - k * 0.06);
+        const x = c + Math.cos(a) * r, y = c + Math.sin(a) * r;
+        if (t === 0) g.moveTo(x, y); else g.lineTo(x, y);
+      }
+      g.stroke();
+    }
+  }),
+  lodo_black: () => tex(128, 2, (g, s) => {
+    g.fillStyle = '#060508'; g.fillRect(0, 0, s, s);
+    g.strokeStyle = 'rgba(120,110,140,0.25)';
+    for (let i = 0; i < 20; i++) { g.beginPath(); g.arc(Math.random() * s, Math.random() * s, rnd(4, 18), 0, Math.PI * 2); g.stroke(); }
+  }, { roughness: 0.05 }),
 };
 
 function crate(color) {

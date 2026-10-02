@@ -79,7 +79,7 @@ export default {
     {
       id: 'dendrobium',
       name: 'Sentir Através "Dendrobium"',
-      input: 'mod+carga', // R1 + △ / RB + Y
+      input: 'block+carga', // R2 + △ / RT + Y
       type: 'rootTrap',
       description: 'Raízes roxas e uma flor brotam do chão sob o alvo e o prendem por um instante.',
       energyCost: 25,
@@ -94,7 +94,7 @@ export default {
     {
       id: 'balasAmaldicoadas',
       name: 'Balas Amaldiçoadas',
-      input: 'mod+jump', // R1 + × / RB + A
+      input: 'block+jump', // R2 + × / RT + A
       type: 'cursedShots',
       description: 'Saca a Desert Eagle e dispara três balas amaldiçoadas com Energia, que procuram o alvo.',
       energyCost: 25,
@@ -107,7 +107,7 @@ export default {
     {
       id: 'nebulosa',
       name: 'Granada "Nebulosa"',
-      input: 'mod+dodge', // R1 + L2 / RB + LT
+      input: 'carga+dodge', // △ + L2 / Y + LT
       type: 'throwProjectile',
       description: 'A granada que a Erin fez para ele: explode numa nuvem que deixa o inimigo lento e engole os tiros.',
       energyCost: 20,
@@ -124,7 +124,7 @@ export default {
     {
       id: 'baforada',
       name: 'Baforada Cinerária',
-      input: 'mod+ranged', // R1 + □ / RB + X
+      input: 'carga+ranged', // △ + □ / Y + X
       type: 'mistCloud',
       description: 'Sopra uma nuvem de névoa à frente: engole projéteis inimigos, deixa o inimigo lento e sem regenerar energia dentro dela.',
       energyCost: 20,
@@ -141,7 +141,7 @@ export default {
     {
       id: 'acacia',
       name: 'Acácia',
-      input: 'mod+physical', // R1 + ○ / RB + B
+      input: 'carga+physical', // △ + ○ / Y + B
       type: 'flowerRain',
       description: 'Dissipar Espíritos "Acácia": uma chuva de pequenas flores roxas cai sobre o alvo e machuca enquanto ele ficar na área.',
       energyCost: 25,

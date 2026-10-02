@@ -29,7 +29,7 @@ export function createGLBArena(cfg) {
   const boxes = [];
   const occluders = [];
   const flicker = [];
-  const sway = [];
+  const sway = []; const spin = [];
   let time = 0;
   let particles = null;
 
@@ -63,6 +63,7 @@ export function createGLBArena(cfg) {
         return o;
       };
       const swaySeen = new Set();
+      spin.length = 0;
       group.traverse((o) => {
         const node = taggedNode(o);
         const n = node.name || '';
@@ -79,7 +80,7 @@ export function createGLBArena(cfg) {
           return;
         }
         if (!o.isMesh) return;
-        o.castShadow = !n.startsWith('GROUND') && !n.startsWith('FLOOR');
+        o.castShadow = !n.startsWith('GROUND') && !n.startsWith('FLOOR') && !n.startsWith('DECAL_'); // decalque no chão não faz sombra
         o.receiveShadow = true;
         // texturas pintadas pelo nome do material
         const mats = Array.isArray(o.material) ? o.material : [o.material];
@@ -93,6 +94,13 @@ export function createGLBArena(cfg) {
             m.map = tex;
             m.color.set(0xffffff);
             if (!t.isTexture && t.roughness !== undefined) m.roughness = t.roughness;
+            if (!t.isTexture && t.glow) {
+              // textura que brilha (ex.: o círculo ritual): a própria imagem vira a luz emitida
+              m.emissive = new THREE.Color(0xffffff);
+              m.emissiveMap = tex;
+              m.emissiveIntensity = t.glow;
+              m.transparent = true;
+            }
             m.userData.textured = true;
             m.needsUpdate = true;
           }
@@ -104,6 +112,7 @@ export function createGLBArena(cfg) {
           occluders.push(o);
         }
         if (n.startsWith('FLICKER_')) flicker.push({ o, base: (Array.isArray(o.material) ? o.material[0] : o.material).emissiveIntensity || 1, seed: Math.random() * 10 });
+        if (n.startsWith('SPIN_')) spin.push({ o, speed: (0.05 + Math.random() * 0.06) * (spin.length % 2 ? -1 : 1) });
         if (n.startsWith('SWAY_') && !swaySeen.has(node)) {
           swaySeen.add(node);
           sway.push({ o: node, rot: node.rotation.clone(), seed: Math.random() * 10 });
@@ -150,6 +159,7 @@ export function createGLBArena(cfg) {
           m.emissiveIntensity = f.base * k;
         }
       }
+      for (const s of spin) s.o.rotation.y += s.speed * dt;
       for (const s of sway) {
         s.o.rotation.x = s.rot.x + Math.sin(time * 1.1 + s.seed) * 0.06;
         s.o.rotation.z = s.rot.z + Math.sin(time * 0.8 + s.seed) * 0.03;

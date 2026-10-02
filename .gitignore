@@ -7,3 +7,6 @@ Referencias visuais/**
 !Referencias visuais/
 !Referencias visuais/**/
 !Referencias visuais/**/*.md
+# modelos prontos baixados (Kenney, CC0) — ver assets_src/README.md
+assets_src/**
+!assets_src/README.md

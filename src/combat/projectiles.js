@@ -402,7 +402,7 @@ export class Projectiles {
           if (exec > 1) target.notify('ESPIRAL DA MORTE', true);
           const res = applyHit(w, p.owner, target, {
             damage: Math.round(a.damage * exec), kind: a.kind || 'ranged', knockback: a.knockback, hitstun: a.hitstun,
-            unblockable: !!a.unblockable, element: a.element,
+            unblockable: !!a.unblockable, guardCrush: a.guardCrush, element: a.element,
             dir: p.dir, color: a.color, sound: a.hitSound, scale: a.impactScale || 1, pos: p.pos.clone(),
             reaction: !(a.onHit && a.onHit.pull),
           });

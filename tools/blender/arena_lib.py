@@ -173,28 +173,6 @@ def text(name, string, pos, size, mat, rot_y=0.0, depth=0.02):
 
 
 # ---------------------------------------------------------------- peças compostas
-def tree_pine(name, pos, h, mats, r=0.35, layers=5, collider=True, occ=None):
-    """Pinheiro. occ=True junta as partes num objeto OCC_ (fica transparente se tampar a luta)."""
-    x, y, z = pos
-    occ = collider if occ is None else occ
-    before = set(o.name for o in bpy.context.scene.objects)
-    cyl(f'{name}_trunk', (x, y, z), r, h * 0.62, mats['bark'], seg=10, r_top=r * 0.55)
-    for i in range(layers):
-        t = i / max(1, layers - 1)
-        yy = y + h * (0.28 + t * 0.62)
-        rr = (1 - t * 0.75) * h * 0.22
-        cyl(f'{name}_leaves{i}', (x, yy, z), rr, h * 0.22, mats['leaves'], seg=9, r_top=0.05)
-    # raízes expostas
-    for k in range(5):
-        a = k / 5 * TAU + 0.3
-        root = cyl(f'{name}_root{k}', (x + math.sin(a) * r * 0.6, y + 0.05, z + math.cos(a) * r * 0.6), r * 0.22, r * 3.2, mats['bark'], seg=6, r_top=0.03, rot_y=-a, rot_x=math.radians(78))
-    if occ:
-        new = [o for o in bpy.context.scene.objects if o.name not in before]
-        rebase(join_objs(new, f'OCC_{name}'))
-    if collider:
-        col_cyl(f'{name}', (x, y, z), r + 0.15, h * 0.6)
-
-
 def swing(name, pos, height, mats, rot_y=0.0, width=0.7):
     """Balanço de corda e tábua (gira em torno do galho, objeto SWAY_)."""
     x, y, z = pos
@@ -269,9 +247,20 @@ def col_cyl(name, pos, r, h):
 # ---------------------------------------------------------------- finalização
 def finalize(path, merge=True):
     """UV em cubo (1 unidade = 1 metro), junta por material e exporta."""
+    # remove os modelos-base das peças prontas (kenney.py), se houver
+    for o in [o for o in bpy.context.scene.objects if o.name.startswith('LIB_')]:
+        bpy.data.objects.remove(o, do_unlink=True)
     meshes = [o for o in bpy.context.scene.objects if o.type == 'MESH']
     for o in meshes:
-        if o.name.startswith('DECAL_') or o.name.startswith('COL_'):
+        if 'KEN_' in o.name:
+            # peças prontas do Kenney: já têm UV (atlas colormap); só aplica giro/escala
+            for sel in bpy.context.selected_objects:
+                sel.select_set(False)
+            o.select_set(True)
+            bpy.context.view_layer.objects.active = o
+            bpy.ops.object.transform_apply(location=False, rotation=True, scale=True)
+            continue
+        if o.name.startswith('DECAL_') or o.name.startswith('COL_') or o.name.startswith('LIB_'):
             continue
         # aplica escala/rotação para o UV em metros ficar correto
         for s in bpy.context.selected_objects:

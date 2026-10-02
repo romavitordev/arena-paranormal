@@ -73,7 +73,7 @@ export default {
     {
       id: 'disparoMorte',
       name: 'Disparo da Morte',
-      input: 'mod+carga', // R1 + △ / RB + Y
+      input: 'block+carga', // R2 + △ / RT + Y
       type: 'deathShot',
       description: 'Ajoelha e o tempo desacelera em volta do alvo (fica bem lento) — ela mira com calma e dispara um tiro certeiro de Morte.',
       energyCost: 30,
@@ -90,7 +90,7 @@ export default {
     {
       id: 'pistolaTranstornada',
       name: 'Pistola Transtornada',
-      input: 'mod+physical', // R1 + ○ / RB + B
+      input: 'carga+physical', // △ + ○ / Y + B
       type: 'cursedShots',
       description: 'Três tiros com balas enroladas em arame farpado: cada uma faz sangrar e deixa o alvo mais lento.',
       energyCost: 20,
@@ -102,12 +102,12 @@ export default {
       anim: 'shoot_rifle',
       showProp: 'pistol',
       hideProp: 'knife',
-      projectile: { visual: 'barbed', color: 0xb8b8c0, damage: 18, range: 26, speed: 48, radius: 0.3, knockback: 0.6, hitstun: 0.25, hitSound: 'bladeHit', onHit: { bleed: { dps: 4, duration: 3 }, slow: { type: 'barbedWire', name: 'ARAME FARPADO', mult: 0.75, time: 2 } } },
+      projectile: { visual: 'barbed', color: 0xb8b8c0, damage: 18, range: 26, speed: 48, radius: 0.3, knockback: 0.6, hitstun: 0.25, hitSound: 'bladeHit', onHit: { bleed: { dps: 3, duration: 3 }, slow: { type: 'barbedWire', name: 'ARAME FARPADO', mult: 0.75, time: 2 } } },
     },
     {
       id: 'perita',
       name: 'Perita',
-      input: 'mod+ranged', // R1 + □ / RB + X
+      input: 'carga+ranged', // △ + □ / Y + X
       type: 'analyze',
       label: 'ANALISADO (PERITA)',
       description: 'Estuda o alvo com olho de assassina: por 8 s ele recebe 12% a mais de dano de tudo.',
@@ -121,7 +121,7 @@ export default {
     {
       id: 'revolver38',
       name: 'Revólver .38',
-      input: 'mod+dodge', // R1 + L2 / RB + LT
+      input: 'carga+dodge', // △ + L2 / Y + LT
       type: 'cursedShots',
       description: 'Saque rápido do revólver: seis tiros em leque, rápidos, para quem chega perto demais.',
       energyCost: 20,
@@ -137,7 +137,7 @@ export default {
     },
   ],
 
-  // VESTIR AS FAIXAS: as faixas enrolam o rosto e o corpo, a escuridão esconde quem ela é — A FANTASMA por 45 s
+  // VESTIR AS FAIXAS: as faixas enrolam o rosto e o corpo, a escuridão esconde quem ela é — A FANTASMA por 40 s
   special: {
     name: 'Vestir as Faixas',
     banner: 'Vestir as Faixas',
@@ -145,12 +145,12 @@ export default {
     energyCost: 50,
     cooldown: 60,
     form: 'fantasma',
-    duration: 45,
-    bonusHealth: 200,
+    duration: 40,
+    bonusHealth: 150,
     color: 0xa7a3ad,
   },
 
   passives: [
-    { type: 'revenge', below: 0.3, duration: 8, mult: 1.3, speedMult: 1.1, energy: 35 }, // Sede de Vingança
+    { type: 'revenge', below: 0.3, duration: 8, mult: 1.2, speedMult: 1.1, energy: 35 }, // Sede de Vingança
   ],
 };

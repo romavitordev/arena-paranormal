@@ -26,11 +26,11 @@ export default {
   melee: {
     name: 'Espada Consumidora',
     strikes: [
-      { name: 'Corte largo', anim: 'slash_h', dur: 0.38, active: [0.12, 0.2], damage: 36, range: 2.5, arc: 150, knockback: 1.2, lunge: 1.1, sound: 'blade', hitSound: 'bladeHit', trail: { color: 0x6a6670, tilt: 0.05 } },
-      { name: 'Corte de volta', anim: 'slash_h_back', dur: 0.38, active: [0.12, 0.2], damage: 36, range: 2.5, arc: 150, knockback: 1.2, lunge: 1.0, sound: 'blade', hitSound: 'bladeHit', trail: { color: 0x6a6670, flip: true } },
-      { name: 'Corte diagonal', anim: 'slash_d', dur: 0.44, active: [0.16, 0.26], damage: 42, range: 2.5, arc: 110, knockback: 1.4, lunge: 1.0, sound: 'blade', hitSound: 'bladeHit', trail: { color: 0x6a6670, roll: 0.8 } },
-      { name: 'Golpe do Ferreiro', anim: 'slash_v', dur: 0.5, active: [0.2, 0.3], damage: 48, range: 2.6, arc: 80, knockback: 1.6, lunge: 1.1, guardCrush: 30, sound: 'blade', hitSound: 'heavyPunch', impactFx: 'smash', impactScale: 1.5, groundFx: 'dust', trail: { color: 0x6a6670, roll: 1.55 } },
-      { name: 'Consumir', anim: 'slash_finisher', dur: 0.66, active: [0.3, 0.42], damage: 76, range: 2.6, arc: 120, lunge: 1.8, finisher: 'launch', armor: { from: 0.12, to: 0.3, max: 35 }, hitstop: 0.11, sound: 'slashFinal', hitSound: 'heavyPunch', impactScale: 1.9, trail: { color: 0x2a2632, roll: 1.5, big: true } },
+      { name: 'Corte largo', anim: 'slash_h', dur: 0.38, active: [0.12, 0.2], damage: 32, range: 2.3, arc: 150, knockback: 1.2, lunge: 1.1, sound: 'blade', hitSound: 'bladeHit', trail: { color: 0x6a6670, tilt: 0.05 } },
+      { name: 'Corte de volta', anim: 'slash_h_back', dur: 0.38, active: [0.12, 0.2], damage: 32, range: 2.3, arc: 150, knockback: 1.2, lunge: 1.0, sound: 'blade', hitSound: 'bladeHit', trail: { color: 0x6a6670, flip: true } },
+      { name: 'Corte diagonal', anim: 'slash_d', dur: 0.44, active: [0.16, 0.26], damage: 38, range: 2.3, arc: 110, knockback: 1.4, lunge: 1.0, sound: 'blade', hitSound: 'bladeHit', trail: { color: 0x6a6670, roll: 0.8 } },
+      { name: 'Golpe do Ferreiro', anim: 'slash_v', dur: 0.5, active: [0.2, 0.3], damage: 44, range: 2.4, arc: 80, knockback: 1.6, lunge: 1.1, guardCrush: 30, sound: 'blade', hitSound: 'heavyPunch', impactFx: 'smash', impactScale: 1.5, groundFx: 'dust', trail: { color: 0x6a6670, roll: 1.55 } },
+      { name: 'Consumir', anim: 'slash_finisher', dur: 0.66, active: [0.3, 0.42], damage: 66, range: 2.4, arc: 120, lunge: 1.8, finisher: 'launch', armor: { from: 0.12, to: 0.3, max: 35 }, hitstop: 0.11, sound: 'slashFinal', hitSound: 'heavyPunch', impactScale: 1.9, trail: { color: 0x2a2632, roll: 1.5, big: true } },
     ],
     up: { name: 'Corte ascendente', anim: 'slash_up', dur: 0.46, active: [0.16, 0.28], damage: 44, range: 2.5, arc: 120, lunge: 0.9, finisher: 'launchHigh', launcher: true, sound: 'blade', hitSound: 'bladeHit', trail: { color: 0x6a6670, tilt: -1.3 } },
     down: { name: 'Espada no chão', anim: 'slash_d', dur: 0.54, active: [0.22, 0.32], damage: 52, range: 2.5, arc: 120, lunge: 1, finisher: 'knockdown', sound: 'blade', hitSound: 'heavyPunch', impactFx: 'smash', impactScale: 1.6, groundFx: 'smash', groundScale: 0.8 },
@@ -65,7 +65,7 @@ export default {
     {
       id: 'hipnoseEspiral',
       name: 'Hipnose Espiral',
-      input: 'mod+physical', // R1 + ○ / RB + B
+      input: 'carga+physical', // △ + ○ / Y + B
       type: 'mindControl',
       description: 'A espiral do Parasita de Dimensões: por alguns segundos o corpo do alvo obedece ao contrário.',
       energyCost: 25,
@@ -80,20 +80,20 @@ export default {
     {
       id: 'espadaConsumidora',
       name: 'Espada Consumidora',
-      input: 'mod+jump', // R1 + × / RB + A
+      input: 'block+jump', // R2 + × / RT + A
       type: 'curseWeapon',
       description: 'Desperta a espada amaldiçoada: por alguns segundos cada corte abre um ferimento que consome o alvo.',
       energyCost: 20,
       cooldown: 16,
       duration: 8,
       props: ['sword'],
-      bleed: { dps: 6, duration: 3, color: 0x2a2632 },
+      bleed: { dps: 4, duration: 3, color: 0x2a2632 },
       color: 0x6a6670,
     },
     {
       id: 'regeneracaoLuzidia',
       name: 'Conforto de Santo Berço',
-      input: 'mod+carga', // R1 + △ / RB + Y
+      input: 'block+carga', // R2 + △ / RT + Y
       type: 'healOverTime',
       description: 'A ilusão de Santo Berço conforta o Luzidio: recupera vida aos poucos.',
       energyCost: 25,
@@ -118,6 +118,6 @@ export default {
   },
 
   passives: [
-    { type: 'resistant', mult: 0.85, kinds: ['melee'] }, // corpo de Luzidio: aguenta melhor golpes físicos
+    { type: 'resistant', mult: 0.92, kinds: ['melee'] }, // corpo de Luzidio: aguenta melhor golpes físicos
   ],
 };

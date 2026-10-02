@@ -79,7 +79,7 @@ export default {
     {
       id: 'gancho',
       name: 'Corrente Gancho',
-      input: 'mod+ranged', // R1 + □ / RB + X
+      input: 'carga+ranged', // △ + □ / Y + X
       type: 'chainSelfPull',
       description: 'Prende a corrente no adversário e puxa o PRÓPRIO Gal até o adversário, chegando com um corte cruzado.',
       energyCost: 20,
@@ -94,7 +94,7 @@ export default {
     {
       id: 'teletransporteGal',
       name: 'Teletransporte',
-      input: 'mod+jump', // R1 + × / RB + A
+      input: 'block+jump', // R2 + × / RT + A
       type: 'sparkTeleport',
       description: 'Some em faíscas douradas e surge atrás do adversário, como fez com Arthur e Erin no orfanato.',
       energyCost: 22,
@@ -107,7 +107,7 @@ export default {
     {
       id: 'controleMental',
       name: 'Controle Mental',
-      input: 'mod+physical', // R1 + ○ / RB + B
+      input: 'carga+physical', // △ + ○ / Y + B
       type: 'mindControl',
       description: 'Um sigilo dourado sobre a cabeça do alvo: por alguns segundos o corpo dele obedece ao contrário (direções invertidas).',
       energyCost: 35,
@@ -122,7 +122,7 @@ export default {
     {
       id: 'correnteGiratoria',
       name: 'Corrente Giratória',
-      input: 'mod+dodge', // R1 + L2 / RB + LT
+      input: 'carga+dodge', // △ + L2 / Y + LT
       type: 'sweepStrike',
       description: 'Gira as duas lâminas presas às correntes em volta do corpo: três cortes em área, o último lança.',
       energyCost: 25,

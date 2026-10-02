@@ -75,7 +75,7 @@ export default {
     {
       id: 'amaldicoarTaco',
       name: 'Amaldiçoar Arma com Sangue',
-      input: 'mod+ranged', // R1 + □ / RB + X
+      input: 'carga+ranged', // △ + □ / Y + X
       type: 'curseWeapon',
       description: 'Imbui o taco com Sangue: por alguns segundos cada golpe físico e o skate abrem um sangramento.',
       energyCost: 25,
@@ -88,7 +88,7 @@ export default {
     {
       id: 'polarizacao',
       name: 'Polarização Caótica',
-      input: 'mod+physical', // R1 + ○ / RB + B
+      input: 'carga+physical', // △ + ○ / Y + B
       type: 'polarize',
       description: 'Aura magnética: o inimigo LONGE é atraído até ele; o inimigo PERTO é repelido para longe e cai.',
       energyCost: 30,
@@ -104,7 +104,7 @@ export default {
     {
       id: 'telaRuido',
       name: 'Tela de Ruído',
-      input: 'mod+carga', // R1 + △ / RB + Y
+      input: 'block+carga', // R2 + △ / RT + Y
       type: 'noiseScreen',
       description: 'Película de Energia que absorve até 140 de dano físico e de projétil por alguns segundos.',
       energyCost: 30,
@@ -116,7 +116,7 @@ export default {
     {
       id: 'velocidadeMortal',
       name: 'Velocidade Mortal',
-      input: 'mod+jump', // R1 + × / RB + A
+      input: 'block+jump', // R2 + × / RT + A
       type: 'selfBuff',
       buffType: 'deadlySpeed',
       label: 'VELOCIDADE MORTAL',
@@ -131,7 +131,7 @@ export default {
     {
       id: 'cicatrizacao',
       name: 'Cicatrização',
-      input: 'mod+dodge', // R1 + L2 / RB + LT
+      input: 'carga+dodge', // △ + L2 / Y + LT
       type: 'healOverTime',
       description: 'Ritual de Sangue: as feridas fecham sozinhas, recuperando vida aos poucos.',
       energyCost: 30,

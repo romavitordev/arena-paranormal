@@ -42,9 +42,11 @@ SEG, ROWS = 44, 8
 
 
 def jk_pt(a, v, out=1.0):
-    rx = 0.25 * H + v * 0.012 * H
-    ry = 0.165 * H + v * 0.01 * H
-    z = top - v * (top - (hz - 0.04 * H))
+    # acompanha o corpo com folga: estreita no ombro, larga no peito, fecha um pouco na cintura
+    chest = math.exp(-((v - 0.3) ** 2) / 0.05)
+    rx = 0.205 * H + 0.06 * H * chest + (0.012 * H if v > 0.8 else 0)
+    ry = 0.15 * H + 0.04 * H * chest
+    z = top + 0.01 * H - v * (top - (hz - 0.08 * H))
     return (math.sin(a) * rx * out / K_TX, -math.cos(a) * ry * out / K_TY, z)
 
 
@@ -76,11 +78,13 @@ b.add('jacket_in', jk_mesh(0.97, flip=True), jacket_in, region='torso', weight_f
 b.add('collar', tube([(0, 0.01, top - 0.02 * H, 0.15 * H, 0.11 * H), (0, 0.02, top + 0.06 * H, 0.13 * H, 0.1 * H)], 20, cap_start=False, cap_end=False), jacket, region='torso', subdiv=0)
 for side in ('L', 'R'):
     sh, e = sk['s' + side], sk['e' + side]
-    b.add('jsleeve' + side, tube(limb_rings(sh + Vector((0, 0, 0.05)), sh.lerp(e, 0.95), 0.092, 0.084, n=3), 14), jacket, region='arm' + side)
+    b.add('jsleeve' + side, tube(limb_rings(sh + Vector((0, 0, 0.05)), sh.lerp(e, 0.92), 0.088, 0.078, n=3), 14), jacket, region='arm' + side)
     # dobra da manga (punho grosso)
-    b.add('jroll' + side, tube(limb_rings(sh.lerp(e, 0.9), sh.lerp(e, 1.06), 0.094, 0.092, n=1), 14), jacket_in, region='arm' + side, subdiv=0)
+    b.add('jroll' + side, tube(limb_rings(sh.lerp(e, 0.86), sh.lerp(e, 1.0), 0.082, 0.08, n=1), 14), jacket_in, region='arm' + side, subdiv=0)
     # bolsos no peito
     b.add('pocket' + side, box(((0.1 if side == 'L' else -0.1) * H, -0.17 * H, hz + 0.47 * H), (0.075, 0.012, 0.07), bevel=0.004), jacket, region='torso', subdiv=0)
+# quadril com a cor da calça (o tronco é todo da camiseta)
+b.add('hips_pants', tube([(0, 0, hz - 0.13 * H, 0.178 * H, 0.132 * H), (0, 0, hz + 0.03 * H, 0.174 * H, 0.128 * H)], 20), M['legs'], region='torso', subdiv=0)
 # cinto
 b.add('belt', tube([(0, 0, hz + 0.02 * H, 0.176 * H, 0.13 * H), (0, 0, hz + 0.06 * H, 0.176 * H, 0.13 * H)], 20), belt, region='torso', subdiv=0)
 b.add('buckle', box((0, -0.134 * H, hz + 0.04 * H), (0.045, 0.01, 0.035)), metal, region='torso', subdiv=0)

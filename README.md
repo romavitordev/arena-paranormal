@@ -23,14 +23,14 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 | Ataque/habilidade principal | □ | X | **J** | Num4 | □ |
 | Ataque físico | ○ | B | **L** | Num6 | ○ |
 | Pulo | × | A | **K** / Espaço | Num2 / Num0 | × |
-| Modificador (segurar + botão) | R1 | RB | **Q** | Num7 | R1 |
+| Modificador R1 (segurar + △ / × / L2) | R1 | RB | **Q** | Num7 | R1 |
 | Defesa (segurar) | R2 | RT | **E** | Num9 | DEF |
 | **Esquiva** (+ direção) | L2 | LT | Shift | Num1 | ESQ |
 | **Dash** | × + × | A + A | K + K | Num2 + Num2 | × + × |
 | **Dash longo** (Mascarado: teleporte) | △ + × | Y + A | I + K | Num8 + Num2 | △ + × |
 | **Agarrão** (não defensável) | R2 + ○ | RT + B | E + L | Num9 + Num6 | DEF + ○ |
-| **Físico forte** | △ + ○ | Y + B | I + L | Num8 + Num6 | △ + ○ |
-| **Principal forte** | △ + □ | Y + X | I + J | Num8 + Num4 | △ + □ |
+| **Habilidade de △ + ○** | △ + ○ | Y + B | I + L | Num8 + Num6 | △ + ○ |
+| **Habilidade de △ + □** | △ + □ | Y + X | I + J | Num8 + Num4 | △ + □ |
 | **Especial** | △ → △ → ○ | Y → Y → B | I → I → L | Num8 → Num8 → Num6 | ESPECIAL |
 | Assistências / troca (equipe) | D-pad ◀ ▶ / analógico dir. | D-pad ◀ ▶ / analógico dir. | 1 2 / 3 4 | N/ N* / N- N+ | AS1 AS2 / ⇄1 ⇄2 |
 | Página da seleção | L1 / R1 | LB / RB | Q / E | PgUp / PgDn | ◀ ▶ na grade |
@@ -45,10 +45,10 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
   lado + ○ = golpe com passo lateral · no ar + ○ = golpe aéreo. A sequência termina num finalizador
   (lança, derruba, afasta ou atordoa).
 - **Especial:** △ → △ → ○ (Y → Y → B; teclado I → I → L). Custa 50 de sanidade.
-- **Habilidades secundárias:** R1/RB + botão (veja cada personagem).
+- **Habilidades secundárias:** o **△ é o modificador de ○ e □** — △ + ○ e △ + □ (juntos, logo em seguida ou
+  segurando △ enquanto carrega) soltam habilidades; R1/RB + △, × ou L2 soltam as outras (veja cada personagem).
 - **Dash:** × + × (toque duplo no pulo) avança rápido. △ + × é o dash longo, que persegue o adversário (10 de sanidade); no Mascarado, △ + × é o Teleporte das Sombras.
 - **Agarrão:** Defesa + ○ (RT + B). Pega de perto e arremessa; não pode ser defendido, só esquivado. Errar deixa você exposto.
-- **Versões fortes (como o dash longo):** △ + ○ = físico forte (finalizador ×1,6 que gasta 60 da defesa, 15 de sanidade) · △ + □ = principal forte (×1,6, projétil maior, +20 de sanidade).
 - **Câmera:** sempre travada no adversário. L1/LB fica livre para funções futuras.
 - Cada jogador lê teclado **e** controle ao mesmo tempo.
 - **Menus:** A/× (Pulo, Enter) confirma · B/○ (Ataque físico, Esc) volta.
@@ -75,7 +75,7 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 
 ## Elenco
 
-| Personagem | Origem | Elemento | □ principal | R1/RB + botão | Especial | Passiva |
+| Personagem | Origem | Elemento | □ principal | Habilidades (□ e ○ = △ + □ / △ + ○ · △, × e L2 = R1 + botão) | Especial | Passiva |
 |---|---|---|---|---|---|---|
 | KAISER | Ordo Realitas | Energia | M4 (varia com a direção) | □ Baforada Cinerária · ○ Acácia · △ Dendrobium (raízes) · × Balas Amaldiçoadas (Desert Eagle) · L2 Granada Nebulosa | Cinerária (névoa → Acácia amplificada, 250; a névoa fica no mapa) | Resistente · Afinidade Elemental (rituais +15%) |
 | ARTHUR CERVERO | Ordo Realitas | Sangue | Sniper (segure □: ajoelha e mira — mais tempo, mais dano) | □ Rebirth · ○ Ódio Incontrolável "Templo do Ódio" · △ Paralisia de Sangue "Dystopia" · L2 Armadura de Sangue (escudo) | Arma de Sangue | — (luta só com chutes: tem um braço) |
@@ -89,7 +89,7 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 | LÍRIO | Os Cinco | Sangue | Canivete de osso (curto e fraco: ele é de perto) | △ Golpe Pesado · ○ Cai Dentro (corre, ombrada, provoca) · □ Amarras de Sangue "Magras" · × Leonora Amaldiçoada · L2 Proteção Pesada | Leonora ("Hoje 'cê vai conhecer a Leonora!") | Sangue de Ferro (+15% de vida) · Casca Grossa (menos recuo e desgaste na defesa) · Mão Pesada (mais impacto) |
 | MIGUEL CARIAD | Ordo Realitas | Morte | Magnum (um tiro pesado) | ○ Lábia · △ Pose de Fisiculturista · □ Tiro na Testa · L2 Marca Espiral (zera a sanidade) | Equipe Kelvin · **Luzidio:** Pacto do Santo (sanidade > 85%, 45 s) | Sanidade em Queda — **sanidade zerada → LUZIDIO** (Espada Consumidora); **morrer no pacto → DEUS DA MORTE** (chefe 2x maior, barra preta, fraco a fogo e Energia, regenera) |
 | JUAN | Mascarados | Sangue | Lâmina de Sangue | △ Descarnar Discente · ○ Perturbação Discente · □ Vínculo de Sangue · L2 Armadura de Sangue Diabólica | Renascimento (1x por partida) → sobe no Trono do Diabo e vira **O PORTADOR DO TRONO** até o fim do round (Senhor do Sangue, Sangue nos Arredores, Amaldiçoar Arma, Veias, Ódio, Transportar, Regeneração; especial Pacto deixa o alvo Transtornado) | Faca Predadora (cura 15%) · Masoquista (apanhar dá sanidade) |
-| KEMI | Mascarados | Morte | Sniper Fantasma (segurar para mirar) | △ Disparo da Morte (tempo lento) · ○ Pistola Transtornada (arame farpado) · □ Perita · L2 Revólver .38 | Vestir as Faixas → **A FANTASMA** por 45 s (Disparo Espiral: balas curvas que procuram o alvo, atravessam cobertura e não podem ser defendidas · Sniper da Morte · Faixas · Some na Escuridão · Analítica) | Sede de Vingança (abaixo de 30% de vida: mais dano, velocidade e sanidade, 1x por round) |
+| KEMI | Mascarados | Morte | Sniper Fantasma (segurar para mirar) | △ Disparo da Morte (tempo lento) · ○ Pistola Transtornada (arame farpado) · □ Perita · L2 Revólver .38 | Vestir as Faixas → **A FANTASMA** por 40 s (Disparo Espiral: balas curvas que procuram o alvo, atravessam cobertura e gastam muito da defesa · Sniper da Morte · Faixas · Some na Escuridão · Analítica) | Sede de Vingança (abaixo de 30% de vida: mais dano, velocidade e sanidade, 1x por round) |
 | XANDE | Os Cinco | Sangue | Skate Caótico (vai e volta) | □ Amaldiçoar Arma · ○ Polarização Caótica · △ Tela de Ruído (escudo de 140) · × Velocidade Mortal · L2 Cicatrização | Por Eles | Gladiador Paranormal (+3 sanidade por golpe) |
 | AGUIAR | Mascarados | Sangue | Machado na Corda (arremessa, sangra e puxa) | ○ Máscara do Mutilador Noturno · L2 Armadilha de Urso · × Predador de Sangue · △ Cães de Caça | Finalização do Mutilador | Filho da Dor (apanhando seguido, resiste mais) |
 
@@ -132,7 +132,6 @@ Exemplo: X=100, Y=60 → o inimigo perde 100, recupera 60 (saldo −40) e perde 
 - **Esquiva:** L2/LT + direção. 4 cargas que recuperam conforme toma dano.
 - **Substituição:** L2/LT **enquanto apanha** gasta 1 carga e reaparece atrás do atacante (como no Storm).
 - **Agarrão:** R2 + ○. Não pode ser defendido; quem é agarrado escapa com **R2 + ○ logo no começo**, ou esquivando antes.
-- **△ + ○ (físico forte):** gasta 60 da defesa do alvo — só quebra se ela já estiver gasta.
 - **Transcender (todos):** com a vida em 30% ou menos, segure △ por 1 s. 1x por partida: +15% de dano por 12 s,
   aguenta 1 golpe sem reagir e recupera 30 de sanidade. (No Kian, também libera mais um Inexistir.)
 - **Falas de introdução:** antes do ROUND 1, cada dupla tem falas baseadas no cânone (pule com × ou Start).
@@ -149,7 +148,7 @@ src/
                  abilities.js (habilidades por tipo), chargeFx, specials/ (mistField, cinematicCombo,
                  teleportStrike, ritual)
   camera/        CameraRig (enquadramento, colisão) e shots.js (planos de cinematic)
-  arena/         arenas (ruinas.js) + registro
+  arena/         cenários .glb (configs.js: luz/céu/limites) + registro (index.js) + texturas
   fx/ audio/     partículas, correntes, marcas de corte, distorções; sons substituíveis;
                  fx/library.js = efeitos com nome (FX_HIT_SMALL, FX_HIT_HEAVY, FX_DASH, FX_BLOCK,
                  FX_PERFECT_BLOCK, FX_BLOOD, FX_ENERGY, FX_EXPLOSION, FX_TELEPORT) via world.fx.play(nome, pos, opções)
@@ -174,6 +173,13 @@ mesma interface do rig (`root`, `body`, `joints`, `sockets` como `handR`, `back`
 `showProp`, `setTint`). Para animações próprias, substitua o `Animator` por um que use
 `THREE.AnimationMixer`, mantendo os mesmos nomes de clipe. Referências visuais futuras: `Referencias visuais/`.
 
+### Cenários (Blender + modelos prontos)
+Os 5 cenários (Ruínas do Ritual, Orfanato, Bar Suvaco Seco, Coliseu e Santo Berço) são montados no Blender por
+`tools/blender/arena_<id>.py` com **peças prontas e gratuitas dos kits do Kenney** (CC0) — casas, árvores, muralhas,
+lápides, móveis, ruas, carros — posicionadas por `tools/blender/kenney.py` (`put`, `house`, `tower`). Só os
+elementos únicos de cada lugar são feitos à mão (Símbolo Espiral, círculo ritual, estátuas, placas). Os kits ficam em
+`assets_src/kenney/` (fora do git; ver `assets_src/README.md`). Gerar: `node tools/blender/build.mjs <id>`.
+
 ### Sons
 Os sons são sintetizados na hora. Para usar arquivos, coloque-os em `public/sounds/` e liste
 em `SOUND_FILES` (`src/audio/AudioManager.js`) com o mesmo nome do som.
@@ -181,4 +187,4 @@ em `SOUND_FILES` (`src/audio/AudioManager.js`) com o mesmo nome do som.
 ## Limitações conhecidas
 - Modelos, animações e sons são provisórios (serão refeitos com as referências visuais).
 - Suporte a controle usa a Gamepad API do navegador (layout padrão Xbox/PlayStation); não testado com controle físico.
-- Uma arena por enquanto.
+- Os cenários dependem dos kits do Kenney baixados em `assets_src/` para serem gerados de novo (o `.glb` pronto já está em `public/arenas/`).

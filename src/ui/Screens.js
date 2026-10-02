@@ -259,7 +259,7 @@ export const MODES = {
 // no centro, os lutadores em 3D (SelectStage) entram deslizando ao serem olhados e fazem pose ao confirmar.
 const SEL_COLS = 3;
 const SEL_PAGE = 15; // 15 lutadores por página (3 × 5), sem barra de rolagem; LB/RB trocam de página
-const INPUT_NAMES = { 'carga+jump': 'Energia + Pulo', 'mod+ranged': 'R1 + □', 'mod+physical': 'R1 + ○', 'mod+carga': 'R1 + △', 'mod+jump': 'R1 + ×', 'mod+dodge': 'R1 + L2' };
+const INPUT_NAMES = { 'carga+jump': 'Energia + Pulo', 'carga+ranged': '△ + □', 'carga+physical': '△ + ○', 'block+carga': 'R2 + △', 'block+jump': 'R2 + ×', 'carga+dodge': '△ + L2' };
 
 export class SelectScreen {
   constructor(root, { portraits, audio, prev, mode = 'pvp', team = false }) {
@@ -678,7 +678,7 @@ export class StageSelectScreen {
 
 const TIPS = [
   'Segure R2/RT para defender. Defesa + direção = esquiva.',
-  'R1/RB + botão ativa as habilidades secundárias de cada personagem.',
+  'Habilidades: △ + ○, △ + □, △ + L2, R2 + △ e R2 + ×. L1 e R1 chamam as assistências na batalha em equipe.',
   'Segure △/Y para carregar energia. △ → △ → ○ solta o especial.',
   'Direção + ○ muda o golpe: avanço, recuo, passo lateral ou golpe aéreo.',
   'Bater na defesa do inimigo deixa você exposto a contra-ataque.',
@@ -755,11 +755,11 @@ export function controlsTable() {
       ${row('Defesa (segurar)', 'block')}
       ${row('Esquiva (+ direção, 4 cargas)', 'dodge')}
       <tr><td>Defesa + andar</td><td colspan="3">Anda mais rápido, mas fica aberto a golpes</td></tr>
-      ${row('Modificador (segurar + botão)', 'mod')}
+      ${row('Assistência 1 / 2 (equipe)', 'assist1')}
       <tr><td>Dash</td><td colspan="3">Pulo + Pulo (toque duplo)</td></tr>
       <tr><td>Dash longo (Mascarado: teleporte)</td><td colspan="3">Carga + Pulo</td></tr>
       <tr><td>Agarrão (não defensável)</td><td colspan="3">Defesa + Ataque físico</td></tr>
-      <tr><td>Físico forte / Principal forte</td><td colspan="3">Carga + Ataque físico / Carga + Principal</td></tr>
+      <tr><td>Habilidades</td><td colspan="3">Carga + Físico · Carga + Principal · Carga + Esquiva · Defesa + Carga · Defesa + Pulo</td></tr>
       <tr><td>Especial</td><td colspan="3">Carga → Carga → Ataque físico</td></tr>
       <tr><td>Câmera</td><td colspan="3">Sempre travada no adversário</td></tr>
     </table>`;

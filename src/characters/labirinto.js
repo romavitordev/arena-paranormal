@@ -68,7 +68,7 @@ export default {
     {
       id: 'labirintoMental',
       name: 'Labirinto Mental',
-      input: 'mod+ranged', // R1 + □ / RB + X
+      input: 'carga+ranged', // △ + □ / Y + X
       type: 'mentalMaze',
       description: 'Prende a mente do alvo num labirinto: por alguns segundos ele anda numa direção que muda sozinha. Com o capacete vira Labirinto Abissal (dura mais).',
       energyCost: 30,
@@ -84,7 +84,7 @@ export default {
     {
       id: 'consumirMomento',
       name: 'Consumir Momento',
-      input: 'mod+physical', // R1 + ○ / RB + B
+      input: 'carga+physical', // △ + ○ / Y + B
       type: 'consumeMoment',
       description: 'Marca o chão onde o alvo pisa com uma espiral; ao estalar os dedos ela estoura e destrói a área (Morte). Dá para sair de cima se perceber a marca. Com o capacete, a área e o dano crescem.',
       energyCost: 30,
@@ -97,7 +97,7 @@ export default {
     {
       id: 'capacete',
       name: 'Capacete do ???',
-      input: 'mod+carga', // R1 + △ / RB + Y
+      input: 'block+carga', // R2 + △ / RT + Y
       type: 'helmetForm',
       description: 'Põe o elmo do sorriso: por alguns segundos os rituais e a Rajada ficam mais fortes (Tempestade Caótica), o Labirinto Mental vira Abissal e o Consumir Momento cresce.',
       energyCost: 35,
@@ -109,7 +109,7 @@ export default {
     {
       id: 'tempestadeCaotica',
       name: 'Tempestade Caótica',
-      input: 'mod+dodge', // R1 + L2 / RB + LT
+      input: 'carga+dodge', // △ + L2 / Y + LT
       type: 'cursedShots',
       description: 'A versão forte da Rajada: a parabólica cospe cinco descargas caóticas em leque que procuram o alvo.',
       energyCost: 30,

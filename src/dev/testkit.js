@@ -44,10 +44,12 @@ export const T = {
     b.yaw = Math.PI;
     return [m, a, b];
   },
+  // habilidade pelo botão que era "R1 + btn" antes: ○/□/L2 usam △, △/× usam R2 (defesa)
   mod(pi, btn) {
-    T.set(pi, { mod: true });
+    const key = btn === 'carga' || btn === 'jump' ? 'block' : 'carga';
+    T.set(pi, { [key]: true });
     T.step(2);
-    T.set(pi, { mod: true, [btn]: true });
+    T.set(pi, { [key]: true, [btn]: true });
     T.step(3);
     T.set(pi, {});
     T.step(1);

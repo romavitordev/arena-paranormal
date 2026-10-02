@@ -4,11 +4,11 @@ import { ELEMENTS } from '../config/elements.js';
 // Lista de comandos de um personagem (usada em PAUSE → COMANDOS).
 const INPUT = {
   'carga+jump': '△ + × / Y + A',
-  'mod+ranged': 'R1 + □ / RB + X',
-  'mod+physical': 'R1 + ○ / RB + B',
-  'mod+carga': 'R1 + △ / RB + Y',
-  'mod+jump': 'R1 + × / RB + A',
-  'mod+dodge': 'R1 + L2 / RB + LT',
+  'carga+ranged': '△ + □ / Y + X',
+  'carga+physical': '△ + ○ / Y + B',
+  'block+carga': 'R2 + △ / RT + Y',
+  'block+jump': 'R2 + × / RT + A',
+  'carga+dodge': '△ + L2 / Y + LT',
 };
 const FIN = { launch: 'lança', knockdown: 'derruba', push: 'afasta', stun: 'atordoa' };
 const DIR = { forward: 'Frente + ○', back: 'Trás + ○', side: 'Lado + ○', air: 'No ar + ○', up: '↑ + ○ no combo', down: '↓ + ○ no combo' };
@@ -43,8 +43,6 @@ export function moveListHTML(c) {
   html += row('R2 + ○ ao ser agarrado', 'Escapar do agarrão', 'logo no começo: os dois se soltam, sem dano');
   html += row('L2 apanhando', 'Substituição', 'gasta 1 carga de esquiva e reaparece atrás do atacante');
   html += row('Segurar △ (vida ≤ 30%)', 'Transcender', `1x por partida: +${Math.round((COMBAT.awaken.damageMult - 1) * 100)}% de dano por ${COMBAT.awaken.duration}s e aguenta 1 golpe sem reagir`);
-  html += row('△ + ○', 'Físico forte', `finalizador ×${COMBAT.powered.meleeMult} que gasta ${COMBAT.powered.guardCrush} da defesa · ${COMBAT.powered.meleeCost} de sanidade`);
-  if (c.ranged) html += row('△ + □', `${c.ranged.name} forte`, `×${COMBAT.powered.rangedMult} de dano, maior e mais rápido · +${COMBAT.powered.rangedCost} de sanidade`);
   if (c.defense && c.defense.perfectBlock) html += row('R2 no tempo exato', 'Bloqueio Perfeito', 'anula o golpe físico e atordoa o atacante');
   for (const p of c.passives || []) {
     if (p.type === 'meleeDrain') html += row('Passiva', 'Cura que cobra sanidade', 'o físico tira X de vida; o inimigo recupera Y (Y < X) e perde Y × 1,5 de sanidade (energia)');

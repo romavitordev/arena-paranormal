@@ -86,7 +86,7 @@ export default {
     {
       id: 'olhar',
       name: 'Olhar do Desespero',
-      input: 'mod+physical', // R1 + ○ / RB + B
+      input: 'carga+physical', // △ + ○ / Y + B
       type: 'fearGaze',
       description: 'Encara o adversário e libera uma manifestação de medo: quem estiver à frente fica paralisado por um instante, vulnerável a combo.',
       energyCost: 25,
@@ -101,7 +101,7 @@ export default {
     {
       id: 'corteSombras',
       name: 'Corte das Sombras',
-      input: 'mod+dodge', // R1 + L2 / RB + LT
+      input: 'carga+dodge', // △ + L2 / Y + LT
       type: 'dashStrike',
       description: 'Avança como uma sombra em linha reta e corta com a katana o primeiro que estiver no caminho.',
       energyCost: 20,

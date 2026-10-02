@@ -87,7 +87,7 @@ export default {
     {
       id: 'golpePesado',
       name: 'Golpe Pesado',
-      input: 'mod+carga', // R1 + △ / RB + Y
+      input: 'block+carga', // R2 + △ / RT + Y
       type: 'heavyBlow',
       description: 'Ergue a Leonora, finca os pés, avança o corpo e crava a marreta: derruba e gasta muito da defesa. Preparação longa (aguenta um golpe pequeno depois de concentrar); errar deixa ele aberto.',
       energyCost: 30,
@@ -107,7 +107,7 @@ export default {
     {
       id: 'caiDentro',
       name: 'Cai Dentro',
-      input: 'mod+physical', // R1 + ○ / RB + B
+      input: 'carga+physical', // △ + ○ / Y + B
       type: 'caiDentro',
       description: 'Chama a atenção do inimigo e assume o confronto: longe, corre e dá uma ombrada; perto, grita. O inimigo fica PROVOCADO (só ataca no corpo a corpo por 4 s) e o Lírio recebe 20% menos dano.',
       energyCost: 20,
@@ -126,7 +126,7 @@ export default {
     {
       id: 'amarrasSangue',
       name: 'Amarras de Sangue "Magras"',
-      input: 'mod+ranged', // R1 + □ / RB + X
+      input: 'carga+ranged', // △ + □ / Y + X
       type: 'bloodBind',
       description: 'Estala as Magras — corda de tripas carnudas trançadas — no alvo, e as voltas se enrolam no corpo dele e o prendem. Feitas para prender criaturas de Conhecimento: seguram 60% mais tempo quem é de Conhecimento.',
       energyCost: 25,
@@ -142,7 +142,7 @@ export default {
     {
       id: 'leonoraAmaldicoada',
       name: 'Leonora Amaldiçoada (Sangue)',
-      input: 'mod+jump', // R1 + × / RB + A
+      input: 'block+jump', // R2 + × / RT + A
       type: 'curseWeapon',
       description: 'Amaldiçoa a Leonora com Sangue: por alguns segundos cada marretada abre um sangramento.',
       energyCost: 25,
@@ -155,7 +155,7 @@ export default {
     {
       id: 'protecaoPesada',
       name: 'Proteção Pesada',
-      input: 'mod+dodge', // R1 + L2 / RB + LT
+      input: 'carga+dodge', // △ + L2 / Y + LT
       type: 'heavyProtection',
       description: 'Põe o capacete azul e se fecha: recebe 25% menos dano e aguenta 2 golpes sem recuar por 7 s, mas fica um pouco mais lento.',
       energyCost: 25,

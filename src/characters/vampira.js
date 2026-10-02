@@ -1,6 +1,6 @@
 // AGHATA (id interno: vampira) — pressão em curta distância + faca + ritual de cortes sobrenaturais (Descarnar).
 // A faca arremessada é uma ferramenta de pressão; os poderes paranormais são Amaldiçoar Arma
-// (Sangue, R1+□) e o especial Descarnar.
+// (Sangue, △+□) e o especial Descarnar.
 export default {
   id: 'vampira',
   name: 'AGHATA',
@@ -67,7 +67,7 @@ export default {
     {
       id: 'amaldicoar',
       name: 'Amaldiçoar Arma',
-      input: 'mod+ranged', // R1 + □ / RB + X
+      input: 'carga+ranged', // △ + □ / Y + X
       type: 'curseWeapon',
       description: 'Amaldiçoa a faca com o elemento Sangue: por alguns segundos cada acerto (físico ou faca arremessada) abre um sangramento que continua tirando vida.',
       energyCost: 25,
@@ -79,7 +79,7 @@ export default {
     {
       id: 'facasAmaldicoadas',
       name: 'Facas Amaldiçoadas',
-      input: 'mod+dodge', // R1 + L2 / RB + LT
+      input: 'carga+dodge', // △ + L2 / Y + LT
       type: 'cursedShots',
       description: 'Arremessa três facas banhadas em sangue, em leque, que se curvam atrás do alvo.',
       energyCost: 20,

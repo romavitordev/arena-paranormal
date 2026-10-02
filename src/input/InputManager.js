@@ -1,6 +1,6 @@
 import { KEYBOARD_LAYOUTS, GAMEPAD_LAYOUT, GAMEPAD_DEADZONE, PLAYER_DEVICES } from '../config/controls.js';
 
-const ACTIONS = ['physical', 'ranged', 'carga', 'jump', 'block', 'dodge', 'mod', 'start', 'select', 'assist1', 'assist2', 'switch1', 'switch2', 'pageL', 'pageR'];
+const ACTIONS = ['physical', 'ranged', 'carga', 'jump', 'block', 'dodge', 'start', 'select', 'assist1', 'assist2', 'switch1', 'switch2', 'pageL', 'pageR'];
 const DIRS = ['up', 'down', 'left', 'right'];
 
 // Estado de entrada de UM jogador, já normalizado (teclado + controle somados).

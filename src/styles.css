@@ -404,9 +404,8 @@ table.moves td span { display: block; color: var(--muted); font-size: 12px; marg
 #touch .b-ci { right: max(18px, env(safe-area-inset-right)); bottom: 84px; color: #ff6a6a; }
 #touch .b-x { right: calc(max(18px, env(safe-area-inset-right)) + var(--touch-face-offset)); bottom: 18px; color: #7ab6ff; }
 /* gatilhos */
-#touch .b-r1, #touch .b-r2, #touch .b-l2 { width: 56px; height: 40px; border-radius: 12px; font-size: 13px; }
-#touch .b-r1 { right: calc(max(18px, env(safe-area-inset-right)) + 4px); bottom: 228px; }
-#touch .b-r2 { right: calc(max(18px, env(safe-area-inset-right)) + 66px); bottom: 228px; }
+#touch .b-r2, #touch .b-l2 { width: 56px; height: 40px; border-radius: 12px; font-size: 13px; }
+#touch .b-r2 { right: calc(max(18px, env(safe-area-inset-right)) + 4px); bottom: 228px; }
 #touch .b-l2 { left: calc(max(18px, env(safe-area-inset-left)) + 160px); bottom: 40px; }
 #touch .b-sp { width: 96px; height: 40px; border-radius: 12px; font-size: 12px; letter-spacing: .06em; right: calc(max(18px, env(safe-area-inset-right)) + 128px); bottom: 228px;
   border-color: rgba(255,210,90,.7); color: #ffd25a; }

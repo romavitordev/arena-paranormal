@@ -73,7 +73,7 @@ export default {
     {
       id: 'teletransporte',
       name: 'Teletransporte',
-      input: 'mod+ranged', // R1 + □ / RB + X
+      input: 'carga+ranged', // △ + □ / Y + X
       type: 'blink',
       description: 'Some numa distorção e reaparece numa posição válida: na direção do analógico ou, sem direção, ao lado do adversário.',
       energyCost: 20,
@@ -86,7 +86,7 @@ export default {
     {
       id: 'transcendencia',
       name: 'Transcendência',
-      input: 'mod+carga', // R1 + △ / RB + Y
+      input: 'block+carga', // R2 + △ / RT + Y
       type: 'transcend',
       description: 'O primeiro ritual: exposição total ao Outro Lado. Por alguns segundos os sigilos brilham, os golpes físicos atravessam a defesa e ganham impacto paranormal.',
       energyCost: 35,
@@ -98,7 +98,7 @@ export default {
     {
       id: 'laminaMedo',
       name: 'Lâmina do Medo',
-      input: 'mod+physical', // R1 + ○ / RB + B
+      input: 'carga+physical', // △ + ○ / Y + B
       type: 'fearBlade',
       description: 'Manifesta uma lâmina translúcida de medo ao redor da mão para um golpe curto devastador que quebra a defesa. Errar deixa ele exposto.',
       energyCost: 40,
@@ -115,7 +115,7 @@ export default {
     {
       id: 'rejeitarNevoa',
       name: 'Rejeitar Névoa',
-      input: 'mod+jump', // R1 + × / RB + A
+      input: 'block+jump', // R2 + × / RT + A
       type: 'rejectMist',
       description: 'Enfraquece drasticamente os rituais na área: dissipa névoas e zonas do inimigo e corta o dano dos rituais e do ataque principal dele por alguns segundos.',
       energyCost: 25,
@@ -128,7 +128,7 @@ export default {
     {
       id: 'toqueMorte',
       name: 'Toque da Morte',
-      input: 'mod+dodge', // R1 + L2 / RB + LT
+      input: 'carga+dodge', // △ + L2 / Y + LT
       type: 'deathTouch',
       description: 'Toca o alvo e o envelhece: ele definha e fica lento por alguns segundos e FRACO (−20% de dano) até o fim do round. Curtíssimo alcance, como o Inexistir — dá para esquivar. Recarga muito longa.',
       energyCost: 40,

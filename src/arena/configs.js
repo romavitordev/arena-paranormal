@@ -65,7 +65,52 @@ export const SUVACO = {
   },
 };
 
-// Coliseu em ruínas ao entardecer, sem plateia
+// Santo Berço: a praça do vilarejo dos Luzidios em frente ao Labirinto Infinito, numa tarde dourada "perfeita"
+// (a ilusão de conforto), com a névoa girando sobre o labirinto e esporos brilhando no ar
+export const SANTO_BERCO = {
+  id: 'santo_berco',
+  name: 'Santo Berço',
+  glb: 'arenas/santo_berco.glb',
+  bounds: { radius: 19.5 },
+  spawns: [{ x: 0, z: -5 }, { x: 0, z: 5 }],
+  sky: 0xe8c890,
+  skyGradient: [[0, '#4a3a6a'], [0.45, '#b88aa0'], [0.75, '#f0c890'], [1, '#f6e0b0']],
+  fog: { color: 0xd8c0b0, density: 0.014 },
+  lights: [
+    { type: 'hemi', sky: 0xffe0b8, ground: 0x4a5a2a, intensity: 1.15 },
+    { type: 'dir', color: 0xffc888, intensity: 2.2, pos: [26, 18, 20], shadow: true, area: 30 },
+    { type: 'ambient', color: 0x8a7a90, intensity: 0.3 },
+    { type: 'point', color: 0xff7a2a, intensity: 22, distance: 9, pos: [-19.1, 1.6, -20.4], flicker: true }, // forja
+    { type: 'point', color: 0xb8a0ff, intensity: 14, distance: 22, pos: [0, 5, -40] }, // brilho do labirinto
+    { type: 'point', color: 0x3aff8a, intensity: 5, distance: 6, pos: [-8.5, 1.2, -9.5] }, // cristal verde
+  ],
+  particles: { color: 0xfff0b0, count: 260, area: 44, height: 7, rise: 0.12, drift: 0.6, size: 0.07, opacity: 0.7 }, // esporos dourados
+  camera: { radius: 23, maxY: 14 }, // não entra nas casas nem nas árvores
+};
+
+// Ruínas do Ritual: cemitério abandonado à noite, lua clara, névoa roxa e cinzas subindo; o círculo ritual brilha
+export const RUINAS = {
+  id: 'ruinas',
+  name: 'Ruínas do Ritual',
+  glb: 'arenas/ruinas.glb',
+  bounds: { radius: 21.5 },
+  spawns: [{ x: 0, z: -5 }, { x: 0, z: 5 }],
+  sky: 0x0d0a14,
+  skyGradient: [[0, '#05040a'], [0.6, '#140e22'], [1, '#2a1c3a']],
+  fog: { color: 0x1a1028, density: 0.022 },
+  lights: [
+    { type: 'hemi', sky: 0xa898d8, ground: 0x2a1c34, intensity: 1.6 },
+    { type: 'ambient', color: 0x6a5a8a, intensity: 0.5 },
+    { type: 'dir', color: 0xd8d0ff, intensity: 2.6, pos: [12, 22, 8], shadow: true, area: 28 },
+    { type: 'point', color: 0xa46bff, intensity: 30, distance: 30, decay: 1.6, pos: [0, 2.5, 0] },
+    { type: 'point', color: 0xffa050, intensity: 6, distance: 9, pos: [4, 0.8, 4], flicker: true },
+    { type: 'point', color: 0xffa050, intensity: 6, distance: 9, pos: [-4, 0.8, -4], flicker: true },
+  ],
+  particles: { color: 0xb89aff, count: 400, area: 50, height: 10, rise: 0.25, drift: 0.4, size: 0.07, opacity: 0.6 }, // cinzas roxas
+  camera: { radius: 25, maxY: 14 },
+};
+
+// Coliseu: arena de areia ao entardecer cercada por muralhas e torres em ruínas (peças do Castle Kit)
 export const COLISEU = {
   id: 'coliseu',
   name: 'Coliseu',
@@ -79,8 +124,7 @@ export const COLISEU = {
     { type: 'hemi', sky: 0xffc8a0, ground: 0x6a4a3a, intensity: 1.0 },
     { type: 'dir', color: 0xffb070, intensity: 2.6, pos: [-34, 14, 18], shadow: true, area: 30 },
     { type: 'ambient', color: 0x8a6a6a, intensity: 0.3 },
-    { type: 'point', color: 0xff8a3a, intensity: 10, distance: 9, pos: [0, 2, 21.5], flicker: true },
   ],
   particles: { color: 0xf0c890, count: 240, area: 46, height: 7, rise: 0.08, drift: 1.2, size: 0.06, opacity: 0.55 }, // poeira dourada
-  camera: { radius: 30, maxY: 16 },
+  camera: { radius: 23, maxY: 16 }, // a muralha começa em ~24 m
 };

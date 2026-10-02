@@ -169,8 +169,25 @@
   ferida em cruz e alargadores.
 - ✅ Kemi / A Fantasma; Magras da Lírio (tripas trançadas que enrolam o alvo, +60% contra Conhecimento).
 - ✅ Aguiar (gola de pelo, lenço, mangas, riscos da máscara) e elmo do Labirinto (sorriso entre faixas rebitadas, gola).
-- ⏭ Polir: jaqueta do Miguel, enquadramento dos
-  retratos das formas grandes; equilíbrio do Miguel (perdeu de Kaiser/Erin) e do Juan; animações próprias das formas.
+- ✅ Polimento (2026-10-02): jaqueta do Miguel acompanha o corpo (sem a camiseta vazando nas costas/quadril, dobras
+  das mangas no tamanho certo); HUD das formas conferido; falas de entrada/vitória do Miguel, Juan e Kemi.
+- ✅ Equilíbrio medido com a telemetria (CPU × elenco): Kemi 68% → 54% (Disparo Espiral gasta a defesa em vez de
+  ignorá-la, Fantasma 40 s/+150, sangramento e Sede de Vingança menores); Juan 61% → 54% (Diabo: sangramento, cura e
+  vida menores, Renascimento +150); Miguel 77% → 64% (Luzidio com combo de 212 e menos alcance, Deus da Morte com
+  850 de vida e regeneração menor) e Luzidio suavizado depois disso (resistência 8%, espada sangra 4/s).
+- ✅ Telemetria corrigida: lutadores transformados contam para o personagem de origem (antes travava).
+- ✅ NOVO cenário: SANTO BERÇO (praça do vilarejo dos Luzidios em frente ao Labirinto Infinito, estátuas dos Cinco
+  Guardiões, Símbolo Espiral, névoa girando, cristais, Lodo, Torre do Porteiro, Ferraria, Taverna, Bosque da Provação).
+- ✅ Cenários refeitos no Blender com MODELOS PRONTOS gratuitos (Kenney, CC0 — assets_src/README.md): Santo Berço
+  (Fantasy Town + Nature), Ruínas do Ritual (Graveyard; antes era montado em código no jogo), Coliseu (Castle Kit:
+  muralhas, torres, estandartes, catapultas destruídas), Orfanato (casarão e torre do Fantasy Town, pinheiros,
+  grade, bancos) e Bar Suvaco Seco (móveis, rua, postes, carros e prédios dos City/Car/Furniture Kits).
+- ✅ Armas encantadas com Sangue (Amaldiçoar Arma da Lírio, Aghata e Xande; Arma de Sangue) usam o mesmo material de
+  sangue da Arma de Sangue do Arthur, em vez de brilhar.
+- ✅ Controles: o △/Y virou o MODIFICADOR de ○ e □ — △ + ○ e △ + □ soltam as habilidades que eram R1 + ○ / R1 + □
+  (juntos, logo em seguida ou segurando △ enquanto carrega). Saíram as "versões fortes" (mesmo golpe com mais dano).
+  R1/RB + △, × e L2 continuam; o especial continua △ → △ → ○. CPU, HUD, lista de golpes e tutorial atualizados.
+- ⏭ Animações próprias das formas (Deus da Morte e Diabo ainda usam as animações humanas).
 - Gal, Erin, Aguiar, Labirinto e Xande já foram feitos/revisados com as referências nas rodadas anteriores.
 - ✅ V4 etapa 12 Armature: esqueleto com root → hips → sp → chest → neck → hd, mãos (handL/R) e pés (footL/R),
   18 ossos em todos os 11 personagens (auditoria exige). Pesos: mão abaixo do punho, pé abaixo do tornozelo, pescoço

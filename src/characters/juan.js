@@ -67,7 +67,7 @@ export default {
     {
       id: 'descarnarDiscente',
       name: 'Descarnar Discente',
-      input: 'mod+carga', // R1 + △ / RB + Y
+      input: 'block+carga', // R2 + △ / RT + Y
       type: 'ritualCuts',
       description: 'Ritual de Sangue: cortes surgem no corpo do alvo, um atrás do outro (dano alto e sangramento).',
       energyCost: 30,
@@ -83,7 +83,7 @@ export default {
     {
       id: 'perturbacao',
       name: 'Perturbação Discente',
-      input: 'mod+physical', // R1 + ○ / RB + B
+      input: 'carga+physical', // △ + ○ / Y + B
       type: 'command',
       description: 'Uma ordem simples a quem está perto: "PARE!" (paralisa), "VENHA!" (puxa) ou "AJOELHE!" (derruba). Sai uma ao acaso.',
       energyCost: 20,
@@ -96,7 +96,7 @@ export default {
     {
       id: 'vinculoSangue',
       name: 'Vínculo de Sangue',
-      input: 'mod+ranged', // R1 + □ / RB + X
+      input: 'carga+ranged', // △ + □ / Y + X
       type: 'bloodLink',
       description: 'Marca o próprio corpo e o do alvo: por 8 s, 40% do dano que o Juan recebe é replicado no alvo.',
       energyCost: 25,
@@ -110,7 +110,7 @@ export default {
     {
       id: 'armaduraSangueDiabolica',
       name: 'Armadura de Sangue Diabólica',
-      input: 'mod+dodge', // R1 + L2 / RB + LT
+      input: 'carga+dodge', // △ + L2 / Y + LT
       type: 'heavyProtection',
       description: 'O próprio sangue endurece numa armadura com espinhos: recebe 30% menos dano, aguenta 2 golpes sem recuar e fica mais rápido.',
       energyCost: 30,
@@ -122,7 +122,7 @@ export default {
     },
   ],
 
-  // RENASCIMENTO: o Trono do Diabo sobe do chão, o Juan senta e vira O DIABO até o fim do round (+300 de vida)
+  // RENASCIMENTO: o Trono do Diabo sobe do chão, o Juan senta e vira O DIABO até o fim do round (+150 de vida)
   special: {
     name: 'Renascimento',
     banner: 'Renascimento',
@@ -132,7 +132,7 @@ export default {
     usesPerMatch: 1,
     form: 'diabo',
     duration: 0,
-    bonusHealth: 300,
+    bonusHealth: 150,
     color: 0xc01828,
   },
 
