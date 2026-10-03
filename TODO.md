@@ -48,7 +48,8 @@ Levantado comparando cada kit com o cânone e procurando habilidades que só rea
   e o alvo andando em círculos até a espiral).
 - 🟡 **Tiros amaldiçoados** (`cursedShots`) em 6 kits (Kaiser, Aghata, Labirinto, Kemi ×2, Fantasma): diferenciar —
   Tempestade Caótica do Labirinto como chuva de projéteis em área; Facas Amaldiçoadas da Aghata voltando para a mão.
-- 🔴 **Aghata** tem só 2 habilidades (os outros têm 4–5): faltam rituais de Sangue do cânone dela.
+- ✅ (v2.3) **Aghata:** + Passagem de Conhecimento (troca de lugar/mente) e Leitura de Rituais (−40% de dano de rituais), ambos do cânone — agora tem 4.
+- ✅ (v2.3) **Aguiar:** mascarado, todo golpe do machado sangra (corpo a corpo e arremessado).
 - 🟡 **Cura ao longo do tempo** (`healOverTime`) em 4 kits (Dante, Erin, Xande, Ferreiro): cada uma com um visual e uma
   condição própria (Paradiso do Dante só funciona parado; Conforto de Santo Berço cura mais perto do altar etc.).
 - 🟡 **Fantasma** usa as animações humanas da Kemi (já anotado) e o Disparo Espiral é ao mesmo tempo o □ e o especial

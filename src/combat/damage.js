@@ -215,8 +215,9 @@ export function applyHit(world, attacker, victim, o) {
   const curse = attacker.findBuff && attacker.findBuff('curse');
   if (curse && (o.kind === 'melee' || o.kind === 'ranged') && victim.state !== 'ko') victim.applyBleed(curse.bleed, attacker);
   // golpe que corta fundo (ex.: machado do Mutilador) e estados que fazem sangrar (máscara do Aguiar)
-  if (o.kind === 'melee' && victim.state !== 'ko') {
-    if (o.strike && o.strike.bleed) victim.applyBleed(o.strike.bleed, attacker);
+  if (o.kind === 'melee' && victim.state !== 'ko' && o.strike && o.strike.bleed) victim.applyBleed(o.strike.bleed, attacker);
+  // máscara do Mutilador: enquanto estiver com ela, TODO golpe do machado sangra — corpo a corpo e o machado na corda
+  if ((o.kind === 'melee' || o.kind === 'ranged') && victim.state !== 'ko') {
     const mb = (attacker.buffs || []).find((b) => b.meleeBleed);
     if (mb) victim.applyBleed(mb.meleeBleed, attacker);
   }

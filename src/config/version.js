@@ -21,6 +21,8 @@ export const CHANGELOG = [
       'Amaldiçoar Arma do Diabo: as garras pingam sangue o tempo todo.',
       'Juan: a Lâmina de Sangue virou uma meia-lua de sangue cortada pela faca, que pinga no caminho e faz sangrar.',
       'Juan: a Armadura de Sangue Diabólica também nasce sozinha depois que ele sangra o bastante (a cada 220 de dano recebido).',
+      'Aghata ganhou dois rituais do cânone: Passagem de Conhecimento (troca de mente com o adversário — os dois trocam de lugar e ele volta de costas, atordoado e desorientado) e Leitura de Rituais (por 7 s recebe 40% menos dano de rituais e especiais).',
+      'Aguiar: com a Máscara do Mutilador Noturno, todo golpe do machado faz sangrar enquanto ele estiver mascarado — no corpo a corpo e também o machado arremessado na corda.',
     ],
   },
   {

@@ -92,6 +92,38 @@ export default {
       spread: 18,
       projectile: { visual: 'knife', color: 0xe0204a, speed: 34, range: 24, radius: 0.35, damage: 24, knockback: 1, hitstun: 0.3, homing: 1.0, kind: 'ability', element: 'sangue', hitSound: 'bladeHit' },
     },
+    {
+      // cânone: o ritual dela troca as mentes de duas pessoas de corpo
+      id: 'passagemConhecimento',
+      name: 'Passagem de Conhecimento',
+      input: 'block+jump', // R2 + × / RT + A
+      type: 'mindSwap',
+      description: 'Troca de mente com o adversário por um instante: os dois trocam de lugar e ele volta desorientado, de costas e atordoado.',
+      energyCost: 25,
+      cooldown: 14,
+      range: 14,
+      windup: 0.3,
+      stun: 0.5,
+      surprise: 0.9,
+      color: 0xe8c070,
+    },
+    {
+      // cânone: ela aprendeu a "ler" rituais, entendendo como funcionam sem transcender
+      id: 'leituraRituais',
+      name: 'Leitura de Rituais',
+      input: 'block+carga', // R2 + △ / RT + Y
+      type: 'selfBuff',
+      buffType: 'ritualReading',
+      label: 'LEITURA DE RITUAIS',
+      anim: 'concentrate',
+      description: 'Lê os rituais do adversário antes de eles chegarem: por 7 s recebe 40% menos dano de rituais e especiais.',
+      energyCost: 20,
+      cooldown: 16,
+      duration: 7,
+      takenMult: 0.6,
+      takenKinds: ['ability', 'special'],
+      color: 0xe8c070,
+    },
   ],
 
   // Especial DESCARNAR (substitui a antiga "Dança Carmesim")

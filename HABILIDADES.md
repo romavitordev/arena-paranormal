@@ -178,6 +178,10 @@ Solta a névoa e, dentro dela, conjura a **Acácia amplificada pela Cinerária**
   Amaldiçoa a faca com o elemento Sangue: por alguns segundos cada acerto (físico ou faca arremessada) abre um sangramento que continua tirando vida.
 - **Facas Amaldiçoadas** — △ + L2 / Y + LT · custo 20 · cooldown 11 s
   Arremessa três facas banhadas em sangue, em leque, que se curvam atrás do alvo.
+- **Passagem de Conhecimento** — R2 + × / RT + A · custo 25 · cooldown 14 s · alcance 14 m
+  Troca de mente com o adversário por um instante: os dois trocam de lugar e ele volta desorientado, de costas e atordoado.
+- **Leitura de Rituais** — R2 + △ / RT + Y · custo 20 · cooldown 16 s
+  Lê os rituais do adversário antes de eles chegarem: por 7 s recebe 40% menos dano de rituais e especiais.
 - **Passiva — Colar Banhado em Sangue:** −15% de dano de Sangue; sangramento 10% mais forte
 
 ### Especial: Descarnar
@@ -388,7 +392,7 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
 ### Habilidades
 
 - **Máscara do Mutilador Noturno** — △ + ○ / Y + B · custo 35 · cooldown 30 s
-  Põe a máscara branca da mão vermelha: a intenção assassina toma conta — bate mais forte, anda mais rápido, aguenta 3 golpes sem reagir e todo golpe físico faz sangrar. Mas não consegue mais defender.
+  Põe a máscara branca da mão vermelha: a intenção assassina toma conta — bate mais forte, anda mais rápido, aguenta 3 golpes sem reagir e todo golpe do machado (corpo a corpo ou na corda) faz sangrar enquanto estiver mascarado. Mas não consegue mais defender.
 - **Armadilha de Urso** — △ + L2 / Y + LT · custo 20 · cooldown 12 s · dano 40
   Arma uma armadilha de urso no chão à frente. Quem pisar fica preso, toma dano e sangra. Só uma por vez.
 - **Cães de Caça** — R2 + △ / RT + Y · custo 25 · cooldown 14 s · dano 30

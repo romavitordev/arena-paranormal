@@ -74,7 +74,7 @@ export default {
       name: 'Máscara do Mutilador Noturno',
       input: 'carga+physical', // △ + ○ / Y + B
       type: 'maskForm',
-      description: 'Põe a máscara branca da mão vermelha: a intenção assassina toma conta — bate mais forte, anda mais rápido, aguenta 3 golpes sem reagir e todo golpe físico faz sangrar. Mas não consegue mais defender.',
+      description: 'Põe a máscara branca da mão vermelha: a intenção assassina toma conta — bate mais forte, anda mais rápido, aguenta 3 golpes sem reagir e todo golpe do machado (corpo a corpo ou na corda) faz sangrar enquanto estiver mascarado. Mas não consegue mais defender.',
       energyCost: 35,
       cooldown: 30,
       duration: 10,

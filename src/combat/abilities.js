@@ -2079,6 +2079,43 @@ Object.assign(ABILITY_TYPES, {
     },
   },
 
+  // PASSAGEM DE CONHECIMENTO (Aghata — cânone: troca completa de mentes com outra pessoa): as duas mentes trocam de
+  // corpo por um instante — na luta, ela e o alvo TROCAM DE LUGAR e o alvo sai desorientado (não sabe de onde veio).
+  mindSwap: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      if (!opp || opp.state === 'ko') return null;
+      if (distXZ(f.pos, opp.pos) > a.range) { f.notify('LONGE DEMAIS'); return null; }
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('concentrate', { restart: true, duration: a.windup + 0.3 });
+      world.audio.play('ritual', { volume: 0.6, pitch: 1.3 });
+      const col = a.color ?? 0xe8c070;
+      tl.add(a.windup, () => {
+        if (opp.state === 'ko' || opp.isInvulnerable() || world.cinematic) { f.notify('PASSAGEM FALHOU'); return; }
+        world.fx.lightning(f.chestPos(), opp.chestPos(), { color: col, life: 0.3 });
+        const a0 = f.pos.clone();
+        const b0 = opp.pos.clone();
+        for (const p of [a0, b0]) world.fx.burst(new THREE.Vector3(p.x, 1.1, p.z), { count: 30, color: col, speed: 3, life: 0.5, size: 0.16 });
+        f.pos.set(b0.x, b0.y, b0.z);
+        opp.pos.set(a0.x, a0.y, a0.z);
+        f.vel.set(0, 0, 0);
+        opp.vel.set(0, 0, 0);
+        f.yaw = yawTo(f.pos, opp.pos);
+        opp.yaw = yawTo(opp.pos, f.pos) + Math.PI; // a mente do alvo volta "de costas"
+        if (opp.state !== 'ko') {
+          opp.stun(a.stun, 'stagger');
+          opp.surprised = a.surprise;
+        }
+        world.fx.ring(new THREE.Vector3(f.pos.x, 0.06, f.pos.z), { color: col, radius: 1.2, life: 0.5 });
+        opp.notify('DESORIENTADO (PASSAGEM)', true);
+      });
+      tl.end(a.windup + 0.3);
+      return seqFrom(tl);
+    },
+  },
+
   // VEIAS DE SANGUE (Diabo — cânone: "prende pessoas manipulando o Sangue nas veias do próprio indivíduo, formando uma
   // espécie de corrente em torno delas"): nada sai da mão do Diabo — o sangue rompe a pele do ALVO e vira correntes que
   // saem do peito dele e se cravam no chão em volta, prendendo-o no lugar.
@@ -2403,7 +2440,7 @@ Object.assign(ABILITY_TYPES, {
       tl.add(0.25, () => {
         const trail = world.fx.emitter({ rate: 24, follow: () => f.chestPos(), particle: { color: a.color, speed: 0.4, spread: 0.4, life: 0.4, size: 0.16 } });
         if (a.refillDodges) f.dodges = Math.max(f.dodges, a.refillDodges);
-        f.addBuff({ type: a.buffType, name: a.label || a.name.toUpperCase(), time: a.duration, duration: a.duration, speedMult: a.speedMult, mult: a.damageMult, affects: a.affects, onEnd() { trail.stop(); } });
+        f.addBuff({ type: a.buffType, name: a.label || a.name.toUpperCase(), time: a.duration, duration: a.duration, speedMult: a.speedMult, mult: a.damageMult, affects: a.affects, takenMult: a.takenMult, takenKinds: a.takenKinds, onEnd() { trail.stop(); } });
         f.notify(a.label || a.name.toUpperCase(), true);
       });
       tl.end(0.45);

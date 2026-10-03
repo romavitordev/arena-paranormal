@@ -5,6 +5,8 @@
 - Santo Berço com névoa; CPU limpa invocações fracas; Arthur paga rituais com vida sem sanidade.
 - Diabo: Veias de Sangue saindo do próprio alvo; garras pingando sangue.
 - Juan: Lâmina de Sangue em meia-lua (sangramento); Armadura de Sangue nasce sozinha ao sangrar (220 de dano).
+- Aghata: Passagem de Conhecimento e Leitura de Rituais (cânone).
+- Aguiar mascarado: o machado sangra também arremessado.
 
 ## v2.2 — 2026-10-03
 
