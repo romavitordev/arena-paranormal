@@ -243,7 +243,8 @@ ok(jua && jua.element === 'sangue' && ['ritualCuts', 'command', 'bloodLink', 'he
 {
   const { getForm } = await import('../src/characters/forms/index.js');
   const dia = getForm('diabo');
-  ok(dia && dia.regen && ['bloodBind', 'selfBuff', 'teleportBehind', 'summonBlood', 'bloodGeysers'].every((t) => dia.abilities.some((a) => a.type === t)) && dia.special.type === 'devilDeal' && dia.melee.strikes.every((x) => x.bleed), 'Diabo (Portador do Trono): Veias de Sangue, Ódio do Diabo, Transportar pelo Sangue, Senhor do Sangue, Sangue nos Arredores, Amaldiçoar Arma, Regeneração e Pacto');
+  ok(dia && dia.regen && ['bloodBind', 'devilHate', 'bloodTransport', 'summonBlood', 'bloodGeysers'].every((t) => dia.abilities.some((a) => a.type === t)) && dia.special.type === 'devilDeal' && dia.melee.strikes.every((x) => x.bleed) && dia.regen.low && dia.passives.some((p) => p.type === 'hatesElement' && p.element === 'conhecimento'), 'Diabo (Portador do Trono): Veias de Sangue, Ódio do Diabo (no alvo), Transportar pelo Sangue (arrasta), Senhor do Sangue, Sangue nos Arredores, Amaldiçoar Arma, Regeneração (mais forte ferido), Pacto e ódio ao Conhecimento');
+  ok(dia && dia.ranged.visual === 'bloodSpear' && dia.ranged.pool && dia.ranged.onHit.impale && ['forward', 'side', 'back'].every((k) => dia.ranged.variants[k]), 'Diabo: Lança de Sangue empala, deixa poça e tem 3 variações (frente, lados, trás)');
 }
 const lir = get('lirio');
 ok(lir && lir.origin === 'Os Cinco' && lir.melee.name === 'Leonora' && lir.stats.maxHealth > 1000 && lir.stats.moveSpeed < Math.min(...ROSTER.filter((c) => c.id !== 'lirio').map((c) => c.stats.moveSpeed)), 'Lírio: Os Cinco, Leonora, mais vida e o mais lento do elenco');

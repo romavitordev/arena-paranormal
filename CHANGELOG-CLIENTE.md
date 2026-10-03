@@ -2,6 +2,21 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v2.2 — O Diabo reformulado
+- O Diabo (Juan) foi reformulado com base no cânone de Hexatombe. Pacto, o especial, agora é uma escolha: o Diabo sai do Símbolo do Pacto cara a cara com você e oferece um pacto — aperte Golpe para aceitar ou Defesa para recusar (calar é consentir).
+- Aceitar o Pacto: você ganha o presente (cura e sanidade cheia), mas fica Transtornado por 9 s — não defende, leva mais dano e a sanidade escorre de volta para o Diabo. Recusar: o Diabo cobra à força, com três garradas e um rasgo que arremessa e faz sangrar.
+- Lança de Sangue refeita: uma lança de verdade, que empala (prende os pés por um instante), faz sangrar, fica cravada na parede e deixa uma poça de sangue. Com direção: para a frente a Lança Cravada, para os lados Quatro Lanças (uma de cada braço) e para trás um salto com arremesso.
+- Poças de sangue: quem pisa nelas atola, o Diabo regenera mais rápido em cima delas e o Transportar pelo Sangue sai por elas. Nascem da Lança, do Sangue nos Arredores, dos Zumbis e do Pacto.
+- Ódio do Diabo agora é lançado no adversário, como no cânone: ele fica cego de ódio por 6 s — bate um pouco mais forte, mas não defende, não usa rituais nem tiros e leva mais dano — enquanto o Diabo se alimenta do ódio.
+- Transportar pelo Sangue: sai pela poça mais perto do adversário; com o adversário colado, arrasta-o junto e o cospe caído em outra poça.
+- A Regeneração do Diabo fica mais forte quando ele está ferido, e ele bate mais forte em quem é de Conhecimento, o elemento que ele jurou destruir.
+- Os Zumbis de Sangue sobem rastejando de poças de sangue e, ao morrer, se desmancham numa poça.
+- Armadura de Sangue do Juan refeita como na arte de referência: o sangue cresce sobre um lado do corpo numa carne porosa cheia de furos — espinhos no ombro, o braço e a perna tomados, veias pelo peito e garras nos pés. Em quem conjura, o braço da faca vira arma de sangue (luva de sangue e lâmina ensanguentada, golpes físicos 25% mais fortes); recebida pela assistência do Juan, só protege de golpes físicos e tiros.
+- Arthur: a Armadura de Sangue saiu do kit dele (não existe no cânone) — o sangue dele fica só na Arma de Sangue. No lugar entrou Analisar Brecha (cânone): ele acha uma brecha no adversário, que recebe 25% a mais dos golpes físicos por 7 s.
+- Defesa + um toque na direção: passo rápido para aquele lado, de frente para o adversário (como no Storm). Segurando a direção, continua andando defendendo.
+- A Poça de Lodo do Dante agora é uma poça preta e brilhante no chão, com bolhas, em vez de uma nuvem de fumaça.
+- A foice da Marionete risca o chão enquanto ela anda, e dá para escapar mais cedo do agarrão dela apertando os botões sem parar.
+
 ## v2.1 — A Marionete e a horda de sangue
 - A Marionete do Dante foi refeita do zero: um crânio com a mandíbula forçada aberta por fios, cabelo preto comprido, braços de galho erguidos como se puxados por cordas invisíveis, estacas nas costas e uma foice feita de ossos amarrada no braço direito.
 - A Marionete agora anda devagar e aos trancos, atravessa paredes e obstáculos, revida na hora quem chega perto e tem um golpe novo, Ironia do Destino: dois cortes da foice, agarra e arrasta a vítima — e metade do dano que ela levar enquanto segura vai para quem está preso.

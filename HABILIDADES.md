@@ -96,8 +96,8 @@ Solta a névoa e, dentro dela, conjura a **Acácia amplificada pela Cinerária**
   Corta a palma e sangra sobre o olho: ódio intenso por alguns segundos — físico mais forte e mais rápido, mas não consegue defender.
 - **Paralisia de Sangue "Dystopia"** — R2 + △ / RT + Y · custo 25 · cooldown 18 s · alcance 7 m
   Mancha o símbolo com o próprio sangue, abre os olhos vermelhos e paralisa quem estiver à frente por um instante.
-- **Armadura de Sangue** — △ + L2 / Y + LT · custo 25 · cooldown 18 s
-  O sangue endurece sobre a pele como uma couraça vermelha: absorve golpes e tiros até se romper.
+- **Analisar Brecha** — △ + L2 / Y + LT · custo 20 · cooldown 16 s · alcance 14 m
+  Estuda o adversário e acha uma brecha: por 7 s ele recebe 25% a mais de dano dos golpes físicos.
 
 ### Especial: Arma de Sangue
 
@@ -604,7 +604,7 @@ Com mais de 85% de sanidade: pacto de 45 s — morrer durante o pacto transforma
 - **Vínculo de Sangue** — △ + □ / Y + X · custo 25 · cooldown 20 s · alcance 9 m
   Marca o próprio corpo e o do alvo: por 8 s, 40% do dano que o Juan recebe é replicado no alvo.
 - **Armadura de Sangue Diabólica** — △ + L2 / Y + LT · custo 30 · cooldown 24 s
-  O próprio sangue endurece numa armadura com espinhos: recebe 30% menos dano, aguenta 2 golpes sem recuar e fica mais rápido.
+  O próprio sangue endurece numa armadura com espinhos: recebe 30% menos dano, aguenta 2 golpes sem recuar e fica mais rápido. O braço da faca vira uma arma de sangue: golpes físicos 25% mais fortes.
 
 ### Especial: Renascimento
 

@@ -241,7 +241,7 @@ const ACTIONS = {
   },
   // JUAN: andando → Armadura de Sangue Diabólica no parceiro; parado → Descarnar Discente no inimigo
   juan: {
-    moving: (c) => buffOwner(c, 'powerup', { type: 'bloodArmor', name: 'ARMADURA DE SANGUE (JUAN)', time: 6, takenMult: 0.75 }, 0xc01828, 'ARMADURA DE SANGUE'),
+    moving: (c) => buffOwner(c, 'powerup', { type: 'bloodArmor', name: 'ARMADURA DE SANGUE (JUAN)', time: 6, takenMult: 0.75, takenKinds: ['melee', 'ranged'] }, 0xc01828, 'ARMADURA DE SANGUE'),
     still: (c) => ritualCuts(c, 0xc01828, 75, 'DESCARNAR'),
   },
   // KEMI: andando → Perita (o inimigo fica analisado e recebe mais dano); parado → um tiro da Sniper Fantasma

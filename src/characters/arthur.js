@@ -112,18 +112,22 @@ export default {
       color: 0xff1f3a,
     },
     {
-      id: 'armaduraSangue',
-      name: 'Armadura de Sangue',
+      // cânone (Desconjuração, 40% de exposição): detecta uma brecha no inimigo — vantagem e mais dano em ataques
+      // físicos no alvo. Arthur luta com chutes: a brecha vale para o corpo a corpo.
+      id: 'analisarBrecha',
+      name: 'Analisar Brecha',
       input: 'carga+dodge', // △ + L2 / Y + LT
-      type: 'noiseScreen',
-      description: 'O sangue endurece sobre a pele como uma couraça vermelha: absorve golpes e tiros até se romper.',
-      energyCost: 25,
-      cooldown: 18,
-      buffType: 'bloodArmor',
-      label: 'ARMADURA DE SANGUE',
-      shield: 130,
-      duration: 8,
-      color: 0xb01020,
+      type: 'analyze',
+      buffType: 'brecha',
+      label: 'BRECHA (ARTHUR)',
+      description: 'Estuda o adversário e acha uma brecha: por 7 s ele recebe 25% a mais de dano dos golpes físicos.',
+      energyCost: 20,
+      cooldown: 16,
+      range: 14,
+      duration: 7,
+      takenMult: 1.25,
+      takenKinds: ['melee'],
+      color: 0xd8a040,
     },
   ],
 

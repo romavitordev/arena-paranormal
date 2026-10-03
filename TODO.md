@@ -7,6 +7,51 @@
 
 ---
 
+## Estado na v2.2 (2026-10-03) — O Diabo reformulado
+
+Cânone usado (wiki "O Diabo"): Ódio do Diabo (faz o ALVO sentir ódio extremo, mais forte), Sangue nos Arredores,
+Transportar pelo Sangue (fendas/poças, pode levar outro ser), Veias de Sangue, Regeneração ("quando fraco ou ferido"),
+Amaldiçoar Arma, Senhor do Sangue, Decepar Máscara (odeia o Conhecimento) e o Pacto ("cumpre a parte dele, mas
+distorce o resultado"; a vítima vira Transtornada).
+
+- ✅ **Pacto (especial)** com escolha da vítima: aceitar = presente (cura, sanidade cheia) + Transtorno de 9 s que
+  devolve a sanidade ao Diabo; recusar = cobrança à força (3 garradas + rasgo, sangramento). A CPU escolhe sozinha.
+- ✅ **Lança de Sangue** de verdade: empala, sangra, crava na parede e deixa poça; frente / lados / trás.
+- ✅ **Poças de sangue** (atolam o adversário, regeneração ×2 para o Diabo, passagem do Transportar).
+- ✅ **Ódio do Diabo** no alvo (cego de ódio: sem defesa, só corpo a corpo, +20% de dano recebido) + o Diabo se alimenta.
+- ✅ **Transportar pelo Sangue** arrasta o adversário colado e o cospe caído em outra poça.
+- ✅ Regeneração mais forte ferido; +15% contra Conhecimento.
+- ✅ Armadura de Sangue do Juan pela arte de referência (carne porosa num lado do corpo) + braço da faca de quem conjura;
+  Arthur sem Armadura de Sangue (não é do cânone) → Analisar Brecha; passo da defesa; Poça de Lodo no chão.
+- Equilíbrio (CPU × CPU, 90 s): Juan 64% (56 lutas, quase só na forma base) · Dante 46% (28 lutas, com a Marionete
+  nova). 🔴 Falta medir o Juan JÁ como Diabo com o kit novo e o braço de sangue (+25%) — rodada em andamento.
+
+### O que mais pode ser reformulado (análise da v2.2)
+Levantado comparando cada kit com o cânone e procurando habilidades que só reaproveitam um tipo genérico.
+- 🔴 **Juan (forma base):** o □ "Lâmina de Sangue" usa a onda em X genérica (`crossWave`, a mesma de outros) — no cânone
+  ele luta com a faca de lâmina ondulada; trocar por arremesso/corte da faca com rastro de sangue. A **Armadura de
+  Sangue Diabólica** deveria nascer de SANGRAR ("após sangrar o suficiente"): carregar com o dano recebido e ativar
+  sozinha (ou ficar mais forte quanto mais ele apanhou), com espinhos no ombro esquerdo como na forma do Diabo.
+- 🔴 **Diabo:** o modelo ainda não tem as asas de braços nem a boca vertical do torso descritas na wiki; Veias de
+  Sangue é a mesma corda das Amarras da Lírio — trocar por correntes saindo das veias do PRÓPRIO alvo (sem corda
+  vindo da mão). Amaldiçoar Arma é só o sangramento das garras: dar um efeito visível (garras com sangue escorrendo).
+- 🟡 **Arthur:** o kit dele no cânone tem Arma de Sangue (lâmina do próprio sangue, gastando vida) — hoje é só o
+  especial; avaliar uma versão curta como habilidade (custa vida em vez de sanidade).
+- 🟡 **Erin:** "Envelhecimento Localizado — Black Hole" é só cura ao longo do tempo (`healOverTime`); no cânone é um
+  ritual de Energia/Morte que envelhece uma área — virar zona que acelera o tempo do adversário (recargas mais
+  lentas, dano contínuo) ou que cura a Erin às custas de quem estiver dentro.
+- 🟡 **Ferreiro:** Hipnose Espiral reaproveita o Controle Mental do Gal; dar a espiral própria (o Lodo girando no chão
+  e o alvo andando em círculos até a espiral).
+- 🟡 **Tiros amaldiçoados** (`cursedShots`) em 6 kits (Kaiser, Aghata, Labirinto, Kemi ×2, Fantasma): diferenciar —
+  Tempestade Caótica do Labirinto como chuva de projéteis em área; Facas Amaldiçoadas da Aghata voltando para a mão.
+- 🟡 **Aghata** tem só 2 habilidades (os outros têm 4–5): faltam rituais de Sangue do cânone dela.
+- 🟡 **Cura ao longo do tempo** (`healOverTime`) em 4 kits (Dante, Erin, Xande, Ferreiro): cada uma com um visual e uma
+  condição própria (Paradiso do Dante só funciona parado; Conforto de Santo Berço cura mais perto do altar etc.).
+- 🟡 **Fantasma** usa as animações humanas da Kemi (já anotado) e o Disparo Espiral é ao mesmo tempo o □ e o especial
+  — o especial podia ser uma versão cinematográfica (vários disparos em volta da arena).
+- 🟢 **Teleportes** (Joui, Kian, Fantasma, Gal, Diabo): cada um já tem a sua cara; padronizar quem deixa rastro/poça.
+- 🟢 **CPU:** focar invocações fracas (zumbis, clones do Trinitá) e usar o Transportar para arrastar quando colado.
+
 ## Estado na v2.1 (2026-10-03)
 
 - ✅ **Retratos da seleção:** o personagem transparente atrás de cada retrato era o retrato ANTERIOR (o canvas era
@@ -15,9 +60,10 @@
   invisíveis, foice de ossos; anda aos trancos, atravessa obstáculos, Reflexos Perfeitos e Ironia do Destino.
 - ✅ **Zumbis de Sangue refeitos:** fraco (magro, rápido) e forte (massa de músculo, pancada que derruba);
   Senhor do Sangue sorteia 1–3 fracos ou 2 fracos + 1 forte.
-- 🟡 Marionete: a "foice que toca o chão" deveria deixar um risco no chão enquanto ela anda (efeito de rastro).
-- 🟡 Zumbis: animação própria de surgir da poça (hoje sobem retos, como a Marionete) e de morrer (desmanchar em sangue).
-- 🟡 CPU: a IA não sabe fugir do agarrão da Marionete nem focar nos zumbis fracos para limpar a horda.
+- ✅ (v2.2) Marionete: a foice risca o chão enquanto ela anda.
+- ✅ (v2.2) Zumbis: sobem rastejando de poças de sangue de verdade e derretem numa poça ao morrer.
+- 🟡 CPU: ✅ (v2.2) o agarrão da Marionete solta mais cedo apertando botões (a CPU já aperta); falta a CPU focar nos zumbis
+  fracos para limpar a horda (hoje só bate se estiverem no caminho).
 - 🟢 Rodar a rodada de equilíbrio do Dante e do Juan com as invocações novas (a Marionete perdeu o giro com medo e
   ganhou o agarrão; a horda pode somar mais dano que o zumbi único de 220 de vida).
 
@@ -59,6 +105,9 @@ Kian 46% · Ferreiro 43% · Arthur 39% · Xande 39% · Aghata 36% · Gal Sal 25%
   para medir sem a página recarregar a cada edição, rodar num `vite` sem HMR.
 
 ### Pendências (prioridade)
+	✅ (v2.2) Nova (editado por mim): Ao segurar defesa (RT) e mover o analógico/wasd você dá um dash para os lados {referencia a jogos da saga naruto storm,}  para melhor movimentação em combate. → Defesa + TOQUE na direção = passo rápido (de frente para o rival); segurando a direção, anda defendendo.
+	✅ (v2.2) Armadura de sangue deve ter textura de sangue (vale pra todos personagens que possuem essa habilidade ou a recebem da assistencia) → carne de sangue porosa num lado do corpo, como na arte do Henri; quem conjura (Juan) também ganha o braço da faca de sangue (+25% físico); pela assistência, só resistência a físico e tiros. Arthur não tem essa habilidade no cânone: saiu do kit.
+	✅ (v2.2) Poça de lodo deve parecer uma poça no chão → mancha preta brilhante de contorno irregular, com bolhas.
 - 🔴 **Online de verdade:** testar com dois computadores (internet e Radmin); batalha em equipe pela rede; o servidor
   público do PeerJS é ponto único de falha (avaliar servidor próprio de apresentação/lista de salas).
 - 🔴 **Equilíbrio:** ajustar quem ficou fora da faixa 35–65% na rodada acima e medir de novo com mais lutas por par.

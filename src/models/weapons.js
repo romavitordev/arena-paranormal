@@ -277,6 +277,7 @@ export function bloodCoat(root) {
   root.traverse((o) => {
     if (!o.isMesh || o.userData.isOutline || o.material === mat) return;
     if (o.material && o.material.side === THREE.BackSide) return; // contorno preto fica
+    if (!o.visible || (o.material && o.material.transparent)) return; // brilhos/halos transparentes ficam (viravam bolas vermelhas)
     saved.push([o, o.material]);
     o.material = mat;
   });
@@ -288,7 +289,7 @@ export function bloodCoat(root) {
 }
 
 // tubo ao longo de uma curva que vai afinando (r(t) = raio no ponto t de 0 a 1)
-function taperedTube(curve, len, r, mat, seg = 24, radial = 7) {
+export function taperedTube(curve, len, r, mat, seg = 24, radial = 7) {
   const geo = new THREE.TubeGeometry(curve, seg, 1, radial, false);
   const pos = geo.attributes.position;
   const v = new THREE.Vector3();
@@ -318,7 +319,7 @@ function bloodStrand(len, r0, r1, turns, offset, phase, mat, wobble = 0.35) {
 }
 
 // espinho/garra de sangue curvado
-function bloodSpike(len, r, bend, mat) {
+export function bloodSpike(len, r, bend, mat) {
   const pts = [];
   for (let i = 0; i <= 6; i++) {
     const t = i / 6;

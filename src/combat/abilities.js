@@ -9,6 +9,7 @@ import { Animator } from '../anim/Animator.js';
 import { DanteClone, CLONE, BloodZombie } from './npcs.js';
 import { buildHuntingDog } from '../models/dog.js';
 import { bloodCoat } from '../models/weapons.js';
+import { addBloodPool, poolsOf, splatGeo } from './bloodPools.js';
 
 // Paga um custo em vida (rituais de Sangue) sem nunca se matar
 function payHealth(f, n) {
@@ -36,6 +37,12 @@ function inCone(f, target, range, arc) {
   if (!target || target.state === 'ko') return false;
   if (distXZ(f.pos, target.pos) > range) return false;
   return Math.abs(angleDiff(f.yaw, yawTo(f.pos, target.pos))) <= (arc * DEG) / 2;
+}
+
+// Armadura de Sangue de QUEM CONJURA o ritual (a.bloodArm): o braço vira uma arma de sangue — golpes físicos mais
+// fortes e o braço de sangue aparece (Fighter.updateBloodShell). Recebida por assistência, só dá a resistência.
+function bloodArmBuff(a) {
+  return a.bloodArm ? { bloodArmSide: a.bloodArm.side, mult: a.bloodArm.meleeMult, affects: ['melee'] } : {};
 }
 
 function seqFrom(tl, extra = {}) {
@@ -1743,7 +1750,8 @@ Object.assign(ABILITY_TYPES, {
         f.armorHits = (f.armorHits || 0) + a.armor;
         world.fx.play('FX_DUST', f.pos, { scale: 0.8 });
         f.addBuff({
-          type: 'heavyProtection', name: label, time: a.duration, duration: a.duration, takenMult: a.takenMult, speedMult: a.speedMult,
+          type: 'heavyProtection', name: label, time: a.duration, duration: a.duration, takenMult: a.takenMult, speedMult: a.speedMult, bloodArmor: !!a.bloodArmor,
+          ...bloodArmBuff(a),
           onEnd() { if (a.prop) f.rig.showProp(a.prop, false); f.armorHits = Math.max(0, (f.armorHits || 0) - a.armor); },
         });
         f.notify(label, true);
@@ -1980,9 +1988,10 @@ Object.assign(ABILITY_TYPES, {
       f.anim.play('turn_look', { restart: true, duration: 0.5 });
       tl.add(0.3, () => {
         if (!opp || opp.state === 'ko' || distXZ(f.pos, opp.pos) > a.range) { f.notify('LONGE DEMAIS', true); return; }
-        const old = opp.findBuff('analyzed');
+        const type = a.buffType || 'analyzed';
+        const old = opp.findBuff(type);
         if (old) old.time = a.duration;
-        else opp.addBuff({ type: 'analyzed', name: a.label || 'ANALISADO', time: a.duration, duration: a.duration, takenMult: a.takenMult });
+        else opp.addBuff({ type, name: a.label || 'ANALISADO', time: a.duration, duration: a.duration, takenMult: a.takenMult, takenKinds: a.takenKinds });
         world.fx.ring(opp.chestPos(), { color: a.color ?? 0xe8c070, radius: 0.9, life: 0.5, vertical: true, yaw: f.yaw });
         world.fx.ring(new THREE.Vector3(opp.pos.x, 0.06, opp.pos.z), { color: a.color ?? 0xe8c070, radius: 1.2, life: 0.6 });
         opp.notify(a.label || 'ANALISADO', true);
@@ -2018,6 +2027,7 @@ Object.assign(ABILITY_TYPES, {
           taken.push({ x: spot.x, z: spot.z, r: strong ? 0.8 : 0.55 });
           world.fx.burst(new THREE.Vector3(spot.x, 0.4, spot.z), { count: strong ? 50 : 30, color: 0x9a0010, speed: 4, up: 4, life: 0.7, size: 0.22, gravity: 8 });
           world.addNpc(new BloodZombie(f, world, new THREE.Vector3(spot.x, 0, spot.z), { duration: a.duration, strong }));
+          addBloodPool(world, f, spot.x, spot.z, { radius: strong ? 1.5 : 1.1, life: a.duration }); // poça de onde ele sobe
         });
         f.notify(horde.includes('strong') ? 'SENHOR DO SANGUE — A HORDA E O BRUTO' : `SENHOR DO SANGUE ×${horde.length}`, true);
       });
@@ -2053,8 +2063,159 @@ Object.assign(ABILITY_TYPES, {
           }
       };
       tl.add(0.35, () => { for (let w = 0; w < a.waves; w++) world.after(w * a.interval, wave); });
+      // o sangue derramado fica: poças em volta (passagem do Transportar e regeneração mais rápida)
+      if (a.pools) {
+        world.after(0.35 + a.waves * a.interval, () => {
+          for (let i = 0; i < a.pools; i++) {
+            const ang = (i / a.pools) * Math.PI * 2 + f.yaw;
+            const r = a.radius * 0.6;
+            const spot = findFreeSpotNear(world.arena, center.x + Math.sin(ang) * r, center.z + Math.cos(ang) * r, { radius: 0.6 });
+            if (spot) addBloodPool(world, f, spot.x, spot.z, { radius: 1.1, life: 10 });
+          }
+        });
+      }
       tl.end(0.6);
       return seqFrom(tl);
+    },
+  },
+
+  // ÓDIO DO DIABO (cânone: faz o ALVO sentir um ódio paranormal extremo, ficando mais forte): o adversário na mira fica
+  // CEGO DE ÓDIO — bate um pouco mais forte, mas não defende, não usa rituais nem tiros e leva mais dano. O Diabo se
+  // alimenta do ódio (mais dano e velocidade enquanto durar). Errou a mira: só o Diabo se alimenta do próprio ódio.
+  devilHate: {
+    start(f, a, world) {
+      if (f.findBuff('hateFeed')) { f.notify('JÁ ATIVO'); return null; }
+      const opp = f.opponent;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      if (opp) f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play(a.anim || 'powerup', { restart: true, duration: 0.6 });
+      world.audio.play('fearGaze', { volume: 0.7, pitch: 0.55 });
+      tl.add(0.3, () => {
+        const col = a.color ?? 0xff2a3d;
+        const feed = world.fx.emitter({ rate: 26, follow: () => f.chestPos(), particle: { color: col, speed: 0.5, up: 1, spread: 0.4, life: 0.45, size: 0.16 } });
+        f.addBuff({ type: 'hateFeed', name: 'PRÍNCIPE DO ÓDIO', time: a.duration, duration: a.duration, mult: a.selfMult, speedMult: a.selfSpeed, affects: ['melee', 'ranged', 'ability'], onEnd() { feed.stop(); } });
+        const hits = opp && opp.state !== 'ko' && !opp.isInvulnerable() && distXZ(f.pos, opp.pos) <= a.range
+          && Math.abs(angleDiff(f.yaw, yawTo(f.pos, opp.pos))) <= (a.arc * DEG) / 2;
+        if (!hits) { f.notify('ÓDIO DO DIABO (ERROU)'); return; }
+        world.fx.lightning(f.chestPos(), opp.chestPos(), { color: col, life: 0.25 });
+        world.fx.burst(opp.chestPos(), { count: 36, color: col, speed: 4, life: 0.6, size: 0.22 });
+        const rage = world.fx.emitter({ rate: 30, follow: () => opp.chestPos(), particle: { color: 0xb01020, kind: 'smoke', speed: 0.6, up: 1.2, spread: 0.4, life: 0.5, size: 0.35 } });
+        if (opp.state === 'block') opp.setState('idle');
+        const old = opp.findBuff('enraged');
+        if (old) old.done = true;
+        opp.addBuff({
+          type: 'enraged', name: 'CEGO DE ÓDIO', time: a.duration, duration: a.duration,
+          noBlock: true, meleeOnly: true, lockMsg: 'CEGO DE ÓDIO: SÓ NO CORPO A CORPO',
+          takenMult: a.takenMult, mult: a.enragedMult, affects: ['melee'],
+          onEnd() { rage.stop(); },
+        });
+        opp.notify('CEGO DE ÓDIO', true);
+      });
+      tl.end(0.6);
+      return seqFrom(tl);
+    },
+  },
+
+  // TRANSPORTAR PELO SANGUE (cânone: "através de fendas ou grandes poças de Sangue", e pode levar outro ser junto):
+  // afunda e sai pela poça dele mais perto do adversário — ou por uma fenda atrás dele. Com o adversário colado,
+  // ARRASTA-O junto: os dois somem e ele é cuspido de outra poça, caído e sangrando.
+  bloodTransport: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      if (!opp) return null;
+      const drag = opp.state !== 'ko' && !opp.isInvulnerable() && !world.cinematic && distXZ(f.pos, opp.pos) <= a.dragRange && Math.abs(opp.pos.y - f.pos.y) < 1;
+      // destino: poça do Diabo mais perto do adversário (arrastando: a mais LONGE de onde estão)
+      const pools = poolsOf(world, f).filter((p) => distXZ(p, f.pos) > 3);
+      let dest = null;
+      if (pools.length) {
+        pools.sort((p, q) => (drag ? distXZ(q, f.pos) - distXZ(p, f.pos) : distXZ(p, opp.pos) - distXZ(q, opp.pos)));
+        dest = pools[0];
+      }
+      const behind = () => findSpotBehind(world.arena, { x: opp.pos.x, z: opp.pos.z, yaw: opp.yaw }, { distance: a.distance, radius: f.radius });
+      if (!dest && !drag && !behind()) { f.notify('SEM ESPAÇO PARA TELEPORTAR'); return null; }
+      const tl = new Timeline();
+      const sink = a.vanishTime;
+      f.vel.set(0, 0, 0);
+      f.anim.play('vanish', { restart: true, duration: sink });
+      addBloodPool(world, f, f.pos.x, f.pos.z, { radius: 1.2, life: 6 });
+      world.audio.play('teleport', { pitch: 0.7 });
+      f.invuln = sink + 0.1;
+      if (drag) {
+        if (opp.cancelAction) opp.cancelAction();
+        opp.setState('grabbed');
+        opp.vel.set(0, 0, 0);
+        opp.notify('ARRASTADO PELO SANGUE', true);
+      }
+      const held = () => drag && opp.state === 'grabbed';
+      tl.each((time) => {
+        if (time <= sink) {
+          f.rig.body.position.y = -1.9 * (time / sink);
+          if (held()) opp.rig.body.position.y = -1.9 * (time / sink);
+        }
+      });
+      tl.add(sink, () => {
+        f.setVisible(false);
+        if (held()) opp.setVisible(false);
+        world.fx.burst(new THREE.Vector3(f.pos.x, 0.2, f.pos.z), { count: 26, color: 0x9a0010, speed: 3, up: 3, life: 0.6, size: 0.22, gravity: 8 });
+      });
+      tl.add(sink + 0.08, () => {
+        let to = dest;
+        if (!to && drag) {
+          // sem poça: abre uma fenda a ~6 m, para o lado com mais espaço
+          for (const ang of [Math.PI, Math.PI / 2, -Math.PI / 2, 0]) {
+            const y = f.yaw + ang;
+            const sp = findFreeSpotNear(world.arena, f.pos.x + Math.sin(y) * 6, f.pos.z + Math.cos(y) * 6, { radius: 0.8 });
+            if (sp) { to = sp; break; }
+          }
+          to = to || { x: f.pos.x, z: f.pos.z };
+          addBloodPool(world, f, to.x, to.z, { radius: 1.4, life: 6 });
+        }
+        if (drag) {
+          // o Diabo sai de pé na borda da poça; o adversário é cuspido no meio dela, caído
+          const yaw = Math.atan2(to.x - f.pos.x, to.z - f.pos.z) || f.yaw;
+          const fs = findFreeSpotNear(world.arena, to.x - Math.sin(yaw) * 1.4, to.z - Math.cos(yaw) * 1.4, { radius: f.radius }) || to;
+          f.pos.set(fs.x, 0, fs.z);
+          if (opp.state === 'grabbed') {
+            opp.pos.set(to.x, 0, to.z);
+            opp.rig.body.position.y = 0;
+            opp.setVisible(true);
+            opp.setState('idle');
+            applyHit(world, f, opp, { damage: a.dragDamage, kind: 'ability', element: 'sangue', knockback: 2.5, launch: true, lowLaunch: true, dir: new THREE.Vector3(Math.sin(yaw), 0, Math.cos(yaw)), sound: 'clawHit', color: 0xb01020, scale: 1.4, ignoreInvuln: true });
+            if (opp.state !== 'ko') opp.applyBleed({ dps: 5, duration: 2.5 }, f);
+            world.fx.burst(new THREE.Vector3(to.x, 0.4, to.z), { count: 40, color: 0xb01020, speed: 4, up: 5, life: 0.7, size: 0.24, gravity: 9 });
+          }
+        } else if (dest) {
+          f.pos.set(dest.x, 0, dest.z);
+        } else {
+          const spot = behind();
+          if (spot) f.pos.set(spot.x, Math.max(0, opp.pos.y), spot.z);
+          if (!hasPassive(opp, 'precognition')) opp.surprised = 0.45;
+        }
+        f.yaw = yawTo(f.pos, opp.pos);
+        world.fx.burst(new THREE.Vector3(f.pos.x, 0.3, f.pos.z), { count: 20, color: 0x9a0010, speed: 3, up: 3, life: 0.5, size: 0.2, gravity: 8 });
+        f.rig.body.position.y = -1.6;
+        f.setVisible(true);
+        f.invuln = 0.12;
+      });
+      tl.each((time) => {
+        if (time > sink + 0.08) f.rig.body.position.y = Math.min(0, -1.6 + ((time - sink - 0.08) / 0.12) * 1.6);
+      });
+      tl.add(sink + 0.2, () => {
+        f.rig.body.position.y = 0;
+        f.anim.play('idle', { restart: true, blend: 0.05 });
+      });
+      tl.end(sink + 0.26);
+      const restore = () => {
+        f.setVisible(true);
+        f.rig.body.position.y = 0;
+        if (drag) {
+          opp.rig.body.position.y = 0;
+          opp.setVisible(true);
+          if (opp.state === 'grabbed') opp.setState('idle');
+        }
+      };
+      return seqFrom(tl, { cancel: restore, cancelable: () => tl.time > sink + 0.15, finish: restore });
     },
   },
 
@@ -2173,7 +2334,7 @@ Object.assign(ABILITY_TYPES, {
       tl.add(0.3, () => {
         const film = world.fx.emitter({ rate: 30, follow: () => f.chestPos().add(new THREE.Vector3((Math.random() - 0.5) * 1.2, (Math.random() - 0.3) * 1.6, (Math.random() - 0.5) * 1.2)), particle: { color: a.color, speed: 0.1, spread: 0.05, life: 0.25, size: 0.09 } });
         world.fx.ring(f.chestPos(), { color: a.color, radius: 1.3, life: 0.4, vertical: true, yaw: f.yaw });
-        f.addBuff({ type: buffType, name: label, time: a.duration, duration: a.duration, shield: a.shield, shieldKinds: a.shieldKinds || ['melee', 'ranged'], color: a.color, onEnd() { film.stop(); } });
+        f.addBuff({ type: buffType, name: label, time: a.duration, duration: a.duration, shield: a.shield, shieldKinds: a.shieldKinds || ['melee', 'ranged'], color: a.color, ...bloodArmBuff(a), onEnd() { film.stop(); } });
         f.notify(label, true);
       });
       tl.end(0.5);
@@ -2226,10 +2387,43 @@ export function createMistZone(world, owner, o) {
     },
     particle: { color: o.color, speed: 0.3, up: 0.6, spread: 0.1, life: 0.9, size: 0.25 },
   });
+  // poça no chão (Poça de Lodo do Dante): mancha preta e brilhante de contorno irregular, com bolhas estourando
+  let bubbles = null;
+  if (o.pool) {
+    const c0 = o.center();
+    const mesh = new THREE.Mesh(splatGeo(c0.x, c0.z), new THREE.MeshStandardMaterial({ color: o.pool.color ?? 0x07060a, roughness: 0.06, metalness: 0.45, emissive: o.pool.glow ?? 0x08201c, emissiveIntensity: 0.6, transparent: true, opacity: 0, depthWrite: false }));
+    mesh.rotation.x = -Math.PI / 2;
+    mesh.position.set(c0.x, 0.04, c0.z);
+    mesh.renderOrder = 1;
+    world.scene.add(mesh);
+    let t = 0;
+    const life = o.duration || 6;
+    world.addTicker({
+      update(dt) {
+        t += dt;
+        const k = t / life;
+        mesh.scale.setScalar(o.radius * Math.min(1, 0.4 + t / 0.3));
+        mesh.material.opacity = 0.92 * Math.min(1, t / 0.15) * (k > 0.85 ? (1 - k) / 0.15 : 1);
+        return t >= life;
+      },
+      dispose() { world.scene.remove(mesh); mesh.geometry.dispose(); mesh.material.dispose(); },
+    });
+    bubbles = world.fx.emitter({
+      rate: 10 * (o.radius / 3),
+      follow: () => {
+        const c = o.center();
+        const a = Math.random() * Math.PI * 2;
+        const r = Math.sqrt(Math.random()) * o.radius * 0.85;
+        return new THREE.Vector3(c.x + Math.sin(a) * r, 0.08, c.z + Math.cos(a) * r);
+      },
+      particle: { color: Math.random() < 0.2 ? 0x58d0b8 : 0x16131c, speed: 0.1, up: 0.5, spread: 0.05, life: 0.5, size: 0.14 },
+    });
+  }
   const end = () => {
     zone.alive = false;
     smoke.stop();
     ring.stop();
+    if (bubbles) bubbles.stop();
   };
   if (o.duration) world.after(o.duration, end);
   zone.end = end;

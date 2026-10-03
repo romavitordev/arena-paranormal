@@ -42,6 +42,12 @@ export const PASSIVES = {
       return victim.health <= victim.maxHealth * (passive.threshold ?? 0.2) ? passive.mult ?? 1.3 : 1;
     },
   },
+  // O Diabo — Decepar Máscara: odeia o Conhecimento e jurou destruí-lo; bate mais forte em quem é desse elemento
+  hatesElement: {
+    damageMod({ victim, passive }) {
+      return victim && victim.def && victim.def.element === passive.element ? passive.mult ?? 1.15 : 1;
+    },
+  },
   // Kaiser — Resistente: armadura natural contra dano físico
   resistant: {
     damageTakenMod({ kind, passive }) {

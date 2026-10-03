@@ -88,6 +88,16 @@ export class CpuController {
     }
     if (f.state === 'ko' || f.state === 'intro' || opp.state === 'ko') return out;
 
+    // Pacto do Diabo: decide uma vez — com pouca vida aceita mais (o presente cura e enche a sanidade)
+    if (f.pactOffer) {
+      if (!f.pactOffer.cpuDecided) {
+        f.pactOffer.cpuDecided = true;
+        const accept = Math.random() < 0.25 + 0.55 * (1 - f.health / f.maxHealth);
+        this.queue.push({ t: 0.3 + Math.random() * 0.6, held: {} }, { t: 0.08, held: accept ? { physical: true } : { block: true } }, { t: 0.05, held: {} });
+      }
+      return out;
+    }
+
     // ---- escapes
     if (f.state === 'hitstun' && f.dodges > 1 && f.cooldowns.substitution <= 0 && Math.random() < L.subst * k) {
       this.tap('dodge');

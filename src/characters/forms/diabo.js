@@ -20,7 +20,8 @@ export default {
     tagline: 'Um novo começo.',
   },
   stats: { moveSpeed: 8.0, size: 1.35, maxHealth: 1250 },
-  regen: { every: 6, amount: 22, color: 0x7a0010 }, // Regeneração
+  // Regeneração (cânone: "quando fraco ou ferido"): mais rápida abaixo de 40% de vida e o dobro em cima das poças dele
+  regen: { every: 6, amount: 22, color: 0x7a0010, low: { below: 0.4, every: 3.5, amount: 34 }, onPool: 2 },
   // animações próprias (anim/formClips.js); os nomes genéricos usados pelas habilidades também são trocados
   anims: { idle: 'db_idle', run: 'db_run', walk: 'db_run', walk_back: 'db_walk_back', strafe_L: 'db_strafe_L', strafe_R: 'db_strafe_R', dash: 'db_dash', charge: 'db_charge', concentrate: 'db_charge', victory: 'db_victory', block: 'db_block', block_hit: 'db_block_hit', point: 'db_point', throw_r: 'db_throw', powerup: 'db_powerup', dual_cross: 'db_cross', cast_up: 'db_powerup' },
   chargeFx: { style: 'default', color: 0xff2a3d },
@@ -39,28 +40,40 @@ export default {
     air: { name: 'Mergulho do Diabo', anim: 'db_air', dur: 0.42, active: [0.13, 0.3], damage: 40, range: 2.2, arc: 120, knockback: 3, slam: 16, vertical: 2.5, bleed: { dps: 3, duration: 1.5 }, sound: 'blade', hitSound: 'clawHit' },
   },
 
-  // □: lança de sangue
+  // □: LANÇA DE SANGUE — uma lança de sangue coagulado com farpas. Empala (prende os pés por um instante), faz
+  // sangrar, fica cravada na parede e deixa uma POÇA DE SANGUE onde para (passagem do Transportar pelo Sangue).
+  // Direção + □: para a frente = Lança Cravada (pesada); para os lados = Quatro Lanças (uma de cada braço);
+  // para trás = salta para trás e arremessa.
   ranged: {
     name: 'Lança de Sangue',
     type: 'projectile',
     anim: 'db_throw',
-    windup: 0.2,
-    recovery: 0.24,
-    count: 2,
-    interval: 0.12,
-    damage: 26,
-    range: 20,
-    speed: 34,
-    radius: 0.4,
-    spread: 6,
-    knockback: 1.4,
-    hitstun: 0.35,
-    cooldown: 2.0,
+    windup: 0.22,
+    recovery: 0.26,
+    count: 1,
+    interval: 0.1,
+    damage: 30,
+    range: 22,
+    speed: 46,
+    radius: 0.42,
+    spread: 0,
+    knockback: 1.6,
+    hitstun: 0.4,
+    cooldown: 1.9,
     energyCost: 0,
-    visual: 'crossWave',
+    visual: 'bloodSpear',
     color: 0xff2a3d,
-    sound: 'blade',
+    element: 'sangue',
+    stick: true,
+    pool: { radius: 1.0, life: 8 },
+    onHit: { impale: { time: 0.55, mult: 0.1 }, bleed: { dps: 4, duration: 2 } },
+    sound: 'knifeThrow',
     hitSound: 'clawHit',
+    variants: {
+      forward: { label: 'LANÇA CRAVADA', windup: 0.38, damage: 46, speed: 40, radius: 0.5, knockback: 4.5, hitstun: 0.55, impactScale: 1.6, pool: { radius: 1.5, life: 10 }, onHit: { impale: { time: 0.9, mult: 0.05 }, bleed: { dps: 6, duration: 2.5 } }, cooldown: 3.2 },
+      side: { label: 'QUATRO LANÇAS', count: 4, interval: 0.07, damage: 13, speed: 44, spread: 0.14, radius: 0.36, knockback: 1, hitstun: 0.25, pool: null, onHit: { bleed: { dps: 2, duration: 1.5 } }, motion: [{ t: [0, 0.4], side: 3.2 }], cooldown: 2.6 },
+      back: { label: 'LANÇA E RECUO', windup: 0.12, damage: 24, motion: [{ t: [0, 0.3], back: 3.6 }], onHit: { impale: { time: 0.4, mult: 0.15 } }, cooldown: 2.4 },
+    },
   },
 
   abilities: [
@@ -82,29 +95,34 @@ export default {
       id: 'odioDiabo',
       name: 'Ódio do Diabo',
       input: 'block+carga', // R2 + △ / RT + Y
-      type: 'selfBuff',
-      buffType: 'devilHate',
-      label: 'ÓDIO DO DIABO',
+      type: 'devilHate',
       anim: 'db_powerup',
-      description: 'O ódio mais puro: golpes 30% mais fortes e mais velocidade por 8 s.',
+      // cânone: o Diabo faz o ALVO sentir um ódio paranormal extremo, mais forte — e cego de raiva
+      description: 'Enche o adversário de um ódio paranormal por 6 s: ele bate 10% mais forte, mas não defende, não usa rituais e leva 20% a mais de dano. O Diabo se alimenta do ódio: +20% de dano e mais velocidade enquanto durar.',
       energyCost: 25,
       cooldown: 18,
-      duration: 8,
-      damageMult: 1.3,
-      speedMult: 1.15,
-      affects: ['melee', 'ranged', 'ability'],
+      range: 11,
+      arc: 70,
+      duration: 6,
+      enragedMult: 1.1,
+      ai: { max: 10 }, // CPU: só com o alvo ao alcance da mira
+      takenMult: 1.2,
+      selfMult: 1.2,
+      selfSpeed: 1.12,
       color: 0xff2a3d,
     },
     {
       id: 'transportarSangue',
       name: 'Transportar pelo Sangue',
       input: 'block+jump', // R2 + × / RT + A
-      type: 'teleportBehind',
-      description: 'Afunda numa poça de sangue e sai por outra, atrás do adversário.',
+      type: 'bloodTransport',
+      description: 'Afunda no sangue e sai pela poça mais perto do adversário (ou por uma fenda atrás dele). Se o adversário estiver colado, é ARRASTADO junto e cuspido no chão de outra poça.',
       energyCost: 20,
-      cooldown: 7,
+      cooldown: 8,
       distance: 1.6,
       vanishTime: 0.18,
+      dragRange: 2.2,
+      dragDamage: 34,
       color: 0x9a0010,
     },
     {
@@ -124,7 +142,7 @@ export default {
       name: 'Sangue nos Arredores',
       input: 'carga+dodge', // △ + L2 / Y + LT
       type: 'bloodGeysers',
-      description: 'O chão em volta jorra sangue em 4 ondas: dano, lentidão, e o Diabo bebe 50% do sangue derramado.',
+      description: 'O chão em volta jorra sangue em 4 ondas: dano, lentidão, e o Diabo bebe 50% do sangue derramado. Deixa poças de sangue em volta.',
       energyCost: 30,
       cooldown: 16,
       waves: 4,
@@ -133,25 +151,37 @@ export default {
       damage: 24,
       drain: 0.5,
       slow: 0.6,
+      pools: 4,
     },
   ],
 
-  // Especial PACTO: o Diabo estende a mão e oferece um pacto — o alvo fica TRANSTORNADO por 8 s (não consegue
-  // defender, recebe 20% a mais de dano e perde energia) e o Diabo se cura
+  // Especial PACTO ("Eu vim te oferecer um pacto."): o Diabo sai do Símbolo do Pacto cara a cara com o adversário e
+  // oferece. A VÍTIMA ESCOLHE (○ aceita, Defesa recusa; calar é consentir):
+  //  - aceitar: o presente (cura 15% e sanidade cheia) e o preço distorcido — TRANSTORNADO por 9 s: não defende, leva
+  //    25% a mais de dano e a sanidade do presente escorre de volta para o Diabo; o Diabo cura 80;
+  //  - recusar: o Diabo cobra à força — 3 garradas de 36 e um rasgo de 70 que arremessa (sem defesa), sangramento
+  //    forte e 4 s de Transtorno (não defende, +15% de dano).
   special: {
     name: 'Pacto',
-    banner: 'Pacto com o Diabo',
+    banner: 'Eu vim te oferecer um pacto',
     type: 'devilDeal',
     energyCost: 50,
     cooldown: 20,
-    duration: 8,
-    takenMult: 1.2,
-    drain: 4,
-    heal: 120,
+    choice: 1.6,
+    giftHeal: 0.15,
+    duration: 9,
+    takenMult: 1.25,
+    drain: 9,
+    heal: 80,
+    refuseHit: 36,
+    refuseFinal: 70,
+    refuseDuration: 4,
+    refuseTaken: 1.15,
     color: 0xff2a3d,
   },
 
   passives: [
     { type: 'lifesteal', ratio: 0.12 }, // o Diabo também se alimenta do sangue
+    { type: 'hatesElement', element: 'conhecimento', mult: 1.15 }, // odeia o Conhecimento ("Decepar Máscara")
   ],
 };

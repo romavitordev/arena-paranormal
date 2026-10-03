@@ -4,6 +4,7 @@ import { applyHit } from './damage.js';
 import { glowMat } from '../models/rig.js';
 import { knife, mutilatorAxe } from '../models/weapons.js';
 import { createMistZone } from './abilities.js';
+import { addBloodPool } from './bloodPools.js';
 
 const UP = new THREE.Vector3(0, 1, 0);
 
@@ -82,6 +83,31 @@ const VISUALS = {
     const glow = new THREE.Mesh(new THREE.SphereGeometry(0.18, 8, 6), glowMat(color, 0.35));
     g.add(glow);
     g.userData.spin = k;
+    return g;
+  },
+  // Lança de Sangue (O Diabo): lança longa de sangue coagulado com farpas, ponta brilhando (aponta para +Z)
+  bloodSpear(color) {
+    const g = new THREE.Group();
+    const dark = new THREE.MeshBasicMaterial({ color: 0x3a0006 });
+    const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.08, 1.8, 7), dark);
+    shaft.rotation.x = Math.PI / 2;
+    shaft.position.z = -0.55;
+    g.add(shaft);
+    const head = new THREE.Mesh(new THREE.ConeGeometry(0.15, 0.6, 6), glowMat(color, 1));
+    head.rotation.x = Math.PI / 2;
+    head.position.z = 0.55;
+    g.add(head);
+    for (let i = 0; i < 6; i++) { // farpas para trás, em espiral
+      const b = new THREE.Mesh(new THREE.ConeGeometry(0.04, 0.26, 4), glowMat(color, 0.85));
+      const a = i * 2.1;
+      b.position.set(Math.cos(a) * 0.07, Math.sin(a) * 0.07, 0.2 - i * 0.2);
+      b.rotation.set(-Math.PI / 2 + 0.5 * Math.sin(a), 0, 0);
+      b.rotateOnWorldAxis(new THREE.Vector3(0, 0, 1), a);
+      g.add(b);
+    }
+    const glow = new THREE.Mesh(new THREE.SphereGeometry(0.2, 8, 6), glowMat(color, 0.35));
+    glow.position.z = 0.45;
+    g.add(glow);
     return g;
   },
   crossWave(color) {
@@ -292,6 +318,13 @@ export class Projectiles {
       w.onPull && w.onPull(o, target);
     }
     if (a.onHit.stun) target.stun(a.onHit.stun, a.onHit.stunAnim || 'stagger');
+    if (a.onHit.impale) {
+      // empalado: a lança atravessa e prende os pés no chão por um instante
+      const old = target.findBuff('impaled');
+      if (old) old.time = a.onHit.impale.time;
+      else target.addBuff({ type: 'impaled', name: 'EMPALADO', time: a.onHit.impale.time, duration: a.onHit.impale.time, speedMult: a.onHit.impale.mult ?? 0.1 });
+      w.fx.burst(target.chestPos(), { count: 22, color: a.color ?? 0xc01020, speed: 4, life: 0.5, size: 0.18, gravity: 8 });
+    }
     if (a.onHit.bleed) target.applyBleed(a.onHit.bleed, p.owner); // ex.: decadência da Decadenza
     if (a.onHit.slow) {
       // ex.: arame farpado da Pistola Transtornada
@@ -454,6 +487,7 @@ export class Projectiles {
             reaction: !(a.onHit && a.onHit.pull),
           });
           if (typeof res === 'number' && res >= 0) this.applyOnHit(p, target);
+          if (a.pool) addBloodPool(w, p.owner, target.pos.x, target.pos.z, a.pool);
           if (a.boomerang && !p.back) { p.back = true; p.hitOnce = true; break; }
           if (a.cursed) {
             for (let k = 0; k < 4; k++) w.fx.lightning(p.pos, p.pos.clone().add(new THREE.Vector3((Math.random() - 0.5) * 3, Math.random() * 2, (Math.random() - 0.5) * 3)), { color: a.color, life: 0.2 });
@@ -464,11 +498,14 @@ export class Projectiles {
         }
         if (w.arena.blocksPoint(p.pos, a.radius * 0.5)) {
           w.fx.impact(p.pos, a.color, 0.6);
+          if (a.stick) this.stick(p);
+          if (a.pool) this.poolBelow(p);
           dead = true;
           break;
         }
         if (p.traveled >= a.range && !a.boomerang) {
           w.fx.burst(p.pos, { count: 8, color: a.color, speed: 2, life: 0.3, size: 0.25 });
+          if (a.pool) this.poolBelow(p);
           dead = true;
         }
       }
@@ -506,11 +543,37 @@ export class Projectiles {
       if (a.visual === 'decay') w.fx.burst(p.pos, { count: 3, color: 0x0c0a0e, kind: 'smoke', speed: 0.5, up: 0.3, life: 0.7, size: 0.55 });
       if (dead) {
         if (p.chainFx) p.chainFx.stop();
-        w.scene.remove(p.mesh);
-        p.mesh.traverse((o) => { if (o.material) o.material.dispose(); });
+        if (!p.stuck) {
+          w.scene.remove(p.mesh);
+          p.mesh.traverse((o) => { if (o.material) o.material.dispose(); });
+        }
         this.list.splice(i, 1);
       }
     }
+  }
+
+  // a lança fica cravada na parede por um tempo e some (o mesh passa a ser de um ticker do mundo)
+  stick(p) {
+    const w = this.world;
+    const mesh = p.mesh;
+    p.stuck = true;
+    mesh.position.copy(p.pos).addScaledVector(p.dir, 0.25);
+    let t = 0;
+    w.addTicker({
+      update(dt) { t += dt; return t >= 1.6; },
+      dispose() {
+        w.scene.remove(mesh);
+        mesh.traverse((o) => { if (o.material) o.material.dispose(); });
+      },
+    });
+  }
+
+  // poça de sangue no chão embaixo de onde o projétil parou (Lança de Sangue)
+  poolBelow(p) {
+    const w = this.world;
+    const back = p.pos.clone().addScaledVector(p.dir, -0.6); // um pouco antes da parede (do lado de dentro)
+    if (w.arena.blocksPoint(new THREE.Vector3(back.x, 0.5, back.z), 0.3)) return;
+    addBloodPool(w, p.owner, back.x, back.z, p.ability.pool);
   }
 
   // Explosão em área (granadas): fogo, onda, fumaça; acerta quem estiver no raio
@@ -524,7 +587,7 @@ export class Projectiles {
     w.cameraRig.shake(0.35, 0.25);
     if (E.mist) {
       const center = c.clone().setY(0);
-      createMistZone(w, p.owner, { center: () => center, radius: E.mist.radius, duration: E.mist.duration, slow: E.mist.slow, enemyRegen: E.mist.enemyRegen, eatsProjectiles: !!E.mist.eatsProjectiles, color: E.mist.color, density: 1 });
+      createMistZone(w, p.owner, { center: () => center, radius: E.mist.radius, duration: E.mist.duration, slow: E.mist.slow, enemyRegen: E.mist.enemyRegen, eatsProjectiles: !!E.mist.eatsProjectiles, color: E.mist.color, density: E.mist.pool ? 0.2 : 1, pool: E.mist.pool });
     }
     const target = w.opponentOf(p.owner);
     if (E.damage && target && target.state !== 'ko' && !target.isInvulnerable()) {

@@ -1,5 +1,18 @@
 # Changelog
 
+## v2.2 — 2026-10-03
+
+### Alterado
+- O Diabo (Juan) reformulado pelo cânone de Hexatombe: Pacto com escolha (aceitar/recusar), Lança de Sangue que
+  empala e deixa poça (3 variações por direção), poças de sangue, Ódio do Diabo no alvo, Transportar pelo Sangue que
+  arrasta o adversário, Regeneração mais forte ferido e ódio ao Conhecimento (+15%).
+- Armadura de Sangue do Juan pela referência (carne porosa num lado do corpo, espinhos, veias, garras); quem conjura
+  ganha o braço da faca de sangue (+25% físico); pela assistência, só resistência a golpes físicos e tiros.
+- Arthur: sem Armadura de Sangue (não é do cânone); entra Analisar Brecha (+25% de dano físico no alvo por 7 s).
+- Defesa + toque na direção = passo rápido (Storm).
+- Poça de Lodo do Dante é uma poça no chão; Zumbis sobem/morrem em poças; foice da Marionete risca o chão; agarrão
+  da Marionete solta mais cedo apertando botões.
+
 ## v2.1 — 2026-10-03
 
 ### Alterado

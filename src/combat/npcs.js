@@ -5,6 +5,7 @@ import { buildModel } from '../models/index.js';
 import { Animator } from '../anim/Animator.js';
 import { buildMarionette, updateMarionetteStrings } from '../models/marionette.js';
 import { buildBloodZombie } from '../models/bloodZombie.js';
+import { addBloodPool } from './bloodPools.js';
 import { resolveBody } from './positioning.js';
 
 // NPCs: entidades que existem no campo além dos dois lutadores (clones do Trinitá, a Marionete).
@@ -231,11 +232,27 @@ export class Marionette {
     this.pool.rotation.x = -Math.PI / 2;
     this.pool.position.set(pos.x, 0.03, pos.z);
     world.scene.add(this.pool);
+    this.pool.visible = !cfg.noPool; // Zumbis: sobem de uma poça de sangue de verdade (bloodPools)
     this.model.root.position.copy(this.pos);
     this.model.root.position.y = -3;
   }
 
   configFor() { return MARIONETTE; }
+
+  // surgir: sobe reta do Lodo, inclinada
+  riseTime() { return 0.9; }
+  risePose(k, restY) {
+    const root = this.model.root;
+    root.position.set(this.pos.x, -3 + k * (3 + restY), this.pos.z);
+    this.model.joints.body.rotation.x = (1 - k) * 0.6;
+    if (Math.random() < 0.5) this.world.fx.burst(new THREE.Vector3(this.pos.x, 0.2, this.pos.z), { count: 3, color: this.cfg.poolColor, kind: 'smoke', speed: 1.5, up: 1.2, life: 0.6, size: 0.6 });
+  }
+
+  // ir embora / morrer: afunda de volta
+  vanishPose(k, restY) {
+    this.model.root.position.y = restY - k * 3.3;
+    this.model.joints.body.rotation.x = k * 0.5;
+  }
   buildModel() { return buildMarionette(); }
   restY() { return this.cfg.restY; }
 
@@ -299,18 +316,15 @@ export class Marionette {
 
     // ---- surgir / ir embora (afunda na poça)
     if (this.state === 'rise') {
-      const k = Math.min(1, this.stateT / 0.9);
-      root.position.set(this.pos.x, -3 + k * (3 + restY), this.pos.z);
-      J.body.rotation.x = (1 - k) * 0.6;
-      if (Math.random() < 0.5) w.fx.burst(new THREE.Vector3(this.pos.x, 0.2, this.pos.z), { count: 3, color: this.cfg.poolColor, kind: 'smoke', speed: 1.5, up: 1.2, life: 0.6, size: 0.6 });
+      const k = Math.min(1, this.stateT / this.riseTime());
+      this.risePose(k, restY);
       if (k >= 1) { J.body.rotation.x = 0; this.setState('chase'); }
       this.pose(dt);
       return;
     }
     if (this.state === 'leave' || this.state === 'die') {
       const k = Math.min(1, this.stateT / 0.9);
-      root.position.y = restY - k * 3.3;
-      J.body.rotation.x = k * 0.5;
+      this.vanishPose(k, restY);
       this.pool.material.opacity = 0.85 * (1 - k);
       if (k >= 1) this.dispose();
       this.pose(dt);
@@ -366,6 +380,9 @@ export class Marionette {
     } else if (this.state === 'drag') {
       const g = this.held;
       const a = this.atk;
+      // apertar botões sem parar solta mais cedo (cada toque tira 0,15 s do agarrão)
+      const inp = g && g.input;
+      if (inp && (inp.pressed.physical || inp.pressed.jump || inp.pressed.dodge || inp.pressed.ranged)) a.hold -= 0.15;
       if (!g || g.state !== 'grabbed' || this.stateT >= a.hold) this.release(true);
       else {
         // arrasta a vítima de costas, aos trancos, segurando-a na frente
@@ -390,6 +407,21 @@ export class Marionette {
     const root = this.model.root;
     root.position.set(this.pos.x, this.restY() + this.bob(), this.pos.z);
     this.pose();
+    this.scytheTrail(px, pz);
+  }
+
+  // a foice é a única coisa que toca o chão: risca o chão enquanto ela anda
+  scytheTrail(px, pz) {
+    const J = this.model.joints;
+    if (!J.puppet || !J.blade) return;
+    this.trailClock = (this.trailClock || 0) + 1;
+    if (this.trailClock % 4 || Math.hypot(this.pos.x - px, this.pos.z - pz) < 1e-3) return;
+    this.model.root.updateMatrixWorld(true);
+    const tip = J.blade.localToWorld(v.set(-0.5, -2.15, 0.6));
+    if (tip.y > 0.45) return;
+    tip.y = 0.06;
+    this.world.fx.burst(tip, { count: 2, color: 0x2a2630, kind: 'smoke', speed: 0.4, up: 0.3, life: 0.5, size: 0.22 });
+    this.world.fx.burst(tip, { count: 1, color: 0x8ad8c0, speed: 0.8, up: 0.6, life: 0.25, size: 0.05 });
   }
 
   bob() { return Math.sin(this.t * 2.2) * 0.1 + jerk(this.t, 9, 3) * 0.04; }
@@ -603,7 +635,7 @@ export class Marionette {
 export const BLOOD_ZOMBIE = {
   weak: {
     name: 'ZUMBI DE SANGUE', hp: 90, duration: 12, speed: 5.2, radius: 0.5, height: 2.0,
-    element: 'sangue', fxColor: 0xc0202c, poolColor: 0x5a0008,
+    element: 'sangue', fxColor: 0xc0202c, poolColor: 0x5a0008, noPool: true,
     leg: [0.5, 0.48], crouch: { hip: -0.75, knee: 1.25, chest: 0.62, neck: -0.75 },
     attacks: {
       claw: { windup: 0.22, active: 0.12, recovery: 0.4, range: 1.9, arc: 140, damage: 12, cd: 1.1, knockback: 1.5 },
@@ -613,7 +645,7 @@ export const BLOOD_ZOMBIE = {
   },
   strong: {
     name: 'ZUMBI DE SANGUE FORTE', hp: 260, duration: 12, speed: 4.0, radius: 0.75, height: 2.5,
-    element: 'sangue', fxColor: 0xc0202c, poolColor: 0x5a0008,
+    element: 'sangue', fxColor: 0xc0202c, poolColor: 0x5a0008, noPool: true,
     leg: [0.46, 0.44], crouch: { hip: -0.85, knee: 1.35, chest: 0.95, neck: -0.85 },
     attacks: {
       claw: { windup: 0.3, active: 0.14, recovery: 0.45, range: 2.5, arc: 150, damage: 24, cd: 1.3, knockback: 2.5 },
@@ -642,6 +674,30 @@ export class BloodZombie extends Marionette {
   }
 
   bob() { return Math.sin(this.t * 3) * 0.02; }
+
+  // sobe rastejando da poça de sangue: primeiro as garras, depois o corpo
+  riseTime() { return this.strong ? 1.1 : 0.8; }
+  risePose(k, restY) {
+    const root = this.model.root;
+    const e = 1 - (1 - k) * (1 - k);
+    root.position.set(this.pos.x, -2.4 * (1 - e) + restY * e, this.pos.z);
+    root.scale.setScalar(1);
+    this.model.joints.body.rotation.x = (1 - e) * 0.9;
+    if (Math.random() < 0.4) this.world.fx.burst(new THREE.Vector3(this.pos.x, 0.15, this.pos.z), { count: 4, color: 0x9a0010, speed: 1.6, up: 2.5, life: 0.5, size: 0.16, gravity: 8 });
+  }
+
+  // morreu: desmancha numa poça de sangue; acabou o tempo: afunda de volta
+  vanishPose(k, restY) {
+    const root = this.model.root;
+    if (this.state !== 'die') return super.vanishPose(k, restY);
+    root.position.y = restY * (1 - k);
+    root.scale.set(1 + k * 0.5, Math.max(0.05, 1 - k * 0.95), 1 + k * 0.5);
+    if (!this.melted) {
+      this.melted = true;
+      addBloodPool(this.world, this.owner, this.pos.x, this.pos.z, { radius: this.strong ? 1.6 : 1.1, life: 6 });
+    }
+    if (Math.random() < 0.5) this.world.fx.burst(new THREE.Vector3(this.pos.x, 0.3 + (1 - k) * this.height * 0.5, this.pos.z), { count: 5, color: 0xa01018, speed: 2, up: 1, life: 0.5, size: 0.18, gravity: 9 });
+  }
 
   // leal: sempre ataca o adversário do dono
   chooseTarget() {

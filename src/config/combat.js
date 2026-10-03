@@ -79,6 +79,8 @@ export const COMBAT = {
     doubleTapWindow: 0.32,
     short: { distance: 5, duration: 0.22, cooldown: 0.35, energyCost: 0, stopAt: 1.3 },
     long: { distance: 14, duration: 0.42, cooldown: 1.0, energyCost: 10, stopAt: 1.4, homing: true },
+    // passo da defesa (Storm): segurando Defesa, um toque na direção dá um passo rápido para lá, de frente para o rival
+    step: { distance: 3.4, duration: 0.18, cooldown: 0.32, energyCost: 0, stopAt: 0 },
   },
   // ---- Agarrão: Defesa + ○/B. Curta distância, NÃO pode ser defendido (só esquivado) ----
   grab: {

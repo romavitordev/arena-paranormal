@@ -1,4 +1,5 @@
 import { buildModel } from '../models/index.js';
+import { poolAt } from './bloodPools.js';
 import { getForm } from '../characters/forms/index.js';
 
 // FORMAS (transformações no meio da luta): Ferreiro → Deus da Morte, Juan → Diabo, Kemi → Fantasma.
@@ -63,11 +64,14 @@ export function updateForm(f, dt) {
   if (f.state === 'ko' || w.cinematic) return;
   // regeneração de tempo em tempo (ex.: Deus da Morte)
   if (def.regen) {
-    f.regenClock = (f.regenClock || 0) + dt;
-    if (f.regenClock >= def.regen.every) {
+    // ferido (low): regenera mais e mais rápido; em cima das próprias poças de sangue (onPool) o relógio corre mais
+    const R = def.regen.low && f.health <= f.maxHealth * def.regen.low.below ? { ...def.regen, ...def.regen.low } : def.regen;
+    const fast = def.regen.onPool && poolAt(w, f, f.pos.x, f.pos.z) ? def.regen.onPool : 1;
+    f.regenClock = (f.regenClock || 0) + dt * fast;
+    if (f.regenClock >= R.every) {
       f.regenClock = 0;
       const before = f.health;
-      f.health = Math.min(f.maxHealth, f.health + def.regen.amount);
+      f.health = Math.min(f.maxHealth, f.health + R.amount);
       if (f.health > before) {
         w.fx.burst(f.chestPos(), { count: 24, color: def.regen.color ?? 0x2a2632, kind: 'smoke', speed: 1.5, up: 1, life: 0.8, size: 0.7, grow: 1 });
         f.notify(`REGENERAÇÃO +${Math.round(f.health - before)}`, true);

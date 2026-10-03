@@ -119,7 +119,7 @@ export default {
       recovery: 0.3,
       projectile: {
         visual: 'decay', color: 0x2a2632, speed: 15, range: 16, radius: 0.4, gravity: 18, damage: 0, lobTo: 'feet', kind: 'ability', element: 'morte',
-        explode: { radius: 2.2, damage: 35, knockback: 1, color: 0x3a3442, mist: { radius: 3.2, duration: 6, slow: 0.45, enemyRegen: 0, color: 0x1a1620 } },
+        explode: { radius: 2.2, damage: 35, knockback: 1, color: 0x3a3442, mist: { radius: 3.2, duration: 6, slow: 0.45, enemyRegen: 0, color: 0x1a1620, pool: { color: 0x07060a, glow: 0x08201c } } },
       },
     },
   ],

@@ -112,13 +112,15 @@ export default {
       name: 'Armadura de Sangue Diabólica',
       input: 'carga+dodge', // △ + L2 / Y + LT
       type: 'heavyProtection',
-      description: 'O próprio sangue endurece numa armadura com espinhos: recebe 30% menos dano, aguenta 2 golpes sem recuar e fica mais rápido.',
+      description: 'O próprio sangue endurece numa armadura com espinhos: recebe 30% menos dano, aguenta 2 golpes sem recuar e fica mais rápido. O braço da faca vira uma arma de sangue: golpes físicos 25% mais fortes.',
       energyCost: 30,
       cooldown: 24,
       duration: 7,
       takenMult: 0.7,
       armor: 2,
       speedMult: 1.15,
+      bloodArmor: true, // casca de sangue sobre o corpo (Fighter.updateBloodShell)
+      bloodArm: { side: 'R', meleeMult: 1.25 }, // o braço da faca vira arma de sangue (só quem conjura)
     },
   ],
 

@@ -12,6 +12,7 @@ import { hasPassive } from './passives.js';
 import { ELEMENTS } from '../config/elements.js';
 import { SETTINGS } from '../config/settings.js';
 import { updateForm, revertForm } from './forms.js';
+import { buildBloodArmor } from '../models/bloodArmor.js';
 
 // estados em que o alvo continua "dentro do combo" (contadores de escala não zeram)
 const COMBO_STATES = new Set(['hitstun', 'stun', 'pulled', 'grabbed', 'ko', 'downed']);
@@ -152,6 +153,13 @@ export class Fighter {
 
   buffMultiplierActive(kind) {
     return this.damageMultiplier(kind) > 1;
+  }
+
+  // Provocado (Cai Dentro) ou cego de ódio (Ódio do Diabo): só corpo a corpo — avisa e retorna true
+  meleeLocked() {
+    const b = this.buffs.find((x) => x.type === 'provoked' || x.meleeOnly);
+    if (b) this.notify(b.lockMsg || 'PROVOCADO: SÓ NO CORPO A CORPO');
+    return !!b;
   }
 
   findBuff(type) {
@@ -614,6 +622,26 @@ export class Fighter {
     this.updateVisuals(dt);
   }
 
+  // ARMADURA DE SANGUE (Juan e a assistência dele): carne de sangue porosa crescendo no lado esquerdo do corpo
+  // enquanto durar. Quem conjura (b.bloodArmSide) também tem o braço da faca virando arma de sangue.
+  updateBloodShell(dt) {
+    const on = this.state !== 'ko' && this.visible ? this.buffs.find((b) => b.type === 'bloodArmor' || b.bloodArmor) : null;
+    const side = on ? this.buffs.find((b) => b.bloodArmSide)?.bloodArmSide || null : null;
+    const key = on ? `on:${side}` : null;
+    if (this.bloodArmor && (this.bloodArmor.key !== key || this.bloodArmor.rig !== this.rig)) {
+      this.bloodArmor.fx.remove();
+      this.bloodArmor = null;
+    }
+    if (key && !this.bloodArmor) {
+      const fx = buildBloodArmor(this.rig, { weaponSide: side, yaw: this.yaw });
+      if (fx) {
+        this.bloodArmor = { fx, key, rig: this.rig };
+        this.world.fx.burst(this.chestPos(), { count: 30, color: 0xb01020, speed: 3, life: 0.5, size: 0.18, gravity: 6 });
+      }
+    }
+    if (this.bloodArmor) this.bloodArmor.fx.update(dt);
+  }
+
   // Só animação/transformação (usado durante cinematics, quando o mundo para)
   updatePresentation(dt) {
     this.updateVisuals(dt);
@@ -621,6 +649,7 @@ export class Fighter {
 
   updateVisuals(dt) {
     this.updateGrip();
+    this.updateBloodShell(dt);
     // posiciona o modelo ANTES de animar: o ajuste de pés/chão do rig usa a posição deste quadro
     this.rig.root.position.copy(this.pos);
     this.rig.root.rotation.y = this.yaw;
@@ -707,7 +736,7 @@ export class Fighter {
     }
     const opp = this.opponent;
     let dir;
-    const stick = kind === 'short' ? this.moveInputWorld(new THREE.Vector3()) : null;
+    const stick = kind === 'short' || kind === 'step' ? this.moveInputWorld(new THREE.Vector3()) : null;
     let free = false;
     if (stick && stick.length() > 0.35) {
       dir = stick.setY(0).normalize();
@@ -1201,6 +1230,8 @@ export class Fighter {
     this.guardMoving = false;
     // momento em que a Defesa foi apertada (usado pelo Bloqueio Perfeito)
     this.blockPressTime = this.input.pressTime.block ?? this.world.inputTime;
+    // já entrou na defesa com a direção apertada: não conta como toque (o passo pede um toque novo)
+    this.blockStickPrev = this.moveInputWorld(v1).length();
     this.vel.x = 0;
     this.vel.z = 0;
     this.anim.play('block', { blend: 0.05 });
@@ -1240,6 +1271,14 @@ export class Fighter {
     }
     const dir = this.moveInputWorld(v1);
     const mag = Math.min(1, dir.length());
+    // DEFESA + TOQUE NA DIREÇÃO = PASSO (como no Storm): sai do neutro e inclina → passo rápido para aquele lado
+    const flick = mag > 0.6 && (this.blockStickPrev ?? 1) < 0.3;
+    this.blockStickPrev = mag;
+    if (flick && this.onGround && this.cooldowns.dash <= 0) {
+      this.guardMoving = false;
+      this.startDash('step');
+      return;
+    }
     if (mag > 0.3) {
       // DEFESA + ANDAR: movimentação melhor pelo mapa, mas aberto a golpes
       this.guardMoving = true;
@@ -1765,7 +1804,7 @@ export class Fighter {
 
   // ------------------------------------------------ ataque principal (□/X)
   tryRanged() {
-    if (this.findBuff('provoked')) { this.notify('PROVOCADO: SÓ NO CORPO A CORPO'); return; }
+    if (this.meleeLocked()) return;
     const base = this.def.ranged;
     if (!base) {
       this.notify('SEM ATAQUE À DISTÂNCIA');
@@ -2069,7 +2108,7 @@ export class Fighter {
   }
 
   useAbility(a) {
-    if (this.findBuff('provoked')) { this.notify('PROVOCADO: SÓ NO CORPO A CORPO'); return; }
+    if (this.meleeLocked()) return;
     if (this.cooldowns[a.id] > 0) {
       this.notify(`${a.name.toUpperCase()}: RECARREGANDO`);
       return;
