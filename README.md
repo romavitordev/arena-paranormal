@@ -85,7 +85,7 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
   assistência (estilo Storm 4): vida e sanidade são da equipe; quem sai vira a assistência. Recarga de 5 s.
 - **Treinamento:** alvo parado (ou defendendo, ou CPU), vida que volta depois do combo, sanidade infinita, recargas
   sem espera — tudo na pausa. Select (Tab no teclado) reinicia a posição.
-- **Tela de vitória:** vencedor no centro (render 3D na pose de vitória), fala conforme quem ele derrotou e a equipe.
+- **Tela de vitória:** personagem vencedor e equipe em pose 3D no próprio cenário da luta, com fala conforme o adversário derrotado.
 - **PAUSA → COMANDOS** mostra todos os golpes dos dois lutadores.
 - Teclas em `src/config/controls.js`. Nada no código usa tecla fixa.
 

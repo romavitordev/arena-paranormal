@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.9 — 2026-10-03
+
+### Corrigido
+- Restaurada a tela de vitória com a equipe vencedora em pose 3D no cenário atual, em vez de um retrato sobre fundo separado.
+
 ## v1.8 — 2026-10-03
 
 ### Adicionado

@@ -1,5 +1,11 @@
 # Registro administrativo de alterações
 
+## Correção da tela de vitória
+- Restaurada a formação 3D da equipe vencedora sobre a arena da luta; a versão anterior mostrava um retrato recortado em um fundo separado.
+- `src/game/World.js` posiciona e anima os modelos de vitória no cenário e ajusta a câmera ao redimensionar.
+- `src/ui/Screens.js` e `src/styles.css` exibem texto e opções sem cobrir a arena; a HUD de combate é ocultada no resultado.
+- Validação: `npm.cmd run build`, `npm.cmd run check` e simulações no navegador confirmaram a arena e os modelos em vitórias solo e em equipe.
+
 ## v1.9 — melhorias mobile e navegação
 - Registro público correspondente adicionado a `CHANGELOG-CLIENTE.md`; as entradas v1.8 e v1.7 foram preservadas.
 - `src/config/version.js` passou a anunciar a versão 1.9, com as novidades v1.9, v1.8 e v1.7 também disponíveis no menu do jogo.

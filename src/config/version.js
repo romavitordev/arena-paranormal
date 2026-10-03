@@ -9,6 +9,7 @@ export const CHANGELOG = [
     date: '2026-10-02',
     title: 'Mobile mais fácil de jogar',
     items: [
+      'Na tela de vitória, o personagem e a equipe vencedora aparecem em pose 3D no próprio cenário da luta.',
       'A interface mobile foi reorganizada para usar melhor o espaço da tela, sem rolagem nos menus e seleções.',
       'Os controles de combate aparecem somente durante a partida; os menus podem ser usados tocando nas opções.',
       'Adicionada uma seta para voltar nas telas internas, além de opção de tela cheia.',

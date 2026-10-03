@@ -3,6 +3,7 @@
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
 ## v1.9 — Mobile mais fácil de jogar
+- Na tela de vitória, o personagem e a equipe vencedora aparecem em pose 3D no próprio cenário da luta.
 - A interface mobile foi reorganizada para usar melhor o espaço da tela, sem rolagem nos menus e seleções.
 - Os controles de combate aparecem somente durante a partida; os menus podem ser usados tocando nas opções.
 - Adicionada uma seta para voltar nas telas internas, além de opção de tela cheia.

@@ -154,10 +154,10 @@ async function startMatch() {
       // tempo contado pela simulação (e não pelo relógio): na LAN a tela de vitória abre no mesmo quadro nos dois
       match.world.after(0.4, () => {
         if (game.state !== 'fight' || game.match !== match) return;
-        // imagem do vencedor: render 3D na pose de vitória (local)
-        const arts = renderPortraits(team || [def], renderer, { w: 520, h: 700, anim: 'victory', animTime: 1.2, full: true, background: false, turn: 0.2 });
+        match.world.showVictoryLineup(team || [def]);
+        hud.show(false);
         setOverlay('result', new VictoryScreen(screens, {
-          winner: def, loser, slot: MODES[game.mode.kind].slots[winner], art: arts[def.id], team, teamArt: arts,
+          winner: def, loser, slot: MODES[game.mode.kind].slots[winner], team,
           line: victoryLine(def.id, loser.id),
           options: [
             { id: 'rematch', label: 'REVANCHE' },
@@ -312,6 +312,7 @@ window.addEventListener('resize', () => {
     cam.aspect = innerWidth / innerHeight;
     cam.updateProjectionMatrix();
   }
+  if (game.match) game.match.world.layoutVictoryLineup();
 });
 
 const clock = new THREE.Clock();
