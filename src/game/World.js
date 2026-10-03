@@ -8,6 +8,8 @@ import { Animator } from '../anim/Animator.js';
 import { ARENAS } from '../arena/index.js';
 import { yawTo } from '../core/util.js';
 
+const RAY = new THREE.Raycaster();
+
 // Tudo que existe dentro de uma luta: cena, arena, lutadores, projéteis,
 // efeitos, câmera, cinematics e congelamento de impacto (hitstop).
 export class World {
@@ -111,24 +113,78 @@ export class World {
     this.layoutVictoryLineup();
   }
 
+  // Vencedores em fila, de frente para a câmera, onde a luta terminou. A câmera procura uma direção com visão livre
+  // (sem parede no caminho, dentro do cenário), de preferência olhando para o meio da arena — antes ficava fixa no
+  // ponto (0, 0) e, no Bar Suvaco Seco, mostrava a fachada por fora em vez dos vencedores.
   layoutVictoryLineup() {
     if (!this.victoryActors) return;
     const count = this.victoryActors.length;
-    const spacing = innerWidth / innerHeight < 0.85 ? 1.35 : 2.35;
+    const narrow = innerWidth / innerHeight < 0.85;
+    const winner = this.fighters.find((f) => f.def.id === this.victoryActors[0].def.id || (f.baseForm && f.baseForm.def.id === this.victoryActors[0].def.id)) || this.fighters[0];
+    const center = new THREE.Vector3(winner.pos.x, 0, winner.pos.z);
+    const spots = this.arena.spawns || [];
+    const mid = spots.length ? spots.reduce((v, p) => v.add(new THREE.Vector3(p.x, 0, p.z)), new THREE.Vector3()).multiplyScalar(1 / spots.length) : new THREE.Vector3();
+    const inward = mid.clone().sub(center);
+    const baseYaw = inward.lengthSq() > 0.25 ? Math.atan2(inward.x, inward.z) : 0;
+    const q = new THREE.Vector3();
+    const clear = (from, to) => {
+      for (let k = 1; k <= 24; k++) {
+        q.lerpVectors(from, to, k / 24);
+        if (this.arena.blocksPoint(q, 0.25)) return false;
+      }
+      return true;
+    };
+    const want = narrow ? 10 : 7.5;
+    // espaço entre os vencedores: cabe na largura visível (o vencedor no meio, a equipe dos lados)
+    const halfW = (dist) => Math.tan(((40 / 2) * Math.PI) / 180) * dist * (innerWidth / innerHeight);
+    const spacingFor = (dist) => (count < 2 ? 0 : Math.min(2.35, (halfW(dist) - 0.8) / Math.floor(count / 2)));
+    const slot = (i) => (i === 0 ? 0 : i % 2 ? -Math.ceil(i / 2) : Math.ceil(i / 2)); // 0, -1, +1, -2...
+    let best = null;
+    for (const dist of [want, want * 0.8, 5.5, 4.2]) {
+      for (let i = 0; i < 16 && !best; i++) {
+        // alterna para os dois lados a partir da direção que olha para o meio da arena
+        const yaw = baseYaw + Math.PI + (i % 2 ? 1 : -1) * Math.ceil(i / 2) * (Math.PI / 8);
+        const cam = new THREE.Vector3(center.x + Math.sin(yaw) * dist, 3.1, center.z + Math.cos(yaw) * dist);
+        if (!clear(new THREE.Vector3(center.x, 1.4, center.z), cam)) continue;
+        const right = new THREE.Vector3(Math.cos(yaw), 0, -Math.sin(yaw));
+        const spacing = spacingFor(dist);
+        const ends = [-1, 1].map((sgn) => center.clone().addScaledVector(right, sgn * Math.floor(count / 2) * spacing).setY(1));
+        if (ends.some((e) => this.arena.blocksPoint(e, 0.3))) continue;
+        // blocos grandes do cenário (cemitério, cidade) entre a câmera e algum vencedor: tenta outra direção
+        const solids = this.arena.solids || [];
+        if (solids.length && [0, ...[-1, 1].map((x) => x * Math.floor(count / 2))].some((k) => {
+          const target = center.clone().addScaledVector(right, k * spacing);
+          return [0.4, 1.2, 1.9].some((h) => {
+            const to = target.clone().setY(h).sub(cam);
+            const len = to.length();
+            RAY.set(cam, to.divideScalar(len));
+            RAY.far = len - 0.3;
+            return RAY.intersectObjects(solids, false).length > 0;
+          });
+        })) continue;
+        best = { yaw, dist, cam, right, spacing };
+      }
+      if (best) break;
+    }
+    if (!best) {
+      const yaw = baseYaw + Math.PI;
+      best = { yaw, dist: 4.2, spacing: spacingFor(4.2), cam: new THREE.Vector3(center.x + Math.sin(yaw) * 4.2, 3.1, center.z + Math.cos(yaw) * 4.2), right: new THREE.Vector3(Math.cos(yaw), 0, -Math.sin(yaw)) };
+    }
     for (const actor of this.victoryActors) {
       const { rig, index } = actor;
-      rig.root.position.set((index - (count - 1) / 2) * spacing, 0, 0);
-      rig.root.rotation.y = 0;
+      rig.root.position.copy(center).addScaledVector(best.right, slot(index) * best.spacing);
+      rig.root.rotation.y = best.yaw; // de frente para a câmera
       rig.groundLock = true;
     }
-
-    const distance = innerWidth / innerHeight < 0.85 ? 10 : 7.5;
+    const look = center.clone().setY(1);
     this.camera.fov = 40;
-    this.camera.position.set(0, 3.1, distance);
-    this.camera.lookAt(0, 1, 0);
+    this.camera.position.copy(best.cam);
+    this.camera.lookAt(look);
     this.camera.updateProjectionMatrix();
     this.cameraRig.pos.copy(this.camera.position);
-    this.cameraRig.look.set(0, 1, 0);
+    this.cameraRig.look.copy(look);
+    // o que ainda ficar entre a câmera e os vencedores fica transparente
+    this.cameraRig.updateOcclusion(this.victoryActors.map((x) => ({ visible: true, def: x.def, chestPos: (v) => (v || new THREE.Vector3()).copy(x.rig.root.position).setY(1.2) })), 1 / 60, true);
   }
 
   // NPCs inimigos de um lutador (os que não são dele)

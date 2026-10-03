@@ -12,6 +12,7 @@
 //   tronco y > 0 → gira o ombro direito para frente  |  tronco x > 0 → inclina p/ frente
 
 import { addFormClips } from './formClips.js';
+import { addVictoryClips } from './victoryClips.js';
 
 const k = (t, pose) => ({ t, pose });
 
@@ -502,5 +503,6 @@ CLIPS.walk_back = {
 
 // animações próprias das formas (Deus da Morte e Diabo)
 addFormClips(CLIPS, k, mirrorPose);
+addVictoryClips(CLIPS, k);
 
 export const JOINTS = ['hip', 'sp', 'hd', 'sL', 'eL', 'sR', 'eR', 'lL', 'kL', 'lR', 'kR'];

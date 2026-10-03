@@ -19,7 +19,7 @@ export default {
     tagline: 'Um contrato é um contrato.',
   },
   stats: { moveSpeed: 7.9 },
-  anims: { idle: 'idle_knife', run: 'run', charge: 'charge', victory: 'victory', block: 'block' },
+  anims: { idle: 'idle_knife', run: 'run', charge: 'charge', victory: 'vic_kemi', block: 'block' },
   chargeFx: { style: 'default', color: 0xa7a3ad },
   dodge: { style: 'default', distance: 5.4 },
 

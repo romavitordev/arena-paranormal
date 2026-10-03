@@ -52,6 +52,9 @@ export class TouchControls {
     document.body.appendChild(this.root);
     document.body.classList.add('touch-capable');
     document.body.classList.add('touch-ui');
+    window.addEventListener('pointerdown', (e) => {
+      if (this.scene && !this.hidden && !(e.target && e.target.closest && e.target.closest('.tb'))) this.T.taps.add('jump');
+    });
     // notebook com tela de toque: os botões somem quando o jogador usa teclado/controle e voltam ao tocar na tela
     window.addEventListener('pointerdown', (e) => { if (e.pointerType === 'touch') this.setHidden(false); }, true);
     this.bindButtons();
@@ -172,8 +175,12 @@ export class TouchControls {
   }
 
   // chamado a cada quadro, ANTES do InputManager: mostra o conjunto certo de botões e aplica as macros
-  sync(state, teamMode = false, mainMenuOpen = false) {
+  // scene: apresentação antes da luta / fim da luta — os botões de combate somem (cobriam as falas) e um toque
+  // em qualquer lugar vale como × (pula a apresentação)
+  sync(state, teamMode = false, mainMenuOpen = false, scene = false) {
     const fight = state === 'fight';
+    this.root.classList.toggle('scene', !!scene);
+    this.scene = !!scene;
     const showBack = state === 'mainmenu' ? mainMenuOpen : !fight && state !== 'title' && state !== 'loading';
     const mode = fight ? 'fight' : 'other';
     if (mode !== this.mode) {

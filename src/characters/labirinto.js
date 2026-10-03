@@ -17,7 +17,7 @@ export default {
     tagline: 'O que espera no final do labirinto... é você.',
   },
   stats: { moveSpeed: 7.4 },
-  anims: { idle: 'idle_katana', run: 'run', charge: 'charge', victory: 'victory', block: 'block_weapon' },
+  anims: { idle: 'idle_katana', run: 'run', charge: 'charge', victory: 'vic_labirinto', block: 'block_weapon' },
   chargeFx: { style: 'default', color: 0x9a6aff },
   dodge: { style: 'default', distance: 4.4 },
 

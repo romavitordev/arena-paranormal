@@ -14,7 +14,7 @@ export default {
     tagline: 'Ninguém viu o rosto. Ninguém viu ele chegar.',
   },
   stats: { moveSpeed: 8.0 },
-  anims: { idle: 'idle_katana', run: 'run', charge: 'charge', victory: 'victory', block: 'block_weapon' },
+  anims: { idle: 'idle_katana', run: 'run', charge: 'charge', victory: 'vic_joui', block: 'block_weapon' },
   chargeFx: { style: 'aura', color: 0xd01830, smoke: 0x120a0c },
   // esquiva pelas sombras (não é teleporte: só um passo rápido envolto em sombra)
   dodge: { style: 'shadow', iframes: 0.2 },

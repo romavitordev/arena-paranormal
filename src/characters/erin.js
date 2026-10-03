@@ -17,7 +17,7 @@ export default {
     tagline: 'Kaboom!',
   },
   stats: { moveSpeed: 8.2 },
-  anims: { idle: 'idle_dual', run: 'run', charge: 'charge_dual', victory: 'victory', block: 'block_weapon' },
+  anims: { idle: 'idle_dual', run: 'run', charge: 'charge_dual', victory: 'vic_erin', block: 'block_weapon' },
   chargeFx: { style: 'default', color: 0xff7a2a },
   dodge: { style: 'default', distance: 4.8 },
 

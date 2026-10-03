@@ -18,7 +18,7 @@ export default {
     tagline: 'Eu não quero morrer... eu quero um novo começo.',
   },
   stats: { moveSpeed: 8.1 },
-  anims: { idle: 'idle_knife', run: 'run', charge: 'charge', victory: 'victory', block: 'block' },
+  anims: { idle: 'idle_knife', run: 'run', charge: 'charge', victory: 'vic_juan', block: 'block' },
   chargeFx: { style: 'default', color: 0xc01828 },
   dodge: { style: 'default', distance: 5.2 },
 

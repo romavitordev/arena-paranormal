@@ -12,6 +12,10 @@ export async function runBalance({ fights = 4, maxTime = 150, ids = ROSTER.map((
   const stats = Object.fromEntries(ids.map((id) => [id, { wins: 0, fights: 0, dealt: 0, taken: 0, rounds: 0, moves: {} }]));
   const matrix = Object.fromEntries(ids.map((a) => [a, Object.fromEntries(ids.map((b) => [b, 0]))]));
   const dt = 1 / 60;
+  // progresso e parciais em window.__balanceProgress (dá para ler no meio de uma rodada longa)
+  const total = ids.reduce((n, a) => n + ids.filter((b) => b !== a && (!focus || a === focus || b === focus)).length, 0) * fights;
+  const progress = { done: 0, total, last: '', stats, matrix, started: performance.now() };
+  window.__balanceProgress = progress;
   for (const a of ids) {
     for (const b of ids) {
       if (a === b) continue;
@@ -50,6 +54,8 @@ export async function runBalance({ fights = 4, maxTime = 150, ids = ROSTER.map((
         stats[a].rounds += wa;
         stats[b].rounds += wb;
         if (wa > wb) { stats[a].wins++; matrix[a][b]++; } else if (wb > wa) { stats[b].wins++; matrix[b][a]++; }
+        progress.done++;
+        progress.last = `${a} ${wa}×${wb} ${b}`;
         // não trava a aba
         await new Promise((r) => setTimeout(r, 0));
       }

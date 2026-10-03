@@ -19,7 +19,7 @@ export default {
     tagline: 'Ninguém vê a Fantasma.',
   },
   stats: { moveSpeed: 8.6, maxHealth: 1100 }, // cabe a vida extra das faixas (+100)
-  anims: { idle: 'idle_knife', run: 'run', charge: 'charge', victory: 'victory', block: 'block' },
+  anims: { idle: 'idle_knife', run: 'run', charge: 'charge', victory: 'vic_fantasma', block: 'block' },
   chargeFx: { style: 'default', color: 0x1a1620 },
   dodge: { style: 'default', distance: 6 },
 

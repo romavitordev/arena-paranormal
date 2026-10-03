@@ -17,7 +17,7 @@ export default {
     tagline: 'A próxima rodada sou eu.',
   },
   stats: { moveSpeed: 7.4 },
-  anims: { idle: 'idle_knife', run: 'run', charge: 'charge', victory: 'victory', block: 'block_weapon' },
+  anims: { idle: 'idle_knife', run: 'run', charge: 'charge', victory: 'vic_aguiar', block: 'block_weapon' },
   chargeFx: { style: 'blood', color: 0xc4241c },
   dodge: { style: 'default', distance: 4.2 },
 

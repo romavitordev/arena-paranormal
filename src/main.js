@@ -154,10 +154,12 @@ async function startMatch() {
       // tempo contado pela simulação (e não pelo relógio): na LAN a tela de vitória abre no mesmo quadro nos dois
       match.world.after(0.4, () => {
         if (game.state !== 'fight' || game.match !== match) return;
-        match.world.showVictoryLineup(team || [def]);
+        // quem terminou a luta fica no meio; o resto da equipe dos lados
+        const lineup = team ? [def, ...team.filter((d) => d.id !== def.id)] : [def];
+        match.world.showVictoryLineup(lineup);
         hud.show(false);
         setOverlay('result', new VictoryScreen(screens, {
-          winner: def, loser, slot: MODES[game.mode.kind].slots[winner], team,
+          winner: def, loser, slot: MODES[game.mode.kind].slots[winner], team: team ? lineup : null,
           line: victoryLine(def.id, loser.id, loser.name),
           options: [
             { id: 'rematch', label: 'REVANCHE' },
@@ -166,6 +168,7 @@ async function startMatch() {
             { id: 'main', label: 'MENU PRINCIPAL' },
           ],
         }));
+        placeVictoryLabels();
       });
     },
   });
@@ -335,7 +338,21 @@ window.addEventListener('resize', () => {
     cam.updateProjectionMatrix();
   }
   if (game.match) game.match.world.layoutVictoryLineup();
+  placeVictoryLabels();
 });
+
+// nomes da equipe vencedora embaixo de cada modelo (projeta o pé de cada um na tela)
+function placeVictoryLabels() {
+  const w = game.match && game.match.world;
+  if (!w || !w.victoryActors || !game.overlay || !game.overlay.placeLabels) return;
+  w.camera.updateMatrixWorld();
+  const pts = [];
+  for (const a of w.victoryActors) {
+    const v = a.rig.root.position.clone().setY(-0.05).project(w.camera);
+    pts[a.index] = { x: (v.x * 0.5 + 0.5) * innerWidth, y: (-v.y * 0.5 + 0.5) * innerHeight + 6 };
+  }
+  game.overlay.placeLabels(pts);
+}
 
 const clock = new THREE.Clock();
 function frame() {
@@ -544,7 +561,7 @@ const touch = touchDevice ? new TouchControls(input) : null;
 game.touch = touch;
 
 function tick(dt) {
-  if (touch) touch.sync(game.state, !!input.teamMode, game.state === 'mainmenu' && game.screen.menu);
+  if (touch) touch.sync(game.state, !!input.teamMode, game.state === 'mainmenu' && game.screen.menu, game.state === 'fight' && !!game.match && ['entrance', 'dialogue'].includes(game.match.phase));
   if (game.tutorial) game.tutorial.el.style.display = game.state === 'fight' ? '' : 'none';
   input.update(dt);
   if (input.anyPressed) audio.unlock();
@@ -696,10 +713,13 @@ function tick(dt) {
   }
 }
 
+// celular deitado: a seleção não tem espaço para os lutadores em 3D no meio (eles apareciam atrás das grades)
+const PHONE_LANDSCAPE = window.matchMedia('(max-height: 520px) and (max-width: 760px)');
+
 function render() {
   if (game.match && (game.state === 'fight' || game.state === 'pause' || game.state === 'result' || game.state === 'commands')) {
     game.match.render();
-  } else if (game.state === 'select' && game.screen && game.screen.stage) {
+  } else if (game.state === 'select' && game.screen && game.screen.stage && !PHONE_LANDSCAPE.matches) {
     game.screen.stage.render(renderer); // seleção: lutadores em 3D no centro
   } else {
     const t = clock.elapsedTime;

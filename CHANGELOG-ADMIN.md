@@ -1,5 +1,50 @@
 # Registro administrativo de alterações
 
+## v2.0 — reanálise geral, recuperação e correções
+
+### Recuperação do histórico
+- O commit `29f1170` ("improve mobile play") partiu de uma cópia antiga (`aa0b93d`) e desfez os IDs novos, as 420
+  introduções, as vitórias variadas e os valores da Fantasma. Reconstruído a partir de `da2771b` + só a parte mobile do
+  `29f1170` + os commits seguintes (`9541e7f`, `5d529c3`, `4fe62ee`), num commit novo (sem reescrever o histórico).
+- Uma segunda reversão acidental (12 arquivos antigos gravados às 03:45 por cima do HEAD) foi guardada com
+  `git stash` ("reversao acidental 03:45") e não entrou no commit.
+
+### Tela de vitória (`src/game/World.js`, `src/main.js`, `src/ui/Screens.js`)
+- `layoutVictoryLineup`: centro na posição do vencedor; câmera testa 16 direções × 4 distâncias com linha livre
+  (`arena.blocksPoint`) e sem bloco grande no caminho (raio contra `arena.solids`), preferindo olhar para o meio da
+  arena; espaçamento calculado pela largura visível; vencedor no centro e equipe alternando dos lados.
+- Nomes da equipe projetados sob cada modelo (`placeVictoryLabels`, refeito no resize).
+- Poses próprias em `src/anim/victoryClips.js` (`vic_*`), ligadas em `anims.victory` de cada personagem.
+
+### Interface
+- Seleção (PC): ficha com uma linha por habilidade (`.abl` com reticências), especial antes das habilidades, estilo
+  em até 2 linhas. Classe `.ab` evitada (colidia com os botões da HUD).
+- `specialSummary` em `src/ui/moves.js` usado na seleção, em COMANDOS e no gerador do HABILIDADES.md.
+- COMANDOS: `.content` rolável e ▲ ▼ rolam pelo controle.
+- Online: `font: … inherit` inválido trocado por propriedades separadas nos campos.
+
+### Mobile (`src/styles.css`, `src/ui/touchControls.js`, `src/main.js`, `src/ui/Screens.js`)
+- Altura ≤ 520 px: `.hopt` compacto e logo oculto com o menu aberto (a regra antiga mirava `.menu-home .opt`).
+- Altura ≤ 520 px e largura ≤ 760 px: grade 5 × 3, retrato com foco no rosto, lados opacos e sem render 3D da
+  seleção (`PHONE_LANDSCAPE` em main.js).
+- `touch.sync(..., scene)`: classe `scene` esconde `.t-fight` durante `entrance`/`dialogue`; toque fora dos botões
+  vira × (pula). Botão de tela cheia oculto em `.fighting`. Textos de toque no título (`touchOnly`).
+
+### Desempenho (`src/camera/CameraRig.js`)
+- `updateOcclusion` e `avoidSolids` a 10 Hz (distância livre guardada entre as checagens): simulação de ~1,9 para
+  ~0,45 ms por quadro (CPU × CPU, Orfanato/Santo Berço/Suvaco).
+
+### Equilíbrio
+- Rodada geral (210 lutas, CPU normal, 60 s, melhor de 3): Kaiser 75% e Gal Sal 25% fora da margem (±18).
+- `gal_sal.js`: `heal` × 0,6 em todos os golpes → 46% (28 lutas). `kaiser.js`: Jab 20, Direto 23, karambit 30, Chute
+  giratório 56 (combo 194) → 63% (56 lutas). Tabela completa no TODO.md ("Estado na v2.0").
+
+### Validação
+- `npm run check`, `npm run build`, `npm run audit`, `npm run moves`.
+- Navegador: fluxo completo no PC (título → menu → seleção → configurações → cenário → apresentação → luta → vitória
+  solo e equipe em Suvaco, Santo Berço e Ruínas), pausa → comandos, tutorial, online; celular deitado (740 × 360 com
+  toque emulado) do título até a luta; retrato pede para girar.
+
 ## Correção da tela de vitória
 - Restaurada a formação 3D da equipe vencedora sobre a arena da luta; a versão anterior mostrava um retrato recortado em um fundo separado.
 - `src/game/World.js` posiciona e anima os modelos de vitória no cenário e ajusta a câmera ao redimensionar.

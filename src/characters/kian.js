@@ -19,7 +19,7 @@ export default {
     tagline: 'Os sigilos seguram o que ele carrega.',
   },
   stats: { moveSpeed: 7.4 },
-  anims: { idle: 'idle_fist', run: 'run', charge: 'charge_fists', victory: 'victory', block: 'block' },
+  anims: { idle: 'idle_fist', run: 'run', charge: 'charge_fists', victory: 'vic_kian', block: 'block' },
   chargeFx: { style: 'fists', color: 0xffd88a },
   dodge: { style: 'default' },
 

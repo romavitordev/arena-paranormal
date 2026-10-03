@@ -163,7 +163,7 @@ export class CameraRig {
         this.target.z + Math.cos(this.yaw) * this.distance,
       );
       this.clampToArena(this.pos);
-      this.avoidSolids();
+      this.avoidSolids(dt);
       this.look.copy(this.target);
       // se a parede não deixa recuar, abre a lente para continuar enquadrando os dois
       const real = this.pos.distanceTo(this.target);
@@ -199,7 +199,9 @@ export class CameraRig {
 
   // Bloco grande do cenário (cidade/cemitério juntados numa peça só) entre os lutadores e a câmera: em vez de ficar
   // atrás dele, a câmera chega para a frente do obstáculo (a lente abre sozinha para continuar enquadrando)
-  avoidSolids() {
+  // O raio contra os blocos é caro (milhares de triângulos): é refeito 10x por segundo e a distância livre fica guardada
+  // para os quadros do meio.
+  avoidSolids(dt = 1 / 60) {
     const solids = this.world.arena && this.world.arena.solids;
     if (!solids || !solids.length) return;
     const from = v1.copy(this.target);
@@ -208,10 +210,15 @@ export class CameraRig {
     const len = dir.length();
     if (len < 1) return;
     dir.divideScalar(len);
-    ray.set(from, dir);
-    ray.far = len;
-    const hit = ray.intersectObjects(solids, false)[0];
-    if (hit && hit.distance > 1.5) this.pos.copy(from).addScaledVector(dir, hit.distance - 0.4);
+    this.solidTimer = (this.solidTimer || 0) - dt;
+    if (this.solidTimer <= 0) {
+      this.solidTimer = 0.1;
+      ray.set(from, dir);
+      ray.far = len;
+      const hit = ray.intersectObjects(solids, false)[0];
+      this.solidFree = hit && hit.distance > 1.5 ? hit.distance - 0.4 : null;
+    }
+    if (this.solidFree != null && this.solidFree < len) this.pos.copy(from).addScaledVector(dir, this.solidFree);
   }
 
   // Mantém a câmera dentro dos limites que a arena permitir (sem pulos bruscos)
@@ -233,9 +240,14 @@ export class CameraRig {
 
   // Objetos entre a câmera e os lutadores ficam transparentes: raios até a cabeça, o peito e o quadril de cada um, e
   // também o objeto em que a câmera "entrou". Some na hora e volta 0,35 s depois de parar de tampar (sem piscar).
-  updateOcclusion(fighters, dt = 1 / 60) {
+  updateOcclusion(fighters, dt = 1 / 60, force = false) {
     const occ = this.world.arena && this.world.arena.occluders;
     if (!occ || !occ.length) return;
+    // 10x por segundo basta para sumir/voltar (os raios contra ~150 objetos custavam mais que a luta inteira)
+    this.occTimer = (this.occTimer || 0) - dt;
+    if (!force && this.occTimer > 0) return;
+    dt = Math.max(dt, 0.1 - Math.max(0, this.occTimer));
+    this.occTimer = 0.1;
     const cam = this.camera.position;
     const hits = new Set();
     for (const f of fighters) {

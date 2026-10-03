@@ -4,6 +4,7 @@
 //   o golpe tira X de vida do inimigo → o INIMIGO recupera Y de vida (Y < X)
 //   → e perde Y × 1,5 de sanidade (energia). O Gal não se cura.
 // X = dano do golpe (por acerto), Y = `heal` (por acerto). Totalmente determinístico.
+// v2.0: Y −40% (telemetria: 25% de vitórias com o 2º maior dano causado — a cura devolvia ~¼ do dano).
 export default {
   id: 'gal_sal',
   name: 'GAL SAL',
@@ -19,7 +20,7 @@ export default {
     tagline: 'Toda ferida cobra um preço.',
   },
   stats: { moveSpeed: 7.8 },
-  anims: { idle: 'idle_dual', run: 'run', charge: 'charge_dual', victory: 'victory', block: 'block_weapon' },
+  anims: { idle: 'idle_dual', run: 'run', charge: 'charge_dual', victory: 'vic_gal', block: 'block_weapon' },
   chargeFx: { style: 'blades', color: 0xd4a64a },
   dodge: { style: 'default' },
   // Bloqueio Perfeito: segurar a defesa no instante do golpe físico inimigo
@@ -28,21 +29,21 @@ export default {
   melee: {
     name: 'Lâminas e correntes',
     strikes: [
-      { name: 'Corte curto', anim: 'dual_r', dur: 0.3, active: [0.08, 0.17], damage: 34, heal: 9, range: 2.0, arc: 120, knockback: 1.2, lunge: 1.2, sound: 'blade', hitSound: 'bladeHit', trail: { tilt: 0.1 } },
-      { name: 'Corte alternado', anim: 'dual_l', dur: 0.3, active: [0.08, 0.17], damage: 34, heal: 9, range: 2.0, arc: 120, knockback: 1.2, lunge: 1.2, sound: 'blade', hitSound: 'bladeHit', trail: { tilt: -0.1, flip: true } },
-      { name: 'Corte cruzado', anim: 'dual_cross', dur: 0.42, active: [0.14, 0.24], damage: 44, heal: 12, range: 2.1, arc: 100, knockback: 2.0, lunge: 1.3, sound: 'blade', hitSound: 'bladeHit', trail: { cross: true } },
+      { name: 'Corte curto', anim: 'dual_r', dur: 0.3, active: [0.08, 0.17], damage: 34, heal: 5, range: 2.0, arc: 120, knockback: 1.2, lunge: 1.2, sound: 'blade', hitSound: 'bladeHit', trail: { tilt: 0.1 } },
+      { name: 'Corte alternado', anim: 'dual_l', dur: 0.3, active: [0.08, 0.17], damage: 34, heal: 5, range: 2.0, arc: 120, knockback: 1.2, lunge: 1.2, sound: 'blade', hitSound: 'bladeHit', trail: { tilt: -0.1, flip: true } },
+      { name: 'Corte cruzado', anim: 'dual_cross', dur: 0.42, active: [0.14, 0.24], damage: 44, heal: 7, range: 2.1, arc: 100, knockback: 2.0, lunge: 1.3, sound: 'blade', hitSound: 'bladeHit', trail: { cross: true } },
       // dois acertos: X e Y valem por acerto (24 de dano e 6 de vida cada)
-      { name: 'Ataque giratório', anim: 'dual_spin', dur: 0.55, actives: [[0.12, 0.24], [0.3, 0.44]], damage: 48, heal: 6, range: 2.2, arc: 360, knockback: 1.6, lunge: 0.8, sound: 'blade', hitSound: 'bladeHit', trail: { spin: true } },
-      { name: 'Duas correntes', anim: 'chain_sweep', dur: 0.6, active: [0.24, 0.38], damage: 56, heal: 15, range: 3.6, arc: 160, lunge: 0.6, finisher: 'launch', chain: true, sound: 'slashFinal', hitSound: 'bladeHit', trail: { big: true, wide: true, radius: 3.2 } },
+      { name: 'Ataque giratório', anim: 'dual_spin', dur: 0.55, actives: [[0.12, 0.24], [0.3, 0.44]], damage: 48, heal: 4, range: 2.2, arc: 360, knockback: 1.6, lunge: 0.8, sound: 'blade', hitSound: 'bladeHit', trail: { spin: true } },
+      { name: 'Duas correntes', anim: 'chain_sweep', dur: 0.6, active: [0.24, 0.38], damage: 56, heal: 9, range: 3.6, arc: 160, lunge: 0.6, finisher: 'launch', chain: true, sound: 'slashFinal', hitSound: 'bladeHit', trail: { big: true, wide: true, radius: 3.2 } },
     ],
     // frente + ○: lança uma lâmina presa à corrente (alcance médio)
-    up: { name: 'Lâminas para cima', anim: 'dual_both', dur: 0.46, active: [0.16, 0.28], damage: 40, range: 2.1, arc: 120, lunge: 0.9, finisher: 'launchHigh', launcher: true, sound: 'swing', hitSound: 'bladeHit', heal: 12, hand: 'R' },
-    down: { name: 'Cruz das lâminas', anim: 'dual_cross', dur: 0.52, active: [0.2, 0.32], damage: 46, range: 2.1, arc: 120, lunge: 1, finisher: 'knockdown', sound: 'swing', hitSound: 'bladeHit', impactScale: 1.4, heal: 14 },
-    forward: { name: 'Lançamento de lâmina', anim: 'chain_throw', dur: 0.46, active: [0.16, 0.3], damage: 32, heal: 9, range: 4.6, arc: 40, knockback: 2.4, chain: true, sound: 'chainThrow', hitSound: 'bladeHit' },
+    up: { name: 'Lâminas para cima', anim: 'dual_both', dur: 0.46, active: [0.16, 0.28], damage: 40, range: 2.1, arc: 120, lunge: 0.9, finisher: 'launchHigh', launcher: true, sound: 'swing', hitSound: 'bladeHit', heal: 7, hand: 'R' },
+    down: { name: 'Cruz das lâminas', anim: 'dual_cross', dur: 0.52, active: [0.2, 0.32], damage: 46, range: 2.1, arc: 120, lunge: 1, finisher: 'knockdown', sound: 'swing', hitSound: 'bladeHit', impactScale: 1.4, heal: 8 },
+    forward: { name: 'Lançamento de lâmina', anim: 'chain_throw', dur: 0.46, active: [0.16, 0.3], damage: 32, heal: 5, range: 4.6, arc: 40, knockback: 2.4, chain: true, sound: 'chainThrow', hitSound: 'bladeHit' },
     // trás + ○: puxa a lâmina de volta trazendo o inimigo junto
-    back: { name: 'Puxão da lâmina', anim: 'chain_pull', dur: 0.46, active: [0.08, 0.22], damage: 26, heal: 8, range: 4.6, arc: 40, knockback: 0, chain: true, onHit: { pull: true, after: 0.55 }, sound: 'chainPull', hitSound: 'bladeHit' },
-    side: { name: 'Corte lateral alternado', anim: 'dual_alt', dur: 0.36, active: [0.1, 0.2], damage: 30, heal: 9, range: 2.0, arc: 120, knockback: 1.6, motion: [{ t: [0, 0.22], side: 2.4 }], sound: 'blade', hitSound: 'bladeHit', trail: { roll: 1.0 } },
-    air: { name: 'Cruz aérea', anim: 'air_dual', dur: 0.4, active: [0.14, 0.3], damage: 36, heal: 10, range: 2.1, arc: 110, knockback: 3, slam: 15, vertical: 2.3, sound: 'blade', hitSound: 'bladeHit', trail: { cross: true } },
+    back: { name: 'Puxão da lâmina', anim: 'chain_pull', dur: 0.46, active: [0.08, 0.22], damage: 26, heal: 5, range: 4.6, arc: 40, knockback: 0, chain: true, onHit: { pull: true, after: 0.55 }, sound: 'chainPull', hitSound: 'bladeHit' },
+    side: { name: 'Corte lateral alternado', anim: 'dual_alt', dur: 0.36, active: [0.1, 0.2], damage: 30, heal: 5, range: 2.0, arc: 120, knockback: 1.6, motion: [{ t: [0, 0.22], side: 2.4 }], sound: 'blade', hitSound: 'bladeHit', trail: { roll: 1.0 } },
+    air: { name: 'Cruz aérea', anim: 'air_dual', dur: 0.4, active: [0.14, 0.3], damage: 36, heal: 6, range: 2.1, arc: 110, knockback: 3, slam: 15, vertical: 2.3, sound: 'blade', hitSound: 'bladeHit', trail: { cross: true } },
   },
 
   // □: CORRENTE (substitui o "Corte Projetado"): LANÇAR → PRENDER → PUXAR → COMBAR

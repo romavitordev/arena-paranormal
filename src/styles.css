@@ -186,6 +186,8 @@ canvas#game { display: block; position: fixed; inset: 0; width: 100%; height: 10
 #victory .vtop { top: 3vh; left: 0; width: 100%; font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px, 7vw, 86px); letter-spacing: .15em; color: #fff; text-shadow: 4px 4px 0 #000; text-align: center; }
 #victory .vtop small { font-size: .5em; color: #ffd84a; margin-right: .3em; }
 #victory .vteam { top: 60vh; left: 50%; transform: translateX(-50%); display: flex; justify-content: center; gap: clamp(20px, 16vw, 240px); width: min(90vw, 1000px); }
+#victory .vteam.placed { position: fixed; inset: 0; top: 0; left: 0; transform: none; width: auto; display: block; pointer-events: none; }
+#victory .vteam.placed span { position: fixed; transform: translate(-50%, 0); }
 #victory .vteam span { color: var(--c); font: 400 clamp(14px, 1.7vw, 21px)/1 'Bebas Neue', sans-serif; letter-spacing: .1em; text-shadow: 2px 2px 3px #000, 0 0 10px #000; white-space: nowrap; }
 #victory .vquote { bottom: 13vh; left: 50%; transform: translateX(-50%); width: min(780px, calc(100vw - 32px)); padding: 12px 22px; border-left: 4px solid var(--c); background: linear-gradient(90deg, rgba(8,5,12,.8), rgba(8,5,12,.65)); text-align: center; box-shadow: 0 6px 24px rgba(0,0,0,.3); }
 #victory .vname { color: var(--c); font-family: 'Bebas Neue', sans-serif; font-size: clamp(34px, 5vw, 58px); line-height: .9; letter-spacing: .08em; text-shadow: 3px 3px 0 #000; }
@@ -366,6 +368,10 @@ table.moves td span { display: block; color: var(--muted); font-size: 12px; marg
 .sel-side .det { flex: 0 1 auto; min-height: 0; max-height: 34%; overflow: hidden; padding: 6px 10px; border: 1px solid #2f2a3a; border-left: 0; border-right: 0; background: none; }
 .sel-side .det dl { grid-template-columns: 82px 1fr; font-size: 11.5px; gap: 2px 6px; }
 .sel-side .det dd i { color: var(--muted); font-style: normal; font-size: 10.5px; }
+/* ficha sem estourar a caixa: uma linha por habilidade, estilo em até 2 linhas */
+.det dd { min-width: 0; }
+.det dd .abl { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.det dd.clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .sel-center { grid-row: 2; grid-column: 2; position: relative; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; min-height: 0; pointer-events: none; }
 .sel-vs { position: absolute; top: 8%; left: 50%; transform: translateX(-50%); font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 7vw, 96px); color: #fff; opacity: .9;
   text-shadow: -4px 0 0 var(--p1), 4px 0 0 var(--p2), 0 0 30px rgba(164,107,255,.7); letter-spacing: .05em; }
@@ -378,7 +384,7 @@ table.moves td span { display: block; color: var(--muted); font-size: 12px; marg
 .plate.ok .pn::after { content: ' ✔'; color: #3ad17a; font-size: .6em; vertical-align: middle; }
 .plate.p2 .teampicks { justify-content: flex-end; }
 .sel-center .startbtn { pointer-events: auto; margin-top: 10px; }
-#select .hint { grid-column: 1 / -1; justify-self: center; margin-top: 0; }
+#select .hint { grid-column: 1 / -1; justify-self: center; margin-top: 0; font-size: 11px; line-height: 1.5; }
 @media (max-width: 760px) {
   #select { grid-template-columns: 1fr 1fr; grid-template-rows: auto minmax(0, 1fr) auto auto; padding: 8px; gap: 5px 8px; }
   .sel-center { grid-column: 1 / -1; grid-row: 4; }
@@ -401,6 +407,7 @@ table.moves td span { display: block; color: var(--muted); font-size: 12px; marg
 #touch .t-fight { position: absolute; inset: 0; pointer-events: none; }
 #touch .t-fight { display: none; }
 #touch.fighting .t-fight { display: block; }
+#touch.fighting.scene .t-fight { display: none; } /* apresentação: as falas ficam livres; tocar pula */
 /* joystick */
 #touch .stick { position: absolute; left: max(18px, env(safe-area-inset-left)); bottom: 22px; width: 150px; height: 150px; border-radius: 50%;
   pointer-events: auto; touch-action: none; background: radial-gradient(circle, rgba(255,255,255,.08), rgba(255,255,255,.02)); border: 2px solid rgba(255,255,255,.22); }
@@ -429,6 +436,7 @@ table.moves td span { display: block; color: var(--muted); font-size: 12px; marg
 #touch .t-back { display: none; left: max(12px, env(safe-area-inset-left)); }
 #touch.menu-mode .t-back { display: flex; }
 #touch .t-fullscreen { right: max(12px, env(safe-area-inset-right)); }
+#touch.fighting .t-fullscreen { display: none; } /* na luta ficava em cima do nome e da vida do P2 (continua nos menus/pausa) */
 #touch .t-status { display: none; position: absolute; top: max(66px, calc(env(safe-area-inset-top) + 58px)); right: max(12px, env(safe-area-inset-right)); max-width: min(80vw, 360px); padding: 8px 12px; border-radius: 8px; background: rgba(10,8,14,.94); color: #fff; font-size: 12px; pointer-events: none; }
 #touch .t-status.on { display: block; }
 #touch .t-rotate { display: none; }
@@ -490,6 +498,13 @@ body.touch-ui .hint { display: none; }
   .sel-grid .card .cn { font-size: 10px; padding: 8px 2px 2px; }
   #select { padding: 6px 10px; gap: 4px 10px; }
 }
+/* celular deitado (estreito e baixo): 5 × 3 cartões em pé por lado (com 3 × 5 viravam tiras e o rosto sumia) e
+   fundo opaco para o modelo 3D do meio não aparecer por trás das grades */
+@media (max-height: 520px) and (max-width: 760px) {
+  .sel-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(0, 1fr)); }
+  .sel-grid .card img { object-position: 50% 15%; }
+  .sel-side { background: rgba(10, 8, 14, .94); }
+}
 body.touch-capable #select { padding-top: max(58px, calc(env(safe-area-inset-top) + 48px)); }
 /* menu principal em tela baixa (celular deitado): logo menor para as opções caberem */
 @media (max-height: 520px) {
@@ -497,8 +512,11 @@ body.touch-capable #select { padding-top: max(58px, calc(env(safe-area-inset-top
   #home .logo .kicker, #home .logo .tag { font-size: 10px; letter-spacing: .2em; margin-top: 2px; }
   #home.menu-on .logo { transform: scale(.7); margin-top: -6vh; margin-bottom: -6vh; }
   #home .menu-home { margin-top: 0; gap: 2px; }
-  #home .menu-home .opt { padding-top: 4px; padding-bottom: 4px; }
+  #home .menu-home .hopt { padding-top: 2px; padding-bottom: 2px; font-size: clamp(18px, 7vh, 26px); }
+  #home .hopt .mk { line-height: 1.4; }
   #home .hdesc { display: none; }
+  /* com o menu aberto o logo sai: as 7 opções cabem na altura do celular deitado */
+  #home.menu-on .logo { display: none; }
 }
 #touch.away { display: none; }
 
@@ -543,11 +561,11 @@ body.touch-capable #changelog .news-nav { display: flex; }
 
 /* ---------------- ONLINE / LAN */
 #lan .lan-label { display: block; font-size: 11px; font-weight: 800; letter-spacing: .12em; color: #8a7ab0; margin: 8px 0 2px; }
-#lan .lan-field { display: block; width: 100%; box-sizing: border-box; font: 700 18px/1.3 inherit; color: #f0e8ff; background: rgba(10, 8, 16, .8); border: 2px solid #4a3a7a; border-radius: 8px; padding: 6px 10px; margin: 2px 0 6px; outline: none; }
+#lan .lan-field { display: block; width: 100%; box-sizing: border-box; font-family: inherit; font-weight: 700; font-size: 18px; line-height: 1.3; color: #f0e8ff; background: rgba(10, 8, 16, .8); border: 2px solid #4a3a7a; border-radius: 8px; padding: 6px 10px; margin: 2px 0 6px; outline: none; }
 #lan .lan-field:focus { border-color: #ffd84a; }
 #lan .lan { max-width: 520px; }
 #lan .lan-code { font-size: 54px; font-weight: 900; letter-spacing: .35em; color: #ffd84a; text-align: center; margin: 10px 0 6px; padding-left: .35em; user-select: all; }
-#lan .lan-input { display: block; width: 100%; box-sizing: border-box; font: 900 40px/1.2 inherit; letter-spacing: .3em; text-align: center; text-transform: uppercase; color: #ffd84a; background: rgba(10, 8, 16, .8); border: 2px solid #6a4ab8; border-radius: 8px; padding: 8px; margin: 8px 0; outline: none; }
+#lan .lan-input { display: block; width: 100%; box-sizing: border-box; font-family: inherit; font-weight: 900; font-size: 40px; line-height: 1.2; letter-spacing: .3em; text-align: center; text-transform: uppercase; color: #ffd84a; background: rgba(10, 8, 16, .8); border: 2px solid #6a4ab8; border-radius: 8px; padding: 8px; margin: 8px 0; outline: none; }
 #lan .lan-input:focus { border-color: #ffd84a; }
 #lan .lan-status { min-height: 1.3em; font-size: 14px; color: #b8a8e0; margin: 6px 0 10px; }
 #lan .lan-status.err { color: #ff6a5a; }
@@ -556,3 +574,10 @@ body.netplay #screens { pointer-events: none; }
 #net-badge { position: fixed; right: 12px; bottom: 10px; z-index: 30; font: 800 12px/1.3 system-ui, sans-serif; letter-spacing: .08em; color: #b8a8e0; background: rgba(10, 8, 16, .75); border: 1px solid #3a2a5a; border-radius: 6px; padding: 4px 8px; pointer-events: none; }
 #net-badge.wait { color: #ffd84a; border-color: #8a6a1a; }
 #net-toast { position: fixed; left: 50%; top: 18px; transform: translateX(-50%); z-index: 40; font: 700 15px/1.4 system-ui, sans-serif; color: #fff; background: rgba(120, 20, 30, .92); border-radius: 8px; padding: 10px 16px; max-width: 90vw; text-align: center; }
+
+/* toque: sem dicas de botão de controle no COMEÇAR */
+body.touch-ui .startbtn small { display: none; }
+
+/* COMANDOS: só a lista rola (antes passava da tela e o fim ficava escondido) */
+#commands .cmdbox { display: flex; flex-direction: column; max-height: calc(100vh - 24px); }
+#commands .cmdbox .content { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }

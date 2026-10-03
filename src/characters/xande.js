@@ -19,7 +19,7 @@ export default {
   stats: { moveSpeed: 8.6 }, // Tênis Lépidos
   // anda um instante e SOBE no Skate Caótico: bem mais rápido; parar, atacar ou apanhar desce
   mount: { prop: 'skate', after: 0.35, speedMult: 1.4, anim: 'skate_ride', lift: 0.1, height: 0.06, center: 0.3, color: 0x5aff6a },
-  anims: { idle: 'idle_knife', run: 'run', charge: 'charge', victory: 'victory', block: 'block_skate' },
+  anims: { idle: 'idle_knife', run: 'run', charge: 'charge', victory: 'vic_xande', block: 'block_skate' },
   // pegada: skate na mão esquerda; ao bater vai para as costas e o taco é seguro com as duas mãos
   grip: { prop: 'skate', reach: 0.42 },
   // o skate de escudo: bloqueio perfeito com janela um pouco maior

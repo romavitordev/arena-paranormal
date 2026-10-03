@@ -16,7 +16,7 @@ export default {
     tagline: 'Queimada, séria e perigosa.',
   },
   stats: { moveSpeed: 7.5 },
-  anims: { idle: 'idle_fist', run: 'run', charge: 'charge', victory: 'victory', block: 'block' },
+  anims: { idle: 'idle_fist', run: 'run', charge: 'charge', victory: 'vic_kaiser', block: 'block' },
   chargeFx: { style: 'smoke', color: 0xa46bff },
   dodge: { style: 'default' },
 
@@ -24,13 +24,14 @@ export default {
     name: 'Socos, chutes e karambit',
     // ○ neutro: sequência
     // sequência ágil: socos, chutes e cortes da karambit vermelha (mão esquerda); empurra pouco e emenda
+    // v2.0: combo 212 → 194 (telemetria: 75% de vitórias, dano concentrado no Jab e no Direto)
     strikes: [
-      { name: 'Jab', anim: 'jab', dur: 0.26, active: [0.07, 0.14], damage: 26, range: 1.7, arc: 100, knockback: 0.8, lunge: 1.3, sound: 'swing', hitSound: 'punch', hand: 'L' },
-      { name: 'Direto', anim: 'cross', dur: 0.28, active: [0.08, 0.16], damage: 28, range: 1.7, arc: 100, knockback: 0.9, lunge: 1.2, sound: 'swing', hitSound: 'punch', hand: 'R' },
-      { name: 'Corte de karambit', anim: 'dual_l', dur: 0.28, active: [0.08, 0.16], damage: 32, range: 1.7, arc: 120, knockback: 0.9, lunge: 1.2, sound: 'blade', hitSound: 'bladeHit', trail: { color: 0xc01828, radius: 1.1, tilt: -0.1, flip: true } },
+      { name: 'Jab', anim: 'jab', dur: 0.26, active: [0.07, 0.14], damage: 20, range: 1.7, arc: 100, knockback: 0.8, lunge: 1.3, sound: 'swing', hitSound: 'punch', hand: 'L' },
+      { name: 'Direto', anim: 'cross', dur: 0.28, active: [0.08, 0.16], damage: 23, range: 1.7, arc: 100, knockback: 0.9, lunge: 1.2, sound: 'swing', hitSound: 'punch', hand: 'R' },
+      { name: 'Corte de karambit', anim: 'dual_l', dur: 0.28, active: [0.08, 0.16], damage: 30, range: 1.7, arc: 120, knockback: 0.9, lunge: 1.2, sound: 'blade', hitSound: 'bladeHit', trail: { color: 0xc01828, radius: 1.1, tilt: -0.1, flip: true } },
       { name: 'Chute circular', anim: 'kick_round', dur: 0.38, active: [0.13, 0.24], damage: 36, range: 1.9, arc: 140, knockback: 1.2, lunge: 1.0, sound: 'swing', hitSound: 'kick' },
       { name: 'Corte cruzado', anim: 'dual_alt', dur: 0.32, active: [0.09, 0.18], damage: 30, range: 1.8, arc: 130, knockback: 1.0, lunge: 1.1, sound: 'blade', hitSound: 'bladeHit', trail: { color: 0xc01828, radius: 1.2, roll: 0.6 } },
-      { name: 'Chute giratório', anim: 'spin_kick', dur: 0.52, active: [0.2, 0.34], damage: 60, range: 2.0, arc: 180, lunge: 1.4, finisher: 'launch', sound: 'swing', hitSound: 'heavyPunch' },
+      { name: 'Chute giratório', anim: 'spin_kick', dur: 0.52, active: [0.2, 0.34], damage: 56, range: 2.0, arc: 180, lunge: 1.4, finisher: 'launch', sound: 'swing', hitSound: 'heavyPunch' },
     ],
     // frente + ○: golpe de avanço
     up: { name: 'Chute ascendente', anim: 'kick_front', dur: 0.46, active: [0.16, 0.28], damage: 38, range: 1.9, arc: 120, lunge: 0.9, finisher: 'launchHigh', launcher: true, sound: 'swing', hitSound: 'kick' },

@@ -5,7 +5,7 @@ import { SETTINGS, TIMER_OPTIONS, CPU_LEVELS, ROUND_OPTIONS, timerLabel, cpuLabe
 import { ARENAS, ARENA_ORDER } from '../arena/index.js';
 import { actionLabel, moveLabel } from './labels.js';
 import { COMBAT } from '../config/combat.js';
-import { moveListHTML } from './moves.js';
+import { moveListHTML, specialSummary } from './moves.js';
 import { VERSION, VERSION_LABEL, CHANGELOG, formatVersion } from '../config/version.js';
 
 // Telas fora da luta. Todas recebem as entradas normalizadas dos dois jogadores.
@@ -90,13 +90,13 @@ export class HomeScreen {
         <h1>ARENA<br><span>PARANORMAL</span></h1>
         <div class="tag">ORDO REALITAS <i>×</i> ESCRIPTAS <i>×</i> MASCARADOS <i>×</i> OS CINCO</div>
       </div>
-      <div class="press">PRESSIONE <b>START</b>, <b>${OK}</b> OU <kbd>ENTER</kbd></div>
+      <div class="press">${touchOnly ? 'TOQUE NA TELA PARA COMEÇAR' : `PRESSIONE <b>START</b>, <b>${OK}</b> OU <kbd>ENTER</kbd>`}</div>
       <div class="menu-home">
         <div class="hlist"></div>
         <div class="hdesc"></div>
       </div>
       <div class="ver">${VERSION_LABEL}</div>
-      <div class="foot"><span><b>${OK}</b> confirmar · <b>${BACK}</b> voltar</span><span>Teclado: P1 WASD + losango I J K L · P2 setas + numérico 8 4 6 2</span></div>`);
+      <div class="foot">${touchOnly ? '<span>Toque nas opções para escolher · a seta no canto volta</span>' : `<span><b>${OK}</b> confirmar · <b>${BACK}</b> voltar</span><span>Teclado: P1 WASD + losango I J K L · P2 setas + numérico 8 4 6 2</span>`}</div>`);
     this.desc = this.el.querySelector('.hdesc');
     this.listEl = this.el.querySelector('.hlist');
     this.list = HOME_OPTIONS;
@@ -363,15 +363,15 @@ export class SelectScreen {
         <div class="pt">“${front.info.tagline}”</div>${teamLine}`;
       this.plates[p].classList.toggle('ok', this.ready[p]);
       // ficha resumida embaixo da grade
-      const extras = (c.abilities || []).map((a) => `${a.name} <i>${INPUT_NAMES[a.input] || a.input}</i>`).join('<br>') || '—';
+      const extras = (c.abilities || []).map((a) => `<span class="abl">${a.name} <i>${INPUT_NAMES[a.input] || a.input}</i></span>`).join('') || '—';
       const sp = c.special;
       this.dets[p].innerHTML = `
         <dl>
-          <dt>Estilo</dt><dd>${c.info.identity || c.info.style}</dd>
+          <dt>Estilo</dt><dd class="clamp">${c.info.identity || c.info.style}</dd>
           <dt>Físico ○</dt><dd>${c.melee.name}</dd>
           <dt>Principal □</dt><dd>${c.ranged ? c.ranged.name : '—'}</dd>
+          <dt>Especial</dt><dd class="clamp">${sp ? `${sp.name} · ${specialSummary(c)}` : '—'}</dd>
           <dt>Habilidades</dt><dd>${extras}</dd>
-          <dt>Especial</dt><dd>${sp ? `${sp.name}${sp.type === 'mistField' ? ' · névoa + Acácia (250 dano)' : sp.type === 'erase' ? ' · 1x por partida' : ` · ${sp.damage ?? COMBAT.specialDamage} dano`}` : '—'}</dd>
         </dl>`;
       // modelo 3D no centro
       this.stage.show(p, front.id, this.ready[p]);
@@ -583,6 +583,17 @@ export class VictoryScreen {
     this.opts.forEach((o, i) => {
       o.textContent = this.options[i].label;
       o.classList.toggle('on', i === this.index);
+    });
+  }
+  // nomes embaixo de cada vencedor: pontos na tela (px), na mesma ordem da equipe
+  placeLabels(points) {
+    const spans = [...this.el.querySelectorAll('.vteam span')];
+    this.el.querySelector('.vteam').classList.add('placed');
+    spans.forEach((sp, i) => {
+      const p = points[i];
+      if (!p) return;
+      sp.style.left = `${p.x}px`;
+      sp.style.top = `${p.y}px`;
     });
   }
   update(input) {
@@ -952,7 +963,7 @@ export class CommandsScreen {
       <div class="cmdbox">
         <div class="tabs"></div>
         <div class="content"></div>
-        <div class="hint">◀ ▶ trocar · <b>${BACK}</b>, <kbd>${actionLabel(0, 'physical')}</kbd> ou <kbd>Esc</kbd> voltar</div>
+        <div class="hint">◀ ▶ trocar · ▲ ▼ rolar · <b>${BACK}</b>, <kbd>${actionLabel(0, 'physical')}</kbd> ou <kbd>Esc</kbd> voltar</div>
       </div>`);
     this.tabs = this.el.querySelector('.tabs');
     this.content = this.el.querySelector('.content');
@@ -965,12 +976,16 @@ export class CommandsScreen {
     const pages = this.pages();
     this.tabs.innerHTML = pages.map((p, i) => `<span class="${i === this.page ? 'on' : ''}">${p.title}</span>`).join('');
     this.content.innerHTML = pages[this.page].html;
+    this.content.scrollTop = 0;
   }
   update(input) {
     const n = this.pages().length;
     for (const p of controllers(input, this.owner)) {
       if (p.menu.left) { this.page = (this.page + n - 1) % n; this.render(); }
       if (p.menu.right) { this.page = (this.page + 1) % n; this.render(); }
+      // a lista de golpes é longa: ▲ ▼ rolam (com a roda do mouse / dedo também)
+      if (p.moveY > 0.5) this.content.scrollTop -= 14;
+      if (p.moveY < -0.5) this.content.scrollTop += 14;
       if (back(p) || p.pressed.start) return 'back';
     }
     if ((this.owner === null || this.owner === 0) && input.keyPressedOnce('Escape')) return 'back';

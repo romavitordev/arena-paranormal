@@ -16,7 +16,7 @@ export default {
     tagline: 'Sorri antes de cortar.',
   },
   stats: { moveSpeed: 8.3 },
-  anims: { idle: 'idle_knife', run: 'run', charge: 'charge', victory: 'victory', block: 'block_weapon' },
+  anims: { idle: 'idle_knife', run: 'run', charge: 'charge', victory: 'vic_aghata', block: 'block_weapon' },
   chargeFx: { style: 'blood', color: 0xe0204a },
   dodge: { style: 'default', distance: 4.6 },
 

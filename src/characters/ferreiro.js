@@ -17,7 +17,7 @@ export default {
     tagline: 'Eu não posso permitir que vocês destruam minha cidade.',
   },
   stats: { moveSpeed: 7.0, size: 1.1 },
-  anims: { idle: 'idle_katana', run: 'run', charge: 'charge', victory: 'victory', block: 'block_weapon' },
+  anims: { idle: 'idle_katana', run: 'run', charge: 'charge', victory: 'vic_ferreiro', block: 'block_weapon' },
   grip: { twoHand: true, reach: 0.42, freeLeft: ['concentrate', 'charge', 'victory', 'hit', 'launched', 'fall', 'getup', 'point'] },
   chargeFx: { style: 'default', color: 0x8a8090 },
   dodge: { style: 'default', distance: 4.6 },

@@ -4,6 +4,7 @@ import { writeFileSync } from 'node:fs';
 import { ROSTER } from '../src/characters/index.js';
 import { COMBAT } from '../src/config/combat.js';
 import { ELEMENTS } from '../src/config/elements.js';
+import { specialSummary } from '../src/ui/moves.js';
 
 const INPUT = {
   'carga+jump': 'Energia + Pulo (△+× / Y+A)',
@@ -90,7 +91,9 @@ for (const c of ROSTER) {
   } else if (sp.type === 'erase') {
     md += `Corpo a corpo, ${sp.usesPerMatch}x por partida (+${sp.bonusUseOnTranscend || 0} depois da primeira Transcendência), não pode ser defendido: o alvo vira pó. Escapa esquivando no contato; com a sanidade cheia resiste levando ${sp.resistDamage} de dano (nunca morre por isso). Custo ${sp.energyCost}.\n`;
   } else {
-    md += `${sp.damage ?? COMBAT.specialDamage} de dano · custo ${sp.energyCost} · cooldown ${sp.cooldown} s.\n`;
+    // transformações, invocações e pactos com o mesmo resumo do jogo (não são "N de dano")
+    const resumo = specialSummary(c);
+    md += `${resumo.charAt(0).toUpperCase()}${resumo.slice(1)} · custo ${sp.energyCost} · cooldown ${sp.cooldown} s.\n`;
   }
 }
 

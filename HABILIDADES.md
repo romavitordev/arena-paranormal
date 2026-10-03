@@ -25,12 +25,12 @@ especial = Carga → Carga → ○ (custa 50, ofensivos causam 250, nunca hitkil
 
 | Comando | Golpe | Dano | Alcance | Observações |
 |---|---|---|---|---|
-| ○ 1 | Jab | 26 | 1.7 m |  |
-| ○ 2 | Direto | 28 | 1.7 m |  |
-| ○ 3 | Corte de karambit | 32 | 1.7 m |  |
+| ○ 1 | Jab | 20 | 1.7 m |  |
+| ○ 2 | Direto | 23 | 1.7 m |  |
+| ○ 3 | Corte de karambit | 30 | 1.7 m |  |
 | ○ 4 | Chute circular | 36 | 1.9 m |  |
 | ○ 5 | Corte cruzado | 30 | 1.8 m |  |
-| ○ 6 | Chute giratório | 60 | 2 m | finalizador: lança |
+| ○ 6 | Chute giratório | 56 | 2 m | finalizador: lança |
 | Frente + ○ | Investida | 40 | 1.8 m |  |
 | Trás + ○ | Rasteira de recuo | 34 | 2.4 m | finalizador: derruba, invulnerável no começo |
 | Lado + ○ | Chute lateral | 38 | 1.9 m |  |
@@ -223,7 +223,7 @@ Solta a névoa e, dentro dela, conjura a **Acácia amplificada pela Cinerária**
 
 ### Especial: Invocação: A Marionete
 
-250 de dano · custo 50 · cooldown 50 s.
+Invoca a Marionete, que luta ao seu lado · custo 50 · cooldown 50 s.
 
 ---
 
@@ -278,17 +278,17 @@ Solta a névoa e, dentro dela, conjura a **Acácia amplificada pela Cinerária**
 
 | Comando | Golpe | Dano | Alcance | Observações |
 |---|---|---|---|---|
-| ○ 1 | Corte curto | 34 | 2 m | Y = 9 |
-| ○ 2 | Corte alternado | 34 | 2 m | Y = 9 |
-| ○ 3 | Corte cruzado | 44 | 2.1 m | Y = 12 |
-| ○ 4 | Ataque giratório | 48 (2 acertos) | 2.2 m | Y = 6 |
-| ○ 5 | Duas correntes | 56 | 3.6 m | finalizador: lança, usa corrente, Y = 15 |
-| Frente + ○ | Lançamento de lâmina | 32 | 4.6 m | usa corrente, Y = 9 |
-| Trás + ○ | Puxão da lâmina | 26 | 4.6 m | usa corrente, puxa o inimigo, Y = 8 |
-| Lado + ○ | Corte lateral alternado | 30 | 2 m | Y = 9 |
-| No ar + ○ | Cruz aérea | 36 | 2.1 m | Y = 10, desce com impacto |
-| ↑ + ○ (no combo) | Lâminas para cima | 40 | 2.1 m | finalizador: undefined, Y = 12 |
-| ↓ + ○ (no combo) | Cruz das lâminas | 46 | 2.1 m | finalizador: derruba, Y = 14 |
+| ○ 1 | Corte curto | 34 | 2 m | Y = 5 |
+| ○ 2 | Corte alternado | 34 | 2 m | Y = 5 |
+| ○ 3 | Corte cruzado | 44 | 2.1 m | Y = 7 |
+| ○ 4 | Ataque giratório | 48 (2 acertos) | 2.2 m | Y = 4 |
+| ○ 5 | Duas correntes | 56 | 3.6 m | finalizador: lança, usa corrente, Y = 9 |
+| Frente + ○ | Lançamento de lâmina | 32 | 4.6 m | usa corrente, Y = 5 |
+| Trás + ○ | Puxão da lâmina | 26 | 4.6 m | usa corrente, puxa o inimigo, Y = 5 |
+| Lado + ○ | Corte lateral alternado | 30 | 2 m | Y = 5 |
+| No ar + ○ | Cruz aérea | 36 | 2.1 m | Y = 6, desce com impacto |
+| ↑ + ○ (no combo) | Lâminas para cima | 40 | 2.1 m | finalizador: undefined, Y = 7 |
+| ↓ + ○ (no combo) | Cruz das lâminas | 46 | 2.1 m | finalizador: derruba, Y = 8 |
 
 ### Principal (□ / X): Corrente de Captura
 
@@ -567,7 +567,7 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
 
 ### Especial: Pacto do Santo
 
-250 de dano · custo 50 · cooldown 50 s.
+Com mais de 85% de sanidade: pacto de 45 s — morrer durante o pacto transforma no Deus da Morte · custo 50 · cooldown 50 s.
 
 ---
 
@@ -608,7 +608,7 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
 
 ### Especial: Renascimento
 
-250 de dano · custo 50 · cooldown 60 s.
+Transforma no Diabo até o fim do round (+150 de vida), 1x por partida · custo 50 · cooldown 60 s.
 
 ---
 
@@ -649,4 +649,4 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
 
 ### Especial: Vestir as Faixas
 
-250 de dano · custo 50 · cooldown 60 s.
+Transforma na Fantasma até o fim do round (+50 de vida) · custo 50 · cooldown 30 s.

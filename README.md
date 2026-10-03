@@ -90,9 +90,11 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
   escolhem opções. Ao continuar, o controle da luta é restaurado.
 - **Treinamento:** alvo parado (ou defendendo, ou CPU), vida que volta depois do combo, sanidade infinita, recargas
   sem espera — tudo na pausa. Select (Tab no teclado) reinicia a posição.
-- **Tela de vitória:** mantém o cenário da luta como fundo e mostra a equipe vencedora em poses de vitória; a fala,
-  centralizada abaixo, é apenas do personagem que terminou a luta. Os botões permitem revanche, retorno e saída.
-- **PAUSA → COMANDOS** mostra todos os golpes dos dois lutadores.
+- **Tela de vitória:** os vencedores ficam no cenário, onde a luta terminou, de frente para a câmera — quem terminou
+  a luta no meio, a equipe dos lados, cada um com a **pose de vitória própria** e o nome embaixo; a câmera escolhe um
+  ângulo com visão livre. A fala, centralizada abaixo, é do personagem que terminou a luta. Os botões permitem revanche,
+  retorno e saída.
+- **PAUSA → COMANDOS** mostra todos os golpes dos dois lutadores (a lista rola com ▲ ▼, roda do mouse ou dedo).
 - Teclas em `src/config/controls.js`. Nada no código usa tecla fixa.
 
 ## Elenco

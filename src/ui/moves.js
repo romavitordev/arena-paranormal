@@ -29,7 +29,7 @@ export function moveListHTML(c) {
   html += row('□ / X', r.name, `${r.damage}${r.count > 1 ? ` × ${r.count}` : ''} de dano · recarga ${r.cooldown}s${r.energyCost ? ` · ${r.energyCost} de sanidade` : ''}`);
   if (r.variants) for (const [k, v] of Object.entries(r.variants)) html += row(DIR[k].replace('○', '□'), v.label.toLowerCase().replace(/^./, (x) => x.toUpperCase()), `${v.damage}${(v.count ?? r.count) > 1 ? ` × ${v.count ?? r.count}` : ''} de dano`);
   for (const a of c.abilities || []) html += row(INPUT[a.input] || a.input, a.name, `${a.description || ''} (${a.energyCost} de sanidade · recarga ${a.cooldown}s)`);
-  html += row('△ → △ → ○', `Especial: ${c.special.name}`, c.special.type === 'mistField' ? 'névoa + Acácia amplificada (250 de dano); a névoa fica no mapa' : c.special.type === 'erase' ? 'corpo a corpo, 1x por partida (+1 depois de Transcender), indefensável: o alvo vira pó — só escapa esquivando ou com sanidade cheia (resiste levando muito dano)' : `${c.special.damage ?? COMBAT.specialDamage} de dano`);
+  html += row('△ → △ → ○', `Especial: ${c.special.name}`, specialSummary(c));
   html += row('R2 parado', 'Defesa', 'defende tudo, até especial (quebra depois de muito dano)');
   html += row('R2 + andar', 'Defesa em movimento', 'anda mais rápido, mas fica aberto a golpes');
   html += row('L2 + direção', c.dodge && c.dodge.name ? `Esquiva: ${c.dodge.name}` : 'Esquiva', 'gasta 1 das 4 cargas (recuperam tomando dano)');
@@ -54,4 +54,22 @@ export function moveListHTML(c) {
     if (p.type === 'bulletDodge') html += row('Passiva', 'Desviar de Balas', 'esquivar de um projétil não gasta carga de esquiva');
   }
   return html + '</table>';
+}
+
+// resumo do especial: transformações, invocações e pactos não são "N de dano"
+export function specialSummary(c) {
+  const sp = c.special;
+  if (!sp) return '—';
+  const until = (d) => (d ? `por ${d} s` : 'até o fim do round');
+  const life = sp.bonusHealth ? ` (+${sp.bonusHealth} de vida)` : '';
+  switch (sp.type) {
+    case 'mistField': return 'névoa + Acácia amplificada (250 de dano); a névoa fica no mapa';
+    case 'erase': return 'corpo a corpo, 1x por partida (+1 depois de Transcender), indefensável: o alvo vira pó — só escapa esquivando ou com sanidade cheia (resiste levando muito dano)';
+    case 'santoPact': return `com mais de ${Math.round((sp.minEnergy || 0) * 100)}% de sanidade: pacto de ${sp.window || 45} s — morrer durante o pacto transforma no Deus da Morte`;
+    case 'devilPact': return `transforma no Diabo ${until(sp.duration)}${life}${sp.usesPerMatch ? `, ${sp.usesPerMatch}x por partida` : ''}`;
+    case 'ghostBands': return `transforma na Fantasma ${until(sp.duration)}${life}`;
+    case 'devilDeal': return `o alvo fica transtornado por ${sp.duration || 8} s: não defende e recebe mais dano; o Diabo se cura`;
+    case 'marionette': return 'invoca a Marionete, que luta ao seu lado';
+    default: return `${sp.damage ?? COMBAT.specialDamage} de dano`;
+  }
 }

@@ -2,6 +2,19 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v2.0 — Vitória, celular e correções
+- Tudo o que tinha sumido numa atualização anterior voltou: as conversas antes de cada confronto, as falas de vitória variadas e os nomes atualizados dos personagens.
+- Tela de vitória: os vencedores aparecem onde a luta terminou, de frente para a câmera, com quem venceu no meio, uma pose de vitória própria para cada personagem e o nome embaixo de cada um.
+- No Bar Suvaco Seco, a tela de vitória não mostra mais a parede do bar por fora.
+- Celular deitado: o menu inteiro cabe na tela, a seleção mostra os rostos dos personagens e, na apresentação, os botões saem da frente das falas — um toque pula a cena.
+- Na luta pelo celular, o botão de tela cheia não cobre mais a vida do adversário.
+- A ficha da seleção de personagens mostra todas as habilidades e o especial sem cortar.
+- Especiais que transformam ou invocam (como Vestir as Faixas, Renascimento e Pacto do Santo) agora são descritos corretamente.
+- Na pausa, a lista de comandos pode ser rolada até o fim.
+- A luta ficou mais leve para rodar.
+- No Online, os campos de nome, código e senha voltaram a ter letras legíveis.
+- Equilíbrio: Gal Sal ficou mais forte (os cortes curam menos o adversário) e Kaiser um pouco mais fraco nos socos rápidos.
+
 ## v1.9 — Mobile mais fácil de jogar
 - Na tela de vitória, o personagem e a equipe vencedora aparecem em pose 3D no próprio cenário da luta.
 - A interface mobile foi reorganizada para usar melhor o espaço da tela, sem rolagem nos menus e seleções.

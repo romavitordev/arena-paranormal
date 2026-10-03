@@ -7,6 +7,59 @@
 
 ---
 
+## Estado na v2.0 (2026-10-03)
+
+### Feito nesta versão
+- ✅ **Recuperação do commit 29f1170** ("improve mobile play"): ele partiu de uma cópia antiga do projeto e desfez os IDs
+  novos (kaiser, arthur, joui, aghata, gal_sal, kian), as 420 introduções e as vitórias variadas e os valores da
+  Fantasma. Voltou tudo, mantendo a parte mobile. Uma segunda reversão acidental (arquivos antigos gravados às 03:45
+  por cima do HEAD) ficou guardada no `git stash` em vez de ser commitada.
+- ✅ **Tela de vitória:** os vencedores ficam onde a luta terminou, de frente para a câmera, com quem venceu no meio e a
+  equipe dos lados (o espaço se ajusta à largura da tela); a câmera procura um ângulo com visão livre, de preferência
+  olhando para o meio da arena (no Bar Suvaco Seco ela ficava do lado de fora, mostrando a fachada); o nome de cada um
+  aparece embaixo do próprio modelo. **Pose de vitória própria** para cada personagem (`src/anim/victoryClips.js`).
+- ✅ **Celular deitado:** o menu principal cabe inteiro (o logo sai com o menu aberto; a regra antiga mirava `.opt` e as
+  opções são `.hopt`); seleção de personagens em 5 × 3 cartões em pé (com 3 × 5 viravam tiras) e sem o 3D vazando
+  por trás; na apresentação os botões de combate somem (cobriam as falas) e um toque pula; o botão de tela cheia não
+  fica mais em cima da vida do P2 durante a luta; tela inicial com instruções de toque (estavam no changelog, mas não
+  no jogo); o COMEÇAR não mostra mais "A/× ou Start" no toque.
+- ✅ **Seleção de personagens (PC):** a ficha não corta mais as habilidades nem o especial (uma linha por habilidade).
+- ✅ **Especiais descritos certo** na seleção, em PAUSA → COMANDOS e no HABILIDADES.md: transformações, invocações e
+  pactos não aparecem mais como "250 de dano".
+- ✅ **PAUSA → COMANDOS:** a lista de golpes rola (▲ ▼, roda do mouse ou dedo); antes o fim ficava fora da tela.
+- ✅ **Desempenho:** os raios da câmera (objetos que somem e blocos que a câmera evita) rodavam a cada quadro e custavam
+  mais que a luta inteira; agora 10× por segundo — de 1,9 para ~0,45 ms por quadro de simulação.
+- ✅ **Online:** os campos de nome/senha/código voltaram a ter letra legível (o atalho `font: … inherit` era inválido).
+- ✅ Telemetria (`src/dev/balance.js`): progresso e parciais em `window.__balanceProgress` durante a rodada.
+
+### Equilíbrio na v2.0 (CPU × CPU, 1 luta por par, todos contra todos, 60 s, melhor de 3)
+Rodada geral (210 lutas, 28 por personagem, CPU normal; margem de ±18 pontos com essa amostra):
+Kaiser 75% · Kemi 68% · Joui 61% · Dante 61% · Juan 57% · Erin 50% · Aguiar 50% · Labirinto 50% · Lírio 50% ·
+Kian 46% · Ferreiro 43% · Arthur 39% · Xande 39% · Aghata 36% · Gal Sal 25%.
+- Fora da margem: **Kaiser** (alto: o Jab e o Direto concentram o dano) e **Gal Sal** (baixo: a cura Y devolvia ~¼ do
+  dano — ela causava o 2º maior dano e ainda perdia).
+- Ajustes: Gal Sal — Y (cura do alvo) −40% em todos os golpes → **46%** (28 lutas). Kaiser — Jab 26 → 20, Direto
+  28 → 23, karambit 32 → 30, Chute giratório 60 → 56 (combo 212 → 194) → **63%** (56 lutas).
+- Dentro da margem, de olho na próxima rodada: Kemi 68% (Fantasma até o fim do round + Disparo Espiral) e Aghata 36%.
+- Ferramenta: `runBalance({ fights, maxTime, focus })` em `src/dev/balance.js` (progresso em `window.__balanceProgress`);
+  para medir sem a página recarregar a cada edição, rodar num `vite` sem HMR.
+
+### Pendências (prioridade)
+- 🔴 **Online de verdade:** testar com dois computadores (internet e Radmin); batalha em equipe pela rede; o servidor
+  público do PeerJS é ponto único de falha (avaliar servidor próprio de apresentação/lista de salas).
+- 🔴 **Equilíbrio:** ajustar quem ficou fora da faixa 35–65% na rodada acima e medir de novo com mais lutas por par.
+- 🟡 **Mobile:** no emulador, a 1ª toque num submenu às vezes não escolhe a opção (o 2º sim) — conferir num aparelho;
+  HUD do celular sem os nomes das habilidades (só ícones): avaliar ícones por personagem.
+- 🟡 **HUD no PC em janela pequena:** nomes longos de habilidade ("Granada \"Nebulosa\"") estouram as caixas.
+- 🟡 **Carregamento:** o pacote principal passa de 500 kB (aviso do Vite); dividir por tela/personagem para abrir mais
+  rápido no celular.
+- 🟡 **Cenários:** peças juntadas num bloco só (a cidade do Orfanato, o cemitério das Ruínas) não ficam transparentes
+  quando tampam a luta (a câmera só chega para a frente) — separar as peças no Blender.
+- 🟢 **Tela de vitória cinematográfica:** movimento de câmera (aproximar/orbitar) e poses refeitas com referência.
+- 🟢 **Formas:** a Fantasma ainda usa as animações humanas da Kemi (só Deus da Morte e Diabo têm as próprias).
+
+---
+
 ## 0. Já feito nesta rodada
 
 - ✅ **Kian: Transcender libera mais um Inexistir.** A primeira Transcendência da partida dá +1 uso do especial
@@ -219,8 +272,7 @@
   Recarga do especial não fica mais presa na da transformação.
 - ✅ Câmera: qualquer objeto alto do cenário some quando tampa os lutadores (cabeça, peito e quadril); nos blocos
   grandes juntados a câmera chega para a frente do obstáculo.
-- ⏭ Medir de novo o equilíbrio da Kemi (Fantasma até o fim do round, Disparo Espiral mais forte) e do Ferreiro
-  (agora personagem base): `runBalance({ fights: 1, focus: 'kemi' })` — a rodada desta versão não terminou.
+- ✅ Equilíbrio da Kemi e do Ferreiro medido na rodada geral da v2.0 (ver "Estado na v2.0").
 - ⏭ Online: batalha em equipe pela rede; testar com dois computadores de verdade (internet e Radmin).
 - ✅ 3.11 Partida LAN por código (ver abaixo) + ONLINE com salas: nome de usuário, sala com código + senha opcional,
   pública (na lista de SALAS ABERTAS) ou privada (só pelo código).
@@ -332,19 +384,32 @@ Arquivo novo `src/config/dialogues.js` com `{ [idA+idB]: [falaA, falaB] }`; most
 
 ### Números atuais (referência)
 
-| Lutador | Combo ○ (total) | Golpes | Alcance | Principal □ |
+Atualizado na v2.0 (soma da sequência de ○; vida 1000, Lírio 1150):
+
+| Lutador | Combo ○ | Golpes | Alcance | Principal □ |
 |---|---|---|---|---|
-| Kaiser | 174 | 4 | 1,6–2,0 m | M4 16×4 = 64 (2,6 s) |
-| Arthur | 184 | 4 | 1,4–2,0 m | Sniper 110 (3,6 s) |
-| Joui | 194 | 6 | **2,3–2,6 m** | Sombra Rasteira 30 (4 s, 10 PE) |
-| Agatha | 152 (+sangramento) | 5 | 1,55–1,8 m | Faca 40 (1,8 s) |
-| Gal | 196 bruto (≈145 líquido, inimigo cura Y) | 5 | 2,0–3,6 m | Corrente 25 (5 s, 15 PE) |
-| Kian | **250** | 6 | 1,5–1,8 m | Impacto Sigilar 70 (3,5 s, 20 PE) |
+| Kaiser | 194 (era 212) | 6 | 1,7–2,0 m | M4 16 × 4 |
+| Arthur | 184 | 4 | 1,7–2,0 m | Sniper 110 (carregável) |
+| Joui | 203 | 6 | 2,1–2,4 m | Sombra Rasteira 30 |
+| Aghata | 152 (+sangramento) | 5 | 1,6–1,8 m | Faca Arremessada 40 |
+| Gal Sal | 216 | 5 | 2,0–3,6 m | Corrente de Captura 25 |
+| Kian | 210 | 6 | 1,7–1,9 m | Impacto Sigilar 70 |
+| Dante | 204 | 5 | 1,7–2,2 m | Decadenza 30 |
+| Erin | 148 | 5 | 1,6–1,9 m | Escopeta 11 × 6 |
+| Aguiar | 200 | 5 | 1,7–2,2 m | Machado na Corda 30 |
+| Labirinto | 192 | 5 | 2,4–3,0 m | Rajada Caótica 56 |
+| Xande | 198 | 5 | 1,8–2,1 m | Skate Caótico 38 |
+| Lírio | 192 | 4 | 2,2–2,4 m | Canivete de osso 22 |
+| Ferreiro | 212 | 5 | 2,3–2,4 m | Lodo arremessado 34 |
+| Juan | 160 | 5 | 1,7–1,9 m | Lâmina de Sangue 28 |
+| Kemi | 160 | 5 | 1,6–1,9 m | Sniper Fantasma 100 (carregável) |
+
+Tabela antiga (2026-10-01), para comparação: Kaiser 174 · Arthur 184 · Joui 194 · Agatha 152 · Gal 196 · Kian 250.
 
 Leitura rápida: **Kian está forte demais** (maior combo + Lâmina do Medo 160 + Transcendência indefensável + agora
 2 Inexistir). **Agatha é a mais fraca no corpo a corpo**. Joui tem o melhor alcance com o 2º maior combo.
 
-### 2.1 Kian 🔴 (equilíbrio)
+### 2.1 Kian ✅ (combo 250 → 210, Precognição e Rejeitar Névoa no kit)
 - Reduzir o combo de 250 para ~205: tirar o "Golpe no corpo" (38) ou baixar o finalizador para 54.
 - **Precognição** (cânone: não pode ser pego desprevenido): imune ao bônus de costas do Joui e ao "surpreso" do
   teleporte. É fiel e dá identidade sem aumentar dano.
@@ -356,7 +421,7 @@ Leitura rápida: **Kian está forte demais** (maior combo + Lâmina do Medo 160 
 - Visual (Calamidade): sem camisa, calça bege, descalço, barba preta grande, sigilos dourados no corpo e glifos
   KI/AN no lado direito do rosto, faixas nos antebraços. Conferir com o modelo atual na V3.
 
-### 2.2 Kaiser 🟡
+### 2.2 Kaiser ✅ (Acácia e Resistente no kit)
 - **Cinerária** (cânone): névoa num raio de **5 m** que fortalece rituais dentro dela e dá bônus de esquiva e
   furtividade. O jogo já faz isso — conferir se a área está perto de 5 m e se "fortalece rituais" (bônus de
   dano em habilidades, não só no físico).
@@ -366,7 +431,7 @@ Leitura rápida: **Kian está forte demais** (maior combo + Lâmina do Medo 160 
 - Arsenal canônico para variar: Desert Eagle, faca karambit vermelha, **balas amaldiçoadas** (9), granada Nebulosa.
 - Visual: cabelo preto volumoso até os ombros, olheiras, postura curvada, barba curta no queixo.
 
-### 2.3 Arthur Cervero 🔴 (fidelidade)
+### 2.3 Arthur Cervero ✅ (Arma de Sangue, Dystopia, Templo do Ódio e sniper carregável no kit)
 - Cânone confirma: perdeu o **braço esquerdo** (arrancado pelo Minerador). ✔ igual ao jogo.
 - **Arma de Sangue** (cânone): gasta PV para criar uma lâmina do próprio sangue — é a **Lâmina de Sangue** com que
   ele perfurou a testa de Kian. O especial continua com 250 (regra geral), mas ganha um uso extra fiel ao
@@ -381,7 +446,7 @@ Leitura rápida: **Kian está forte demais** (maior combo + Lâmina do Medo 160 
 - Visual: 1,65 m, forte, barba longa, cabelo castanho raspado nas laterais, **heterocromia** (olho esquerdo
   verde-azulado, direito castanho), três cicatrizes de garra no rosto. Conferir na V3.
 
-### 2.4 Joui Jouki 🟡
+### 2.4 Joui Jouki ✅ (Coincidência Forçada "Rodolfo" e Decepar no kit)
 - Cânone ✔: Teleporte das Sombras, Olhar do Desespero (paralisa de medo), Shi no Kage (katana preta com sigilos
   dourados, "Sombra da Morte"), Máscara das Pessoas nas Sombras (preta com detalhes vermelhos).
 - **Coincidência Forçada "Rodolfo"** (cânone): vantagem para contra-atacar e bloquear golpes físicos — é a
@@ -394,7 +459,7 @@ Leitura rápida: **Kian está forte demais** (maior combo + Lâmina do Medo 160 
 - Visual: nipo-brasileiro, 1,80 m, esguio (ginasta), cabelo curto e liso, roupas pretas; pulseira com bandeiras
   do Brasil, Itália e Japão (detalhe para a V3).
 
-### 2.5 Agatha 🔴 (fidelidade + equilíbrio)
+### 2.5 Agatha ✅ (Colar Banhado em Sangue no kit; combo ainda 152 — ver equilíbrio)
 - **Nome:** na wiki é **"Agatha Volkomenn"**; no jogo está "AGHATA". Confirmar com o usuário qual grafia quer.
 - **Aparência canônica bem diferente do modelo atual:** por causa da troca de corpos ela tem o físico do Gabriel
   (1,70 m, cabelo escuro curto raspado em degradê nas laterais), **manca de um pé** (tiro do Thiago), braço
@@ -408,7 +473,7 @@ Leitura rápida: **Kian está forte demais** (maior combo + Lâmina do Medo 160 
   dano de sangramento e −20% de dano recebido de golpes de Sangue (Arthur especial, Agatha espelho).
 - Equilíbrio: combo mais fraco (152). Subir para ~170 (+4 em cada golpe) ou deixar o sangramento acumular.
 
-### 2.6 Gal 🟡
+### 2.6 Gal ✅ (teleporte em faíscas, Desviar de Balas e Controle Mental no kit)
 - Cânone ✔: Ereshkigal (lâminas duplas presas por correntes nos braços, arremessam e puxam; os cortes
   **sangram e curam** — "mecanismo de tortura"): é exatamente a regra X/Y. Bloqueio Perfeito ✔.
 - ✅ **Teletransporte em faíscas douradas atrás do alvo** (usou em Arthur e Erin) — no kit como R1+×.
@@ -509,7 +574,7 @@ jogadores; permitir conexão pela rede virtual do Radmin. O código deve levar o
 4. Habilidades novas fiéis (Acácia, Dystopia, Teletransporte do Gal, Rejeitar Névoa).
 5. 3.4 Transcender universal + 1.4 falas de intro.
 6. V3 visual com os detalhes canônicos acima (perguntar sobre a Agatha antes).
-7. Aprimorar a tela de vitória: centralizar os vencedores na arena, voltados para a câmera, com composição cinematográfica e uma pose de vitória própria para cada personagem.
+7. ✅ Tela de vitória: vencedores centralizados na arena, voltados para a câmera, com pose de vitória própria (v2.0). Falta o movimento de câmera cinematográfico.
 
 ## 5. Dúvidas para o usuário — ✅ todas respondidas: nome AGHATA com o visual da referência; nerf do Kian e
 Precognição ok; elementos só nos rituais; Transcender com o nome do cânone.

@@ -1,5 +1,23 @@
 # Changelog
 
+## v2.0 — 2026-10-03
+
+### Corrigido
+- Recuperados os IDs novos, as 420 introduções, as vitórias variadas e os valores da Fantasma desfeitos pelo commit
+  `29f1170` (mantida a parte mobile dele).
+- Tela de vitória com câmera dentro do cenário (no Bar Suvaco Seco ficava atrás da parede) e vencedor no centro.
+- Mobile: menu cabe no celular deitado; seleção 5 × 3 sem 3D vazando; botões de combate fora da apresentação (toque
+  pula); tela cheia fora da vida do P2; textos de toque no título.
+- Ficha da seleção sem cortar habilidades/especial; COMANDOS rolável; especiais de transformação/invocação descritos.
+- Campos do Online com fonte legível.
+
+### Adicionado
+- Pose de vitória própria para cada personagem.
+- Nomes da equipe vencedora sob cada modelo.
+
+### Desempenho
+- Raios da câmera a 10 Hz: simulação ~4× mais leve.
+
 ## v1.9 — 2026-10-03
 
 ### Corrigido
