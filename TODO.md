@@ -24,9 +24,13 @@ distorce o resultado"; a vítima vira Transtornada).
 - ✅ Armadura de Sangue do Juan pela arte de referência (carne porosa num lado do corpo) + braço da faca de quem conjura;
   Arthur sem Armadura de Sangue (não é do cânone) → Analisar Brecha; passo da defesa; Poça de Lodo no chão.
 - Equilíbrio (CPU × CPU, 90 s): Juan 64% (56 lutas, quase só na forma base) · Dante 46% (28 lutas, com a Marionete
-  nova). 🔴 Falta medir o Juan JÁ como Diabo com o kit novo e o braço de sangue (+25%) — rodada em andamento.
+  nova). Juan JÁ como Diabo desde o 1º round (28 lutas): 86% → ajuste (sangramento da Lança 4→3/s, Ódio +20→+15%,
+  roubo de vida 0,12→0,08) 82% → vida da forma 1250→1150: **75%**. Aceitável para uma forma de "carta na manga"
+  (uma vez por partida, pelo Renascimento); 🟡 medir com mais lutas por par e numa partida normal (forma no meio).
 
 ### O que mais pode ser reformulado (análise da v2.2)
+🔴Analisar se todos personagens de ataque rápido, como gal e Henri, etc.. sem ser personagens pesados como Lirio, ou personagens estratégicos como Arthur e Kemi, estão agéis o suficientes em combos, gal eu sei que está, mas analisar os outros.
+🟡 Adição de Névoa no mapa do Santo Berço
 Levantado comparando cada kit com o cânone e procurando habilidades que só reaproveitam um tipo genérico.
 - 🔴 **Juan (forma base):** o □ "Lâmina de Sangue" usa a onda em X genérica (`crossWave`, a mesma de outros) — no cânone
   ele luta com a faca de lâmina ondulada; trocar por arremesso/corte da faca com rastro de sangue. A **Armadura de
@@ -36,7 +40,7 @@ Levantado comparando cada kit com o cânone e procurando habilidades que só rea
   Sangue é a mesma corda das Amarras da Lírio — trocar por correntes saindo das veias do PRÓPRIO alvo (sem corda
   vindo da mão). Amaldiçoar Arma é só o sangramento das garras: dar um efeito visível (garras com sangue escorrendo).
 - 🟡 **Arthur:** o kit dele no cânone tem Arma de Sangue (lâmina do próprio sangue, gastando vida) — hoje é só o
-  especial; avaliar uma versão curta como habilidade (custa vida em vez de sanidade).
+  especial; avaliar uma versão curta como habilidade (custa vida em vez de sanidade) Ele pode gastar vida ao invés de sanidade para fazer o ritual.
 - 🟡 **Erin:** "Envelhecimento Localizado — Black Hole" é só cura ao longo do tempo (`healOverTime`); no cânone é um
   ritual de Energia/Morte que envelhece uma área — virar zona que acelera o tempo do adversário (recargas mais
   lentas, dano contínuo) ou que cura a Erin às custas de quem estiver dentro.
@@ -44,11 +48,11 @@ Levantado comparando cada kit com o cânone e procurando habilidades que só rea
   e o alvo andando em círculos até a espiral).
 - 🟡 **Tiros amaldiçoados** (`cursedShots`) em 6 kits (Kaiser, Aghata, Labirinto, Kemi ×2, Fantasma): diferenciar —
   Tempestade Caótica do Labirinto como chuva de projéteis em área; Facas Amaldiçoadas da Aghata voltando para a mão.
-- 🟡 **Aghata** tem só 2 habilidades (os outros têm 4–5): faltam rituais de Sangue do cânone dela.
+- 🔴 **Aghata** tem só 2 habilidades (os outros têm 4–5): faltam rituais de Sangue do cânone dela.
 - 🟡 **Cura ao longo do tempo** (`healOverTime`) em 4 kits (Dante, Erin, Xande, Ferreiro): cada uma com um visual e uma
   condição própria (Paradiso do Dante só funciona parado; Conforto de Santo Berço cura mais perto do altar etc.).
 - 🟡 **Fantasma** usa as animações humanas da Kemi (já anotado) e o Disparo Espiral é ao mesmo tempo o □ e o especial
-  — o especial podia ser uma versão cinematográfica (vários disparos em volta da arena).
+  — o especial podia ser uma versão cinematográfica (um disparo em volta da arena e a câmera seguindo a bala até atingir o adversário).
 - 🟢 **Teleportes** (Joui, Kian, Fantasma, Gal, Diabo): cada um já tem a sua cara; padronizar quem deixa rastro/poça.
 - 🟢 **CPU:** focar invocações fracas (zumbis, clones do Trinitá) e usar o Transportar para arrastar quando colado.
 

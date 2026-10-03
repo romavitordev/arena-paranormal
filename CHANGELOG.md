@@ -9,6 +9,10 @@
 - Armadura de Sangue do Juan pela referência (carne porosa num lado do corpo, espinhos, veias, garras); quem conjura
   ganha o braço da faca de sangue (+25% físico); pela assistência, só resistência a golpes físicos e tiros.
 - Arthur: sem Armadura de Sangue (não é do cânone); entra Analisar Brecha (+25% de dano físico no alvo por 7 s).
+
+### Equilíbrio
+- Diabo (medido já na forma desde o 1º round): 86% → 75% — sangramento da Lança 4→3/s (1,5 s), Ódio +20→+15%,
+  roubo de vida 0,12→0,08, vida 1250→1150. Dante 46% e Juan (base) 64% na faixa.
 - Defesa + toque na direção = passo rápido (Storm).
 - Poça de Lodo do Dante é uma poça no chão; Zumbis sobem/morrem em poças; foice da Marionete risca o chão; agarrão
   da Marionete solta mais cedo apertando botões.

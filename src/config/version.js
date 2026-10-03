@@ -27,6 +27,7 @@ export const CHANGELOG = [
       'Defesa + um toque na direção: passo rápido para aquele lado, de frente para o adversário (como no Storm). Segurando a direção, continua andando defendendo.',
       'A Poça de Lodo do Dante agora é uma poça preta e brilhante no chão, com bolhas, em vez de uma nuvem de fumaça.',
       'A foice da Marionete risca o chão enquanto ela anda, e dá para escapar mais cedo do agarrão dela apertando os botões sem parar.',
+      'Equilíbrio do Diabo: menos sangramento na Lança, Ódio do Diabo dá +15% (era +20%), menos roubo de vida e um pouco menos de vida na forma (1150).',
     ],
   },
   {

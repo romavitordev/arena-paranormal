@@ -19,7 +19,7 @@ export default {
     identity: 'O Portador do Trono: fica assim até o fim do round',
     tagline: 'Um novo começo.',
   },
-  stats: { moveSpeed: 8.0, size: 1.35, maxHealth: 1250 },
+  stats: { moveSpeed: 8.0, size: 1.35, maxHealth: 1150 }, // 1250 → 1150 na v2.2 (82–86% de vitórias como Diabo)
   // Regeneração (cânone: "quando fraco ou ferido"): mais rápida abaixo de 40% de vida e o dobro em cima das poças dele
   regen: { every: 6, amount: 22, color: 0x7a0010, low: { below: 0.4, every: 3.5, amount: 34 }, onPool: 2 },
   // animações próprias (anim/formClips.js); os nomes genéricos usados pelas habilidades também são trocados
@@ -66,7 +66,7 @@ export default {
     element: 'sangue',
     stick: true,
     pool: { radius: 1.0, life: 8 },
-    onHit: { impale: { time: 0.55, mult: 0.1 }, bleed: { dps: 4, duration: 2 } },
+    onHit: { impale: { time: 0.55, mult: 0.1 }, bleed: { dps: 3, duration: 1.5 } },
     sound: 'knifeThrow',
     hitSound: 'clawHit',
     variants: {
@@ -98,7 +98,7 @@ export default {
       type: 'devilHate',
       anim: 'db_powerup',
       // cânone: o Diabo faz o ALVO sentir um ódio paranormal extremo, mais forte — e cego de raiva
-      description: 'Enche o adversário de um ódio paranormal por 6 s: ele bate 10% mais forte, mas não defende, não usa rituais e leva 20% a mais de dano. O Diabo se alimenta do ódio: +20% de dano e mais velocidade enquanto durar.',
+      description: 'Enche o adversário de um ódio paranormal por 6 s: ele bate 10% mais forte, mas não defende, não usa rituais e leva 20% a mais de dano. O Diabo se alimenta do ódio: +15% de dano e mais velocidade enquanto durar.',
       energyCost: 25,
       cooldown: 18,
       range: 11,
@@ -107,7 +107,7 @@ export default {
       enragedMult: 1.1,
       ai: { max: 10 }, // CPU: só com o alvo ao alcance da mira
       takenMult: 1.2,
-      selfMult: 1.2,
+      selfMult: 1.15,
       selfSpeed: 1.12,
       color: 0xff2a3d,
     },
@@ -181,7 +181,7 @@ export default {
   },
 
   passives: [
-    { type: 'lifesteal', ratio: 0.12 }, // o Diabo também se alimenta do sangue
+    { type: 'lifesteal', ratio: 0.08 }, // o Diabo também se alimenta do sangue (0,12 → 0,08 na v2.2: 86% de vitórias como Diabo)
     { type: 'hatesElement', element: 'conhecimento', mult: 1.15 }, // odeia o Conhecimento ("Decepar Máscara")
   ],
 };
