@@ -502,6 +502,7 @@ jogadores; permitir conexão pela rede virtual do Radmin. O código deve levar o
 4. Habilidades novas fiéis (Acácia, Dystopia, Teletransporte do Gal, Rejeitar Névoa).
 5. 3.4 Transcender universal + 1.4 falas de intro.
 6. V3 visual com os detalhes canônicos acima (perguntar sobre a Agatha antes).
+7. Aprimorar a tela de vitória: centralizar os vencedores na arena, voltados para a câmera, com composição cinematográfica e uma pose de vitória própria para cada personagem.
 
 ## 5. Dúvidas para o usuário — ✅ todas respondidas: nome AGHATA com o visual da referência; nerf do Kian e
 Precognição ok; elementos só nos rituais; Transcender com o nome do cânone.
