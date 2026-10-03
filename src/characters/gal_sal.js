@@ -19,7 +19,7 @@ export default {
     identity: 'Lâminas + correntes + puxão + cura que drena a sanidade + controle de espaço',
     tagline: 'Toda ferida cobra um preço.',
   },
-  stats: { moveSpeed: 7.8 },
+  stats: { moveSpeed: 8.0, attackSpeed: 1.1 },
   anims: { idle: 'idle_dual', run: 'run', charge: 'charge_dual', victory: 'vic_gal', block: 'block_weapon' },
   chargeFx: { style: 'blades', color: 0xd4a64a },
   dodge: { style: 'default' },
@@ -141,6 +141,22 @@ export default {
       element: 'conhecimento',
       color: 0xd4a64a,
     },
+    {
+      // cânone: o Leque da Fatalidade dele é amaldiçoado com um Ritual de Velocidade Mortal
+      id: 'velocidadeMortal',
+      name: 'Velocidade Mortal',
+      input: 'block+carga', // R2 + △ / RT + Y
+      type: 'selfBuff',
+      buffType: 'deadlySpeed',
+      label: 'VELOCIDADE MORTAL',
+      description: 'O ritual do Leque da Fatalidade distorce o tempo em volta dele: fica muito mais rápido e recupera todas as esquivas.',
+      energyCost: 25,
+      cooldown: 20,
+      duration: 6,
+      speedMult: 1.3,
+      refillDodges: 4,
+      color: 0xa7a3ad,
+    },
   ],
 
   special: {
@@ -170,6 +186,6 @@ export default {
 
   passives: [
     { type: 'bulletDodge' }, // Desviar de Balas: esquivar de projéteis não gasta carga
-    { type: 'meleeDrain', energyRatio: 1.5, giveEnergyToAttacker: false },
+    { type: 'meleeDrain', energyRatio: 1.5, giveEnergyToAttacker: true }, // a sanidade que ele tira do inimigo vai para ele (Gal com 21–29% de vitórias)
   ],
 };

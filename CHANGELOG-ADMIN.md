@@ -1,5 +1,20 @@
 # Registro administrativo de alterações
 
+## v2.5 — Equilíbrio: rápidos e pesados
+
+### Equilíbrio (CPU × CPU, 75 s)
+- `stats.attackSpeed` (novo, `characters/index.js` → `applyAttackSpeed`): divide `dur`, `active`/`actives`, `iframes` e
+  `motion.t` de todos os golpes físicos; a animação acompanha (toca com a duração do golpe). Ágeis: Joui/Aghata/Erin
+  1,12–1,18, Xande 1,1, Gal 1,1, Kian 1,14, Labirinto 1,08, Dante/Kaiser 1,06; Juan 0,92; pesados 1,0.
+- Pesados com mais vida: Lírio 1350, Ferreiro 1250, Aguiar 1150 (1200 deu 71%, 1100 deu 36%).
+- Juan: velocidade 8,1 → 7,6; `lifesteal` 0,15 → 0,10; `masochist` 0,12 → 0,08; sangramento do Banho de Sangue 5/s·2,5 s
+  → 4/s·2 s e da meia-lua 3 → 2/s; Vínculo 0,4 → 0,3; `bloodHardens` 220 → 400, a armadura automática dura
+  `autoDuration` 0,6 e põe a habilidade na recarga inteira (era a causa: 82% mesmo depois dos outros cortes).
+- Gal: Velocidade Mortal (R2 + △, `selfBuff` ×1,3) e `meleeDrain.giveEnergyToAttacker: true`.
+- Medições: rodada geral (1 luta por par) Aguiar 71 · Juan 71 · Kemi 61 · Joui/Ferreiro 57 · Kaiser 54 · Xande/Lírio 50 ·
+  Dante/Erin 43 · Arthur/Labirinto 39 · Aghata/Kian 32 · Gal 29. Depois dos ajustes: Juan 61% (56 lutas), Gal 41% (56),
+  Kian 54% (28), Aghata 39% (28).
+
 ## v2.4 — Interface e carregamento
 
 ### HUD e carregamento

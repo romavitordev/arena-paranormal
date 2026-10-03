@@ -1,7 +1,7 @@
 // Versão do jogo e NOVIDADES (changelog). Cada atualização conta, inclusive as que foram juntas numa só publicação.
 // Para uma nova atualização: suba VERSION e acrescente a entrada no TOPO de CHANGELOG (textos para jogadores, os mesmos
 // do CHANGELOG-CLIENTE.md; detalhes técnicos vão no CHANGELOG-ADMIN.md).
-export const VERSION = 24;
+export const VERSION = 25;
 export const VERSION_LABEL = `v${Math.floor(VERSION / 10)}.${VERSION % 10}`;
 
 export function formatVersion(version) {
@@ -9,6 +9,17 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: 25,
+    date: '2026-10-03',
+    title: 'Equilíbrio: rápidos e pesados',
+    items: [
+      'Equilíbrio geral: os personagens leves e médios ficaram mais ágeis nos combos (golpes mais rápidos) e um pouco mais velozes — Joui, Aghata, Erin, Xande, Kian, Labirinto, Dante, Kaiser e Gal.',
+      'Os pesados continuam lentos, mas aguentam mais para segurar os rápidos: Lírio com 1350 de vida, Ferreiro com 1250 e Aguiar com 1150.',
+      'Juan (Henri) estava ganhando demais: anda e corta mais devagar, a Faca Predadora cura 10% (era 15%), sangra menos, demora mais para chegar ao Renascimento, o Vínculo de Sangue replica 30% (era 40%) e a armadura que nasce sozinha agora pede 400 de dano, dura menos e gasta a recarga da habilidade.',
+      'Gal ganhou o ritual Velocidade Mortal (o do Leque da Fatalidade, R2 + △): fica muito mais rápido e recupera todas as esquivas. E a sanidade que os cortes dele tiram do adversário agora vai para ele.',
+    ],
+  },
   {
     v: 24,
     date: '2026-10-03',

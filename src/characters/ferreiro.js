@@ -16,7 +16,7 @@ export default {
     identity: 'Guardião de Santo Berço: no Pacto do Santo, morrer o transforma no Deus da Morte',
     tagline: 'Eu não posso permitir que vocês destruam minha cidade.',
   },
-  stats: { moveSpeed: 7.0, size: 1.1 },
+  stats: { moveSpeed: 7.0, size: 1.1, maxHealth: 1250 }, // pesado: aguenta os rápidos pela vida,
   anims: { idle: 'idle_katana', run: 'run', charge: 'charge', victory: 'vic_ferreiro', block: 'block_weapon' },
   grip: { twoHand: true, reach: 0.42, freeLeft: ['concentrate', 'charge', 'victory', 'hit', 'launched', 'fall', 'getup', 'point'] },
   chargeFx: { style: 'default', color: 0x8a8090 },

@@ -15,7 +15,7 @@ export default {
     identity: 'Ocultista da Morte: decadência, cópias, lodo e cura',
     tagline: 'É ironia do destino.',
   },
-  stats: { moveSpeed: 7.3 },
+  stats: { moveSpeed: 7.6, attackSpeed: 1.06 },
   anims: { idle: 'idle_fist', run: 'run', charge: 'charge', victory: 'vic_dante', block: 'block' },
   chargeFx: { style: 'aura', color: 0x9a94ae, smoke: 0x0c0a0e },
   dodge: { style: 'shadow' }, // vira um vulto preto ao esquivar

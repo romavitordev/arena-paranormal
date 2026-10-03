@@ -2,6 +2,12 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v2.5 — Equilíbrio: rápidos e pesados
+- Equilíbrio geral: os personagens leves e médios ficaram mais ágeis nos combos (golpes mais rápidos) e um pouco mais velozes — Joui, Aghata, Erin, Xande, Kian, Labirinto, Dante, Kaiser e Gal.
+- Os pesados continuam lentos, mas aguentam mais para segurar os rápidos: Lírio com 1350 de vida, Ferreiro com 1250 e Aguiar com 1150.
+- Juan (Henri) estava ganhando demais: anda e corta mais devagar, a Faca Predadora cura 10% (era 15%), sangra menos, demora mais para chegar ao Renascimento, o Vínculo de Sangue replica 30% (era 40%) e a armadura que nasce sozinha agora pede 400 de dano, dura menos e gasta a recarga da habilidade.
+- Gal ganhou o ritual Velocidade Mortal (o do Leque da Fatalidade, R2 + △): fica muito mais rápido e recupera todas as esquivas. E a sanidade que os cortes dele tiram do adversário agora vai para ele.
+
 ## v2.4 — Interface e carregamento
 - Na luta pelo PC em janela pequena, os nomes longos das habilidades não estouram mais as caixas: ficam em até duas linhas (com reticências) e o nome inteiro aparece ao passar o mouse.
 - O jogo abre mais rápido nas próximas visitas: a parte gráfica (three.js) e os dados dos personagens ficam em arquivos separados, e o navegador guarda a parte gráfica entre uma atualização e outra.

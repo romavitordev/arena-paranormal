@@ -16,7 +16,7 @@ export default {
     identity: 'Caçador paciente: prende, marca e mutila — e vira o Mutilador quando põe a máscara',
     tagline: 'A próxima rodada sou eu.',
   },
-  stats: { moveSpeed: 7.4 },
+  stats: { moveSpeed: 7.4, maxHealth: 1150 }, // pesado: aguenta os rápidos pela vida (1200 deu 71%, 1100 deu 36%)
   anims: { idle: 'idle_knife', run: 'run', charge: 'charge', victory: 'vic_aguiar', block: 'block_weapon' },
   chargeFx: { style: 'blood', color: 0xc4241c },
   dodge: { style: 'default', distance: 4.2 },

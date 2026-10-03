@@ -15,7 +15,7 @@ export default {
     identity: 'Pressão em curta distância + faca + ritual de cortes sobrenaturais',
     tagline: 'Sorri antes de cortar.',
   },
-  stats: { moveSpeed: 8.3 },
+  stats: { moveSpeed: 8.6, attackSpeed: 1.18 },
   anims: { idle: 'idle_knife', run: 'run', charge: 'charge', victory: 'vic_aghata', block: 'block_weapon' },
   chargeFx: { style: 'blood', color: 0xe0204a },
   dodge: { style: 'default', distance: 4.6 },

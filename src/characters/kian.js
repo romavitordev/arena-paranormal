@@ -18,7 +18,7 @@ export default {
     identity: 'Força física absurda + paranormal + mobilidade + ataques devastadores',
     tagline: 'Os sigilos seguram o que ele carrega.',
   },
-  stats: { moveSpeed: 7.4 },
+  stats: { moveSpeed: 7.8, attackSpeed: 1.14 },
   anims: { idle: 'idle_fist', run: 'run', charge: 'charge_fists', victory: 'vic_kian', block: 'block' },
   chargeFx: { style: 'fists', color: 0xffd88a },
   dodge: { style: 'default' },

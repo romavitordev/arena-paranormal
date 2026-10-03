@@ -21,7 +21,7 @@ export default {
     identity: 'A parede: aguenta o impacto, chega perto e decide com golpes que derrubam',
     tagline: "Hoje 'cê vai conhecer a Leonora!",
   },
-  stats: { moveSpeed: 6.9, maxHealth: 1150 }, // Sangue de Ferro: +15% de vida; o mais lento do elenco
+  stats: { moveSpeed: 6.9, maxHealth: 1350 }, // Sangue de Ferro + pesado: o mais lento e o que mais aguenta
   anims: { idle: 'idle_hammer', run: 'run', charge: 'charge', victory: 'victory_hammer', block: 'block_hammer', blockHeavy: 'block_heavy', dash: 'dash_heavy' },
   // Leonora de duas mãos: a esquerda segura o cabo; andando/correndo leva a marreta no ombro
   grip: {

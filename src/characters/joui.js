@@ -13,7 +13,7 @@ export default {
     identity: 'Velocidade + katana + sombras + teleporte',
     tagline: 'Ninguém viu o rosto. Ninguém viu ele chegar.',
   },
-  stats: { moveSpeed: 8.0 },
+  stats: { moveSpeed: 8.3, attackSpeed: 1.12 },
   anims: { idle: 'idle_katana', run: 'run', charge: 'charge', victory: 'vic_joui', block: 'block_weapon' },
   chargeFx: { style: 'aura', color: 0xd01830, smoke: 0x120a0c },
   // esquiva pelas sombras (não é teleporte: só um passo rápido envolto em sombra)

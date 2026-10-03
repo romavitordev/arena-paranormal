@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.5 — 2026-10-03
+
+### Equilíbrio
+- Combos mais rápidos para leves/médios (`stats.attackSpeed`); pesados com mais vida (Lírio 1350, Ferreiro 1250, Aguiar 1150).
+- Juan 82% → 61%: mais lento, menos cura/sangramento, Vínculo 30%, armadura automática mais fraca.
+- Gal 29% → 41%: Velocidade Mortal e a sanidade drenada vai para ele.
+
 ## v2.4 — 2026-10-03
 
 ### Alterado

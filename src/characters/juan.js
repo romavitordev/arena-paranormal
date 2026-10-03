@@ -17,7 +17,7 @@ export default {
     identity: 'Masoquista e imprevisível: quanto mais apanha, mais sanidade; no Renascimento senta no Trono e vira o Diabo',
     tagline: 'Eu não quero morrer... eu quero um novo começo.',
   },
-  stats: { moveSpeed: 8.1 },
+  stats: { moveSpeed: 7.6, attackSpeed: 0.92 }, // estava rápido demais (64%+ de vitórias): mais lento e combos mais cadenciados,
   anims: { idle: 'idle_knife', run: 'run', charge: 'charge', victory: 'vic_juan', block: 'block' },
   chargeFx: { style: 'default', color: 0xc01828 },
   dodge: { style: 'default', distance: 5.2 },
@@ -29,7 +29,7 @@ export default {
       { name: 'Corte de volta', anim: 'knife_2', dur: 0.24, active: [0.06, 0.13], damage: 24, range: 1.7, arc: 110, knockback: 0.7, lunge: 1.2, sound: 'blade', hitSound: 'bladeHit', trail: { color: 0xc01828, flip: true } },
       { name: 'Estocada', anim: 'thrust', dur: 0.3, active: [0.1, 0.17], damage: 28, range: 1.9, arc: 70, knockback: 0.9, lunge: 1.4, sound: 'blade', hitSound: 'bladeHit' },
       { name: 'Corte descendente', anim: 'knife_3', dur: 0.3, active: [0.09, 0.17], damage: 30, range: 1.7, arc: 110, knockback: 1.0, lunge: 1.1, sound: 'blade', hitSound: 'bladeHit', trail: { color: 0xc01828, roll: 1.2 } },
-      { name: 'Banho de Sangue', anim: 'knife_final', dur: 0.46, active: [0.16, 0.26], damage: 54, range: 1.9, arc: 120, lunge: 1.8, finisher: 'launch', bleed: { dps: 6, duration: 3 }, sound: 'slashFinal', hitSound: 'bladeHit', trail: { color: 0x7a0010, roll: 1.4, big: true } },
+      { name: 'Banho de Sangue', anim: 'knife_final', dur: 0.46, active: [0.16, 0.26], damage: 54, range: 1.9, arc: 120, lunge: 1.8, finisher: 'launch', bleed: { dps: 4, duration: 2 }, sound: 'slashFinal', hitSound: 'bladeHit', trail: { color: 0x7a0010, roll: 1.4, big: true } },
     ],
     up: { name: 'Corte para cima', anim: 'slash_up', dur: 0.38, active: [0.12, 0.22], damage: 38, range: 1.8, arc: 120, lunge: 0.9, finisher: 'launchHigh', launcher: true, sound: 'blade', hitSound: 'bladeHit', trail: { color: 0xc01828, tilt: -1.3 } },
     down: { name: 'Faca no chão', anim: 'slash_d', dur: 0.44, active: [0.18, 0.28], damage: 44, range: 1.8, arc: 110, lunge: 1, finisher: 'knockdown', sound: 'blade', hitSound: 'bladeHit', trail: { color: 0xc01828, roll: 1.2 } },
@@ -60,7 +60,7 @@ export default {
     visual: 'bloodCrescent',
     color: 0xc01828,
     element: 'sangue',
-    onHit: { bleed: { dps: 3, duration: 1.5 } },
+    onHit: { bleed: { dps: 2, duration: 1.5 } },
     sound: 'blade',
     hitSound: 'bladeHit',
   },
@@ -100,21 +100,21 @@ export default {
       name: 'Vínculo de Sangue',
       input: 'carga+ranged', // △ + □ / Y + X
       type: 'bloodLink',
-      description: 'Marca o próprio corpo e o do alvo: por 8 s, 40% do dano que o Juan recebe é replicado no alvo.',
+      description: 'Marca o próprio corpo e o do alvo: por 8 s, 30% do dano que o Juan recebe é replicado no alvo.',
       energyCost: 25,
       cooldown: 20,
       windup: 0.35,
       range: 9,
       arc: 50,
       duration: 8,
-      ratio: 0.4,
+      ratio: 0.3, // 0,4 → 0,3 (Juan com 70–80% de vitórias)
     },
     {
       id: 'armaduraSangueDiabolica',
       name: 'Armadura de Sangue Diabólica',
       input: 'carga+dodge', // △ + L2 / Y + LT
       type: 'heavyProtection',
-      description: 'Também nasce sozinha depois de sangrar o bastante (a cada 220 de dano recebido). O próprio sangue endurece numa armadura com espinhos: recebe 30% menos dano, aguenta 2 golpes sem recuar e fica mais rápido. O braço da faca vira uma arma de sangue: golpes físicos 25% mais fortes.',
+      description: 'Também nasce sozinha depois de sangrar o bastante (a cada 400 de dano recebido, mais curta, e usa a recarga). O próprio sangue endurece numa armadura com espinhos: recebe 30% menos dano, aguenta 2 golpes sem recuar e fica mais rápido. O braço da faca vira uma arma de sangue: golpes físicos 25% mais fortes.',
       energyCost: 30,
       cooldown: 24,
       duration: 7,
@@ -123,6 +123,7 @@ export default {
       speedMult: 1.15,
       bloodArmor: true, // casca de sangue sobre o corpo (Fighter.updateBloodShell)
       bloodArm: { side: 'R', meleeMult: 1.25 }, // o braço da faca vira arma de sangue (só quem conjura)
+      autoDuration: 0.6, // nascida sozinha (Sangue que Endurece): 60% do tempo
     },
   ],
 
@@ -141,8 +142,8 @@ export default {
   },
 
   passives: [
-    { type: 'lifesteal', ratio: 0.15 }, // Faca Predadora: cura 15% do dano dos cortes
-    { type: 'masochist', ratio: 0.12 }, // Masoquista: apanhar devolve sanidade
-    { type: 'bloodHardens', threshold: 220, ability: 'armaduraSangueDiabolica' }, // a cada 220 de dano recebido, a armadura nasce sozinha
+    { type: 'lifesteal', ratio: 0.1 }, // Faca Predadora: cura 10% do dano dos cortes (era 15%)
+    { type: 'masochist', ratio: 0.08 }, // Masoquista: apanhar devolve sanidade (0,12 → 0,08: chegava rápido demais ao Renascimento)
+    { type: 'bloodHardens', threshold: 400, ability: 'armaduraSangueDiabolica' }, // a cada 400 de dano recebido, a armadura nasce sozinha (60% do tempo, gasta a recarga)
   ],
 };

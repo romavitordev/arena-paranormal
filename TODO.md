@@ -7,6 +7,90 @@
 
 ---
 
+## Novo lutador: BALU (Antônio "Balu" Pontevedra) — preparação 🔴
+
+Pesquisa de 2026-10-03 (wiki "Antônio Pontevedra" + lore/MEMBROS.md). Nada implementado ainda.
+
+### Quem é (cânone)
+- Ex-agente aposentado da **Ordo Realitas** (Equipe Abutres, Calamidade), voltou a pedido do Senhor Veríssimo.
+  **Combatente / Duelista**. 1,90 m, forte, "um soco desacorda uma pessoa comum".
+- Personalidade: bobo, piadista, fala alto, sempre sorrindo; muito protetor com a equipe; decisões precipitadas;
+  gosta de comer. Sério e furioso quando ameaçam a família (o irmão morreu há ~15 anos; a sobrinha Stella).
+- **Repudia o paranormal** (recusa transcender), mas usa o machado amaldiçoado e o ritual Amaldiçoar Arma com Sangue.
+- Referências a Mogli (o apelido Balu, a pantera no cabo, o papel de parede de urso e pantera) e a Tarzan (ele canta e
+  toca viola). Mentia para a sobrinha que já tinha lutado com um leopardo. Celular flip antigo.
+- Inimizades: o **Diabo** (o golpe nele amaldiçoou o machado) e o **Kian** (quebrou o machado ao meio; o Dante restaurou).
+
+### Feitos (escala de poder: nível B, o "tanque" humano — ver `lore/ESCALA.md`)
+- Luta corpo a corpo o combate inteiro mesmo gravemente ferido; matou o Carente; cravou o machado no ombro do Diabo
+  (que o amaldiçoou); enfrentou um Titã de Sangue (perdeu a orelha direita); Resistência à Dor: aguenta tiro à
+  queima-roupa. Sem feitos de distância → kit de corpo a corpo, muita vida, golpes pesados com armadura.
+
+### Aparência — referências salvas pelo usuário em `Referencias visuais/Personagens/Balu`
+- `balu desenho.jpg` / `balu rosto.webp` (base do modelo): cabelo preto penteado para trás com volume, sobrancelhas
+  grossas, olhos pequenos e simpáticos, **bigode** grosso e cavanhaque curto só no meio do queixo, rosto largo e sorriso
+  aberto; polo **verde-clara** de gola grande, mangas arregaçadas nos bíceps, braços fortes, calça jeans azul-clara por
+  dentro do cinto, sapato social marrom.
+- `balu com camisa amarela.jpg`: polo **branca com flores amarelas** e o machado normal (cabo escuro com tiras, lâmina
+  prateada larga, de um lado só, com saliências).
+- `balu com machado.jpg` (fan art): antebraços enfaixados, machado ornamentado segurado com as duas mãos.
+- `balu arma de sangue.webp`: polo **roxa** e o **Machado Demônio** (bola espinhosa de sangue no lugar da lâmina).
+- `balu sem camisa.webp`: tronco forte sem camisa, cheio de queimaduras/rachaduras (depois do Anfitrião) e pelos no
+  peito — boa skin alternativa.
+
+### Aparência (links da wiki — conferidos no navegador)
+- Cabelo preto penteado para trás com gel, **bigode** marcante e cavanhaque curto que não chega ao queixo; porte grande.
+- Roupa padrão: **camisa polo** de mangas arregaçadas, por dentro da **calça jeans azul**, **cinto marrom** com a fivela
+  (Amuleto de Proteção Elemental: veias vermelhas e o Símbolo de Sangue) e **sapato social marrom**.
+- Variações (skins): polo **verde-claro** (início de Calamidade) · polo **branca com pétalas amarelas** (a mais
+  conhecida — usar como padrão) · polo **roxa com zigue-zagues brancos** (depois de "Escolha"), com queimaduras pelo tronco
+  e uma queimadura em forma de mão no pescoço. Sem a orelha direita: cicatriz em **espiral** (Cicatrização do Dante).
+- **Machado Lancinante**: cabo longo de metal escuro com tiras de couro bege enroladas, **pomo em cabeça de pantera**,
+  lâmina ornamentada com saliências feitas à mão e uma ponta curva; amaldiçoado: **veias vermelhas** sobre a lâmina.
+- **Machado Demônio** (inspirado no Bloodletter de Bloodborne): ele crava o pomo de pantera no próprio peito e o sangue
+  vira uma **maça-estrela de sangue** no lugar da lâmina (bola espinhosa vermelho-escura).
+- Links (wiki, para conferir / salvar manualmente em `Referencias visuais/Personagens/Balu`):
+  - padrão: https://static.wikia.nocookie.net/ordemparanormal/images/a/a6/Miniatura_Ant%C3%B4nio_em_Calamidade.png
+  - florida: https://static.wikia.nocookie.net/ordemparanormal/images/a/a9/Miniatura_Ant%C3%B4nio_roupa_florida.png
+  - roxa: https://static.wikia.nocookie.net/ordemparanormal/images/9/99/Miniatura_Ant%C3%B4nio_roupa_roxa.png
+  - Machado Demônio em combate: https://static.wikia.nocookie.net/ordemparanormal/images/8/80/Miniatura_Ant%C3%B4nio_em_combate_com_seu_Mangual_de_Sangue.png
+  - machado amaldiçoado: https://static.wikia.nocookie.net/ordemparanormal/images/b/bf/Machado_amaldi%C3%A7oado_do_Balu.png
+  - machado transformado: https://static.wikia.nocookie.net/ordemparanormal/images/9/95/Machado_de_Ant%C3%B4nio_transformado.png
+  - retrato (pós "Escolha"): https://static.wikia.nocookie.net/ordemparanormal/images/6/6a/Portrait_de_Balu_ap%C3%B3s_os_eventos_de_Escolha_em_Calamidade.png
+
+### Proposta de kit (arquétipo: PESADO — aguenta os rápidos)
+- `id: 'balu'`, origem Ordo Realitas, elemento **Sangue** (machado amaldiçoado pelo Diabo). `stats: { moveSpeed: 7.0,
+  maxHealth: 1300, attackSpeed: 1.0 }` — pesado como Lírio/Ferreiro, um pouco mais rápido que a Lírio.
+- ○ **Machado Lancinante** (duas mãos, golpes largos): 4 golpes + golpe por cima que derruba; ↑ machado de baixo para
+  cima (lança); ↓ machadada no chão; aéreo: queda com o machado. Pode reaproveitar as animações de duas mãos da Lírio.
+- □ **Machado em Giro**: arremessa o machado girando, que volta para a mão (bumerangue — diferente do Aguiar, que
+  arremessa preso na corda). Ou "Soco do Balu" (curto, atordoa) se o arremesso ficar parecido demais.
+- △ + □ **Amaldiçoar Arma com Sangue** (cânone): veias na lâmina, todo golpe sangra por alguns segundos.
+- △ + ○ **Machado Demônio** (cânone): crava a pantera no peito (custa VIDA, não sanidade — ele repudia o paranormal) e
+  por ~10 s o machado vira a maça-estrela de sangue: mais alcance e dano, golpes pesados com armadura.
+- R2 + △ **Fala Imponente** (cânone, ex-vendedor): grita com o adversário — Provocado (só corpo a corpo) por 4 s; na
+  equipe, tira o parceiro de Transtornado/medo.
+- △ + L2 **110%** (cânone): explosão de força — os próximos 3 golpes físicos ganham +5 de "dano bônus" cada e o último
+  derruba.
+- Passivas: **Resistência à Dor** (aguenta tiro à queima-roupa: o 1º golpe de cada combo recebido não o faz recuar),
+  **Colete Físico-Balístico** (−10% de dano físico e de tiros), **Derrubar e Atacar** (depois de derrubar, um golpe extra
+  no chão como o da Lírio).
+- Especial **"Coração de Urso"**: cinemática curta — segura o adversário, três machadadas e termina com o Machado Demônio
+  esmagando o chão (Sangue, 250).
+- Falas: tom alto e brincalhão; com o Diabo (raiva: "você amaldiçoou meu machado"), com o Kian ("quebrou meu machado,
+  agora paga"), com Arthur/Dante/Joui/Kaiser (Equipe Abutres, camaradagem). Pode cantarolar uma música da Disney na
+  vitória — SEM citar letra de música (direito autoral): só a ação ("cantarola uma música de filme").
+
+### Passos de implementação
+1. ✅ Referências salvas pelo usuário em `Referencias visuais/Personagens/Balu` (6 imagens, descritas acima).
+2. Modelo no Blender (`tools/blender/char_balu.py`, mesmo pipeline dos outros `char_*`): corpo grande, polo florida,
+   jeans, cinto com a fivela de veias, sapato social; cabeça com cabelo de gel, bigode e cavanhaque, orelha direita com
+   a espiral. Props: machado (normal/amaldiçoado) e a maça-estrela de sangue.
+3. `src/characters/balu.js` + registrar no `ROSTER`, `models/index.js`, retratos, seleção, `HABILIDADES.md`
+   (`npm run moves`), `tools/check-roster.mjs` e falas de entrada/vitória (`config/dialogues.js`).
+4. Novos tipos: `demonAxe` (troca o prop, custo em vida), `imposingVoice` (Provocado + limpeza no parceiro), `power110`.
+5. Rodada de equilíbrio focada no Balu (meta 45–55%).
+
 ## Estado na v2.2 (2026-10-03) — O Diabo reformulado
 
 Cânone usado (wiki "O Diabo"): Ódio do Diabo (faz o ALVO sentir ódio extremo, mais forte), Sangue nos Arredores,
@@ -29,7 +113,15 @@ distorce o resultado"; a vítima vira Transtornada).
   (uma vez por partida, pelo Renascimento); 🟡 medir com mais lutas por par e numa partida normal (forma no meio).
 
 ### O que mais pode ser reformulado (análise da v2.2)
-🔴Analisar se todos personagens de ataque rápido, como gal e Henri, etc.. sem ser personagens pesados como Lirio, ou personagens estratégicos como Arthur e Kemi, estão agéis o suficientes em combos, gal eu sei que está, mas analisar os outros.
+✅ (v2.5) Analisar se todos personagens de ataque rápido, como gal e Henri, etc.. sem ser personagens pesados como Lirio, ou personagens estratégicos como Arthur e Kemi, estão agéis o suficientes em combos, gal eu sei que está, mas analisar os outros. → `stats.attackSpeed` nos leves/médios, pesados com mais vida, Juan 82% → 61%, Gal 29% → 41%.
+🟡 **Escala de poder pelo cânone** (`lore/ESCALA.md`, feitos de cada um na wiki): S Kian, Gal (e as formas) · A Dante, Joui,
+Juan, Ferreiro · B Balu, Kaiser, Arthur, Erin, Agatha, Kemi, Aguiar · C Xande, Lírio, Labirinto. Não decide quem ganha
+(todos em 35–65%), decide a sensação do kit. Fora da escala hoje: **Gal (S) 41%** e **Dante (A) 43%** abaixo do que
+deviam passar; **Kemi (B) 61%** e **Xande (C) 50%** acima — sugestões no fim do arquivo.
+🟡 **Buffs a fazer (decisão do usuário, ainda NÃO aplicados):** alguns personagens precisam de buff — em especial o
+**Labirinto** (39%, quase sem ferramentas próprias), e pela escala também Gal (S, 41%), Dante (A, 43%), Arthur (39%) e
+Aghata (39%). Medir com 2–3 lutas por par antes e depois de cada mudança.
+🟡 Equilíbrio: a rodada geral com 1 luta por par oscila ±10–20% (o Aguiar foi de 71% a 36% com −100 de vida). Rodar 2–3 lutas por par para os ajustes finos; conferir Kemi (61%) e Aghata (39%).
 ✅ (v2.3) Adição de Névoa no mapa do Santo Berço
 Levantado comparando cada kit com o cânone e procurando habilidades que só reaproveitam um tipo genérico.
 - ✅ (v2.3) **Juan (forma base):** meia-lua de sangue no □ e armadura que nasce ao sangrar (220 de dano). Era: o □ "Lâmina de Sangue" usa a onda em X genérica (`crossWave`, a mesma de outros) — no cânone

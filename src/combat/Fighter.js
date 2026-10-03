@@ -645,11 +645,12 @@ export class Fighter {
         this.armorHits = (this.armorHits || 0) + (a.armor || 0);
         const self = this;
         this.addBuff({
-          type: 'heavyProtection', name: (a.label || a.name).toUpperCase(), time: a.duration, duration: a.duration, takenMult: a.takenMult, speedMult: a.speedMult,
+          // versão "de graça" (nasceu do sangue): dura menos que a conjurada (autoDuration)
+          type: 'heavyProtection', name: (a.label || a.name).toUpperCase(), time: a.duration * (a.autoDuration ?? 0.6), duration: a.duration * (a.autoDuration ?? 0.6), takenMult: a.takenMult, speedMult: a.speedMult,
           bloodArmor: true, ...(a.bloodArm ? { bloodArmSide: a.bloodArm.side, mult: a.bloodArm.meleeMult, affects: ['melee'] } : {}),
           onEnd() { self.armorHits = Math.max(0, (self.armorHits || 0) - (a.armor || 0)); },
         });
-        this.cooldowns[a.id] = Math.max(this.cooldowns[a.id] || 0, a.cooldown * 0.5);
+        this.cooldowns[a.id] = Math.max(this.cooldowns[a.id] || 0, a.cooldown); // e gasta a recarga inteira da habilidade
         this.notify('O SANGUE ENDURECEU', true);
         this.world.audio.play('blockHit', { volume: 0.8, pitch: 0.6 });
       }

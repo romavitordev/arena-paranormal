@@ -309,6 +309,8 @@ Invoca a Marionete, que luta ao seu lado · custo 50 · cooldown 50 s.
   Um sigilo dourado sobre a cabeça do alvo: por alguns segundos o corpo dele obedece ao contrário (direções invertidas).
 - **Corrente Giratória** — △ + L2 / Y + LT · custo 25 · cooldown 13 s · dano 75
   Gira as duas lâminas presas às correntes em volta do corpo: três cortes em área, o último lança.
+- **Velocidade Mortal** — R2 + △ / RT + Y · custo 25 · cooldown 20 s
+  O ritual do Leque da Fatalidade distorce o tempo em volta dele: fica muito mais rápido e recupera todas as esquivas.
 - **Bloqueio Perfeito** — defender no instante exato (0.15 s) anula o dano e atordoa o atacante por 0.7 s
 - **Passiva — Desviar de Balas:** esquivar de um projétil não gasta carga
 - **Passiva:** o físico tira X de vida; o INIMIGO recupera Y (Y < X) e perde Y × 1.5 de sanidade (energia). O Injustiça não se cura.
@@ -606,9 +608,9 @@ Com mais de 85% de sanidade: pacto de 45 s — morrer durante o pacto transforma
 - **Perturbação Discente** — △ + ○ / Y + B · custo 20 · cooldown 12 s · dano 30 · alcance 5 m
   Uma ordem simples a quem está perto: "PARE!" (paralisa), "VENHA!" (puxa) ou "AJOELHE!" (derruba). Sai uma ao acaso.
 - **Vínculo de Sangue** — △ + □ / Y + X · custo 25 · cooldown 20 s · alcance 9 m
-  Marca o próprio corpo e o do alvo: por 8 s, 40% do dano que o Juan recebe é replicado no alvo.
+  Marca o próprio corpo e o do alvo: por 8 s, 30% do dano que o Juan recebe é replicado no alvo.
 - **Armadura de Sangue Diabólica** — △ + L2 / Y + LT · custo 30 · cooldown 24 s
-  Também nasce sozinha depois de sangrar o bastante (a cada 220 de dano recebido). O próprio sangue endurece numa armadura com espinhos: recebe 30% menos dano, aguenta 2 golpes sem recuar e fica mais rápido. O braço da faca vira uma arma de sangue: golpes físicos 25% mais fortes.
+  Também nasce sozinha depois de sangrar o bastante (a cada 400 de dano recebido, mais curta, e usa a recarga). O próprio sangue endurece numa armadura com espinhos: recebe 30% menos dano, aguenta 2 golpes sem recuar e fica mais rápido. O braço da faca vira uma arma de sangue: golpes físicos 25% mais fortes.
 
 ### Especial: Renascimento
 

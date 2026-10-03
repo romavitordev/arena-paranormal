@@ -16,7 +16,7 @@ export default {
     identity: 'Controla o espaço: perde o inimigo num labirinto e consome o chão onde ele pisa',
     tagline: 'O que espera no final do labirinto... é você.',
   },
-  stats: { moveSpeed: 7.4 },
+  stats: { moveSpeed: 7.7, attackSpeed: 1.08 },
   anims: { idle: 'idle_katana', run: 'run', charge: 'charge', victory: 'vic_labirinto', block: 'block_weapon' },
   chargeFx: { style: 'default', color: 0x9a6aff },
   dodge: { style: 'default', distance: 4.4 },

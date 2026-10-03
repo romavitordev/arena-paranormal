@@ -16,7 +16,7 @@ export default {
     identity: 'Controle de espaço com granadas + punição de perto com a escopeta',
     tagline: 'Kaboom!',
   },
-  stats: { moveSpeed: 8.2 },
+  stats: { moveSpeed: 8.4, attackSpeed: 1.12 },
   anims: { idle: 'idle_dual', run: 'run', charge: 'charge_dual', victory: 'vic_erin', block: 'block_weapon' },
   chargeFx: { style: 'default', color: 0xff7a2a },
   dodge: { style: 'default', distance: 4.8 },
