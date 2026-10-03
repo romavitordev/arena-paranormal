@@ -2,6 +2,15 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v2.3 — Ajustes do TODO
+- Santo Berço ganhou névoa: nuvens baixas girando pela praça e um banco de névoa denso sobre o Labirinto Infinito.
+- A CPU agora limpa as invocações fracas do adversário que estiverem por perto (Zumbis de Sangue fracos, clones do Trinitá) antes de voltar para a luta, e o Diabo da CPU usa o Transportar pelo Sangue para arrastar quando está colado.
+- Arthur: sem sanidade, ele paga os rituais e a Arma de Sangue com o próprio sangue (2 de vida por ponto que faltar, nunca abaixo de 15% da vida).
+- Veias de Sangue do Diabo: agora o sangue rompe as veias do alvo e vira correntes que saem do peito dele e se cravam no chão em volta — nada sai da mão do Diabo.
+- Amaldiçoar Arma do Diabo: as garras pingam sangue o tempo todo.
+- Juan: a Lâmina de Sangue virou uma meia-lua de sangue cortada pela faca, que pinga no caminho e faz sangrar.
+- Juan: a Armadura de Sangue Diabólica também nasce sozinha depois que ele sangra o bastante (a cada 220 de dano recebido).
+
 ## v2.2 — O Diabo reformulado
 - O Diabo (Juan) foi reformulado com base no cânone de Hexatombe. Pacto, o especial, agora é uma escolha: o Diabo sai do Símbolo do Pacto cara a cara com você e oferece um pacto — aperte Golpe para aceitar ou Defesa para recusar (calar é consentir).
 - Aceitar o Pacto: você ganha o presente (cura e sanidade cheia), mas fica Transtornado por 9 s — não defende, leva mais dano e a sanidade escorre de volta para o Diabo. Recusar: o Diabo cobra à força, com três garradas e um rasgo que arremessa e faz sangrar.

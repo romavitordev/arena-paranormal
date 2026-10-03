@@ -39,7 +39,7 @@ export default {
     air: { name: 'Faca aérea', anim: 'air_knife', dur: 0.4, active: [0.12, 0.28], damage: 32, range: 1.8, arc: 110, knockback: 2.5, slam: 15, vertical: 2.2, sound: 'blade', hitSound: 'bladeHit', trail: { color: 0xc01828, roll: 1.3 } },
   },
 
-  // □: sangue arremessado — corta o próprio braço e lança uma lâmina de sangue
+  // □: corta o próprio braço com a faca e lança uma MEIA-LUA de sangue (pinga no caminho e faz sangrar)
   ranged: {
     name: 'Lâmina de Sangue',
     type: 'projectile',
@@ -48,7 +48,7 @@ export default {
     recovery: 0.26,
     count: 1,
     interval: 0,
-    damage: 28,
+    damage: 24,
     range: 18,
     speed: 30,
     radius: 0.4,
@@ -57,8 +57,10 @@ export default {
     hitstun: 0.35,
     cooldown: 2.0,
     energyCost: 0,
-    visual: 'crossWave',
+    visual: 'bloodCrescent',
     color: 0xc01828,
+    element: 'sangue',
+    onHit: { bleed: { dps: 3, duration: 1.5 } },
     sound: 'blade',
     hitSound: 'bladeHit',
   },
@@ -112,7 +114,7 @@ export default {
       name: 'Armadura de Sangue Diabólica',
       input: 'carga+dodge', // △ + L2 / Y + LT
       type: 'heavyProtection',
-      description: 'O próprio sangue endurece numa armadura com espinhos: recebe 30% menos dano, aguenta 2 golpes sem recuar e fica mais rápido. O braço da faca vira uma arma de sangue: golpes físicos 25% mais fortes.',
+      description: 'Também nasce sozinha depois de sangrar o bastante (a cada 220 de dano recebido). O próprio sangue endurece numa armadura com espinhos: recebe 30% menos dano, aguenta 2 golpes sem recuar e fica mais rápido. O braço da faca vira uma arma de sangue: golpes físicos 25% mais fortes.',
       energyCost: 30,
       cooldown: 24,
       duration: 7,
@@ -141,5 +143,6 @@ export default {
   passives: [
     { type: 'lifesteal', ratio: 0.15 }, // Faca Predadora: cura 15% do dano dos cortes
     { type: 'masochist', ratio: 0.12 }, // Masoquista: apanhar devolve sanidade
+    { type: 'bloodHardens', threshold: 220, ability: 'armaduraSangueDiabolica' }, // a cada 220 de dano recebido, a armadura nasce sozinha
   ],
 };

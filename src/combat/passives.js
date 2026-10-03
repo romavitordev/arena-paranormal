@@ -48,6 +48,8 @@ export const PASSIVES = {
       return victim && victim.def && victim.def.element === passive.element ? passive.mult ?? 1.15 : 1;
     },
   },
+  // Arthur — Preço de Sangue: sem sanidade, paga rituais e a Arma de Sangue com a própria vida (lido no Fighter)
+  bloodPrice: {},
   // Kaiser — Resistente: armadura natural contra dano físico
   resistant: {
     damageTakenMod({ kind, passive }) {
@@ -96,6 +98,18 @@ export const PASSIVES = {
   masochist: {
     onHitTaken({ victim, dealt, passive }) {
       if (dealt > 0) victim.energy = Math.min(victim.maxEnergy, victim.energy + dealt * (passive.ratio ?? 0.12));
+    },
+  },
+  // Juan — Sangue que Endurece (cânone: "após sangrar o suficiente, seu sangue começa a formar uma armadura"): o dano
+  // recebido acumula; ao passar do limite, a Armadura de Sangue Diabólica nasce sozinha (o Fighter ativa: autoArmor)
+  bloodHardens: {
+    onHitTaken({ victim, dealt, passive }) {
+      if (!(dealt > 0) || victim.findBuff('heavyProtection')) return;
+      victim.bloodLost = (victim.bloodLost || 0) + dealt;
+      if (victim.bloodLost >= (passive.threshold ?? 220)) {
+        victim.bloodLost = 0;
+        victim.autoArmor = passive.ability;
+      }
     },
   },
   // Lírio — Sangue de Ferro: mais vitalidade (a vida extra está em stats.maxHealth; aqui só identifica a passiva)

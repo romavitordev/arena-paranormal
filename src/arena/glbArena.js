@@ -33,6 +33,7 @@ export function createGLBArena(cfg) {
   const sway = []; const spin = [];
   let time = 0;
   let particles = null;
+  let mist = null;
 
   const arena = {
     id: cfg.id,
@@ -168,6 +169,7 @@ export function createGLBArena(cfg) {
         if (light) group.add(light);
       }
       if (cfg.particles) particles = makeParticles(group, cfg.particles);
+      if (cfg.mist) mist = makeMist(group, cfg.mist);
     },
 
     update(dt) {
@@ -186,6 +188,7 @@ export function createGLBArena(cfg) {
         s.o.rotation.z = s.rot.z + Math.sin(time * 0.8 + s.seed) * 0.03;
       }
       if (particles) particles.update(dt);
+      if (mist) mist.update(dt);
     },
 
     blocksPoint(p, r = 0) {
@@ -229,6 +232,58 @@ function gradientSky(stops) {
   const t = new THREE.CanvasTexture(c);
   t.colorSpace = THREE.SRGBColorSpace;
   return t;
+}
+
+// NÉVOA (Santo Berço): nuvens baixas e translúcidas girando devagar em volta de um centro; bancos (banks) mais densos
+// em pontos fixos (ex.: sobre o labirinto). Sprites com textura radial suave; não entram nos raios da câmera.
+function mistTexture() {
+  const c = document.createElement('canvas');
+  c.width = c.height = 128;
+  const g = c.getContext('2d');
+  const grd = g.createRadialGradient(64, 64, 4, 64, 64, 62);
+  grd.addColorStop(0, 'rgba(255,255,255,0.55)');
+  grd.addColorStop(0.45, 'rgba(255,255,255,0.22)');
+  grd.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = grd;
+  g.fillRect(0, 0, 128, 128);
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
+function makeMist(group, o) {
+  const tex = mistTexture();
+  const puffs = [];
+  const add = (n, place, size, opacity) => {
+    for (let i = 0; i < n; i++) {
+      const mat = new THREE.SpriteMaterial({ map: tex, color: o.color, transparent: true, opacity: opacity * (0.6 + Math.random() * 0.4), depthWrite: false, fog: true });
+      const sp = new THREE.Sprite(mat);
+      const p = place(i, n);
+      sp.scale.setScalar(size * (0.7 + Math.random() * 0.6));
+      sp.raycast = () => {};
+      sp.renderOrder = 2;
+      group.add(sp);
+      puffs.push({ sp, ...p, phase: Math.random() * Math.PI * 2 });
+    }
+  };
+  const c = o.center ?? [0, 0];
+  // anel baixo pela praça (não fica em cima da luta: começa a alguns metros do centro)
+  add(o.count ?? 36, (i, n) => ({ cx: c[0], cz: c[1], r: (o.inner ?? 7) + Math.random() * ((o.radius ?? 20) - (o.inner ?? 7)), a: (i / n) * Math.PI * 2 + Math.random() * 0.4, y: 0.4 + Math.random() * (o.height ?? 2.2), spin: (o.swirl ?? 0.03) * (0.7 + Math.random() * 0.6) }), o.size ?? 7, o.opacity ?? 0.35);
+  for (const b of o.banks || []) {
+    add(b.count ?? 14, () => ({ cx: b.at[0], cz: b.at[1], r: Math.random() * (b.radius ?? 8), a: Math.random() * Math.PI * 2, y: (b.y ?? 2) + Math.random() * (b.height ?? 4), spin: (o.swirl ?? 0.03) * 2.5 }), b.size ?? 10, b.opacity ?? 0.5);
+  }
+  let t = 0;
+  const place = (p) => {
+    const a = p.a + t * p.spin;
+    p.sp.position.set(p.cx + Math.sin(a) * p.r, p.y + Math.sin(t * 0.3 + p.phase) * 0.25, p.cz + Math.cos(a) * p.r);
+  };
+  puffs.forEach(place);
+  return {
+    update(dt) {
+      t += dt;
+      for (const p of puffs) place(p);
+    },
+  };
 }
 
 // Partículas do ambiente (poeira, folhas, cinzas, mosquitos na luz)

@@ -67,7 +67,7 @@ Solta a névoa e, dentro dela, conjura a **Acácia amplificada pela Cinerária**
 
 ## ARTHUR CERVERO
 
-*Precisão + sniper + arma amaldiçoada + combate de um braço* · arma: Sniper
+*Precisão + sniper + arma amaldiçoada + combate de um braço; sem sanidade, paga os rituais com o próprio sangue* · arma: Sniper
 
 ### Físico (○ / B)
 
@@ -593,7 +593,7 @@ Com mais de 85% de sanidade: pacto de 45 s — morrer durante o pacto transforma
 
 ### Principal (□ / X): Lâmina de Sangue
 
-- Dano 28 · alcance 18 m · cooldown 2 s · custo 0
+- Dano 24 · alcance 18 m · cooldown 2 s · custo 0
 
 ### Habilidades
 
@@ -604,7 +604,7 @@ Com mais de 85% de sanidade: pacto de 45 s — morrer durante o pacto transforma
 - **Vínculo de Sangue** — △ + □ / Y + X · custo 25 · cooldown 20 s · alcance 9 m
   Marca o próprio corpo e o do alvo: por 8 s, 40% do dano que o Juan recebe é replicado no alvo.
 - **Armadura de Sangue Diabólica** — △ + L2 / Y + LT · custo 30 · cooldown 24 s
-  O próprio sangue endurece numa armadura com espinhos: recebe 30% menos dano, aguenta 2 golpes sem recuar e fica mais rápido. O braço da faca vira uma arma de sangue: golpes físicos 25% mais fortes.
+  Também nasce sozinha depois de sangrar o bastante (a cada 220 de dano recebido). O próprio sangue endurece numa armadura com espinhos: recebe 30% menos dano, aguenta 2 golpes sem recuar e fica mais rápido. O braço da faca vira uma arma de sangue: golpes físicos 25% mais fortes.
 
 ### Especial: Renascimento
 

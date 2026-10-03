@@ -75,7 +75,7 @@ export const SANTO_BERCO = {
   spawns: [{ x: 0, z: -5 }, { x: 0, z: 5 }],
   sky: 0xe8c890,
   skyGradient: [[0, '#4a3a6a'], [0.45, '#b88aa0'], [0.75, '#f0c890'], [1, '#f6e0b0']],
-  fog: { color: 0xd8c0b0, density: 0.014 },
+  fog: { color: 0xd8c0b0, density: 0.018 },
   lights: [
     { type: 'hemi', sky: 0xffe0b8, ground: 0x4a5a2a, intensity: 1.15 },
     { type: 'dir', color: 0xffc888, intensity: 2.2, pos: [26, 18, 20], shadow: true, area: 30 },
@@ -85,6 +85,8 @@ export const SANTO_BERCO = {
     { type: 'point', color: 0x3aff8a, intensity: 5, distance: 6, pos: [-8.5, 1.2, -9.5] }, // cristal verde
   ],
   particles: { color: 0xfff0b0, count: 260, area: 44, height: 7, rise: 0.12, drift: 0.6, size: 0.07, opacity: 0.7 }, // esporos dourados
+  // névoa baixa girando pela praça e um banco denso sobre o Labirinto Infinito (ao fundo, z ≈ −40)
+  mist: { color: 0xe8dcd8, count: 34, inner: 6, radius: 21, height: 1.8, size: 7, opacity: 0.32, swirl: 0.035, banks: [{ at: [0, -38], radius: 14, count: 18, y: 1.5, height: 6, size: 12, opacity: 0.55 }] },
   camera: { radius: 23, maxY: 14 }, // não entra nas casas nem nas árvores
 };
 

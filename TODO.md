@@ -30,16 +30,16 @@ distorce o resultado"; a vítima vira Transtornada).
 
 ### O que mais pode ser reformulado (análise da v2.2)
 🔴Analisar se todos personagens de ataque rápido, como gal e Henri, etc.. sem ser personagens pesados como Lirio, ou personagens estratégicos como Arthur e Kemi, estão agéis o suficientes em combos, gal eu sei que está, mas analisar os outros.
-🟡 Adição de Névoa no mapa do Santo Berço
+✅ (v2.3) Adição de Névoa no mapa do Santo Berço
 Levantado comparando cada kit com o cânone e procurando habilidades que só reaproveitam um tipo genérico.
-- 🔴 **Juan (forma base):** o □ "Lâmina de Sangue" usa a onda em X genérica (`crossWave`, a mesma de outros) — no cânone
+- ✅ (v2.3) **Juan (forma base):** meia-lua de sangue no □ e armadura que nasce ao sangrar (220 de dano). Era: o □ "Lâmina de Sangue" usa a onda em X genérica (`crossWave`, a mesma de outros) — no cânone
   ele luta com a faca de lâmina ondulada; trocar por arremesso/corte da faca com rastro de sangue. A **Armadura de
   Sangue Diabólica** deveria nascer de SANGRAR ("após sangrar o suficiente"): carregar com o dano recebido e ativar
   sozinha (ou ficar mais forte quanto mais ele apanhou), com espinhos no ombro esquerdo como na forma do Diabo.
-- 🔴 **Diabo:** o modelo ainda não tem as asas de braços nem a boca vertical do torso descritas na wiki; Veias de
+- 🔴 **Diabo:** ✅ (v2.3) Veias saindo do próprio alvo e garras pingando sangue. Falta: o modelo ainda não tem as asas de braços nem a boca vertical do torso descritas na wiki; Veias de
   Sangue é a mesma corda das Amarras da Lírio — trocar por correntes saindo das veias do PRÓPRIO alvo (sem corda
   vindo da mão). Amaldiçoar Arma é só o sangramento das garras: dar um efeito visível (garras com sangue escorrendo).
-- 🟡 **Arthur:** o kit dele no cânone tem Arma de Sangue (lâmina do próprio sangue, gastando vida) — hoje é só o
+- ✅ (v2.3) **Arthur:** sem sanidade, paga rituais e a Arma de Sangue com vida (passiva Preço de Sangue). Era: o kit dele no cânone tem Arma de Sangue (lâmina do próprio sangue, gastando vida) — hoje é só o
   especial; avaliar uma versão curta como habilidade (custa vida em vez de sanidade) Ele pode gastar vida ao invés de sanidade para fazer o ritual.
 - 🟡 **Erin:** "Envelhecimento Localizado — Black Hole" é só cura ao longo do tempo (`healOverTime`); no cânone é um
   ritual de Energia/Morte que envelhece uma área — virar zona que acelera o tempo do adversário (recargas mais
@@ -54,7 +54,7 @@ Levantado comparando cada kit com o cânone e procurando habilidades que só rea
 - 🟡 **Fantasma** usa as animações humanas da Kemi (já anotado) e o Disparo Espiral é ao mesmo tempo o □ e o especial
   — o especial podia ser uma versão cinematográfica (um disparo em volta da arena e a câmera seguindo a bala até atingir o adversário).
 - 🟢 **Teleportes** (Joui, Kian, Fantasma, Gal, Diabo): cada um já tem a sua cara; padronizar quem deixa rastro/poça.
-- 🟢 **CPU:** focar invocações fracas (zumbis, clones do Trinitá) e usar o Transportar para arrastar quando colado.
+- ✅ (v2.3) **CPU:** foca invocações fracas (zumbis, clones do Trinitá) e usa o Transportar para arrastar quando colado.
 
 ## Estado na v2.1 (2026-10-03)
 

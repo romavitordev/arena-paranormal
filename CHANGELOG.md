@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.3 — 2026-10-03
+### Alterado
+- Santo Berço com névoa; CPU limpa invocações fracas; Arthur paga rituais com vida sem sanidade.
+- Diabo: Veias de Sangue saindo do próprio alvo; garras pingando sangue.
+- Juan: Lâmina de Sangue em meia-lua (sangramento); Armadura de Sangue nasce sozinha ao sangrar (220 de dano).
+
 ## v2.2 — 2026-10-03
 
 ### Alterado

@@ -110,6 +110,21 @@ const VISUALS = {
     g.add(glow);
     return g;
   },
+  // Lâmina de Sangue (Juan): meia-lua de sangue cortada pela faca, deitada, com o fio claro na frente (aponta para +Z)
+  bloodCrescent(color) {
+    const g = new THREE.Group();
+    const arc = new THREE.Mesh(new THREE.TorusGeometry(0.7, 0.07, 6, 28, Math.PI), glowMat(color, 0.95));
+    arc.rotation.x = Math.PI / 2; // deitada no plano do chão, a curva para a frente
+    arc.scale.set(1, 1, 0.35);
+    g.add(arc);
+    const edge = new THREE.Mesh(new THREE.TorusGeometry(0.74, 0.022, 4, 28, Math.PI), glowMat(0xffd0d0, 0.9));
+    edge.rotation.x = Math.PI / 2;
+    g.add(edge);
+    const core = new THREE.Mesh(new THREE.SphereGeometry(0.16, 8, 6), glowMat(0x5a0008, 0.8));
+    core.position.z = 0.55;
+    g.add(core);
+    return g;
+  },
   crossWave(color) {
     const g = new THREE.Group();
     for (const r of [0.75, -0.75]) {
@@ -532,6 +547,7 @@ export class Projectiles {
         if (a.drip && Math.random() < 0.5) w.fx.burst(p.mesh.position, { count: 1, color: 0x050406, speed: 0.2, life: 0.6, size: 0.1, gravity: 9 }); // lodo pingando
       }
       if (a.visual === 'crossWave') w.fx.burst(p.pos, { count: 2, color: a.color, speed: 1, life: 0.3, size: 0.3 });
+      if (a.visual === 'bloodCrescent' || a.visual === 'bloodSpear') w.fx.burst(p.pos, { count: 1, color: 0xa01018, speed: 0.4, life: 0.5, size: 0.1, gravity: 9 }); // pinga sangue no caminho
       if (a.visual === 'shockwave') {
         w.fx.burst(p.pos.clone().setY(0.1), { count: 3, color: a.color, speed: 2, life: 0.4, size: 0.35, up: 0.8 });
         if (Math.random() < 0.25) w.fx.ring(p.pos.clone().setY(0.08), { color: a.color, radius: 1.6, life: 0.3 });

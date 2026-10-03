@@ -12,7 +12,7 @@ export default {
   info: {
     weapon: 'Sniper',
     style: 'Um braço só: luta com chutes e joelhadas (o braço fica para a sniper)',
-    identity: 'Precisão + sniper + arma amaldiçoada + combate de um braço',
+    identity: 'Precisão + sniper + arma amaldiçoada + combate de um braço; sem sanidade, paga os rituais com o próprio sangue',
     tagline: 'Paciente. Um tiro basta.',
   },
   stats: { moveSpeed: 7.2 },
@@ -156,5 +156,7 @@ export default {
     hideProp: 'claw',
   },
 
-  passives: [],
+  passives: [
+    { type: 'bloodPrice', hpPerPoint: 2, minHealth: 0.15 }, // sem sanidade, paga rituais com a própria vida (cânone: a Arma de Sangue gasta PV)
+  ],
 };

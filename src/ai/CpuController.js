@@ -177,6 +177,27 @@ export class CpuController {
       }
     }
 
+    // invocações FRACAS do adversário por perto (Zumbi fraco, clones do Trinitá): limpa antes de voltar a ele
+    if ((f.state === 'idle' || f.state === 'charging') && f.onGround && w.hostileNpcs) {
+      let prey = null;
+      let best = 5;
+      for (const n of w.hostileNpcs(f)) {
+        if (!n.alive || n.state === 'rise' || n.state === 'die' || n.state === 'leave' || !(n.isClone || n.maxHp <= 120)) continue;
+        const dn = distXZ(f.pos, n.pos);
+        if (dn < best && (dn < d - 1 || d > 4)) { best = dn; prey = n; }
+      }
+      if (prey && Math.random() < 0.5 * k * (1 - L.mistake)) {
+        if (best <= 1.9) this.tap('physical');
+        else {
+          const lx = prey.pos.x - f.pos.x;
+          const lz = prey.pos.z - f.pos.z;
+          const ln = Math.hypot(lx, lz) || 1;
+          this.queue.push({ t: 0.18, held: {}, move: { x: lx / ln, z: lz / ln } });
+        }
+        return out;
+      }
+    }
+
     this.think -= dt;
     if (this.think <= 0) {
       this.think = rnd(L.think[0], L.think[1]);

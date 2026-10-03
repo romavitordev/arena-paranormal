@@ -622,9 +622,38 @@ export class Fighter {
     this.updateVisuals(dt);
   }
 
+  // sangue pingando das mãos/garras (def.drips — Amaldiçoar Arma do Diabo)
+  updateDrips(dt) {
+    const D = this.def.drips;
+    if (!D || !this.visible || this.state === 'ko') return;
+    this.dripT = (this.dripT ?? 0) - dt;
+    if (this.dripT > 0) return;
+    this.dripT = D.every ?? 0.1;
+    const s = this.rig.sockets && this.rig.sockets[D.sockets[(this.dripI = ((this.dripI || 0) + 1) % D.sockets.length)]];
+    if (!s) return;
+    this.world.fx.burst(s.getWorldPosition(v1), { count: 1, color: D.color ?? 0xa01018, speed: 0.2, up: -0.5, life: 0.5, size: 0.07, gravity: 9 });
+  }
+
   // ARMADURA DE SANGUE (Juan e a assistência dele): carne de sangue porosa crescendo no lado esquerdo do corpo
   // enquanto durar. Quem conjura (b.bloodArmSide) também tem o braço da faca virando arma de sangue.
   updateBloodShell(dt) {
+    // Sangue que Endurece (Juan): sangrou o bastante → a armadura nasce sozinha, de graça
+    if (this.autoArmor) {
+      const a = (this.def.abilities || []).find((x) => x.id === this.autoArmor);
+      this.autoArmor = null;
+      if (a && this.state !== 'ko' && !this.findBuff('heavyProtection')) {
+        this.armorHits = (this.armorHits || 0) + (a.armor || 0);
+        const self = this;
+        this.addBuff({
+          type: 'heavyProtection', name: (a.label || a.name).toUpperCase(), time: a.duration, duration: a.duration, takenMult: a.takenMult, speedMult: a.speedMult,
+          bloodArmor: true, ...(a.bloodArm ? { bloodArmSide: a.bloodArm.side, mult: a.bloodArm.meleeMult, affects: ['melee'] } : {}),
+          onEnd() { self.armorHits = Math.max(0, (self.armorHits || 0) - (a.armor || 0)); },
+        });
+        this.cooldowns[a.id] = Math.max(this.cooldowns[a.id] || 0, a.cooldown * 0.5);
+        this.notify('O SANGUE ENDURECEU', true);
+        this.world.audio.play('blockHit', { volume: 0.8, pitch: 0.6 });
+      }
+    }
     const on = this.state !== 'ko' && this.visible ? this.buffs.find((b) => b.type === 'bloodArmor' || b.bloodArmor) : null;
     const side = on ? this.buffs.find((b) => b.bloodArmSide)?.bloodArmSide || null : null;
     const key = on ? `on:${side}` : null;
@@ -650,6 +679,7 @@ export class Fighter {
   updateVisuals(dt) {
     this.updateGrip();
     this.updateBloodShell(dt);
+    this.updateDrips(dt);
     // posiciona o modelo ANTES de animar: o ajuste de pés/chão do rig usa a posição deste quadro
     this.rig.root.position.copy(this.pos);
     this.rig.root.rotation.y = this.yaw;
@@ -2113,20 +2143,38 @@ export class Fighter {
       this.notify(`${a.name.toUpperCase()}: RECARREGANDO`);
       return;
     }
-    if (this.energy < this.abilityCost(a)) {
-      this.notify('SEM SANIDADE');
-      return;
-    }
+    const cost = this.abilityCost(a);
+    const blood = this.bloodPrice(cost);
+    if (blood < 0) return;
     const impl = ABILITY_TYPES[a.type];
     if (!impl) return;
     this.carga.stage = 0;
     const seq = impl.start(this, a, this.world);
     if (!seq) return; // falhou (ex.: sem posição/alvo válido) — não gasta nada
-    this.spendEnergy(this.abilityCost(a));
+    this.payCost(cost, blood);
     (this.lastAbilityUse || (this.lastAbilityUse = {}))[a.id] = this.world.time;
     this.cooldowns[a.id] = a.cooldown;
     this.setState('ability');
     this.seq = seq;
+  }
+
+  // Quanto de VIDA vai custar um ritual/especial: 0 = paga com sanidade; −1 = não dá (já avisou).
+  // Preço de Sangue (Arthur, cânone: a Arma de Sangue gasta PV): o que faltar de sanidade sai da vida.
+  bloodPrice(cost) {
+    if (this.energy >= cost) return 0;
+    const P = (this.def.passives || []).find((p) => p.type === 'bloodPrice');
+    if (!P) { this.notify('SEM SANIDADE'); return -1; }
+    const hp = Math.ceil((cost - this.energy) * (P.hpPerPoint ?? 2));
+    if (this.health - hp < this.maxHealth * (P.minHealth ?? 0.15)) { this.notify('SEM SANIDADE (NEM SANGUE)'); return -1; }
+    return hp;
+  }
+
+  payCost(cost, blood) {
+    if (!blood) { this.spendEnergy(cost); return; }
+    this.energy = 0;
+    this.health -= blood;
+    this.world.fx.burst(this.chestPos(), { count: 26, color: 0xb01020, speed: 3, life: 0.5, size: 0.16, gravity: 7 });
+    this.notify(`PAGOU COM SANGUE −${blood}`, true);
   }
 
   // ------------------------------------------------ especial
@@ -2144,10 +2192,8 @@ export class Fighter {
       this.notify('ESPECIAL RECARREGANDO');
       return;
     }
-    if (this.energy < this.specialCost()) {
-      this.notify('SEM SANIDADE');
-      return;
-    }
+    const spBlood = this.bloodPrice(this.specialCost());
+    if (spBlood < 0) return;
     // especiais que exigem a sanidade alta (Pacto do Santo: acima de 85%)
     if (sp.minEnergy && this.energy < sp.minEnergy * this.maxEnergy) {
       this.notify(`PRECISA DE ${Math.round(sp.minEnergy * 100)}% DE SANIDADE`);
@@ -2159,7 +2205,7 @@ export class Fighter {
       this.notify(impl.blockMsg || 'ALVO FORA DE ALCANCE');
       return;
     }
-    this.energy -= this.specialCost();
+    this.payCost(this.specialCost(), spBlood);
     this.specialUses++;
     this.cooldowns.special = this.cooldownMax.special;
     this.vel.set(0, this.vel.y, 0);

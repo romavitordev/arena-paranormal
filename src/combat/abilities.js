@@ -2079,6 +2079,56 @@ Object.assign(ABILITY_TYPES, {
     },
   },
 
+  // VEIAS DE SANGUE (Diabo — cânone: "prende pessoas manipulando o Sangue nas veias do próprio indivíduo, formando uma
+  // espécie de corrente em torno delas"): nada sai da mão do Diabo — o sangue rompe a pele do ALVO e vira correntes que
+  // saem do peito dele e se cravam no chão em volta, prendendo-o no lugar.
+  veinChains: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      if (opp) f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('point', { restart: true, duration: a.windup + 0.4 });
+      world.audio.play('fearGaze', { volume: 0.6, pitch: 0.7 });
+      tl.add(a.windup, () => {
+        const ok = opp && opp.state !== 'ko' && !opp.isInvulnerable() && distXZ(f.pos, opp.pos) <= a.range
+          && Math.abs(angleDiff(f.yaw, yawTo(f.pos, opp.pos))) <= (a.arc * DEG) / 2;
+        if (!ok) {
+          f.notify('VEIAS DE SANGUE (ERROU)');
+          return;
+        }
+        const res = applyHit(world, f, opp, { damage: a.damage, kind: 'ability', element: 'sangue', knockback: 0, hitstun: 0.3, reaction: false, sound: 'chainPull', color: 0xc01828, scale: 1 });
+        if (typeof res !== 'number' || opp.state === 'ko') return;
+        opp.stun(a.hold, 'stagger');
+        opp.vel.set(0, 0, 0);
+        opp.notify('PRESO PELAS PRÓPRIAS VEIAS', true);
+        world.fx.burst(opp.chestPos(), { count: 40, color: 0xb01020, speed: 4, life: 0.6, size: 0.2, gravity: 8 });
+        // correntes: do peito (acompanha o alvo) até âncoras fixas no chão em volta dele
+        const base = opp.pos.clone();
+        const chains = [];
+        for (let i = 0; i < (a.chains ?? 4); i++) {
+          const ang = opp.yaw + (i / (a.chains ?? 4)) * Math.PI * 2 + 0.4;
+          const anchor = new THREE.Vector3(base.x + Math.sin(ang) * 1.4, 0.05, base.z + Math.cos(ang) * 1.4);
+          const h = 0.7 + (i % 2) * 0.45;
+          chains.push(world.fx.chain(() => opp.pos.clone().setY(opp.pos.y + h), () => anchor, { links: 18, color: 0x8a0a14, glow: 0x4a0006, sag: 0.05 }));
+          world.fx.burst(anchor, { count: 8, color: 0x9a0010, speed: 2, up: 2, life: 0.4, size: 0.16, gravity: 8 });
+        }
+        // sangue escorrendo das veias enquanto está preso
+        let t = 0;
+        world.addTicker({
+          update(dt) {
+            t += dt;
+            if (opp.state !== 'ko' && Math.random() < 0.4) world.fx.burst(opp.pos.clone().setY(opp.pos.y + 0.6 + Math.random() * 0.9), { count: 1, color: 0xa01018, speed: 0.5, life: 0.4, size: 0.1, gravity: 9 });
+            return t >= a.hold * 0.9 || opp.state === 'ko';
+          },
+          dispose() { chains.forEach((c) => c.alive && c.stop()); },
+        });
+      });
+      tl.end(a.windup + 0.4);
+      return seqFrom(tl);
+    },
+  },
+
   // ÓDIO DO DIABO (cânone: faz o ALVO sentir um ódio paranormal extremo, ficando mais forte): o adversário na mira fica
   // CEGO DE ÓDIO — bate um pouco mais forte, mas não defende, não usa rituais nem tiros e leva mais dano. O Diabo se
   // alimenta do ódio (mais dano e velocidade enquanto durar). Errou a mira: só o Diabo se alimenta do próprio ódio.

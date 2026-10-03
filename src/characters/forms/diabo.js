@@ -25,6 +25,8 @@ export default {
   // animações próprias (anim/formClips.js); os nomes genéricos usados pelas habilidades também são trocados
   anims: { idle: 'db_idle', run: 'db_run', walk: 'db_run', walk_back: 'db_walk_back', strafe_L: 'db_strafe_L', strafe_R: 'db_strafe_R', dash: 'db_dash', charge: 'db_charge', concentrate: 'db_charge', victory: 'db_victory', block: 'db_block', block_hit: 'db_block_hit', point: 'db_point', throw_r: 'db_throw', powerup: 'db_powerup', dual_cross: 'db_cross', cast_up: 'db_powerup' },
   chargeFx: { style: 'default', color: 0xff2a3d },
+  // Amaldiçoar Arma: as garras amaldiçoadas pingam sangue o tempo todo (Fighter.updateDrips)
+  drips: { sockets: ['handR', 'handL'], color: 0xa01018, every: 0.09 },
   dodge: { style: 'default', distance: 5.2 },
 
   melee: {
@@ -81,8 +83,8 @@ export default {
       id: 'veiasSangue',
       name: 'Veias de Sangue',
       input: 'carga+ranged', // △ + □ / Y + X
-      type: 'bloodBind',
-      description: 'Puxa o sangue das veias do alvo e forma correntes em volta dele: fica preso por um instante.',
+      type: 'veinChains',
+      description: 'O sangue rompe as veias do alvo e vira correntes que saem do peito dele e se cravam no chão: fica preso por um instante.',
       energyCost: 25,
       cooldown: 13,
       windup: 0.3,
@@ -122,6 +124,7 @@ export default {
       distance: 1.6,
       vanishTime: 0.18,
       dragRange: 2.2,
+      ai: { max: 2.2 }, // CPU: usa colado no adversário, para arrastá-lo
       dragDamage: 34,
       color: 0x9a0010,
     },
