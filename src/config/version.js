@@ -1,8 +1,18 @@
 // Versão do jogo e NOVIDADES (changelog). Cada atualização conta, inclusive as que foram juntas numa só publicação.
 // Para uma nova atualização: suba VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = 14;
+export const VERSION = 15;
 
 export const CHANGELOG = [
+  {
+    v: 15,
+    date: '2026-10-02',
+    title: 'Correções nos menus',
+    items: [
+      'Esc nos menus agora sempre VOLTA (antes, em algumas telas, avançava: seleção, configuração da batalha, vitória).',
+      'Na seleção, Esc desfaz a escolha do P1 em vez de começar a luta.',
+      'O cartão do tutorial não aparece mais por cima da pausa e dos outros menus.',
+    ],
+  },
   {
     v: 14,
     date: '2026-10-02',

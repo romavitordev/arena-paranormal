@@ -309,6 +309,7 @@ game.touch = touch;
 
 function tick(dt) {
   if (touch) touch.sync(game.state, !!input.teamMode);
+  if (game.tutorial) game.tutorial.el.style.display = game.state === 'fight' ? '' : 'none';
   input.update(dt);
   if (input.anyPressed) audio.unlock();
 

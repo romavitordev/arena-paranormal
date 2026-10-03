@@ -198,6 +198,7 @@
 - ✅ A Fantasma (Kemi) dura até o fim do round.
 - ✅ Modo TUTORIAL no menu inicial: escolhe o personagem e ensina passo a passo todos os golpes dele (detecta cada
   ação de verdade). Saiu a opção "Tutorial ON/OFF": os comandos aparecem sempre nos ícones da HUD.
+- ✅ Esc nos menus sempre volta (não avança mais na seleção/configuração/vitória); o cartão do tutorial some fora da luta.
 - ⏭ Animações próprias das formas (Deus da Morte e Diabo ainda usam as animações humanas).
 - Gal, Erin, Aguiar, Labirinto e Xande já foram feitos/revisados com as referências nas rodadas anteriores.
 - ✅ V4 etapa 12 Armature: esqueleto com root → hips → sp → chest → neck → hd, mãos (handL/R) e pés (footL/R),

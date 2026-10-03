@@ -15,6 +15,8 @@ import { VERSION, CHANGELOG } from '../config/version.js';
 // Nos menus: A / × (Pulo) confirma e B / ○ (Ataque físico) volta.
 const confirm = (p) => p.pressed.jump;
 const back = (p) => p.pressed.physical;
+// START para prosseguir: só o do controle. No teclado o START é o Esc (P1) / Backspace (P2), que nos menus VOLTA.
+const startGo = (p, input) => p.pressed.start && !input.keyPressedOnce('Escape') && !input.keyPressedOnce('Backspace');
 const random = (p) => p.pressed.carga; // Y/△: escolha aleatória
 const RAND = 'Y/△';
 // índice aleatório diferente do atual (quando houver mais de uma opção)
@@ -169,7 +171,7 @@ export class HomeScreen {
   update(input) {
     if (!this.portraitsReady) this.fillPortraits();
     if (!this.menu) {
-      const go = this.tapped || input.keyPressedOnce('Enter') || input.players.some((x) => x.pressed.start || confirm(x));
+      const go = this.tapped || input.keyPressedOnce('Enter') || input.players.some((x) => startGo(x, input) || confirm(x));
       this.tapped = false;
       if (go) { this.setMenu(true); return 'start'; }
       return null;
@@ -183,7 +185,7 @@ export class HomeScreen {
       const n = this.list.length;
       if (p.menu.up) { this.index = (this.index + n - 1) % n; this.render(); return 'move'; }
       if (p.menu.down) { this.index = (this.index + 1) % n; this.render(); return 'move'; }
-      if (confirm(p) || p.pressed.start) return this.choose(this.index);
+      if (confirm(p) || startGo(p, input)) return this.choose(this.index);
       if (back(p)) return this.goBack();
     }
     if (input.keyPressedOnce('Enter')) return this.choose(this.index);
@@ -199,7 +201,7 @@ export class TitleScreen {
     this.el = el(root, 'screen', 'title', `<h1>ARENA<br>PARANORMAL</h1><p>PRESSIONE ENTER, ESPAÇO OU START</p>`);
   }
   update(input) {
-    return input.keyPressedOnce('Enter') || input.players.some((x) => x.pressed.start || confirm(x));
+    return input.keyPressedOnce('Enter') || input.players.some((x) => startGo(x, input) || confirm(x));
   }
   dispose() { this.el.remove(); }
 }
@@ -239,7 +241,7 @@ export class MenuScreen {
       if (p.menu.down) { this.index = (this.index + 1) % this.options.length; this.render(); }
       if (confirm(p) && !this.options[this.index].disabled) return this.options[this.index].id;
       if (back(p)) return 'back';
-      if (p.pressed.start) return 'resume';
+      if (p.pressed.start) return this.options.some((x) => x.id === 'resume') ? 'resume' : 'back';
     }
     // Enter/Esc ficam no lado do P1 do teclado
     if (this.owner === null || this.owner === 0) {
@@ -385,12 +387,15 @@ export class SelectScreen {
   update(input) {
     const [p1, p2] = input.players;
     let changed = false;
+    // Esc (teclado do P1) vale como o "voltar" do P1
+    this.escBack = input.keyPressedOnce('Escape');
+    this.p1 = p1;
     // B/○ (ou Esc) com ninguém confirmado: volta para a tela inicial
-    if (!this.ready[0] && !this.ready[1] && !this.picks[0].length && !this.picks[1].length && (back(p1) || (!this.cpu && back(p2)) || input.keyPressedOnce('Escape'))) return 'back';
+    if (!this.ready[0] && !this.ready[1] && !this.picks[0].length && !this.picks[1].length && (this.bk(p1) || (!this.cpu && this.bk(p2)))) return 'back';
     // os dois confirmados: COMEÇAR leva às configurações da batalha (B desfaz a escolha)
     if (this.ready[0] && this.ready[1]) {
       const humans = this.cpu ? [p1] : [p1, p2];
-      const go = this.startClicked || input.keyPressedOnce('Enter') || humans.some((p) => confirm(p) || p.pressed.start);
+      const go = this.startClicked || input.keyPressedOnce('Enter') || humans.some((p) => confirm(p) || startGo(p, input));
       this.startClicked = false;
       if (go) {
         this.audio.play('confirm');
@@ -400,8 +405,8 @@ export class SelectScreen {
         }
         return { p1: ROSTER[this.cursor[0]], p2: ROSTER[this.cursor[1]], cpu: this.cpu, mode: this.mode };
       }
-      if (this.cpu ? back(p1) : back(p1) || back(p2)) {
-        const slot = this.cpu ? 1 : back(p2) ? 1 : 0;
+      if (this.cpu ? this.bk(p1) : this.bk(p1) || this.bk(p2)) {
+        const slot = this.cpu ? 1 : this.bk(p2) ? 1 : 0;
         this.ready[slot] = false;
         if (this.team) this.picks[slot].pop();
         this.audio.play('select');
@@ -423,14 +428,18 @@ export class SelectScreen {
     return null;
   }
 
+  bk(p) {
+    return back(p) || (this.escBack && p === this.p1);
+  }
+
   handle(p, slot) {
     if (this.ready[slot]) {
-      if (back(p)) { this.ready[slot] = false; if (this.team) this.picks[slot].pop(); return true; }
+      if (this.bk(p)) { this.ready[slot] = false; if (this.team) this.picks[slot].pop(); return true; }
       return false;
     }
     // equipe: B desfaz a última escolha do lado
-    if (this.team && back(p) && this.picks[slot].length) { this.picks[slot].pop(); this.audio.play('select'); return true; }
-    if (back(p) && this.cpu && slot === 1) { this.ready[0] = false; if (this.team) this.picks[0].pop(); return true; }
+    if (this.team && this.bk(p) && this.picks[slot].length) { this.picks[slot].pop(); this.audio.play('select'); return true; }
+    if (this.bk(p) && this.cpu && slot === 1) { this.ready[0] = false; if (this.team) this.picks[0].pop(); return true; }
     const n = ROSTER.length;
     let changed = false;
     // LB / RB (Q / E · PgUp / PgDn): troca de página mantendo a posição na grade
@@ -535,8 +544,8 @@ export class BattleConfigScreen {
       if (p.menu.down) { this.index = (this.index + 1) % this.rows.length; this.audio.play('select'); this.render(); }
       if (p.menu.left) this.change(-1);
       if (p.menu.right) this.change(1);
-      if (confirm(p) || p.pressed.start) {
-        if (this.rows[this.index].id === 'go' || p.pressed.start) { this.audio.play('confirm'); return 'go'; }
+      if (confirm(p) || startGo(p, input)) {
+        if (this.rows[this.index].id === 'go' || startGo(p, input)) { this.audio.play('confirm'); return 'go'; }
         this.change(1);
       }
       if (back(p)) return 'back';
@@ -589,7 +598,7 @@ export class VictoryScreen {
       const n = this.options.length;
       if (p.menu.left || p.menu.up) { this.index = (this.index + n - 1) % n; this.render(); }
       if (p.menu.right || p.menu.down) { this.index = (this.index + 1) % n; this.render(); }
-      if (confirm(p) || p.pressed.start || (p.humanPressed && p.humanPressed.start)) return this.options[this.index].id;
+      if (confirm(p) || startGo(p, input) || (p.cpu && p.humanPressed && p.humanPressed.start && !input.keyPressedOnce('Escape'))) return this.options[this.index].id;
     }
     if (input.keyPressedOnce('Enter')) return this.options[this.index].id;
     return null;
