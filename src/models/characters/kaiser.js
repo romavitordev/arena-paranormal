@@ -2,9 +2,9 @@ import * as THREE from 'three';
 import { buildHumanoid, part, faceTexture, paintEyes, paintMouth, toon } from '../rig.js';
 import { m4, wraps } from '../weapons.js';
 
-// Cineraria — modelo provisório. Jaqueta branca com capuz, gola alta preta,
+// Kaiser — modelo provisório. Jaqueta branca com capuz, gola alta preta,
 // braço direito enfaixado e grande queimadura no lado direito do rosto.
-export function buildCineraria() {
+export function buildKaiser() {
   const skin = 0xc49478;
   const face = faceTexture((g) => {
     g.fillStyle = '#c49478';

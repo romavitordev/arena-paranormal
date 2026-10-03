@@ -558,31 +558,21 @@ export class BattleConfigScreen {
   dispose() { this.el.remove(); }
 }
 
-// Tela de VITÓRIA: vencedor no centro (render 3D na pose de vitória), nome, fala conforme o
-// derrotado e, na batalha em equipe, os parceiros ao lado. Tudo local (sem internet).
+// Tela de vitória sobre a arena: a equipe fica em pose no cenário e só o lutador ativo fala.
 export class VictoryScreen {
-  constructor(root, { winner, loser, slot, art, team = null, teamArt = {}, line, options }) {
+  constructor(root, { winner, loser, slot, team = null, line, options }) {
     this.options = options;
     this.index = 0;
     this.el = el(root, 'screen', 'victory', `
       <div class="vbg" style="--c:${winner.color}"></div>
       <div class="vtop"><small>${slot}</small> VENCE</div>
-      <div class="vstage">
-        ${team ? '<div class="vmates left"></div>' : ''}
-        <div class="vhero"><img src="${art}" alt="${winner.name}"></div>
-        ${team ? `<div class="vmates right"></div>` : ''}
+      <div class="vteam">${(team || [winner]).map((member) => `<span style="--c:${member.color}">${member.name}</span>`).join('')}</div>
+      <div class="vquote">
+        <div class="vname" style="--c:${winner.color}">${winner.name}</div>
+        <div class="vline">“${line}”</div>
+        <div class="vsub">derrotou ${loser.name}</div>
       </div>
-      <div class="vname" style="color:${winner.color}">${winner.name}</div>
-      <div class="vline">“${line}”</div>
-      <div class="vsub">derrotou ${loser.name}${team ? ' · equipe: ' + team.map((d) => d.name).join(', ') : ''}</div>
       <div class="vopts">${options.map(() => '<div class="opt"></div>').join('')}</div>`);
-    if (team) {
-      // parceiros um de cada lado do vencedor
-      const [a, b] = team.slice(1);
-      const box = (d) => `<div class="vmate" style="--c:${d.color}"><img src="${teamArt[d.id] || ''}" alt=""><b>${d.name}</b></div>`;
-      this.el.querySelector('.vmates.left').innerHTML = a ? box(a) : '';
-      this.el.querySelector('.vmates.right').innerHTML = b ? box(b) : '';
-    }
     this.opts = [...this.el.querySelectorAll('.vopts .opt')];
     this.opts.forEach((o, i) => o.addEventListener('click', () => { this.clicked = i; }));
     this.render();
@@ -994,7 +984,7 @@ export function controlsTable() {
       <tr><td>Defesa + andar</td><td colspan="3">Anda mais rápido, mas fica aberto a golpes</td></tr>
       ${row('Assistência 1 / 2 (equipe)', 'assist1')}
       <tr><td>Dash</td><td colspan="3">Pulo + Pulo (toque duplo)</td></tr>
-      <tr><td>Dash longo (Mascarado: teleporte)</td><td colspan="3">Carga + Pulo</td></tr>
+      <tr><td>Dash longo (Joui: teleporte)</td><td colspan="3">Carga + Pulo</td></tr>
       <tr><td>Agarrão (não defensável)</td><td colspan="3">Defesa + Ataque físico</td></tr>
       <tr><td>Habilidades</td><td colspan="3">Carga + Físico · Carga + Principal · Carga + Esquiva · Defesa + Carga · Defesa + Pulo</td></tr>
       <tr><td>Especial</td><td colspan="3">Carga → Carga → Ataque físico</td></tr>

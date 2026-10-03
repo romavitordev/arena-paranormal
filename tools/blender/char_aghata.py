@@ -1,5 +1,5 @@
 """
-VAMPIRA — public/models/vampira.glb (visual da PRIMEIRA referência)
+AGHATA — public/models/aghata.glb (visual da PRIMEIRA referência)
 Cabelo preto curto e bagunçado, brinco de pena, colete cinza-azulado sem mangas com capuz sobre
 camisa vermelha, lenço vermelho, braços tatuados (textura arms_vampira), camisa xadrez amarrada na
 cintura, calça escura, tênis bordô, livro preso na cintura. A faca é adicionada em código.
@@ -9,7 +9,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from lib import *
 from mathutils import Vector
 
-OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'vampira.glb'
+OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'aghata.glb'
 b = Builder(width=0.9, bulk=0.92, height=0.9)  # 1,62 m
 sk = b.sk
 H = sk.h

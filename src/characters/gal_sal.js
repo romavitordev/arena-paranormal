@@ -1,13 +1,13 @@
-// GAL SAL (id interno: injustica; personagem masculino) — lâminas + correntes de metal + puxão +
+// GAL SAL (id interno: gal_sal; personagem masculino) — lâminas + correntes de metal + puxão +
 // cura invertida que drena sanidade + controle de espaço.
 // Mecânica obrigatória no ataque físico:
 //   o golpe tira X de vida do inimigo → o INIMIGO recupera Y de vida (Y < X)
 //   → e perde Y × 1,5 de sanidade (energia). O Gal não se cura.
 // X = dano do golpe (por acerto), Y = `heal` (por acerto). Totalmente determinístico.
 export default {
-  id: 'injustica',
+  id: 'gal_sal',
   name: 'GAL SAL',
-  model: 'injustica',
+  model: 'gal_sal',
   color: '#d4a64a',
   origin: 'Escriptas', // organização (cânone)
   element: 'conhecimento', // afinidade elemental (ver config/elements.js)

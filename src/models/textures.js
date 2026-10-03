@@ -314,7 +314,7 @@ function tendonRopes(g, w, h) {
 }
 
 export const MATERIAL_TEXTURES = {
-  // ---------------- CINERARIA: queimadura no lado ESQUERDO (x > 256)
+  // ---------------- KAISER: queimadura no lado ESQUERDO (x > 256)
   face_cineraria: face((g) => {
     stubble(g, 'rgba(30,20,15,0.25)', 700);
   }, {
@@ -352,7 +352,7 @@ export const MATERIAL_TEXTURES = {
     },
   }),
 
-  // ---------------- ABUTRE: heterocromia (direito castanho, esquerdo verde), cicatriz diagonal
+  // ---------------- ARTHUR: heterocromia (direito castanho, esquerdo verde), cicatriz diagonal
   face_abutre: face((g) => {
     // cicatriz diagonal da testa, cruzando o olho direito e o nariz
     g.strokeStyle = '#7a3c34'; g.lineWidth = 4; g.lineCap = 'round';
@@ -902,7 +902,7 @@ export const MATERIAL_TEXTURES = {
     return { map, emissiveMap, emissive: 0xffd27a };
   },
 
-  // ---------------- MASCARADO: cicatriz em X na bochecha esquerda
+  // ---------------- JOUI: cicatriz em X na bochecha esquerda
   face_mascarado: face((g) => {
     g.strokeStyle = '#8a3e36'; g.lineWidth = 3.6; g.lineCap = 'round';
     g.beginPath(); g.moveTo(CX + 36, 142); g.lineTo(CX + 58, 166); g.moveTo(CX + 58, 142); g.lineTo(CX + 36, 166); g.stroke();
@@ -914,7 +914,7 @@ export const MATERIAL_TEXTURES = {
     mouth: { mouthW: 13, smile: -1.5 },
   }),
 
-  // ---------------- VAMPIRA: olhar provocador, presas
+  // ---------------- AGHATA: olhar provocador, presas
   face_vampira: face((g) => {
     // pintinha e tatuagem pequena no pescoço (parte de baixo do rosto)
     g.fillStyle = '#3a2420';
@@ -1002,13 +1002,13 @@ export const MATERIAL_TEXTURES = {
     g.lineWidth = 1.5; g.beginPath(); g.moveTo(150, 10); g.lineTo(362, 10); g.moveTo(150, 54); g.lineTo(362, 54); g.stroke();
   }),
 
-  // ---------------- DESCONJURADO: sigilo na testa (lado direito), linha do olho, 3 riscos pretos
+  // ---------------- KIAN: sigilo na testa (lado direito), linha do olho, 3 riscos pretos
   face_desconjurado: () => {
     const map = face((g) => {
       // riscos pretos (marca de garra) no lado esquerdo do rosto
       g.strokeStyle = 'rgba(15,8,6,0.85)'; g.lineWidth = 5; g.lineCap = 'round';
       for (let i = 0; i < 3; i++) { g.beginPath(); g.moveTo(CX + 30 + i * 11, 96); g.lineTo(CX + 22 + i * 11, 168); g.stroke(); }
-      paintDesconjuradoSigils(g, '#f2e2b0');
+      paintKianSigils(g, '#f2e2b0');
     }, {
       skin: '#5e4234',
       eye: { iris: '#b8761a', irisLight: '#ffcf5a', tilt: 0.06 },
@@ -1018,7 +1018,7 @@ export const MATERIAL_TEXTURES = {
     })();
     const emissiveMap = canvasTex(W, HT, (g) => {
       g.fillStyle = '#000'; g.fillRect(0, 0, W, HT);
-      paintDesconjuradoSigils(g, '#ffd27a');
+      paintKianSigils(g, '#ffd27a');
     }, { wrap: true });
     return { map, emissiveMap, emissive: 0xffd27a };
   },
@@ -1126,7 +1126,7 @@ export const MATERIAL_TEXTURES = {
   }, { wrap: true }),
 };
 
-function paintDesconjuradoSigils(g, color) {
+function paintKianSigils(g, color) {
   // glifos "KI" e "AN" na bochecha direita (x < 256), em traços retos de runa
   g.save();
   g.strokeStyle = color; g.lineWidth = 2.6; g.lineCap = 'round';

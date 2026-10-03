@@ -1,9 +1,9 @@
-// ARTHUR CERVERO (id interno: abutre) — precisão + sniper + arma amaldiçoada (Rebirth) + combate de um braço.
+// ARTHUR CERVERO (id interno: arthur) — precisão + sniper + arma amaldiçoada (Rebirth) + combate de um braço.
 // REGRA: possui só o braço DIREITO. Nenhum golpe usa um segundo braço.
 export default {
-  id: 'abutre',
+  id: 'arthur',
   name: 'ARTHUR CERVERO',
-  model: 'abutre',
+  model: 'arthur',
   color: '#ff2a3d',
   origin: 'Ordo Realitas', // organização (cânone)
   element: 'sangue', // afinidade elemental (ver config/elements.js)

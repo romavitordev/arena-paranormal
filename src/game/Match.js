@@ -3,8 +3,11 @@ import { SETTINGS } from '../config/settings.js';
 import { World } from './World.js';
 import { introLines } from '../config/dialogues.js';
 import { Assist } from '../combat/assists.js';
+import { yawTo } from '../core/util.js';
 
-const LINE_TIME = 2.2; // segundos por fala antes do ROUND 1
+const LINE_TIME = 2.0;
+const ENTRANCE_WALK_TIME = 1.7;
+const READY_TIME = 0.9;
 
 // Partida: rodadas, cronômetro, K.O. e vitória. Usa o World para a luta em si.
 export class Match {
@@ -48,37 +51,81 @@ export class Match {
     this.hud.reset();
     this.hud.bind(this.world.fighters);
     this.hud.show(true);
-    if (this.dialogue) this.startDialogue();
+    if (this.dialogue) this.startEntrance();
     else this.startRound();
   }
 
-  // Falas antes do ROUND 1 (qualquer jogador pode pular com confirmar/Start)
-  startDialogue() {
+  // Entrada dos lutadores e falas antes do primeiro round (qualquer jogador pode pular).
+  startEntrance() {
     this.world.resetRound();
-    this.phase = 'dialogue';
+    this.phase = 'entrance';
     this.phaseTime = 0;
-    this.lines = introLines(this.defs[0].id, this.defs[1].id).map(([id, t], i) => [id, t, i]).filter(([, t]) => t);
+    this.round = 1;
+    this.timer = SETTINGS.timer || COMBAT.roundTime;
+    this.lines = introLines(this.defs[0].id, this.defs[1].id, this.defs[0].name, this.defs[1].name)
+      .map(([id, text], fighter) => [id, text, fighter])
+      .filter(([, text]) => text);
     this.lineIndex = -1;
-    for (const f of this.fighters) f.setState('intro');
+    this.entranceStarts = this.fighters.map((f) => f.pos.clone());
+    const [a, b] = this.entranceStarts;
+    const dx = b.x - a.x;
+    const dz = b.z - a.z;
+    const distance = Math.hypot(dx, dz) || 1;
+    const midpoint = { x: (a.x + b.x) / 2, z: (a.z + b.z) / 2 };
+    this.entranceTargets = [
+      { x: midpoint.x - (dx / distance) * 1.1, z: midpoint.z - (dz / distance) * 1.1 },
+      { x: midpoint.x + (dx / distance) * 1.1, z: midpoint.z + (dz / distance) * 1.1 },
+    ];
+    this.entranceReadyAt = this.lines.length * LINE_TIME;
+    this.entranceReadyShown = false;
+    for (const f of this.fighters) {
+      f.setState('intro');
+      f.anim.play('walk', { restart: true });
+    }
   }
 
-  updateDialogue(dt) {
+  updateEntrance(dt) {
     const w = this.world;
     w.update(dt, { simulate: false });
-    for (const f of this.fighters) f.anim.play('idle');
     const skip = this.input.players.some((p) => !p.cpu && (p.pressed.start || p.pressed.jump));
-    const idx = Math.floor(this.phaseTime / LINE_TIME);
-    if (skip || idx >= this.lines.length) {
-      this.hud.subtitle(null);
-      this.round = 0;
-      this.startRound();
-      return;
+    if (skip && !this.entranceReadyShown) {
+      this.entranceReadyAt = this.phaseTime;
+      this.entranceSkipped = true;
     }
-    if (idx !== this.lineIndex) {
-      this.lineIndex = idx;
-      const [, text, fi] = this.lines[idx];
-      const def = this.defs[fi];
-      this.hud.subtitle({ name: def.name, color: def.color, text, side: fi });
+    const progress = this.entranceSkipped ? 1 : Math.min(1, this.phaseTime / ENTRANCE_WALK_TIME);
+    const eased = progress * progress * (3 - 2 * progress);
+    this.fighters.forEach((fighter, i) => {
+      const target = this.entranceTargets[i];
+      fighter.pos.set(
+        this.entranceStarts[i].x + (target.x - this.entranceStarts[i].x) * eased,
+        0,
+        this.entranceStarts[i].z + (target.z - this.entranceStarts[i].z) * eased,
+      );
+      fighter.yaw = yawTo(fighter.pos, this.fighters[1 - i].pos);
+      fighter.anim.play(progress < 1 ? 'walk' : 'idle');
+    });
+
+    const idx = Math.floor(this.phaseTime / LINE_TIME);
+    if (this.phaseTime < this.entranceReadyAt && idx < this.lines.length) {
+      if (idx !== this.lineIndex) {
+        this.lineIndex = idx;
+        const [, text, fighter] = this.lines[idx];
+        const def = this.defs[fighter];
+        this.hud.subtitle({ name: def.name, color: def.color, text, side: fighter });
+      }
+    } else {
+      this.hud.subtitle(null);
+      if (!this.entranceReadyShown) {
+        this.entranceReadyShown = true;
+        this.entranceReadyAt = Math.max(this.entranceReadyAt, this.phaseTime);
+        this.hud.callout('LUTEM', '#ffd84a');
+        this.audio.play('confirm', { volume: 1.2 });
+      } else if (this.phaseTime >= this.entranceReadyAt + READY_TIME) {
+        this.phase = 'fight';
+        this.phaseTime = 0;
+        this.koPending = false;
+        for (const fighter of this.fighters) fighter.setState('idle');
+      }
     }
   }
 
@@ -95,8 +142,6 @@ export class Match {
     this.countStep = 0;
     this.koPending = false;
     for (const f of this.fighters) f.setState('intro');
-    this.hud.callout(`ROUND ${this.round}`);
-    this.audio.play('banner');
   }
 
   update(dt) {
@@ -106,23 +151,22 @@ export class Match {
     this.phaseTime += dt;
     const w = this.world;
     switch (this.phase) {
-      case 'dialogue':
-        this.updateDialogue(dt);
+      case 'entrance':
+        this.updateEntrance(dt);
         break;
       case 'intro': {
         w.update(dt, { simulate: false });
         for (const f of this.fighters) f.anim.play('idle');
-        // ROUND N → 3, 2, 1 → LUTE!
-        const steps = [[0.9, '3', '#ffffff'], [1.6, '2', '#ffffff'], [2.3, '1', '#ffffff'], [3.0, 'LUTAR!', '#ffd84a']];
+        const steps = [[0.1, `ROUND ${this.round}`, '#ffffff'], [1.0, 'LUTEM', '#ffd84a']];
         for (let i = 0; i < steps.length; i++) {
           const [at, text, color] = steps[i];
           if (this.phaseTime >= at && this.countStep <= i) {
             this.countStep = i + 1;
             this.hud.callout(text, color);
-            this.audio.play(i === steps.length - 1 ? 'confirm' : 'select', { volume: 1.2 });
+            this.audio.play(i === steps.length - 1 ? 'confirm' : 'banner', { volume: 1.2 });
           }
         }
-        if (this.phaseTime > 3.0) {
+        if (this.phaseTime > 1.9) {
           this.phase = 'fight';
           for (const f of this.fighters) f.setState('idle');
         }
@@ -141,7 +185,14 @@ export class Match {
           if (this.wins.some((x) => x >= (SETTINGS.rounds || COMBAT.roundsToWin))) {
             this.phase = 'over';
             const winner = this.wins[0] > this.wins[1] ? 0 : 1;
-            this.onEnd && this.onEnd({ winner, def: this.fighters[winner].def, loser: this.fighters[1 - winner].def, team: this.teams ? this.teams[winner] : null });
+            const winningFighter = this.fighters[winner];
+            const activeDef = winningFighter.baseForm?.def ?? winningFighter.def;
+            const roster = this.teams ? this.teams[winner] : null;
+            const activeIndex = roster?.findIndex((member) => member.id === activeDef.id) ?? -1;
+            const team = activeIndex >= 0
+              ? [roster[activeIndex], ...roster.filter((_, index) => index !== activeIndex)]
+              : roster;
+            this.onEnd && this.onEnd({ winner, def: winningFighter.def, loser: this.fighters[1 - winner].def, team });
           } else {
             this.startRound();
           }

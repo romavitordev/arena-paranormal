@@ -1,5 +1,5 @@
 """
-GAL SAL (personagem masculino) — public/models/injustica.glb
+GAL SAL (personagem masculino) — public/models/gal_sal.glb
 Referências: 'Referencias visuais/Personagens/Gal' (corpo inteiro / com armas / rosto).
 - PONCHO preto de verdade: cai em PONTA na frente e atrás (até o meio da coxa) e cobre os braços até o
   cotovelo dos lados; decote em V dourado; barra com fita dourada e franja de dentes em zigue-zague.
@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from lib import *
 from mathutils import Vector
 
-OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'injustica.glb'
+OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'gal_sal.glb'
 b = Builder(width=0.98, bulk=0.96, height=1.02)
 sk = b.sk
 H = sk.h

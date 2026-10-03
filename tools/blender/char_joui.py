@@ -1,5 +1,5 @@
 """
-MASCARADO — public/models/mascarado.glb
+JOUI — public/models/joui.glb
 Referências (mascarado corpo inteiro / poses / especial / SÉRIO / desenho):
   casaco longo cinza-escuro ABERTO na frente com debrum vermelho em toda a borda e na barra;
   túnica de gola chinesa cinza com fechos vermelhos; corda bege no pescoço com nó;
@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from lib import *
 from mathutils import Vector
 
-OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'mascarado.glb'
+OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'joui.glb'
 b = Builder(width=0.98, bulk=1.0, height=1.0)
 sk = b.sk
 hz = sk['hips'].z

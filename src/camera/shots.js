@@ -73,7 +73,7 @@ export function pullBack(a, b, { dur = 1, from = 3, to = 6.5, height = 2.2, side
   return twoShot(a, b, { dur, dist: from, height, push: from - to, side, fov });
 }
 
-// Close em um ponto do corpo (ex.: antebraço do Abutre)
+// Close em um ponto do corpo (ex.: antebraço do Arthur)
 export function socketClose(f, getPoint, { dur = 1, dist = 1.4, side = 0.8, fov = 40 } = {}) {
   return {
     dur, fov,

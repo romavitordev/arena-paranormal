@@ -29,7 +29,7 @@ function chainArm() {
   return t;
 }
 
-export function buildInjustica() {
+export function buildGalSal() {
   const skin = 0xc4a090;
   const face = faceTexture((g) => {
     g.fillStyle = '#c4a090';

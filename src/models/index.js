@@ -1,10 +1,10 @@
-import { buildCineraria } from './characters/cineraria.js';
-import { buildAbutre } from './characters/abutre.js';
-import { buildMascarado } from './characters/mascarado.js';
-import { addCinerariaProps, addAbutreProps, addMascaradoProps, addVampiraProps, addInjusticaProps, addDesconjuradoProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps, addFerreiroProps, addJuanProps, addKemiProps, addFantasmaProps } from './props.js';
-import { buildVampira } from './characters/vampira.js';
-import { buildInjustica } from './characters/injustica.js';
-import { buildDesconjurado } from './characters/desconjurado.js';
+import { buildKaiser } from './characters/kaiser.js';
+import { buildArthur } from './characters/arthur.js';
+import { buildJoui } from './characters/joui.js';
+import { addKaiserProps, addArthurProps, addJouiProps, addAghataProps, addGalSalProps, addKianProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps, addFerreiroProps, addJuanProps, addKemiProps, addFantasmaProps } from './props.js';
+import { buildAghata } from './characters/aghata.js';
+import { buildGalSal } from './characters/gal_sal.js';
+import { buildKian } from './characters/kian.js';
 import { buildDante } from './characters/dante.js';
 import { loadGLB, rigFromGLB } from './glbRig.js';
 
@@ -12,35 +12,35 @@ import { loadGLB, rigFromGLB } from './glbRig.js';
 // Cada personagem pode ter um modelo do Blender (.glb em public/models, gerado por
 // tools/blender/char_<id>.py). Se o arquivo não existir, usa o modelo procedural.
 export const MODEL_BUILDERS = {
-  cineraria: buildCineraria,
-  abutre: buildAbutre,
-  mascarado: buildMascarado,
-  vampira: buildVampira,
-  injustica: buildInjustica,
-  desconjurado: buildDesconjurado,
+  kaiser: buildKaiser,
+  arthur: buildArthur,
+  joui: buildJoui,
+  aghata: buildAghata,
+  gal_sal: buildGalSal,
+  kian: buildKian,
   dante: buildDante,
   // sem modelo procedural próprio: se o .glb faltar, usa um corpo provisório parecido
-  erin: buildVampira,
-  aguiar: buildMascarado,
-  labirinto: buildDesconjurado,
-  xande: buildCineraria,
-  lirio: buildAbutre,
-  ferreiro: buildAbutre,
-  deus_morte: buildAbutre,
-  juan: buildVampira,
-  diabo: buildVampira,
-  kemi: buildVampira,
-  fantasma: buildVampira,
+  erin: buildAghata,
+  aguiar: buildJoui,
+  labirinto: buildKian,
+  xande: buildKaiser,
+  lirio: buildArthur,
+  ferreiro: buildArthur,
+  deus_morte: buildArthur,
+  juan: buildAghata,
+  diabo: buildAghata,
+  kemi: buildAghata,
+  fantasma: buildAghata,
 };
 
 // Modelos do Blender + armas/acessórios adicionados em código
 const BLENDER_MODELS = {
-  cineraria: { url: 'models/cineraria.glb', props: addCinerariaProps },
-  abutre: { url: 'models/abutre.glb', props: addAbutreProps },
-  mascarado: { url: 'models/mascarado.glb', props: addMascaradoProps },
-  vampira: { url: 'models/vampira.glb', props: addVampiraProps },
-  injustica: { url: 'models/injustica.glb', props: addInjusticaProps },
-  desconjurado: { url: 'models/desconjurado.glb', props: addDesconjuradoProps },
+  kaiser: { url: 'models/kaiser.glb', props: addKaiserProps },
+  arthur: { url: 'models/arthur.glb', props: addArthurProps },
+  joui: { url: 'models/joui.glb', props: addJouiProps },
+  aghata: { url: 'models/aghata.glb', props: addAghataProps },
+  gal_sal: { url: 'models/gal_sal.glb', props: addGalSalProps },
+  kian: { url: 'models/kian.glb', props: addKianProps },
   dante: { url: 'models/dante.glb', props: null }, // sem armas
   erin: { url: 'models/erin.glb', props: addErinProps },
   aguiar: { url: 'models/aguiar.glb', props: addAguiarProps },

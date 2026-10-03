@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { buildHumanoid, part, faceTexture, paintEyes, paintMouth, glowMat } from '../rig.js';
 import { wraps } from '../weapons.js';
 
-// Desconjurado — modelo provisório. Sem camisa, corpo coberto por sigilos
+// Kian — modelo provisório. Sem camisa, corpo coberto por sigilos
 // brancos, black power, barba, olhos âmbar e faixas nas mãos/antebraços.
 // NÃO possui nenhuma arma: o modelo não cria nenhum prop de arma.
 function sigilTexture(base, { lines = true, script = true } = {}) {
@@ -33,7 +33,7 @@ function sigilTexture(base, { lines = true, script = true } = {}) {
   return t;
 }
 
-export function buildDesconjurado() {
+export function buildKian() {
   const skin = 0x5e4234;
   const face = faceTexture((g) => {
     g.fillStyle = '#5e4234';

@@ -1,10 +1,10 @@
-// AGHATA (id interno: vampira) — pressão em curta distância + faca + ritual de cortes sobrenaturais (Descarnar).
+// AGHATA (id interno: aghata) — pressão em curta distância + faca + ritual de cortes sobrenaturais (Descarnar).
 // A faca arremessada é uma ferramenta de pressão; os poderes paranormais são Amaldiçoar Arma
 // (Sangue, △+□) e o especial Descarnar.
 export default {
-  id: 'vampira',
+  id: 'aghata',
   name: 'AGHATA',
-  model: 'vampira',
+  model: 'aghata',
   color: '#e0204a',
   origin: 'Ordo Realitas', // organização (cânone)
   element: 'sangue', // afinidade elemental (ver config/elements.js)

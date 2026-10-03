@@ -7,10 +7,10 @@
 
 | Nome | Elemento | Classe / Trilha | No jogo | Rituais |
 |---|---|---|---|---|
-| [Arthur Cervero](#arthur-cervero) | Sangue | Especialista / Atirador de Elite | ✅ `abutre` | 5 |
-| [Joui Jouki](#joui-jouki) | Conhecimento | Combatente / Duelista | ✅ `mascarado` | 5 |
-| [Kaiser](#kaiser) | Energia | Combatente | ✅ `cineraria` | 3 |
-| [Agatha Volkomenn](#agatha-volkomenn) | Sangue | Ocultista / Maledictóloga | ✅ `vampira` | 3 |
+| [Arthur Cervero](#arthur-cervero) | Sangue | Especialista / Atirador de Elite | ✅ `arthur` | 5 |
+| [Joui Jouki](#joui-jouki) | Conhecimento | Combatente / Duelista | ✅ `joui` | 5 |
+| [Kaiser](#kaiser) | Energia | Combatente | ✅ `kaiser` | 3 |
+| [Agatha Volkomenn](#agatha-volkomenn) | Sangue | Ocultista / Maledictóloga | ✅ `aghata` | 3 |
 | [Dante](#dante) | Morte | Ocultista / Sagaz |  | 16 |
 | [Elizabeth Webber](#elizabeth-webber) | — | Especialista / Médica de Campo |  | 0 |
 | [Thiago Fritz](#thiago-fritz) | — | — |  | 0 |
@@ -39,8 +39,8 @@
 
 | Nome | Elemento | Classe / Trilha | No jogo | Rituais |
 |---|---|---|---|---|
-| [Kian](#kian) | Conhecimento | Ocultista | ✅ `desconjurado` | 6 |
-| [Gal](#gal) | Conhecimento | Combatente / Duelista | ✅ `injustica` | 6 |
+| [Kian](#kian) | Conhecimento | Ocultista | ✅ `kian` | 6 |
+| [Gal](#gal) | Conhecimento | Combatente / Duelista | ✅ `gal_sal` | 6 |
 | [Artemis](#artemis) | Sangue | Especialista |  | 3 |
 | [Tirigan](#tirigan) | — | — |  | 0 |
 | [Anthony Scelto](#anthony-scelto) | — | — |  | 1 |

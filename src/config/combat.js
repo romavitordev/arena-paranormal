@@ -74,7 +74,7 @@ export const COMBAT = {
   },
   // ---- Dashes ----
   // A/× + A/× (toque duplo no pulo) = dash curto para frente
-  // △/Y + A/× = dash longo que persegue o adversário (Mascarado: teleporte no lugar)
+  // △/Y + A/× = dash longo que persegue o adversário (Joui: teleporte no lugar)
   dash: {
     doubleTapWindow: 0.32,
     short: { distance: 5, duration: 0.22, cooldown: 0.35, energyCost: 0, stopAt: 1.3 },

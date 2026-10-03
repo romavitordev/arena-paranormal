@@ -2,9 +2,9 @@ import * as THREE from 'three';
 import { buildHumanoid, part, faceTexture, toon } from '../rig.js';
 import { katana, scabbard } from '../weapons.js';
 
-// Mascarado — modelo provisório. Casaco escuro com detalhes vermelhos,
+// Joui — modelo provisório. Casaco escuro com detalhes vermelhos,
 // máscara clara com fendas nos olhos e marca em X, katana como arma principal.
-export function buildMascarado() {
+export function buildJoui() {
   const skin = 0xd0a888;
   const face = faceTexture((g) => {
     g.fillStyle = '#d0a888';
@@ -92,12 +92,12 @@ export function buildMascarado() {
     e.add(band);
   }
 
-  addMascaradoProps(rig);
+  addJouiProps(rig);
   return rig.finish();
 }
 
 // Armas (usadas tanto pelo modelo procedural quanto pelo modelo do Blender)
-export function addMascaradoProps(rig) {
+export function addJouiProps(rig) {
   const { sockets, props } = rig;
   // katana sempre na mão (arma principal) e bainha na cintura
   const sheath = scabbard();

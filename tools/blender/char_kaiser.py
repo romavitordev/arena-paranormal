@@ -1,5 +1,5 @@
 """
-CINERARIA — public/models/cineraria.glb
+KAISER — public/models/kaiser.glb
 Referências: cabelo preto bagunçado com franja caindo sobre o lado queimado; queimadura no lado
 ESQUERDO do rosto (textura face_cineraria); cigarro na boca; jaqueta cinza-clara aberta com capuz e
 detalhes roxos; gola alta preta canelada; alça transversal marrom; alças de mochila roxas; mão
@@ -10,7 +10,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from lib import *
 from mathutils import Vector
 
-OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'cineraria.glb'
+OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'kaiser.glb'
 b = Builder(width=1.0, bulk=1.05, height=0.97)  # 1,75 m
 sk, H = b.sk, 1.0
 hz = sk['hips'].z

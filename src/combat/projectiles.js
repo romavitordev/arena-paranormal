@@ -105,7 +105,7 @@ const VISUALS = {
     g.userData.lightning = true;
     return g;
   },
-  // Mascarado: sombra rasteira com espinhos escuros
+  // Joui: sombra rasteira com espinhos escuros
   shadow() {
     const g = new THREE.Group();
     const disc = new THREE.Mesh(new THREE.CircleGeometry(0.7, 20), new THREE.MeshBasicMaterial({ color: 0x050307, transparent: true, opacity: 0.85, depthWrite: false }));

@@ -1,8 +1,8 @@
-// JOUI JOUKI (id interno: mascarado) — velocidade + katana + sombras + teleporte.
+// JOUI JOUKI (id interno: joui) — velocidade + katana + sombras + teleporte.
 export default {
-  id: 'mascarado',
+  id: 'joui',
   name: 'JOUI JOUKI',
-  model: 'mascarado',
+  model: 'joui',
   color: '#e8e2d6',
   origin: 'Ordo Realitas', // organização (cânone)
   element: 'conhecimento', // afinidade elemental (ver config/elements.js)

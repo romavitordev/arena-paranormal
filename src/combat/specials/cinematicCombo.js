@@ -6,14 +6,14 @@ import { splitDamage, specialHitFx, trySpecialBlock } from './common.js';
 import { faceClose, twoShot, overShoulder, lowAngle, pullBack, socketClose } from '../../camera/shots.js';
 
 // Especial genérico "avança e executa uma sequência de golpes com câmera
-// cinematográfica". Usado por Abutre, Vampira, Injustiça e Desconjurado;
+// cinematográfica". Usado por Arthur, Aghata, Injustiça e Kian;
 // cada um só muda a configuração (golpes, efeitos, tempos).
 //
 // Fases: preparação → investida → (se encostar) cinematic com golpes → fim.
 // Dano total = sp.damage ?? COMBAT.specialDamage, dividido entre os golpes.
 
 const PREP_FX = {
-  // Abutre: energia vermelha no antebraço e a Arma de Sangue surgindo
+  // Arthur: energia vermelha no antebraço e a Arma de Sangue surgindo
   forearmEnergy(f, world, sp) {
     const s = (sp.prepare && sp.prepare.arm) || 'R';
     const elbow = () => f.rig.joints['e' + s].getWorldPosition(new THREE.Vector3());

@@ -1,10 +1,10 @@
-// KAISER (id interno: cineraria) — controle de espaço + arma de fogo + névoa.
+// KAISER (id interno: kaiser) — controle de espaço + arma de fogo + névoa.
 // M4 (com variações por direção), socos e chutes, Baforada Cinerária e o
 // especial Cinerária (névoa paranormal + tempestade de Acácia).
 export default {
-  id: 'cineraria',
+  id: 'kaiser',
   name: 'KAISER',
-  model: 'cineraria',
+  model: 'kaiser',
   color: '#a46bff',
   origin: 'Ordo Realitas', // organização (cânone)
   element: 'energia', // afinidade elemental (ver config/elements.js)

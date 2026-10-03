@@ -2,10 +2,10 @@ import * as THREE from 'three';
 import { buildHumanoid, part, faceTexture, paintEyes, paintMouth, toon, glowMat } from '../rig.js';
 import { sniper, guitarCase, bloodClaw } from '../weapons.js';
 
-// Abutre — modelo provisório. Possui APENAS o braço direito.
+// Arthur — modelo provisório. Possui APENAS o braço direito.
 // Camisa clara, colete escuro, barba grisalha, rabo de cavalo e a sniper
 // guardada num suporte parecido com case de violão nas costas.
-export function buildAbutre() {
+export function buildArthur() {
   const skin = 0xc09a80;
   const face = faceTexture((g) => {
     g.fillStyle = '#c09a80';

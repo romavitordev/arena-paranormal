@@ -1,5 +1,5 @@
 """
-DESCONJURADO — public/models/desconjurado.glb
+KIAN — public/models/kian.glb
 Cabelo CURTO (raspado), barba cheia, olhos âmbar, sigilo luminoso na testa e linha descendo do olho,
 três riscos pretos no outro lado do rosto (textura face_desconjurado); sem camisa, corpo coberto de
 faixas de glifos e linhas luminosas douradas (textura skin_desconjurado, com brilho); faixas brancas
@@ -10,7 +10,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from lib import *
 from mathutils import Vector
 
-OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'desconjurado.glb'
+OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'kian.glb'
 b = Builder(width=1.06, bulk=1.18, height=1.03)
 sk = b.sk
 H = sk.h

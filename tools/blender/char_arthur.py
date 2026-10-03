@@ -1,5 +1,5 @@
 """
-ABUTRE — public/models/abutre.glb
+ARTHUR — public/models/arthur.glb
 Referências: cabelo castanho com mecha grisalha preso em coque; barba grisalha com bigode castanho;
 cicatriz diagonal; olhos de cores diferentes (textura face_abutre); brincos; camisa creme com a manga
 dobrada; colete azul-marinho com botões e broche de abutre; calça escura com bolsos; coturnos.
@@ -12,7 +12,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from lib import *
 from mathutils import Vector
 
-OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'abutre.glb'
+OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'arthur.glb'
 b = Builder(width=1.0, bulk=1.06, height=0.93)  # 1,65 m (mais baixo e forte)
 sk = b.sk
 hz = sk['hips'].z

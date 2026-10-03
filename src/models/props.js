@@ -1,12 +1,12 @@
 import * as THREE from 'three';
 import { glowMat } from './rig.js';
 import { m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma } from './weapons.js';
-export { addMascaradoProps } from './characters/mascarado.js';
+export { addJouiProps } from './characters/joui.js';
 
 // Armas e acessórios adicionados em código sobre os modelos do Blender.
 // Usam só `sockets`, `attach()` e `props`, que existem nos dois tipos de rig.
 
-export function addCinerariaProps(rig) {
+export function addKaiserProps(rig) {
   const { sockets, props } = rig;
   // faca karambit vermelha (cânone) na mão esquerda
   const kar = karambit();
@@ -27,7 +27,7 @@ export function addCinerariaProps(rig) {
   rig.muzzle = hand.userData.muzzle;
 }
 
-export function addAbutreProps(rig) {
+export function addArthurProps(rig) {
   const { sockets, props } = rig;
   const kase = guitarCase();
   kase.rotation.z = -0.35;
@@ -69,7 +69,7 @@ export function addAbutreProps(rig) {
   props.eyes = eyes;
 }
 
-export function addVampiraProps(rig) {
+export function addAghataProps(rig) {
   const { sockets, props } = rig;
   const blade = knife();
   blade.rotation.x = -0.35;
@@ -198,7 +198,7 @@ export function addXandeProps(rig) {
   props.skate = sk;
 }
 
-export function addInjusticaProps(rig) {
+export function addGalSalProps(rig) {
   const { sockets, props } = rig;
   const right = sickleBlade();
   right.rotation.x = -0.3;
@@ -212,9 +212,9 @@ export function addInjusticaProps(rig) {
   props.bladeL = left;
 }
 
-// Desconjurado: NENHUMA arma. Só a manifestação translúcida da Lâmina do Medo,
+// Kian: NENHUMA arma. Só a manifestação translúcida da Lâmina do Medo,
 // que aparece apenas durante a habilidade.
-export function addDesconjuradoProps(rig) {
+export function addKianProps(rig) {
   const blade = new THREE.Group();
   const shape = new THREE.Shape();
   shape.moveTo(-0.07, 0);

@@ -177,7 +177,7 @@ export class Fighter {
     return !!this.def.special && !this.specialUsedUp() && this.cooldowns.special <= 0 && this.energy >= this.specialCost();
   }
 
-  // Esquiva com bônus de buffs (ex.: névoa da Cineraria)
+  // Esquiva com bônus de buffs (ex.: névoa da Kaiser)
   dodgeParams() {
     const d = { ...this.dodgeCfg };
     for (const b of this.buffs) {
@@ -254,7 +254,7 @@ export class Fighter {
     this.rig.root.visible = v;
   }
 
-  // Translucidez (névoa da Cineraria, Inexistir do Desconjurado)
+  // Translucidez (névoa da Kaiser, Inexistir do Kian)
   setOpacity(a) {
     if (this._opacity === a) return;
     this._opacity = a;
@@ -637,7 +637,7 @@ export class Fighter {
     } else {
       this.rig.setTint(0x000000, 0);
     }
-    // máscara (Mascarado): no rosto na luta, puxada para o lado nas cinematics e na vitória
+    // máscara (Joui): no rosto na luta, puxada para o lado nas cinematics e na vitória
     if (this.rig.props.maskOn && this.rig.props.maskSide) {
       const reveal = (this.world.cinematic && this.world.cinematic.actor === this) || (this.anim.currentName || '').startsWith('victory');
       if (reveal !== this._maskRevealed) {
@@ -680,7 +680,7 @@ export class Fighter {
   }
 
   // Comando Energia + Pulo (△/Y + A/×). Retorna true se consumiu.
-  // Todos: dash longo. Quem tiver habilidade própria nesse comando (Mascarado) usa ela.
+  // Todos: dash longo. Quem tiver habilidade própria nesse comando (Joui) usa ela.
   tryChord() {
     const inp = this.input;
     const jumpWithCarga = inp.pressed.jump && (inp.held.carga || this.recent('carga'));
@@ -965,7 +965,7 @@ export class Fighter {
     }
     const opp = this.opponent;
     if (this.surprised > 0) {
-      // surpreendido (ex.: Mascarado surgiu pelas costas): não se vira sozinho
+      // surpreendido (ex.: Joui surgiu pelas costas): não se vira sozinho
       this.surprised -= dt;
     } else if (this.riding && mag > 0.05) {
       // no skate: o corpo vira para onde está andando (não fica travado no adversário)
@@ -1725,7 +1725,7 @@ export class Fighter {
     }
   }
 
-  // Contra-ataque (postura de contra do Mascarado): acionado por damage.js
+  // Contra-ataque (postura de contra do Joui): acionado por damage.js
   triggerCounter(attacker) {
     const s = this.combo.strike;
     const r = s.counter.riposte;
@@ -1897,7 +1897,7 @@ export class Fighter {
 
   fireProjectile(r0) {
     let r = r0;
-    // estado temporário da arma (Rebirth do Abutre)
+    // estado temporário da arma (Rebirth do Arthur)
     const ws = this.buffs.find((b) => b.type === 'weaponState' && b.shots > 0);
     if (ws) {
       r = { ...r0, ...ws.projectile, damage: r0.damage + ws.bonusDamage, cursed: true };

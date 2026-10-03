@@ -1,12 +1,12 @@
-// KIAN (id interno: desconjurado) — força física absurda + paranormal + mobilidade + ataques devastadores.
+// KIAN (id interno: kian) — força física absurda + paranormal + mobilidade + ataques devastadores.
 // REGRA ABSOLUTA: nenhuma arma. Todo o combate é com os punhos/corpo.
 // Rituais: Teletransporte, Lâmina do Medo, Transcendência e o especial Inexistir.
 // A Lâmina do Medo é uma manifestação de energia temporária ao redor da mão,
 // não uma espada física, e só aparece durante a habilidade.
 export default {
-  id: 'desconjurado',
+  id: 'kian',
   name: 'KIAN',
-  model: 'desconjurado',
+  model: 'kian',
   color: '#f2efe2',
   origin: 'Escriptas', // organização (cânone)
   element: 'conhecimento', // afinidade elemental (ver config/elements.js)

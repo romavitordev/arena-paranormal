@@ -54,7 +54,7 @@ export const CLIPS = {
       k(1, { ...LEGS, hip: [0, -0.3, 0], sp: [0.05, 0.3, 0], hd: [0, -0.3, 0], sR: [-0.5, 0.3, -0.1], eR: [-1.5, 0, 0], sL: [-0.9, -0.3, 0.2], eL: [-1.6, 0, 0] }),
     ],
   },
-  // Abutre: só o braço direito existe. Nada aqui move o braço esquerdo.
+  // Arthur: só o braço direito existe. Nada aqui move o braço esquerdo.
   idle_onearm: {
     dur: 1.6, loop: true, keys: [
       k(0, { ...LEGS, hip: [0, -0.2, 0], sp: [0.12, 0.25, 0.04], hd: [0, -0.2, 0], sR: [-0.8, 0, -0.2], eR: [-1.9, 0, 0] }),
@@ -114,7 +114,7 @@ export const CLIPS = {
       k(1, { h: -0.22, sp: [0.25, 0, 0], hd: [0.2, 0, 0], sL: [-0.6, 0, 0.7], eL: [-1.2, 0, 0], sR: [-0.6, 0, -0.7], eR: [-1.2, 0, 0], lL: [-0.3, 0, 0.35], kL: [0.7, 0, 0], lR: [-0.3, 0, -0.35], kR: [0.7, 0, 0] }),
     ],
   },
-  // Desconjurado: punhos cerrados à frente concentrando energia nos braços
+  // Kian: punhos cerrados à frente concentrando energia nos braços
   charge_fists: {
     dur: 0.6, loop: true, keys: [
       k(0, { h: -0.25, sp: [0.2, 0, 0], hd: [0.15, 0, 0], sL: [-0.5, 0, 0.35], eL: [-2.0, 0, 0], sR: [-0.5, 0, -0.35], eR: [-2.0, 0, 0], lL: [-0.3, 0, 0.4], kL: [0.8, 0, 0], lR: [-0.3, 0, -0.4], kR: [0.8, 0, 0] }),
@@ -150,7 +150,7 @@ export const CLIPS = {
   kick_low: { dur: 0.4, keys: [k(0, GUARD), k(0.45, { ...GUARD, h: -0.25, sp: [0.25, 0.3, 0], lR: [-1.0, 0, -0.3], kR: [0.1, 0, 0], kL: [1.0, 0, 0] }), k(1, GUARD)] },
   spin_kick: { dur: 0.6, keys: [k(0, GUARD), k(0.3, { ...GUARD, h: 0.1, hip: [0, -1.5, 0], sp: [0, -0.6, 0], lL: [-0.3, 0, 1.0], kL: [1.5, 0, 0] }), k(0.55, { ...GUARD, h: 0.1, hip: [0, -2.6, 0], sp: [0, -0.4, 0.3], lL: [-0.1, 0, 1.5], kL: [0, 0, 0] }), k(1, GUARD)] },
 
-  // Abutre (um braço): golpes com o braço direito, antebraço, cotovelo e corpo
+  // Arthur (um braço): golpes com o braço direito, antebraço, cotovelo e corpo
   onearm_punch: { dur: 0.34, keys: [k(0, { ...GUARD, sL: [0, 0, 0], eL: [0, 0, 0] }), k(0.4, { ...GUARD, sp: [0.18, -0.5, 0], sR: [-1.55, -0.1, 0], eR: [-0.05, 0, 0], lR: [0.45, 0, -0.1] }), k(1, GUARD)] },
   onearm_forearm: { dur: 0.42, keys: [k(0, GUARD), k(0.25, { ...GUARD, sp: [0.05, 0.8, 0], sR: [-1.4, 0.9, -0.3], eR: [-1.7, 0, 0] }), k(0.5, { ...GUARD, sp: [0.15, -0.6, 0], sR: [-1.5, -0.5, -0.1], eR: [-1.6, 0, 0] }), k(1, GUARD)] },
   onearm_elbow: { dur: 0.42, keys: [k(0, GUARD), k(0.25, { ...GUARD, sp: [0, 0.5, 0], sR: [-0.6, 0.6, -1.4], eR: [-2.4, 0, 0] }), k(0.5, { ...GUARD, h: -0.12, sp: [0.25, -0.7, 0], sR: [-1.6, -0.2, -0.9], eR: [-2.5, 0, 0] }), k(1, GUARD)] },
@@ -164,7 +164,7 @@ export const CLIPS = {
   slash_rapid: { dur: 0.26, keys: [k(0, { ...GUARD, sp: [0.1, 0.5, 0], sR: [-1.4, -0.9, 0], eR: [-0.5, 0, 0] }), k(0.4, { ...GUARD, sp: [0.12, -0.4, 0], sR: [-1.6, 0.8, 0], eR: [-0.2, 0, 0] }), k(1, { ...GUARD, sR: [-1.0, 0.2, -0.2], eR: [-0.9, 0, 0] })] },
   slash_finisher: { dur: 0.62, keys: [k(0, GUARD), k(0.35, { ...GUARD, h: 0, sp: [-0.3, 0.3, 0], sR: [-3.1, -0.2, 0], eR: [-0.5, 0, 0], sL: [-3.0, 0.3, 0], eL: [-0.6, 0, 0] }), k(0.55, { ...GUARD, h: -0.3, sp: [0.6, 0, 0], sR: [-0.6, 0.15, 0], eR: [0, 0, 0], sL: [-0.6, -0.3, 0], eL: [-0.2, 0, 0], lL: [-0.9, 0, 0], kL: [1.0, 0, 0], lR: [0.6, 0, 0], kR: [0.4, 0, 0] }), k(1, { ...GUARD, sR: [-1.0, 0.2, -0.2], eR: [-0.9, 0, 0] })] },
   thrust: { dur: 0.36, keys: [k(0, { ...GUARD, sp: [0.05, 0.6, 0], sR: [-1.0, 0, -0.3], eR: [-2.0, 0, 0] }), k(0.45, { ...GUARD, h: -0.15, sp: [0.25, -0.4, 0], sR: [-1.6, 0, 0], eR: [0, 0, 0], lL: [-0.8, 0, 0], kL: [0.8, 0, 0] }), k(1, GUARD)] },
-  // Vampira: cortes curtos e rápidos de faca
+  // Aghata: cortes curtos e rápidos de faca
   knife_1: { dur: 0.24, keys: [k(0, { ...GUARD, sp: [0.15, 0.5, 0], sR: [-1.2, -0.8, -0.2], eR: [-1.0, 0, 0] }), k(0.4, { ...GUARD, sp: [0.2, -0.3, 0], sR: [-1.5, 0.6, 0], eR: [-0.4, 0, 0] }), k(1, GUARD)] },
   knife_2: { dur: 0.24, keys: [k(0, { ...GUARD, sp: [0.15, -0.3, 0], sR: [-1.5, 0.7, 0], eR: [-0.6, 0, 0] }), k(0.4, { ...GUARD, sp: [0.2, 0.6, 0], sR: [-1.3, -0.9, -0.2], eR: [-0.3, 0, 0] }), k(1, GUARD)] },
   knife_3: { dur: 0.28, keys: [k(0, { ...GUARD, sp: [-0.05, 0.4, 0], sR: [-2.4, -0.5, 0], eR: [-1.0, 0, 0] }), k(0.4, { ...GUARD, h: -0.2, sp: [0.35, -0.3, 0], sR: [-0.9, 0.4, 0], eR: [-0.2, 0, 0] }), k(1, GUARD)] },
@@ -200,7 +200,7 @@ export const CLIPS = {
   claw_raise: { dur: 0.8, keys: [k(0, GUARD), k(1, { h: -0.18, sp: [0.2, 0.5, 0.1], hd: [0.15, -0.3, 0], sR: [-2.2, -0.2, -0.4], eR: [-1.2, 0, 0], lL: [-0.5, 0, 0.3], kL: [0.8, 0, 0], lR: [0.3, 0, -0.2], kR: [0.5, 0, 0] })] },
   dash: { dur: 0.4, loop: true, keys: [k(0, { h: -0.2, sp: [0.6, 0, 0], hd: [-0.4, 0, 0], sL: [0.9, 0, 0.3], eL: [-0.3, 0, 0], sR: [0.9, 0, -0.3], eR: [-0.3, 0, 0], lL: [-1.0, 0, 0], kL: [0.8, 0, 0], lR: [0.8, 0, 0], kR: [1.2, 0, 0] }), k(1, { h: -0.2, sp: [0.6, 0, 0], hd: [-0.4, 0, 0], sL: [0.9, 0, 0.3], eL: [-0.3, 0, 0], sR: [0.9, 0, -0.3], eR: [-0.3, 0, 0], lL: [-1.0, 0, 0], kL: [0.8, 0, 0], lR: [0.8, 0, 0], kR: [1.2, 0, 0] })] },
   vanish: { dur: 0.3, keys: [k(0, GUARD), k(1, { h: -0.35, sp: [0.5, 0, 0], hd: [0.3, 0, 0], sR: [-0.5, 0, -0.3], eR: [-1.2, 0, 0], sL: [-0.6, -0.5, 0.2], eL: [-1.4, 0, 0], kL: [1.0, 0, 0], kR: [1.0, 0, 0] })] },
-  // Mascarado cara a cara: mão na empunhadura, prestes a sacar
+  // Joui cara a cara: mão na empunhadura, prestes a sacar
   iai_ready: { dur: 0.6, keys: [k(0, { ...LEGS, sp: [0, 0, 0], sR: [-0.4, 0.8, 0], eR: [-1.4, 0, 0], sL: [-0.3, 0.6, 0.1], eL: [-1.3, 0, 0] }), k(1, { ...LEGS, h: -0.16, sp: [0.12, 0.3, 0], hd: [-0.05, -0.3, 0], sR: [-0.5, 1.0, 0], eR: [-1.5, 0, 0], sL: [-0.3, 0.7, 0.1], eL: [-1.4, 0, 0], lL: [-0.6, 0, 0.1], kL: [0.7, 0, 0] })] },
   iai_slash: { dur: 0.5, keys: [k(0, { ...LEGS, h: -0.16, sp: [0.12, 0.3, 0], sR: [-0.5, 1.0, 0], eR: [-1.5, 0, 0], sL: [-0.3, 0.7, 0.1], eL: [-1.4, 0, 0] }), k(0.3, { ...LEGS, h: -0.3, hip: [0, 0.3, 0], sp: [0.3, -0.9, 0], hd: [0, 0.6, 0], sR: [-1.5, -1.6, 0], eR: [0, 0, 0], sL: [-0.3, 0.7, 0.1], eL: [-1.2, 0, 0], lL: [-1.1, 0, 0], kL: [1.1, 0, 0], lR: [0.8, 0, 0], kR: [0.3, 0, 0] }), k(1, { ...LEGS, h: -0.3, hip: [0, 0.3, 0], sp: [0.3, -0.9, 0], hd: [0, 0.6, 0], sR: [-1.4, -1.7, 0], eR: [0, 0, 0], sL: [-0.3, 0.7, 0.1], eL: [-1.2, 0, 0], lL: [-1.1, 0, 0], kL: [1.1, 0, 0], lR: [0.8, 0, 0], kR: [0.3, 0, 0] })] },
   stagger: { dur: 0.6, keys: [k(0, { sp: [0.3, 0, 0] }), k(0.4, { h: -0.2, sp: [0.6, 0, 0.2], hd: [0.4, 0, 0], sL: [-0.5, 0, 0.4], eL: [-1.6, 0, 0], sR: [-0.6, 0, -0.3], eR: [-1.7, 0, 0], kL: [0.8, 0, 0], kR: [0.6, 0, 0] }), k(1, { h: -0.25, sp: [0.7, 0, 0.2], hd: [0.5, 0, 0], sL: [-0.5, 0, 0.4], eL: [-1.6, 0, 0], sR: [-0.6, 0, -0.3], eR: [-1.7, 0, 0], kL: [0.9, 0, 0], kR: [0.7, 0, 0] })] },
@@ -212,7 +212,7 @@ export const CLIPS = {
     k(0, { ...LEGS, h: -0.16, sp: [0.2, 0, 0], hd: [0.15, 0, 0], sL: [-1.3, -0.5, 0.1], eL: [-2.2, 0, 0], sR: [-1.3, 0.5, -0.1], eR: [-2.2, 0, 0] }),
     k(1, { ...LEGS, h: -0.18, sp: [0.22, 0, 0], hd: [0.15, 0, 0], sL: [-1.32, -0.5, 0.1], eL: [-2.2, 0, 0], sR: [-1.32, 0.5, -0.1], eR: [-2.2, 0, 0] }),
   ] },
-  // Abutre: defesa com o antebraço e o ombro (um braço só)
+  // Arthur: defesa com o antebraço e o ombro (um braço só)
   block_onearm: { dur: 0.8, loop: true, keys: [
     k(0, { ...LEGS, h: -0.2, hip: [0, 0.4, 0], sp: [0.25, 0.5, 0.1], hd: [0.2, -0.3, 0], sR: [-1.4, 0.7, -0.1], eR: [-2.3, 0, 0] }),
     k(1, { ...LEGS, h: -0.22, hip: [0, 0.4, 0], sp: [0.27, 0.5, 0.1], hd: [0.2, -0.3, 0], sR: [-1.42, 0.7, -0.1], eR: [-2.3, 0, 0] }),

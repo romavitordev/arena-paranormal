@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { buildHumanoid, part, faceTexture, paintEyes, paintMouth, toon } from '../rig.js';
 import { knife } from '../weapons.js';
 
-// Vampira — modelo provisório. Colete escuro com capuz sobre camisa vermelha,
+// Aghata — modelo provisório. Colete escuro com capuz sobre camisa vermelha,
 // braços tatuados, camisa xadrez amarrada na cintura e faca curva na mão direita.
 function tattooArm() {
   const c = document.createElement('canvas');
@@ -24,7 +24,7 @@ function tattooArm() {
   return t;
 }
 
-export function buildVampira() {
+export function buildAghata() {
   const skin = 0xd6a68c;
   const face = faceTexture((g) => {
     g.fillStyle = '#d6a68c';
