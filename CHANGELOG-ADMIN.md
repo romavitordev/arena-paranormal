@@ -1,5 +1,11 @@
 # Registro administrativo de alterações
 
+## v2.4 — Interface e carregamento
+
+### HUD e carregamento
+- `.ab .n` com `line-clamp: 2` + `overflow-wrap: break-word`; classe `long` (8,5 px) para nome > 18 letras ou com palavra > 10 letras; `title` com o nome inteiro (`HUD.js`).
+- `vite.config.js`: `manualChunks` → `three` (node_modules/three, ~608 kB) e `personagens` (`src/characters`, `src/anim`, ~144 kB); principal ~488 kB; `chunkSizeWarningLimit` 650 só por causa do three. Testado no build (`vite preview`, porta 3032): carrega e luta sem erros.
+
 ## v2.3 — Ajustes do TODO
 
 ### Lote 1 do TODO

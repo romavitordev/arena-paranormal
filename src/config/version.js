@@ -1,7 +1,7 @@
 // Versão do jogo e NOVIDADES (changelog). Cada atualização conta, inclusive as que foram juntas numa só publicação.
 // Para uma nova atualização: suba VERSION e acrescente a entrada no TOPO de CHANGELOG (textos para jogadores, os mesmos
 // do CHANGELOG-CLIENTE.md; detalhes técnicos vão no CHANGELOG-ADMIN.md).
-export const VERSION = 23;
+export const VERSION = 24;
 export const VERSION_LABEL = `v${Math.floor(VERSION / 10)}.${VERSION % 10}`;
 
 export function formatVersion(version) {
@@ -9,6 +9,15 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: 24,
+    date: '2026-10-03',
+    title: 'Interface e carregamento',
+    items: [
+      'Na luta pelo PC em janela pequena, os nomes longos das habilidades não estouram mais as caixas: ficam em até duas linhas (com reticências) e o nome inteiro aparece ao passar o mouse.',
+      'O jogo abre mais rápido nas próximas visitas: a parte gráfica (three.js) e os dados dos personagens ficam em arquivos separados, e o navegador guarda a parte gráfica entre uma atualização e outra.',
+    ],
+  },
   {
     v: 23,
     date: '2026-10-03',

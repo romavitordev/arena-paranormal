@@ -97,7 +97,7 @@ export class HUD {
           <div class="state"></div>
         </div>
         <div class="abilities">${abil.map((a) => `
-          <div class="ab ${a.none ? 'none' : ''}" data-k="${a.key}"><div class="cd"></div><div class="k"></div><div class="n">${a.name}</div><div class="s"></div></div>`).join('')}
+          <div class="ab ${a.none ? 'none' : ''}" data-k="${a.key}" title="${a.name.replace(/"/g, '&quot;')}"><div class="cd"></div><div class="k"></div><div class="n${a.name.length > 18 || a.name.split(/\s+/).some((w) => w.length > 10) ? ' long' : ''}">${a.name}</div><div class="s"></div></div>`).join('')}
         </div>
         ${f.assists ? `<div class="assists">${f.assists.map((a, k) => `<div class="as" data-k="${k}" style="--ac:${a.def.color}"><i class="ak"></i><b>${a.def.name}</b><span class="acd"></span><i class="sk" title="Trocar de personagem"></i></div>`).join('')}</div>` : ''}
         <div class="buff"></div>

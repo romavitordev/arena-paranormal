@@ -118,8 +118,8 @@ Kian 46% · Ferreiro 43% · Arthur 39% · Xande 39% · Aghata 36% · Gal Sal 25%
 - 🔴 **Equilíbrio:** ajustar quem ficou fora da faixa 35–65% na rodada acima e medir de novo com mais lutas por par.
 - 🟡 **Mobile:** no emulador, a 1ª toque num submenu às vezes não escolhe a opção (o 2º sim) — conferir num aparelho;
   HUD do celular sem os nomes das habilidades (só ícones): avaliar ícones por personagem.
-- 🟡 **HUD no PC em janela pequena:** nomes longos de habilidade ("Granada \"Nebulosa\"") estouram as caixas.
-- 🟡 **Carregamento:** o pacote principal passa de 500 kB (aviso do Vite); dividir por tela/personagem para abrir mais
+- ✅ (v2.4) **HUD no PC em janela pequena:** nomes longos de habilidade ("Granada \"Nebulosa\"") estouram as caixas.
+- ✅ (v2.4: three.js e personagens em arquivos próprios, principal < 500 kB) **Carregamento:** o pacote principal passa de 500 kB (aviso do Vite); dividir por tela/personagem para abrir mais
   rápido no celular.
 - 🟡 **Cenários:** peças juntadas num bloco só (a cidade do Orfanato, o cemitério das Ruínas) não ficam transparentes
   quando tampam a luta (a câmera só chega para a frente) — separar as peças no Blender.

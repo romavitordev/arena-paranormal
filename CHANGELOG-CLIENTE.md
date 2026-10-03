@@ -2,6 +2,10 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v2.4 — Interface e carregamento
+- Na luta pelo PC em janela pequena, os nomes longos das habilidades não estouram mais as caixas: ficam em até duas linhas (com reticências) e o nome inteiro aparece ao passar o mouse.
+- O jogo abre mais rápido nas próximas visitas: a parte gráfica (three.js) e os dados dos personagens ficam em arquivos separados, e o navegador guarda a parte gráfica entre uma atualização e outra.
+
 ## v2.3 — Ajustes do TODO
 - Santo Berço ganhou névoa: nuvens baixas girando pela praça e um banco de névoa denso sobre o Labirinto Infinito.
 - A CPU agora limpa as invocações fracas do adversário que estiverem por perto (Zumbis de Sangue fracos, clones do Trinitá) antes de voltar para a luta, e o Diabo da CPU usa o Transportar pelo Sangue para arrastar quando está colado.

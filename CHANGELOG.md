@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.4 — 2026-10-03
+
+### Alterado
+- HUD: nomes de habilidade em até 2 linhas (nome inteiro no title).
+- Build dividido: three.js e personagens em arquivos próprios (sem o aviso de 500 kB).
+
 ## v2.3 — 2026-10-03
 ### Alterado
 - Santo Berço com névoa; CPU limpa invocações fracas; Arthur paga rituais com vida sem sanidade.
