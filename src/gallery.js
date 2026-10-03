@@ -6,8 +6,8 @@ import { ROSTER } from './characters/index.js';
 
 // Página de visualização dos modelos e animações (ferramenta de desenvolvimento).
 const IDLE = {
-  kaiser: 'idle_fist', arthur: 'idle_onearm', joui: 'idle_katana',
-  aghata: 'idle_knife', gal_sal: 'idle_dual', kian: 'idle_fist',
+  cineraria: 'idle_fist', abutre: 'idle_onearm', mascarado: 'idle_katana',
+  vampira: 'idle_knife', injustica: 'idle_dual', desconjurado: 'idle_fist',
 };
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });

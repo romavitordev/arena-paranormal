@@ -47,14 +47,9 @@ export class HUD {
     this.root.classList.toggle('hidden', !v);
   }
 
-  setIntro(active) {
-    this.root.classList.toggle('intro-scene', active);
-  }
-
   // Limpa TUDO que é transitório (chamado ao montar e ao desmontar uma partida):
   // nada da luta anterior pode aparecer na próxima.
   reset() {
-    this.setIntro(false);
     for (const el of [this.callEl, this.bannerEl]) { el.classList.remove('show'); }
     this.callEl.textContent = '';
     this.bannerEl.querySelector('.txt').textContent = '';
@@ -237,9 +232,7 @@ export class HUD {
     if (!s) { el.classList.remove('on'); return; }
     el.querySelector('b').textContent = s.name;
     el.querySelector('b').style.color = s.color;
-    const text = el.querySelector('span');
-    text.textContent = s.text;
-    text.style.borderColor = s.color;
+    el.querySelector('span').textContent = s.text;
     el.classList.toggle('right', s.side === 1);
     el.classList.remove('on');
     void el.offsetWidth;

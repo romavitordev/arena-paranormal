@@ -1,34 +1,40 @@
 // Versão do jogo e NOVIDADES (changelog). Cada atualização conta, inclusive as que foram juntas numa só publicação.
 // Para uma nova atualização: suba VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = 18;
-export const VERSION_LABEL = `v${Math.floor(VERSION / 10)}.${VERSION % 10}`;
-
-export function formatVersion(version) {
-  return `v${Math.floor(version / 10)}.${version % 10}`;
-}
+export const VERSION = 19;
+export const formatVersion = (version) => `${Math.floor(version / 10)}.${version % 10}`;
 
 export const CHANGELOG = [
   {
-    v: 18,
-    date: '2026-10-03',
-    title: 'Novas falas de vitória e introdução',
+    v: 19,
+    date: '2026-10-02',
+    title: 'Mobile mais fácil de jogar',
     items: [
-      'As falas de vitória agora têm duas variações específicas para cada um dos 210 confrontos e são escolhidas aleatoriamente.',
-      'Nova matriz independente de introduções: 420 cenas em que os personagens conversam antes do round, alternando quem começa.',
-      'As falas permanecem na tela pelo tempo adequado à leitura, com uma pausa antes de “LUTEM”; o cronômetro não corre durante a cena.',
-      'A apresentação esconde a HUD de combate até o começo do round.',
+      'A interface mobile foi reorganizada para usar melhor o espaço da tela, sem rolagem nos menus e seleções.',
+      'Os controles de combate aparecem somente durante a partida; os menus podem ser usados tocando nas opções.',
+      'Adicionada uma seta para voltar nas telas internas, além de opção de tela cheia.',
+      'No celular, o jogo pede orientação horizontal.',
+    ],
+  },
+  {
+    v: 18,
+    date: '2026-10-02',
+    title: 'Novas falas e apresentações',
+    items: [
+      'Os personagens agora têm falas próprias antes da luta e ao vencer, com variações para cada rival.',
+      'As apresentações ficaram mais naturais e podem ser acompanhadas antes do início da luta.',
+      'As falas ficam na tela por mais tempo para você conseguir ler tudo com calma.',
+      'A luta só começa depois da apresentação, sem consumir o tempo do combate.',
     ],
   },
   {
     v: 17,
-    date: '2026-10-03',
-    title: 'Apresentações, vitória e nomes atualizados',
+    date: '2026-10-02',
+    title: 'Apresentações e finais aprimorados',
     items: [
-      'Tela de vitória com o cenário da luta, equipe vencedora completa em poses e fala do personagem ativo.',
-      'Entradas caminhando e falas antes da primeira luta; “LUTEM” inicia o round. ×/Start pula a apresentação.',
-      'Falas originais de introdução e vitória contextualizadas pelas relações conhecidas e personalidade dos personagens.',
-      'Equipe vencedora sem integrantes repetidos e CPUs sem interferir na navegação durante a pausa.',
-      'IDs internos, definições, modelos e assets atualizados para Kian, Arthur, Kaiser, Joui, Aghata e Gal Sal.',
+      'A tela de vitória agora mostra a equipe vencedora e uma fala especial do personagem.',
+      'Os lutadores entram em cena e conversam antes da luta; se preferir, você pode pular a apresentação.',
+      'As falas de entrada e vitória combinam melhor com a personalidade e a relação entre os personagens.',
+      'Ajustes na pausa e na formação das equipes deixam as partidas mais organizadas.',
     ],
   },
   {

@@ -2,7 +2,7 @@
 //  - Luta: joystick à esquerda; losango △ □ ○ × à direita (mesma posição do controle); DEF (defesa: segure; DEF + △ / DEF + × soltam
 //    habilidades), ESQ (esquiva) e ESPECIAL (faz △ △ ○ sozinho); PAUSA.
 //    Na batalha em equipe aparecem os botões das assistências e da troca.
-//  - Menus: setas, OK e VOLTAR (os cartões e opções também aceitam toque direto).
+//  - Menus: opções e cartões clicáveis; a seta no alto volta para a tela anterior.
 // Aparece sozinho em aparelhos com tela de toque (ou com ?touch=1 na URL para testar no PC).
 
 export function isTouchDevice() {
@@ -41,17 +41,12 @@ export class TouchControls {
         <button class="tb b-s2 team" data-a="switch2">⇄2</button>
         <button class="tb b-pause" data-a="start">II</button>
       </div>
-      <div class="t-menu">
-        <div class="dpad">
-          <button class="tb d-up" data-dir="up">▲</button>
-          <button class="tb d-left" data-dir="left">◀</button>
-          <button class="tb d-right" data-dir="right">▶</button>
-          <button class="tb d-down" data-dir="down">▼</button>
-        </div>
-        <button class="tb m-lb" data-a="pageL">LB</button>
-        <button class="tb m-rb" data-a="pageR">RB</button>
-        <button class="tb m-back" data-a="physical">VOLTAR</button>
-        <button class="tb m-ok" data-a="jump">OK</button>
+      <button class="tb t-back" type="button" aria-label="Voltar" title="Voltar">←</button>
+      <button class="tb t-fullscreen" type="button" aria-label="Entrar em tela cheia" title="Tela cheia">⛶</button>
+      <div class="t-status" role="status" aria-live="polite"></div>
+      <div class="t-rotate" role="alert" aria-live="assertive">
+        <strong>GIRE O CELULAR</strong>
+        <span>Este jogo funciona somente com a tela na horizontal.</span>
       </div>
     `;
     document.body.appendChild(this.root);
@@ -61,12 +56,14 @@ export class TouchControls {
     window.addEventListener('pointerdown', (e) => { if (e.pointerType === 'touch') this.setHidden(false); }, true);
     this.bindButtons();
     this.bindStick();
+    this.bindNavigation();
+    this.bindFullscreen();
   }
 
   // botões: segurar = held; um toque rápido também vale (taps) para não perder o aperto entre dois quadros
   bindButtons() {
     const T = this.T;
-    for (const b of this.root.querySelectorAll('.tb')) {
+    for (const b of this.root.querySelectorAll('.t-fight .tb')) {
       const a = b.dataset.a;
       const dir = b.dataset.dir;
       const macro = b.dataset.macro;
@@ -94,6 +91,45 @@ export class TouchControls {
       b.addEventListener('pointercancel', up);
       b.addEventListener('contextmenu', (e) => e.preventDefault());
     }
+  }
+
+  bindNavigation() {
+    this.root.querySelector('.t-back').addEventListener('click', (e) => {
+      e.preventDefault();
+      this.T.taps.add('physical');
+    });
+  }
+
+  bindFullscreen() {
+    const button = this.root.querySelector('.t-fullscreen');
+    const status = this.root.querySelector('.t-status');
+    let statusTimer;
+    const update = () => {
+      const active = !!document.fullscreenElement;
+      button.textContent = active ? '×' : '⛶';
+      button.setAttribute('aria-label', active ? 'Sair da tela cheia' : 'Entrar em tela cheia');
+      button.title = active ? 'Sair da tela cheia' : 'Tela cheia';
+    };
+    button.addEventListener('click', async () => {
+      try {
+        if (!document.fullscreenEnabled || !document.documentElement.requestFullscreen) {
+          status.textContent = 'Tela cheia não é suportada neste navegador.';
+          status.classList.add('on');
+          clearTimeout(statusTimer);
+          statusTimer = setTimeout(() => status.classList.remove('on'), 4000);
+          return;
+        }
+        if (document.fullscreenElement) await document.exitFullscreen();
+        else await document.documentElement.requestFullscreen();
+      } catch (error) {
+        status.textContent = `Não foi possível alterar a tela cheia: ${error.message || error}`;
+        status.classList.add('on');
+        clearTimeout(statusTimer);
+        statusTimer = setTimeout(() => status.classList.remove('on'), 4000);
+      }
+    });
+    document.addEventListener('fullscreenchange', update);
+    update();
   }
 
   // joystick analógico: arrasta o pino; distância = intensidade (andar devagar / correr)
@@ -136,9 +172,10 @@ export class TouchControls {
   }
 
   // chamado a cada quadro, ANTES do InputManager: mostra o conjunto certo de botões e aplica as macros
-  sync(state, teamMode = false) {
+  sync(state, teamMode = false, mainMenuOpen = false) {
     const fight = state === 'fight';
-    const mode = fight ? 'fight' : 'menu';
+    const showBack = state === 'mainmenu' ? mainMenuOpen : !fight && state !== 'title' && state !== 'loading';
+    const mode = fight ? 'fight' : 'other';
     if (mode !== this.mode) {
       this.mode = mode;
       this.root.classList.toggle('fighting', fight);
@@ -148,17 +185,12 @@ export class TouchControls {
       this.T.moveX = 0;
       this.T.moveY = 0;
     }
+    this.root.classList.toggle('menu-mode', showBack);
     this.root.classList.toggle('team', !!teamMode);
     const src = this.input.players[0].source;
     if (!this.hidden && (src === 'keyboard' || src === 'gamepad') && this.input.anyPressed) this.setHidden(true);
-    // seleção de personagem: os cartões e as setas de página já aceitam toque — só OK/VOLTAR no alto
+    // Os cartões e as setas de página da seleção aceitam toque direto.
     this.root.classList.toggle('select', state === 'select');
-    // menus: as setas viram direção (o InputManager transforma em navegação)
-    if (!fight) {
-      const d = this.T.dirHeld;
-      this.T.moveX = d === 'left' ? -1 : d === 'right' ? 1 : 0;
-      this.T.moveY = d === 'up' ? 1 : d === 'down' ? -1 : 0;
-    }
     // macro em andamento (ESPECIAL): um passo por quadro
     if (this.T.queue.length) for (const a of this.T.queue.shift()) this.T.taps.add(a);
   }

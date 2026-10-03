@@ -24,17 +24,17 @@ const tmp = new THREE.Vector3();
 // Cada uma: (ctx) → Timeline. ctx = { as (a assistência), owner, opp, world, hit(dmg, opts) }
 const ACTIONS = {
   // ARTHUR: andando → Ódio Incontrolável no parceiro; parado → Descarnar (ritual de Sangue) no inimigo
-  arthur: {
+  abutre: {
     moving: (c) => buffOwner(c, 'gaze', { type: 'hatred', name: 'ÓDIO (ARTHUR)', time: 6, mult: 1.25, affects: ['melee'], speedMult: 1.1, noBlock: true }, 0xd0102a, 'ÓDIO INCONTROLÁVEL'),
     still: (c) => ritualCuts(c, 0xe0204a, 70, 'DESCARNAR'),
   },
   // AGHATA: andando → amaldiçoa a arma do parceiro (sangramento); parado → Descarnar
-  aghata: {
+  vampira: {
     moving: (c) => buffOwner(c, 'concentrate', { type: 'curse', name: 'ARMA AMALDIÇOADA (AGHATA)', time: 8, bleed: { dps: 6, duration: 3 } }, 0xe0204a, 'ARMA AMALDIÇOADA'),
     still: (c) => ritualCuts(c, 0xe0204a, 80, 'DESCARNAR'),
   },
   // KAISER: andando → névoa Cinerária em volta do parceiro; parado → rajada da M4
-  kaiser: {
+  cineraria: {
     moving: (c) => {
       const tl = new Timeline();
       c.as.play('breath', 0.7);
@@ -60,8 +60,8 @@ const ACTIONS = {
       return tl.end(1.0);
     },
   },
-  // Joui: andando → surge atrás do inimigo e corta; parado → Olhar do Desespero
-  joui: {
+  // JOUI: andando → surge atrás do inimigo e corta; parado → Olhar do Desespero
+  mascarado: {
     moving: (c) => {
       const tl = new Timeline();
       tl.add(0.05, () => {
@@ -89,7 +89,7 @@ const ACTIONS = {
     },
   },
   // GAL: andando → Corrente de Captura que puxa o inimigo até o parceiro; parado → avança girando as lâminas
-  gal_sal: {
+  injustica: {
     moving: (c) => {
       const tl = new Timeline();
       c.as.face(c.opp);
@@ -105,7 +105,7 @@ const ACTIONS = {
     still: (c) => rushStrike(c, 'dual_spin', [[0.35, 30], [0.5, 30]], 'bladeHit'),
   },
   // KIAN: andando → Transcendência no parceiro (físico atravessa a defesa); parado → soco meteoro
-  kian: {
+  desconjurado: {
     moving: (c) => buffOwner(c, 'charge_fists', { type: 'transcend', name: 'TRANSCENDÊNCIA (KIAN)', time: 4 }, 0xffd88a, 'TRANSCENDÊNCIA'),
     still: (c) => rushStrike(c, 'meteor_punch', [[0.4, 70]], 'heavyPunch', { launch: true, knockback: 6 }),
   },

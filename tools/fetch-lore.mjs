@@ -11,10 +11,10 @@ const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
 // Membros por origem. `page` = título na wiki; `id` = id interno se já estiver no jogo.
 export const ORIGINS = {
   'Ordo Realitas': [
-    { page: 'Arthur Cervero', id: 'arthur' },
-    { page: 'Joui Jouki', id: 'joui' },
-    { page: 'Cesar Oliveira Cohen', name: 'Kaiser', id: 'kaiser' },
-    { page: 'Agatha Volkomenn', id: 'aghata' },
+    { page: 'Arthur Cervero', id: 'abutre' },
+    { page: 'Joui Jouki', id: 'mascarado' },
+    { page: 'Cesar Oliveira Cohen', name: 'Kaiser', id: 'cineraria' },
+    { page: 'Agatha Volkomenn', id: 'vampira' },
     { page: 'Dante', id: 'dante' },
     { page: 'Elizabeth Webber' },
     { page: 'Thiago Fritz' },
@@ -40,8 +40,8 @@ export const ORIGINS = {
     { page: 'Tim Flom' },
   ],
   Escriptas: [
-    { page: 'Kian', id: 'kian' },
-    { page: 'Gal', id: 'gal_sal' },
+    { page: 'Kian', id: 'desconjurado' },
+    { page: 'Gal', id: 'injustica' },
     { page: 'Artemis Deordelin', name: 'Artemis' },
     { page: 'Tirigan' },
     { page: 'Anthony Scelto' },

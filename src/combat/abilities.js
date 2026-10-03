@@ -81,7 +81,7 @@ function wrapCoils(world, opp, hold, ropes) {
 }
 
 export const ABILITY_TYPES = {
-  // ------------------------------------------------------------------ JOUI
+  // ------------------------------------------------------------------ MASCARADO
   // Teleporte das Sombras: afunda na própria sombra e surge atrás do inimigo.
   teleportBehind: {
     start(f, a, world) {
@@ -171,7 +171,7 @@ export const ABILITY_TYPES = {
     },
   },
 
-  // ------------------------------------------------------------------ KAISER
+  // ------------------------------------------------------------------ CINERARIA
   // Baforada Cinerária: sopra uma nuvem de névoa que controla o espaço.
   mistCloud: {
     start(f, a, world) {
@@ -194,7 +194,7 @@ export const ABILITY_TYPES = {
     },
   },
 
-  // ------------------------------------------------------------------ ARTHUR
+  // ------------------------------------------------------------------ ABUTRE
   // Rebirth: a arma fica temporariamente amaldiçoada (estado da arma).
   weaponState: {
     start(f, a, world) {
@@ -255,7 +255,7 @@ export const ABILITY_TYPES = {
     },
   },
 
-  // ------------------------------------------------------------------ AGHATA
+  // ------------------------------------------------------------------ VAMPIRA
   // Descarnar: ritual que abre cortes sobrenaturais no corpo do alvo à distância.
   ritualCuts: {
     start(f, a, world) {
@@ -430,7 +430,7 @@ export const ABILITY_TYPES = {
     },
   },
 
-  // ------------------------------------------------------------------ KIAN
+  // ------------------------------------------------------------------ DESCONJURADO
   // Teletransporte: some numa distorção e reaparece numa posição válida.
   blink: {
     start(f, a, world) {
@@ -559,7 +559,7 @@ export const ABILITY_TYPES = {
         world.fx.slash(f.chestPos(), f.yaw, { color: 0x000000, radius: 2.4, arc: 2.6, life: 0.3, width: 0.25, roll: 0.4 });
       });
       tl.add(a.active[1] + 0.1, () => { f.rig.showProp('fearBlade', false); aura.stop(); });
-      // errar deixa o Kian exposto por mais tempo
+      // errar deixa o Desconjurado exposto por mais tempo
       tl.end(a.duration + a.whiffRecovery);
       return {
         update: (dt) => {
@@ -2191,7 +2191,7 @@ Object.assign(ABILITY_TYPES, {
   },
 });
 
-// Zona de névoa da Kaiser (usada pela Baforada e pelo especial Cinerária)
+// Zona de névoa da Cineraria (usada pela Baforada e pelo especial Cinerária)
 export function createMistZone(world, owner, o) {
   const zone = world.addZone({
     owner, center: o.center, radius: o.radius, slow: o.slow, enemyRegen: o.enemyRegen,

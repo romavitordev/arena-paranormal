@@ -5,7 +5,7 @@ import { applyHit } from '../damage.js';
 import { splitDamage, trySpecialBlock } from './common.js';
 import { faceClose, twoShot, orbit, pullBack } from '../../camera/shots.js';
 
-// Especial do tipo ritual à distância (Aghata — DESCARNAR):
+// Especial do tipo ritual à distância (Vampira — DESCARNAR):
 // encara, concentra-se, energia vermelha percorre o corpo, estende a mão e
 // vários cortes surgem ao mesmo tempo no corpo do inimigo.
 // Mecanicamente: 250 de dano (padrão), sem hitkill.

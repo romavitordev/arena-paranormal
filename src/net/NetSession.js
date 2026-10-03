@@ -11,7 +11,7 @@
 // A cada CHECK quadros os dois comparam um resumo do estado; se divergirem, o anfitrião manda os números da luta e o
 // convidado corrige.
 
-import { VERSION_LABEL, VERSION, formatVersion } from '../config/version.js';
+import { VERSION, formatVersion } from '../config/version.js';
 
 const BROKER = 'wss://0.peerjs.com:443/peerjs';
 const BROKER_KEY = 'peerjs';
@@ -236,7 +236,7 @@ export class NetSession {
         l.onmessage = (h) => {
           if (h.t !== 'hello' || s.link) return;
           const deny = (reason) => { l.send({ t: 'deny', reason }); setTimeout(() => l.close(), 300); };
-          if (h.v !== VERSION) return deny(`Versões diferentes do jogo (${VERSION_LABEL} na sala, ${formatVersion(h.v)} aí). Atualizem a página.`);
+          if (h.v !== VERSION) return deny(`Versões diferentes do jogo (v${formatVersion(VERSION)} na sala, v${formatVersion(h.v)} aí). Atualizem a página.`);
           if (password && h.password !== password) return deny('Senha errada.');
           s.names[1] = cleanName(h.name) || 'P2';
           l.send({ t: 'welcome', v: VERSION, seed: s.seed, settings: s.settings, name: s.names[0] });

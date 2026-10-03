@@ -19,6 +19,13 @@ import { TutorialMode } from './ui/Tutorial.js';
 import { VERSION } from './config/version.js';
 import { TouchControls, isTouchDevice } from './ui/touchControls.js';
 
+const touchDevice = isTouchDevice();
+document.addEventListener('gesturestart', (e) => e.preventDefault(), { passive: false });
+document.addEventListener('gesturechange', (e) => e.preventDefault(), { passive: false });
+document.addEventListener('touchmove', (e) => {
+  if (e.touches.length > 1) e.preventDefault();
+}, { passive: false });
+
 // Avisa no console se alguma definição de personagem estiver inconsistente
 for (const def of ROSTER) for (const p of validatePassives(def)) console.warn(p);
 
@@ -63,7 +70,7 @@ const rings = [3, 2.3, 1.5].map((r, i) => {
 
 const game = {
   state: 'title',
-  screen: new HomeScreen(screens, { portraits }),
+  screen: new HomeScreen(screens, { portraits, touchOnly: touchDevice }),
   overlay: null,
   match: null,
   mode: null, // { cpu: boolean }
@@ -97,7 +104,7 @@ function toMainMenu() {
   if (game.net) { endNet('Partida online encerrada.', true); return; }
   endMatch();
   setOverlay(null, null);
-  setScreen('mainmenu', new HomeScreen(screens, { portraits, menu: true }));
+  setScreen('mainmenu', new HomeScreen(screens, { portraits, menu: true, touchOnly: touchDevice }));
 }
 
 function toOptions() {
@@ -147,11 +154,11 @@ async function startMatch() {
       // tempo contado pela simulação (e não pelo relógio): na LAN a tela de vitória abre no mesmo quadro nos dois
       match.world.after(0.4, () => {
         if (game.state !== 'fight' || game.match !== match) return;
-        match.world.showVictoryLineup(team || [def]);
-        hud.show(false);
+        // imagem do vencedor: render 3D na pose de vitória (local)
+        const arts = renderPortraits(team || [def], renderer, { w: 520, h: 700, anim: 'victory', animTime: 1.2, full: true, background: false, turn: 0.2 });
         setOverlay('result', new VictoryScreen(screens, {
-          winner: def, loser, slot: MODES[game.mode.kind].slots[winner], team,
-          line: victoryLine(def.id, loser.id, loser.name),
+          winner: def, loser, slot: MODES[game.mode.kind].slots[winner], art: arts[def.id], team, teamArt: arts,
+          line: victoryLine(def.id, loser.id),
           options: [
             { id: 'rematch', label: 'REVANCHE' },
             { id: 'select', label: 'SELEÇÃO DE PERSONAGENS' },
@@ -195,7 +202,6 @@ function beginLoadedMatch(match) {
 }
 
 function endMatch() {
-  restorePauseController();
   if (game.tutorial) { game.tutorial.dispose(); game.tutorial = null; }
   game.tutorialEnded = false;
   if (game.match) game.match.dispose();
@@ -203,26 +209,6 @@ function endMatch() {
   for (const p of input.players) { p.cpu = null; p.setVirtual(null); }
   input.teamMode = false;
   game.pausedBy = 0;
-}
-
-function suspendPauseController(owner) {
-  if (game.pauseController) return;
-  const player = input.players[owner];
-  if (!player || (!player.cpu && !player._virtual)) return;
-  game.pauseController = { player, cpu: player.cpu, virtual: player._virtual };
-  player.cpu = null;
-  player.setVirtual(null);
-  player._prevHeld = { ...player._prevHeld, start: true };
-  player.menu = { up: false, down: false, left: false, right: false };
-  player.pressed = {};
-}
-
-function restorePauseController() {
-  const paused = game.pauseController;
-  if (!paused) return;
-  paused.player.cpu = paused.cpu;
-  paused.player.setVirtual(paused.virtual);
-  game.pauseController = null;
 }
 
 // Controladores de cada lado conforme o modo
@@ -256,7 +242,6 @@ function toConfig() {
 // só quem pausou (game.pausedBy) navega no menu e despausa
 function openPause(by = game.pausedBy) {
   game.pausedBy = by;
-  suspendPauseController(by);
   audio.stopAllLoops();
   const tut = game.tutorial;
   const tr = !tut && game.match && game.match.training ? game.match.trainingOpts : null;
@@ -286,7 +271,7 @@ function openPause(by = game.pausedBy) {
 }
 
 // Atalho de testes: partida completa pelo fluxo real (carregamento, falas, vitória)
-//   await __game.devStart({ kind: 'cpu', team: true, picks: [['dante','joui','arthur'], ['kaiser','aghata','gal_sal']], arenaId: 'ruinas' })
+//   await __game.devStart({ kind: 'cpu', team: true, picks: [['dante','mascarado','abutre'], ['cineraria','vampira','injustica']], arenaId: 'ruinas' })
 game.devStart = async ({ kind = 'cpu', team = false, picks, arenaId = DEFAULT_ARENA }) => {
   const byId = (id) => ROSTER.find((c) => c.id === id);
   const teams = picks.map((l) => (Array.isArray(l) ? l : [l]).map(byId));
@@ -302,7 +287,7 @@ game.devStart = async ({ kind = 'cpu', team = false, picks, arenaId = DEFAULT_AR
 // Atalho de desenvolvimento: abre a seleção de personagens direto (__game.toSelect('cpu'))
 game.toSelect = (kind = 'cpu', team = false) => { game.mode = { kind, cpu: kind !== 'pvp', team }; toSelect(); };
 
-// Atalho de desenvolvimento: __game.quick('joui', 'gal_sal', true)
+// Atalho de desenvolvimento: __game.quick('mascarado', 'injustica', true)
 game.quick = (a, b, cpu = false, arenaId = DEFAULT_ARENA, dialogue = false) => {
   setOverlay(null, null);
   if (game.screen) { game.screen.dispose(); game.screen = null; }
@@ -327,7 +312,6 @@ window.addEventListener('resize', () => {
     cam.aspect = innerWidth / innerHeight;
     cam.updateProjectionMatrix();
   }
-  if (game.match) game.match.world.layoutVictoryLineup();
 });
 
 const clock = new THREE.Clock();
@@ -533,11 +517,11 @@ game.step = (n = 1, dt = 1 / 60) => {
 };
 
 // celular/tablet: botões na tela (alimentam o jogador 1)
-const touch = isTouchDevice() ? new TouchControls(input) : null;
+const touch = touchDevice ? new TouchControls(input) : null;
 game.touch = touch;
 
 function tick(dt) {
-  if (touch) touch.sync(game.state, !!input.teamMode);
+  if (touch) touch.sync(game.state, !!input.teamMode, game.state === 'mainmenu' && game.screen.menu);
   if (game.tutorial) game.tutorial.el.style.display = game.state === 'fight' ? '' : 'none';
   input.update(dt);
   if (input.anyPressed) audio.unlock();
@@ -642,7 +626,6 @@ function tick(dt) {
     case 'result': {
       const choice = game.overlay.update(input);
       if ((choice === 'resume' || choice === 'back') && game.state === 'pause') {
-        restorePauseController();
         setOverlay('fight', null);
       } else if (choice && choice.startsWith && choice.startsWith('tr_')) {
         const tr = game.match.trainingOpts;
@@ -650,14 +633,13 @@ function tick(dt) {
         if (choice === 'tr_energy') tr.energy = !tr.energy;
         if (choice === 'tr_cd') tr.noCooldown = !tr.noCooldown;
         if (choice === 'tr_dummy') { tr.dummy = { still: 'block', block: 'cpu', cpu: 'still' }[tr.dummy]; applyDummy(); }
-        if (choice === 'tr_reset') { game.match.resetTraining(); restorePauseController(); setOverlay('fight', null); }
+        if (choice === 'tr_reset') { game.match.resetTraining(); setOverlay('fight', null); }
         else { audio.play('select'); game.overlay.render(); }
       } else if (choice === 'commands') {
         const defs = game.match.fighters.map((f) => f.def);
         setOverlay('commands', new CommandsScreen(screens, { defs, owner: game.pausedBy }));
       } else if (choice === 'tut_skip') {
         if (game.tutorial) game.tutorial.skip();
-        restorePauseController();
         setOverlay('fight', null);
       } else if (choice === 'time') {
         cycleSetting('timer', TIMER_OPTIONS);

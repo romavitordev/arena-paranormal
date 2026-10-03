@@ -6,7 +6,7 @@ import { ARENAS, ARENA_ORDER } from '../arena/index.js';
 import { actionLabel, moveLabel } from './labels.js';
 import { COMBAT } from '../config/combat.js';
 import { moveListHTML } from './moves.js';
-import { VERSION, VERSION_LABEL, CHANGELOG, formatVersion } from '../config/version.js';
+import { VERSION, CHANGELOG, formatVersion } from '../config/version.js';
 
 // Telas fora da luta. Todas recebem as entradas normalizadas dos dois jogadores.
 // Fluxo: Título → Menu principal (P1 VS P2 / P1 VS CPU / Opções) → Personagens →
@@ -49,7 +49,7 @@ const HOME_OPTIONS = [
   { id: 'lan', label: 'ONLINE / LAN', desc: 'Contra outra pessoa em outro computador: crie uma sala (pública ou privada, com senha se quiser), veja as salas abertas ou entre com um código.' },
   { id: 'tutorial', label: 'TUTORIAL', desc: 'Escolha um personagem e aprenda, passo a passo, todos os golpes dele.' },
   { id: 'training', label: 'TREINAMENTO', desc: 'Pratique combos num alvo parado. A vida dele se recupera.' },
-  { id: 'news', label: 'NOVIDADES', desc: `O que mudou na versão ${VERSION_LABEL}.` },
+  { id: 'news', label: 'NOVIDADES', desc: `O que mudou na versão v${formatVersion(VERSION)}.` },
   { id: 'options', label: 'OPÇÕES', desc: 'Tempo da luta e modo de movimento.' },
 ];
 
@@ -78,8 +78,9 @@ function sigilSVG() {
 }
 
 export class HomeScreen {
-  constructor(root, { portraits = {}, menu = false } = {}) {
+  constructor(root, { portraits = {}, menu = false, touchOnly = false } = {}) {
     this.portraits = portraits;
+    this.touchOnly = touchOnly;
     this.index = 0;
     this.el = el(root, 'screen', 'home', `
       <div class="sigil">${sigilSVG()}</div>
@@ -94,7 +95,7 @@ export class HomeScreen {
         <div class="hlist"></div>
         <div class="hdesc"></div>
       </div>
-      <div class="ver">${VERSION_LABEL}</div>
+      <div class="ver">v${formatVersion(VERSION)}</div>
       <div class="foot"><span><b>${OK}</b> confirmar · <b>${BACK}</b> voltar</span><span>Teclado: P1 WASD + losango I J K L · P2 setas + numérico 8 4 6 2</span></div>`);
     this.desc = this.el.querySelector('.hdesc');
     this.listEl = this.el.querySelector('.hlist');
@@ -139,8 +140,9 @@ export class HomeScreen {
 
   // monta as opções da lista atual (menu principal ou submenu)
   buildList() {
+    this.visibleList = this.touchOnly ? this.list.filter((o) => !o.id.endsWith(':pvp')) : this.list;
     this.listEl.innerHTML = (this.parent ? `<div class="hcrumb">${this.parent.label}</div>` : '')
-      + this.list.map((o) => `<div class="hopt" data-id="${o.id}"><span class="mk">◆</span>${o.label}${o.sub ? ' ▸' : ''}</div>`).join('');
+      + this.visibleList.map((o) => `<div class="hopt" data-id="${o.id}"><span class="mk">◆</span>${o.label}${o.sub ? ' ▸' : ''}</div>`).join('');
     this.opts = [...this.listEl.querySelectorAll('.hopt')];
     this.opts.forEach((o, i) => {
       o.addEventListener('mouseenter', () => { if (this.menu) { this.index = i; this.render(); } });
@@ -151,7 +153,7 @@ export class HomeScreen {
 
   // escolher uma opção: abre submenu ou devolve o id
   choose(i) {
-    const o = this.list[i];
+    const o = this.visibleList[i];
     if (o.sub) {
       this.parent = o;
       this.list = o.sub;
@@ -165,7 +167,7 @@ export class HomeScreen {
   render() {
     if (!this.opts) return;
     this.opts.forEach((o, i) => o.classList.toggle('on', i === this.index));
-    this.desc.textContent = this.list[this.index] ? this.list[this.index].desc : '';
+    this.desc.textContent = this.visibleList[this.index] ? this.visibleList[this.index].desc : '';
   }
 
   // 'start' (saiu do "pressione start"), id da opção, ou null
@@ -183,7 +185,7 @@ export class HomeScreen {
       return this.choose(i);
     }
     for (const p of input.players) {
-      const n = this.list.length;
+      const n = this.visibleList.length;
       if (p.menu.up) { this.index = (this.index + n - 1) % n; this.render(); return 'move'; }
       if (p.menu.down) { this.index = (this.index + 1) % n; this.render(); return 'move'; }
       if (confirm(p) || startGo(p, input)) return this.choose(this.index);
@@ -558,21 +560,31 @@ export class BattleConfigScreen {
   dispose() { this.el.remove(); }
 }
 
-// Tela de vitória sobre a arena: a equipe fica em pose no cenário e só o lutador ativo fala.
+// Tela de VITÓRIA: vencedor no centro (render 3D na pose de vitória), nome, fala conforme o
+// derrotado e, na batalha em equipe, os parceiros ao lado. Tudo local (sem internet).
 export class VictoryScreen {
-  constructor(root, { winner, loser, slot, team = null, line, options }) {
+  constructor(root, { winner, loser, slot, art, team = null, teamArt = {}, line, options }) {
     this.options = options;
     this.index = 0;
     this.el = el(root, 'screen', 'victory', `
       <div class="vbg" style="--c:${winner.color}"></div>
       <div class="vtop"><small>${slot}</small> VENCE</div>
-      <div class="vteam">${(team || [winner]).map((member) => `<span style="--c:${member.color}">${member.name}</span>`).join('')}</div>
-      <div class="vquote">
-        <div class="vname" style="--c:${winner.color}">${winner.name}</div>
-        <div class="vline">“${line}”</div>
-        <div class="vsub">derrotou ${loser.name}</div>
+      <div class="vstage">
+        ${team ? '<div class="vmates left"></div>' : ''}
+        <div class="vhero"><img src="${art}" alt="${winner.name}"></div>
+        ${team ? `<div class="vmates right"></div>` : ''}
       </div>
+      <div class="vname" style="color:${winner.color}">${winner.name}</div>
+      <div class="vline">“${line}”</div>
+      <div class="vsub">derrotou ${loser.name}${team ? ' · equipe: ' + team.map((d) => d.name).join(', ') : ''}</div>
       <div class="vopts">${options.map(() => '<div class="opt"></div>').join('')}</div>`);
+    if (team) {
+      // parceiros um de cada lado do vencedor
+      const [a, b] = team.slice(1);
+      const box = (d) => `<div class="vmate" style="--c:${d.color}"><img src="${teamArt[d.id] || ''}" alt=""><b>${d.name}</b></div>`;
+      this.el.querySelector('.vmates.left').innerHTML = a ? box(a) : '';
+      this.el.querySelector('.vmates.right').innerHTML = b ? box(b) : '';
+    }
     this.opts = [...this.el.querySelectorAll('.vopts .opt')];
     this.opts.forEach((o, i) => o.addEventListener('click', () => { this.clicked = i; }));
     this.render();
@@ -905,24 +917,33 @@ export class ChangelogScreen {
     this.el = el(root, 'screen clear', 'changelog', `
       <div class="cmdbox news">
         <div class="news-head"><h3>NOVIDADES</h3><span class="news-ver"></span></div>
+        <div class="news-nav"><button type="button" aria-label="Versão anterior">◀</button><button type="button" aria-label="Próxima versão">▶</button></div>
         <div class="content"></div>
         <div class="hint">◀ ▶ outras versões · <b>${OK}</b> ou <b>${BACK}</b> fechar</div>
       </div>`);
     this.content = this.el.querySelector('.content');
     this.verEl = this.el.querySelector('.news-ver');
+    const [previous, next] = this.el.querySelectorAll('.news-nav button');
+    previous.addEventListener('click', (event) => { event.stopPropagation(); this.changePage(-1); });
+    next.addEventListener('click', (event) => { event.stopPropagation(); this.changePage(1); });
     this.el.addEventListener('click', () => { this.clicked = true; });
+    this.render();
+  }
+  changePage(direction) {
+    this.page = (this.page + direction + CHANGELOG.length) % CHANGELOG.length;
     this.render();
   }
   render() {
     const c = CHANGELOG[this.page];
-    this.verEl.textContent = `${formatVersion(c.v)}${c.v === VERSION ? ' · ATUAL' : ''} — ${this.page + 1} / ${CHANGELOG.length}`;
-    this.content.innerHTML = `<div class="news-title">${formatVersion(c.v)} — ${c.title}</div><div class="news-date">${c.date.split('-').reverse().join('/')}</div><ul>${c.items.map((i) => `<li>${i}</li>`).join('')}</ul>`;
+    const version = formatVersion(c.v);
+    this.verEl.textContent = `v${version}${c.v === VERSION ? ' · ATUAL' : ''} — ${this.page + 1} / ${CHANGELOG.length}`;
+    this.content.innerHTML = `<div class="news-title">v${version} — ${c.title}</div><div class="news-date">${c.date.split('-').reverse().join('/')}</div><ul>${c.items.map((i) => `<li>${i}</li>`).join('')}</ul>`;
   }
   update(input) {
     if (this.clicked) { this.clicked = false; return 'back'; }
     for (const p of controllers(input, null)) {
-      if (p.menu.left) { this.page = (this.page + CHANGELOG.length - 1) % CHANGELOG.length; this.render(); }
-      if (p.menu.right) { this.page = (this.page + 1) % CHANGELOG.length; this.render(); }
+      if (p.menu.left) this.changePage(-1);
+      if (p.menu.right) this.changePage(1);
       if (back(p) || confirm(p) || p.pressed.start) return 'back';
     }
     if (input.keyPressedOnce('Escape') || input.keyPressedOnce('Enter')) return 'back';
@@ -984,7 +1005,7 @@ export function controlsTable() {
       <tr><td>Defesa + andar</td><td colspan="3">Anda mais rápido, mas fica aberto a golpes</td></tr>
       ${row('Assistência 1 / 2 (equipe)', 'assist1')}
       <tr><td>Dash</td><td colspan="3">Pulo + Pulo (toque duplo)</td></tr>
-      <tr><td>Dash longo (Joui: teleporte)</td><td colspan="3">Carga + Pulo</td></tr>
+      <tr><td>Dash longo (Mascarado: teleporte)</td><td colspan="3">Carga + Pulo</td></tr>
       <tr><td>Agarrão (não defensável)</td><td colspan="3">Defesa + Ataque físico</td></tr>
       <tr><td>Habilidades</td><td colspan="3">Carga + Físico · Carga + Principal · Carga + Esquiva · Defesa + Carga · Defesa + Pulo</td></tr>
       <tr><td>Especial</td><td colspan="3">Carga → Carga → Ataque físico</td></tr>

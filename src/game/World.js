@@ -3,8 +3,6 @@ import { Effects } from '../fx/Effects.js';
 import { CameraRig } from '../camera/CameraRig.js';
 import { Projectiles } from '../combat/projectiles.js';
 import { Fighter } from '../combat/Fighter.js';
-import { buildModel } from '../models/index.js';
-import { Animator } from '../anim/Animator.js';
 import { ARENAS } from '../arena/index.js';
 import { yawTo } from '../core/util.js';
 
@@ -24,12 +22,11 @@ export class World {
     this.cameraBasis = this.cameraRig.basis;
     this.projectiles = new Projectiles(this);
     this.fighters = [];
-    this.zones = []; // áreas paranormais (ex.: névoa da Kaiser)
+    this.zones = []; // áreas paranormais (ex.: névoa da Cineraria)
     this.timers = []; // ações agendadas em tempo de jogo
     this.tickers = []; // { update(dt)→done, dispose() } — efeitos com lógica própria (ex.: tentáculos)
     this.npcs = []; // clones do Trinitá, a Marionete (ver combat/npcs.js)
     this.cinematic = null;
-    this.victoryActors = null;
     this.hitstopTime = 0;
     this.inputTime = 0;
     this.time = 0;
@@ -87,48 +84,6 @@ export class World {
   clearNpcs() {
     for (const n of this.npcs) n.dispose();
     this.npcs.length = 0;
-  }
-
-  showVictoryLineup(defs) {
-    this.clearTickers();
-    this.clearNpcs();
-    this.projectiles.clear();
-    this.fx.clear();
-    for (const fighter of this.fighters) {
-      if (fighter.riding) fighter.mount(false);
-      fighter.rig.root.visible = false;
-      for (const assist of fighter.assists || []) assist.reset();
-    }
-
-    this.victoryActors = defs.map((def, index) => {
-      const rig = buildModel(def.model);
-      const anim = new Animator(rig, def.anims);
-      const actor = { def, rig, anim, index };
-      this.scene.add(rig.root);
-      anim.play('victory', { blend: 0 });
-      return actor;
-    });
-    this.layoutVictoryLineup();
-  }
-
-  layoutVictoryLineup() {
-    if (!this.victoryActors) return;
-    const count = this.victoryActors.length;
-    const spacing = innerWidth / innerHeight < 0.85 ? 1.35 : 2.35;
-    for (const actor of this.victoryActors) {
-      const { rig, index } = actor;
-      rig.root.position.set((index - (count - 1) / 2) * spacing, 0, 0);
-      rig.root.rotation.y = 0;
-      rig.groundLock = true;
-    }
-
-    const distance = innerWidth / innerHeight < 0.85 ? 10 : 7.5;
-    this.camera.fov = 40;
-    this.camera.position.set(0, 3.1, distance);
-    this.camera.lookAt(0, 1, 0);
-    this.camera.updateProjectionMatrix();
-    this.cameraRig.pos.copy(this.camera.position);
-    this.cameraRig.look.set(0, 1, 0);
   }
 
   // NPCs inimigos de um lutador (os que não são dele)
@@ -227,12 +182,6 @@ export class World {
     this.inputTime = this.input.time;
     this.arena.update(dt);
 
-    if (this.victoryActors) {
-      for (const actor of this.victoryActors) actor.anim.update(dt);
-      this.fx.update(dt);
-      return;
-    }
-
     if (this.hitstopTime > 0) {
       this.hitstopTime -= dt;
       // botões apertados durante a pausa de impacto não se perdem
@@ -250,11 +199,6 @@ export class World {
       void target;
     } else if (simulate) {
       this.tickTimers(dt);
-      if (this.victoryActors) {
-        for (const actor of this.victoryActors) actor.anim.update(dt);
-        this.fx.update(dt);
-        return;
-      }
       for (let i = this.tickers.length - 1; i >= 0; i--) {
         const tk = this.tickers[i];
         if (tk.update(dt)) { tk.dispose && tk.dispose(); this.tickers.splice(i, 1); }

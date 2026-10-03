@@ -4,12 +4,10 @@ Jogo de luta 3D em arena com temática paranormal. Combate rápido e acessível,
 movimentação livre, ataques direcionais, defesa, esquiva, habilidades por combinação de
 botões e especiais cinematográficos. Feito com **Three.js + Vite**, roda no navegador.
 
-Versão atual do jogo: **v1.8**.
-
 ```bash
 npm install
 npm run dev      # abre em http://localhost:5173 (ou a porta indicada)
-npm run check    # verifica as regras do elenco (dano, X/Y da Injustiça, Kian sem armas…)
+npm run check    # verifica as regras do elenco (dano, X/Y da Injustiça, Desconjurado sem armas…)
 npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 ```
 
@@ -29,7 +27,7 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 | Defesa (segurar) | R2 | RT | **E** | Num9 | DEF |
 | **Esquiva** (+ direção) | L2 | LT | Shift | Num1 | ESQ |
 | **Dash** | × + × | A + A | K + K | Num2 + Num2 | × + × |
-| **Dash longo** (Joui: teleporte) | △ + × | Y + A | I + K | Num8 + Num2 | △ + × |
+| **Dash longo** (Mascarado: teleporte) | △ + × | Y + A | I + K | Num8 + Num2 | △ + × |
 | **Agarrão** (não defensável) | R2 + ○ | RT + B | E + L | Num9 + Num6 | DEF + ○ |
 | **Habilidade de △ → ○** | △ → ○ | Y → B | I → L | Num8 → Num6 | △ → ○ |
 | **Habilidade de △ → □** | △ → □ | Y → X | I → J | Num8 → Num4 | △ → □ |
@@ -53,15 +51,14 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 - **Habilidades secundárias** (sem botão modificador): **△ → ○** e **△ → □** como no Storm 4 (toque △, solte e
   toque ○ / □ — também valem juntos ou segurando △), **△ + L2** (juntos ou △ logo antes) e **R2 + △** / **R2 + ×** (segurando a defesa). R2 + ○ é o agarrão.
   Segurando △ para carregar, L2 sozinho continua sendo **esquiva** — dá para fugir no meio da carga.
-- **Dash:** × + × (toque duplo no pulo) avança rápido. △ + × é o dash longo, que persegue o adversário (10 de sanidade); no Joui, △ + × é o Teleporte das Sombras.
+- **Dash:** × + × (toque duplo no pulo) avança rápido. △ + × é o dash longo, que persegue o adversário (10 de sanidade); no Mascarado, △ + × é o Teleporte das Sombras.
 - **Agarrão:** Defesa + ○ (RT + B). Pega de perto e arremessa; não pode ser defendido, só esquivado. Errar deixa você exposto.
 - **Câmera:** sempre travada no adversário. **L1 / R1** chamam as assistências na batalha em equipe.
 - Cada jogador lê teclado **e** controle ao mesmo tempo.
 - **Menus:** A/× (Pulo, Enter) confirma · B/○ (Ataque físico, Esc) volta.
 - **Fluxo:** Tela inicial → Batalha Solo / Batalha em Equipe (P1 VS P2, P1 VS CPU, CPU VS CPU), Tutorial ou Treinamento →
   Personagens (os dois confirmam) → **COMEÇAR** → **Configurações** (tempo 30/60/90/99/120/∞, dificuldade da CPU
-  Fácil/Normal/Difícil/Muito Difícil, rounds 1–3) → Cenário (com preview) → Carregamento → entrada dos lutadores com
-  falas → **LUTEM** → round. ×/Start pula a apresentação; nos rounds seguintes, a chamada mostra o número do round.
+  Fácil/Normal/Difícil/Muito Difícil, rounds 1–3) → Cenário (com preview) → Carregamento → 3, 2, 1, LUTAR.
 - **Seleção:** Y/△ escolhe personagem ou cenário **aleatório**; B/○ na seleção de personagens (com ninguém confirmado) volta para a tela inicial.
 - **Opções** (menu principal e pausa): Tempo da luta · **Movimento**: direções da tela
   (padrão) ou relativo ao inimigo (↑ aproxima, ↓ recua, ←/→ orbitam).
@@ -86,12 +83,9 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
   com você **andando** ela apoia (buff, névoa, puxão, cura); **parado** ela ataca. Recarga de 18 s.
   **Analógico direito ◀ / ▶** (teclado P1 3 / 4, P2 Num- / Num+) **troca** o personagem em campo pelo daquela
   assistência (estilo Storm 4): vida e sanidade são da equipe; quem sai vira a assistência. Recarga de 5 s.
-- **Pausa:** enquanto o menu está aberto, os controladores de CPU ficam suspensos; CPUs não movem a seleção nem
-  escolhem opções. Ao continuar, o controle da luta é restaurado.
 - **Treinamento:** alvo parado (ou defendendo, ou CPU), vida que volta depois do combo, sanidade infinita, recargas
   sem espera — tudo na pausa. Select (Tab no teclado) reinicia a posição.
-- **Tela de vitória:** mantém o cenário da luta como fundo e mostra a equipe vencedora em poses de vitória; a fala,
-  centralizada abaixo, é apenas do personagem que terminou a luta. Os botões permitem revanche, retorno e saída.
+- **Tela de vitória:** vencedor no centro (render 3D na pose de vitória), fala conforme quem ele derrotou e a equipe.
 - **PAUSA → COMANDOS** mostra todos os golpes dos dois lutadores.
 - Teclas em `src/config/controls.js`. Nada no código usa tecla fixa.
 
@@ -101,7 +95,7 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 |---|---|---|---|---|---|---|
 | KAISER | Ordo Realitas | Energia | M4 (varia com a direção) | □ Baforada Cinerária · ○ Acácia · △ Dendrobium (raízes) · × Balas Amaldiçoadas (Desert Eagle) · L2 Granada Nebulosa | Cinerária (névoa → Acácia amplificada, 250; a névoa fica no mapa) | Resistente · Afinidade Elemental (rituais +15%) |
 | ARTHUR CERVERO | Ordo Realitas | Sangue | Sniper (segure □: ajoelha e mira — mais tempo, mais dano) | □ Rebirth · ○ Ódio Incontrolável "Templo do Ódio" · △ Paralisia de Sangue "Dystopia" · L2 Armadura de Sangue (escudo) | Arma de Sangue | — (luta só com chutes: tem um braço) |
-|JOUI JOUKI | Ordo Realitas | Conhecimento | Sombra Rasteira | ○ Olhar do Desespero · L2 Corte das Sombras (investida) (△ + × Teleporte das Sombras) | Shi no Kage | Golpe pelas costas · Decepar |
+| JOUI JOUKI | Ordo Realitas | Conhecimento | Sombra Rasteira | ○ Olhar do Desespero · L2 Corte das Sombras (investida) (△ + × Teleporte das Sombras) | Shi no Kage | Golpe pelas costas · Decepar |
 | AGHATA | Ordo Realitas | Sangue | Faca Arremessada | □ Amaldiçoar Arma (Sangue) · L2 Facas Amaldiçoadas (3 em leque) | Descarnar | Colar Banhado em Sangue |
 | DANTE | Ordo Realitas | Morte | Decadenza (fumaça que apodrece) | □ Embaralhar "Trinitá" (3 clones com IA, 50% do dano) · ○ Tentáculos de Lodo · △ Cicatrização "Paradiso" · L2 Poça de Lodo (lentidão) | Invocação: A Marionete (NPC por 18 s, barra preta, pode ser destruída) | Concentração Inquebrável (rituais −10% de sanidade) |
 | ERIN PARKER | Ordo Realitas | Energia | Escopeta calibre 12 (leque de chumbo) | □ Granada "Supernova" · × Granada "Nebulosa" (névoa) · ○ Bênção Maldita · △ Black Hole (cura) · L2 Granada de Luz (atordoa) | Supernova (corre, tiro de escopeta e granada) | Amuleto Elétrico (choque em quem bate nela) |
@@ -157,15 +151,7 @@ Exemplo: X=100, Y=60 → o inimigo perde 100, recupera 60 (saldo −40) e perde 
 - **Agarrão:** R2 + ○. Não pode ser defendido; quem é agarrado escapa com **R2 + ○ logo no começo**, ou esquivando antes.
 - **Transcender (todos):** com a vida em 30% ou menos, segure △ por 1 s. 1x por partida: +15% de dano por 12 s,
   aguenta 1 golpe sem reagir e recupera 30 de sanidade. (No Kian, também libera mais um Inexistir.)
-- **Falas de introdução:** antes do ROUND 1, cada dupla tem entradas caminhando e falas originais baseadas na
-  personalidade e nas relações conhecidas (pule com × ou Start); depois aparece **LUTEM**. As falas de vitória também
-  variam por confronto. Quando não há relação canônica conhecida, as provocações evitam inventar um passado comum.
-
-### Identificadores internos dos personagens
-
-Os IDs do elenco usam os nomes atuais: `kian`, `arthur`, `kaiser`, `joui`, `aghata` e `gal_sal`. Eles também nomeiam
-seus arquivos de definição, scripts de modelo e assets `.glb`; nomes de rituais, habilidades e grupos da história
-continuam com seus próprios termos canônicos.
+- **Falas de introdução:** antes do ROUND 1, cada dupla tem falas baseadas no cânone (pule com × ou Start).
 
 ## Arquitetura
 

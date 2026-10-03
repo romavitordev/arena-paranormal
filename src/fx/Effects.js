@@ -299,7 +299,7 @@ export class Effects {
     return m;
   }
 
-  // Poço de sombra no chão (Joui)
+  // Poço de sombra no chão (Mascarado)
   shadowDisc(pos, o = {}) {
     const { radius = 1.1, life = 0.6, grow = true } = o;
     const mat = new THREE.MeshBasicMaterial({ color: 0x050307, transparent: true, opacity: 0.85, depthWrite: false });

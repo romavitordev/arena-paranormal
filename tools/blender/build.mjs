@@ -1,6 +1,6 @@
 // Gera os modelos e cenários com o Blender (modo background) e salva em public/.
 //   node tools/blender/build.mjs              → tudo
-//   node tools/blender/build.mjs joui    → só um
+//   node tools/blender/build.mjs mascarado    → só um
 import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';

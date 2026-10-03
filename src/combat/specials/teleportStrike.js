@@ -7,7 +7,7 @@ import { vanishFx } from '../abilities.js';
 import { twoShot, faceClose, pullBack, orbit } from '../../camera/shots.js';
 import { trySpecialBlock } from './common.js';
 
-// Especial do Joui: some, surge atrás do inimigo, o inimigo se vira,
+// Especial do Mascarado: some, surge atrás do inimigo, o inimigo se vira,
 // cara a cara, câmera aproxima, corte de katana.
 // Mecanicamente igual aos outros especiais: dano configurável (padrão),
 // respeita a vida, NÃO é hitkill.
