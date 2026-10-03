@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.8 — 2026-10-03
+
+### Adicionado
+- 420 cenas de introdução pré-luta para os 210 confrontos, em um sistema separado das falas de vitória.
+- Duas variações de vitória para cada confronto, escolhidas aleatoriamente.
+- Tempo de leitura ajustado ao tamanho das falas, pausa antes de “LUTEM” e HUD de combate oculta durante a cena.
+
 ## v1.7 — 2026-10-03
 
 ### Adicionado

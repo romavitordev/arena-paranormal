@@ -5,9 +5,9 @@ import { introLines } from '../config/dialogues.js';
 import { Assist } from '../combat/assists.js';
 import { yawTo } from '../core/util.js';
 
-const LINE_TIME = 2.0;
 const ENTRANCE_WALK_TIME = 1.7;
 const READY_TIME = 0.9;
+const POST_DIALOGUE_PAUSE = 1.0;
 
 // Partida: rodadas, cronômetro, K.O. e vitória. Usa o World para a luta em si.
 export class Match {
@@ -62,10 +62,16 @@ export class Match {
     this.phaseTime = 0;
     this.round = 1;
     this.timer = SETTINGS.timer || COMBAT.roundTime;
-    this.lines = introLines(this.defs[0].id, this.defs[1].id, this.defs[0].name, this.defs[1].name)
-      .map(([id, text], fighter) => [id, text, fighter])
-      .filter(([, text]) => text);
+    let nextLineAt = 0;
+    this.lines = introLines(this.defs[0].id, this.defs[1].id).map(([id, text]) => {
+      const fighter = this.defs.findIndex((def) => def.id === id);
+      const duration = getDialogueDuration(text);
+      const line = { id, text, fighter, start: nextLineAt, end: nextLineAt + duration };
+      nextLineAt = line.end;
+      return line;
+    });
     this.lineIndex = -1;
+    this.hud.setIntro(true);
     this.entranceStarts = this.fighters.map((f) => f.pos.clone());
     const [a, b] = this.entranceStarts;
     const dx = b.x - a.x;
@@ -76,7 +82,7 @@ export class Match {
       { x: midpoint.x - (dx / distance) * 1.1, z: midpoint.z - (dz / distance) * 1.1 },
       { x: midpoint.x + (dx / distance) * 1.1, z: midpoint.z + (dz / distance) * 1.1 },
     ];
-    this.entranceReadyAt = this.lines.length * LINE_TIME;
+    this.entranceReadyAt = nextLineAt + POST_DIALOGUE_PAUSE;
     this.entranceReadyShown = false;
     for (const f of this.fighters) {
       f.setState('intro');
@@ -105,17 +111,18 @@ export class Match {
       fighter.anim.play(progress < 1 ? 'walk' : 'idle');
     });
 
-    const idx = Math.floor(this.phaseTime / LINE_TIME);
-    if (this.phaseTime < this.entranceReadyAt && idx < this.lines.length) {
-      if (idx !== this.lineIndex) {
-        this.lineIndex = idx;
-        const [, text, fighter] = this.lines[idx];
-        const def = this.defs[fighter];
-        this.hud.subtitle({ name: def.name, color: def.color, text, side: fighter });
+    const activeLine = this.entranceSkipped
+      ? null
+      : this.lines.find((line) => this.phaseTime >= line.start && this.phaseTime < line.end);
+    if (activeLine) {
+      if (activeLine.fighter !== this.lineIndex) {
+        this.lineIndex = activeLine.fighter;
+        const def = this.defs[activeLine.fighter];
+        this.hud.subtitle({ name: def.name, color: def.color, text: activeLine.text, side: activeLine.fighter });
       }
     } else {
       this.hud.subtitle(null);
-      if (!this.entranceReadyShown) {
+      if (this.phaseTime >= this.entranceReadyAt && !this.entranceReadyShown) {
         this.entranceReadyShown = true;
         this.entranceReadyAt = Math.max(this.entranceReadyAt, this.phaseTime);
         this.hud.callout('LUTEM', '#ffd84a');
@@ -124,6 +131,7 @@ export class Match {
         this.phase = 'fight';
         this.phaseTime = 0;
         this.koPending = false;
+        this.hud.setIntro(false);
         for (const fighter of this.fighters) fighter.setState('idle');
       }
     }
@@ -268,6 +276,10 @@ export class Match {
     this.hud.reset();
     this.hud.show(false);
   }
+}
+
+function getDialogueDuration(text) {
+  return Math.min(Math.max(2200 + text.length * 45, 2500), 6000) / 1000;
 }
 
 function fmt(n) {

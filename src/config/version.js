@@ -1,6 +1,6 @@
 // Versão do jogo e NOVIDADES (changelog). Cada atualização conta, inclusive as que foram juntas numa só publicação.
 // Para uma nova atualização: suba VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = 17;
+export const VERSION = 18;
 export const VERSION_LABEL = `v${Math.floor(VERSION / 10)}.${VERSION % 10}`;
 
 export function formatVersion(version) {
@@ -8,6 +8,17 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: 18,
+    date: '2026-10-03',
+    title: 'Novas falas de vitória e introdução',
+    items: [
+      'As falas de vitória agora têm duas variações específicas para cada um dos 210 confrontos e são escolhidas aleatoriamente.',
+      'Nova matriz independente de introduções: 420 cenas em que os personagens conversam antes do round, alternando quem começa.',
+      'As falas permanecem na tela pelo tempo adequado à leitura, com uma pausa antes de “LUTEM”; o cronômetro não corre durante a cena.',
+      'A apresentação esconde a HUD de combate até o começo do round.',
+    ],
+  },
   {
     v: 17,
     date: '2026-10-03',

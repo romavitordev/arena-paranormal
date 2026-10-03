@@ -7,6 +7,7 @@ import { CLIPS } from '../src/anim/clips.js';
 import { GAMEPAD_LAYOUT } from '../src/config/controls.js';
 import { ELEMENTS } from '../src/config/elements.js';
 import * as ARENA_CFGS from '../src/arena/configs.js';
+import { INTRO_DIALOGUES, VICTORY_LINES, introLines, victoryLine } from '../src/config/dialogues.js';
 
 let fails = 0;
 const ok = (cond, msg) => {
@@ -19,6 +20,51 @@ const allStrikes = (c) => [...c.melee.strikes, ...['forward', 'back', 'side', 'a
 // ---------------- base preservada ----------------
 const ids = ROSTER.map((c) => c.id);
 ok(['kaiser', 'arthur', 'joui', 'aghata', 'dante', 'erin', 'gal_sal', 'kian', 'aguiar', 'labirinto', 'xande', 'lirio'].every((i) => ids.includes(i)), `elenco com os 12 personagens (${ids.join(', ')})`);
+let validIntroPairs = 0;
+let validVictoryPairs = 0;
+let validIntroScenes = true;
+let validVictoryLines = true;
+for (const winner of ids) {
+  if (Object.keys(INTRO_DIALOGUES[winner] || {}).length !== ids.length - 1) validIntroScenes = false;
+  if (Object.keys(VICTORY_LINES[winner] || {}).length !== ids.length - 1) validVictoryLines = false;
+  for (const opponent of ids) {
+    if (winner === opponent) continue;
+    const scenes = INTRO_DIALOGUES[winner]?.[opponent];
+    if (Array.isArray(scenes) && scenes.length === 2
+      && scenes[0].starter === scenes[1].response
+      && scenes[1].starter === scenes[0].response
+      && scenes[0].starter !== scenes[1].starter
+      && scenes.every((scene) => typeof scene.line === 'string' && scene.line.trim()
+        && typeof scene.responseLine === 'string' && scene.responseLine.trim()
+        && !/\b(ganh\w*|perd\w*|venc\w*|vit[oó]ria|derrota)\b/i.test(`${scene.line} ${scene.responseLine}`))) {
+      validIntroPairs++;
+    } else validIntroScenes = false;
+    const lines = VICTORY_LINES[winner]?.[opponent];
+    if (Array.isArray(lines) && lines.length === 2 && lines.every((line) => typeof line === 'string' && line.trim())) {
+      validVictoryPairs++;
+    } else validVictoryLines = false;
+  }
+}
+const sampleIntro = introLines('kaiser', 'erin');
+const sampleVictory = victoryLine('kaiser', 'erin');
+let randomSelectionValid = false;
+const originalRandom = Math.random;
+try {
+  Math.random = () => 0;
+  const firstIntro = introLines('kaiser', 'erin');
+  const firstVictory = victoryLine('kaiser', 'erin');
+  Math.random = () => 0.999999;
+  const secondIntro = introLines('kaiser', 'erin');
+  const secondVictory = victoryLine('kaiser', 'erin');
+  randomSelectionValid = firstIntro[0][0] !== secondIntro[0][0]
+    && firstVictory !== secondVictory
+    && VICTORY_LINES.kaiser.erin.includes(firstVictory)
+    && VICTORY_LINES.kaiser.erin.includes(secondVictory);
+} finally {
+  Math.random = originalRandom;
+}
+ok(validIntroScenes && validIntroPairs === 210 && sampleIntro.length === 2 && randomSelectionValid, 'introduções: 210 confrontos, duas cenas alternadas e aleatórias, sem falas de resultado');
+ok(validVictoryLines && validVictoryPairs === 210 && VICTORY_LINES.kaiser.erin.includes(sampleVictory) && randomSelectionValid, 'vitórias: 210 confrontos com duas falas selecionáveis aleatoriamente');
 ok(ROSTER.map((c) => c.name).join() === 'KAISER,ARTHUR CERVERO,JOUI JOUKI,AGHATA,DANTE,ERIN PARKER,GAL SAL,KIAN,AGUIAR,LABIRINTO,XANDE,LÍRIO,FERREIRO,JUAN,KEMI', 'nomes: Kaiser, Arthur Cervero, Joui Jouki, Aghata, Dante, Erin Parker, Gal Sal, Kian, Aguiar, Labirinto, Xande, Lírio, Ferreiro, Juan, Kemi');
 const banners = Object.fromEntries(ROSTER.map((c) => [c.id, c.special.banner]));
 ok(banners.gal_sal === 'Injustiça né?' && banners.kaiser === 'Cinerária!' && banners.joui === 'Shi no Kage!' && banners.aghata === 'Descarnar!' && banners.arthur === 'Arma de Sangue!' && banners.kian === 'Inexistir', 'textos dos especiais na tela');
