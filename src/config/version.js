@@ -1,8 +1,25 @@
 // Versão do jogo e NOVIDADES (changelog). Cada atualização conta, inclusive as que foram juntas numa só publicação.
 // Para uma nova atualização: suba VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = 16;
+export const VERSION = 17;
+export const VERSION_LABEL = `v${Math.floor(VERSION / 10)}.${VERSION % 10}`;
+
+export function formatVersion(version) {
+  return `v${Math.floor(version / 10)}.${version % 10}`;
+}
 
 export const CHANGELOG = [
+  {
+    v: 17,
+    date: '2026-10-03',
+    title: 'Apresentações, vitória e nomes atualizados',
+    items: [
+      'Tela de vitória com o cenário da luta, equipe vencedora completa em poses e fala do personagem ativo.',
+      'Entradas caminhando e falas antes da primeira luta; “LUTEM” inicia o round. ×/Start pula a apresentação.',
+      'Falas originais de introdução e vitória contextualizadas pelas relações conhecidas e personalidade dos personagens.',
+      'Equipe vencedora sem integrantes repetidos e CPUs sem interferir na navegação durante a pausa.',
+      'IDs internos, definições, modelos e assets atualizados para Kian, Arthur, Kaiser, Joui, Aghata e Gal Sal.',
+    ],
+  },
   {
     v: 16,
     date: '2026-10-02',

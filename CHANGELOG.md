@@ -1,6 +1,6 @@
 # Changelog
 
-## 2026-10-03
+## v1.7 — 2026-10-03
 
 ### Adicionado
 - Tela de vitória com o cenário atual, equipe vencedora completa em poses e fala do personagem ativo.
