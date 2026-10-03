@@ -7,6 +7,7 @@ import { buildGalSal } from './characters/gal_sal.js';
 import { buildKian } from './characters/kian.js';
 import { buildDante } from './characters/dante.js';
 import { loadGLB, rigFromGLB } from './glbRig.js';
+import { preloadNpcModels } from './npcRig.js';
 
 // Registro de MODELOS, separado das habilidades.
 // Cada personagem pode ter um modelo do Blender (.glb em public/models, gerado por
@@ -61,6 +62,7 @@ const loaded = {};
 export async function preloadModels(onProgress) {
   const ids = Object.keys(BLENDER_MODELS);
   let done = 0;
+  const npcs = preloadNpcModels(); // invocações (Marionete, Zumbis de Sangue)
   await Promise.all(ids.map(async (id) => {
     try {
       loaded[id] = await loadGLB(import.meta.env.BASE_URL + BLENDER_MODELS[id].url);
@@ -70,6 +72,7 @@ export async function preloadModels(onProgress) {
     done++;
     onProgress && onProgress(done / ids.length);
   }));
+  await npcs;
 }
 
 export function buildModel(id) {

@@ -112,11 +112,12 @@ export default {
       name: 'Senhor do Sangue',
       input: 'carga+physical', // △ + ○ / Y + B
       type: 'summonBlood',
-      description: 'Abre uma poça de sangue perto do adversário e dela sobe um Zumbi de Sangue que luta pelo Diabo por 12 s.',
+      description: 'Abre poças de sangue perto do adversário e delas sobe uma horda que luta pelo Diabo por 12 s: 1 a 3 Zumbis de Sangue fracos, ou 2 fracos e 1 forte.',
       energyCost: 30,
       cooldown: 22,
       duration: 12,
-      hp: 220,
+      // hordas possíveis (sorteadas): fraco = 90 de vida, garra e mordida; forte = 260, pancada que derruba (ver npcs.js BLOOD_ZOMBIE)
+      hordes: [['weak'], ['weak', 'weak'], ['weak', 'weak', 'weak'], ['weak', 'strong', 'weak']],
     },
     {
       id: 'sangueArredores',

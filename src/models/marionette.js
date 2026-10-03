@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { part, addOutlines } from './rig.js';
+import { buildNpcModel } from './npcRig.js';
 
 // A MARIONETE (invocação do Dante) — referência: "dante marionete.jpg".
 // Criatura esquelética de Morte: corpo de varetas escuras, véu cinza-azulado esfarrapado,
@@ -38,7 +39,27 @@ function tattered(radiusTop, radiusBottom, height, color, seed = 1) {
   return m;
 }
 
+// Modelo do Blender (tools/blender/npc_marionette.py): crânio com a mandíbula forçada aberta por fios, braços de
+// galho erguidos, foice de ossos amarrada no braço direito, estacas nas costas, vestido amarrado e Lodo Preto.
+// Sem a cruzeta: no cânone os fios são INVISÍVEIS. Se o .glb faltar, usa o provisório abaixo.
 export function buildMarionette() {
+  const m = buildNpcModel('marionette');
+  if (!m) return buildMarionetteProcedural();
+  const J = m.joint;
+  const joints = {
+    body: J('body'), chest: J('chest'), neck: J('neck'), jaw: J('jaw'), hair: J('hair'),
+    armL: { sh: J('shL'), el: J('elL'), hand: J('handL') },
+    armR: { sh: J('shR'), el: J('elR'), hand: J('handR') },
+    legs: [{ hip: J('hipL'), knee: J('kneeL') }, { hip: J('hipR'), knee: J('kneeR') }],
+    blade: J('handR'),
+    drips: [],
+    puppet: true, // pose de marionete do cânone (braços erguidos por fios invisíveis)
+  };
+  return { root: m.root, joints };
+}
+
+// provisório em código (antes do modelo do Blender)
+export function buildMarionetteProcedural() {
   const root = new THREE.Group();
   const body = new THREE.Group(); // tudo que flutua/inclina
   root.add(body);
@@ -190,6 +211,7 @@ export function buildMarionette() {
 const _a = new THREE.Vector3();
 export function updateMarionetteStrings(m) {
   const { joints, root } = m;
+  if (!joints.strings) return; // modelo do Blender: fios invisíveis (cânone)
   const pos = joints.strings.geometry.attributes.position;
   const body = joints.body;
   body.updateMatrixWorld(true);

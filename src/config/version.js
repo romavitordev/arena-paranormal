@@ -1,7 +1,7 @@
 // Versão do jogo e NOVIDADES (changelog). Cada atualização conta, inclusive as que foram juntas numa só publicação.
 // Para uma nova atualização: suba VERSION e acrescente a entrada no TOPO de CHANGELOG (textos para jogadores, os mesmos
 // do CHANGELOG-CLIENTE.md; detalhes técnicos vão no CHANGELOG-ADMIN.md).
-export const VERSION = 20;
+export const VERSION = 21;
 export const VERSION_LABEL = `v${Math.floor(VERSION / 10)}.${VERSION % 10}`;
 
 export function formatVersion(version) {
@@ -9,6 +9,19 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: 21,
+    date: '2026-10-03',
+    title: 'A Marionete e a horda de sangue',
+    items: [
+      'A Marionete do Dante foi refeita do zero: um crânio com a mandíbula forçada aberta por fios, cabelo preto comprido, braços de galho erguidos como se puxados por cordas invisíveis, estacas nas costas e uma foice feita de ossos amarrada no braço direito.',
+      'A Marionete agora anda devagar e aos trancos, atravessa paredes e obstáculos, revida na hora quem chega perto e tem um golpe novo, Ironia do Destino: dois cortes da foice, agarra e arrasta a vítima — e metade do dano que ela levar enquanto segura vai para quem está preso.',
+      'A Marionete prefere caçar adversários de Energia: contra eles, quase não se volta contra o Dante.',
+      'Os Zumbis de Sangue do Diabo ganharam modelos novos: carne viva vermelha, sem olhos, a cabeça tomada por uma boca cheia de presas e braços longos com garras.',
+      'Senhor do Sangue agora invoca uma horda: 1, 2 ou 3 zumbis fracos e rápidos, ou 2 fracos e 1 zumbi forte, enorme e quase de quatro, cuja pancada derruba.',
+      'Na seleção de personagens, os retratos não mostram mais um personagem "fantasma" de outro lutador atrás de cada um.',
+    ],
+  },
   {
     v: 20,
     date: '2026-10-03',

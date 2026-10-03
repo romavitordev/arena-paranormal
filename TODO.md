@@ -7,6 +7,20 @@
 
 ---
 
+## Estado na v2.1 (2026-10-03)
+
+- ✅ **Retratos da seleção:** o personagem transparente atrás de cada retrato era o retrato ANTERIOR (o canvas era
+  reaproveitado sem limpar) — por isso parecia "embaralhado".
+- ✅ **A Marionete refeita** (modelo do Blender + IA): crânio de mandíbula aberta por fios, braços erguidos por fios
+  invisíveis, foice de ossos; anda aos trancos, atravessa obstáculos, Reflexos Perfeitos e Ironia do Destino.
+- ✅ **Zumbis de Sangue refeitos:** fraco (magro, rápido) e forte (massa de músculo, pancada que derruba);
+  Senhor do Sangue sorteia 1–3 fracos ou 2 fracos + 1 forte.
+- 🟡 Marionete: a "foice que toca o chão" deveria deixar um risco no chão enquanto ela anda (efeito de rastro).
+- 🟡 Zumbis: animação própria de surgir da poça (hoje sobem retos, como a Marionete) e de morrer (desmanchar em sangue).
+- 🟡 CPU: a IA não sabe fugir do agarrão da Marionete nem focar nos zumbis fracos para limpar a horda.
+- 🟢 Rodar a rodada de equilíbrio do Dante e do Juan com as invocações novas (a Marionete perdeu o giro com medo e
+  ganhou o agarrão; a horda pode somar mais dano que o zumbi único de 220 de vida).
+
 ## Estado na v2.0 (2026-10-03)
 
 ### Feito nesta versão

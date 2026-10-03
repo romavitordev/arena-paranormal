@@ -1993,23 +1993,33 @@ Object.assign(ABILITY_TYPES, {
   },
 
   // ------------------------------------------------------------------ O DIABO (Portador do Trono)
-  // SENHOR DO SANGUE: abre uma poça de sangue perto do adversário e dela sobe um Zumbi de Sangue que luta pelo Diabo
+  // SENHOR DO SANGUE: abre poças de sangue perto do adversário e delas sobem Zumbis de Sangue que lutam pelo Diabo.
+  // A horda é sorteada: 1, 2 ou 3 zumbis FRACOS, ou 2 fracos + 1 FORTE (a.hordes). Uma horda por vez.
   summonBlood: {
     start(f, a, world) {
-      if (world.npcs.some((n) => n.alive && n.owner === f && n instanceof BloodZombie)) { f.notify('O ZUMBI JÁ ESTÁ EM CAMPO'); return null; }
+      if (world.npcs.some((n) => n.alive && n.owner === f && n instanceof BloodZombie)) { f.notify('A HORDA JÁ ESTÁ EM CAMPO'); return null; }
       const opp = f.opponent;
       const tl = new Timeline();
       f.vel.set(0, 0, 0);
       f.anim.play('cast_up', { restart: true, duration: 0.7 });
       world.audio.play('ritual', { volume: 0.7, pitch: 0.7 });
+      const hordes = a.hordes || [['weak']];
+      const horde = hordes[Math.floor(Math.random() * hordes.length)];
       tl.add(0.4, () => {
         const base = opp ? opp.pos : f.pos;
-        const dir = new THREE.Vector3().subVectors(f.pos, base).setY(0).normalize();
-        const want = { x: base.x + dir.x * 2.2, z: base.z + dir.z * 2.2 };
-        const spot = findFreeSpotNear(world.arena, want.x, want.z, { radius: 0.6, others: [{ x: base.x, z: base.z, r: 0.7 }, { x: f.pos.x, z: f.pos.z, r: 0.7 }] }) || want;
-        world.fx.burst(new THREE.Vector3(spot.x, 0.4, spot.z), { count: 40, color: 0x9a0010, speed: 4, up: 4, life: 0.7, size: 0.22, gravity: 8 });
-        world.addNpc(new BloodZombie(f, world, new THREE.Vector3(spot.x, 0, spot.z), { duration: a.duration, hp: a.hp }));
-        f.notify('SENHOR DO SANGUE', true);
+        const back = Math.atan2(f.pos.x - base.x, f.pos.z - base.z);
+        const taken = [{ x: base.x, z: base.z, r: 0.8 }, { x: f.pos.x, z: f.pos.z, r: 0.7 }];
+        horde.forEach((kind, i) => {
+          // em leque do lado do Diabo, em volta do adversário
+          const ang = back + (i - (horde.length - 1) / 2) * 0.9;
+          const want = { x: base.x + Math.sin(ang) * 2.3, z: base.z + Math.cos(ang) * 2.3 };
+          const strong = kind === 'strong';
+          const spot = findFreeSpotNear(world.arena, want.x, want.z, { radius: strong ? 0.8 : 0.55, others: taken }) || want;
+          taken.push({ x: spot.x, z: spot.z, r: strong ? 0.8 : 0.55 });
+          world.fx.burst(new THREE.Vector3(spot.x, 0.4, spot.z), { count: strong ? 50 : 30, color: 0x9a0010, speed: 4, up: 4, life: 0.7, size: 0.22, gravity: 8 });
+          world.addNpc(new BloodZombie(f, world, new THREE.Vector3(spot.x, 0, spot.z), { duration: a.duration, strong }));
+        });
+        f.notify(horde.includes('strong') ? 'SENHOR DO SANGUE — A HORDA E O BRUTO' : `SENHOR DO SANGUE ×${horde.length}`, true);
       });
       tl.end(0.7);
       return seqFrom(tl);

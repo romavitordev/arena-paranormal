@@ -2,6 +2,14 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v2.1 — A Marionete e a horda de sangue
+- A Marionete do Dante foi refeita do zero: um crânio com a mandíbula forçada aberta por fios, cabelo preto comprido, braços de galho erguidos como se puxados por cordas invisíveis, estacas nas costas e uma foice feita de ossos amarrada no braço direito.
+- A Marionete agora anda devagar e aos trancos, atravessa paredes e obstáculos, revida na hora quem chega perto e tem um golpe novo, Ironia do Destino: dois cortes da foice, agarra e arrasta a vítima — e metade do dano que ela levar enquanto segura vai para quem está preso.
+- A Marionete prefere caçar adversários de Energia: contra eles, quase não se volta contra o Dante.
+- Os Zumbis de Sangue do Diabo ganharam modelos novos: carne viva vermelha, sem olhos, a cabeça tomada por uma boca cheia de presas e braços longos com garras.
+- Senhor do Sangue agora invoca uma horda: 1, 2 ou 3 zumbis fracos e rápidos, ou 2 fracos e 1 zumbi forte, enorme e quase de quatro, cuja pancada derruba.
+- Na seleção de personagens, os retratos não mostram mais um personagem "fantasma" de outro lutador atrás de cada um.
+
 ## v2.0 — Vitória, celular e correções
 - Tudo o que tinha sumido numa atualização anterior voltou: as conversas antes de cada confronto, as falas de vitória variadas e os nomes atualizados dos personagens.
 - Tela de vitória: os vencedores aparecem onde a luta terminou, de frente para a câmera, com quem venceu no meio, uma pose de vitória própria para cada personagem e o nome embaixo de cada um.

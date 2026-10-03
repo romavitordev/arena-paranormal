@@ -58,13 +58,16 @@ export function renderPortraits(roster, renderer, { w = 300, h = 400, anim: anim
     for (let y = 0; y < h; y++) {
       img.data.set(pixels.subarray((h - 1 - y) * w * 4, (h - y) * w * 4), y * w * 4);
     }
+    // o canvas é reaproveitado entre personagens: limpar antes, senão o fundo (semitransparente embaixo) deixava o
+    // retrato anterior aparecer como um "fantasma" atrás do personagem
+    ctx.clearRect(0, 0, w, h);
     if (background) {
       const grd = ctx.createLinearGradient(0, 0, 0, h);
       grd.addColorStop(0, '#1c1428');
       grd.addColorStop(1, def.color + '55');
       ctx.fillStyle = grd;
       ctx.fillRect(0, 0, w, h);
-    } else ctx.clearRect(0, 0, w, h);
+    }
     const tmp = document.createElement('canvas');
     tmp.width = w;
     tmp.height = h;

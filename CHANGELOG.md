@@ -1,5 +1,16 @@
 # Changelog
 
+## v2.1 — 2026-10-03
+
+### Alterado
+- A Marionete (Dante) refeita no Blender e com IA nova: anda aos trancos, atravessa obstáculos, Reflexos Perfeitos e
+  Ironia do Destino (agarra, arrasta e repassa 50% do dano que leva).
+- Zumbis de Sangue (Diabo) refeitos: fraco e forte; Senhor do Sangue invoca 1–3 fracos ou 2 fracos + 1 forte.
+
+### Corrigido
+- Retratos da seleção com um personagem "fantasma" atrás (canvas não era limpo).
+- Recursão sem fim ao montar o contorno dos modelos de invocação.
+
 ## v2.0 — 2026-10-03
 
 ### Corrigido

@@ -15,10 +15,11 @@ if (!existsSync(BLENDER)) {
 }
 
 const jobs = readdirSync(here)
-  .filter((f) => /^(char|arena)_.+\.py$/.test(f) && f !== 'arena_lib.py') // arena_lib.py é biblioteca, não cenário
+  .filter((f) => /^(char|arena|npc)_.+\.py$/.test(f) && !f.endsWith('_lib.py')) // arena_lib.py e npc_lib.py são bibliotecas
   .map((f) => {
     const [kind, id] = f.replace('.py', '').split(/_(.+)/);
-    const dir = kind === 'char' ? 'models' : 'arenas';
+    // npc_*: invocações em peças rígidas (Marionete, Zumbi de Sangue) — sem esqueleto, em public/npcs
+    const dir = kind === 'char' ? 'models' : kind === 'npc' ? 'npcs' : 'arenas';
     return { file: f, id, out: join(root, 'public', dir, `${id}.glb`) };
   });
 
