@@ -7,6 +7,7 @@ import { CLIPS } from '../src/anim/clips.js';
 import { GAMEPAD_LAYOUT } from '../src/config/controls.js';
 import { ELEMENTS } from '../src/config/elements.js';
 import * as ARENA_CFGS from '../src/arena/configs.js';
+import { INTRO_DIALOGUES, VICTORY_LINES, introLines, victoryLine } from '../src/config/dialogues.js';
 
 let fails = 0;
 const ok = (cond, msg) => {
@@ -18,10 +19,55 @@ const allStrikes = (c) => [...c.melee.strikes, ...['forward', 'back', 'side', 'a
 
 // ---------------- base preservada ----------------
 const ids = ROSTER.map((c) => c.id);
-ok(['cineraria', 'abutre', 'mascarado', 'vampira', 'dante', 'erin', 'injustica', 'desconjurado', 'aguiar', 'labirinto', 'xande', 'lirio'].every((i) => ids.includes(i)), `elenco com os 12 personagens (${ids.join(', ')})`);
+ok(['kaiser', 'arthur', 'joui', 'aghata', 'dante', 'erin', 'gal_sal', 'kian', 'aguiar', 'labirinto', 'xande', 'lirio'].every((i) => ids.includes(i)), `elenco com os 12 personagens (${ids.join(', ')})`);
+let validIntroPairs = 0;
+let validVictoryPairs = 0;
+let validIntroScenes = true;
+let validVictoryLines = true;
+for (const winner of ids) {
+  if (Object.keys(INTRO_DIALOGUES[winner] || {}).length !== ids.length - 1) validIntroScenes = false;
+  if (Object.keys(VICTORY_LINES[winner] || {}).length !== ids.length - 1) validVictoryLines = false;
+  for (const opponent of ids) {
+    if (winner === opponent) continue;
+    const scenes = INTRO_DIALOGUES[winner]?.[opponent];
+    if (Array.isArray(scenes) && scenes.length === 2
+      && scenes[0].starter === scenes[1].response
+      && scenes[1].starter === scenes[0].response
+      && scenes[0].starter !== scenes[1].starter
+      && scenes.every((scene) => typeof scene.line === 'string' && scene.line.trim()
+        && typeof scene.responseLine === 'string' && scene.responseLine.trim()
+        && !/\b(ganh\w*|perd\w*|venc\w*|vit[oó]ria|derrota)\b/i.test(`${scene.line} ${scene.responseLine}`))) {
+      validIntroPairs++;
+    } else validIntroScenes = false;
+    const lines = VICTORY_LINES[winner]?.[opponent];
+    if (Array.isArray(lines) && lines.length === 2 && lines.every((line) => typeof line === 'string' && line.trim())) {
+      validVictoryPairs++;
+    } else validVictoryLines = false;
+  }
+}
+const sampleIntro = introLines('kaiser', 'erin');
+const sampleVictory = victoryLine('kaiser', 'erin');
+let randomSelectionValid = false;
+const originalRandom = Math.random;
+try {
+  Math.random = () => 0;
+  const firstIntro = introLines('kaiser', 'erin');
+  const firstVictory = victoryLine('kaiser', 'erin');
+  Math.random = () => 0.999999;
+  const secondIntro = introLines('kaiser', 'erin');
+  const secondVictory = victoryLine('kaiser', 'erin');
+  randomSelectionValid = firstIntro[0][0] !== secondIntro[0][0]
+    && firstVictory !== secondVictory
+    && VICTORY_LINES.kaiser.erin.includes(firstVictory)
+    && VICTORY_LINES.kaiser.erin.includes(secondVictory);
+} finally {
+  Math.random = originalRandom;
+}
+ok(validIntroScenes && validIntroPairs === 210 && sampleIntro.length === 2 && randomSelectionValid, 'introduções: 210 confrontos, duas cenas alternadas e aleatórias, sem falas de resultado');
+ok(validVictoryLines && validVictoryPairs === 210 && VICTORY_LINES.kaiser.erin.includes(sampleVictory) && randomSelectionValid, 'vitórias: 210 confrontos com duas falas selecionáveis aleatoriamente');
 ok(ROSTER.map((c) => c.name).join() === 'KAISER,ARTHUR CERVERO,JOUI JOUKI,AGHATA,DANTE,ERIN PARKER,GAL SAL,KIAN,AGUIAR,LABIRINTO,XANDE,LÍRIO,FERREIRO,JUAN,KEMI', 'nomes: Kaiser, Arthur Cervero, Joui Jouki, Aghata, Dante, Erin Parker, Gal Sal, Kian, Aguiar, Labirinto, Xande, Lírio, Ferreiro, Juan, Kemi');
 const banners = Object.fromEntries(ROSTER.map((c) => [c.id, c.special.banner]));
-ok(banners.injustica === 'Injustiça né?' && banners.cineraria === 'Cinerária!' && banners.mascarado === 'Shi no Kage!' && banners.vampira === 'Descarnar!' && banners.abutre === 'Arma de Sangue!' && banners.desconjurado === 'Inexistir', 'textos dos especiais na tela');
+ok(banners.gal_sal === 'Injustiça né?' && banners.kaiser === 'Cinerária!' && banners.joui === 'Shi no Kage!' && banners.aghata === 'Descarnar!' && banners.arthur === 'Arma de Sangue!' && banners.kian === 'Inexistir', 'textos dos especiais na tela');
 ok(COMBAT.maxHealth === 1000 && COMBAT.maxEnergy === 100, 'vida 1000 e energia 100');
 ok(COMBAT.startEnergy === 30 && COMBAT.energyRegen === 2.5 && COMBAT.chargeRate === 32, 'energia: início 30, regen 2,5/s, carga 32/s');
 
@@ -29,7 +75,7 @@ ok(COMBAT.startEnergy === 30 && COMBAT.energyRegen === 2.5 && COMBAT.chargeRate 
 ok(GAMEPAD_LAYOUT.block[0] === 7, 'defesa no RT / R2');
 ok(!GAMEPAD_LAYOUT.mod && GAMEPAD_LAYOUT.assist1[0] === 4 && GAMEPAD_LAYOUT.assist2[0] === 5, 'assistências no L1/LB e R1/RB (sem botão modificador)');
 ok(COMBAT.dodge.charges === 4 && COMBAT.dodge.damagePerCharge > 0, 'barra com 4 esquivas que recupera tomando dano');
-ok(ROSTER.find((c) => c.id === 'abutre').abilities[0].color === 0x3aff6a, 'Rebirth verde');
+ok(ROSTER.find((c) => c.id === 'arthur').abilities[0].color === 0x3aff6a, 'Rebirth verde');
 ok(!GAMEPAD_LAYOUT.lock, 'sem botão de travar câmera');
 ok(GAMEPAD_LAYOUT.dodge[0] === 6, 'esquiva no LT / L2 (separada da defesa)');
 
@@ -51,8 +97,8 @@ ok(dmg.every((d) => d === 250), `especiais ofensivos com 250 de dano (${dmg.join
 ok(dmg.every((d) => d < COMBAT.maxHealth), 'especiais comuns não são hitkill (o Inexistir é a exceção pedida, com regras próprias)');
 ok(ROSTER.every((c) => (c.special.energyCost ?? COMBAT.specialEnergyCost) === 50), 'todos os especiais custam 50 de energia');
 
-// ---------------- Cineraria ----------------
-const cin = get('cineraria');
+// ---------------- Kaiser ----------------
+const cin = get('kaiser');
 ok(cin.ranged.name === 'M4' && cin.ranged.count === 4 && cin.ranged.damage === 16 && cin.ranged.cooldown === 2.6, 'M4 mantida: rajada de 4 × 16, cooldown 2,6 s');
 ok(['forward', 'back', 'side'].every((k) => cin.ranged.variants[k]), 'M4 com variações por direção');
 const varMax = Math.max(...Object.values(cin.ranged.variants).map((v) => v.damage * (v.count ?? cin.ranged.count)));
@@ -60,11 +106,11 @@ ok(varMax <= 64, `variações da M4 não aumentam o dano da rajada (máx ${varMa
 ok(cin.special.type === 'mistField' && cin.special.evasion && cin.special.area && cin.special.opacity < 1, 'Cinerária é névoa: dano + evasão + área + leitura visual difícil');
 ok(cin.special.damageBonus < 1.5, `Cinerária não é mais só ×1,5 (bônus ${cin.special.damageBonus})`);
 
-// ---------------- Abutre ----------------
-const abu = get('abutre');
+// ---------------- Arthur ----------------
+const abu = get('arthur');
 const twoArm = ['jab', 'hook_l', 'dual_r', 'dual_l', 'dual_alt', 'dual_cross', 'dual_both', 'dual_spin', 'shove', 'block', 'shoot_rifle', 'charge'];
-ok(abu.oneArm && allStrikes(abu).every((s) => !twoArm.includes(s.anim)) && !twoArm.includes(abu.anims.block), 'Abutre: nenhum golpe/defesa usa um segundo braço');
-ok(abu.ranged.name === 'Sniper' && abu.ranged.damage === 110, 'Abutre: sniper mantida (110)');
+ok(abu.oneArm && allStrikes(abu).every((s) => !twoArm.includes(s.anim)) && !twoArm.includes(abu.anims.block), 'Arthur: nenhum golpe/defesa usa um segundo braço');
+ok(abu.ranged.name === 'Sniper' && abu.ranged.damage === 110, 'Arthur: sniper mantida (110)');
 const reb = abu.abilities.find((a) => a.id === 'rebirth');
 ok(reb && reb.input === 'carga+ranged' && reb.type === 'weaponState' && reb.shots > 0 && reb.bonusDamage > 0, 'Rebirth: △+□, estado temporário da arma com tiros fortalecidos');
 ok(abu.special.name === 'Arma de Sangue', 'Arthur: especial ARMA DE SANGUE (nome correto)');
@@ -73,26 +119,26 @@ const legOnly = ['kick_low', 'kick_round', 'kick_front', 'spin_kick', 'knee', 's
 ok(allStrikes(abu).every((s) => legOnly.includes(s.anim)), 'Arthur: golpes físicos só com chutes/joelhadas (não bate com o braço que não tem)');
 ok(abu.anims.grab === 'grab_onearm', 'Arthur: agarrão com um braço só');
 
-// ---------------- Mascarado ----------------
-const mas = get('mascarado');
-ok(mas.melee.strikes.every((s) => s.anim.startsWith('slash')), 'Mascarado: sequência só com a katana');
-ok(mas.melee.back.counter, 'Mascarado: contra-ataque');
+// ---------------- Joui ----------------
+const mas = get('joui');
+ok(mas.melee.strikes.every((s) => s.anim.startsWith('slash')), 'Joui: sequência só com a katana');
+ok(mas.melee.back.counter, 'Joui: contra-ataque');
 ok(mas.abilities.some((a) => a.type === 'teleportBehind' && a.input === 'carga+jump' && a.cooldown > 0), 'Teleporte das Sombras: Energia + Pulo, com cooldown');
 const gaze = mas.abilities.find((a) => a.type === 'fearGaze');
 ok(gaze && gaze.stun <= 1 && gaze.cooldown >= 10, `Olhar do Desespero: atordoamento breve (${gaze && gaze.stun}s) e cooldown`);
-ok(mas.ranged.visual === 'shadow', 'Mascarado: □ é uma extensão de sombra');
-ok(mas.special.type === 'teleportStrike', 'Mascarado: Corte Silencioso mantido');
+ok(mas.ranged.visual === 'shadow', 'Joui: □ é uma extensão de sombra');
+ok(mas.special.type === 'teleportStrike', 'Joui: Corte Silencioso mantido');
 
-// ---------------- Vampira ----------------
-const vam = get('vampira');
-ok(allStrikes(vam).every((s) => s.trail || s.anim === 'thrust'), 'Vampira: físico só com a faca');
+// ---------------- Aghata ----------------
+const vam = get('aghata');
+ok(allStrikes(vam).every((s) => s.trail || s.anim === 'thrust'), 'Aghata: físico só com a faca');
 ok(!vam.abilities.some((a) => a.name === 'Descarnar'), 'Aghata: Descarnar não aparece repetido (só no especial)');
 ok(vam.abilities.some((a) => a.type === 'curseWeapon' && a.bleed), 'Aghata: Amaldiçoar Arma (Sangue) com sangramento');
-ok(vam.special.name === 'Descarnar' && vam.special.type === 'ritual', 'Vampira: especial DESCARNAR');
+ok(vam.special.name === 'Descarnar' && vam.special.type === 'ritual', 'Aghata: especial DESCARNAR');
 ok(!JSON.stringify(vam).includes('Dança Carmesim'), 'Dança Carmesim removida');
 
 // ---------------- Injustiça ----------------
-const inj = get('injustica');
+const inj = get('gal_sal');
 ok(allStrikes(inj).every((s) => s.heal < s.damage), 'Injustiça: Y < X em todos os golpes físicos');
 const ex = computeDrain({ X: 100, Y: 60, dealt: 100, energyRatio: 1.5 });
 ok(ex.heal === 60 && ex.energyRemoved === 90, `exemplo do documento: X=100, Y=60 → +${ex.heal} vida, −${ex.energyRemoved} energia`);
@@ -105,36 +151,36 @@ ok(allStrikes(inj).some((s) => s.chain), 'Injustiça: correntes aparecem nos gol
 ok(inj.defense && inj.defense.perfectBlock && inj.defense.perfectBlock.window <= 0.2, 'Injustiça: Bloqueio Perfeito com janela curta');
 ok(inj.special.approach === 'chain' && inj.special.applyMeleePassives === false, 'Sentença com corrente; não aplica X/Y por padrão');
 
-// ---------------- Desconjurado ----------------
-const des = get('desconjurado');
+// ---------------- Kian ----------------
+const des = get('kian');
 const fistAnims = ['jab', 'cross', 'hook_l', 'hook_r', 'uppercut', 'heavy_punch', 'wave_punch', 'body_blow', 'dash_punch', 'shove', 'meteor_punch', 'flurry'];
-ok(des.unarmed && allStrikes(des).every((s) => fistAnims.includes(s.anim) && !s.trail), 'Desconjurado: físico só com punhos');
+ok(des.unarmed && allStrikes(des).every((s) => fistAnims.includes(s.anim) && !s.trail), 'Kian: físico só com punhos');
 ok(des.special.type === 'erase' && des.special.usesPerMatch === 1 && des.special.unblockable && des.special.resistDamage > 0, 'Kian: especial Inexistir (1x por partida, indefensável, resiste com sanidade cheia)');
 ok(des.special.bonusUseOnTranscend === 1, 'Kian: Transcender libera mais um Inexistir');
 ok(des.abilities.some((a) => a.type === 'transcend'), 'Kian: Transcendência');
-ok(des.abilities.some((a) => a.type === 'blink' && a.cooldown > 0), 'Desconjurado: Teletransporte com cooldown');
+ok(des.abilities.some((a) => a.type === 'blink' && a.cooldown > 0), 'Kian: Teletransporte com cooldown');
 const fb = des.abilities.find((a) => a.type === 'fearBlade');
 ok(fb && fb.cooldown >= 20, `Lâmina do Medo: manifestação temporária com cooldown alto (${fb && fb.cooldown}s)`);
 ok(des.dodge.style !== 'inexistir', 'Inexistir não é mais esquiva');
 
 // ---------------- Origem e elemento ----------------
 ok(ROSTER.every((c) => c.origin && ELEMENTS[c.element]), 'todos com origem e elemento válidos');
-ok(get('mascarado').origin === 'Ordo Realitas' && get('mascarado').element === 'conhecimento', 'Joui Jouki: Ordo Realitas (Conhecimento)');
+ok(get('joui').origin === 'Ordo Realitas' && get('joui').element === 'conhecimento', 'Joui Jouki: Ordo Realitas (Conhecimento)');
 
 // ---------------- Cânone e mecânicas (TODO 2026-10-01) ----------------
 const pas = (id, t) => (get(id).passives || []).some((p) => p.type === t);
 const abil = (id, t) => (get(id).abilities || []).some((a) => a.type === t);
-ok(pas('desconjurado', 'precognition') && abil('desconjurado', 'rejectMist'), 'Kian: Precognição + Rejeitar Névoa');
-ok(get('desconjurado').melee.strikes.reduce((n, s) => n + s.damage, 0) <= 215, 'Kian: combo reduzido (≤ 215)');
-ok(get('desconjurado').abilities.find((a) => a.type === 'transcend').endDrain > 0, 'Kian: Transcendência cobra sanidade');
-ok(pas('cineraria', 'resistant') && abil('cineraria', 'flowerRain') && get('cineraria').special.area === 5, 'Kaiser: Resistente, Acácia, Cinerária em 5 m');
+ok(pas('kian', 'precognition') && abil('kian', 'rejectMist'), 'Kian: Precognição + Rejeitar Névoa');
+ok(get('kian').melee.strikes.reduce((n, s) => n + s.damage, 0) <= 215, 'Kian: combo reduzido (≤ 215)');
+ok(get('kian').abilities.find((a) => a.type === 'transcend').endDrain > 0, 'Kian: Transcendência cobra sanidade');
+ok(pas('kaiser', 'resistant') && abil('kaiser', 'flowerRain') && get('kaiser').special.area === 5, 'Kaiser: Resistente, Acácia, Cinerária em 5 m');
 // RB + LT (mod+dodge): todo personagem tem um golpe nesse comando
 ok(ROSTER.every((c) => (c.abilities || []).some((a) => a.input === 'carga+dodge')), 'todos têm habilidade em △ + L2 (Y + LT)');
-ok(abil('cineraria', 'rootTrap') && abil('cineraria', 'cursedShots') && pas('cineraria', 'elementalAffinity') && get('cineraria').special.flowerStorm, 'Kaiser: Dendrobium, Balas Amaldiçoadas, Afinidade Elemental e Cinerária com tempestade de Acácia');
-ok(abil('abutre', 'hatredTemple') && abil('abutre', 'bloodParalysis'), 'Arthur: Templo do Ódio + Dystopia');
-ok(pas('mascarado', 'decepar') && get('mascarado').melee.strikes.slice(0, -1).every((s) => s.range <= 2.2), 'Joui: Decepar, sequência com alcance ≤ 2,2 m');
-ok(pas('vampira', 'bloodNecklace'), 'Agatha: Colar Banhado em Sangue');
-ok(pas('injustica', 'bulletDodge') && abil('injustica', 'sparkTeleport'), 'Gal: Desviar de Balas + Teletransporte');
+ok(abil('kaiser', 'rootTrap') && abil('kaiser', 'cursedShots') && pas('kaiser', 'elementalAffinity') && get('kaiser').special.flowerStorm, 'Kaiser: Dendrobium, Balas Amaldiçoadas, Afinidade Elemental e Cinerária com tempestade de Acácia');
+ok(abil('arthur', 'hatredTemple') && abil('arthur', 'bloodParalysis'), 'Arthur: Templo do Ódio + Dystopia');
+ok(pas('joui', 'decepar') && get('joui').melee.strikes.slice(0, -1).every((s) => s.range <= 2.2), 'Joui: Decepar, sequência com alcance ≤ 2,2 m');
+ok(pas('aghata', 'bloodNecklace'), 'Agatha: Colar Banhado em Sangue');
+ok(pas('gal_sal', 'bulletDodge') && abil('gal_sal', 'sparkTeleport'), 'Gal: Desviar de Balas + Teletransporte');
 const mods = (c) => (c.abilities || []).filter((a) => a.input.startsWith('block+') || a.input.startsWith('carga+')).map((a) => a.input);
 ok(ROSTER.every((c) => new Set(mods(c)).size === mods(c).length), 'nenhum R1 + botão repetido no mesmo personagem');
 ok(COMBAT.comboScaling[0] === 1 && COMBAT.comboScaling.at(-1) >= 0.5 && COMBAT.substitution && COMBAT.grabTech && COMBAT.awaken, 'escala de combo, substituição, escape do agarrão e Transcender configurados');
@@ -175,7 +221,7 @@ ok(eri && pas('erin', 'electricAmulet') && eri.special.type === 'supernova', 'Er
 ok(agu && agu.origin === 'Mascarados' && agu.element === 'sangue', 'Aguiar: Mascarados (Sangue)');
 ok(agu && agu.melee.name.includes('Machado') && agu.melee.strikes.at(-1).bleed, 'Aguiar: machado do Mutilador (o finalizador faz sangrar)');
 ok(agu && ['maskForm', 'bearTrap', 'predatorScent', 'huntingDog'].every((t) => agu.abilities.some((a) => a.type === t)), 'Aguiar: Máscara do Mutilador, Armadilha de Urso, Predador de Sangue e Cães de Caça');
-ok(agu && agu.abilities.find((a) => a.type === 'maskForm').noBlock, 'Aguiar: mascarado não consegue defender (intenção assassina)');
+ok(agu && agu.abilities.find((a) => a.type === 'maskForm').noBlock, 'Aguiar: forma de máscara não consegue defender (intenção assassina)');
 ok(agu && pas('aguiar', 'sonOfPain'), 'Aguiar: Filho da Dor');
 const lab = get('labirinto');
 const xan = get('xande');

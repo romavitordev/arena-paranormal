@@ -1,6 +1,6 @@
 // Teste de pose (V4 — etapa 15): renderiza cada personagem nas 9 poses extremas para achar deformação
 // (ombro, cotovelo, punho, quadril, joelho, tornozelo) e roupa atravessando o corpo.
-// Uso no console: const t = await import('/src/dev/poseTest.js'); t.poseSheet(['injustica', 'aguiar']);
+// Uso no console: const t = await import('/src/dev/poseTest.js'); t.poseSheet(['gal_sal', 'aguiar']);
 import { renderPortraits } from '../ui/portraits.js';
 import { ROSTER } from '../characters/index.js';
 

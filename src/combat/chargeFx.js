@@ -17,14 +17,14 @@ export const CHARGE_STYLES = {
       c.smoke && w.fx.emitter({ rate: 25, follow: () => tmp.set(f.pos.x, f.pos.y + 0.6, f.pos.z).clone(), particle: { color: c.smoke, speed: 1.2, up: 1, spread: 0.6, life: 0.9, size: 0.8, kind: 'smoke', grow: 1.2 } }),
     ];
   },
-  // Cineraria: fumaça roxa
+  // Kaiser: fumaça roxa
   smoke(f, w, c) {
     return [
       ...CHARGE_STYLES.aura(f, w, c),
       w.fx.emitter({ rate: 30, follow: () => tmp.set(f.pos.x, f.pos.y + 0.9, f.pos.z).clone(), particle: { color: 0x5a2a8a, speed: 1.4, up: 1, spread: 0.7, life: 1.0, size: 0.9, kind: 'smoke', grow: 1.5 } }),
     ];
   },
-  // Abutre: energia vermelha no antebraço
+  // Arthur: energia vermelha no antebraço
   forearm(f, w, c) {
     const p = socketPos(f.rig, 'eR');
     return [
@@ -32,7 +32,7 @@ export const CHARGE_STYLES = {
       w.fx.emitter({ rate: 70, follow: p, particle: { color: c.color, speed: 1.5, spread: 0.6, life: 0.4, size: 0.25, jitter: 0.2 } }),
     ];
   },
-  // Vampira: névoa de sangue e gotas subindo
+  // Aghata: névoa de sangue e gotas subindo
   blood(f, w, c) {
     return [
       w.fx.emitter({ rate: 50, follow: () => tmp.set(f.pos.x + (Math.random() - 0.5) * 1.6, f.pos.y + 0.05, f.pos.z + (Math.random() - 0.5) * 1.6).clone(), particle: { color: c.color, speed: 2.5, up: 1.6, spread: 0.1, life: 0.8, size: 0.2 } }),
@@ -48,7 +48,7 @@ export const CHARGE_STYLES = {
       w.fx.emitter({ rate: 25, follow: () => tmp.set(f.pos.x, f.pos.y + 0.1, f.pos.z).clone(), particle: { color: 0x6a5020, speed: 2, up: 1, spread: 0.6, life: 0.6, size: 0.3 } }),
     ];
   },
-  // Desconjurado: energia sobrenatural nas mãos e braços
+  // Kian: energia sobrenatural nas mãos e braços
   fists(f, w, c) {
     const pts = ['handL', 'handR', 'eL', 'eR'].map((n) => socketPos(f.rig, n));
     return [

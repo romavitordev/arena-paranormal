@@ -6,7 +6,7 @@ import { ARENAS, ARENA_ORDER } from '../arena/index.js';
 import { actionLabel, moveLabel } from './labels.js';
 import { COMBAT } from '../config/combat.js';
 import { moveListHTML } from './moves.js';
-import { VERSION, CHANGELOG, formatVersion } from '../config/version.js';
+import { VERSION, VERSION_LABEL, CHANGELOG, formatVersion } from '../config/version.js';
 
 // Telas fora da luta. Todas recebem as entradas normalizadas dos dois jogadores.
 // Fluxo: Título → Menu principal (P1 VS P2 / P1 VS CPU / Opções) → Personagens →
@@ -49,7 +49,7 @@ const HOME_OPTIONS = [
   { id: 'lan', label: 'ONLINE / LAN', desc: 'Contra outra pessoa em outro computador: crie uma sala (pública ou privada, com senha se quiser), veja as salas abertas ou entre com um código.' },
   { id: 'tutorial', label: 'TUTORIAL', desc: 'Escolha um personagem e aprenda, passo a passo, todos os golpes dele.' },
   { id: 'training', label: 'TREINAMENTO', desc: 'Pratique combos num alvo parado. A vida dele se recupera.' },
-  { id: 'news', label: 'NOVIDADES', desc: `O que mudou na versão v${formatVersion(VERSION)}.` },
+  { id: 'news', label: 'NOVIDADES', desc: `O que mudou na versão ${VERSION_LABEL}.` },
   { id: 'options', label: 'OPÇÕES', desc: 'Tempo da luta e modo de movimento.' },
 ];
 
@@ -95,7 +95,7 @@ export class HomeScreen {
         <div class="hlist"></div>
         <div class="hdesc"></div>
       </div>
-      <div class="ver">v${formatVersion(VERSION)}</div>
+      <div class="ver">${VERSION_LABEL}</div>
       <div class="foot"><span><b>${OK}</b> confirmar · <b>${BACK}</b> voltar</span><span>Teclado: P1 WASD + losango I J K L · P2 setas + numérico 8 4 6 2</span></div>`);
     this.desc = this.el.querySelector('.hdesc');
     this.listEl = this.el.querySelector('.hlist');
@@ -925,9 +925,8 @@ export class ChangelogScreen {
   }
   render() {
     const c = CHANGELOG[this.page];
-    const version = formatVersion(c.v);
-    this.verEl.textContent = `v${version}${c.v === VERSION ? ' · ATUAL' : ''} — ${this.page + 1} / ${CHANGELOG.length}`;
-    this.content.innerHTML = `<div class="news-title">v${version} — ${c.title}</div><div class="news-date">${c.date.split('-').reverse().join('/')}</div><ul>${c.items.map((i) => `<li>${i}</li>`).join('')}</ul>`;
+    this.verEl.textContent = `${formatVersion(c.v)}${c.v === VERSION ? ' · ATUAL' : ''} — ${this.page + 1} / ${CHANGELOG.length}`;
+    this.content.innerHTML = `<div class="news-title">${formatVersion(c.v)} — ${c.title}</div><div class="news-date">${c.date.split('-').reverse().join('/')}</div><ul>${c.items.map((i) => `<li>${i}</li>`).join('')}</ul>`;
   }
   update(input) {
     if (this.clicked) { this.clicked = false; return 'back'; }
@@ -995,7 +994,7 @@ export function controlsTable() {
       <tr><td>Defesa + andar</td><td colspan="3">Anda mais rápido, mas fica aberto a golpes</td></tr>
       ${row('Assistência 1 / 2 (equipe)', 'assist1')}
       <tr><td>Dash</td><td colspan="3">Pulo + Pulo (toque duplo)</td></tr>
-      <tr><td>Dash longo (Mascarado: teleporte)</td><td colspan="3">Carga + Pulo</td></tr>
+      <tr><td>Dash longo (Joui: teleporte)</td><td colspan="3">Carga + Pulo</td></tr>
       <tr><td>Agarrão (não defensável)</td><td colspan="3">Defesa + Ataque físico</td></tr>
       <tr><td>Habilidades</td><td colspan="3">Carga + Físico · Carga + Principal · Carga + Esquiva · Defesa + Carga · Defesa + Pulo</td></tr>
       <tr><td>Especial</td><td colspan="3">Carga → Carga → Ataque físico</td></tr>

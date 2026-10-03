@@ -43,7 +43,7 @@ export function applyHit(world, attacker, victim, o) {
   if (!o.ignoreInvuln && victim.isInvulnerable()) return 0;
 
 
-  // Postura de contra-ataque (ex.: Mascarado): anula o golpe físico e revida
+  // Postura de contra-ataque (ex.: Joui): anula o golpe físico e revida
   if (o.kind === 'melee' && victim.state === 'attack' && victim.combo.strike && victim.combo.strike.counter && !victim.combo.counterUsed) {
     const w = victim.combo.strike.counter.window;
     if (victim.stateTime >= w[0] && victim.stateTime <= w[1]) {

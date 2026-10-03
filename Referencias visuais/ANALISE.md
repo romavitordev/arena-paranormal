@@ -7,9 +7,9 @@ Feita em 2026-09-30 sobre as 36 imagens desta pasta. Nenhuma alteração no jogo
   (cel shading), muito preto e **luz de contorno (rim light) na cor do poder** de cada um.
   O sombreamento toon + contorno que o jogo já usa é a base certa; falta a luz de contorno colorida
   e texturas pintadas à mão.
-- Cada personagem tem uma cor de poder bem definida nas artes: Cineraria roxo/magenta,
-  Abutre vermelho-sangue, Mascarado preto + vermelho, Vampira vermelho, Injustiça dourado + preto,
-  Desconjurado dourado/branco-quente luminoso.
+- Cada personagem tem uma cor de poder bem definida nas artes: Kaiser roxo/magenta,
+  Arthur vermelho-sangue, Joui preto + vermelho, Aghata vermelho, Injustiça dourado + preto,
+  Kian dourado/branco-quente luminoso.
 - Algumas artes têm marca d'água de artistas e do Ordem Paranormal. Servem só como referência; os
   modelos serão feitos do zero.
 
@@ -70,7 +70,7 @@ Feita em 2026-09-30 sobre as 36 imagens desta pasta. Nenhuma alteração no jogo
 
 ## PERSONAGENS
 
-### CINERARIA (4 imagens)
+### KAISER (4 imagens)
 - Cabelo preto bagunçado com franja caindo sobre o lado queimado.
 - **Queimadura no lado ESQUERDO do rosto** (lado direito de quem olha): testa, olho, bochecha e pescoço,
   com textura de pele derretida/rachada e contornos escuros. ⚠ O modelo atual tem a queimadura do lado
@@ -83,7 +83,7 @@ Feita em 2026-09-30 sobre as 36 imagens desta pasta. Nenhuma alteração no jogo
   roxa deve escurecer.
 - A M4 não aparece em nenhuma referência.
 
-### ABUTRE (6 imagens)
+### ARTHUR (6 imagens)
 - Cabelo castanho com **mecha branca/grisalha**, preso em coque ou rabo; barba grisalha com bigode
   castanho; **cicatriz diagonal** da testa, cruzando o olho e o nariz.
 - **Olhos de cores diferentes (heterocromia):** um castanho, um verde (na arte de raiva, o verde brilha).
@@ -98,7 +98,7 @@ Feita em 2026-09-30 sobre as 36 imagens desta pasta. Nenhuma alteração no jogo
 - ⚠ **Braços:** nas artes aparecem as duas mangas cheias. Na arte de corpo inteiro e na da garra, um dos
   braços parece segmentado, como uma **prótese** ou manga presa. A garra parece sair dessa região.
 
-### MASCARADO (5 imagens)
+### JOUI JOUKI (5 imagens)
 - Cabelo preto liso com franja, **cicatriz em X** na bochecha, barba rala.
 - **Máscara escura (preta/grafite) estilo oni/kitsune com marcas vermelhas** sobre os olhos e olhos brancos
   brilhando quando está colocada. Fora da luta, fica **puxada para o lado da cabeça**, presa numa faixa.
@@ -113,7 +113,7 @@ Feita em 2026-09-30 sobre as 36 imagens desta pasta. Nenhuma alteração no jogo
 - A folha de poses é ótima para as animações (base baixa, saques, cortes giratórios, salto, joelho no chão).
 - Uma arte mostra violência gráfica (cabeça decepada); não vou levar isso para o jogo.
 
-### VAMPIRA (2 imagens novas + a da primeira conversa)
+### AGHATA (2 imagens novas + a da primeira conversa)
 - Cabelo preto curto e repicado com **mecha vermelha**, **brinco de pena**, tatuagens no pescoço, colares de
   corrente, **presas e língua de fora** (expressão provocadora).
 - Visual novo: **jaqueta de couro curta cinza-escura** com bolsos de aba vermelha, gola alta vermelha,
@@ -132,7 +132,7 @@ Feita em 2026-09-30 sobre as 36 imagens desta pasta. Nenhuma alteração no jogo
 - **Lâminas curvas longas** com empunhadura de **aro dourado**, sujas de sangue.
 - Correntes vermelhas penduradas ao fundo: reforçam o tema das correntes que entrou na V2.
 
-### DESCONJURADO (4 imagens)
+### KIAN (4 imagens)
 - Pele negra, barba cheia, **olhos âmbar/dourados** (brilham no especial).
 - **Sigilo luminoso na testa** com uma linha descendo do olho pela bochecha; do outro lado do rosto,
   **três riscos pretos** como marca de garra.
@@ -147,13 +147,13 @@ Feita em 2026-09-30 sobre as 36 imagens desta pasta. Nenhuma alteração no jogo
 ---
 
 ## Dúvidas para decidir antes do update
-1. **Abutre:** o outro braço é uma prótese, uma manga vazia ou a Garra de Sangue que forma o braço que falta?
-2. **Abutre:** manter a sniper no case de violão como arma principal ou trazer o revólver (ex.: como variação ou habilidade)?
-3. **Desconjurado:** black power ou cabelo curto?
-4. **Mascarado:** máscara no rosto durante a luta e puxada para o lado nas cinematics/vitória?
-5. **Vampira:** jaqueta de couro (nova) ou colete com capuz (primeira referência)?
-6. **Cineraria:** usar o cigarro como gatilho da Cinerária (ela acende → fumaça)?
-7. **Cores:** Desconjurado em dourado-branco luminoso e Injustiça em dourado-metal + vermelho das correntes, para não confundir?
+1. **Arthur:** o outro braço é uma prótese, uma manga vazia ou a Garra de Sangue que forma o braço que falta?
+2. **Arthur:** manter a sniper no case de violão como arma principal ou trazer o revólver (ex.: como variação ou habilidade)?
+3. **Kian:** black power ou cabelo curto?
+4. **Joui:** máscara no rosto durante a luta e puxada para o lado nas cinematics/vitória?
+5. **Aghata:** jaqueta de couro (nova) ou colete com capuz (primeira referência)?
+6. **Kaiser:** usar o cigarro como gatilho da Cinerária (ela acende → fumaça)?
+7. **Cores:** Kian em dourado-branco luminoso e Injustiça em dourado-metal + vermelho das correntes, para não confundir?
 8. **Orfanato:** confirmar o nome (Santa Mega-Freira × "Menefreda" dos arquivos) e se é dia nublado ou entardecer com neblina.
 9. **Bar:** luta só dentro, ou dentro + varanda/esquina?
 10. **Coliseu:** em ruínas ou intacto? Com plateia? Dia ensolarado ou entardecer?

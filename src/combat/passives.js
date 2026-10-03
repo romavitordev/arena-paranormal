@@ -21,7 +21,7 @@ export function computeDrain({ X, Y, dealt, energyRatio = 1.5 }) {
 export const hasPassive = (f, type) => !!(f && f.def && (f.def.passives || []).some((p) => p.type === type));
 
 export const PASSIVES = {
-  // Mascarado: golpes vindos pelas costas do inimigo causam mais dano
+  // Joui: golpes vindos pelas costas do inimigo causam mais dano
   backstab: {
     damageMod({ attacker, victim, kind, passive }) {
       if (kind === 'special' || !(passive.kinds || ['melee']).includes(kind)) return 1;

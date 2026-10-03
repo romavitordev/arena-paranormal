@@ -1,6 +1,6 @@
 // Ferramentas de teste usadas no console do navegador (não fazem parte do jogo).
 //   const { T } = await import('/src/dev/testkit.js');
-//   const [m, a, b] = T.setup('mascarado', 'injustica', 1.5);
+//   const [m, a, b] = T.setup('joui', 'gal_sal', 1.5);
 export const T = {
   set(pi, held = {}, move = [0, 0]) {
     window.__game.input.players[pi].setVirtual({ moveX: move[0], moveY: move[1], held });

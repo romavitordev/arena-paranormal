@@ -10,7 +10,7 @@
 ## 0. Já feito nesta rodada
 
 - ✅ **Kian: Transcender libera mais um Inexistir.** A primeira Transcendência da partida dá +1 uso do especial
-  (máximo de 2 na partida). `special.bonusUseOnTranscend` em `src/characters/desconjurado.js`; o
+  (máximo de 2 na partida). `special.bonusUseOnTranscend` em `src/characters/kian.js`; o
   Fighter soma `specialBonusUses`. Testado no jogo: após o 1º Inexistir, ficou "USADO"; depois de Transcender,
   liberou e o 2º Inexistir funcionou; uma 2ª Transcendência não dá mais usos.
 - ✅ **Origem e elemento** de cada lutador na seleção (sem arma) — §1.1.
@@ -21,7 +21,7 @@
 - ✅ 1.1 elementos com vantagem/desvantagem (+10% / −10%, Medo neutro) e elemento na HUD.
 - ✅ 1.2 "energia" passou a se chamar **sanidade** na HUD, avisos e listas de comandos.
 - ✅ 1.3 Transcendência do Kian cobra sanidade (sem regenerar durante, −15 no fim).
-- ✅ 1.4 falas de introdução por dupla antes do ROUND 1 (`src/config/dialogues.js`, pula com × ou Start).
+- ✅ 1.4 falas originais contextualizadas por dupla e personalidade; entradas caminhando antes do primeiro round, “LUTEM” inicia (×/Start pula). Falas não reproduzem diálogos da obra; confrontos sem encontro canônico evitam inventar passado em comum.
 - ✅ 2.1 Kian: combo 250 → 212 (saiu o "Golpe no corpo"), Precognição, Lâmina do Medo é Medo, Rejeitar Névoa (R1 + ×).
 - ✅ 2.2 Kaiser: Cinerária em 5 m, Resistente (−10% físico), Acácia (R1 + ○).
 - ✅ 2.3 Arthur: Arma de Sangue (R1 + ○, paga 40 de vida) e Paralisia de Sangue "Dystopia" (R1 + △, paga 15 de vida).
@@ -66,6 +66,13 @@
 - ✅ Fase 10: casos extremos (especiais simultâneos, Trinitá + Marionete, fim de round, interrupções, tempo zerando,
   KO no dash, revanche), equipes CPU × CPU, telemetria final.
 - Decisão do usuário: mapeamento de botões atual mantido (não o L1/R2/L2 sugerido no prompt).
+
+### Atualização (2026-10-03)
+- ✅ Tela de vitória aprimorada: cenário atual como fundo, equipe vencedora completa em poses e fala central apenas
+  do personagem ativo no fim da luta.
+- ✅ Apresentação pré-round com entradas caminhando e falas originais; “LUTEM” inicia o combate. ×/Start pula a cena.
+- ✅ Controladores CPU suspensos enquanto o menu de pausa está aberto, sem interferir na navegação.
+- ✅ IDs internos, definições, modelos e assets atualizados para Kian, Arthur, Kaiser, Joui, Aghata e Gal Sal.
 
 ### Rodada V3 + novos lutadores (2026-10-01)
 - ✅ Elementos: vantagem/desvantagem só nos RITUAIS (habilidades e especiais), não em golpes físicos nem no □.
@@ -511,5 +518,6 @@ Precognição ok; elementos só nos rituais; Transcender com o nome do cânone.
 
 ## Fontes
 - Ordem Paranormal Wiki: [Kian](https://ordemparanormal.fandom.com/wiki/Kian) · [Arthur Cervero](https://ordemparanormal.fandom.com/wiki/Arthur_Cervero) · [Joui Jouki](https://ordemparanormal.fandom.com/wiki/Joui_Jouki) · [Kaiser (Cesar Oliveira Cohen)](https://ordemparanormal.fandom.com/wiki/Cesar_Oliveira_Cohen) · [Gal](https://ordemparanormal.fandom.com/wiki/Gal) · [Agatha Volkomenn](https://ordemparanormal.fandom.com/wiki/Agatha_Volkomenn) · [Elementos do Outro Lado](https://ordemparanormal.fandom.com/wiki/Elementos_do_Outro_Lado) · [Ordem da Desconjuração](https://ordemparanormal.fandom.com/wiki/Ordem_da_Desconjura%C3%A7%C3%A3o)
+- Referências de personalidade e relações nas campanhas (falas do jogo são originais, não transcrições): [Kaiser, Arthur e Joui — O Segredo na Floresta, ep. 16](https://www.youtube.com/watch?v=BH-yFQo882w) · [Arthur e Joui — Calamidade, ep. 5](https://www.youtube.com/watch?v=2sxn1WyqMq0&t=554s) · [Joui, Erin, Gal e Dante — Desconjuração, ep. 17](https://www.youtube.com/watch?v=nAqPmCAuWxo&t=14230s) · [Agatha e Arthur — Desconjuração, ep. 16](https://www.youtube.com/watch?v=kqF7svnqhy0&t=1403s) · [Xande e Lírio — Sinais do Outro Lado, ep. 1](https://www.youtube.com/watch?v=k5y48mQTdpE&t=793s) · [Juan e Kian — Calamidade, ep. 12](https://www.youtube.com/watch?v=tdb8jng7qwQ&t=15898s) · [Assassinos — Hexatombe, eps. 1–2](https://www.youtube.com/watch?v=DMzwnM6gwBY&t=329s)
 - Naruto Storm 4: [Push Square — dicas](https://www.pushsquare.com/news/2016/02/guide_naruto_shippuden_ultimate_ninja_storm_4_hints_and_tips_for_a_future_hokage) · [TrueAchievements — dicas gerais](https://www.trueachievements.com/game/Naruto-Shippuden-Ultimate-Ninja-Storm-4/walkthrough/2) · [Player.One — guia de batalha](https://www.player.one/naruto-shippuden-ultimate-ninja-storm-4-battle-guide-secret-techniques-substitution-511035)
 - Jogos de luta: [Glossário (Wiktionary)](https://en.wiktionary.org/wiki/Appendix:Glossary_of_fighting_games) · [Damage Scaling](https://mugen.fandom.com/wiki/Damage_Scaling) · [Dustloop — prevenção de infinitos e mecânicas de combo](https://www.dustloop.com/w/User:Slimegirl-scientist/Infinite_Prevention_and_Combo_Mechanics) · [SuperCombo — dados do SF6](https://wiki.supercombo.gg/w/Street_Fighter_6/Game_Data) · [Guia prático para fazer jogo de luta, parte 7](https://andrea-jens.medium.com/i-wanna-make-a-fighting-game-a-practical-guide-for-beginners-part-7-56f32f706a46)

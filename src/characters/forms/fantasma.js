@@ -52,14 +52,14 @@ export default {
     recovery: 0.44,
     count: 1,
     interval: 0,
-    damage: 125,
+    damage: 100,
     range: 200, // pega em qualquer lugar do mapa
     speed: 95,
     radius: 0.32,
     spread: 0,
     knockback: 4.5,
     hitstun: 0.45,
-    cooldown: 3.0,
+    cooldown: 4.0, // quase certeiro: recarga maior que a da sniper comum
     energyCost: 0,
     visual: 'deathSpiral',
     color: 0xd8d4dc,
@@ -72,7 +72,7 @@ export default {
     sound: 'sniper',
     hitSound: 'heavyPunch',
     impactScale: 1.6,
-    chargeShot: { draw: 0.28, maxAim: 1.1, minDamage: 80, maxDamage: 175, recovery: 0.4 },
+    chargeShot: { draw: 0.28, maxAim: 1.1, minDamage: 60, maxDamage: 140, recovery: 0.4 },
   },
 
   abilities: [

@@ -24,7 +24,7 @@ export class World {
     this.cameraBasis = this.cameraRig.basis;
     this.projectiles = new Projectiles(this);
     this.fighters = [];
-    this.zones = []; // áreas paranormais (ex.: névoa da Cineraria)
+    this.zones = []; // áreas paranormais (ex.: névoa da Kaiser)
     this.timers = []; // ações agendadas em tempo de jogo
     this.tickers = []; // { update(dt)→done, dispose() } — efeitos com lógica própria (ex.: tentáculos)
     this.npcs = []; // clones do Trinitá, a Marionete (ver combat/npcs.js)
@@ -250,6 +250,11 @@ export class World {
       void target;
     } else if (simulate) {
       this.tickTimers(dt);
+      if (this.victoryActors) {
+        for (const actor of this.victoryActors) actor.anim.update(dt);
+        this.fx.update(dt);
+        return;
+      }
       for (let i = this.tickers.length - 1; i >= 0; i--) {
         const tk = this.tickers[i];
         if (tk.update(dt)) { tk.dispose && tk.dispose(); this.tickers.splice(i, 1); }
