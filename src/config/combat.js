@@ -117,7 +117,9 @@ export const COMBAT = {
   // de dano do combo e a Substituição de quem apanha.
   comboDash: { maxPerCombo: Infinity, energyCost: 8 },
   // ---- Queda: caído não toma dano; dá para levantar rolando (× ou L2) ----
-  down: { lie: 0.75, techFrom: 0.12, techUntil: 0.6, techDistance: 2.6, techTime: 0.32, getup: 0.35 },
+  // caído depois do fim de um combo: invulnerável deitado e levantando (~1,5 s) — tempo para os dois carregarem a
+  // sanidade (estilo Storm 4). × / L2 logo depois de cair levanta rolando, mais cedo.
+  down: { lie: 0.95, techFrom: 0.12, techUntil: 0.6, techDistance: 2.6, techTime: 0.32, getup: 0.55 },
   // ---- Batalha em equipe: troca de personagem (estilo Storm 4) ----
   switch: { cooldown: 5, assistCooldown: 6, invuln: 0.35 }, // vida e sanidade são da equipe
   // ---- Anti-repetição ----
@@ -127,7 +129,7 @@ export const COMBAT = {
   finishers: {
     launch: { knockback: 7, launch: true, hitstun: 0.85 },
     knockdown: { knockback: 3, launch: true, lowLaunch: true, hitstun: 1.0 },
-    push: { knockback: 11, hitstun: 0.55 },
+    push: { knockback: 11, launch: true, lowLaunch: true, hitstun: 0.9 }, // afasta E derruba: todo fim de combo derruba
     stun: { knockback: 1, stun: 0.75 },
     launchHigh: { knockback: 0.8, launch: true, high: true, hitstun: 1.4 }, // ↑ + ○: sobe para o combo aéreo
     spike: { knockback: 2, launch: true, spike: true, hitstun: 1.0 }, // fim do combo aéreo: crava no chão

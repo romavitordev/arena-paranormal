@@ -46,6 +46,7 @@ const VS_OPTIONS = (prefix, team) => [
 const HOME_OPTIONS = [
   { id: 'solo', label: 'BATALHA SOLO', desc: '1 contra 1.', sub: VS_OPTIONS('solo', false) },
   { id: 'team', label: 'BATALHA EM EQUIPE', desc: 'Líder + 2 assistências (L1 / R1).', sub: VS_OPTIONS('team', true) },
+  { id: 'lan', label: 'ONLINE / LAN', desc: 'Contra outra pessoa em outro computador: crie uma sala (pública ou privada, com senha se quiser), veja as salas abertas ou entre com um código.' },
   { id: 'tutorial', label: 'TUTORIAL', desc: 'Escolha um personagem e aprenda, passo a passo, todos os golpes dele.' },
   { id: 'training', label: 'TREINAMENTO', desc: 'Pratique combos num alvo parado. A vida dele se recupera.' },
   { id: 'news', label: 'NOVIDADES', desc: `O que mudou na versão v.${VERSION}.` },
@@ -266,7 +267,7 @@ export const MODES = {
 // no centro, os lutadores em 3D (SelectStage) entram deslizando ao serem olhados e fazem pose ao confirmar.
 const SEL_COLS = 3;
 const SEL_PAGE = 15; // 15 lutadores por página (3 × 5), sem barra de rolagem; LB/RB trocam de página
-const INPUT_NAMES = { 'carga+jump': 'Energia + Pulo', 'carga+ranged': '△ + □', 'carga+physical': '△ + ○', 'block+carga': 'R2 + △', 'block+jump': 'R2 + ×', 'carga+dodge': '△ + L2' };
+const INPUT_NAMES = { 'carga+jump': 'Energia + Pulo', 'carga+ranged': '△ → □', 'carga+physical': '△ → ○', 'block+carga': 'R2 + △', 'block+jump': 'R2 + ×', 'carga+dodge': '△ + L2' };
 
 export class SelectScreen {
   constructor(root, { portraits, audio, prev, mode = 'pvp', team = false }) {
@@ -692,7 +693,7 @@ export class StageSelectScreen {
 
 const TIPS = [
   'Segure R2/RT para defender. Defesa + direção = esquiva.',
-  'Habilidades: △ + ○, △ + □, △ + L2, R2 + △ e R2 + ×. L1 e R1 chamam as assistências na batalha em equipe.',
+  'Habilidades: △ → ○, △ → □ (um toque depois do outro), △ + L2, R2 + △ e R2 + ×. L1 e R1 chamam as assistências na batalha em equipe.',
   'Segure △/Y para carregar energia. △ → △ → ○ solta o especial.',
   'Direção + ○ muda o golpe: avanço, recuo, passo lateral ou golpe aéreo.',
   'Bater na defesa do inimigo deixa você exposto a contra-ataque.',
@@ -720,6 +721,193 @@ export class LoadingScreen {
 }
 
 // PAUSE → COMANDOS: controles gerais + lista de golpes de cada lutador
+// ONLINE / LAN: nome de usuário, criar sala (senha opcional, pública ou privada), lista de SALAS ABERTAS e entrar
+// com código. A conexão fica em net/NetSession.js. update() devolve null, 'move', 'back', 'cancel', 'refresh',
+// { act: 'host', password, isPublic } ou { act: 'join', code, password }.
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const NAME_KEY = 'arena_nome_usuario';
+export function loadUserName() {
+  let n = '';
+  try { n = localStorage.getItem(NAME_KEY) || ''; } catch { /* sem armazenamento */ }
+  return n || `Jogador${Math.floor(100 + Math.random() * 900)}`;
+}
+
+export class LanScreen {
+  constructor(root) {
+    this.view = 'menu';
+    this.index = 0;
+    this.name = loadUserName();
+    this.isPublic = true;
+    this.password = '';
+    this.code = '';
+    this.rooms = [];
+    this.el = el(root, 'screen clear', 'lan', '');
+    this.render();
+  }
+
+  saveName() {
+    this.name = String(this.name || '').replace(/[<>]/g, '').slice(0, 16);
+    try { localStorage.setItem(NAME_KEY, this.name); } catch { /* sem armazenamento */ }
+  }
+
+  options() {
+    switch (this.view) {
+      case 'menu': return [['create', 'CRIAR SALA'], ['rooms', 'SALAS ABERTAS'], ['join', 'ENTRAR COM CÓDIGO'], ['back', 'VOLTAR']];
+      case 'create': return [['vis', `VISIBILIDADE: ${this.isPublic ? 'PÚBLICA (aparece na lista)' : 'PRIVADA (só com o código)'}`], ['host', 'CRIAR'], ['menu', 'VOLTAR']];
+      case 'rooms': return [
+        ...this.rooms.map((r, i) => [`room:${i}`, `${r.locked ? '🔒 ' : ''}Sala de ${esc(r.name)} · ${r.code}`]),
+        ['refresh', 'ATUALIZAR'], ['menu', 'VOLTAR'],
+      ];
+      case 'join': case 'password': return [['go', 'ENTRAR'], [this.view === 'password' ? 'rooms' : 'menu', 'VOLTAR']];
+      default: return [['cancel', 'CANCELAR']];
+    }
+  }
+
+  render() {
+    const V = this.view;
+    const opts = this.options();
+    this.opts = opts;
+    if (this.index >= opts.length) this.index = Math.max(0, opts.length - 1);
+    const field = (cls, ph, max = 16, type = 'text') => `<input class="lan-field ${cls}" type="${type}" maxlength="${max}" autocomplete="off" spellcheck="false" placeholder="${ph}">`;
+    let body = '';
+    if (V === 'menu') body = `<label class="lan-label">SEU NOME</label>${field('f-name', 'Seu nome de usuário')}<p class="sub">Partida pela internet, na mesma rede ou pelo Radmin. Quem cria a sala é o P1; os dois precisam da mesma versão do jogo.</p>`;
+    else if (V === 'create') body = `<label class="lan-label">SENHA (opcional)</label>${field('f-pass', 'sem senha', 20, 'password')}`;
+    else if (V === 'host') body = `<p class="sub">${this.code ? 'Código da sala:' : 'Criando a sala…'}</p><div class="lan-code">${this.code || '· · · · ·'}</div><p class="sub">${this.isPublic ? 'Sala PÚBLICA (aparece em SALAS ABERTAS)' : 'Sala PRIVADA (passe o código)'}${this.password ? ' · com senha' : ''}</p>`;
+    else if (V === 'rooms') body = `<p class="sub">${this.rooms.length ? 'Salas públicas abertas agora:' : 'Procurando salas… (nenhuma aberta no momento)'}</p>`;
+    else if (V === 'join') body = `<label class="lan-label">CÓDIGO DA SALA</label>${field('f-code lan-input', 'ABCDE', 5)}<label class="lan-label">SENHA (se tiver)</label>${field('f-pass', 'sem senha', 20, 'password')}`;
+    else if (V === 'password') body = `<p class="sub">Sala de ${esc(this.target && this.target.name)} · ${this.target && this.target.code}</p><label class="lan-label">SENHA</label>${field('f-pass', 'senha da sala', 20, 'password')}`;
+    this.el.innerHTML = `<div class="menu lan"><h2>ONLINE / LAN</h2>${body}<p class="lan-status ${this.statusErr ? 'err' : ''}">${esc(this.status || '')}</p>${opts.map(([, l], i) => `<div class="opt ${i === this.index ? 'on' : ''}" data-i="${i}">${l}</div>`).join('')}</div>`;
+    this.el.querySelectorAll('.opt').forEach((o) => o.addEventListener('click', () => { this.clicked = Number(o.dataset.i); }));
+    const bindField = (sel, get, set, upper) => {
+      const inp = this.el.querySelector(sel);
+      if (!inp) return null;
+      inp.value = get();
+      inp.addEventListener('input', () => {
+        if (upper) inp.value = inp.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        set(inp.value);
+      });
+      inp.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') this.submit = true;
+        if (e.key === 'Escape') this.escape = true;
+      });
+      return inp;
+    };
+    const nameIn = bindField('.f-name', () => this.name, (v) => { this.name = v; this.saveName(); });
+    const codeIn = bindField('.f-code', () => this.code, (v) => { this.code = v; }, true);
+    const passIn = bindField('.f-pass', () => this.password, (v) => { this.password = v; });
+    const focus = V === 'join' ? codeIn : V === 'create' || V === 'password' ? passIn : null;
+    if (focus) setTimeout(() => focus.focus(), 0);
+    void nameIn;
+  }
+
+  setStatus(text, err = false) {
+    this.status = text;
+    this.statusErr = err;
+    const s = this.el.querySelector('.lan-status');
+    if (s) { s.textContent = text; s.classList.toggle('err', err); }
+  }
+
+  setRooms(list) {
+    this.rooms = list || [];
+    if (this.view === 'rooms' && !this.el.querySelector('input:focus')) this.render();
+  }
+
+  showCode(code) {
+    this.code = code;
+    this.status = this.isPublic ? 'Aguardando alguém entrar… (a sala está na lista de salas abertas)' : 'Aguardando o amigo entrar com o código…';
+    this.statusErr = false;
+    this.render();
+  }
+
+  // volta para o menu mostrando um erro
+  fail(msg) {
+    this.view = this.view === 'wait' && this.from === 'rooms' ? 'rooms' : 'menu';
+    this.status = msg;
+    this.statusErr = true;
+    this.render();
+  }
+
+  go(view, ret) {
+    this.view = view;
+    this.status = '';
+    this.statusErr = false;
+    this.index = 0;
+    this.render();
+    return ret;
+  }
+
+  act(id) {
+    if (!id) return null;
+    if (id === 'back') { this.saveName(); return 'back'; }
+    if (id === 'create') { this.password = ''; return this.go('create', 'move'); }
+    if (id === 'rooms') return this.go('rooms', 'refresh');
+    if (id === 'join') { this.code = ''; this.password = ''; return this.go('join', 'move'); }
+    if (id === 'menu') return this.go('menu', 'move');
+    if (id === 'refresh') { this.setStatus('Atualizando…'); return 'refresh'; }
+    if (id === 'vis') { this.isPublic = !this.isPublic; this.render(); return 'move'; }
+    if (id === 'cancel') return this.go(this.from === 'rooms' ? 'rooms' : 'menu', 'cancel');
+    if (id === 'host') {
+      this.saveName();
+      this.code = '';
+      this.from = 'menu';
+      this.go('host', null);
+      return { act: 'host', password: this.password, isPublic: this.isPublic };
+    }
+    if (id.startsWith('room:')) {
+      const r = this.rooms[Number(id.slice(5))];
+      if (!r) return null;
+      this.target = r;
+      this.code = r.code;
+      this.password = '';
+      if (r.locked) return this.go('password', 'move');
+      this.from = 'rooms';
+      this.go('wait', null);
+      this.setStatus(`Entrando na sala de ${r.name}…`);
+      return { act: 'join', code: r.code, password: '' };
+    }
+    if (id === 'go') {
+      if (!/^[A-Z0-9]{5}$/.test(this.code || '')) { this.setStatus('O código tem 5 letras/números.', true); return null; }
+      this.saveName();
+      this.from = this.view === 'password' ? 'rooms' : 'menu';
+      this.go('wait', null);
+      this.setStatus('Conectando…');
+      return { act: 'join', code: this.code, password: this.password };
+    }
+    return null;
+  }
+
+  backId() {
+    return { menu: 'back', create: 'menu', rooms: 'menu', join: 'menu', password: 'rooms' }[this.view] || 'cancel';
+  }
+
+  update(input) {
+    if (this.clicked !== undefined) {
+      const i = this.clicked;
+      this.clicked = undefined;
+      return this.act(this.opts[i] && this.opts[i][0]);
+    }
+    if (this.submit) {
+      this.submit = false;
+      const def = { menu: null, create: 'host', join: 'go', password: 'go' }[this.view];
+      if (def) return this.act(def);
+    }
+    if (this.escape) { this.escape = false; return this.act(this.backId()); }
+    for (const p of controllers(input, null)) {
+      const n = this.opts.length;
+      if (p.menu.up) { this.index = (this.index + n - 1) % n; this.render(); return 'move'; }
+      if (p.menu.down) { this.index = (this.index + 1) % n; this.render(); return 'move'; }
+      if ((p.menu.left || p.menu.right) && this.opts[this.index][0] === 'vis') return this.act('vis');
+      if (confirm(p)) return this.act(this.opts[this.index][0]);
+      if (back(p)) return this.act(this.backId());
+    }
+    if (input.keyPressedOnce('Enter')) return this.act(this.opts[this.index][0]);
+    if (input.keyPressedOnce('Escape')) return this.act(this.backId());
+    return null;
+  }
+
+  dispose() { this.el.remove(); }
+}
+
 // NOVIDADES: o changelog, uma versão por vez (◀ ▶ navegam; começa na mais nova)
 export class ChangelogScreen {
   constructor(root) {

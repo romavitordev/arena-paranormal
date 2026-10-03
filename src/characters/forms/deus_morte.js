@@ -23,27 +23,28 @@ export default {
   weakTo: { fire: 1.5, energia: 1.5 },
   regen: { every: 7, amount: 45, color: 0x0a080c },
   poise: { hits: 3 },
-  anims: { idle: 'idle_hunch', run: 'walk', charge: 'charge', victory: 'victory', block: 'block_hunch' },
+  // animações próprias (anim/formClips.js); os nomes genéricos usados pelas habilidades também são trocados
+  anims: { idle: 'idle_hunch', run: 'dm_walk', walk: 'dm_walk', walk_back: 'dm_walk_back', strafe_L: 'dm_strafe_L', strafe_R: 'dm_strafe_R', dash: 'dm_dash', charge: 'dm_charge', concentrate: 'dm_charge', victory: 'dm_victory', block: 'dm_block', block_hit: 'dm_block_hit', hit: 'dm_hit', grab: 'dm_grab', cast_up: 'dm_cast', point: 'dm_point', powerup: 'dm_charge' },
   chargeFx: { style: 'default', color: 0x6a6670 },
   dodge: { style: 'default', distance: 3.6 },
 
   melee: {
     name: 'Punhos de Lodo',
     strikes: [
-      { name: 'Tapa de Lodo', anim: 'cross', dur: 0.5, active: [0.18, 0.28], damage: 46, range: 3.4, arc: 120, knockback: 2.5, lunge: 0.8, sound: 'swing', hitSound: 'heavyPunch', impactScale: 1.6, groundFx: 'dust', groundScale: 0.7 },
-      { name: 'Gancho de Lodo', anim: 'hook_r', dur: 0.54, active: [0.2, 0.3], damage: 52, range: 3.4, arc: 150, knockback: 3, lunge: 0.8, sound: 'swing', hitSound: 'heavyPunch', impactScale: 1.7 },
-      { name: 'Esmagar', anim: 'heavy_punch', dur: 0.7, active: [0.3, 0.42], damage: 72, range: 3.6, arc: 110, lunge: 1.2, finisher: 'launch', hitstop: 0.12, sound: 'swing', hitSound: 'heavyPunch', impactFx: 'smash', impactScale: 2.2, groundFx: 'smash' },
+      { name: 'Tapa de Lodo', anim: 'dm_slap', dur: 0.5, active: [0.18, 0.28], damage: 46, range: 3.4, arc: 120, knockback: 2.5, lunge: 0.8, sound: 'swing', hitSound: 'heavyPunch', impactScale: 1.6, groundFx: 'dust', groundScale: 0.7 },
+      { name: 'Gancho de Lodo', anim: 'dm_hook', dur: 0.54, active: [0.2, 0.3], damage: 52, range: 3.4, arc: 150, knockback: 3, lunge: 0.8, sound: 'swing', hitSound: 'heavyPunch', impactScale: 1.7 },
+      { name: 'Esmagar', anim: 'dm_smash', dur: 0.7, active: [0.3, 0.42], damage: 72, range: 3.6, arc: 110, lunge: 1.2, finisher: 'launch', hitstop: 0.12, sound: 'swing', hitSound: 'heavyPunch', impactFx: 'smash', impactScale: 2.2, groundFx: 'smash' },
     ],
-    up: { name: 'Erguer pelo pescoço', anim: 'uppercut', dur: 0.56, active: [0.2, 0.32], damage: 50, range: 3.4, arc: 120, lunge: 0.8, finisher: 'launchHigh', launcher: true, sound: 'swing', hitSound: 'heavyPunch', impactScale: 1.8 },
-    down: { name: 'Pisão de Lodo', anim: 'meteor_punch', dur: 0.62, active: [0.26, 0.38], damage: 60, range: 3.4, arc: 140, lunge: 0.8, finisher: 'knockdown', sound: 'swing', hitSound: 'heavyPunch', impactFx: 'smash', impactScale: 2, groundFx: 'smash', groundScale: 1.2 },
-    air: { name: 'Queda do Deus', anim: 'meteor_punch', dur: 0.5, active: [0.16, 0.32], damage: 50, range: 3.4, arc: 140, knockback: 4, slam: 18, vertical: 3.2, sound: 'swing', hitSound: 'heavyPunch', impactFx: 'smash', impactScale: 2 },
+    up: { name: 'Erguer pelo pescoço', anim: 'dm_lift', dur: 0.56, active: [0.2, 0.32], damage: 50, range: 3.4, arc: 120, lunge: 0.8, finisher: 'launchHigh', launcher: true, sound: 'swing', hitSound: 'heavyPunch', impactScale: 1.8 },
+    down: { name: 'Pisão de Lodo', anim: 'dm_stomp', dur: 0.62, active: [0.26, 0.38], damage: 60, range: 3.4, arc: 140, lunge: 0.8, finisher: 'knockdown', sound: 'swing', hitSound: 'heavyPunch', impactFx: 'smash', impactScale: 2, groundFx: 'smash', groundScale: 1.2 },
+    air: { name: 'Queda do Deus', anim: 'dm_air', dur: 0.5, active: [0.16, 0.32], damage: 50, range: 3.4, arc: 140, knockback: 4, slam: 18, vertical: 3.2, sound: 'swing', hitSound: 'heavyPunch', impactFx: 'smash', impactScale: 2 },
   },
 
   // □: onda de Lodo pelo chão
   ranged: {
     name: 'Onda de Lodo',
     type: 'projectile',
-    anim: 'cast_up',
+    anim: 'dm_cast',
     windup: 0.4,
     recovery: 0.4,
     count: 1,
@@ -120,12 +121,12 @@ export default {
     cooldown: 16,
     color: 0x2a2632,
     sound: 'specialStart',
-    prepare: { anim: 'charge', time: 0.6, fx: 'stomp' },
+    prepare: { anim: 'dm_charge', time: 0.6, fx: 'stomp' },
     dash: { speed: 14, maxTime: 0.6, contact: 3 },
     hits: [
-      { t: 0.95, anim: 'hook_r', dur: 0.5, share: 0.2, fx: { kind: 'smash' }, sound: 'heavyPunch' },
-      { t: 1.5, anim: 'cross', dur: 0.5, share: 0.2, fx: { kind: 'smash' }, sound: 'heavyPunch' },
-      { t: 2.2, anim: 'meteor_punch', dur: 0.6, share: 0.6, fx: { kind: 'smash', big: true }, sound: 'heavyPunch', final: true },
+      { t: 0.95, anim: 'dm_hook', dur: 0.5, share: 0.2, fx: { kind: 'smash' }, sound: 'heavyPunch' },
+      { t: 1.5, anim: 'dm_slap', dur: 0.5, share: 0.2, fx: { kind: 'smash' }, sound: 'heavyPunch' },
+      { t: 2.2, anim: 'dm_smash', dur: 0.6, share: 0.6, fx: { kind: 'smash', big: true }, sound: 'heavyPunch', final: true },
     ],
     bannerAt: 0.3,
     length: 3.4,

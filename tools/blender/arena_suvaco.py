@@ -70,9 +70,16 @@ DOOR = 2.3  # meia largura da porta (porta de 4,6 m)
 for s, x0, x1 in ((-1, W0 - 0.25, -DOOR), (1, DOOR, W1 + 0.25)):
     box(f'OCC_wall_front{s}', ((x0 + x1) / 2, HH / 2, D1 + T / 2), (x1 - x0, HH, T), M['brick'])
 box('OCC_door_lintel', (0, HH - 0.3, D1 + T / 2), (DOOR * 2, 0.6, T), M['brick'])
+# obstáculos das paredes: os tiros param nelas (antes atravessavam a parede da frente e saíam na rua)
+for s, x0, x1 in ((-1, W0 - 0.25, -DOOR), (1, DOOR, W1 + 0.25)):
+    col_box(f'wall_front{s}', ((x0 + x1) / 2, HH / 2, D1 + T / 2), (x1 - x0, HH, T))
+col_box('wall_back', (0, HH / 2, D0 - T / 2), (W1 - W0 + 0.5, HH, T))
+col_box('wall_left', (W0 - T / 2, HH / 2, 0), (T, HH, D1 - D0))
+col_box('wall_right', (W1 + T / 2, HH / 2, 0), (T, HH, D1 - D0))
 # rodapé escuro e coluna de tijolo
 box('baseboard', (0, 0.1, D0 + 0.02), (W1 - W0, 0.2, 0.05), M['wood'])
 box('OCC_pillar', (2.5, HH / 2, D0 + 0.3), (0.6, HH, 0.6), M['brick'])
+col_box('pillar', (2.5, HH / 2, D0 + 0.3), (0.6, HH, 0.6))
 # lâmpadas fluorescentes no teto
 for k, (x, z) in enumerate([(-5, -2), (0, -2), (5, -2), (-4, 2.5), (4, 2.5)]):
     box(f'FLICKER_tube{k}', (x, HH - 0.08, z), (1.6, 0.08, 0.16), M['fluor'])

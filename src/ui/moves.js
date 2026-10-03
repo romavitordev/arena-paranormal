@@ -4,8 +4,8 @@ import { ELEMENTS } from '../config/elements.js';
 // Lista de comandos de um personagem (usada em PAUSE → COMANDOS).
 const INPUT = {
   'carga+jump': '△ + × / Y + A',
-  'carga+ranged': '△ + □ / Y + X',
-  'carga+physical': '△ + ○ / Y + B',
+  'carga+ranged': '△ → □ / Y → X',
+  'carga+physical': '△ → ○ / Y → B',
   'block+carga': 'R2 + △ / RT + Y',
   'block+jump': 'R2 + × / RT + A',
   'carga+dodge': '△ + L2 / Y + LT',

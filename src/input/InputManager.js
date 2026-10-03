@@ -40,6 +40,8 @@ export class InputManager {
     this.touch = { active: false, moveX: 0, moveY: 0, held: {}, taps: new Set() };
     window.addEventListener('keydown', (e) => {
       if (e.repeat) return;
+      // digitando num campo (código da partida LAN): as teclas não viram comandos
+      if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
       this.keys.add(e.code);
       this.tapped.add(e.code);
       if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Backspace', 'Tab', 'NumpadDecimal'].includes(e.code)) e.preventDefault();
@@ -57,9 +59,21 @@ export class InputManager {
     this.time += dt;
     const pads = this.connectedPads();
     this.anyPressed = false;
+
+    // PARTIDA LAN: os dois lados vêm do quadro sincronizado (netFrame), nunca dos aparelhos daqui (os toques do
+    // teclado ficam guardados para o readLocal)
+    if (this.netFrame) {
+      this.frameTaps = new Set();
+      this.players.forEach((p, i) => {
+        const v = this.netFrame[i];
+        this.applyHeld(p, v.moveX, v.moveY, v.held);
+        p.humanPressed = { start: p.pressed.start, select: p.pressed.select };
+        p.source = i === this.netSlot ? this.localSource || 'keyboard' : 'keyboard';
+      });
+      return;
+    }
     this.frameTaps = this.tapped;
     this.tapped = new Set();
-
     this.players.forEach((p, i) => {
       const dev = PLAYER_DEVICES[i];
       const layout = KEYBOARD_LAYOUTS[dev.keyboard];
@@ -86,67 +100,99 @@ export class InputManager {
         for (const a of ACTIONS) held[a] = !!(v.held && v.held[a]);
         p.source = 'cpu';
       } else {
-        const kbHeld = (codes) => codes && codes.some((c) => this.keys.has(c) || this.frameTaps.has(c));
-        for (const a of ACTIONS) held[a] = kbHeld(layout[a]);
-        mx += (kbHeld(layout.right) ? 1 : 0) - (kbHeld(layout.left) ? 1 : 0);
-        my += (kbHeld(layout.up) ? 1 : 0) - (kbHeld(layout.down) ? 1 : 0);
-
-        // toque na tela (celular): botões e joystick virtuais do jogador 1
-        const T = this.touch;
-        if (i === 0 && T.active) {
-          for (const a of ACTIONS) if (T.held[a] || T.taps.has(a)) held[a] = true;
-          if (Math.abs(T.moveX) > Math.abs(mx)) mx = T.moveX;
-          if (Math.abs(T.moveY) > Math.abs(my)) my = T.moveY;
-          if (T.moveX || T.moveY || T.taps.size || ACTIONS.some((a) => T.held[a])) p.source = 'touch';
-          T.taps.clear();
-        }
-        if (pad) {
-          // gatilhos (LT/RT) são analógicos: considera apertado acima de 35%
-          const btn = (ids) => ids.some((id) => pad.buttons[id] && (pad.buttons[id].pressed || pad.buttons[id].value > 0.35));
-          for (const a of ACTIONS) if (GAMEPAD_LAYOUT[a] && btn(GAMEPAD_LAYOUT[a])) held[a] = true;
-          // analógico direito ◀/▶: TROCA o personagem em campo pelo da assistência 1/2
-          // (as assistências são chamadas por L1/LB e R1/RB)
-          const rx = pad.axes[2] || 0;
-          if (rx < -0.6) held.switch1 = true;
-          if (rx > 0.6) held.switch2 = true;
-          let ax = pad.axes[0] || 0;
-          let ay = -(pad.axes[1] || 0);
-          const mag = Math.hypot(ax, ay);
-          if (mag < GAMEPAD_DEADZONE) { ax = 0; ay = 0; }
-          ax += (btn(GAMEPAD_LAYOUT.right) ? 1 : 0) - (btn(GAMEPAD_LAYOUT.left) ? 1 : 0);
-          ay += (btn(GAMEPAD_LAYOUT.up) ? 1 : 0) - (btn(GAMEPAD_LAYOUT.down) ? 1 : 0);
-          if (Math.abs(ax) > Math.abs(mx)) mx = ax;
-          if (Math.abs(ay) > Math.abs(my)) my = ay;
-          if (ax || ay || ACTIONS.some((a) => GAMEPAD_LAYOUT[a] && btn(GAMEPAD_LAYOUT[a]))) p.source = 'gamepad';
-          else if (mx || my || ACTIONS.some((a) => held[a])) p.source = 'keyboard';
-        } else if (p.source !== 'touch') {
-          p.source = 'keyboard';
-        }
+        const d = this.readDevice(i, pads, this.frameTaps, p.source);
+        mx = d.mx;
+        my = d.my;
+        Object.assign(held, d.held);
+        p.source = d.source;
       }
 
-      const mag = Math.hypot(mx, my);
-      if (mag > 1) { mx /= mag; my /= mag; }
-      p.moveX = mx;
-      p.moveY = my;
-
-      for (const a of ACTIONS) {
-        p.pressed[a] = held[a] && !p._prevHeld[a];
-        if (p.pressed[a]) {
-          p.pressTime[a] = this.time;
-          this.anyPressed = true;
-        }
-      }
-      p.held = held;
-      p._prevHeld = held;
-
-      // Navegação de menu com detecção de borda
-      const dirNow = { up: my > 0.5, down: my < -0.5, left: mx < -0.5, right: mx > 0.5 };
-      for (const d of DIRS) {
-        p.menu[d] = dirNow[d] && !p._prevDir[d];
-        if (p.menu[d]) this.anyPressed = true;
-      }
-      p._prevDir = dirNow;
+      this.applyHeld(p, mx, my, held);
     });
+  }
+
+  // aplica o estado de um quadro num jogador: movimento, botões e as bordas (apertou agora / menu)
+  applyHeld(p, mx, my, held) {
+    const mag = Math.hypot(mx, my);
+    if (mag > 1) { mx /= mag; my /= mag; }
+    p.moveX = mx;
+    p.moveY = my;
+
+    for (const a of ACTIONS) {
+      p.pressed[a] = held[a] && !p._prevHeld[a];
+      if (p.pressed[a]) {
+        p.pressTime[a] = this.time;
+        this.anyPressed = true;
+      }
+    }
+    p.held = held;
+    p._prevHeld = held;
+
+    // Navegação de menu com detecção de borda
+    const dirNow = { up: my > 0.5, down: my < -0.5, left: mx < -0.5, right: mx > 0.5 };
+    for (const d of DIRS) {
+      p.menu[d] = dirNow[d] && !p._prevDir[d];
+      if (p.menu[d]) this.anyPressed = true;
+    }
+    p._prevDir = dirNow;
+  }
+
+  // aparelhos físicos do jogador i (teclado do layout dele + controle do slot dele + toque na tela no P1)
+  readDevice(i, pads, taps, prevSource = 'keyboard') {
+    const dev = PLAYER_DEVICES[i];
+    const layout = KEYBOARD_LAYOUTS[dev.keyboard];
+    const pad = pads[dev.gamepadSlot];
+    const held = {};
+    let mx = 0;
+    let my = 0;
+    let source = prevSource;
+    const kbHeld = (codes) => codes && codes.some((c) => this.keys.has(c) || taps.has(c));
+    for (const a of ACTIONS) held[a] = kbHeld(layout[a]);
+    mx += (kbHeld(layout.right) ? 1 : 0) - (kbHeld(layout.left) ? 1 : 0);
+    my += (kbHeld(layout.up) ? 1 : 0) - (kbHeld(layout.down) ? 1 : 0);
+
+    // toque na tela (celular): botões e joystick virtuais do jogador 1
+    const T = this.touch;
+    if (i === 0 && T.active) {
+      for (const a of ACTIONS) if (T.held[a] || T.taps.has(a)) held[a] = true;
+      if (Math.abs(T.moveX) > Math.abs(mx)) mx = T.moveX;
+      if (Math.abs(T.moveY) > Math.abs(my)) my = T.moveY;
+      if (T.moveX || T.moveY || T.taps.size || ACTIONS.some((a) => T.held[a])) source = 'touch';
+      T.taps.clear();
+    }
+    if (pad) {
+      // gatilhos (LT/RT) são analógicos: considera apertado acima de 35%
+      const btn = (ids) => ids.some((id) => pad.buttons[id] && (pad.buttons[id].pressed || pad.buttons[id].value > 0.35));
+      for (const a of ACTIONS) if (GAMEPAD_LAYOUT[a] && btn(GAMEPAD_LAYOUT[a])) held[a] = true;
+      // analógico direito ◀/▶: TROCA o personagem em campo pelo da assistência 1/2
+      // (as assistências são chamadas por L1/LB e R1/RB)
+      const rx = pad.axes[2] || 0;
+      if (rx < -0.6) held.switch1 = true;
+      if (rx > 0.6) held.switch2 = true;
+      let ax = pad.axes[0] || 0;
+      let ay = -(pad.axes[1] || 0);
+      const mag = Math.hypot(ax, ay);
+      if (mag < GAMEPAD_DEADZONE) { ax = 0; ay = 0; }
+      ax += (btn(GAMEPAD_LAYOUT.right) ? 1 : 0) - (btn(GAMEPAD_LAYOUT.left) ? 1 : 0);
+      ay += (btn(GAMEPAD_LAYOUT.up) ? 1 : 0) - (btn(GAMEPAD_LAYOUT.down) ? 1 : 0);
+      if (Math.abs(ax) > Math.abs(mx)) mx = ax;
+      if (Math.abs(ay) > Math.abs(my)) my = ay;
+      if (ax || ay || ACTIONS.some((a) => GAMEPAD_LAYOUT[a] && btn(GAMEPAD_LAYOUT[a]))) source = 'gamepad';
+      else if (mx || my || ACTIONS.some((a) => held[a])) source = 'keyboard';
+    } else if (source !== 'touch') {
+      source = 'keyboard';
+    }
+    return { mx, my, held, source };
+  }
+
+  // PARTIDA LAN: comandos do jogador LOCAL (aparelhos do P1 deste computador), lidos uma vez por quadro de rede
+  readLocal() {
+    const taps = this.tapped;
+    this.tapped = new Set();
+    const d = this.readDevice(0, this.connectedPads(), taps, this.localSource);
+    this.localSource = d.source;
+    d.escape = taps.has('Escape') || this.keys.has('Escape');
+    return d;
   }
 
   // Tecla "global" (ex.: Enter no título)

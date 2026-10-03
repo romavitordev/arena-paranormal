@@ -11,6 +11,8 @@
 //   cotovelo x < 0 → dobra   |  perna x < 0 → perna à frente  |  joelho x > 0 → dobra
 //   tronco y > 0 → gira o ombro direito para frente  |  tronco x > 0 → inclina p/ frente
 
+import { addFormClips } from './formClips.js';
+
 const k = (t, pose) => ({ t, pose });
 
 // Postura base de luta, reaproveitada por vários clipes
@@ -497,5 +499,8 @@ CLIPS.walk_back = {
   ...CLIPS.walk, axis: 'back',
   keys: CLIPS.walk.keys.map((key) => ({ t: 1 - key.t, pose: { ...key.pose, ...GUARD_TOP } })).reverse(),
 };
+
+// animações próprias das formas (Deus da Morte e Diabo)
+addFormClips(CLIPS, k, mirrorPose);
 
 export const JOINTS = ['hip', 'sp', 'hd', 'sL', 'eL', 'sR', 'eR', 'lL', 'kL', 'lR', 'kR'];

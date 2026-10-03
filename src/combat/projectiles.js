@@ -5,6 +5,8 @@ import { glowMat } from '../models/rig.js';
 import { knife, mutilatorAxe } from '../models/weapons.js';
 import { createMistZone } from './abilities.js';
 
+const UP = new THREE.Vector3(0, 1, 0);
+
 // Gerencia projéteis (balas, faca arremessada, ondas de corte, ondas de impacto).
 // A aparência vem de `visual` na definição do ataque; a lógica é a mesma para todos.
 
@@ -333,8 +335,53 @@ export class Projectiles {
         if (p.mesh.userData.spinY) p.mesh.userData.spinY.rotation.y += dt * 18;
       }
       if (a.visual === 'chaos' && Math.random() < 0.7) w.fx.lightning(p.pos, p.pos.clone().add(new THREE.Vector3((Math.random() - 0.5), (Math.random() - 0.5), (Math.random() - 0.5)).multiplyScalar(1.4)), { color: a.color, life: 0.08 });
+      // BALA CURVA (Disparo Espiral da Fantasma — cânone: "nega toda cobertura que não seja completa"): com o alvo à
+      // vista, vai direto nele; com parede/obstáculo no meio, calcula uma rota pelo mapa (refeita a cada 0,25 s) e segue
+      // o ponto mais distante dela que já está à vista — passa por qualquer brecha (porta, vão, janela) e acerta. Só a
+      // cobertura COMPLETA (sem rota) para a bala. É quase certeira, mas dá para ESQUIVAR: esquivando com ela perto,
+      // a bala perde o alvo e segue reto.
+      if (a.curve) {
+        const tg = w.opponentOf(p.owner);
+        if (tg && !p.lost && tg.state === 'dodge' && tg.pos.distanceTo(p.pos) < 7) p.lost = true;
+        const alive = tg && tg.state !== 'ko' && tg.visible && !p.lost;
+        let goal = null;
+        if (alive) {
+          const aim = tg.chestPos();
+          if (this.clearLine(p.pos, aim, a.radius * 0.5)) {
+            goal = aim;
+            p.path = null;
+          } else {
+            p.replan = (p.replan || 0) - dt;
+            if (!p.path || p.replan <= 0) {
+              p.path = this.planPath(p.pos, aim, a.radius);
+              p.replan = 0.25;
+            }
+            if (p.path) {
+              // descarta os pontos já alcançados e mira no mais distante que já está à vista
+              while (p.path.length > 1 && p.path[0].distanceTo(p.pos) < 0.5) p.path.shift();
+              for (let k = Math.min(p.path.length - 1, 24); k >= 0; k--) {
+                if (p.path[k].distanceTo(p.pos) > 0.3 && this.clearLine(p.pos, p.path[k], a.radius * 0.5)) { goal = p.path[k]; break; }
+              }
+            }
+          }
+        }
+        if (goal) {
+          const to = goal.clone().sub(p.pos);
+          const dist = tg ? tg.pos.distanceTo(p.pos) : 20;
+          const want = to.normalize();
+          // seguindo a rota (contornando cobertura) ou já perto do alvo, a curva é fechada na hora (quase certeira);
+          // de longe e à vista, curva forte mas suave
+          if (p.path || dist < 14) p.dir.copy(want);
+          else {
+            const turn = a.homing * (1 + 2.5 * Math.max(0, 1 - dist / 14));
+            const ang = p.dir.angleTo(want);
+            if (ang > 1e-3) p.dir.lerp(want, Math.min(1, (turn * dt) / ang)).normalize();
+          }
+        }
+        if (p.mesh) p.mesh.lookAt(p.pos.clone().add(p.dir));
+      }
       // projétil que procura o alvo (ex.: Corrente de Captura): gira devagar na direção dele
-      if (a.homing) {
+      if (a.homing && !a.curve) {
         const tg = w.opponentOf(p.owner);
         if (tg && tg.state !== 'ko' && tg.visible) {
           const want = tg.chestPos().sub(p.pos).normalize();
@@ -415,7 +462,7 @@ export class Projectiles {
           dead = true;
           break;
         }
-        if (!a.ghost && w.arena.blocksPoint(p.pos, a.radius * 0.5)) {
+        if (w.arena.blocksPoint(p.pos, a.radius * 0.5)) {
           w.fx.impact(p.pos, a.color, 0.6);
           dead = true;
           break;
@@ -495,6 +542,77 @@ export class Projectiles {
   }
 
   // tira um projétil do campo (fizzle = some com uma fumacinha)
+  // linha livre de obstáculos entre dois pontos (amostras a cada 0,2 m)
+  clearLine(a, b, radius) {
+    const d = b.clone().sub(a);
+    const n = Math.max(1, Math.ceil(d.length() / 0.2));
+    const q = new THREE.Vector3();
+    for (let i = 1; i <= n; i++) {
+      q.copy(a).addScaledVector(d, i / n);
+      if (this.world.arena.blocksPoint(q, radius)) return false;
+    }
+    return true;
+  }
+
+  // rota curta (busca em largura numa grade de 0,5 m em volta do trajeto) de `from` até `to`, na altura da bala;
+  // devolve os pontos da rota ou null
+  planPath(from, to, radius) {
+    const C = 0.35; // grade fina: cabe numa brecha estreita
+    const y = from.y;
+    const x0 = Math.min(from.x, to.x) - 12;
+    const z0 = Math.min(from.z, to.z) - 12;
+    const nx = Math.min(200, Math.ceil((Math.abs(from.x - to.x) + 24) / C));
+    const nz = Math.min(200, Math.ceil((Math.abs(from.z - to.z) + 24) / C));
+    const cx = (x) => Math.max(0, Math.min(nx - 1, Math.round((x - x0) / C)));
+    const cz = (z) => Math.max(0, Math.min(nz - 1, Math.round((z - z0) / C)));
+    const q = new THREE.Vector3();
+    const blocked = new Int8Array(nx * nz).fill(-1);
+    const isBlocked = (i) => {
+      if (blocked[i] < 0) {
+        q.set(x0 + (i % nx) * C, y, z0 + Math.floor(i / nx) * C);
+        blocked[i] = this.world.arena.blocksPoint(q, radius * 0.5) ? 1 : 0;
+      }
+      return blocked[i] === 1;
+    };
+    const startI = cz(from.z) * nx + cx(from.x);
+    const goalI = cz(to.z) * nx + cx(to.x);
+    const prev = new Int32Array(nx * nz).fill(-1);
+    prev[startI] = startI;
+    const queue = [startI];
+    const steps = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]];
+    for (let h = 0; h < queue.length; h++) {
+      const i = queue[h];
+      if (i === goalI) break;
+      const ix = i % nx;
+      const iz = Math.floor(i / nx);
+      for (const [dx, dz] of steps) {
+        const jx = ix + dx;
+        const jz = iz + dz;
+        if (jx < 0 || jz < 0 || jx >= nx || jz >= nz) continue;
+        const j = jz * nx + jx;
+        if (prev[j] >= 0 || (j !== goalI && isBlocked(j))) continue;
+        prev[j] = i;
+        queue.push(j);
+      }
+    }
+    if (prev[goalI] < 0) return null;
+    const path = [];
+    for (let i = goalI; i !== startI; i = prev[i]) path.push(new THREE.Vector3(x0 + (i % nx) * C, y, z0 + Math.floor(i / nx) * C));
+    path.reverse();
+    if (path.length) path[path.length - 1] = to.clone();
+    return path;
+  }
+
+  // há obstáculo nos próximos `len` metros na direção `dir`?
+  blockedAhead(pos, dir, len, radius) {
+    const q = new THREE.Vector3();
+    for (const k of [0.25, 0.5, 0.75, 1]) {
+      q.copy(pos).addScaledVector(dir, len * k);
+      if (this.world.arena.blocksPoint(q, radius)) return true;
+    }
+    return false;
+  }
+
   remove(p, fizzle = false) {
     const i = this.list.indexOf(p);
     if (i < 0) return;

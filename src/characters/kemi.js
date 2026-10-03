@@ -143,10 +143,10 @@ export default {
     banner: 'Vestir as Faixas',
     type: 'ghostBands',
     energyCost: 50,
-    cooldown: 60,
+    cooldown: 30,
     form: 'fantasma',
     duration: 0, // até o fim do round
-    bonusHealth: 100,
+    bonusHealth: 50,
     color: 0xa7a3ad,
   },
 

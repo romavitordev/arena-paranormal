@@ -14,6 +14,24 @@ import { MATERIAL_TEXTURES } from './textures.js';
 const loader = new GLTFLoader();
 const cache = new Map();
 
+// PELE: a luz colorida do cenário (o roxo das Ruínas) deixava as peles morenas rosadas. Na pele, a luz muda o
+// BRILHO mas quase não muda o TOM: o resultado é puxado para a cor da própria pele com a mesma luminância (70%).
+// O brilho do dano (emissive) é somado depois, sem ser tingido.
+const SKIN_KEEP = 0.7;
+const SKIN_CODE = `{
+  vec3 litK = outgoingLight - totalEmissiveRadiance;
+  float lumO = dot(litK, vec3(0.299, 0.587, 0.114));
+  float lumA = max(dot(diffuseColor.rgb, vec3(0.299, 0.587, 0.114)), 1e-4);
+  outgoingLight = mix(litK, diffuseColor.rgb * (lumO / lumA), ${SKIN_KEEP.toFixed(2)}) + totalEmissiveRadiance;
+}
+`;
+function keepSkinHue(m) {
+  m.onBeforeCompile = (sh) => {
+    sh.fragmentShader = sh.fragmentShader.replace('#include <opaque_fragment>', SKIN_CODE + '#include <opaque_fragment>');
+  };
+  m.customProgramCacheKey = () => 'skinKeep';
+}
+
 export function loadGLB(url) {
   if (!cache.has(url)) {
     cache.set(url, new Promise((resolve, reject) => loader.load(url, resolve, undefined, reject)));
@@ -114,6 +132,7 @@ export function rigFromGLB(gltf, { scale = 1, outline = 0.012 } = {}) {
         side: src.side,
       });
       m.name = src.name;
+      if (/^MAT_SKIN_/.test(src.name)) keepSkinHue(m);
       if (emissive) m.userData.glow = true;
       if (emissiveMap) m.userData.baseEmissive = { color: new THREE.Color(texEmissive), intensity: 1 };
       convert.set(src, m);

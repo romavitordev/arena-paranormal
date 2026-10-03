@@ -2,7 +2,9 @@ import * as THREE from 'three';
 import { InputManager } from './input/InputManager.js';
 import { AudioManager } from './audio/AudioManager.js';
 import { HUD } from './ui/HUD.js';
-import { HomeScreen, BattleConfigScreen, VictoryScreen, MODES, SelectScreen, MenuScreen, StageSelectScreen, LoadingScreen, CommandsScreen, ChangelogScreen } from './ui/Screens.js';
+import { HomeScreen, BattleConfigScreen, VictoryScreen, MODES, SelectScreen, MenuScreen, StageSelectScreen, LoadingScreen, CommandsScreen, ChangelogScreen, LanScreen } from './ui/Screens.js';
+import { NetSession, Lobby, packInput, unpackInput, seededRandom } from './net/NetSession.js';
+import { setLabelNetplay } from './ui/labels.js';
 import { renderPortraits } from './ui/portraits.js';
 import { renderArenaThumbs } from './ui/arenaThumbs.js';
 import { victoryLine } from './config/dialogues.js';
@@ -92,6 +94,7 @@ function setOverlay(state, overlay) {
 
 // Tela inicial com o menu aberto (voltar da seleção, das opções ou da pausa)
 function toMainMenu() {
+  if (game.net) { endNet('Partida online encerrada.', true); return; }
   endMatch();
   setOverlay(null, null);
   setScreen('mainmenu', new HomeScreen(screens, { portraits, menu: true }));
@@ -124,13 +127,15 @@ function toStage() {
 // Tela de carregamento → monta a luta → começa
 async function startMatch() {
   endMatch();
+  game.netLoaded = null;
   setOverlay(null, null);
   const { p1, p2 } = game.pick;
   const arena = ARENAS[game.arenaId] || ARENAS[DEFAULT_ARENA];
   const loading = new LoadingScreen(screens, { p1, p2, arena, cpu: game.mode.cpu, mode: game.mode.kind, portraits });
   setScreen('loading', loading);
   const t0 = performance.now();
-  const frame = () => new Promise((r) => requestAnimationFrame(r));
+  // quadro de tela (ou 50 ms, se a janela estiver em segundo plano: na LAN o outro jogador não fica esperando)
+  const frame = () => new Promise((r) => { requestAnimationFrame(() => r()); setTimeout(r, 50); });
   loading.progress(0.1);
   await frame();
   await frame();
@@ -139,7 +144,8 @@ async function startMatch() {
     defs: [p1, p2],
     arenaId: game.arenaId || DEFAULT_ARENA,
     onEnd: ({ winner, def, loser, team }) => {
-      setTimeout(() => {
+      // tempo contado pela simulação (e não pelo relógio): na LAN a tela de vitória abre no mesmo quadro nos dois
+      match.world.after(0.4, () => {
         if (game.state !== 'fight' || game.match !== match) return;
         // imagem do vencedor: render 3D na pose de vitória (local)
         const arts = renderPortraits(team || [def], renderer, { w: 520, h: 700, anim: 'victory', animTime: 1.2, full: true, background: false, turn: 0.2 });
@@ -153,9 +159,10 @@ async function startMatch() {
             { id: 'main', label: 'MENU PRINCIPAL' },
           ],
         }));
-      }, 400);
+      });
     },
   });
+  if (game.net) match.world.netplay = true;
   if (match.ready) await match.ready((k) => loading.progress(0.1 + k * 0.8));
   loading.progress(0.95);
   // compila os shaders antes de mostrar, para não travar no primeiro frame
@@ -166,6 +173,16 @@ async function startMatch() {
   }
   loading.progress(1);
   if (game.state !== 'loading') { match.dispose(); return; }
+  if (game.net) {
+    // LAN: a luta só começa no MESMO quadro nos dois computadores — quando os dois avisarem que carregaram (tick)
+    game.netLoaded = match;
+    return;
+  }
+  beginLoadedMatch(match);
+}
+
+// carregou: controles, tutorial e a apresentação
+function beginLoadedMatch(match) {
   setupControllers(match);
   game.match = match;
   if (game.mode.kind === 'tutorial') {
@@ -292,9 +309,198 @@ window.addEventListener('resize', () => {
 
 const clock = new THREE.Clock();
 function frame() {
-  tick(Math.min(1 / 30, clock.getDelta()));
+  const dt = clock.getDelta();
+  if (game.net) netPump(dt);
+  else tick(Math.min(1 / 30, dt));
   render();
   requestAnimationFrame(frame);
+}
+
+// ---------------------------------------------------------------- PARTIDA LAN (ver net/NetSession.js)
+const NET_STEP = 1 / 60;
+const nativeRandom = Math.random;
+let netBadge = null;
+
+// comandos locais de um quadro de rede (o Esc do teclado volta nos menus e só pausa na luta, como fora da LAN)
+function packLocal() {
+  const d = input.readLocal();
+  const held = { ...d.held };
+  if (d.escape && game.state !== 'fight') { held.start = false; held.physical = true; }
+  return packInput(d.mx, d.my, held, game.netLoaded ? 1 : 0);
+}
+
+// resumo do estado da luta para conferir a sincronia
+function netHash() {
+  const m = game.match;
+  let s = game.state + '|';
+  if (m && m.fighters) for (const f of m.fighters) s += [f.def.id, f.state, f.pos.x.toFixed(2), f.pos.z.toFixed(2), Math.round(f.health), Math.round(f.energy)].join(',') + ';';
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (Math.imul(h, 31) + s.charCodeAt(i)) | 0;
+  return h;
+}
+function netSnapshot() {
+  const m = game.match;
+  if (!m || !m.fighters) return null;
+  return m.fighters.map((f) => ({ id: f.def.id, p: f.pos.toArray(), v: f.vel.toArray(), yaw: f.yaw, hp: f.health, en: f.energy, dg: f.dodges, cd: { ...f.cooldowns } }));
+}
+function netApplyFix(snap) {
+  const m = game.match;
+  if (!snap || !m || !m.fighters) return;
+  m.fighters.forEach((f, i) => {
+    const s = snap[i];
+    if (!s || s.id !== f.def.id) return;
+    f.pos.fromArray(s.p);
+    f.vel.fromArray(s.v);
+    f.yaw = s.yaw;
+    f.health = s.hp;
+    f.energy = s.en;
+    f.dodges = s.dg;
+    Object.assign(f.cooldowns, s.cd);
+  });
+}
+
+function netPump(realDt) {
+  const net = game.net;
+  if (net.closed) { endNet(net.closeReason || 'A partida LAN terminou.'); return; }
+  net.acc = Math.min(net.acc + realDt, 0.2);
+  let n = 0;
+  while (net.acc >= NET_STEP && n < 6) {
+    net.fill(packLocal);
+    if (!net.ready()) { net.waiting += realDt; break; }
+    net.waiting = 0;
+    input.netFrame = net.take().map(unpackInput);
+    Math.random = game.simRandom; // a simulação usa o sorteio com semente (igual nos dois computadores)
+    try { tick(NET_STEP); } finally { Math.random = nativeRandom; }
+    if (net.role === 'guest') while (net.fixes.length) netApplyFix(net.fixes.shift());
+    if (game.net) net.afterTick(netHash, netSnapshot);
+    net.acc -= NET_STEP;
+    n++;
+    if (!game.net) return;
+  }
+  if (netBadge) {
+    const wait = net.waiting > 0.4;
+    netBadge.classList.toggle('wait', wait);
+    netBadge.textContent = wait ? 'ONLINE · AGUARDANDO O OUTRO JOGADOR…' : `ONLINE · ${net.names[0]} × ${net.names[1]} · ${net.ping} ms${net.desyncs ? ' · ressincronizado' : ''}`;
+  }
+}
+
+// depuração: um passo de rede manual (aba em segundo plano não roda o requestAnimationFrame)
+game.netPumpOnce = () => { if (game.net) netPump(NET_STEP); };
+
+function netToast(text) {
+  const old = document.getElementById('net-toast');
+  if (old) old.remove();
+  const t = document.createElement('div');
+  t.id = 'net-toast';
+  t.textContent = text;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 4500);
+}
+
+// conectou: os dois começam do mesmo estado (seleção de personagens P1 × P2) e daqui em diante andam juntos
+function startNet(session) {
+  game.net = session;
+  game.netSettings = { ...SETTINGS };
+  Object.assign(SETTINGS, session.settings || {});
+  game.simRandom = seededRandom(session.seed);
+  input.netSlot = session.slot;
+  input.time = 0;
+  for (const p of input.players) {
+    p.cpu = null;
+    p.setVirtual(null);
+    p._prevHeld = {};
+    p._prevDir = {};
+    p.pressTime = {};
+    p.held = {};
+    p.pressed = {};
+  }
+  document.body.classList.add('netplay');
+  setLabelNetplay(true);
+  hud.names = session.names.slice();
+  netBadge = document.createElement('div');
+  netBadge.id = 'net-badge';
+  document.body.appendChild(netBadge);
+  game.mode = { kind: 'pvp', cpu: false, team: false, net: true };
+  game.lastSelect = null;
+  game.arenaId = null;
+  game.pausedBy = 0;
+  game.menuGuard = 0;
+  audio.play('confirm');
+  toSelect();
+}
+
+function endNet(reason, byMe = false) {
+  const net = game.net;
+  game.net = null;
+  game.netLoaded = null;
+  input.netFrame = null;
+  input.netSlot = undefined;
+  if (net) { if (byMe) net.leave(); else net.close(); }
+  if (game.netSettings) { Object.assign(SETTINGS, game.netSettings); game.netSettings = null; }
+  document.body.classList.remove('netplay');
+  setLabelNetplay(false);
+  hud.names = null;
+  if (netBadge) { netBadge.remove(); netBadge = null; }
+  if (reason) netToast(reason);
+  toMainMenu();
+}
+
+// tela ONLINE / LAN (antes de conectar: roda fora da sincronia) + lista de salas abertas (Lobby)
+function openOnline() {
+  const scr = new LanScreen(screens);
+  setScreen('lan', scr);
+  if (game.lobby) game.lobby.stop();
+  game.lobby = new Lobby({ onRooms: (list) => { if (game.screen === scr) scr.setRooms(list); } });
+  game.lobby.start();
+}
+
+function leaveOnline() {
+  if (game.lanPending) { game.lanPending.close('cancelado'); game.lanPending = null; }
+  if (game.lobby) { game.lobby.stop(); game.lobby = null; }
+}
+
+function updateLan() {
+  const scr = game.screen;
+  const c = scr.update(input);
+  const cancelPending = () => {
+    if (game.lanPending) { game.lanPending.close('cancelado'); game.lanPending = null; }
+    if (game.lobby && game.lanRoom) { game.lobby.remove(game.lanRoom); game.lanRoom = null; }
+  };
+  if (c === 'move') audio.play('select');
+  else if (c === 'refresh') { audio.play('select'); if (game.lobby) game.lobby.refresh(); }
+  else if (c === 'back') { leaveOnline(); audio.play('select'); toMainMenu(); }
+  else if (c === 'cancel') { cancelPending(); audio.play('select'); }
+  else if (c && (c.act === 'host' || c.act === 'join')) {
+    audio.play('confirm');
+    cancelPending();
+    const ticket = {};
+    game.lanTicket = ticket;
+    const settings = { timer: SETTINGS.timer, moveMode: SETTINGS.moveMode, rounds: SETTINGS.rounds };
+    const onSession = (s) => { game.lanPending = s; };
+    const p = c.act === 'host'
+      ? NetSession.host({
+        name: scr.name, password: c.password, settings, onSession,
+        onCode: (code) => {
+          if (game.lanTicket !== ticket || game.screen !== scr) return;
+          scr.showCode(code);
+          if (c.isPublic && game.lobby) { game.lanRoom = code; game.lobby.announce({ code, name: scr.name, locked: !!c.password }); }
+        },
+      })
+      : NetSession.join(c.code, { name: scr.name, password: c.password, onSession });
+    p.then((session) => {
+      if (game.lanTicket !== ticket || game.screen !== scr || session.closed) { session.close(); return; }
+      game.lanPending = null;
+      game.lanRoom = null;
+      leaveOnline();
+      startNet(session);
+    }).catch((err) => {
+      if (game.lanTicket !== ticket || game.screen !== scr) return;
+      game.lanPending = null;
+      if (game.lobby && game.lanRoom) { game.lobby.remove(game.lanRoom); game.lanRoom = null; }
+      if (err && err.message === 'cancelado') return;
+      scr.fail((err && err.message) || 'Não foi possível conectar.');
+    });
+  }
 }
 
 // Depuração: avança N frames de forma síncrona (útil com a aba em segundo plano)
@@ -333,6 +539,7 @@ function tick(dt) {
         }
       }
       else if (c === 'news') { audio.play('confirm'); setOverlay('news', new ChangelogScreen(screens)); }
+      else if (c === 'lan') { audio.play('confirm'); openOnline(); }
       else if (c === 'back') { audio.play('select'); game.state = 'title'; }
       else if (c === 'move') audio.play('select');
       else if (c && (c.includes(':') || c === 'training' || c === 'tutorial')) {
@@ -384,6 +591,15 @@ function tick(dt) {
       break;
     }
     case 'loading':
+      // LAN: começa quando os dois computadores avisaram que carregaram (o aviso viaja junto com os comandos)
+      if (game.net && game.netLoaded && input.netFrame && input.netFrame.every((v) => v.flags & 1)) {
+        const m = game.netLoaded;
+        game.netLoaded = null;
+        beginLoadedMatch(m);
+      }
+      break;
+    case 'lan':
+      updateLan();
       break;
     case 'fight':
       const pauser = input.players.findIndex((p) => (!p.cpu && p.pressed.start) || (p.humanPressed && p.humanPressed.start && (p.cpu || p._virtual)));

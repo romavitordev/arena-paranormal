@@ -174,5 +174,7 @@ function buildSteps(def) {
 
 function comboCmd(input) {
   const [mod, btn] = input.split('+');
-  return [`@${mod}`, '+', `@${btn}`];
+  // △ → ○ / △ → □: um toque depois do outro (Storm 4)
+  const seq = input === 'carga+physical' || input === 'carga+ranged';
+  return [`@${mod}`, seq ? '→' : '+', `@${btn}`];
 }

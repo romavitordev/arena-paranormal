@@ -28,6 +28,7 @@ M = {
     'face': material('face_diabo', '#ffffff', 0.7),
     'torso': material('torso_diabo', '#ffffff', 0.7),  # símbolo de Sangue, boca vertical, sigilos dourados
     'arm': skin,
+    'armR': material('arms_diabo', '#ffffff', 0.7),  # Sigilos de Conhecimento dourados (onde o Juan tinha tatuagens)
     'legs': material('goat_fur', '#3a1210', 0.95),
     'feet': material('hoof', '#141010', 0.5),
 }

@@ -45,7 +45,7 @@ export class CameraRig {
     this.shakeAmt = 0;
     this.shakeTime = 0;
     this.basis = { forward: new THREE.Vector3(0, 0, -1), right: new THREE.Vector3(1, 0, 0) };
-    this.faded = new Set();
+    this.faded = new Map(); // objeto → tempo restante transparente
     camera.fov = CAMERA_CFG.fov;
   }
 
@@ -163,6 +163,7 @@ export class CameraRig {
         this.target.z + Math.cos(this.yaw) * this.distance,
       );
       this.clampToArena(this.pos);
+      this.avoidSolids();
       this.look.copy(this.target);
       // se a parede não deixa recuar, abre a lente para continuar enquadrando os dois
       const real = this.pos.distanceTo(this.target);
@@ -185,13 +186,32 @@ export class CameraRig {
     }
     cam.lookAt(this.look);
     cam.updateProjectionMatrix();
-    this.updateOcclusion(fighters);
+    this.updateOcclusion(fighters, dt);
 
-    // base para movimentação relativa à câmera
-    cam.getWorldDirection(this.basis.forward);
+    // base para movimentação relativa à câmera. Na LAN vem só do ângulo da câmera (igual nos dois computadores; a
+    // posição real muda com o tamanho da janela e com paredes)
+    if (this.world.netplay) this.basis.forward.set(-Math.sin(this.yaw), 0, -Math.cos(this.yaw));
+    else cam.getWorldDirection(this.basis.forward);
     this.basis.forward.y = 0;
     this.basis.forward.normalize();
     this.basis.right.set(-this.basis.forward.z, 0, this.basis.forward.x);
+  }
+
+  // Bloco grande do cenário (cidade/cemitério juntados numa peça só) entre os lutadores e a câmera: em vez de ficar
+  // atrás dele, a câmera chega para a frente do obstáculo (a lente abre sozinha para continuar enquadrando)
+  avoidSolids() {
+    const solids = this.world.arena && this.world.arena.solids;
+    if (!solids || !solids.length) return;
+    const from = v1.copy(this.target);
+    from.y += 0.6;
+    const dir = new THREE.Vector3().subVectors(this.pos, from);
+    const len = dir.length();
+    if (len < 1) return;
+    dir.divideScalar(len);
+    ray.set(from, dir);
+    ray.far = len;
+    const hit = ray.intersectObjects(solids, false)[0];
+    if (hit && hit.distance > 1.5) this.pos.copy(from).addScaledVector(dir, hit.distance - 0.4);
   }
 
   // Mantém a câmera dentro dos limites que a arena permitir (sem pulos bruscos)
@@ -211,30 +231,52 @@ export class CameraRig {
     if (p.y < 0.4) p.y = 0.4;
   }
 
-  // Objetos entre a câmera e os lutadores ficam transparentes
-  updateOcclusion(fighters) {
+  // Objetos entre a câmera e os lutadores ficam transparentes: raios até a cabeça, o peito e o quadril de cada um, e
+  // também o objeto em que a câmera "entrou". Some na hora e volta 0,35 s depois de parar de tampar (sem piscar).
+  updateOcclusion(fighters, dt = 1 / 60) {
     const occ = this.world.arena && this.world.arena.occluders;
     if (!occ || !occ.length) return;
-    const now = new Set();
+    const cam = this.camera.position;
+    const hits = new Set();
     for (const f of fighters) {
-      const target = f.chestPos(v1);
-      const dir = new THREE.Vector3().subVectors(target, this.camera.position);
-      const len = dir.length();
-      ray.set(this.camera.position, dir.divideScalar(len));
-      ray.far = len - 0.4;
-      for (const hit of ray.intersectObjects(occ, false)) now.add(hit.object);
+      if (!f.visible) continue;
+      const chest = f.chestPos(v1);
+      const s = f.def && f.def.stats && f.def.stats.size ? f.def.stats.size : 1;
+      for (const dy of [0.55 * s, 0, -0.55 * s]) {
+        const target = new THREE.Vector3(chest.x, chest.y + dy, chest.z);
+        const dir = target.sub(cam);
+        const len = dir.length();
+        if (len < 0.5) continue;
+        ray.set(cam, dir.divideScalar(len));
+        ray.far = len - 0.4;
+        for (const hit of ray.intersectObjects(occ, false)) hits.add(hit.object);
+      }
     }
-    for (const o of now) {
+    for (const o of occ) {
+      if (!o.userData.occBox) o.userData.occBox = new THREE.Box3().setFromObject(o).expandByScalar(0.3);
+      if (o.userData.occBox.containsPoint(cam)) hits.add(o);
+    }
+    for (const o of hits) {
       if (!this.faded.has(o)) setFade(o, CAMERA_CFG.occluderOpacity);
+      this.faded.set(o, 0.35);
     }
-    for (const o of this.faded) {
-      if (!now.has(o)) setFade(o, 1);
+    for (const [o, t] of this.faded) {
+      if (hits.has(o)) continue;
+      if (t - dt > 0) this.faded.set(o, t - dt);
+      else {
+        setFade(o, 1);
+        this.faded.delete(o);
+      }
     }
-    this.faded = now;
   }
 }
 
 function setFade(obj, opacity) {
+  // objetos do kit dividem o material: copia antes de deixar transparente (senão some toda casa igual)
+  if (opacity < 1 && obj.userData.autoOcc && !obj.userData.ownMat) {
+    obj.material = Array.isArray(obj.material) ? obj.material.map((m) => m.clone()) : obj.material.clone();
+    obj.userData.ownMat = true;
+  }
   const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
   for (const m of mats) {
     if (!m) continue;

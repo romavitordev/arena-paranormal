@@ -11,14 +11,20 @@ export function keyName(code) {
 }
 
 // Rótulo do botão de uma ação, conforme o dispositivo em uso pelo jogador.
+// PARTIDA LAN: cada um joga com o teclado do P1 do próprio computador (inclusive o convidado, que é o P2)
+let netplay = false;
+export function setLabelNetplay(v) {
+  netplay = !!v;
+}
+
 export function actionLabel(playerIndex, action, source = 'keyboard') {
   if (source === 'gamepad') return BUTTON_LABELS.pad[action] || action;
-  const layout = KEYBOARD_LAYOUTS[PLAYER_DEVICES[playerIndex].keyboard];
+  const layout = KEYBOARD_LAYOUTS[PLAYER_DEVICES[netplay ? 0 : playerIndex].keyboard];
   const codes = layout[action];
   return codes ? keyName(codes[0]) : '?';
 }
 
 export function moveLabel(playerIndex) {
-  const l = KEYBOARD_LAYOUTS[PLAYER_DEVICES[playerIndex].keyboard];
+  const l = KEYBOARD_LAYOUTS[PLAYER_DEVICES[netplay ? 0 : playerIndex].keyboard];
   return [l.up, l.left, l.down, l.right].map((c) => keyName(c[0])).join('');
 }

@@ -427,9 +427,10 @@ export function mutilatorAxe() {
   const grip = part(new THREE.CylinderGeometry(0.03, 0.03, 0.14, 8), 0x2a1a10, { outline: false });
   grip.position.y = 0.06;
   g.add(grip);
-  // cabeça: lâmina vermelha (cânone) desenhada no plano XY e girada para a frente (+X do desenho → +Z)
+  // cabeça: lâmina vermelha (cânone) desenhada no plano XY e girada para que o FIO aponte para a frente do golpe
+  // (o machado pende da mão para -Y; com -π/2 o fio ficava virado para as costas do Aguiar)
   const head = new THREE.Group();
-  head.rotation.y = -Math.PI / 2;
+  head.rotation.y = Math.PI / 2;
   head.position.y = -0.5;
   g.add(head);
   const shape = new THREE.Shape();

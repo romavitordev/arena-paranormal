@@ -40,8 +40,8 @@ export default {
     air: { name: 'Queda da Fantasma', anim: 'air_knife', dur: 0.38, active: [0.11, 0.27], damage: 34, range: 1.9, arc: 110, knockback: 2.5, slam: 15, vertical: 2.2, sound: 'blade', hitSound: 'bladeHit', trail: { color: 0x1a1620, roll: 1.3 } },
   },
 
-  // □: DISPARO ESPIRAL — as faixas puxam o rifle: a bala sai em curva (espiral), procura o alvo, atravessa
-  // cobertura e não pode ser defendida
+  // □: DISPARO ESPIRAL (cânone: as faixas puxam a sniper e as balas saem CURVAS, negando a cobertura) — a bala
+  // procura o alvo e faz curva em volta das paredes e obstáculos em vez de atravessá-los
   ranged: {
     name: 'Disparo Espiral',
     type: 'projectile',
@@ -53,20 +53,20 @@ export default {
     count: 1,
     interval: 0,
     damage: 100,
-    range: 70,
-    speed: 120,
+    range: 200, // pega em qualquer lugar do mapa
+    speed: 95,
     radius: 0.32,
     spread: 0,
     knockback: 4.5,
     hitstun: 0.45,
-    cooldown: 3.0,
+    cooldown: 4.0, // quase certeiro: recarga maior que a da sniper comum
     energyCost: 0,
     visual: 'deathSpiral',
     color: 0xd8d4dc,
     element: 'morte',
     spiral: 0.22,
-    homing: 5,
-    ghost: true, // contorna cobertura
+    homing: 9,
+    curve: true, // faz curva em volta da cobertura
     guardCrush: 25, // ignora resistência: gasta muito da defesa de quem bloqueia
     drip: true, // o rifle pinga lodo
     sound: 'sniper',
@@ -81,7 +81,7 @@ export default {
       name: 'Sniper da Morte',
       input: 'block+carga', // R2 + △ / RT + Y
       type: 'deathShot',
-      description: 'O tempo quase para em volta do alvo; o tiro sai numa espiral de Morte que procura o alvo — e termina quem já está morrendo (abaixo de 30% de vida: dano ×1,6).',
+      description: 'O tempo quase para em volta do alvo; o tiro sai numa espiral de Morte que procura o alvo e faz curva em volta das paredes — e termina quem já está morrendo (abaixo de 30% de vida: dano ×1,6).',
       energyCost: 30,
       cooldown: 15,
       windup: 0.75,
@@ -91,7 +91,7 @@ export default {
       element: 'morte',
       showProp: 'sniperHand',
     hideProp: 'stowed', // faca + rifle das costas
-      projectile: { visual: 'deathSpiral', color: 0xd8d4dc, damage: 120, range: 70, speed: 120, radius: 0.34, knockback: 5, hitstun: 0.55, impactScale: 2, hitSound: 'heavyPunch', element: 'morte', spiral: 0.3, homing: 6, ghost: true, drip: true, execute: { below: 0.3, mult: 1.6 } },
+      projectile: { visual: 'deathSpiral', color: 0xd8d4dc, damage: 140, range: 200, speed: 100, radius: 0.34, knockback: 5, hitstun: 0.55, impactScale: 2, hitSound: 'heavyPunch', element: 'morte', spiral: 0.3, homing: 10, curve: true, drip: true, execute: { below: 0.3, mult: 1.6 } },
     },
     {
       id: 'faixas',
@@ -165,6 +165,7 @@ export default {
     type: 'spiralSnipe',
     energyCost: 50,
     cooldown: 16,
+    damage: 320, // o tiro mais forte da Kemi (padrão dos especiais: 250)
     range: 40,
     showProp: 'sniperHand',
     hideProp: 'stowed', // faca + rifle das costas

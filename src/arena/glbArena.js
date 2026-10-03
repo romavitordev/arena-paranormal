@@ -28,6 +28,7 @@ export function createGLBArena(cfg) {
   const colliders = [];
   const boxes = [];
   const occluders = [];
+  const solids = []; // blocos grandes que a câmera não atravessa
   const flicker = [];
   const sway = []; const spin = [];
   let time = 0;
@@ -41,6 +42,7 @@ export function createGLBArena(cfg) {
     colliders,
     boxes,
     occluders,
+    solids,
     spawns: cfg.spawns,
 
     build(scene) {
@@ -119,6 +121,25 @@ export function createGLBArena(cfg) {
         }
       });
       for (const o of remove) o.parent && o.parent.remove(o);
+      // além das peças OCC_, qualquer objeto ALTO do cenário (árvores, pedras, casas, colunas) fica transparente
+      // quando fica entre a câmera e os lutadores (o material só é copiado na primeira vez que precisar sumir)
+      const occSet = new Set(occluders);
+      group.updateMatrixWorld(true);
+      group.traverse((o) => {
+        if (!o.isMesh || occSet.has(o)) return;
+        const n = taggedNode(o).name || '';
+        if (/^(GROUND|FLOOR|DECAL_)/.test(n)) return;
+        const bb = new THREE.Box3().setFromObject(o);
+        if (bb.max.y - bb.min.y < 1.2) return;
+        // peças juntadas num bloco só (a cidade inteira, o cemitério): não dá para sumir uma casa sozinha — a câmera
+        // é que chega para a frente do obstáculo (CameraRig)
+        if (bb.max.x - bb.min.x > 12 || bb.max.z - bb.min.z > 12) {
+          if (bb.max.y - bb.min.y > 2.5) solids.push(o);
+          return;
+        }
+        o.userData.autoOcc = true;
+        occluders.push(o);
+      });
 
       // céu, névoa e luzes definidos no cenário
       scene.background = cfg.sky.isTexture ? cfg.sky : new THREE.Color(cfg.sky);

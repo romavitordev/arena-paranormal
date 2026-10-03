@@ -29,8 +29,8 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 | **Dash** | × + × | A + A | K + K | Num2 + Num2 | × + × |
 | **Dash longo** (Mascarado: teleporte) | △ + × | Y + A | I + K | Num8 + Num2 | △ + × |
 | **Agarrão** (não defensável) | R2 + ○ | RT + B | E + L | Num9 + Num6 | DEF + ○ |
-| **Habilidade de △ + ○** | △ + ○ | Y + B | I + L | Num8 + Num6 | △ + ○ |
-| **Habilidade de △ + □** | △ + □ | Y + X | I + J | Num8 + Num4 | △ + □ |
+| **Habilidade de △ → ○** | △ → ○ | Y → B | I → L | Num8 → Num6 | △ → ○ |
+| **Habilidade de △ → □** | △ → □ | Y → X | I → J | Num8 → Num4 | △ → □ |
 | **Habilidade de △ + L2** | △ + L2 | Y + LT | I + Shift | Num8 + Num1 | △ + ESQ |
 | **Habilidade de R2 + △** | R2 + △ | RT + Y | E + I | Num9 + Num8 | DEF + △ |
 | **Habilidade de R2 + ×** | R2 + × | RT + A | E + K | Num9 + Num2 | DEF + × |
@@ -48,8 +48,8 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
   lado + ○ = golpe com passo lateral · no ar + ○ = golpe aéreo. A sequência termina num finalizador
   (lança, derruba, afasta ou atordoa).
 - **Especial:** △ → △ → ○ (Y → Y → B; teclado I → I → L). Custa 50 de sanidade.
-- **Habilidades secundárias** (sem botão modificador): **△ + ○**, **△ + □** e **△ + L2** (juntos ou △ logo antes;
-  △ + ○/□ também saem segurando △ enquanto carrega) e **R2 + △** / **R2 + ×** (segurando a defesa). R2 + ○ é o agarrão.
+- **Habilidades secundárias** (sem botão modificador): **△ → ○** e **△ → □** como no Storm 4 (toque △, solte e
+  toque ○ / □ — também valem juntos ou segurando △), **△ + L2** (juntos ou △ logo antes) e **R2 + △** / **R2 + ×** (segurando a defesa). R2 + ○ é o agarrão.
   Segurando △ para carregar, L2 sozinho continua sendo **esquiva** — dá para fugir no meio da carga.
 - **Dash:** × + × (toque duplo no pulo) avança rápido. △ + × é o dash longo, que persegue o adversário (10 de sanidade); no Mascarado, △ + × é o Teleporte das Sombras.
 - **Agarrão:** Defesa + ○ (RT + B). Pega de perto e arremessa; não pode ser defendido, só esquivado. Errar deixa você exposto.
@@ -67,6 +67,15 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 - **Combo infinito (estilo Storm):** na sequência de ○, antes do finalizador, aperte **△ + ×** depois de acertar: o
   personagem dá um rush atrás do alvo e a sequência de ○ recomeça do 1º golpe — dá para repetir ○○○ → △+× → ○○○...
   Cada rush gasta 8 de sanidade; o dano cai com a escala de combo e quem apanha pode usar a Substituição.
+- **Online / LAN:** no menu inicial, **ONLINE / LAN**: escreva seu **nome de usuário** (fica salvo) e
+  - **CRIAR SALA** — senha opcional e visibilidade **PÚBLICA** (aparece em SALAS ABERTAS) ou **PRIVADA** (só com o
+    código); a sala recebe um código de 5 letras;
+  - **SALAS ABERTAS** — lista das salas públicas abertas agora (🔒 = com senha); escolha uma para entrar;
+  - **ENTRAR COM CÓDIGO** — código + senha (se tiver).
+  Funciona pela internet, na mesma rede ou pela rede virtual do Radmin (precisa de internet para a apresentação e
+  para a lista de salas). Quem cria a sala é o P1; cada um joga com o teclado do P1 (ou controle) do próprio
+  computador. Os dois rodam a mesma luta, quadro a quadro; o canto da tela mostra os nomes, o ping e avisa quando está
+  esperando o outro. Por enquanto só batalha solo (1 × 1).
 - **Tutorial:** escolha um personagem e aprenda todos os golpes dele, passo a passo, contra um alvo parado: o cartão
   mostra o comando com as teclas do aparelho que você está usando e só avança quando você faz o golpe (a pausa pula
   um passo). Os comandos de cada ataque também aparecem sempre nos ícones da HUD.
@@ -96,7 +105,7 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 | LÍRIO | Os Cinco | Sangue | Canivete de osso (curto e fraco: ele é de perto) | △ Golpe Pesado · ○ Cai Dentro (corre, ombrada, provoca) · □ Amarras de Sangue "Magras" · × Leonora Amaldiçoada · L2 Proteção Pesada | Leonora ("Hoje 'cê vai conhecer a Leonora!") | Sangue de Ferro (+15% de vida) · Casca Grossa (menos recuo e desgaste na defesa) · Mão Pesada (mais impacto) |
 | FERREIRO | Luzidios | Morte | Lodo arremessado | ○ Hipnose Espiral · × Espada Consumidora (sangra) · △ Conforto de Santo Berço (cura) · L2 Armadura do Ferreiro | Pacto do Santo (sanidade > 85%, 45 s): **morrer no pacto → DEUS DA MORTE** (chefe 2x maior, barra preta, fraco a fogo e Energia, regenera) | Corpo de Luzidio (−8% de dano físico) |
 | JUAN | Mascarados | Sangue | Lâmina de Sangue | △ Descarnar Discente · ○ Perturbação Discente · □ Vínculo de Sangue · L2 Armadura de Sangue Diabólica | Renascimento (1x por partida) → sobe no Trono do Diabo e vira **O PORTADOR DO TRONO** até o fim do round (Senhor do Sangue, Sangue nos Arredores, Amaldiçoar Arma, Veias, Ódio, Transportar, Regeneração; especial Pacto deixa o alvo Transtornado) | Faca Predadora (cura 15%) · Masoquista (apanhar dá sanidade) |
-| KEMI | Mascarados | Morte | Sniper Fantasma (segurar para mirar) | △ Disparo da Morte (tempo lento) · ○ Pistola Transtornada (arame farpado) · □ Perita · L2 Revólver .38 | Vestir as Faixas → **A FANTASMA** até o fim do round (Disparo Espiral: balas curvas que procuram o alvo, atravessam cobertura e gastam muito da defesa · Sniper da Morte · Faixas · Some na Escuridão · Analítica) | Sede de Vingança (abaixo de 30% de vida: mais dano, velocidade e sanidade, 1x por round) |
+| KEMI | Mascarados | Morte | Sniper Fantasma (segurar para mirar) | △ Disparo da Morte (tempo lento) · ○ Pistola Transtornada (arame farpado) · □ Perita · L2 Revólver .38 | Vestir as Faixas → **A FANTASMA** até o fim do round (Disparo Espiral: bala curva e rápida que acha o caminho por qualquer brecha e pega em qualquer lugar do mapa — só a esquiva escapa — e gasta muito da defesa · Sniper da Morte · Faixas · Some na Escuridão · Analítica) | Sede de Vingança (abaixo de 30% de vida: mais dano, velocidade e sanidade, 1x por round) |
 | XANDE | Os Cinco | Sangue | Skate Caótico (vai e volta) | □ Amaldiçoar Arma · ○ Polarização Caótica · △ Tela de Ruído (escudo de 140) · × Velocidade Mortal · L2 Cicatrização | Por Eles | Gladiador Paranormal (+3 sanidade por golpe) |
 | AGUIAR | Mascarados | Sangue | Machado na Corda (arremessa, sangra e puxa) | ○ Máscara do Mutilador Noturno · L2 Armadilha de Urso · × Predador de Sangue · △ Cães de Caça | Finalização do Mutilador | Filho da Dor (apanhando seguido, resiste mais) |
 
@@ -122,7 +131,8 @@ Exemplo: X=100, Y=60 → o inimigo perde 100, recupera 60 (saldo −40) e perde 
   some pouco depois do combo acabar.
 - **Combo vertical (dentro do combo):** ↑ + ○ lança para cima e o atacante sobe junto (até 3 golpes aéreos e o último
   crava no chão); ↓ + ○ derruba. × depois de acertar = dash de perseguição (até 2 por combo, inclusive no ar).
-- **Queda:** derrubado fica no chão sem tomar dano; × ou L2 logo ao cair levanta rolando; senão levanta sozinho.
+- **Queda:** todo fim de combo derruba. Derrubado fica no chão sem tomar dano (~1,4 s e mais 0,35 s ao levantar) —
+  tempo para os dois carregarem a sanidade; × ou L2 logo ao cair levanta rolando; senão levanta sozinho.
 - **Dash direcional:** × + × vai na direção do analógico (frente, trás, lados, diagonais); sem direção, vai até o inimigo.
 - **Órbita:** com o lock-on, andar para o lado gira em volta do adversário mantendo a distância.
 - **Carregar andando:** dá para andar segurando △ (anda a 45% e carrega a 50%).

@@ -15,6 +15,19 @@ const EYE_Y = 120;
 const NOSE_Y = 146;
 const MOUTH_Y = 170;
 
+// sorteio repetível (mesma semente → mesmos números): para cor e brilho baterem
+function seeded(seed) {
+  let s = seed >>> 0;
+  return () => {
+    s = (s + 0x6d2b79f5) >>> 0;
+    let t = s;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const SIGIL_SET = 'ᚠᚢᚦᚨᚱᚲᚷᚹᚺᚾᛁᛃᛇᛈᛉᛊᛏᛒ⊕⊗';
+
 function canvasTex(w, h, paint, { wrap = false, repeat } = {}) {
   const c = document.createElement('canvas');
   c.width = w;
@@ -841,9 +854,10 @@ export const MATERIAL_TEXTURES = {
   torso_diabo: () => {
     const sigils = (g, color) => {
       g.fillStyle = color; g.font = '15px serif';
-      const set = 'ᚠᚢᚦᚨᚱᚲᚷᚹᚺᚾᛁᛃᛇᛈᛉᛊᛏᛒ⊕⊗';
+      // sorteio com semente: a cor (map) e o brilho (emissiveMap) caem exatamente nos mesmos lugares
+      const rnd = seeded(7);
       // lado DIREITO do corpo (na frente, x < 256)
-      for (let y = 16; y < 250; y += 18) for (let x = 120; x < 240; x += 14) if (Math.random() < 0.7) g.fillText(set[Math.floor(Math.random() * set.length)], x, y);
+      for (let y = 16; y < 250; y += 18) for (let x = 120; x < 240; x += 14) if (rnd() < 0.7) g.fillText(SIGIL_SET[Math.floor(rnd() * SIGIL_SET.length)], x, y);
     };
     const map = canvasTex(512, 256, (g) => {
       g.fillStyle = '#a01818'; g.fillRect(0, 0, 512, 256);
@@ -860,6 +874,29 @@ export const MATERIAL_TEXTURES = {
     }, { wrap: true });
     const emissiveMap = canvasTex(512, 256, (g) => {
       g.fillStyle = '#000'; g.fillRect(0, 0, 512, 256);
+      sigils(g, '#ffd27a');
+    }, { wrap: true });
+    return { map, emissiveMap, emissive: 0xffd27a };
+  },
+  // braço DIREITO do Diabo: onde o Juan tinha as tatuagens agora há Sigilos de Conhecimento dourados que brilham
+  arms_diabo: () => {
+    const sigils = (g, color) => {
+      const rnd = seeded(11);
+      g.fillStyle = color;
+      for (let y = 14; y < 256; y += 16) {
+        g.font = (y % 48 === 14 ? 'bold ' : '') + '14px serif';
+        for (let x = 4 + ((y * 5) % 12); x < 256; x += 13) if (rnd() < 0.62) g.fillText(SIGIL_SET[Math.floor(rnd() * SIGIL_SET.length)], x, y);
+      }
+      // dois anéis de sigilo (ombro e antebraço)
+      g.strokeStyle = color; g.lineWidth = 2.5;
+      for (const y of [40, 170]) { g.beginPath(); g.moveTo(0, y); g.lineTo(256, y); g.moveTo(0, y + 6); g.lineTo(256, y + 6); g.stroke(); }
+    };
+    const map = canvasTex(256, 256, (g) => {
+      g.fillStyle = '#a01818'; g.fillRect(0, 0, 256, 256);
+      sigils(g, '#e8c060');
+    }, { wrap: true });
+    const emissiveMap = canvasTex(256, 256, (g) => {
+      g.fillStyle = '#000'; g.fillRect(0, 0, 256, 256);
       sigils(g, '#ffd27a');
     }, { wrap: true });
     return { map, emissiveMap, emissive: 0xffd27a };

@@ -4,6 +4,8 @@ import { SETTINGS } from '../config/settings.js';
 import { ELEMENTS } from '../config/elements.js';
 import * as THREE from 'three';
 
+const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
 const DMG_HOLD = 1.2; // segundos que o marcador fica depois do combo acabar
 const _v = new THREE.Vector3();
 
@@ -80,7 +82,7 @@ export class HUD {
       abil.push({ key: 'dodge', action: 'dodge', name: def.dodge?.name || 'Esquiva', cost: 0 });
       p.style.setProperty('--c', def.color);
       p.innerHTML = `
-        <div class="name"><span class="tag">P${i + 1}</span><span>${def.name}</span>${ELEMENTS[def.element] ? `<span class="el" style="color:${ELEMENTS[def.element].color}">${ELEMENTS[def.element].name}</span>` : ''}</div>
+        <div class="name"><span class="tag">${this.names && this.names[i] ? escapeHtml(this.names[i]) : `P${i + 1}`}</span><span>${def.name}</span>${ELEMENTS[def.element] ? `<span class="el" style="color:${ELEMENTS[def.element].color}">${ELEMENTS[def.element].name}</span>` : ''}</div>
         <div class="bar health"><div class="trail"></div><div class="fill"></div><div class="num"></div></div>
         <div class="bar energy" title="Sanidade (PE): gasta em rituais, habilidades e especial"><div class="fill"></div><div class="mark" style="left:${(f.specialCost() / f.maxEnergy) * 100}%"></div></div>
         <div class="bar guard" title="Resistência da defesa"><div class="fill"></div></div>
@@ -120,6 +122,7 @@ export class HUD {
 
   keyText(i, action, source) {
     if (action === 'special') return `${actionLabel(i, 'carga', source)}·${actionLabel(i, 'carga', source)}·${actionLabel(i, 'physical', source)}`;
+    if (action === 'carga+physical' || action === 'carga+ranged') return `${actionLabel(i, 'carga', source)}·${actionLabel(i, action.slice(6), source)}`;
     if (action.startsWith('carga+')) return `${actionLabel(i, 'carga', source)}+${actionLabel(i, action.slice(6), source)}`;
     if (action.startsWith('block+')) return `${actionLabel(i, 'block', source)}+${actionLabel(i, action.slice(6), source)}`;
     return actionLabel(i, action, source);

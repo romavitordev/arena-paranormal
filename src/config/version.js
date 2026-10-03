@@ -1,8 +1,26 @@
 // Versão do jogo e NOVIDADES (changelog). Cada atualização conta, inclusive as que foram juntas numa só publicação.
 // Para uma nova atualização: suba VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = 15;
+export const VERSION = 16;
 
 export const CHANGELOG = [
+  {
+    v: 16,
+    date: '2026-10-02',
+    title: 'Online / LAN, formas e Disparo Espiral',
+    items: [
+      'NOVO: ONLINE / LAN no menu inicial — escolha seu nome de usuário, crie uma SALA (código de 5 letras, senha opcional, pública ou privada), veja as SALAS ABERTAS no momento ou entre com o código. Funciona pela internet, na mesma rede ou pelo Radmin; os dois computadores andam juntos, quadro a quadro, e o nome de cada um aparece na luta.',
+      'Habilidades de △ + ○ e △ + □ agora saem como no Storm 4: toque △, solte, e depois toque ○ (ou □). △ → △ → ○ continua sendo o especial.',
+      'Fim de combo derruba sempre: quem apanhou cai, fica protegido no chão e levanta (~1,5 s) — dá tempo dos dois carregarem a sanidade.',
+      'Os tiros não atravessam mais paredes (ex.: a parede do Bar Suvaco Seco).',
+      'Disparo Espiral da Fantasma (cânone: "nega toda cobertura que não seja completa"): bala rápida, quase certeira, que acha o caminho por qualquer brecha (porta, vão) e pega em qualquer lugar do mapa — mas dá para ESQUIVAR. Mais dano no tiro e no especial (320).',
+      'Kemi: o especial Disparo Espiral não fica mais travado 60 s depois de Vestir as Faixas (a recarga da transformação passava para ele); Vestir as Faixas: recarga de 60 para 30 s.',
+      'Deus da Morte e Diabo com animações próprias (o gigante curvado que esmaga com o corpo todo; o predador agachado de garras abertas).',
+      'Câmera: árvores, pedras, casas e colunas ficam transparentes quando tampam a luta (antes só algumas paredes); nos blocos grandes a câmera chega para a frente.',
+      'Diabo: Sigilos de Conhecimento dourados no braço direito (onde o Juan tinha as tatuagens).',
+      'Pele morena (Aguiar, Kemi) não fica mais rosada na luz roxa das Ruínas.',
+      'Machado do Aguiar com o fio virado para a frente.',
+    ],
+  },
   {
     v: 15,
     date: '2026-10-02',

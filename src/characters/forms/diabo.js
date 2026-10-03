@@ -21,28 +21,29 @@ export default {
   },
   stats: { moveSpeed: 8.0, size: 1.35, maxHealth: 1250 },
   regen: { every: 6, amount: 22, color: 0x7a0010 }, // Regeneração
-  anims: { idle: 'idle_dual', run: 'run', charge: 'charge', victory: 'victory', block: 'block' },
+  // animações próprias (anim/formClips.js); os nomes genéricos usados pelas habilidades também são trocados
+  anims: { idle: 'db_idle', run: 'db_run', walk: 'db_run', walk_back: 'db_walk_back', strafe_L: 'db_strafe_L', strafe_R: 'db_strafe_R', dash: 'db_dash', charge: 'db_charge', concentrate: 'db_charge', victory: 'db_victory', block: 'db_block', block_hit: 'db_block_hit', point: 'db_point', throw_r: 'db_throw', powerup: 'db_powerup', dual_cross: 'db_cross', cast_up: 'db_powerup' },
   chargeFx: { style: 'default', color: 0xff2a3d },
   dodge: { style: 'default', distance: 5.2 },
 
   melee: {
     name: 'Garras do Diabo',
     strikes: [
-      { name: 'Garra direita', anim: 'dual_r', dur: 0.28, active: [0.08, 0.16], damage: 32, range: 2.2, arc: 120, knockback: 1.0, lunge: 1.3, bleed: { dps: 3, duration: 1.5 }, sound: 'blade', hitSound: 'clawHit', trail: { color: 0xff2a3d, tilt: 0.05 } },
-      { name: 'Garra esquerda', anim: 'dual_l', dur: 0.28, active: [0.08, 0.16], damage: 32, range: 2.2, arc: 120, knockback: 1.0, lunge: 1.2, bleed: { dps: 3, duration: 1.5 }, sound: 'blade', hitSound: 'clawHit', trail: { color: 0xff2a3d, flip: true } },
-      { name: 'Quatro garras', anim: 'dual_cross', dur: 0.4, actives: [[0.1, 0.17], [0.22, 0.3]], damage: 48, range: 2.2, arc: 130, knockback: 1.2, lunge: 1.1, bleed: { dps: 3, duration: 1.5 }, sound: 'blade', hitSound: 'clawHit', trail: { color: 0xff2a3d, roll: 0.8 } },
-      { name: 'Rasgar', anim: 'dual_both', dur: 0.55, active: [0.22, 0.34], damage: 70, range: 2.3, arc: 140, lunge: 1.8, finisher: 'launch', bleed: { dps: 8, duration: 3 }, hitstop: 0.1, sound: 'slashFinal', hitSound: 'clawHit', impactScale: 1.8, trail: { color: 0x7a0010, roll: 1.4, big: true } },
+      { name: 'Garra direita', anim: 'db_claw_r', dur: 0.28, active: [0.08, 0.16], damage: 32, range: 2.2, arc: 120, knockback: 1.0, lunge: 1.3, bleed: { dps: 3, duration: 1.5 }, sound: 'blade', hitSound: 'clawHit', trail: { color: 0xff2a3d, tilt: 0.05 } },
+      { name: 'Garra esquerda', anim: 'db_claw_l', dur: 0.28, active: [0.08, 0.16], damage: 32, range: 2.2, arc: 120, knockback: 1.0, lunge: 1.2, bleed: { dps: 3, duration: 1.5 }, sound: 'blade', hitSound: 'clawHit', trail: { color: 0xff2a3d, flip: true } },
+      { name: 'Quatro garras', anim: 'db_cross', dur: 0.4, actives: [[0.1, 0.17], [0.22, 0.3]], damage: 48, range: 2.2, arc: 130, knockback: 1.2, lunge: 1.1, bleed: { dps: 3, duration: 1.5 }, sound: 'blade', hitSound: 'clawHit', trail: { color: 0xff2a3d, roll: 0.8 } },
+      { name: 'Rasgar', anim: 'db_rend', dur: 0.55, active: [0.22, 0.34], damage: 70, range: 2.3, arc: 140, lunge: 1.8, finisher: 'launch', bleed: { dps: 8, duration: 3 }, hitstop: 0.1, sound: 'slashFinal', hitSound: 'clawHit', impactScale: 1.8, trail: { color: 0x7a0010, roll: 1.4, big: true } },
     ],
-    up: { name: 'Garra ascendente', anim: 'slash_up', dur: 0.4, active: [0.13, 0.24], damage: 44, range: 2.2, arc: 120, lunge: 0.9, finisher: 'launchHigh', launcher: true, bleed: { dps: 3, duration: 1.5 }, sound: 'blade', hitSound: 'clawHit' },
-    down: { name: 'Cravar as garras', anim: 'slash_d', dur: 0.46, active: [0.18, 0.28], damage: 50, range: 2.2, arc: 120, lunge: 1, finisher: 'knockdown', bleed: { dps: 3, duration: 1.5 }, sound: 'blade', hitSound: 'clawHit', impactScale: 1.5 },
-    air: { name: 'Mergulho do Diabo', anim: 'air_dual', dur: 0.42, active: [0.13, 0.3], damage: 40, range: 2.2, arc: 120, knockback: 3, slam: 16, vertical: 2.5, bleed: { dps: 3, duration: 1.5 }, sound: 'blade', hitSound: 'clawHit' },
+    up: { name: 'Garra ascendente', anim: 'db_up', dur: 0.4, active: [0.13, 0.24], damage: 44, range: 2.2, arc: 120, lunge: 0.9, finisher: 'launchHigh', launcher: true, bleed: { dps: 3, duration: 1.5 }, sound: 'blade', hitSound: 'clawHit' },
+    down: { name: 'Cravar as garras', anim: 'db_down', dur: 0.46, active: [0.18, 0.28], damage: 50, range: 2.2, arc: 120, lunge: 1, finisher: 'knockdown', bleed: { dps: 3, duration: 1.5 }, sound: 'blade', hitSound: 'clawHit', impactScale: 1.5 },
+    air: { name: 'Mergulho do Diabo', anim: 'db_air', dur: 0.42, active: [0.13, 0.3], damage: 40, range: 2.2, arc: 120, knockback: 3, slam: 16, vertical: 2.5, bleed: { dps: 3, duration: 1.5 }, sound: 'blade', hitSound: 'clawHit' },
   },
 
   // □: lança de sangue
   ranged: {
     name: 'Lança de Sangue',
     type: 'projectile',
-    anim: 'throw_r',
+    anim: 'db_throw',
     windup: 0.2,
     recovery: 0.24,
     count: 2,
@@ -84,7 +85,7 @@ export default {
       type: 'selfBuff',
       buffType: 'devilHate',
       label: 'ÓDIO DO DIABO',
-      anim: 'powerup',
+      anim: 'db_powerup',
       description: 'O ódio mais puro: golpes 30% mais fortes e mais velocidade por 8 s.',
       energyCost: 25,
       cooldown: 18,

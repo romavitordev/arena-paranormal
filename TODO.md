@@ -199,7 +199,24 @@
 - ✅ Modo TUTORIAL no menu inicial: escolhe o personagem e ensina passo a passo todos os golpes dele (detecta cada
   ação de verdade). Saiu a opção "Tutorial ON/OFF": os comandos aparecem sempre nos ícones da HUD.
 - ✅ Esc nos menus sempre volta (não avança mais na seleção/configuração/vitória); o cartão do tutorial some fora da luta.
-- ⏭ Animações próprias das formas (Deus da Morte e Diabo ainda usam as animações humanas).
+- ✅ Machado do Aguiar: o fio da lâmina aponta para a FRENTE (para onde ele golpeia).
+- ✅ Animações próprias das formas (`src/anim/formClips.js`): Deus da Morte (curvado, caminhada pesada, tapa de costas,
+  martelada dupla, erguer pelo pescoço, pisão, palmas no chão) e Diabo (agachado, corrida de predador, garras, rasgar,
+  mergulho, urro do Ódio).
+- ✅ Diabo: Sigilos de Conhecimento dourados (com brilho) no braço direito; os sigilos do peito e o brilho batem.
+- ✅ Pele morena (Aguiar/Kemi) rosada na luz roxa: na pele a luz muda o brilho mas mantém o tom (70%).
+- ✅ △ → ○ / △ → □ em toques separados (como no Storm 4) soltam as habilidades.
+- ✅ Fim de combo sempre derruba (o "empurrão" do Dante também); caído ~1,4 s + 0,35 s protegido ao levantar.
+- ✅ Projéteis param nas paredes do Bar Suvaco Seco (faltavam os obstáculos das paredes).
+- ✅ Disparo Espiral (Fantasma) com rota pelo mapa: passa pelas brechas, pega em qualquer lugar e só erra com esquiva.
+  Recarga do especial não fica mais presa na da transformação.
+- ✅ Câmera: qualquer objeto alto do cenário some quando tampa os lutadores (cabeça, peito e quadril); nos blocos
+  grandes juntados a câmera chega para a frente do obstáculo.
+- ⏭ Medir de novo o equilíbrio da Kemi (Fantasma até o fim do round, Disparo Espiral mais forte) e do Ferreiro
+  (agora personagem base): `runBalance({ fights: 1, focus: 'kemi' })` — a rodada desta versão não terminou.
+- ⏭ Online: batalha em equipe pela rede; testar com dois computadores de verdade (internet e Radmin).
+- ✅ 3.11 Partida LAN por código (ver abaixo) + ONLINE com salas: nome de usuário, sala com código + senha opcional,
+  pública (na lista de SALAS ABERTAS) ou privada (só pelo código).
 - Gal, Erin, Aguiar, Labirinto e Xande já foram feitos/revisados com as referências nas rodadas anteriores.
 - ✅ V4 etapa 12 Armature: esqueleto com root → hips → sp → chest → neck → hd, mãos (handL/R) e pés (footL/R),
   18 ossos em todos os 11 personagens (auditoria exige). Pesos: mão abaixo do punho, pé abaixo do tornozelo, pescoço
@@ -460,7 +477,18 @@ Ferramenta `npm run balance`: roda N lutas CPU × CPU para todos os pares (sem r
 do navegador) e gera tabela de vitórias, dano médio por golpe e uso de cada habilidade. Base para todos os ajustes
 acima. Precisa rodar no navegador (Three.js) → script em `src/dev/balance.js` chamado pelo console, salvando JSON.
 
-### 3.11 Partidas LAN por código 🟡
+### 3.11 Partidas LAN por código ✅ (`src/net/NetSession.js`)
+Feito: menu **ONLINE / LAN** → nome de usuário · **Criar sala** (código de 5 letras, senha opcional, pública/privada) ·
+**Salas abertas** · **Entrar com código**. A lista de salas não tem servidor próprio: quem está na tela ONLINE ocupa um
+endereço fixo no corretor e vira o "dono da lista"; os outros se conectam nele e as salas públicas se anunciam a cada
+4 s (se o dono sair, outro assume). A apresentação usa o
+servidor público do PeerJS só para trocar oferta/resposta do WebRTC; depois a conexão é direta (rede local, Radmin ou
+internet). Sincronia em lockstep (60 quadros/s, atraso de entrada de 4 quadros, sorteio com semente, conferência do
+estado a cada 2 s com correção pelo anfitrião). Só batalha solo P1 × P2 por enquanto; quem cria é o P1 e as opções
+(tempo, rounds, movimento) são as do anfitrião. Pendente: batalha em equipe na LAN e testar com dois computadores de
+verdade numa rede Radmin.
+
+Pedido original:
 No menu **Jogar**, adicionar **Partida LAN** com as opções **Criar partida** (gera um código para compartilhar) e
 **Entrar em partida** (campo para digitar o código do amigo). Sincronizar os comandos e o estado da luta entre os dois
 jogadores; permitir conexão pela rede virtual do Radmin. O código deve levar o convidado até a partida do anfitrião.

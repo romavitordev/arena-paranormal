@@ -461,6 +461,9 @@ export class Fighter {
     this.dodgeCfg = { ...COMBAT.dodge, ...(def.dodge || {}) };
     this.cooldownMax.ranged = def.ranged?.cooldown || 1;
     this.cooldownMax.special = def.special?.cooldown ?? COMBAT.specialCooldown;
+    // ao trocar de forma, a recarga do especial anterior não prende o especial novo (antes: Vestir as Faixas, 60 s,
+    // travava o Disparo Espiral da Fantasma pelo mesmo tempo)
+    if (this.cooldowns.special > this.cooldownMax.special) this.cooldowns.special = this.cooldownMax.special;
     this.cooldownMax.dodge = this.dodgeCfg.cooldown;
     for (const a of def.abilities || []) {
       if (this.cooldowns[a.id] === undefined) this.cooldowns[a.id] = 0;
@@ -856,11 +859,13 @@ export class Fighter {
     return false;
   }
 
-  // △/Y é o MODIFICADOR de ○ e □: △ + ○ e △ + □ (junto, logo depois ou segurando △) soltam a habilidade daquele
-  // comando ('carga+physical' / 'carga+ranged') e desfazem a etapa de Carga daquele toque
+  // △/Y é o MODIFICADOR de ○ e □, como no Storm 4: △ → ○ e △ → □ (um toque depois do outro, dentro da janela da
+  // Carga; também vale junto ou segurando △) soltam a habilidade daquele comando ('carga+physical' / 'carga+ranged')
+  // e desfazem a etapa de Carga daquele toque. △ → △ → ○ continua sendo o especial.
   chordWithCarga() {
     const inp = this.input;
-    if (!inp.pressed.carga && !inp.held.carga && !this.recent('carga')) return false;
+    const seq = this.carga.stage === 1 && this.carga.timer > 0;
+    if (!inp.pressed.carga && !inp.held.carga && !this.recent('carga') && !seq) return false;
     if (!inp.pressed.carga && this.carga.stage > 0) this.carga.stage -= 1;
     return true;
   }
