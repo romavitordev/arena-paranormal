@@ -2,6 +2,9 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.1 — Agarrão de cinema
+- Agarrão (Defesa + ○) virou cena: depois do instante de escape, a câmera chega perto e gira em volta dos dois, quem agarrou dá dois golpes do seu próprio jeito (faca, machado, socos, espada...) e arremessa. O dano total continua o mesmo, e o escape (Defesa + ○ logo no começo) funciona igual.
+
 ## v3.0 — Todos despertam
 - Todos os personagens agora têm a Barra de Transformação. Quem não tem uma forma própria DESPERTA (cena curta, cura 10% e fica assim até o fim do round), cada um com um estado do cânone:
 - Kaiser — Combate Perfeito (mais dano e velocidade, recargas mais rápidas) · Arthur — Magnum Opus (Arma de Sangue no ombro que ele perdeu, mais dano, aguenta mais) · Joui — Técnica Secreta (mais rápido e forte) · Aghata — Passagem de Conhecimento Expandido (rituais voltam e recarregam muito mais rápido) · Dante — Afinidade com o Outro Lado (rituais de Morte mais fortes, regenera vida).

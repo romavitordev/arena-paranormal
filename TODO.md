@@ -120,16 +120,19 @@ distorce o resultado"; a vítima vira Transtornada).
 Juan, Ferreiro · B Balu, Kaiser, Arthur, Erin, Agatha, Kemi, Aguiar · C Xande, Lírio, Labirinto. Não decide quem ganha
 (todos em 35–65%), decide a sensação do kit. Fora da escala hoje: **Gal (S) 41%** e **Dante (A) 43%** abaixo do que
 deviam passar; **Kemi (B) 61%** e **Xande (C) 50%** acima — sugestões no fim do arquivo.
-🟡 **Agarrões em cutscene (pedido do usuário, 2026-10-04):** todo agarrão (Defesa + ○ / R2 + B) deve virar uma pequena
+✅ (v3.1) **Agarrões em cutscene (pedido do usuário, 2026-10-04):** feito no genérico — passada a janela de escape, a
+câmera chega perto e gira, o atacante dá dois golpes com o estilo dele (os dois primeiros golpes do próprio combo) e
+arremessa (70 no total, igual). Falta: `def.grab.scene` própria em cada kit (abaixo os exemplos). Pedido original: todo agarrão (Defesa + ○ / R2 + B) deve virar uma pequena
 cena: câmera aproxima, os dois travam numa animação de agarrão própria de cada personagem (ex.: chave de braço do
 Kaiser, faca no pescoço do Juan, machado na nuca do Aguiar) e o golpe final com impacto. Hoje é o agarrão genérico
 (`COMBAT.grab`). Como fazer: um `grabCinematic` por kit (como o `cinematicCombo`, curto, ~1,2 s), chamado no lugar do
 golpe do agarrão quando ele pega; escape (R2 + ○ no começo) continua igual, antes da cena.
-🔴 **Deus da Morte — Envelhecimento (pedido do usuário):** ataque FORTE em que ele agarra o adversário pelo pescoço e o
-envelhece. Muda a APARÊNCIA do alvo (cabelo branco, pele enrugada/acinzentada, corpo curvado) e o deixa fraco quase
+🔴 **Deus da Morte — Envelhecimento (pedido do usuário):** NÃO é o agarrão dele (seria quebrado): tem que ser o
+ESPECIAL (ult) do Deus da Morte ou outro ataque com recarga bem longa. Ataque FORTE em que ele agarra o adversário pelo
+pescoço e o envelhece. Muda a APARÊNCIA do alvo (cabelo branco, pele enrugada/acinzentada, corpo curvado) e o deixa fraco quase
 injogável até o fim do round (ex.: −40% de dano, −30% de velocidade, sem regenerar sanidade). Por ser tão forte:
 recarga longa / 1x por round, telegrafado (dá para esquivar ou escapar no começo), só no Deus da Morte. Como fazer:
-cena de agarrão (ver acima) + buff `aged` até o fim do round; visual: tingir cabelo/pele (materiais do rig) e
+especial/habilidade com cena de agarrão pelo pescoço (como a do agarrão, mas própria) + buff `aged` até o fim do round; visual: tingir cabelo/pele (materiais do rig) e
 `anim` com postura curvada.
 🟡 **Plano de buffs (2026-10-04, ordem combinada):** medir ANTES e DEPOIS com 2–3 lutas por par (`runBalance` com `focus`).
 1. **Gal (S, 41%)** — Corrente Giratória e Controle Mental mais longos/com mais controle; Injustiça mais cinematográfica.

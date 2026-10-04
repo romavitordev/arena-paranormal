@@ -1,7 +1,7 @@
 // Versão do jogo e NOVIDADES (changelog). Cada atualização conta, inclusive as que foram juntas numa só publicação.
 // Para uma nova atualização: suba VERSION e acrescente a entrada no TOPO de CHANGELOG (textos para jogadores, os mesmos
 // do CHANGELOG-CLIENTE.md; detalhes técnicos vão no CHANGELOG-ADMIN.md).
-export const VERSION = 30;
+export const VERSION = 31;
 export const VERSION_LABEL = `v${Math.floor(VERSION / 10)}.${VERSION % 10}`;
 
 export function formatVersion(version) {
@@ -9,6 +9,14 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: 31,
+    date: '2026-10-04',
+    title: 'Agarrão de cinema',
+    items: [
+      'Agarrão (Defesa + ○) virou cena: depois do instante de escape, a câmera chega perto e gira em volta dos dois, quem agarrou dá dois golpes do seu próprio jeito (faca, machado, socos, espada...) e arremessa. O dano total continua o mesmo, e o escape (Defesa + ○ logo no começo) funciona igual.',
+    ],
+  },
   {
     v: 30,
     date: '2026-10-04',

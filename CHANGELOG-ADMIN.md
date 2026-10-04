@@ -1,5 +1,13 @@
 # Registro administrativo de alterações
 
+## v3.1 — Agarrão de cinema
+
+### Agarrão em cutscene (v3.1)
+- `Fighter.tryGrab`: passada a janela `COMBAT.grabTech.window`, `startGrabScene()` — `beginCinematic(self, caught)`,
+  `twoShot` + `orbit`, golpes em `def.grab.scene` (opcional: [{ t, anim, dur, share, fx, sound }]) ou, sem ela, os dois
+  primeiros golpes do combo do kit (anim + trail → fx 'slash'/'punch'), 20% + 20% + arremesso 60% de `G.damage` (70);
+  o arremesso sai com o mundo andando (`endCinematic` antes do `applyHit` final). Escape e erro sem mudança.
+
 ## v3.0 — Todos despertam
 
 ### Despertar para todos (v3.0)

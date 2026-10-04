@@ -1,5 +1,10 @@
 # Changelog
 
+## v3.1 — 2026-10-04
+
+### Alterado
+- Agarrão em cutscene (câmera, dois golpes no estilo do personagem, arremesso).
+
 ## v3.0 — 2026-10-04
 
 ### Adicionado

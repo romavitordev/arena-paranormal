@@ -13,6 +13,8 @@ import { ELEMENTS } from '../config/elements.js';
 import { SETTINGS } from '../config/settings.js';
 import { updateForm, revertForm } from './forms.js';
 import { buildBloodArmor } from '../models/bloodArmor.js';
+import { orbit, twoShot } from '../camera/shots.js';
+import { splitDamage, specialHitFx } from './specials/common.js';
 
 // estados em que o alvo continua "dentro do combo" (contadores de escala não zeram)
 const COMBO_STATES = new Set(['hitstun', 'stun', 'pulled', 'grabbed', 'ko', 'downed']);
@@ -2082,7 +2084,72 @@ export class Fighter {
     let t = 0;
     let caught = null;
     let thrown = false;
-    let throwAnim = false;
+    let scene = null;
+    // CENA DO AGARRÃO: def.grab.scene (opcional) = [{ t, anim, dur, share, fx, sound }] e o arremesso no fim; sem
+    // ela, usa os dois primeiros golpes do combo do personagem (cada um agarra do seu jeito)
+    const startGrabScene = () => {
+      const strikes = (self.def.melee && self.def.melee.strikes) || [];
+      const beats = G.scene || [
+        { t: 0.12, anim: strikes[0]?.anim || 'jab', dur: 0.28, share: 0.2, fx: { kind: strikes[0]?.trail ? 'slash' : 'punch' }, sound: strikes[0]?.hitSound },
+        { t: 0.48, anim: strikes[1]?.anim || 'heavy_punch', dur: 0.3, share: 0.2, fx: { kind: strikes[1]?.trail ? 'slash' : 'punch', flip: true }, sound: strikes[1]?.hitSound },
+      ];
+      const THROW_AT = (beats.at(-1)?.t ?? 0.5) + 0.42;
+      const END = THROW_AT + 0.5;
+      const parts = splitDamage(G.damage, [...beats.map((x) => x.share), 1 - beats.reduce((n, x) => n + x.share, 0)]);
+      const col = self.def.energyColor ?? 0xffffff;
+      w.beginCinematic(self, caught);
+      w.cameraRig.playShots([
+        twoShot(self, caught, { dur: 0.55, dist: 2.8, height: 1.5, push: 0.5, side: 1, lookH: 1.3 }),
+        orbit(self, { dur: END - 0.55, radius: 3.0, height: 1.5, a0: 0.9, a1: 2.0, lookH: 1.2 }),
+      ]);
+      let st = 0;
+      let i = 0;
+      let threw = false;
+      let animThrow = false;
+      const hold = () => {
+        const Fw = forwardFromYaw(self.yaw, v3);
+        caught.pos.set(self.pos.x + Fw.x * 0.9, self.pos.y, self.pos.z + Fw.z * 0.9);
+        caught.vel.set(0, 0, 0);
+        caught.yaw = yawTo(caught.pos, self.pos);
+      };
+      const hit = (dmg, last) => applyHit(w, self, caught, {
+        damage: dmg, kind: 'melee', reaction: !!last, knockback: last ? G.knockback : 0, hitstun: last ? COMBAT.launchHitstun : 0,
+        launch: !!last, lowLaunch: !!last, dir: forwardFromYaw(self.yaw), unblockable: true, ignoreInvuln: true,
+        sound: last ? 'heavyPunch' : undefined, scale: last ? 1.6 : 1.1, strike: { damage: dmg, name: 'Agarrão' }, grab: true,
+      });
+      return {
+        end() { if (w.cinematic && w.cinematic.actor === self) w.endCinematic(); },
+        update(dt2) {
+          st += dt2;
+          if (caught.state === 'ko') { this.end(); thrown = true; return true; }
+          if (!threw) hold();
+          while (i < beats.length && st >= beats[i].t) {
+            const bt = beats[i];
+            self.anim.play(bt.anim, { restart: true, duration: bt.dur, blend: 0.04 });
+            caught.anim.play('hit', { restart: true, blend: 0.02 });
+            hit(parts[i], false);
+            specialHitFx(w, self, caught, bt.fx || {}, col);
+            w.audio.play(bt.sound || 'impact', { volume: 0.8 });
+            w.cameraRig.shake(0.15, 0.12);
+            i++;
+          }
+          if (!animThrow && st >= THROW_AT - 0.22) {
+            animThrow = true;
+            self.anim.play('throw_grab', { restart: true, duration: 0.5 });
+          }
+          if (!threw && st >= THROW_AT) {
+            threw = true;
+            thrown = true;
+            w.endCinematic(); // o arremesso acontece já com o mundo andando (o alvo voa e cai)
+            caught.setState('idle');
+            hit(parts[parts.length - 1], true);
+            w.fx.burst(caught.chestPos(), { count: 24, color: col, speed: 6, life: 0.4, size: 0.22 });
+            w.cameraRig.shake(0.4, 0.25);
+          }
+          return threw && st >= END;
+        },
+      };
+    };
     this.seq = {
       update(dt) {
         t += dt;
@@ -2138,25 +2205,14 @@ export class Fighter {
           caught.vel.set(0, 0, 0);
           caught.yaw = yawTo(caught.pos, self.pos);
         }
-        if (!throwAnim && t >= G.holdTime * 0.3) {
-          throwAnim = true;
-          self.anim.play('throw_grab', { restart: true, duration: 0.5 });
-        }
-        if (!thrown && t >= G.holdTime + 0.12) {
-          thrown = true;
-          if (caught.state === 'grabbed') {
-            caught.setState('idle');
-            applyHit(w, self, caught, {
-              damage: G.damage, kind: 'melee', knockback: G.knockback, hitstun: COMBAT.launchHitstun,
-              launch: true, lowLaunch: true, dir: F.clone(), unblockable: true, ignoreInvuln: true,
-              sound: 'heavyPunch', scale: 1.6, strike: { damage: G.damage, name: 'Agarrão' }, grab: true,
-            });
-            w.cameraRig.shake(0.3, 0.2);
-          }
-        }
-        return thrown && t >= G.holdTime + 0.45;
+        // passou a janela de escape: vira CENA (cutscene de agarrão) — câmera em volta dos dois, dois golpes com o
+        // estilo do próprio personagem (os dois primeiros golpes do combo dele: faca, machado, socos...) e o arremesso
+        if (!scene && !thrown && t > T.window && caught.state === 'grabbed') scene = startGrabScene();
+        if (scene) return scene.update(dt);
+        return thrown && t >= G.holdTime + 0.45; // escapou: termina logo
       },
       cancel() {
+        if (scene) scene.end();
         if (caught && caught.state === 'grabbed') caught.setState('idle');
       },
     };
