@@ -93,41 +93,119 @@ for i in range(18):
     strands.append(tube(pts, 6))
 b.add('hair_long', merge(*strands), hairm, region='head', subdiv=0)
 
-# ---------------- ASAS DE BRAÇOS: das costas saem braços vermelhos que se ramificam e terminam em mãos abertas
-def open_hand(p, d, sz):
+# ---------------- ASAS DE BRAÇOS (arte do trono): de cada lado, um "osso de asa" grosso de carne vermelha sobe das
+# costas e abre para fora (ombro → cotovelo → punho, como a asa de um pássaro); dele pendem DEZENAS de braços em
+# leque, como penas — os de perto das costas caem para baixo, os da ponta apontam para fora —, cada um com cotovelo
+# dobrado e terminando numa mão aberta de dedos compridos. Três fileiras (cada uma menor e mais à frente), para dar volume.
+def rod(pts, radii, seg=7, cap_start=False):
+    """Tubo com anéis PERPENDICULARES ao caminho (o `tube` da lib deixa os anéis deitados e achata o que é horizontal).
+    Sem tampa no começo por padrão: todo começo fica enterrado em outra peça."""
+    pts = [Vector(p) for p in pts]
+    verts, faces, uvs = [], [], []
+    n = len(pts)
+    prev_side = None
+    for i, p in enumerate(pts):
+        t = (pts[min(i + 1, n - 1)] - pts[max(i - 1, 0)]).normalized()
+        side = (prev_side - t * prev_side.dot(t)) if prev_side is not None else t.orthogonal()
+        side.normalize()
+        prev_side = side
+        up = t.cross(side)
+        for s in range(seg + 1):
+            a = s / seg * TAU
+            verts.append(tuple(p + (side * math.cos(a) + up * math.sin(a)) * radii[i]))
+            uvs.append((s / seg, i / (n - 1)))
+    row = seg + 1
+    for i in range(n - 1):
+        for s in range(seg):
+            a = i * row + s
+            faces.append((a, a + row, a + 1 + row, a + 1))
+    for k, flip in (((0, True),) if cap_start else ()) + ((n - 1, False),):
+        c = len(verts)
+        verts.append(tuple(pts[k]))
+        uvs.append((0.5, k / (n - 1)))
+        for s in range(seg):
+            f = (c, k * row + s + 1, k * row + s) if flip else (c, k * row + s, k * row + s + 1)
+            faces.append(f)
+    return verts, faces, uvs
+
+
+def open_hand(p, d, sz, spread, fingers=4, thumb=True):
+    """Mão aberta: palma, dedos em leque de duas falanges e o polegar para o lado (as fileiras de trás vêm mais simples)."""
     d = d.normalized()
-    side = d.cross(Vector((0, 1, 0)))
-    if side.length < 0.1:
-        side = Vector((1, 0, 0))
-    side.normalize()
-    parts = [ellipsoid(tuple(p), (sz, sz * 0.6, sz), 8, 6)]
-    for f in range(5):
-        fd = (d + side * ((f - 2) * 0.32)).normalized()
-        parts.append(cone(tuple(p + fd * sz * 0.6), tuple(p + fd * sz * 2.4), sz * 0.28, 4))
+    side = spread.normalized()
+    normal = d.cross(side).normalized()
+    parts = [ellipsoid(tuple(p + d * sz * 0.5), (sz * 0.9, sz * 0.9, sz * 0.9), 6, 4)]
+    c = (fingers - 1) / 2
+    for f in range(fingers):
+        fd = (d + side * ((f - c) * 0.28)).normalized()
+        k0 = p + d * sz * 0.9 + side * ((f - c) * sz * 0.42)
+        ln = sz * (2.0 - abs(f - c) * 0.35)
+        k1 = k0 + fd * ln * 0.55
+        k2 = k1 + (fd + normal * 0.35).normalized() * ln * 0.5  # ponta levemente curvada, como garra
+        parts.append(rod([k0, k1, k2], [sz * 0.24, sz * 0.2, sz * 0.06], 4))
+    if not thumb:
+        return parts
+    th = (side * 1.0 + d * 0.4).normalized()
+    t0 = p + d * sz * 0.4 + side * sz * 0.7
+    parts.append(rod([t0, t0 + th * sz * 1.1, t0 + (th + d * 0.6).normalized() * sz * 1.9], [sz * 0.26, sz * 0.2, sz * 0.06], 4))
     return parts
 
 
-def branch(start, d, ln, r0, depth, out):
+def feather_arm(root, d, ln, r0, bend, spread, out, front=True):
+    """Um braço-pena: braço → cotovelo dobrado → antebraço → mão aberta."""
     d = d.normalized()
-    end = start + d * ln
-    mid = start.lerp(end, 0.5) + Vector((0, 0.02 * H, 0.03 * H))
-    out.append(tube([(start.x, start.y, start.z, r0, r0), (mid.x, mid.y, mid.z, r0 * 0.8, r0 * 0.8), (end.x, end.y, end.z, r0 * 0.6, r0 * 0.6)], 7))
-    if depth == 0:
-        out.extend(open_hand(end, d, r0 * 1.5))
-        return
-    out.append(ellipsoid(tuple(end), (r0 * 0.75, r0 * 0.75, r0 * 0.75), 6, 4))  # "cotovelo"
-    sx = 1 if d.x >= 0 else -1
-    for turn in (-0.45, 0.4):
-        nd = Vector((d.x * math.cos(turn) - d.z * math.sin(turn) * sx, d.y + 0.15, d.z * math.cos(turn) + abs(d.x) * math.sin(turn)))
-        branch(end, nd, ln * 0.72, r0 * 0.7, depth - 1, out)
+    elbow = root + d * ln * 0.48
+    d2 = (d + bend).normalized()
+    wrist = elbow + d2 * ln * 0.46
+    mid1 = root.lerp(elbow, 0.5) + bend * ln * -0.04
+    mid2 = elbow.lerp(wrist, 0.45)
+    out.append(rod([root, mid1, elbow, mid2, wrist], [r0, r0 * 1.08, r0 * 0.82, r0 * 0.86, r0 * 0.58], 6))
+    if front:
+        out.append(ellipsoid(tuple(elbow), (r0 * 0.9,) * 3, 5, 3))
+    out.extend(open_hand(wrist, d2, r0 * 0.95, spread, 4 if front else 3, front))
 
 
-wings = []
+def bez(a, b, c, t):
+    return a * ((1 - t) ** 2) + b * (2 * (1 - t) * t) + c * (t * t)
+
+
+random.seed(66)
+wings, bones = [], []
 for s in (1, -1):
-    for k, (ang, ln) in enumerate(((0.35, 0.36), (0.75, 0.42), (1.15, 0.38), (1.5, 0.3))):
-        root = Vector((s * (0.06 + k * 0.02) * H, 0.13 * H, top - (0.02 + k * 0.05) * H))
-        d = Vector((s * math.sin(ang), 0.45, math.cos(ang)))
-        branch(root, d, ln * H, 0.032 * H, 1 if k < 3 else 0, wings)
+    X = Vector((s, 0, 0))
+    # osso da asa: das costas (entre as escápulas) para trás, para fora e para cima, depois abre na horizontal
+    r0 = Vector((s * 0.07 * H, 0.12 * H, top - 0.08 * H))
+    j1 = r0 + Vector((s * 0.2 * H, 0.18 * H, 0.1 * H))   # "ombro" da asa
+    j2 = j1 + Vector((s * 0.36 * H, 0.08 * H, 0.34 * H))   # "cotovelo": o ponto mais alto
+    j3 = j2 + Vector((s * 0.42 * H, 0.03 * H, -0.06 * H))  # "punho": a ponta
+    spine = [r0, j1, j1.lerp(j2, 0.5) + Vector((0, 0, 0.02 * H)), j2, j2.lerp(j3, 0.5) + Vector((0, 0, 0.03 * H)), j3]
+    bones.append(rod(spine, [0.05 * H, 0.056 * H, 0.046 * H, 0.05 * H, 0.04 * H, 0.032 * H], 9))
+    for j in (j1, j2):
+        bones.append(ellipsoid(tuple(j), (0.062 * H,) * 3, 8, 6))  # juntas nodosas
+    # garra/mão grande na ponta da asa
+    tipd = (j3 - j2).normalized()
+    wings.extend(open_hand(j3, tipd, 0.042 * H, Vector((0, 0, 1)).cross(tipd).cross(tipd) * -1))
+    # espinho no "cotovelo" (como o polegar de uma asa de morcego)
+    bones.append(cone(tuple(j2 + Vector((0, 0, 0.03 * H))), tuple(j2 + Vector((s * -0.04 * H, 0.03 * H, 0.2 * H))), 0.028 * H, 6))
+
+    # pontos ao longo do osso para pendurar os braços-pena
+    def along(u):
+        if u < 0.5:
+            return bez(j1, j1.lerp(j2, 0.5), j2, u * 2)
+        return bez(j2, j2.lerp(j3, 0.5), j3, (u - 0.5) * 2)
+
+    for row, (N, scale, dy, u0, u1) in enumerate(((15, 1.12, 0.0, 0.0, 1.0), (10, 0.72, -0.035, 0.04, 0.9), (6, 0.45, -0.065, 0.1, 0.8))):
+        for i in range(N):
+            u = u0 + (u1 - u0) * i / (N - 1)
+            p = along(u) + Vector((0, dy * H, 0))
+            # leque: perto das costas aponta para baixo, na ponta aponta para fora (levemente para cima)
+            ang = (0.12 + u * 1.55) + (random.random() - 0.5) * 0.12  # 0 = para baixo, pi/2 = para fora
+            d = Vector((s * math.sin(ang), 0.12 + random.random() * 0.08, -math.cos(ang)))
+            ln = (0.3 + 0.26 * math.sin(min(1.0, u * 1.25) * math.pi * 0.85)) * H * scale * (0.92 + random.random() * 0.16)
+            bend = Vector((s * -0.25, 0.05, -0.25)) * (0.8 + random.random() * 0.4)  # o antebraço cai um pouco
+            spread = Vector((0, 1, 0)).cross(d)  # dedos abrem no plano da asa
+            feather_arm(p, d, ln, (0.021, 0.018, 0.015)[row] * H * (1.1 - 0.3 * u), bend, spread, wings, row == 0)
+b.add('wing_bones', merge(*bones), material('wing_bone', '#7a0c12', 0.6), region='chest', subdiv=0)
 b.add('arm_wings', merge(*wings), wing, region='chest', subdiv=0)
 
 # ---------------- tanga vermelha rasgada na cintura
