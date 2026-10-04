@@ -1,5 +1,14 @@
 # Changelog
 
+## v3.5 — 2026-10-04
+
+### Corrigido
+- Tela de vitória: só a forma de quem venceu transformado.
+
+### Alterado
+- Super Difícil mais forte (reações, punição, esquiva de tiros, combos longos, +15%/−15%).
+- Deus da Morte: especial Envelhecimento (agarra pelo pescoço, envelhece o alvo até o fim do round).
+
 ## v3.4 — 2026-10-04
 
 ### Adicionado

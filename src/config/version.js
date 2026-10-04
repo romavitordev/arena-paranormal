@@ -1,7 +1,7 @@
 // Versão do jogo e NOVIDADES (changelog). Cada atualização conta, inclusive as que foram juntas numa só publicação.
 // Para uma nova atualização: suba VERSION e acrescente a entrada no TOPO de CHANGELOG (textos para jogadores, os mesmos
 // do CHANGELOG-CLIENTE.md; detalhes técnicos vão no CHANGELOG-ADMIN.md).
-export const VERSION = 34;
+export const VERSION = 35;
 export const VERSION_LABEL = `v${Math.floor(VERSION / 10)}.${VERSION % 10}`;
 
 export function formatVersion(version) {
@@ -9,6 +9,16 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: 35,
+    date: '2026-10-04',
+    title: 'Super Difícil de verdade',
+    items: [
+      'Tela de vitória: quem venceu transformado aparece SÓ na forma (Diabo, Deus da Morte ou Fantasma) — antes, na batalha em equipe, o Juan/Ferreiro/Kemi aparecia junto com a forma.',
+      'Deus da Morte: novo especial ENVELHECIMENTO (no lugar do Heilag Vagga) — agarra o adversário pelo pescoço, ergue e o envelhece: cabelo branco, pele acinzentada, corpo curvado, e fica fraco até o fim do round (40% menos dano, 30% mais lento, sem recuperar sanidade). O preparo é visível (dá para esquivar), só pega de perto, uma vez por round e com recarga longa.',
+      'Super Difícil bem mais difícil: defende e acerta o Perfect Block muito mais, escapa de combos com a Substituição, pune na hora quem erra um golpe perto, desvia dos tiros para o lado, faz combos mais longos — e, como um chefe, bate 15% mais forte e recebe 15% menos dano.',
+    ],
+  },
   {
     v: 34,
     date: '2026-10-04',

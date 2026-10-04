@@ -75,6 +75,9 @@ export function applyHit(world, attacker, victim, o) {
   const weak = weaknessMult(victim, attacker, o);
   if (weak > 1 && !o.noWeakFx) victim.notify('FRAQUEZA!', true);
   mult *= weak;
+  // vantagem do nível Super Difícil (CpuController.attach): a CPU bate mais e aguenta mais, como um chefe
+  if (attacker.cpuEdge) mult *= attacker.cpuEdge.dealt;
+  if (victim.cpuEdge) mult *= victim.cpuEdge.taken;
   const attempted = Math.round(o.damage * mult);
   // passivas de peso: quem bate empurra/atordoa mais (Mão Pesada); quem apanha é empurrado menos (Casca Grossa)
   let kbMult = 1;

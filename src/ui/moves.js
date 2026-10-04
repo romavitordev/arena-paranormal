@@ -71,6 +71,7 @@ export function specialSummary(c) {
     case 'ghostBands': return `transforma na Fantasma ${until(sp.duration)}${life}`;
     case 'devilDeal': return `o alvo fica transtornado por ${sp.duration || 8} s: não defende e recebe mais dano; o Diabo se cura`;
     case 'marionette': return 'invoca a Marionete, que luta ao seu lado';
+    case 'ageGrab': return `agarra pelo pescoço e envelhece o alvo até o fim do round (${Math.round((1 - (sp.aged?.mult ?? 0.6)) * 100)}% menos dano, ${Math.round((1 - (sp.aged?.speedMult ?? 0.7)) * 100)}% mais lento, sem regenerar sanidade) · ${sp.damage} de dano · 1x por round`;
     case 'awakenMode': {
       const pct = (m) => `${m > 1 ? '+' : '−'}${Math.round(Math.abs(m - 1) * 100)}%`;
       const parts = [];

@@ -110,14 +110,16 @@ export default {
       name: 'Controle Mental',
       input: 'carga+physical', // △ + ○ / Y + B
       type: 'mindControl',
-      description: 'Um sigilo dourado sobre a cabeça do alvo: por alguns segundos o corpo dele obedece ao contrário (direções invertidas).',
+      description: 'Um sigilo dourado sobre a cabeça do alvo: por alguns segundos o corpo dele obedece ao Gal — anda sozinho até ele e não consegue defender.',
       energyCost: 35,
-      cooldown: 24,
+      cooldown: 18, // buff v3.6 (era 24)
       windup: 0.45,
       recovery: 0.3,
       range: 10,
       arc: 60,
-      duration: 2.5,
+      duration: 3, // era 2,5
+      walkTo: true, // o alvo anda até o Gal (antes: direções invertidas, que o faziam fugir)
+      noBlock: true,
       color: 0xffcf4a,
     },
     {
@@ -125,9 +127,9 @@ export default {
       name: 'Corrente Giratória',
       input: 'carga+dodge', // △ + L2 / Y + LT
       type: 'sweepStrike',
-      description: 'Gira as duas lâminas presas às correntes em volta do corpo: três cortes em área, o último lança.',
+      description: 'Gira as duas lâminas presas às correntes em volta do corpo: três cortes em área, o último lança — o 1º giro laça e arrasta quem estiver perto.',
       energyCost: 25,
-      cooldown: 13,
+      cooldown: 11, // era 13
       anim: 'chain_sweep',
       startSound: 'chainThrow',
       windup: 0.2,
@@ -135,6 +137,7 @@ export default {
       interval: 0.16,
       recovery: 0.3,
       radius: 3.4,
+      pull: 2.5, // laça até 2,5 m além do raio
       damage: 75,
       knockback: 6,
       launch: true,

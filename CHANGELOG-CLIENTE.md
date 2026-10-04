@@ -2,6 +2,11 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.5 — Super Difícil de verdade
+- Tela de vitória: quem venceu transformado aparece SÓ na forma (Diabo, Deus da Morte ou Fantasma) — antes, na batalha em equipe, o Juan/Ferreiro/Kemi aparecia junto com a forma.
+- Deus da Morte: novo especial ENVELHECIMENTO (no lugar do Heilag Vagga) — agarra o adversário pelo pescoço, ergue e o envelhece: cabelo branco, pele acinzentada, corpo curvado, e fica fraco até o fim do round (40% menos dano, 30% mais lento, sem recuperar sanidade). O preparo é visível (dá para esquivar), só pega de perto, uma vez por round e com recarga longa.
+- Super Difícil bem mais difícil: defende e acerta o Perfect Block muito mais, escapa de combos com a Substituição, pune na hora quem erra um golpe perto, desvia dos tiros para o lado, faz combos mais longos — e, como um chefe, bate 15% mais forte e recebe 15% menos dano.
+
 ## v3.4 — CPU que aprende
 - Novo nível de CPU: SUPER DIFÍCIL. Reage mais rápido, não erra de propósito, pune quem erra um golpe, atiradores mantêm distância — e APRENDE: a cada luta ela vê quais ações deram certo em cada situação (perto, longe, você atacando, você defendendo...) e passa a usá-las mais. Também aprende o SEU jeito de jogar: se você ataca muito de perto, ela defende mais; se defende muito, ela agarra.
 - O que a CPU aprende fica salvo no seu navegador e, a cada versão, um pouco do que ela aprendeu vem junto com o jogo — a IA vai ficando mais esperta a cada atualização.

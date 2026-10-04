@@ -77,7 +77,7 @@ export default {
       cooldown: 22,
       duration: 15, // segundos máximos do estado amaldiçoado
       shots: 3, // tiros fortalecidos
-      bonusDamage: 60, // por tiro (110 → 170)
+      bonusDamage: 75, // por tiro (110 → 185; era +60, buff v3.6)
       color: 0x3aff6a, // energia VERDE com caveirinhas
       projectile: { visual: 'cursedSniper', color: 0x3aff6a, impactScale: 2.4, hitSound: 'clawHit', knockback: 7, hitstun: 0.6 },
     },
@@ -91,7 +91,7 @@ export default {
       healthCost: 30,
       cooldown: 20,
       duration: 6,
-      damageMult: 1.25,
+      damageMult: 1.35, // era 1,25 (buff v3.6)
       speedMult: 1.12,
       color: 0xd0102a,
     },
@@ -165,6 +165,6 @@ export default {
   },
 
   passives: [
-    { type: 'bloodPrice', hpPerPoint: 2, minHealth: 0.15 }, // sem sanidade, paga rituais com a própria vida (cânone: a Arma de Sangue gasta PV)
+    { type: 'bloodPrice', hpPerPoint: 1.5, minHealth: 0.15 }, // sem sanidade, paga rituais com a própria vida (cânone: a Arma de Sangue gasta PV)
   ],
 };

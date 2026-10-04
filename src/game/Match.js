@@ -197,8 +197,10 @@ export class Match {
             const activeDef = winningFighter.baseForm?.def ?? winningFighter.def;
             const roster = this.teams ? this.teams[winner] : null;
             const activeIndex = roster?.findIndex((member) => member.id === activeDef.id) ?? -1;
+            // transformado (Diabo, Deus da Morte, Fantasma): aparece SÓ a forma, no lugar do personagem base — antes a
+            // equipe trazia o Juan/Ferreiro/Kemi E a forma na mesma tela de vitória
             const team = activeIndex >= 0
-              ? [roster[activeIndex], ...roster.filter((_, index) => index !== activeIndex)]
+              ? [winningFighter.def, ...roster.filter((_, index) => index !== activeIndex)]
               : roster;
             this.onEnd && this.onEnd({ winner, def: winningFighter.def, loser: this.fighters[1 - winner].def, team });
           } else {

@@ -87,13 +87,13 @@ export default {
       type: 'lodoTentacles',
       description: 'Põe a mão no chão: tentáculos de Lodo Preto brotam embaixo do inimigo, prendem e comprimem.',
       energyCost: 30,
-      cooldown: 14,
+      cooldown: 11, // era 14 (buff v3.6)
       range: 10,
       radius: 2.0,
       castTime: 0.5,
       hold: 1.0,
-      damage: 60,
-      stun: 1.1,
+      damage: 70, // era 60
+      stun: 1.4, // era 1,1: os tentáculos prendem mais
       color: 0x0e0c10,
     },
     {
@@ -123,7 +123,7 @@ export default {
       recovery: 0.3,
       projectile: {
         visual: 'decay', color: 0x2a2632, speed: 15, range: 16, radius: 0.4, gravity: 18, damage: 0, lobTo: 'feet', kind: 'ability', element: 'morte',
-        explode: { radius: 2.2, damage: 35, knockback: 1, color: 0x3a3442, mist: { radius: 3.2, duration: 6, slow: 0.45, enemyRegen: 0, color: 0x1a1620, pool: { color: 0x07060a, glow: 0x08201c } } },
+        explode: { radius: 2.2, damage: 35, knockback: 1, color: 0x3a3442, mist: { radius: 3.2, duration: 7, slow: 0.55, enemyRegen: 0, color: 0x1a1620, pool: { color: 0x07060a, glow: 0x08201c } } },
       },
     },
   ],

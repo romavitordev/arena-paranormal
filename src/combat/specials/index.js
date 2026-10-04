@@ -12,7 +12,8 @@ import { devilDeal } from './devilDeal.js';
 import { ghostBands } from './ghostBands.js';
 import { spiralSnipe } from './spiralSnipe.js';
 import { awakenMode } from './awakenMode.js';
+import { ageGrab } from './ageGrab.js';
 
 // Tipos de especial disponíveis. Cada personagem escolhe um em `special.type`.
 // Para criar um tipo novo: { canStart(f, sp, world), start(f, sp, world) → {update(dt)→done, cancel()} }
-export const SPECIALS = { mistField, cinematicCombo, teleportStrike, ritual, erase, marionette, supernova, abyssMaze, santoPact, devilPact, devilDeal, ghostBands, spiralSnipe, awakenMode };
+export const SPECIALS = { mistField, cinematicCombo, teleportStrike, ritual, erase, marionette, supernova, abyssMaze, santoPact, devilPact, devilDeal, ghostBands, spiralSnipe, awakenMode, ageGrab };

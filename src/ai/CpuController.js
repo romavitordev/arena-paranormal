@@ -18,7 +18,7 @@ export const CPU_LEVELS = {
   veryhard: { think: [0.1, 0.2], block: 0.2, dodge: 0.14, perfect: 0.35, subst: 0.05, mistake: 0.03, combo: [4, 6], ability: 0.2, special: 0.35, vertical: 0.7, tech: 0.85, ranged: 0.5, rush: 0.6 },
   // SUPER DIFÍCIL: a IA inteligente no máximo (reage rápido, sem erros de propósito, pune aberturas, lê o jogador) e
   // APRENDE (learner.js): escolhe entre as ações possíveis pelo que já deu certo em situações parecidas.
-  superhard: { think: [0.07, 0.14], block: 0.26, dodge: 0.17, perfect: 0.5, subst: 0.07, mistake: 0, combo: [4, 6], ability: 0.24, special: 0.4, vertical: 0.8, tech: 0.95, ranged: 0.55, rush: 0.7, smart: true, learn: true },
+  superhard: { think: [0.05, 0.1], block: 0.42, dodge: 0.3, perfect: 0.75, subst: 0.12, mistake: 0, combo: [5, 7], ability: 0.24, special: 0.45, vertical: 0.9, tech: 1, ranged: 0.55, rush: 0.85, smart: true, learn: true, edge: { dealt: 1.15, taken: 0.85 } },
 };
 
 const rnd = (a, b) => a + Math.random() * (b - a);
@@ -38,6 +38,7 @@ export class CpuController {
   attach(fighter) {
     this.fighter = fighter;
     if (this.L.learn && fighter) this.episode = new Episode(fighter.def.id);
+    if (fighter) fighter.cpuEdge = this.L.edge || null; // Super Difícil: +15% de dano, −15% de dano recebido
   }
 
   tap(action, extra = {}, raw) {
@@ -157,6 +158,20 @@ export class CpuController {
         out.moveY = -toOpp.x * b.forward.x + -toOpp.z * b.forward.z;
       }
       return out;
+    }
+
+    // ---- Super Difícil: pune NA HORA quem errou um golpe perto (sem esperar o próximo "pensamento") e sai do caminho
+    // dos projéteis para o lado (a esquiva só gasta carga se desviar de algo)
+    if (L.smart && (f.state === 'idle' || f.state === 'charging') && f.onGround) {
+      if (d < 2.4 && this.aiOk({ ai: { when: 'opening' } }, d, opp, lowHp) && opp.state !== 'block' && Math.random() < 0.55 * k) {
+        this.combo();
+        return out;
+      }
+      const shot = w.projectiles.list.find((p) => p.owner === opp && Math.hypot(p.pos.x - f.pos.x, p.pos.z - f.pos.z) < 6 && (p.dir ? (f.pos.x - p.pos.x) * p.dir.x + (f.pos.z - p.pos.z) * p.dir.z > 0 : true));
+      if (shot && f.cooldowns.dodge <= 0 && f.dodges > 0 && Math.random() < 0.45 * k) {
+        this.queue.push({ t: 0.06, held: { dodge: true }, move: side }, { t: 0.05, held: {} });
+        return out;
+      }
     }
 
     // ---- reações defensivas

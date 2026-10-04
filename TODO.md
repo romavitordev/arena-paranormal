@@ -150,7 +150,7 @@ cena: câmera aproxima, os dois travam numa animação de agarrão própria de c
 Kaiser, faca no pescoço do Juan, machado na nuca do Aguiar) e o golpe final com impacto. Hoje é o agarrão genérico
 (`COMBAT.grab`). Como fazer: um `grabCinematic` por kit (como o `cinematicCombo`, curto, ~1,2 s), chamado no lugar do
 golpe do agarrão quando ele pega; escape (R2 + ○ no começo) continua igual, antes da cena.
-🔴 **Deus da Morte — Envelhecimento (pedido do usuário):** NÃO é o agarrão dele (seria quebrado): tem que ser o
+✅ (v3.5) **Deus da Morte — Envelhecimento (pedido do usuário):** feito como o ESPECIAL dele (`ageGrab`). Pedido original: NÃO é o agarrão dele (seria quebrado): tem que ser o
 ESPECIAL (ult) do Deus da Morte ou outro ataque com recarga bem longa. Ataque FORTE em que ele agarra o adversário pelo
 pescoço e o envelhece. Muda a APARÊNCIA do alvo (cabelo branco, pele enrugada/acinzentada, corpo curvado) e o deixa fraco quase
 injogável até o fim do round (ex.: −40% de dano, −30% de velocidade, sem regenerar sanidade). Por ser tão forte:
@@ -268,7 +268,7 @@ Kian 46% · Ferreiro 43% · Arthur 39% · Xande 39% · Aghata 36% · Gal Sal 25%
 	✅ (v2.2) Nova (editado por mim): Ao segurar defesa (RT) e mover o analógico/wasd você dá um dash para os lados {referencia a jogos da saga naruto storm,}  para melhor movimentação em combate. → Defesa + TOQUE na direção = passo rápido (de frente para o rival); segurando a direção, anda defendendo.
 	✅ (v2.2) Armadura de sangue deve ter textura de sangue (vale pra todos personagens que possuem essa habilidade ou a recebem da assistencia) → carne de sangue porosa num lado do corpo, como na arte do Henri; quem conjura (Juan) também ganha o braço da faca de sangue (+25% físico); pela assistência, só resistência a físico e tiros. Arthur não tem essa habilidade no cânone: saiu do kit.
 	✅ (v2.2) Poça de lodo deve parecer uma poça no chão → mancha preta brilhante de contorno irregular, com bolhas.
-- ✅ **Online de verdade:** testar com dois computadores (internet e Radmin); batalha em equipe pela rede; o servidor
+- 🔴 **Online de verdade:** testar com dois computadores (internet e Radmin); batalha em equipe pela rede; o servidor
   público do PeerJS é ponto único de falha (avaliar servidor próprio de apresentação/lista de salas).
 - 🔴 **Equilíbrio:** ajustar quem ficou fora da faixa 35–65% na rodada acima e medir de novo com mais lutas por par.
 - 🟡 **Mobile:** no emulador, a 1ª toque num submenu às vezes não escolhe a opção (o 2º sim) — conferir num aparelho;

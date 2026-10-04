@@ -1,5 +1,19 @@
 # Registro administrativo de alterações
 
+## v3.5 — Super Difícil de verdade
+
+### Vitória sem duplicar formas + Super Difícil mais forte (v3.5)
+- `Match` (fim da partida): na equipe, a forma (`winningFighter.def`) entra NO LUGAR do personagem base.
+- `superhard`: think 0,05–0,1 s, block 0,42, dodge 0,3, perfect 0,75, subst 0,12, combo 5–7, rush 0,85, vertical
+  0,9, tech 1; `edge` { dealt 1,15, taken 0,85 } → `Fighter.cpuEdge` (damage.js). Reações novas (smart): punição
+  imediata de abertura a < 2,4 m (combo sem esperar o think) e esquiva lateral de projétil vindo na direção dela.
+- Medido (12 lutas, Super Difícil × Muito Difícil): 7 × 5 → **11 × 1** (10 vitórias por 2 × 0).
+- Deus da Morte: especial `ageGrab` (novo, `specials/ageGrab.js`) — preparo de 0,55 s avançando (`dm_lift`), agarra
+  se estiver a ≤ 2,6 m × tamanho × 0,6; cena de 2,8 s pelo pescoço; `ageVictim`: materiais de cabelo/barba → branco e
+  pele → acinzentada (clonados por malha, restaurados no fim), `rig.body` 0,9 de altura e inclinado; buff `aged`
+  até o fim do round (mult 0,6 em tudo, speedMult 0,7, noRegen). `canStart` recusa quem já está `aged` (1x por
+  round). 150 de dano, recarga 60 s.
+
 ## v3.4 — CPU que aprende
 
 ### IA que aprende + esquiva (v3.4)

@@ -111,25 +111,22 @@ export default {
     },
   ],
 
-  // Especial HEILAG VAGGA: agarra e esmaga com os punhos de Lodo
+  // Especial ENVELHECIMENTO (pedido do usuário): agarra o adversário pelo PESCOÇO, ergue e o envelhece — cabelo
+  // branco, pele acinzentada, curvado — e o deixa fraco até o fim do round. É o golpe mais forte dele: preparo
+  // visível (dá para esquivar ou sair do alcance), só de perto, 1x por round (não pega quem já está envelhecido) e
+  // recarga longa. (Era o Heilag Vagga, um combo de socos de Lodo.)
   special: {
-    name: 'Heilag Vagga',
-    banner: 'Heilag Vagga',
-    type: 'cinematicCombo',
-    physical: true,
+    name: 'Envelhecimento',
+    banner: 'Envelhecimento',
+    type: 'ageGrab',
     energyCost: 50,
-    cooldown: 16,
-    color: 0x2a2632,
-    sound: 'specialStart',
-    prepare: { anim: 'dm_charge', time: 0.6, fx: 'stomp' },
-    dash: { speed: 14, maxTime: 0.6, contact: 3 },
-    hits: [
-      { t: 0.95, anim: 'dm_hook', dur: 0.5, share: 0.2, fx: { kind: 'smash' }, sound: 'heavyPunch' },
-      { t: 1.5, anim: 'dm_slap', dur: 0.5, share: 0.2, fx: { kind: 'smash' }, sound: 'heavyPunch' },
-      { t: 2.2, anim: 'dm_smash', dur: 0.6, share: 0.6, fx: { kind: 'smash', big: true }, sound: 'heavyPunch', final: true },
-    ],
-    bannerAt: 0.3,
-    length: 3.4,
+    cooldown: 60,
+    range: 7,
+    grabRange: 2.6,
+    reach: 0.55,
+    damage: 150,
+    aged: { mult: 0.6, speedMult: 0.7 }, // −40% de dano, −30% de velocidade, sem regenerar sanidade
+    color: 0x6a6670,
   },
 
   passives: [
