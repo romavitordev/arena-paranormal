@@ -9,6 +9,7 @@ import { faceClose, overShoulder, pullBack } from '../../camera/shots.js';
 // NA ARENA desenhando uma espiral de Morte no ar (passa por qualquer brecha, como no cânone) e a câmera vai atrás dela
 // até atravessar o alvo. Se ele já estava morrendo
 // (vida ≤ sp.executeBelow), a espiral termina o serviço (sp.executeMult).
+// sp.path 'straight' (Kemi, Disparo da Morte): o tempo desacelera e a bala vai RETA, devagar, com a espiral em volta.
 export const spiralSnipe = {
   canStart(f, sp) {
     const opp = f.opponent;
@@ -75,7 +76,7 @@ export const spiralSnipe = {
           const side = new THREE.Vector3(-fwd.z, 0, fwd.x);
           const dist = Math.max(4, from.distanceTo(to));
           const R = Math.min(8, dist * 0.7 + 2);
-          path = new THREE.CatmullRomCurve3([
+          path = sp.path === 'straight' ? new THREE.CatmullRomCurve3([from.clone(), from.clone().lerp(to, 0.5).add(new THREE.Vector3(0, 0.25, 0)), to.clone()]) : new THREE.CatmullRomCurve3([
             from.clone(),
             from.clone().addScaledVector(fwd, dist * 0.3).addScaledVector(side, R * 0.8).setY(from.y + 1.6),
             to.clone().addScaledVector(fwd, R * 0.7).addScaledVector(side, R * 0.4).setY(to.y + 2.6),

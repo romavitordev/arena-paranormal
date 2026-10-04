@@ -570,6 +570,84 @@ export const ABILITY_TYPES = {
     },
   },
 
+  // LEVITAÇÃO (Kian, cânone: move objetos erguendo a mão): pedras sobem do chão e giram em volta dele; depois voam,
+  // uma a cada a.interval, para onde o alvo ESTÁ naquele instante (dá para defender ou sair da frente).
+  levitation: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      if (!opp || opp.state === 'ko') return null;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.yaw = yawTo(f.pos, opp.pos);
+      const total = a.windup + a.stones * a.interval + a.recovery;
+      f.anim.play('point', { restart: true, duration: total });
+      world.audio.play('fearGaze', { volume: 0.5, pitch: 1.8 });
+      const col = a.color ?? 0xffd88a;
+      const mat = new THREE.MeshStandardMaterial({ color: 0x6a6460, roughness: 0.95, emissive: col, emissiveIntensity: 0.08 });
+      const stones = [];
+      for (let i = 0; i < a.stones; i++) {
+        const m = new THREE.Mesh(new THREE.DodecahedronGeometry(0.16 + (i % 3) * 0.04, 0), mat);
+        m.userData = { ang: (i / a.stones) * Math.PI * 2, r: 1.1 + (i % 2) * 0.25, h: 1.3 + (i % 3) * 0.3, flying: false, done: false, vel: new THREE.Vector3() };
+        m.position.set(f.pos.x + Math.sin(m.userData.ang) * m.userData.r, 0.1, f.pos.z + Math.cos(m.userData.ang) * m.userData.r);
+        world.scene.add(m);
+        stones.push(m);
+        world.fx.play('FX_DUST', m.position, { scale: 0.4 });
+      }
+      let t = 0;
+      world.addTicker({
+        update(dt) {
+          t += dt;
+          for (const m of stones) {
+            const u = m.userData;
+            if (u.done) continue;
+            if (!u.flying) {
+              // sobem e giram em volta da mão erguida
+              u.ang += dt * 2.4;
+              const rise = Math.min(1, t / a.windup);
+              m.position.set(f.pos.x + Math.sin(u.ang) * u.r, f.pos.y + 0.1 + (u.h - 0.1) * rise + Math.sin(t * 5 + u.ang) * 0.05, f.pos.z + Math.cos(u.ang) * u.r);
+              m.rotation.x += dt * 2;
+              m.rotation.y += dt * 3;
+              continue;
+            }
+            m.position.addScaledVector(u.vel, dt);
+            m.rotation.x += dt * 12;
+            u.life -= dt;
+            if (Math.random() < 0.5) world.fx.burst(m.position, { count: 1, color: col, speed: 0.2, life: 0.25, size: 0.08 });
+            const c = opp.chestPos();
+            if (opp.state !== 'ko' && !opp.isInvulnerable() && m.position.distanceTo(c) < 0.75) {
+              applyHit(world, f, opp, { damage: a.damage, kind: 'ability', element: f.def.element, knockback: 0.8, hitstun: 0.28, sound: 'impact', color: col, scale: 0.8, dir: u.vel.clone().setY(0).normalize() });
+              u.done = true;
+            } else if (u.life <= 0 || m.position.y < 0.05) u.done = true;
+            if (u.done) {
+              world.fx.burst(m.position, { count: 10, color: 0x6a6460, speed: 3, life: 0.4, size: 0.1, gravity: 9 });
+              world.scene.remove(m);
+              m.geometry.dispose();
+            }
+          }
+          return stones.every((m) => m.userData.done) || t > total + 3;
+        },
+        dispose() {
+          for (const m of stones) if (!m.userData.done) { world.scene.remove(m); m.geometry.dispose(); }
+          mat.dispose();
+        },
+      });
+      // uma a uma, as pedras partem para onde o alvo está agora
+      for (let i = 0; i < a.stones; i++) {
+        tl.add(a.windup + i * a.interval, () => {
+          const m = stones[i];
+          if (!m || m.userData.done) return;
+          const to = opp.chestPos();
+          m.userData.vel.subVectors(to, m.position).normalize().multiplyScalar(a.speed);
+          m.userData.life = a.range / a.speed;
+          m.userData.flying = true;
+          world.audio.play('swing', { volume: 0.4, pitch: 1.3 });
+        });
+      }
+      tl.end(total);
+      return seqFrom(tl);
+    },
+  },
+
   // Transcendência: exposição total; golpes físicos atravessam a defesa por alguns segundos.
   transcend: {
     start(f, a, world) {
@@ -592,13 +670,6 @@ export const ABILITY_TYPES = {
           particle: { color: a.color, speed: 0.6, up: 1.2, spread: 0.3, life: 0.5, size: 0.14 },
         });
         f.buffTint = { color: a.color, base: 0.3 };
-        // Kian: a primeira Transcendência da partida libera mais um uso do especial (Inexistir)
-        const bonus = f.def.special && f.def.special.bonusUseOnTranscend;
-        if (bonus && !f.transcendBonusGiven) {
-          f.transcendBonusGiven = true;
-          f.specialBonusUses += bonus;
-          f.notify(`${f.def.special.name.toUpperCase()} +${bonus}`, true);
-        }
         f.addBuff({
           type: 'transcend',
           name: 'TRANSCENDÊNCIA',
@@ -880,7 +951,9 @@ Object.assign(ABILITY_TYPES, {
         const sig = world.fx.emitter({ rate: 30, follow: head, particle: { color: a.color, speed: 0.3, spread: 0.3, life: 0.4, size: 0.12 } });
         const old = opp.findBuff('mindControl');
         if (old) old.time = a.duration;
-        else opp.addBuff({ type: 'mindControl', name: 'CONTROLADO', time: a.duration, duration: a.duration, invertMove: true, onEnd() { sig.stop(); } });
+        // a.walkTo: o corpo obedece a quem controla — anda sozinho até ele (em vez de inverter as direções, que fazia
+        // o alvo FUGIR do Gal, que luta de perto); a.noBlock: também não consegue defender enquanto dura
+        else opp.addBuff({ type: 'mindControl', name: 'CONTROLADO', time: a.duration, duration: a.duration, invertMove: !a.walkTo, walkTo: a.walkTo ? f : null, noBlock: !!a.noBlock, onEnd() { sig.stop(); } });
         opp.notify('CONTROLE MENTAL', true);
         world.onHit && world.onHit(f, opp, 0, { kind: 'ability', ability: a.id });
       });
@@ -1727,6 +1800,18 @@ Object.assign(ABILITY_TYPES, {
       const parts = splitDamage(a.damage, Array(a.hits).fill(1));
       for (let i = 0; i < a.hits; i++) {
         tl.add(a.windup + i * a.interval, () => {
+          // a.pull: no 1º giro as correntes laçam quem estiver até a.pull metros além do raio e o arrastam para dentro
+          if (i === 0 && a.pull && opp && opp.state !== 'ko' && !opp.isInvulnerable() && Math.abs(opp.pos.y - f.pos.y) < 2) {
+            const d = distXZ(f.pos, opp.pos);
+            if (d > 1.4 && d - opp.radius <= a.radius + a.pull) {
+              const k = (d - 1.4) / d;
+              opp.pos.x -= (opp.pos.x - f.pos.x) * k;
+              opp.pos.z -= (opp.pos.z - f.pos.z) * k;
+              opp.vel.set(0, opp.vel.y, 0);
+              world.fx.lightning(new THREE.Vector3(f.pos.x, f.pos.y + 1.1, f.pos.z), opp.chestPos(), { color: a.color, life: 0.15 });
+              world.audio.play('chainPull', { volume: 0.6 });
+            }
+          }
           const c = new THREE.Vector3(f.pos.x, f.pos.y + 1.1, f.pos.z);
           world.fx.slash(c, f.yaw + i * 2.1, { color: a.color, radius: a.radius, arc: 6.2, life: 0.25, width: 0.4, roll: 0.15 * (i % 2 ? 1 : -1) });
           world.audio.play(a.hitSound ? 'swing' : 'blade', { volume: 0.5 });

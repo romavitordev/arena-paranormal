@@ -1,7 +1,7 @@
 // Versão do jogo e NOVIDADES (changelog). Cada atualização conta, inclusive as que foram juntas numa só publicação.
 // Para uma nova atualização: suba VERSION e acrescente a entrada no TOPO de CHANGELOG (textos para jogadores, os mesmos
 // do CHANGELOG-CLIENTE.md; detalhes técnicos vão no CHANGELOG-ADMIN.md).
-export const VERSION = 28;
+export const VERSION = 29;
 export const VERSION_LABEL = `v${Math.floor(VERSION / 10)}.${VERSION % 10}`;
 
 export function formatVersion(version) {
@@ -9,6 +9,19 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: 29,
+    date: '2026-10-04',
+    title: 'Barra de Transformação',
+    items: [
+      'Nova Barra de Transformação (Juan, Kemi e Ferreiro): enche conforme você apanha. Com ela cheia e a vida baixa (35% ou menos), segure Y/△ até a sanidade encher e passar do limite — o personagem se transforma (Diabo, Fantasma ou Deus da Morte). A barra zera a cada round.',
+      'As transformações saíram do especial, e o Transcender (vida baixa + segurar Y/△) saiu do jogo para todos.',
+      'Especiais novos para quem transformava: Hemorragia Severa (Juan — cinco cortes de faca, o último deixa uma hemorragia forte), Contrato de Morte (Kemi — o tempo desacelera e a bala vai reta até o alvo, girando a espiral de Morte) e Consumir (Ferreiro — quatro cortes enormes da Espada Consumidora).',
+      'Pacto do Santo: virou a transformação do Ferreiro — ele se ergue como Deus da Morte na hora, sem precisar morrer durante o pacto.',
+      'Kian: a Transcendência deu lugar à Levitação (ritual do cânone) — ergue a mão, pedras do chão flutuam em volta dele e voam uma a uma contra o alvo. Como o Transcender saiu, o Inexistir passa a valer duas vezes por partida (antes era uma, +1 depois de transcender).',
+      'Diabo: asas de braços refeitas pela arte do trono (leque de braços com mãos abertas) e a boca vertical em relevo do peito ao umbigo.',
+    ],
+  },
   {
     v: 28,
     date: '2026-10-03',

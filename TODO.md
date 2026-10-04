@@ -120,6 +120,23 @@ distorce o resultado"; a vítima vira Transtornada).
 Juan, Ferreiro · B Balu, Kaiser, Arthur, Erin, Agatha, Kemi, Aguiar · C Xande, Lírio, Labirinto. Não decide quem ganha
 (todos em 35–65%), decide a sensação do kit. Fora da escala hoje: **Gal (S) 41%** e **Dante (A) 43%** abaixo do que
 deviam passar; **Kemi (B) 61%** e **Xande (C) 50%** acima — sugestões no fim do arquivo.
+🟡 **Plano de buffs (2026-10-04, ordem combinada):** medir ANTES e DEPOIS com 2–3 lutas por par (`runBalance` com `focus`).
+1. **Gal (S, 41%)** — Corrente Giratória e Controle Mental mais longos/com mais controle; Injustiça mais cinematográfica.
+   ⚠ Medição INVÁLIDA (2026-10-04): o servidor de equilíbrio (sem HMR) não tinha sido reiniciado, então as três
+   rodadas (40% / 28% / 32%, 60 lutas cada) usaram o código ANTIGO — a diferença é só ruído (±12 pontos). Os valores
+   do Gal voltaram aos de antes; as opções novas ficaram no motor, prontas para testar de verdade:
+   `mindControl` com `walkTo` (o alvo anda até o Gal) e `noBlock`; `sweepStrike` com `pull` (laça e arrasta).
+   Próximo passo: reiniciar o `arena-balance`, aplicar (Controle Mental 3 s, recarga 18, walkTo + noBlock; Corrente
+   Giratória pull 2,5, recarga 11) e medir 2–3 lutas por par.
+2. **Arthur (B, 39%)** — Arma de Sangue (paga com vida) bate mais forte, ou Preço de Sangue devolve algo com vida baixa.
+(v2.9) **Kian (S)** entra na lista: sem a Transcendência e o Transcender caiu para 35% (60 lutas); com o Inexistir 2x
+   por partida, **38%** (60 lutas). Dentro da faixa, mas baixo para um nível S — a Levitação e o Toque da Morte são as
+   alavancas (dano por pedra, recarga).
+   Transformações (v2.9): a CPU transforma (10 vezes em 30 lutas); medir Juan/Kemi/Ferreiro com 2–3 lutas por par.
+3. **Dante (A, 46%)** — Tentáculos de Lodo e Decadenza prendem/desaceleram mais (a força não pode ficar só na Marionete).
+De olho (ajuste leve): Aghata (B, 39%: Leitura de Rituais mais longa ou facas com mais dano); Labirinto (50%: falta
+identidade, não força). Conferir antes de mexer: Kemi (61%) e Xande (50%, acima para C → Tênis Lépidos, não dano);
+Diabo 75% desde o 1º round é aceitável (carta na manga).
 🟡 **Buffs a fazer (decisão do usuário, ainda NÃO aplicados):** (v2.8: o Labirinto subiu para 50% com a Tempestade
 Caótica em área; Erin 60%, Ferreiro 57%) alguns personagens precisam de buff — em especial o
 **Labirinto** (39%, quase sem ferramentas próprias), e pela escala também Gal (S, 41%), Dante (A, 43%), Arthur (39%) e
@@ -230,7 +247,7 @@ Kian 46% · Ferreiro 43% · Arthur 39% · Xande 39% · Aghata 36% · Gal Sal 25%
 
 ## 0. Já feito nesta rodada
 
-- ✅ **Kian: Transcender libera mais um Inexistir.** A primeira Transcendência da partida dá +1 uso do especial
+- ✅ (removido na v2.9, junto com o Transcender) **Kian: Transcender libera mais um Inexistir.** A primeira Transcendência da partida dá +1 uso do especial
   (máximo de 2 na partida). `special.bonusUseOnTranscend` em `src/characters/kian.js`; o
   Fighter soma `specialBonusUses`. Testado no jogo: após o 1º Inexistir, ficou "USADO"; depois de Transcender,
   liberou e o 2º Inexistir funcionou; uma 2ª Transcendência não dá mais usos.
@@ -252,7 +269,7 @@ Kian 46% · Ferreiro 43% · Arthur 39% · Xande 39% · Aghata 36% · Gal Sal 25%
 - ✅ 3.1 escala de combo + limite de 1 lançamento por combo + contador "N ACERTOS".
 - ✅ 3.2 Substituição (L2 apanhando, 1 carga).
 - ✅ 3.3 escapar do agarrão (R2 + ○ logo no começo).
-- ✅ 3.4 Transcender para todos (vida ≤ 30%, segurar △).
+- ✅ 3.4 Transcender para todos (vida ≤ 30%, segurar △). (v2.9: SUBSTITUÍDO pela Barra de Transformação — só Juan, Kemi e Ferreiro)
 - ✅ 3.6 buffer de comandos e pausa no impacto por peso.
 - ✅ 3.7 invulnerabilidade ao levantar.
 - ✅ 3.9 △ + ○ gasta 60 da defesa em vez de quebrar.

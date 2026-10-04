@@ -130,6 +130,7 @@ export const cinematicCombo = {
             strike: sp.applyMeleePassives ? { damage: parts[i], heal: Math.floor(parts[i] * 0.3) } : undefined,
           });
           specialHitFx(world, f, opp, h.fx, sp.color);
+          if (h.bleed && opp.state !== 'ko') opp.applyBleed(h.bleed, f); // ex.: Hemorragia Severa (Juan)
           if (h.fx && h.fx.chain) {
             // correntes aparecem fisicamente durante o golpe
             const sides = h.fx.chain === 'both' ? ['handR', 'handL'] : [h.fx.chain === 'L' ? 'handL' : 'handR'];

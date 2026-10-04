@@ -1,5 +1,27 @@
 # Registro administrativo de alterações
 
+## v2.9 — Barra de Transformação
+
+### Barra de Transformação (v2.9)
+- `COMBAT.storm` { fillPerHealth 1,4, healthRatio 0,35, overcharge 1 s, decay 1,5 } no lugar de `COMBAT.awaken`.
+  `Fighter.storm` (0–100) enche em `takeDamage` (só com `def.awakening` e na forma base) e zera em `reset()`.
+  `canTransform()`: barra cheia + vida ≤ 35% (no treino com sanidade infinita: barra cheia e sem a exigência da vida,
+  `trainingAwaken`). Em `updateCharging`, com a sanidade cheia, `overcharge` sobe 1/s; em 1 → `startAwakening()`, que
+  roda o tipo de especial de `def.awakening` (devilPact / ghostBands / santoPact) direto, sem o preparo vulnerável.
+  Fora da carga o `overcharge` cai 1,5/s. Saíram `canAwaken`/`awaken`/`awakened` e o `bonusUseOnTranscend` do Kian.
+- HUD: `.bar.storm` (só para quem tem `awakening`), com o nome da transformação, `full` / `ready` (pulsa) e o branco
+  do `overcharge`; aviso "SEGURE △: TRANSFORMAR". CPU: com `canTransform()` segura a carga o tempo de encher a
+  sanidade + overcharge.
+- `santoPact` com `immediate`: a mesma cena, e no fim `riseAsDeathGod` (antes só ao morrer dentro do pacto de 45 s).
+- Especiais novos (250, padrão): Juan `cinematicCombo` Hemorragia Severa (faca; `hits[].bleed` novo no cinematicCombo:
+  8/s por 5 s no último corte; Faca Predadora rouba vida); Kemi `spiralSnipe` com `path: 'straight'` (novo: bala reta,
+  1 s de voo, espiral em volta); Ferreiro `cinematicCombo` Consumir (espada, prep `bladeGlow`).
+- Kian: `levitation` (novo tipo): 5 pedras sobem e giram em volta dele em 0,55 s e partem a cada 0,16 s para onde o
+  alvo está (24 m/s, 16 de dano cada, dá para defender/sair). A Transcendência (tipo `transcend`) ficou só na
+  assistência do Kian (buff no parceiro).
+- Gal: buff ainda NÃO aplicado (a medição saiu inválida — servidor de equilíbrio com código antigo); ficaram no motor
+  `mindControl.walkTo/noBlock` e `sweepStrike.pull`, sem uso por enquanto. Detalhes no TODO.
+
 ## v2.8 — Múmia, rastros e vitória de cinema
 
 ### Lote 2 do TODO (v2.8)

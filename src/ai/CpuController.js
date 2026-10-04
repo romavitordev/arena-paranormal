@@ -1,4 +1,5 @@
 import { distXZ } from '../core/util.js';
+import { COMBAT } from '../config/combat.js';
 
 // Adversário controlado pelo computador. Gera o mesmo tipo de entrada que um jogador
 // (nada de atalhos internos) e erra de propósito conforme a dificuldade.
@@ -280,9 +281,9 @@ export class CpuController {
         this.holdCharge = rnd(1.0, 1.8);
         return out;
       }
-      // Transcender com a vida baixa: segura △
-      if (f.canAwaken() && d > 4 && r < 0.35) {
-        this.holdCharge = 1.3;
+      // Barra de Transformação cheia e vida baixa: segura △ até encher a sanidade e passar do limite
+      if (f.canTransform() && d > 4 && r < 0.45) {
+        this.holdCharge = (f.maxEnergy - f.energy) / COMBAT.chargeRate + COMBAT.storm.overcharge + 0.4;
         return out;
       }
       if (f.energy < 45 && d > 9 && r < 0.3) {

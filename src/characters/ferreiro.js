@@ -12,8 +12,8 @@ export default {
   energyColor: 0x8a8090,
   info: {
     weapon: 'Espada Consumidora',
-    style: 'Cortes enormes com a espada amaldiçoada; o Pacto do Santo abre caminho para o Deus da Morte',
-    identity: 'Guardião de Santo Berço: no Pacto do Santo, morrer o transforma no Deus da Morte',
+    style: 'Cortes enormes com a espada amaldiçoada; quase morto, o Pacto do Santo o ergue como Deus da Morte',
+    identity: 'Guardião de Santo Berço: quase morto, o Pacto do Santo o transforma no Deus da Morte',
     tagline: 'Eu não posso permitir que vocês destruam minha cidade.',
   },
   stats: { moveSpeed: 7.0, size: 1.1, maxHealth: 1250 }, // pesado: aguenta os rápidos pela vida,
@@ -124,15 +124,36 @@ export default {
     },
   ],
 
-  // PACTO DO SANTO: exige a sanidade acima de 85%; por 45 s, morrer = virar o Deus da Morte
+  // CONSUMIR (a Espada Consumidora): o Lodo escorre pela lâmina e ela abre o alvo em quatro cortes enormes; o último
+  // crava a espada e consome.
   special: {
+    name: 'Espada Consumidora',
+    banner: 'Consumir',
+    type: 'cinematicCombo',
+    energyCost: 50,
+    cooldown: 14,
+    // damage: omitido → 250 (padrão)
+    color: 0x6a6670,
+    sound: 'specialStart',
+    prepare: { anim: 'charge', time: 0.4, fx: 'bladeGlow' },
+    dash: { speed: 20, maxTime: 0.5, contact: 2.0 },
+    hits: [
+      { t: 0.8, anim: 'slash_h', dur: 0.38, share: 0.18, fx: { kind: 'slash', tilt: 0.05, wide: true }, sound: 'bladeHit' },
+      { t: 1.2, anim: 'slash_h_back', dur: 0.38, share: 0.18, fx: { kind: 'slash', tilt: -0.1, flip: true, wide: true }, sound: 'bladeHit' },
+      { t: 1.65, anim: 'slash_v', dur: 0.5, share: 0.24, fx: { kind: 'smash' }, sound: 'heavyPunch' },
+      { t: 2.25, anim: 'slash_finisher', dur: 0.66, share: 0.4, fx: { kind: 'cross', big: true }, sound: 'slashFinal', final: true },
+    ],
+    bannerAt: 0.2,
+    length: 3.4,
+  },
+
+  // TRANSFORMAÇÃO (Barra de Transformação cheia + vida baixa, segurando △): crava o Símbolo Espiral no peito, se
+  // entrega ao Parasita de Dimensões e o Lodo toma o corpo — ergue-se como O DEUS DA MORTE (chefe com vida própria)
+  awakening: {
     name: 'Pacto do Santo',
     banner: 'Pacto do Santo',
     type: 'santoPact',
-    minEnergy: 0.85,
-    energyCost: 50,
-    cooldown: 50,
-    window: 45,
+    immediate: true,
     form: 'deus_morte',
     color: 0x2a2632,
   },

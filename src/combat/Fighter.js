@@ -72,7 +72,7 @@ export class Fighter {
     }
     this.buffs = [];
     this.specialUses = 0; // por PARTIDA (não volta no round seguinte)
-    this.specialBonusUses = 0; // usos extras ganhos na partida (ex.: Kian ao Transcender)
+    this.specialBonusUses = 0; // usos extras do especial ganhos na partida
     this.reset();
   }
 
@@ -81,6 +81,8 @@ export class Fighter {
     if (this.baseForm) revertForm(this, { keepHealth: false });
     this.lethalHook = null;
     this.revengeUsed = false; // Sede de Vingança (Kemi): uma vez por round
+    this.storm = 0; // Barra de Transformação (0–100), zera a cada round
+    this.overcharge = 0; // segurando △ com a sanidade cheia (0–1) → transforma
     this.health = this.maxHealth;
     this.energy = COMBAT.startEnergy;
     this.guard = this.maxGuard;
@@ -204,6 +206,8 @@ export class Fighter {
     const cap = this.immortal ? Math.max(0, this.health - 1) : this.health;
     const dealt = Math.min(cap, Math.max(0, n));
     this.health -= dealt;
+    // Barra de Transformação: enche com o dano recebido (só na forma base de quem transforma)
+    if (this.def.awakening && !this.baseForm) this.storm = Math.min(100, this.storm + (dealt / this.maxHealth) * 100 * COMBAT.storm.fillPerHealth);
     // a barra de esquivas recupera conforme toma dano
     this.dodgeDmgAcc += dealt;
     while (this.dodgeDmgAcc >= COMBAT.dodge.damagePerCharge) {
@@ -518,6 +522,7 @@ export class Fighter {
     }
     this.stateTime += dt;
     if (this.invuln > 0) this.invuln -= dt;
+    if (this.overcharge > 0 && this.state !== 'charging') this.overcharge = Math.max(0, this.overcharge - dt * COMBAT.storm.decay);
     updateForm(this, dt);
     if (this.message) {
       this.message.time -= dt;
@@ -989,6 +994,15 @@ export class Fighter {
       const pull = new THREE.Vector3(-dz / d, 0, dx / d).multiplyScalar(1).add(new THREE.Vector3(dx / d, 0, dz / d).multiplyScalar(0.3)).normalize().multiplyScalar(0.8);
       out.multiplyScalar(0.3).add(pull);
     }
+    // Controle Mental do Gal (walkTo): o corpo anda sozinho até quem controla e para colado nele (os comandos valem 25%)
+    const ctl = this.buffs && this.buffs.find((x) => x.walkTo);
+    if (ctl && ctl.walkTo.state !== 'ko') {
+      const dx = ctl.walkTo.pos.x - this.pos.x;
+      const dz = ctl.walkTo.pos.z - this.pos.z;
+      const d = Math.hypot(dx, dz) || 1;
+      out.multiplyScalar(0.25);
+      if (d > 1.7) out.add(new THREE.Vector3(dx / d, 0, dz / d).multiplyScalar(0.85));
+    }
     // Labirinto Mental: o corpo anda numa direção que muda sozinha (como perdido num labirinto)
     const maze = this.buffs && this.buffs.find((x) => x.mazeMove);
     if (maze && out.lengthSq() > 0) {
@@ -1258,9 +1272,14 @@ export class Fighter {
     }
     this.addEnergy(COMBAT.chargeRate * (moving ? COMBAT.chargeMoveRate : 1) * dt);
     if (this.carga.stage > 0) this.carga.timer = Math.max(this.carga.timer, 0.6);
-    if (this.canAwaken() && this.stateTime >= COMBAT.awaken.hold) {
-      this.awaken();
-      return;
+    // Barra de Transformação cheia e vida baixa: com a sanidade cheia, continuar segurando passa do limite e transforma
+    if (this.canTransform() && this.energy >= this.maxEnergy) {
+      this.overcharge = Math.min(1, this.overcharge + dt / COMBAT.storm.overcharge);
+      if (Math.random() < 0.5) this.world.fx.burst(this.chestPos(), { count: 2, color: this.def.awakening.color ?? this.def.energyColor, speed: 3 + this.overcharge * 5, life: 0.3, size: 0.12 + this.overcharge * 0.15 });
+      if (this.overcharge >= 1) {
+        this.startAwakening();
+        return;
+      }
     }
     const opp = this.opponent;
     if (opp) this.yaw = turnTowards(this.yaw, yawTo(this.pos, opp.pos), dt * 6);
@@ -2374,47 +2393,29 @@ export class Fighter {
     return true;
   }
 
-  // ------------------------------------------------ Transcender (todos, vida baixa, 1x por partida)
-  canAwaken() {
-    const A = COMBAT.awaken;
-    return !this.awakened && this.health <= this.maxHealth * A.healthRatio && this.health > 0;
+  // ------------------------------------------------ Transformação (Barra de Transformação cheia + vida baixa)
+  // As transformações (Diabo, Fantasma, Deus da Morte) saíram do especial: o kit traz `awakening` com a cinemática de
+  // transformação (mesmos tipos de especial: devilPact, ghostBands, santoPact) e ela só fica disponível assim.
+  canTransform() {
+    const aw = this.def.awakening;
+    if (!aw || this.baseForm || this.health <= 0) return false;
+    return this.storm >= 100 && (this.health <= this.maxHealth * COMBAT.storm.healthRatio || this.trainingAwaken);
   }
 
-  awaken() {
-    const A = COMBAT.awaken;
-    this.awakened = true;
-    this.setState('idle');
-    const el = ELEMENTS[this.def.element];
-    const col = el ? new THREE.Color(el.color).getHex() : this.def.energyColor;
-    const w = this.world;
-    w.fx.ring(new THREE.Vector3(this.pos.x, 0.06, this.pos.z), { color: col, radius: 5, life: 0.7 });
-    w.fx.burst(this.chestPos(), { count: 70, color: col, speed: 9, life: 0.7, size: 0.3 });
-    w.fx.distort(this.chestPos(), { color: col, radius: 3, life: 0.6 });
-    w.cameraRig.shake(0.4, 0.3);
-    w.screenFlash && w.screenFlash(el ? el.color : '#ffffff', 0.08);
-    w.showBanner && w.showBanner('TRANSCENDEU!', this.def.color);
-    w.audio.play('armed');
-    const self = this;
-    const glow = w.fx.emitter({
-      rate: 40,
-      follow: () => new THREE.Vector3(self.pos.x + (Math.random() - 0.5) * 0.9, self.pos.y + Math.random() * 1.9, self.pos.z + (Math.random() - 0.5) * 0.9),
-      particle: { color: col, speed: 0.6, up: 1.4, spread: 0.3, life: 0.5, size: 0.14 },
-    });
-    this.armorHits = A.armorHits;
-    this.addEnergy(30);
-    this.buffTint = { color: col, base: 0.22 };
-    this.addBuff({
-      type: 'awaken', name: 'TRANSCENDEU', time: A.duration, duration: A.duration,
-      mult: A.damageMult, affects: ['melee', 'ranged', 'ability'],
-      onEnd() { glow.stop(); self.armorHits = 0; if (self.buffTint && self.buffTint.color === col) self.buffTint = null; },
-    });
-    // transcender também conta para o Kian (mais um Inexistir)
-    const bonus = this.def.special && this.def.special.bonusUseOnTranscend;
-    if (bonus && !this.transcendBonusGiven) {
-      this.transcendBonusGiven = true;
-      this.specialBonusUses += bonus;
+  startAwakening() {
+    const aw = this.def.awakening;
+    const impl = SPECIALS[aw.type];
+    this.overcharge = 0;
+    if (!impl || (impl.canStart && !impl.canStart(this, aw, this.world))) {
+      this.notify(impl?.blockMsg || 'NÃO DÁ PARA TRANSFORMAR AGORA');
+      return;
     }
-    this.notify('TRANSCENDEU!', true);
+    this.storm = 0;
+    this.carga = { stage: 0, timer: 0 };
+    this.vel.set(0, this.vel.y, 0);
+    this.world.screenFlash && this.world.screenFlash('#ffffff', 0.12);
+    this.setState('special');
+    this.seq = impl.start(this, aw, this.world);
   }
 
   updatePulled(dt) {

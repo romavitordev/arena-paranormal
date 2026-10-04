@@ -2,6 +2,14 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v2.9 — Barra de Transformação
+- Nova Barra de Transformação (Juan, Kemi e Ferreiro): enche conforme você apanha. Com ela cheia e a vida baixa (35% ou menos), segure Y/△ até a sanidade encher e passar do limite — o personagem se transforma (Diabo, Fantasma ou Deus da Morte). A barra zera a cada round.
+- As transformações saíram do especial, e o Transcender (vida baixa + segurar Y/△) saiu do jogo para todos.
+- Especiais novos para quem transformava: Hemorragia Severa (Juan — cinco cortes de faca, o último deixa uma hemorragia forte), Contrato de Morte (Kemi — o tempo desacelera e a bala vai reta até o alvo, girando a espiral de Morte) e Consumir (Ferreiro — quatro cortes enormes da Espada Consumidora).
+- Pacto do Santo: virou a transformação do Ferreiro — ele se ergue como Deus da Morte na hora, sem precisar morrer durante o pacto.
+- Kian: a Transcendência deu lugar à Levitação (ritual do cânone) — ergue a mão, pedras do chão flutuam em volta dele e voam uma a uma contra o alvo. Como o Transcender saiu, o Inexistir passa a valer duas vezes por partida (antes era uma, +1 depois de transcender).
+- Diabo: asas de braços refeitas pela arte do trono (leque de braços com mãos abertas) e a boca vertical em relevo do peito ao umbigo.
+
 ## v2.8 — Múmia, rastros e vitória de cinema
 - Faixas da Fantasma: agora cobrem o alvo dos pés ao rosto como uma múmia e o prendem por até 2,2 s — apertando os botões sem parar, dá para se soltar antes. (Adaptação: a wiki só diz que as faixas melhoram as habilidades dela e puxam o rifle.)
 - Teletransportes deixam rastro no lugar de onde saíram: sigilos dourados no Kian e a fumaça preta das faixas na Fantasma (os outros já tinham sombra, faíscas e poça de sangue).

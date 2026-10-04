@@ -45,7 +45,7 @@ especial = Carga → Carga → ○ (custa ${COMBAT.specialEnergyCost}, ofensivos
 **Combo vertical:** ↑ + ○ dentro do combo lança e o atacante sobe junto (até ${COMBAT.airCombo.maxHits} golpes aéreos + finalização); ↓ + ○ derruba. × depois de acertar = dash de perseguição (até ${COMBAT.comboDash.maxPerCombo} por combo).
 **Queda:** caído não toma dano; × ou L2 logo ao cair levanta rolando. **Perfect Block:** defesa no instante do impacto (todos). **Carregar andando:** ${COMBAT.chargeMoveSpeed * 100}% da velocidade, ${COMBAT.chargeMoveRate * 100}% da carga.
 **Agarrão:** R2 + ○ (curta distância, ${COMBAT.grab.damage} de dano, não pode ser defendido — só esquivado). **△ é o modificador de ○ e □:** △ + ○ e △ + □ soltam habilidades (veja cada personagem); R2 + △ e R2 + × também (L1 e R1 chamam as assistências).
-**Elementos (só nos rituais — habilidades e especiais):** Sangue > Conhecimento > Energia > Morte > Sangue (+${Math.round((COMBAT.elements.advantage - 1) * 100)}% / −${Math.round((1 - COMBAT.elements.disadvantage) * 100)}%). **Escala de combo:** ${COMBAT.comboScaling.join(' → ')}. **Substituição:** L2 apanhando (1 carga). **Escapar do agarrão:** R2 + ○ logo no começo. **Transcender:** vida ≤ ${COMBAT.awaken.healthRatio * 100}% + segurar △ ${COMBAT.awaken.hold} s (1x por partida, +${Math.round((COMBAT.awaken.damageMult - 1) * 100)}% de dano por ${COMBAT.awaken.duration} s, aguenta 1 golpe).
+**Elementos (só nos rituais — habilidades e especiais):** Sangue > Conhecimento > Energia > Morte > Sangue (+${Math.round((COMBAT.elements.advantage - 1) * 100)}% / −${Math.round((1 - COMBAT.elements.disadvantage) * 100)}%). **Escala de combo:** ${COMBAT.comboScaling.join(' → ')}. **Substituição:** L2 apanhando (1 carga). **Escapar do agarrão:** R2 + ○ logo no começo. **Barra de Transformação** (só quem transforma): enche apanhando; cheia + vida ≤ ${COMBAT.storm.healthRatio * 100}% → segurar △ até a sanidade encher e mais ${COMBAT.storm.overcharge} s; zera a cada round.
 **Câmera:** sempre travada no adversário.
 `;
 
@@ -89,11 +89,15 @@ for (const c of ROSTER) {
   if (sp.type === 'mistField') {
     md += `Solta a névoa e, dentro dela, conjura a **Acácia amplificada pela Cinerária** (${sp.damage ?? 250} de dano). Depois a névoa fica **parada no mapa** por ${sp.duration} s; com o Kaiser dentro dela: +${Math.round((sp.damageBonus - 1) * 100)}% de dano, esquiva com ${sp.evasion.iframesMult}× invulnerabilidade e metade do cooldown, corpo translúcido, área de ${sp.area} m onde o inimigo fica ${sp.enemySlow * 100}% mais lento, não regenera energia e os projéteis perdem ${sp.projectileSlow * 100}% da velocidade. Custo ${sp.energyCost} · cooldown ${sp.cooldown} s.\n`;
   } else if (sp.type === 'erase') {
-    md += `Corpo a corpo, ${sp.usesPerMatch}x por partida (+${sp.bonusUseOnTranscend || 0} depois da primeira Transcendência), não pode ser defendido: o alvo vira pó. Escapa esquivando no contato; com a sanidade cheia resiste levando ${sp.resistDamage} de dano (nunca morre por isso). Custo ${sp.energyCost}.\n`;
+    md += `Corpo a corpo, ${sp.usesPerMatch}x por partida, não pode ser defendido: o alvo vira pó. Escapa esquivando no contato; com a sanidade cheia resiste levando ${sp.resistDamage} de dano (nunca morre por isso). Custo ${sp.energyCost}.\n`;
   } else {
     // transformações, invocações e pactos com o mesmo resumo do jogo (não são "N de dano")
     const resumo = specialSummary(c);
     md += `${resumo.charAt(0).toUpperCase()}${resumo.slice(1)} · custo ${sp.energyCost} · cooldown ${sp.cooldown} s.\n`;
+  }
+  if (c.awakening) {
+    md += `\n### Transformação: ${c.awakening.name}\n\n`;
+    md += `Barra de Transformação cheia + vida ≤ ${COMBAT.storm.healthRatio * 100}%: segurar △ até passar da sanidade cheia → ${specialSummary({ special: c.awakening })}.\n`;
   }
 }
 

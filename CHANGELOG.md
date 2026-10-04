@@ -1,5 +1,17 @@
 # Changelog
 
+## v2.9 — 2026-10-04
+
+### Adicionado
+- Barra de Transformação (Juan, Kemi, Ferreiro): cheia + vida ≤ 35% → segurar △ passa da sanidade cheia e transforma.
+- Especiais Hemorragia Severa (Juan), Contrato de Morte (Kemi), Consumir (Ferreiro); Levitação (Kian).
+
+### Removido
+- Transcender (todos) e a Transcendência do Kian; transformações pelo especial.
+
+### Alterado
+- Diabo: asas de braços e boca vertical no modelo.
+
 ## v2.8 — 2026-10-03
 
 ### Alterado

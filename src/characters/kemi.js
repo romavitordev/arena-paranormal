@@ -137,13 +137,31 @@ export default {
     },
   ],
 
-  // VESTIR AS FAIXAS: as faixas enrolam o rosto e o corpo, a escuridão esconde quem ela é — A FANTASMA até o fim do round
+  // CONTRATO DE MORTE (a assassina de aluguel cumpre o contrato; cânone do tiro: o tempo desacelera em volta dela e a
+  // espiral de Morte se forma do disparo): ajoelha, o tempo para, e a bala vai reta e devagar, girando a espiral até o alvo.
   special: {
+    name: 'Contrato de Morte',
+    banner: 'Contrato de Morte',
+    type: 'spiralSnipe',
+    path: 'straight',
+    flight: 1.0,
+    energyCost: 50,
+    cooldown: 16,
+    // damage: omitido → 250 (padrão); termina o serviço em quem já está morrendo (executeBelow)
+    range: 40,
+    showProp: 'sniperHand',
+    hideProp: 'stowed',
+    executeBelow: 0.25,
+    executeMult: 1.2,
+    color: 0xd8d4dc,
+  },
+
+  // TRANSFORMAÇÃO (Barra de Transformação cheia + vida baixa, segurando △): as faixas enrolam o rosto e o corpo, a
+  // escuridão esconde quem ela é — A FANTASMA até o fim do round
+  awakening: {
     name: 'Vestir as Faixas',
     banner: 'Vestir as Faixas',
     type: 'ghostBands',
-    energyCost: 50,
-    cooldown: 30,
     form: 'fantasma',
     duration: 0, // até o fim do round
     bonusHealth: 50,

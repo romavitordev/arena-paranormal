@@ -259,7 +259,9 @@ export class Match {
     if (p.health < p.maxHealth && !['hitstun', 'downed'].includes(p.state)) p.health = Math.min(p.maxHealth, p.health + p.maxHealth * dt);
     if (o.energy) { p.energy = p.maxEnergy; p.dodges = COMBAT.dodge.charges; p.guard = p.maxGuard; }
     if (o.noCooldown) for (const k in p.cooldowns) if (k !== 'dodge') p.cooldowns[k] = Math.min(p.cooldowns[k], 0.05);
-    if (o.noCooldown) { p.specialUses = 0; p.awakened = false; }
+    if (o.noCooldown) p.specialUses = 0;
+    // treino com sanidade infinita: a Barra de Transformação fica cheia e não precisa da vida baixa
+    if (o.energy && p.def.awakening && !p.baseForm) { p.storm = 100; p.trainingAwaken = true; }
   }
 
   // Treino: volta os dois para o começo, com vida cheia (Select na luta ou opção da pausa)

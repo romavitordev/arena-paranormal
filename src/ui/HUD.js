@@ -91,6 +91,7 @@ export class HUD {
         <div class="bar health"><div class="trail"></div><div class="fill"></div><div class="num"></div></div>
         <div class="bar energy" title="Sanidade (PE): gasta em rituais, habilidades e especial"><div class="fill"></div><div class="mark" style="left:${(f.specialCost() / f.maxEnergy) * 100}%"></div></div>
         <div class="bar guard" title="Resistência da defesa"><div class="fill"></div></div>
+        ${def.awakening ? `<div class="bar storm" title="Barra de Transformação: enche apanhando; cheia e com a vida baixa, segure ${actionLabel(i, 'carga', f.input.source)} até passar da sanidade cheia"><div class="fill"></div><div class="over"></div><span>${escapeHtml(def.awakening.name.toUpperCase())}</span></div>` : ''}
         <div class="row">
           <div class="carga" title="Carga de Poder"><span class="lbl">CARGA</span><i class="pip"></i><i class="pip"></i><b class="go">ESPECIAL</b></div>
           <div class="dodges" title="Esquivas (recuperam conforme toma dano)"><span class="lbl">ESQUIVA</span><i></i><i></i><i></i><i></i></div>
@@ -111,6 +112,7 @@ export class HUD {
         hpNum: p.querySelector('.bar.health .num'),
         en: p.querySelector('.bar.energy .fill'),
         guard: p.querySelector('.bar.guard .fill'),
+        storm: p.querySelector('.bar.storm'),
         guardBar: p.querySelector('.bar.guard'),
         state: p.querySelector('.state'),
         dodgePips: [...p.querySelectorAll('.dodges i')],
@@ -147,8 +149,14 @@ export class HUD {
       e.guardBar.classList.toggle('active', f.state === 'block');
       e.guardBar.classList.toggle('low', f.guard < f.maxGuard * 0.3);
       const stateText = { block: f.guardMoving ? 'DEFESA ABERTA' : 'DEFENDENDO', stun: 'ATORDOADO', pulled: 'PRESO', dodge: (f.def.dodge?.name || 'ESQUIVA').toUpperCase() }[f.state] || '';
-      // Transcender disponível (vida baixa): avisa para segurar △
-      const awakenHint = f.canAwaken && f.canAwaken() && (f.state === 'idle' || f.state === 'charging') ? `SEGURE ${actionLabel(i, 'carga', f.input.source)}: TRANSCENDER` : '';
+      if (e.storm) {
+        e.storm.children[0].style.width = `${f.storm}%`;
+        e.storm.children[1].style.width = `${(f.overcharge || 0) * 100}%`;
+        e.storm.classList.toggle('full', f.storm >= 100);
+        e.storm.classList.toggle('ready', f.canTransform());
+      }
+      // transformação disponível (barra cheia + vida baixa): avisa para segurar △
+      const awakenHint = f.canTransform && f.canTransform() && (f.state === 'idle' || f.state === 'charging') ? `SEGURE ${actionLabel(i, 'carga', f.input.source)}: TRANSFORMAR` : '';
       e.state.textContent = stateText || awakenHint;
       e.state.classList.toggle('awaken', !stateText && !!awakenHint);
       this.updateDamageMarker(i, f, match);

@@ -12,7 +12,7 @@ especial = Carga → Carga → ○ (custa 50, ofensivos causam 250, nunca hitkil
 **Combo vertical:** ↑ + ○ dentro do combo lança e o atacante sobe junto (até 3 golpes aéreos + finalização); ↓ + ○ derruba. × depois de acertar = dash de perseguição (até Infinity por combo).
 **Queda:** caído não toma dano; × ou L2 logo ao cair levanta rolando. **Perfect Block:** defesa no instante do impacto (todos). **Carregar andando:** 45% da velocidade, 50% da carga.
 **Agarrão:** R2 + ○ (curta distância, 70 de dano, não pode ser defendido — só esquivado). **△ é o modificador de ○ e □:** △ + ○ e △ + □ soltam habilidades (veja cada personagem); R2 + △ e R2 + × também (L1 e R1 chamam as assistências).
-**Elementos (só nos rituais — habilidades e especiais):** Sangue > Conhecimento > Energia > Morte > Sangue (+10% / −10%). **Escala de combo:** 1 → 1 → 0.9 → 0.8 → 0.72 → 0.65 → 0.58 → 0.5. **Substituição:** L2 apanhando (1 carga). **Escapar do agarrão:** R2 + ○ logo no começo. **Transcender:** vida ≤ 30% + segurar △ 1 s (1x por partida, +15% de dano por 12 s, aguenta 1 golpe).
+**Elementos (só nos rituais — habilidades e especiais):** Sangue > Conhecimento > Energia > Morte > Sangue (+10% / −10%). **Escala de combo:** 1 → 1 → 0.9 → 0.8 → 0.72 → 0.65 → 0.58 → 0.5. **Substituição:** L2 apanhando (1 carga). **Escapar do agarrão:** R2 + ○ logo no começo. **Barra de Transformação** (só quem transforma): enche apanhando; cheia + vida ≤ 35% → segurar △ até a sanidade encher e mais 1 s; zera a cada round.
 **Câmera:** sempre travada no adversário.
 
 ---
@@ -350,8 +350,8 @@ Invoca a Marionete, que luta ao seu lado · custo 50 · cooldown 50 s.
 
 - **Teletransporte** — △ + □ / Y + X · custo 20 · cooldown 7 s
   Some numa distorção e reaparece numa posição válida: na direção do analógico ou, sem direção, ao lado do adversário.
-- **Transcendência** — R2 + △ / RT + Y · custo 35 · cooldown 26 s
-  O primeiro ritual: exposição total ao Outro Lado. Por alguns segundos os sigilos brilham, os golpes físicos atravessam a defesa e ganham impacto paranormal.
+- **Levitação** — R2 + △ / RT + Y · custo 30 · cooldown 15 s · dano 16 · alcance 18 m
+  Ergue a mão e as pedras do chão flutuam em volta dele; depois voam uma a uma contra o alvo (dá para defender ou sair da frente).
 - **Lâmina do Medo** — △ + ○ / Y + B · custo 40 · cooldown 25 s · dano 160 · alcance 2.8 m
   Manifesta uma lâmina translúcida de medo ao redor da mão para um golpe curto devastador que quebra a defesa. Errar deixa ele exposto.
 - **Rejeitar Névoa** — R2 + × / RT + A · custo 25 · cooldown 16 s
@@ -362,7 +362,7 @@ Invoca a Marionete, que luta ao seu lado · custo 50 · cooldown 50 s.
 
 ### Especial: Inexistir
 
-Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode ser defendido: o alvo vira pó. Escapa esquivando no contato; com a sanidade cheia resiste levando 450 de dano (nunca morre por isso). Custo 50.
+Corpo a corpo, 2x por partida, não pode ser defendido: o alvo vira pó. Escapa esquivando no contato; com a sanidade cheia resiste levando 450 de dano (nunca morre por isso). Custo 50.
 
 ---
 
@@ -537,7 +537,7 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
 
 ## FERREIRO
 
-*Guardião de Santo Berço: no Pacto do Santo, morrer o transforma no Deus da Morte* · arma: Espada Consumidora
+*Guardião de Santo Berço: quase morto, o Pacto do Santo o transforma no Deus da Morte* · arma: Espada Consumidora
 
 ### Físico (○ / B)
 
@@ -571,15 +571,19 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
   Fecha o peitoral de metal: por 6 s recebe 25% menos dano e aguenta 2 golpes sem recuar, mas anda um pouco mais devagar.
 - **Passiva — Resistente:** −8% de dano físico recebido
 
-### Especial: Pacto do Santo
+### Especial: Espada Consumidora
 
-Com mais de 85% de sanidade: pacto de 45 s — morrer durante o pacto transforma no Deus da Morte · custo 50 · cooldown 50 s.
+250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: Pacto do Santo
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → o Lodo toma o corpo: transforma no Deus da Morte (chefe com vida própria) até o fim do round.
 
 ---
 
 ## JUAN
 
-*Masoquista e imprevisível: quanto mais apanha, mais sanidade; no Renascimento senta no Trono e vira o Diabo* · arma: Faca Predadora (lâmina ondulada que absorve sangue)
+*Masoquista e imprevisível: quanto mais apanha, mais sanidade; quase morto, senta no Trono e vira o Diabo* · arma: Faca Predadora (lâmina ondulada que absorve sangue)
 
 ### Físico (○ / B)
 
@@ -612,9 +616,13 @@ Com mais de 85% de sanidade: pacto de 45 s — morrer durante o pacto transforma
 - **Armadura de Sangue Diabólica** — △ + L2 / Y + LT · custo 30 · cooldown 24 s
   Também nasce sozinha depois de sangrar o bastante (a cada 400 de dano recebido, mais curta, e usa a recarga). O próprio sangue endurece numa armadura com espinhos: recebe 30% menos dano, aguenta 2 golpes sem recuar e fica mais rápido. O braço da faca vira uma arma de sangue: golpes físicos 25% mais fortes.
 
-### Especial: Renascimento
+### Especial: Hemorragia Severa
 
-Transforma no Diabo até o fim do round (+150 de vida), 1x por partida · custo 50 · cooldown 60 s.
+250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: Renascimento
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → transforma no Diabo até o fim do round (+150 de vida).
 
 ---
 
@@ -653,9 +661,13 @@ Transforma no Diabo até o fim do round (+150 de vida), 1x por partida · custo 
 - **Revólver .38** — △ + L2 / Y + LT · custo 20 · cooldown 10 s
   Saque rápido do revólver: seis tiros em leque, rápidos, para quem chega perto demais.
 
-### Especial: Vestir as Faixas
+### Especial: Contrato de Morte
 
-Transforma na Fantasma até o fim do round (+50 de vida) · custo 50 · cooldown 30 s.
+250 de dano · custo 50 · cooldown 16 s.
+
+### Transformação: Vestir as Faixas
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → transforma na Fantasma até o fim do round (+50 de vida).
 
 ---
 

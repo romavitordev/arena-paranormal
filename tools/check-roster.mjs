@@ -158,9 +158,9 @@ ok(inj.special.approach === 'chain' && inj.special.applyMeleePassives === false,
 const des = get('kian');
 const fistAnims = ['jab', 'cross', 'hook_l', 'hook_r', 'uppercut', 'heavy_punch', 'wave_punch', 'body_blow', 'dash_punch', 'shove', 'meteor_punch', 'flurry'];
 ok(des.unarmed && allStrikes(des).every((s) => fistAnims.includes(s.anim) && !s.trail), 'Kian: físico só com punhos');
-ok(des.special.type === 'erase' && des.special.usesPerMatch === 1 && des.special.unblockable && des.special.resistDamage > 0, 'Kian: especial Inexistir (1x por partida, indefensável, resiste com sanidade cheia)');
-ok(des.special.bonusUseOnTranscend === 1, 'Kian: Transcender libera mais um Inexistir');
-ok(des.abilities.some((a) => a.type === 'transcend'), 'Kian: Transcendência');
+ok(des.special.type === 'erase' && des.special.unblockable && des.special.resistDamage > 0, 'Kian: especial Inexistir (indefensável, resiste com sanidade cheia)');
+ok(des.special.usesPerMatch === 2 && !des.special.bonusUseOnTranscend, 'Kian: Inexistir 2x por partida (o bônus do Transcender virou fixo)');
+ok(des.abilities.some((a) => a.type === 'levitation') && !des.abilities.some((a) => a.type === 'transcend'), 'Kian: Levitação no lugar da Transcendência');
 ok(des.abilities.some((a) => a.type === 'blink' && a.cooldown > 0), 'Kian: Teletransporte com cooldown');
 const fb = des.abilities.find((a) => a.type === 'fearBlade');
 ok(fb && fb.cooldown >= 20, `Lâmina do Medo: manifestação temporária com cooldown alto (${fb && fb.cooldown}s)`);
@@ -175,7 +175,7 @@ const pas = (id, t) => (get(id).passives || []).some((p) => p.type === t);
 const abil = (id, t) => (get(id).abilities || []).some((a) => a.type === t);
 ok(pas('kian', 'precognition') && abil('kian', 'rejectMist'), 'Kian: Precognição + Rejeitar Névoa');
 ok(get('kian').melee.strikes.reduce((n, s) => n + s.damage, 0) <= 215, 'Kian: combo reduzido (≤ 215)');
-ok(get('kian').abilities.find((a) => a.type === 'transcend').endDrain > 0, 'Kian: Transcendência cobra sanidade');
+ok(new Set(get('kian').abilities.map((a) => a.id)).size === get('kian').abilities.length, 'Kian: habilidades sem id repetido');
 ok(pas('kaiser', 'resistant') && abil('kaiser', 'flowerRain') && get('kaiser').special.area === 5, 'Kaiser: Resistente, Acácia, Cinerária em 5 m');
 // RB + LT (mod+dodge): todo personagem tem um golpe nesse comando
 ok(ROSTER.every((c) => (c.abilities || []).some((a) => a.input === 'carga+dodge')), 'todos têm habilidade em △ + L2 (Y + LT)');
@@ -186,7 +186,7 @@ ok(pas('aghata', 'bloodNecklace'), 'Agatha: Colar Banhado em Sangue');
 ok(pas('gal_sal', 'bulletDodge') && abil('gal_sal', 'sparkTeleport'), 'Gal: Desviar de Balas + Teletransporte');
 const mods = (c) => (c.abilities || []).filter((a) => a.input.startsWith('block+') || a.input.startsWith('carga+')).map((a) => a.input);
 ok(ROSTER.every((c) => new Set(mods(c)).size === mods(c).length), 'nenhum R1 + botão repetido no mesmo personagem');
-ok(COMBAT.comboScaling[0] === 1 && COMBAT.comboScaling.at(-1) >= 0.5 && COMBAT.substitution && COMBAT.grabTech && COMBAT.awaken, 'escala de combo, substituição, escape do agarrão e Transcender configurados');
+ok(COMBAT.comboScaling[0] === 1 && COMBAT.comboScaling.at(-1) >= 0.5 && COMBAT.substitution && COMBAT.grabTech && COMBAT.storm && !COMBAT.awaken, 'escala de combo, substituição, escape do agarrão e Barra de Transformação configurados (sem Transcender)');
 
 // ---------------- Cenários: sem frestas entre retângulos andáveis ----------------
 // Onde dois retângulos se encontram, a sobreposição tem que passar do diâmetro do corpo; senão o lutador trava.
@@ -233,7 +233,7 @@ ok(lab && ['mentalMaze', 'consumeMoment', 'helmetForm'].every((t) => abil('labir
 ok(xan && xan.origin === 'Os Cinco' && xan.melee.name.includes('Taco') && xan.ranged.boomerang, 'Xande: Os Cinco, taco com arame farpado e Skate Caótico que volta');
 ok(xan && ['curseWeapon', 'polarize', 'noiseScreen', 'selfBuff'].every((t) => abil('xande', t)) && pas('xande', 'paranormalGladiator'), 'Xande: Amaldiçoar Arma, Polarização Caótica, Tela de Ruído, Velocidade Mortal, Gladiador Paranormal');
 const fer = get('ferreiro');
-ok(fer && fer.special.type === 'santoPact' && fer.special.minEnergy === 0.85 && fer.special.window === 45 && fer.special.form === 'deus_morte' && fer.melee.name === 'Espada Consumidora', 'Ferreiro: Espada Consumidora; Pacto do Santo exige 85% de sanidade, dura 45 s e leva ao Deus da Morte');
+ok(fer && fer.special.type === 'cinematicCombo' && fer.awakening.type === 'santoPact' && fer.awakening.immediate && fer.awakening.form === 'deus_morte' && fer.melee.name === 'Espada Consumidora', 'Ferreiro: especial Consumir; o Pacto do Santo (Deus da Morte) é a transformação da Barra de Transformação');
 {
   const { getForm } = await import('../src/characters/forms/index.js');
   const deus = getForm('deus_morte');
@@ -242,7 +242,7 @@ ok(fer && fer.special.type === 'santoPact' && fer.special.minEnergy === 0.85 && 
   ok(deus && ['timelockGrab', 'deadHands', 'timeWarp'].every((t) => deus.abilities.some((a) => a.type === t)), 'Deus da Morte: Espiral Descendente, Controlar Mortos, Senhor do Tempo');
 }
 const jua = get('juan');
-ok(jua && jua.element === 'sangue' && ['ritualCuts', 'command', 'bloodLink', 'heavyProtection'].every((t) => abil('juan', t)) && pas('juan', 'lifesteal') && jua.special.type === 'devilPact' && jua.special.form === 'diabo' && !jua.special.duration && jua.special.usesPerMatch === 1, 'Juan: Descarnar, Perturbação, Vínculo de Sangue, Armadura de Sangue, Faca Predadora e o Renascimento (Trono do Diabo até o fim do round)');
+ok(jua && jua.element === 'sangue' && ['ritualCuts', 'command', 'bloodLink', 'heavyProtection'].every((t) => abil('juan', t)) && pas('juan', 'lifesteal') && jua.special.type === 'cinematicCombo' && jua.special.hits.some((h) => h.bleed) && jua.awakening.type === 'devilPact' && jua.awakening.form === 'diabo' && !jua.awakening.duration, 'Juan: Descarnar, Perturbação, Vínculo de Sangue, Armadura de Sangue, Faca Predadora, especial Hemorragia Severa e o Renascimento (Diabo) pela Barra de Transformação');
 {
   const { getForm } = await import('../src/characters/forms/index.js');
   const dia = getForm('diabo');

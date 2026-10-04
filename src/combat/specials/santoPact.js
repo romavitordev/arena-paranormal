@@ -6,6 +6,7 @@ import { transform } from '../forms.js';
 // PACTO DO SANTO (Ferreiro): crava o Símbolo Espiral no próprio peito e se entrega ao Parasita de
 // Dimensões. Exige a sanidade acima de sp.minEnergy (85%). Por sp.window segundos (45), se ele MORRER, o Lodo
 // toma o corpo e ele se ergue como O DEUS DA MORTE (sp.form) — um chefe com vida própria.
+// sp.immediate (a transformação pela Barra de Transformação): a mesma cena, e ele se ergue no fim dela.
 export const santoPact = {
   canStart: (f) => !f.findBuff('santoPact'),
   blockMsg: 'O PACTO JÁ ESTÁ FEITO',
@@ -33,6 +34,7 @@ export const santoPact = {
     tl.add(1.0, () => {
       world.fx.ring(new THREE.Vector3(f.pos.x, 0.06, f.pos.z), { color: 0x2a2632, radius: 4, life: 0.7 });
       world.cameraRig.shake(0.3, 0.3);
+      if (sp.immediate) return; // pela Barra de Transformação: o Lodo toma o corpo no fim da cena, sem esperar a morte
       const until = world.time + sp.window;
       f.addBuff({ type: 'santoPact', name: 'PACTO DO SANTO', time: sp.window, duration: sp.window, onEnd() { if (f.lethalHook === hook) f.lethalHook = null; } });
       // golpe fatal dentro do pacto: em vez de cair, o Lodo toma o corpo
@@ -46,7 +48,10 @@ export const santoPact = {
       f.lethalHook = hook;
       f.notify(`PACTO: SE CAIR EM ${sp.window}s, VIRA O DEUS DA MORTE`, true);
     });
-    tl.add(1.6, () => {});
+    tl.add(1.6, () => {
+      // depois que este especial termina (a troca de kit encerra a sequência)
+      if (sp.immediate) world.after(0.01, () => riseAsDeathGod(f, sp, world));
+    });
     tl.end(1.6);
     return {
       update: (dt) => {

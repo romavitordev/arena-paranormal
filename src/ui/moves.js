@@ -42,7 +42,7 @@ export function moveListHTML(c) {
   html += row('R2 + ○', 'Agarrão', `curta distância, não pode ser defendido (só esquivado) · ${COMBAT.grab.damage} de dano`);
   html += row('R2 + ○ ao ser agarrado', 'Escapar do agarrão', 'logo no começo: os dois se soltam, sem dano');
   html += row('L2 apanhando', 'Substituição', 'gasta 1 carga de esquiva e reaparece atrás do atacante');
-  html += row('Segurar △ (vida ≤ 30%)', 'Transcender', `1x por partida: +${Math.round((COMBAT.awaken.damageMult - 1) * 100)}% de dano por ${COMBAT.awaken.duration}s e aguenta 1 golpe sem reagir`);
+  if (c.awakening) html += row(`Barra de Transformação cheia + vida ≤ ${Math.round(COMBAT.storm.healthRatio * 100)}%: segurar △`, c.awakening.name, `a sanidade enche e passa do limite: ${specialSummary({ special: c.awakening })} · a barra enche apanhando e zera a cada round`);
   if (c.defense && c.defense.perfectBlock) html += row('R2 no tempo exato', 'Bloqueio Perfeito', 'anula o golpe físico e atordoa o atacante');
   for (const p of c.passives || []) {
     if (p.type === 'meleeDrain') html += row('Passiva', 'Cura que cobra sanidade', 'o físico tira X de vida; o inimigo recupera Y (Y < X) e perde Y × 1,5 de sanidade (energia)');
@@ -64,8 +64,9 @@ export function specialSummary(c) {
   const life = sp.bonusHealth ? ` (+${sp.bonusHealth} de vida)` : '';
   switch (sp.type) {
     case 'mistField': return 'névoa + Acácia amplificada (250 de dano); a névoa fica no mapa';
-    case 'erase': return 'corpo a corpo, 1x por partida (+1 depois de Transcender), indefensável: o alvo vira pó — só escapa esquivando ou com sanidade cheia (resiste levando muito dano)';
-    case 'santoPact': return `com mais de ${Math.round((sp.minEnergy || 0) * 100)}% de sanidade: pacto de ${sp.window || 45} s — morrer durante o pacto transforma no Deus da Morte`;
+    case 'erase': return 'corpo a corpo, 1x por partida, indefensável: o alvo vira pó — só escapa esquivando ou com sanidade cheia (resiste levando muito dano)';
+    case 'santoPact': if (sp.immediate) return 'o Lodo toma o corpo: transforma no Deus da Morte (chefe com vida própria) até o fim do round';
+      return `com mais de ${Math.round((sp.minEnergy || 0) * 100)}% de sanidade: pacto de ${sp.window || 45} s — morrer durante o pacto transforma no Deus da Morte`;
     case 'devilPact': return `transforma no Diabo ${until(sp.duration)}${life}${sp.usesPerMatch ? `, ${sp.usesPerMatch}x por partida` : ''}`;
     case 'ghostBands': return `transforma na Fantasma ${until(sp.duration)}${life}`;
     case 'devilDeal': return `o alvo fica transtornado por ${sp.duration || 8} s: não defende e recebe mais dano; o Diabo se cura`;

@@ -1,6 +1,6 @@
 // KIAN (id interno: kian) — força física absurda + paranormal + mobilidade + ataques devastadores.
 // REGRA ABSOLUTA: nenhuma arma. Todo o combate é com os punhos/corpo.
-// Rituais: Teletransporte, Lâmina do Medo, Transcendência e o especial Inexistir.
+// Rituais: Teletransporte, Lâmina do Medo, Toque da Morte, Levitação, Rejeitar Névoa e o especial Inexistir.
 // A Lâmina do Medo é uma manifestação de energia temporária ao redor da mão,
 // não uma espada física, e só aparece durante a habilidade.
 export default {
@@ -85,15 +85,22 @@ export default {
       residue: 'sigil', // deixa sigilos dourados onde estava
     },
     {
-      id: 'transcendencia',
-      name: 'Transcendência',
+      // cânone: "Kian consegue levitar e mover pequenos objetos apenas erguendo a sua mão" (substitui a
+      // Transcendência, que repetia o golpe que atravessa a defesa)
+      id: 'levitacao',
+      name: 'Levitação',
       input: 'block+carga', // R2 + △ / RT + Y
-      type: 'transcend',
-      description: 'O primeiro ritual: exposição total ao Outro Lado. Por alguns segundos os sigilos brilham, os golpes físicos atravessam a defesa e ganham impacto paranormal.',
-      energyCost: 35,
-      cooldown: 26,
-      duration: 7,
-      endDrain: 15, // transcender cobra sanidade: sem regeneração durante e -15 no fim
+      type: 'levitation',
+      description: 'Ergue a mão e as pedras do chão flutuam em volta dele; depois voam uma a uma contra o alvo (dá para defender ou sair da frente).',
+      energyCost: 30,
+      cooldown: 15,
+      windup: 0.55,
+      recovery: 0.3,
+      stones: 5,
+      interval: 0.16,
+      speed: 24,
+      range: 18,
+      damage: 16, // por pedra (80 se todas acertarem)
       color: 0xffd88a,
     },
     {
@@ -147,7 +154,7 @@ export default {
   ],
 
   // Especial INEXISTIR: o corpo do alvo se enche de escrita, brilha por dentro e vira pó,
-  // como se nunca tivesse existido. Corpo a corpo, 1 vez por partida (+1 ao Transcender) (não volta no round
+  // como se nunca tivesse existido. Corpo a corpo, 2 vezes por partida (não volta no round
   // seguinte), NÃO pode ser defendido — só esquivado. Com a sanidade (energia) cheia o alvo
   // resiste: leva muito dano, mas não o suficiente para morrer.
   special: {
@@ -156,8 +163,7 @@ export default {
     type: 'erase',
     energyCost: 50,
     cooldown: 14,
-    usesPerMatch: 1,
-    bonusUseOnTranscend: 1, // ao Transcender (1ª vez na partida) pode usar o Inexistir mais uma vez
+    usesPerMatch: 2, // era 1 (+1 ao Transcender): com o fim do Transcender, os 2 usos ficam fixos
     unblockable: true,
     dash: { speed: 24, maxTime: 0.4, contact: 1.6 },
     resistDamage: 450, // dano quando o alvo resiste com sanidade cheia (nunca mata)

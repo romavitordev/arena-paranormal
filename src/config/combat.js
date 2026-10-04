@@ -109,8 +109,10 @@ export const COMBAT = {
   inputBuffer: 0.12,
   // ---- Levantar depois de ser lançado ----
   wakeupInvuln: 0.35,
-  // ---- Transcender (todos): vida baixa + segurar △ por 1 s, 1x por partida ----
-  awaken: { healthRatio: 0.3, hold: 1.0, duration: 12, damageMult: 1.15, armorHits: 1, speedMult: 1.08 },
+  // ---- Barra de Transformação (só quem tem `awakening` no kit: Juan, Kemi, Ferreiro) ----
+  // Enche com o dano recebido (fillPerHealth × % da vida perdida). Cheia + vida ≤ healthRatio: segurar △ enche a
+  // sanidade e, com ela cheia, mais `overcharge` segundos segurando → a transformação. Zera a cada round.
+  storm: { fillPerHealth: 1.4, healthRatio: 0.35, overcharge: 1.0, decay: 1.5 },
   // ---- Combos verticais (dentro de um combo): ↑ + ○ lança para cima, ↓ + ○ derruba ----
   airCombo: { chase: 12.5, maxHits: 3, hang: 2.0, pop: 4.0, chainMult: 0.6, finalMult: 1.2 },
   // ---- Dash de perseguição no meio do combo (× depois de acertar) ----
