@@ -101,8 +101,8 @@ export const COMBAT = {
   hitstopBy: { light: 0.04, medium: 0.055, heavy: 0.075, launch: 0.11 },
   // ---- Elementos: ciclo Sangue > Conhecimento > Energia > Morte > Sangue (Medo neutro) ----
   elements: { advantage: 1.1, disadvantage: 0.9 },
-  // ---- Substituição: L2 enquanto apanha, gasta 1 carga de esquiva e cancela o golpe no mesmo lugar ----
-  substitution: { charges: 1, cooldown: 1.2, iframes: 0.35 },
+  // ---- Substituição: L2 enquanto apanha, gasta 1 carga de esquiva e reaparece atrás do atacante ----
+  substitution: { charges: 1, cooldown: 1.2, iframes: 0.35, behind: 1.7 },
   // ---- Escapar do agarrão: Defesa + ○ logo no começo ----
   grabTech: { window: 0.22, push: 6 },
   // ---- Buffer de comandos (apertou um pouco antes de poder agir) ----

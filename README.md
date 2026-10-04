@@ -4,7 +4,7 @@ Jogo de luta 3D em arena com temática paranormal. Combate rápido e acessível,
 movimentação livre, ataques direcionais, defesa, esquiva, habilidades por combinação de
 botões e especiais cinematográficos. Feito com **Three.js + Vite**, roda no navegador.
 
-Versão atual do jogo: **v1.8**.
+Versão atual do jogo: **v3.7**.
 
 ```bash
 npm install
@@ -55,6 +55,7 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
   Segurando △ para carregar, L2 sozinho continua sendo **esquiva** — dá para fugir no meio da carga.
 - **Dash:** × + × (toque duplo no pulo) avança rápido. △ + × é o dash longo, que persegue o adversário (10 de sanidade); no Joui, △ + × é o Teleporte das Sombras.
 - **Agarrão:** Defesa + ○ (RT + B). Pega de perto e arremessa; não pode ser defendido, só esquivado. Errar deixa você exposto.
+- **Substituição:** aperte L2 enquanto apanha para gastar uma carga, escapar do combo e reaparecer atrás do adversário (ou no ponto seguro mais próximo).
 - **Câmera:** sempre travada no adversário. **L1 / R1** chamam as assistências na batalha em equipe.
 - Cada jogador lê teclado **e** controle ao mesmo tempo.
 - **Menus:** A/× (Pulo, Enter) confirma · B/○ (Ataque físico, Esc) volta.
@@ -70,7 +71,7 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 - **Combo infinito (estilo Storm):** na sequência de ○, antes do finalizador, aperte **△ + ×** depois de acertar: o
   personagem dá um rush atrás do alvo e a sequência de ○ recomeça do 1º golpe — dá para repetir ○○○ → △+× → ○○○...
   Cada rush gasta 8 de sanidade; o dano cai com a escala de combo e quem apanha pode usar a Substituição.
-- **Online / LAN:** no menu inicial, **ONLINE / LAN**: escreva seu **nome de usuário** (fica salvo) e
+- **Online / LAN (pronto):** no menu inicial, **ONLINE / LAN**: escreva seu **nome de usuário** (fica salvo) e
   - **CRIAR SALA** — senha opcional e visibilidade **PÚBLICA** (aparece em SALAS ABERTAS) ou **PRIVADA** (só com o
     código); a sala recebe um código de 5 letras;
   - **SALAS ABERTAS** — lista das salas públicas abertas agora (🔒 = com senha); escolha uma para entrar;

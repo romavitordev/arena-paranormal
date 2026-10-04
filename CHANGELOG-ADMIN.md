@@ -1,5 +1,14 @@
 # Registro administrativo de alterações
 
+## v3.7 — Substituição aprimorada + Online pronto
+
+### Posicionamento da substituição (v3.7)
+- `Fighter.trySubstitution` usa `findSpotBehind` para escolher um local livre atrás do oponente, considerando hitboxes, obstáculos e limites da arena. Sem local seguro, a ação não consome carga nem recarga.
+- A substituição mantém o cancelamento do hitstun/combo, a invulnerabilidade breve e os efeitos; a lógica é determinística para os dois lados no modo online.
+
+### Modo online pronto
+- A changelog para jogadores registra a disponibilidade das salas públicas/privadas por código e das partidas sincronizadas já implementadas em `NetSession`.
+
 ## v3.6 — Substituição no lugar
 
 ### Posicionamento da substituição (v3.6)

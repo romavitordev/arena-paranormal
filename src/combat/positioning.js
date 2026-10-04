@@ -51,7 +51,7 @@ export function findSpotBehind(arena, target, { distance = 1.5, radius = 0.5, ta
 
   const candidates = [];
   const dists = [distance, distance * 0.8, distance * 1.25, distance * 1.6, 1.15, 2.2];
-  for (let a = 0; a <= 180; a += 15) {
+  for (let a = 0; a <= 90; a += 15) {
     for (const s of a === 0 || a === 180 ? [1] : [1, -1]) {
       const ang = Math.atan2(bx, bz) + s * (a * Math.PI) / 180;
       for (const d of dists) {

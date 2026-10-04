@@ -1,5 +1,13 @@
 # Changelog
 
+## v3.7 — 2026-10-04
+
+### Adicionado
+- Modo online pronto: crie ou entre em salas públicas e privadas por código e jogue partidas sincronizadas pela internet.
+
+### Alterado
+- Substituição: ao usar L2 enquanto apanha, reaparece atrás do adversário em um ponto livre da arena, interrompe o combo e ganha invulnerabilidade breve.
+
 ## v3.6 — 2026-10-04
 
 ### Corrigido

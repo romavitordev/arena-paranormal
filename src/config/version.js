@@ -1,7 +1,7 @@
 // Versão do jogo e NOVIDADES (changelog). Cada atualização conta, inclusive as que foram juntas numa só publicação.
 // Para uma nova atualização: suba VERSION e acrescente a entrada no TOPO de CHANGELOG (textos para jogadores, os mesmos
 // do CHANGELOG-CLIENTE.md; detalhes técnicos vão no CHANGELOG-ADMIN.md).
-export const VERSION = 36;
+export const VERSION = 37;
 export const VERSION_LABEL = `v${Math.floor(VERSION / 10)}.${VERSION % 10}`;
 
 export function formatVersion(version) {
@@ -9,6 +9,15 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: 37,
+    date: '2026-10-04',
+    title: 'Substituição aprimorada + Online pronto',
+    items: [
+      'Substituição: ao usar L2 enquanto apanha, reaparece atrás do adversário em um ponto livre da arena, interrompe o combo e ganha invulnerabilidade breve.',
+      'Modo online pronto: crie ou entre em salas públicas e privadas por código e jogue partidas sincronizadas pela internet.',
+    ],
+  },
   {
     v: 36,
     date: '2026-10-04',

@@ -4,7 +4,7 @@ import { buildModel } from '../models/index.js';
 import { Animator } from '../anim/Animator.js';
 import { clamp, yawTo, turnTowards, forwardFromYaw, distXZ, angleDiff, DEG } from '../core/util.js';
 import { applyHit } from './damage.js';
-import { resolveBody } from './positioning.js';
+import { findSpotBehind, resolveBody } from './positioning.js';
 import { startChargeFx } from './chargeFx.js';
 import { ABILITY_TYPES } from './abilities.js';
 import { SPECIALS } from './specials/index.js';
@@ -2380,7 +2380,7 @@ export class Fighter {
 
   // ------------------------------------------------ dano recebido
   updateHitstun(dt) {
-    // SUBSTITUIÇÃO: L2 enquanto apanha gasta carga de esquiva e cancela o golpe sem mudar de posição
+    // SUBSTITUIÇÃO: L2 enquanto apanha gasta carga de esquiva e reaparece atrás do atacante
     if (this.input.pressed.dodge && this.trySubstitution()) return;
     if (this.onGround) {
       const f = Math.exp(-dt * 6);
@@ -2464,6 +2464,12 @@ export class Fighter {
     }
     const opp = this.opponent;
     if (!opp) return false;
+    const spot = findSpotBehind(this.world.arena, opp.pos, {
+      distance: S.behind,
+      radius: this.radius,
+      targetRadius: opp.radius,
+    });
+    if (!spot) return false;
     this.dodges -= S.charges;
     this.cooldowns.substitution = S.cooldown;
     this.buffered = null; // o L2 da substituição não vira uma esquiva logo depois
@@ -2472,7 +2478,7 @@ export class Fighter {
     // "tronco": nuvem no lugar onde estava + faíscas do elemento
     this.world.fx.play('FX_TELEPORT', from, { color: col, kind: 'smoke' });
     this.world.audio.play('teleport', { volume: 0.8 });
-    this.pos.y = 0;
+    this.pos.set(spot.x, 0, spot.z);
     this.vel.set(0, 0, 0);
     this.onGround = true;
     this.launched = false;
