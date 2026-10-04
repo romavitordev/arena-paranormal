@@ -7,7 +7,7 @@ Referência: wiki (Juan / O Diabo / Trono do Diabo) e a arte do trono. O que pre
   - QUATRO braços com garras (o par de baixo sai das costelas, bem visível);
   - pernas de BODE (coxa de pelo, jarrete dobrado para trás, canela fina, casco fendido) com bocas dentadas na tíbia;
   - rosto do Juan com o sorriso enorme, piercings e o olho faltando; capuz vermelho rasgado e correntes no torso;
-  - símbolo de Sangue enorme no peito, boca vertical no umbigo e Sigilos dourados brilhando (textura torso_diabo).
+  - BOCA VERTICAL em relevo do peito ao ventre (malha); símbolo de Sangue e Sigilos dourados na textura torso_diabo.
 Todas as espessuras em frações de H (o construtor NÃO escala arm_r/leg_r sozinho).
 """
 import sys, os, math, random
@@ -233,6 +233,42 @@ for z0, tilt in ((hz + 0.42 * H, 0.08), (hz + 0.3 * H, -0.06)):
         a = i / 28 * TAU
         links.append(ellipsoid((math.sin(a) * 0.22 * H, -math.cos(a) * 0.15 * H, z0 + math.sin(a) * tilt * H), (0.012 * H, 0.012 * H, 0.008 * H), 5, 3))
 b.add('chains', merge(*links), chainm, region='torso', subdiv=0)
+# BOCA VERTICAL do peito ao ventre (wiki: a boca que se abre do peito ao umbigo; na arte, a costura com dentes de osso):
+# lábios grossos em relevo, o fundo escuro e duas fileiras de dentes que se cruzam no meio
+def belly_front(z, out=0.0):
+    """y da frente do tronco na altura z (mesmo perfil do b.body: meia-largura × 0,62)."""
+    prof = [(-0.12, 0.17), (0.0, 0.17), (0.17, 0.155), (0.36, 0.215), (0.48, 0.24)]
+    dz = (z - hz) / H
+    for (z0, w0), (z1, w1) in zip(prof, prof[1:]):
+        if dz <= z1:
+            w = w0 + (w1 - w0) * max(0.0, (dz - z0) / (z1 - z0))
+            break
+    else:
+        w = prof[-1][1]
+    return -(w * 0.62 + out) * H
+
+
+mz0, mz1 = hz + 0.07 * H, hz + 0.45 * H  # do umbigo ao esterno
+lips, teeth = [], []
+for sx in (1, -1):
+    pts, rad = [], []
+    for k in range(13):
+        t = k / 12
+        z = mz0 + (mz1 - mz0) * t
+        pts.append((sx * math.sin(t * math.pi) * 0.042 * H, belly_front(z, 0.004), z))
+        rad.append((0.007 + 0.009 * math.sin(t * math.pi)) * H)
+    lips.append(rod(pts, rad, 6, cap_start=True))
+    for k in range(1, 12):
+        t = k / 12
+        z = mz0 + (mz1 - mz0) * t
+        x = sx * math.sin(t * math.pi) * 0.04 * H
+        y = belly_front(z, 0.006)
+        ln = (0.014 + 0.022 * math.sin(t * math.pi)) * H
+        teeth.append(cone((x, y, z + sx * 0.004 * H), (x - sx * ln, y - 0.004 * H, z - sx * 0.006 * H), 0.006 * H, 4))
+gap = ellipsoid((0, belly_front((mz0 + mz1) / 2, -0.006), (mz0 + mz1) / 2), (0.04 * H, 0.012 * H, (mz1 - mz0) * 0.48), 10, 8)
+b.add('belly_mouth_gap', gap, material('mouth_dark', '#120304', 0.8), region='torso', subdiv=0)
+b.add('belly_mouth_lips', merge(*lips), material('lips_diabo', '#6e0a10', 0.55), region='torso', subdiv=0)
+b.add('belly_mouth_teeth', merge(*teeth), material('teeth_bone', '#e8dcc0', 0.5), region='torso', subdiv=0)
 # garras compridas nas mãos
 for side in ('L', 'R'):
     h = sk['hand' + side]

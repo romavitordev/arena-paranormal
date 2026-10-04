@@ -131,10 +131,10 @@ Levantado comparando cada kit com o cânone e procurando habilidades que só rea
   ele luta com a faca de lâmina ondulada; trocar por arremesso/corte da faca com rastro de sangue. A **Armadura de
   Sangue Diabólica** deveria nascer de SANGRAR ("após sangrar o suficiente"): carregar com o dano recebido e ativar
   sozinha (ou ficar mais forte quanto mais ele apanhou), com espinhos no ombro esquerdo como na forma do Diabo.
-- 🔴 **Diabo:** ✅ (v2.3) Veias saindo do próprio alvo e garras pingando sangue. ✅ (pós-v2.8) asas de braços refeitas pela arte do trono (osso de asa + 3 fileiras de braços-pena com mãos
-  abertas, em leque). Falta: a boca vertical do torso descrita na wiki; Veias de
-  Sangue é a mesma corda das Amarras da Lírio — trocar por correntes saindo das veias do PRÓPRIO alvo (sem corda
-  vindo da mão). Amaldiçoar Arma é só o sangramento das garras: dar um efeito visível (garras com sangue escorrendo).
+- ✅ **Diabo:** (v2.3) Veias saindo do próprio alvo e garras pingando sangue; (pós-v2.8) asas de braços refeitas pela arte
+  do trono (osso de asa + 3 fileiras de braços-pena com mãos abertas, em leque) e a boca vertical em relevo do esterno ao
+  umbigo (lábios, fundo escuro e dentes de osso). Era: sem asas de braços nem boca vertical; Veias de Sangue com a corda
+  das Amarras da Lírio; Amaldiçoar Arma sem efeito visível.
 - ✅ (v2.3) **Arthur:** sem sanidade, paga rituais e a Arma de Sangue com vida (passiva Preço de Sangue). Era: o kit dele no cânone tem Arma de Sangue (lâmina do próprio sangue, gastando vida) — hoje é só o
   especial; avaliar uma versão curta como habilidade (custa vida em vez de sanidade) Ele pode gastar vida ao invés de sanidade para fazer o ritual.
 - ✅ (v2.7) **Erin:** CORREÇÃO — no cânone o Black Hole É uma cura (cinzas assopradas, mais forte que a do Dante); ficou

@@ -947,11 +947,7 @@ export const MATERIAL_TEXTURES = {
       g.strokeStyle = '#3a0406'; g.lineWidth = 7; g.lineCap = 'round';
       g.beginPath(); g.arc(256, 92, 46, 0, Math.PI * 2); g.stroke();
       g.beginPath(); g.moveTo(256, 30); g.lineTo(256, 154); g.moveTo(214, 70); g.lineTo(298, 114); g.moveTo(298, 70); g.lineTo(214, 114); g.stroke();
-      // boca vertical dentada no umbigo
-      g.fillStyle = '#140404';
-      g.beginPath(); g.ellipse(256, 210, 10, 40, 0, 0, Math.PI * 2); g.fill();
-      g.fillStyle = '#efe4cc';
-      for (let i = -3; i <= 3; i++) { g.beginPath(); g.moveTo(247, 210 + i * 10); g.lineTo(255, 214 + i * 10); g.lineTo(247, 218 + i * 10); g.fill(); g.beginPath(); g.moveTo(265, 210 + i * 10); g.lineTo(257, 214 + i * 10); g.lineTo(265, 218 + i * 10); g.fill(); }
+      // a boca vertical agora é malha 3D no modelo (char_diabo.py: belly_mouth_*)
       sigils(g, '#e8c060');
     }, { wrap: true });
     const emissiveMap = canvasTex(512, 256, (g) => {
