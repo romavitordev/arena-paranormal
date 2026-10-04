@@ -177,7 +177,7 @@ Solta a névoa e, dentro dela, conjura a **Acácia amplificada pela Cinerária**
 - **Amaldiçoar Arma** — △ + □ / Y + X · custo 25 · cooldown 16 s
   Amaldiçoa a faca com o elemento Sangue: por alguns segundos cada acerto (físico ou faca arremessada) abre um sangramento que continua tirando vida.
 - **Facas Amaldiçoadas** — △ + L2 / Y + LT · custo 20 · cooldown 11 s
-  Arremessa três facas banhadas em sangue, em leque, que se curvam atrás do alvo.
+  Arremessa três facas banhadas em sangue, em leque, que se curvam atrás do alvo e VOLTAM para a mão — a que errou na ida ainda pode acertar na volta.
 - **Passagem de Conhecimento** — R2 + × / RT + A · custo 25 · cooldown 14 s · alcance 14 m
   Troca de mente com o adversário por um instante: os dois trocam de lugar e ele volta desorientado, de costas e atordoado.
 - **Leitura de Rituais** — R2 + △ / RT + Y · custo 20 · cooldown 16 s
@@ -221,7 +221,7 @@ Solta a névoa e, dentro dela, conjura a **Acácia amplificada pela Cinerária**
 - **Tentáculos de Lodo** — △ + ○ / Y + B · custo 30 · cooldown 14 s · dano 60 · alcance 10 m
   Põe a mão no chão: tentáculos de Lodo Preto brotam embaixo do inimigo, prendem e comprimem.
 - **Cicatrização "Paradiso"** — R2 + △ / RT + Y · custo 30 · cooldown 26 s
-  Assopra uma névoa preta em espiral que envelhece as próprias feridas até cicatrizarem.
+  Assopra uma névoa preta em espiral que envelhece as próprias feridas até cicatrizarem. Parado, cicatriza 25% mais.
 - **Poça de Lodo** — △ + L2 / Y + LT · custo 20 · cooldown 15 s
   Arremessa uma bola de Lodo Preto que se espalha no chão: o inimigo dentro anda devagar e não recupera energia.
 
@@ -264,7 +264,7 @@ Invoca a Marionete, que luta ao seu lado · custo 50 · cooldown 50 s.
 - **Bênção Maldita** — △ + ○ / Y + B · custo 30 · cooldown 22 s
   Ritual de Energia: a mão brilha em ciano e ela vê um pedaço do futuro — recupera todas as esquivas e bate mais forte por alguns segundos.
 - **Envelhecimento Localizado "Black Hole"** — R2 + △ / RT + Y · custo 30 · cooldown 26 s
-  Segura cinzas, diz "Black Hole" e assopra: as cinzas ficam pretas e envelhecem as próprias feridas até cicatrizarem em espiral.
+  Segura cinzas, diz "Black Hole" e assopra: as cinzas ficam pretas e envelhecem as feridas até cicatrizarem em espiral — mais forte e mais rápido que o ritual do Dante.
 - **Granada de Luz** — △ + L2 / Y + LT · custo 20 · cooldown 16 s
   Uma granada de clarão: explode numa luz branca que deixa o inimigo atordoado por um instante.
 
@@ -440,8 +440,8 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
   Marca o chão onde o alvo pisa com uma espiral; ao estalar os dedos ela estoura e destrói a área (Morte). Dá para sair de cima se perceber a marca. Com o capacete, a área e o dano crescem.
 - **Capacete do ???** — R2 + △ / RT + Y · custo 35 · cooldown 30 s
   Põe o elmo do sorriso: por alguns segundos os rituais e a Rajada ficam mais fortes (Tempestade Caótica), o Labirinto Mental vira Abissal e o Consumir Momento cresce.
-- **Tempestade Caótica** — △ + L2 / Y + LT · custo 30 · cooldown 15 s
-  A versão forte da Rajada: a parabólica cospe cinco descargas caóticas em leque que procuram o alvo.
+- **Tempestade Caótica** — △ + L2 / Y + LT · custo 30 · cooldown 15 s · dano 20 · alcance 18 m
+  A parabólica chama uma tempestade em cima do alvo: um círculo avisa a área e oito raios caóticos caem nela por 2 s — metade mira onde o alvo está. Saia de baixo!
 
 ### Especial: O Labirinto é a Resposta
 
@@ -484,7 +484,7 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
 - **Velocidade Mortal** — R2 + × / RT + A · custo 25 · cooldown 20 s
   Distorce o tempo em volta de si: fica muito mais rápido e recupera todas as esquivas.
 - **Cicatrização** — △ + L2 / Y + LT · custo 30 · cooldown 26 s
-  Ritual de Sangue: as feridas fecham sozinhas, recuperando vida aos poucos.
+  Ritual de Sangue: fios de sangue correm pelo corpo e fecham as feridas, recuperando vida aos poucos.
 - **Bloqueio Perfeito** — defender no instante exato (0.14 s) anula o dano e atordoa o atacante por 0.45 s
 
 ### Especial: Por Eles
@@ -562,11 +562,11 @@ Corpo a corpo, 1x por partida (+1 depois da primeira Transcendência), não pode
 ### Habilidades
 
 - **Hipnose Espiral** — △ + ○ / Y + B · custo 25 · cooldown 22 s · alcance 10 m
-  A espiral do Parasita de Dimensões: por alguns segundos o corpo do alvo obedece ao contrário.
+  A espiral do Parasita de Dimensões: o Lodo desenha uma espiral no chão e o alvo anda em círculos até o centro (perto do Ferreiro), sem conseguir defender; lá fica parado, hipnotizado.
 - **Espada Consumidora** — R2 + × / RT + A · custo 20 · cooldown 16 s
   Desperta a espada amaldiçoada: por alguns segundos cada corte abre um ferimento que consome o alvo.
 - **Conforto de Santo Berço** — R2 + △ / RT + Y · custo 25 · cooldown 24 s
-  A ilusão de Santo Berço conforta o Luzidio: recupera vida aos poucos.
+  A ilusão da tarde perfeita de Santo Berço conforta o Luzidio: recupera bastante vida devagar — mas a ilusão se quebra se ele apanhar.
 - **Armadura do Ferreiro** — △ + L2 / Y + LT · custo 25 · cooldown 22 s
   Fecha o peitoral de metal: por 6 s recebe 25% menos dano e aguenta 2 golpes sem recuar, mas anda um pouco mais devagar.
 - **Passiva — Resistente:** −8% de dano físico recebido

@@ -68,8 +68,8 @@ export default {
       id: 'hipnoseEspiral',
       name: 'Hipnose Espiral',
       input: 'carga+physical', // △ + ○ / Y + B
-      type: 'mindControl',
-      description: 'A espiral do Parasita de Dimensões: por alguns segundos o corpo do alvo obedece ao contrário.',
+      type: 'hypnoSpiral',
+      description: 'A espiral do Parasita de Dimensões: o Lodo desenha uma espiral no chão e o alvo anda em círculos até o centro (perto do Ferreiro), sem conseguir defender; lá fica parado, hipnotizado.',
       energyCost: 25,
       cooldown: 22,
       windup: 0.45,
@@ -77,6 +77,8 @@ export default {
       range: 10,
       arc: 60,
       duration: 2.5,
+      offset: 1.6,
+      stun: 0.8,
       color: 0x6a6670,
     },
     {
@@ -97,11 +99,13 @@ export default {
       name: 'Conforto de Santo Berço',
       input: 'block+carga', // R2 + △ / RT + Y
       type: 'healOverTime',
-      description: 'A ilusão de Santo Berço conforta o Luzidio: recupera vida aos poucos.',
+      description: 'A ilusão da tarde perfeita de Santo Berço conforta o Luzidio: recupera bastante vida devagar — mas a ilusão se quebra se ele apanhar.',
       energyCost: 25,
       cooldown: 24,
-      heal: 70,
-      duration: 2.5,
+      heal: 100,
+      duration: 4,
+      style: 'comfort',
+      breakOnHit: true,
       color: 0x8a8090,
     },
     {

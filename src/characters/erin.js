@@ -121,11 +121,12 @@ export default {
       name: 'Envelhecimento Localizado "Black Hole"',
       input: 'block+carga', // R2 + △ / RT + Y
       type: 'healOverTime',
-      description: 'Segura cinzas, diz "Black Hole" e assopra: as cinzas ficam pretas e envelhecem as próprias feridas até cicatrizarem em espiral.',
+      description: 'Segura cinzas, diz "Black Hole" e assopra: as cinzas ficam pretas e envelhecem as feridas até cicatrizarem em espiral — mais forte e mais rápido que o ritual do Dante.',
       energyCost: 30,
       cooldown: 26,
-      heal: 55,
-      duration: 2.5,
+      heal: 80,
+      duration: 1.8,
+      style: 'ash',
       color: 0x141018,
     },
     {

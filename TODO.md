@@ -135,18 +135,20 @@ Levantado comparando cada kit com o cânone e procurando habilidades que só rea
   vindo da mão). Amaldiçoar Arma é só o sangramento das garras: dar um efeito visível (garras com sangue escorrendo).
 - ✅ (v2.3) **Arthur:** sem sanidade, paga rituais e a Arma de Sangue com vida (passiva Preço de Sangue). Era: o kit dele no cânone tem Arma de Sangue (lâmina do próprio sangue, gastando vida) — hoje é só o
   especial; avaliar uma versão curta como habilidade (custa vida em vez de sanidade) Ele pode gastar vida ao invés de sanidade para fazer o ritual.
-- 🟡 **Erin:** "Envelhecimento Localizado — Black Hole" é só cura ao longo do tempo (`healOverTime`); no cânone é um
+- ✅ (v2.7) **Erin:** CORREÇÃO — no cânone o Black Hole É uma cura (cinzas assopradas, mais forte que a do Dante); ficou
+  como a cura mais forte e rápida, com visual próprio. Anotação antiga (errada): "é só cura ao longo do tempo; no cânone é um
   ritual de Energia/Morte que envelhece uma área — virar zona que acelera o tempo do adversário (recargas mais
   lentas, dano contínuo) ou que cura a Erin às custas de quem estiver dentro.
-- 🟡 **Ferreiro:** Hipnose Espiral reaproveita o Controle Mental do Gal; dar a espiral própria (o Lodo girando no chão
+- ✅ (v2.7) **Ferreiro:** Hipnose Espiral própria (espiral de Lodo, anda em círculos até o centro). Era: reaproveita o Controle Mental do Gal; dar a espiral própria (o Lodo girando no chão
   e o alvo andando em círculos até a espiral).
-- 🟡 **Tiros amaldiçoados** (`cursedShots`) em 6 kits (Kaiser, Aghata, Labirinto, Kemi ×2, Fantasma): diferenciar —
+- ✅ (v2.7, em parte) **Tiros amaldiçoados:** Tempestade Caótica virou chuva de raios em área; facas da Aghata voltam.
+  Continuam iguais: Balas Amaldiçoadas (Kaiser), Pistola Transtornada e Revólver .38 (Kemi/Fantasma). Era: `cursedShots` em 6 kits (Kaiser, Aghata, Labirinto, Kemi ×2, Fantasma): diferenciar —
   Tempestade Caótica do Labirinto como chuva de projéteis em área; Facas Amaldiçoadas da Aghata voltando para a mão.
 - ✅ (v2.3) **Aghata:** + Passagem de Conhecimento (troca de lugar/mente) e Leitura de Rituais (−40% de dano de rituais), ambos do cânone — agora tem 4.
 - ✅ (v2.3) **Aguiar:** mascarado, todo golpe do machado sangra (corpo a corpo e arremessado).
-- 🟡 **Cura ao longo do tempo** (`healOverTime`) em 4 kits (Dante, Erin, Xande, Ferreiro): cada uma com um visual e uma
+- ✅ (v2.7) **Curas** com visual e regra próprios. Era: `healOverTime` em 4 kits (Dante, Erin, Xande, Ferreiro): cada uma com um visual e uma
   condição própria (Paradiso do Dante só funciona parado; Conforto de Santo Berço cura mais perto do altar etc.).
-- 🟡 **Fantasma** usa as animações humanas da Kemi (já anotado) e o Disparo Espiral é ao mesmo tempo o □ e o especial
+- 🟡 **Fantasma:** ✅ (v2.7) especial cinematográfico (a bala dá a volta e a câmera segue). Falta: usa as animações humanas da Kemi (já anotado) e o Disparo Espiral é ao mesmo tempo o □ e o especial
   — o especial podia ser uma versão cinematográfica (um disparo em volta da arena e a câmera seguindo a bala até atingir o adversário).
 - 🟢 **Teleportes** (Joui, Kian, Fantasma, Gal, Diabo): cada um já tem a sua cara; padronizar quem deixa rastro/poça.
 - ✅ (v2.3) **CPU:** foca invocações fracas (zumbis, clones do Trinitá) e usa o Transportar para arrastar quando colado.

@@ -2,6 +2,13 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v2.7 — Rituais com cara própria
+- As curas agora são diferentes entre si: o Black Hole da Erin (cinzas pretas que fecham a ferida em espiral) é a mais forte e rápida, como no cânone; o Paradiso do Dante cura 25% mais parado; a Cicatrização do Xande fecha com fios de sangue; o Conforto de Santo Berço do Ferreiro cura muito, devagar — mas a ilusão se quebra se ele apanhar.
+- Hipnose Espiral do Ferreiro refeita: o Lodo desenha uma espiral no chão e o alvo anda em círculos até o centro, perto do Ferreiro, sem conseguir defender; lá fica parado, hipnotizado.
+- Tempestade Caótica do Labirinto refeita: um círculo marca a área do alvo e raios caóticos caem nela por 2 s — dá para sair de baixo.
+- As Facas Amaldiçoadas da Aghata voltam para a mão: a que errou na ida ainda pode acertar na volta.
+- Disparo Espiral da Fantasma (especial) agora é cinematográfico: a bala dá a volta na arena desenhando a espiral de Morte e a câmera vai atrás dela até atravessar o alvo.
+
 ## v2.6 — Chegou o Balu
 - NOVO LUTADOR: BALU (Antônio Pontevedra), o ex-agente veterano da Ordo Realitas — o "tanque" da Equipe Abutres. Camisa polo de flores amarelas, bigode, cabelo com gel e o Machado Lancinante com o pomo de pantera.
 - Balu é pesado (1300 de vida, um pouco mais rápido que a Lírio): machadadas com as duas mãos que derrubam e aguentam um golpe pequeno, e uma machadada a mais em quem está caído (Derrubar e Atacar).

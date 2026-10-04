@@ -5,8 +5,9 @@ import { applyHit } from '../damage.js';
 import { trySpecialBlock } from './common.js';
 import { faceClose, overShoulder, pullBack } from '../../camera/shots.js';
 
-// DISPARO ESPIRAL (A Fantasma): o mundo para, ela ajoelha e as faixas puxam o rifle — a bala sai em curva, desenhando
-// uma espiral de Morte no ar, contorna qualquer cobertura e atravessa o alvo. Se ele já estava morrendo
+// DISPARO ESPIRAL (A Fantasma): o mundo para, ela ajoelha e as faixas puxam o rifle — a bala sai em curva, DÁ A VOLTA
+// NA ARENA desenhando uma espiral de Morte no ar (passa por qualquer brecha, como no cânone) e a câmera vai atrás dela
+// até atravessar o alvo. Se ele já estava morrendo
 // (vida ≤ sp.executeBelow), a espiral termina o serviço (sp.executeMult).
 export const spiralSnipe = {
   canStart(f, sp) {
@@ -39,6 +40,17 @@ export const spiralSnipe = {
     let hit = false;
     let bullet = null;
     let from = null;
+    let path = null; // a volta pela arena (curva) que termina no peito do alvo
+    const FLIGHT = sp.flight ?? 1.6;
+    const bulletPos = new THREE.Vector3();
+    const bulletDir = new THREE.Vector3(0, 0, 1);
+    // câmera que persegue a bala (logo atrás e um pouco acima, olhando para onde ela vai)
+    const chaseShot = {
+      dur: FLIGHT,
+      fov: 58,
+      pos: () => bulletPos.clone().addScaledVector(bulletDir, -1.4).add(new THREE.Vector3(0, 0.35, 0)),
+      look: () => bulletPos.clone().addScaledVector(bulletDir, 2),
+    };
     const color = sp.color ?? 0xd8d4dc;
     world.showBanner(sp.banner || sp.name, f.def.color);
     return {
@@ -57,18 +69,37 @@ export const spiralSnipe = {
           world.fx.burst(from, { count: 14, color: 0x0a080c, kind: 'smoke', speed: 1.5, life: 0.8, size: 0.5, grow: 1 });
           bullet = new THREE.Mesh(new THREE.SphereGeometry(0.09, 8, 6), new THREE.MeshBasicMaterial({ color }));
           world.scene.add(bullet);
+          // a volta: sai para um lado, contorna o alvo por trás, volta pelo outro lado e entra no peito dele
+          const to = opp.chestPos();
+          const fwd = to.clone().sub(from).setY(0).normalize();
+          const side = new THREE.Vector3(-fwd.z, 0, fwd.x);
+          const dist = Math.max(4, from.distanceTo(to));
+          const R = Math.min(8, dist * 0.7 + 2);
+          path = new THREE.CatmullRomCurve3([
+            from.clone(),
+            from.clone().addScaledVector(fwd, dist * 0.3).addScaledVector(side, R * 0.8).setY(from.y + 1.6),
+            to.clone().addScaledVector(fwd, R * 0.7).addScaledVector(side, R * 0.4).setY(to.y + 2.6),
+            to.clone().addScaledVector(fwd, R * 0.4).addScaledVector(side, -R * 0.8).setY(to.y + 1.4),
+            to.clone().addScaledVector(fwd, -1.6).addScaledVector(side, -0.6).setY(to.y + 0.2),
+            to.clone(),
+          ]);
+          bulletPos.copy(from);
+          world.cameraRig.playShots([chaseShot, faceClose(opp, { dur: 1.2, from: 2.2, to: 1.6, side: 0.3, height: 1.4 })]);
         }
         if (bullet && !hit) {
-          // a bala curva: espiral larga que fecha no alvo
-          const k = Math.min(1, (t - 1.5) / 0.45);
-          const to = opp.chestPos();
-          const p = from.clone().lerp(to, k);
-          const dir = to.clone().sub(from).normalize();
-          const side = new THREE.Vector3().crossVectors(dir, new THREE.Vector3(0, 1, 0)).normalize();
-          const up = new THREE.Vector3().crossVectors(side, dir);
-          const amp = Math.sin(k * Math.PI) * 0.9;
-          const ang = k * Math.PI * 6;
+          const k = Math.min(1, (t - 1.5) / FLIGHT);
+          const p = path.getPointAt(k); // getPointAt: velocidade constante ao longo da curva
+          const tan = path.getTangentAt(k);
+          // o fim da curva segue o alvo de verdade (ele ainda pode estar se mexendo antes da cinemática)
+          if (k > 0.9) p.lerp(opp.chestPos(), (k - 0.9) / 0.1);
+          // espiral de Morte em volta da trajetória
+          const side = new THREE.Vector3().crossVectors(tan, new THREE.Vector3(0, 1, 0)).normalize();
+          const up = new THREE.Vector3().crossVectors(side, tan);
+          const amp = 0.35 * Math.sin(Math.min(1, k * 1.2) * Math.PI);
+          const ang = k * Math.PI * 14;
           p.addScaledVector(side, Math.cos(ang) * amp).addScaledVector(up, Math.sin(ang) * amp);
+          bulletPos.copy(p);
+          bulletDir.copy(tan);
           bullet.position.copy(p);
           world.fx.burst(p, { count: 3, color: 0x0a080c, kind: 'smoke', speed: 0.2, life: 0.9, size: 0.35 });
           world.fx.burst(p, { count: 1, color, speed: 0.1, life: 0.5, size: 0.12 });
@@ -90,7 +121,7 @@ export const spiralSnipe = {
             if (opp.state !== 'ko') opp.anim.play('launched', { restart: true });
           }
         }
-        if (t >= 2.6) {
+        if (t >= 1.5 + FLIGHT + 1.0) {
           show(false);
           world.endCinematic();
           if (opp.state !== 'ko') opp.stun(0.4, 'stagger');

@@ -1,5 +1,21 @@
 # Registro administrativo de alterações
 
+## v2.7 — Rituais com cara própria
+
+### Lote do TODO (v2.7)
+- `healOverTime` com `a.style` ('mist' Dante, 'ash' Erin, 'blood' Xande, 'comfort' Ferreiro), `a.stillBonus` (Dante 1,25)
+  e `a.breakOnHit` (Ferreiro); buff `healing` com o nome do ritual (antes todos eram "PARADISO"). Valores: Erin 80 em
+  1,8 s (cânone: mais forte que Dante/Joui), Dante 60 (75 parado), Xande 70, Ferreiro 100 em 4 s.
+  Nota: a anotação antiga do TODO (Black Hole como zona de dano) estava errada — no cânone é cura.
+- `hypnoSpiral` (novo, Ferreiro): tubo em espiral de Lodo no chão; buff `hypno` com `spiralTo` (em
+  `Fighter.moveInputWorld`: o corpo anda em volta e para dentro do centro, os comandos valem 30%) e `noBlock`;
+  centro a `offset` 1,6 m do alvo, do lado do Ferreiro; chegou (ou acabou o tempo) → `stun` 0,8.
+- `chaosStorm` (novo, Labirinto): aviso de 0,55 s e 8 raios em 2 s num círculo de 3,2 m (metade mira o alvo se ele
+  ainda estiver na área), 20 de dano cada. Teste: parado na área 72, saindo 0.
+- Aghata: Facas Amaldiçoadas com `boomerang` (alcance 20, velocidade 30).
+- `spiralSnipe`: trajetória `CatmullRomCurve3` em volta do alvo (raio até 8 m) em `sp.flight` 1,6 s com a espiral em
+  volta da curva; câmera `chaseShot` presa à bala e corte no rosto do alvo; fim em 1,5 + voo + 1 s.
+
 ## v2.6 — Chegou o Balu
 
 ### Novo lutador: BALU (`src/characters/balu.js`)

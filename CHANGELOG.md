@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.7 — 2026-10-03
+
+### Alterado
+- Curas com visual e regra próprios (Erin a mais forte; Dante parado; Ferreiro quebra ao apanhar).
+- Ferreiro: Hipnose Espiral própria; Labirinto: Tempestade Caótica em área; Aghata: facas que voltam.
+- Fantasma: Disparo Espiral com a bala dando a volta na arena e a câmera seguindo.
+
 ## v2.6 — 2026-10-03
 
 ### Adicionado

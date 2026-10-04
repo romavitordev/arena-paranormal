@@ -99,11 +99,13 @@ export default {
       name: 'Cicatrização "Paradiso"',
       input: 'block+carga', // R2 + △ / RT + Y
       type: 'healOverTime',
-      description: 'Assopra uma névoa preta em espiral que envelhece as próprias feridas até cicatrizarem.',
+      description: 'Assopra uma névoa preta em espiral que envelhece as próprias feridas até cicatrizarem. Parado, cicatriza 25% mais.',
       energyCost: 30,
       cooldown: 26,
       heal: 60,
       duration: 2.5,
+      style: 'mist',
+      stillBonus: 1.25, // parado: até 75 (o Black Hole da Erin continua o mais forte, como no cânone)
       color: 0x2a2632,
     },
     {

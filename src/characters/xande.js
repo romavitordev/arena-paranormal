@@ -133,11 +133,12 @@ export default {
       name: 'Cicatrização',
       input: 'carga+dodge', // △ + L2 / Y + LT
       type: 'healOverTime',
-      description: 'Ritual de Sangue: as feridas fecham sozinhas, recuperando vida aos poucos.',
+      description: 'Ritual de Sangue: fios de sangue correm pelo corpo e fecham as feridas, recuperando vida aos poucos.',
       energyCost: 30,
       cooldown: 26,
       heal: 70,
       duration: 2.5,
+      style: 'blood',
       color: 0xc01830,
     },
   ],

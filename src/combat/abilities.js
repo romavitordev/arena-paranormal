@@ -800,6 +800,121 @@ Object.assign(ABILITY_TYPES, {
     },
   },
 
+  // TEMPESTADE CAÓTICA (Labirinto, com o Capacete): a parabólica da Antena chama uma tempestade em cima do alvo — um
+  // círculo avisa a área e raios caóticos caem nela por alguns segundos (parte deles mira onde o alvo está AGORA).
+  // Diferente dos tiros que perseguem: é controle de área, para sair de baixo.
+  chaosStorm: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      if (!opp || opp.state === 'ko') return null;
+      if (distXZ(f.pos, opp.pos) > a.range) { f.notify('LONGE DEMAIS'); return null; }
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play(a.anim || 'point', { restart: true, duration: a.windup + 0.4 });
+      world.audio.play('shockwave', { volume: 0.7, pitch: 0.7 });
+      const col = a.color ?? 0x9a6aff;
+      tl.add(a.windup, () => {
+        const c = new THREE.Vector3(opp.pos.x, 0.06, opp.pos.z);
+        world.fx.ring(c, { color: col, radius: a.radius, life: a.warn + a.duration });
+        world.fx.ring(c, { color: col, radius: a.radius * 0.5, life: a.warn });
+        let t = 0;
+        let next = a.warn;
+        let n = 0;
+        world.addTicker({
+          update(dt) {
+            t += dt;
+            while (t >= next && n < a.bolts) {
+              n++;
+              next += a.duration / a.bolts;
+              // metade mira o alvo (se ainda estiver na área), o resto cai ao acaso dentro do círculo
+              const aim = n % 2 === 0 && opp.state !== 'ko' && Math.hypot(opp.pos.x - c.x, opp.pos.z - c.z) <= a.radius;
+              const ang = Math.random() * Math.PI * 2;
+              const r = Math.sqrt(Math.random()) * a.radius;
+              const p = aim ? new THREE.Vector3(opp.pos.x, 0.05, opp.pos.z) : new THREE.Vector3(c.x + Math.sin(ang) * r, 0.05, c.z + Math.cos(ang) * r);
+              world.fx.lightning(p.clone().setY(9), p, { color: col, life: 0.18 });
+              world.fx.ring(p, { color: col, radius: a.boltRadius, life: 0.3 });
+              world.fx.burst(p.clone().setY(0.3), { count: 14, color: col, speed: 4, up: 2, life: 0.35, size: 0.14 });
+              world.audio.play('impact', { volume: 0.4, pitch: 1.4 });
+              if (opp.state !== 'ko' && !opp.isInvulnerable() && Math.hypot(opp.pos.x - p.x, opp.pos.z - p.z) <= a.boltRadius + opp.radius && opp.pos.y < 2.5) {
+                applyHit(world, f, opp, { damage: a.damage, kind: 'ability', element: a.element || 'energia', knockback: 0.8, hitstun: 0.3, dir: new THREE.Vector3().subVectors(opp.pos, p).setY(0).normalize(), sound: 'impact', color: col, scale: 0.9 });
+              }
+            }
+            return n >= a.bolts;
+          },
+        });
+      });
+      tl.end(a.windup + 0.4);
+      return seqFrom(tl);
+    },
+  },
+
+  // HIPNOSE ESPIRAL (Ferreiro — a espiral do Parasita de Dimensões): o Lodo desenha uma espiral no chão e o alvo é
+  // puxado ANDANDO EM CÍRCULOS até o centro (fica a 1,6 m dele, do lado do Ferreiro: uma isca). Os comandos do alvo
+  // quase não valem enquanto isso; chegando no centro (ou no fim do tempo) fica parado, hipnotizado.
+  hypnoSpiral: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      if (opp) f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('point', { restart: true, duration: a.windup + a.recovery });
+      world.audio.play('fearGaze', { pitch: 0.8 });
+      tl.add(a.windup, () => {
+        if (!inCone(f, opp, a.range, a.arc) || opp.isInvulnerable()) { f.notify('ERROU', true); return; }
+        const toF = new THREE.Vector3().subVectors(f.pos, opp.pos).setY(0).normalize();
+        const c = { x: opp.pos.x + toF.x * a.offset, z: opp.pos.z + toF.z * a.offset };
+        // a espiral de Lodo no chão (tubo achatado em espiral, preto e brilhante)
+        const pts = [];
+        for (let i = 0; i <= 60; i++) {
+          const t = i / 60;
+          const ang = t * Math.PI * 6;
+          const r = 0.1 + t * (a.offset + 0.6);
+          pts.push(new THREE.Vector3(c.x + Math.sin(ang) * r, 0.05, c.z + Math.cos(ang) * r));
+        }
+        const mat = new THREE.MeshStandardMaterial({ color: 0x0a0810, roughness: 0.1, metalness: 0.4, emissive: a.color ?? 0x6a6670, emissiveIntensity: 0.25, transparent: true, opacity: 0.9 });
+        const spiral = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 160, 0.07, 5, false), mat);
+        spiral.scale.y = 0.25;
+        world.scene.add(spiral);
+        const eyes = world.fx.emitter({ rate: 24, follow: () => opp.rig.joints.hd.getWorldPosition(new THREE.Vector3()).add(new THREE.Vector3(0, 0.35, 0)), particle: { color: a.color ?? 0x6a6670, speed: 0.3, spread: 0.3, life: 0.4, size: 0.1 } });
+        const old = opp.findBuff('hypno');
+        if (old) old.done = true;
+        let t = 0;
+        let ended = false;
+        const finish = () => {
+          if (ended) return;
+          ended = true;
+          const b = opp.findBuff('hypno');
+          if (b) b.done = true;
+          if (opp.state !== 'ko' && !opp.isInvulnerable()) opp.stun(a.stun, 'stagger');
+          world.fx.burst(new THREE.Vector3(c.x, 0.3, c.z), { count: 30, color: 0x1a1620, kind: 'smoke', speed: 2, up: 1, life: 0.6, size: 0.4 });
+        };
+        opp.addBuff({ type: 'hypno', name: 'HIPNOSE ESPIRAL', time: a.duration, duration: a.duration, spiralTo: c, noBlock: true, onEnd() { eyes.stop(); } });
+        opp.notify('HIPNOTIZADO', true);
+        world.addTicker({
+          update(dt) {
+            t += dt;
+            mat.opacity = 0.9 * Math.min(1, t / 0.2) * (t > a.duration ? Math.max(0, 1 - (t - a.duration) / 0.4) : 1);
+            spiral.rotation.y = 0; // a espiral fica parada; quem gira é o alvo
+            if (!ended && (Math.hypot(opp.pos.x - c.x, opp.pos.z - c.z) < 0.5 || t >= a.duration || opp.state === 'ko')) finish();
+            return t >= a.duration + 0.4;
+          },
+          dispose() {
+            // fim do round no meio da hipnose: só limpa (sem atordoar)
+            const b = opp.findBuff('hypno');
+            if (b) b.done = true;
+            world.scene.remove(spiral);
+            spiral.geometry.dispose();
+            mat.dispose();
+          },
+        });
+        world.onHit && world.onHit(f, opp, 0, { kind: 'ability', ability: a.id });
+      });
+      tl.end(a.windup + a.recovery);
+      return seqFrom(tl);
+    },
+  },
+
   // Gal — Teletransporte: some em faíscas douradas e surge atrás do alvo.
   sparkTeleport: {
     start(f, a, world) {
@@ -997,9 +1112,14 @@ Object.assign(ABILITY_TYPES, {
   },
 
   // Cicatrização "Paradiso": névoa preta em espiral que cicatriza as feridas aos poucos.
+  // CURA AO LONGO DO TEMPO — cada ritual com a cara e a regra dele (a.style):
+  //  'mist'    Paradiso do Dante (Morte): névoa preta em espiral; PARADO cura mais (a.stillBonus)
+  //  'ash'     Black Hole da Erin: cinzas humanas assopradas ficam pretas e fecham a ferida numa espiral (o mais forte)
+  //  'blood'   Cicatrização do Xande (Sangue): fios de sangue se fecham sobre o corpo
+  //  'comfort' Conforto de Santo Berço (Ferreiro): luz dourada da "tarde perfeita"; a ilusão QUEBRA se apanhar (a.breakOnHit)
   healOverTime: {
     start(f, a, world) {
-      if (f.findBuff('paradiso')) {
+      if (f.findBuff('healing')) {
         f.notify('JÁ CICATRIZANDO');
         return null;
       }
@@ -1007,31 +1127,84 @@ Object.assign(ABILITY_TYPES, {
         f.notify('VIDA CHEIA');
         return null;
       }
+      const style = a.style || 'mist';
       const tl = new Timeline();
       f.vel.set(0, 0, 0);
       f.anim.play('breath', { restart: true, duration: 0.6 });
-      world.audio.play('smoke');
+      world.audio.play(style === 'comfort' ? 'ritual' : 'smoke', { volume: 0.7, pitch: style === 'comfort' ? 1.3 : 1 });
       tl.add(0.3, () => {
         let given = 0;
         let ang = 0;
-        const spiral = world.fx.emitter({
-          rate: 60,
-          follow: () => {
-            ang += 0.35;
-            const r = 0.7 + Math.sin(ang * 0.3) * 0.2;
-            return new THREE.Vector3(f.pos.x + Math.sin(ang) * r, f.pos.y + 0.3 + ((ang * 0.08) % 1.6), f.pos.z + Math.cos(ang) * r);
-          },
-          particle: { color: 0x141018, kind: 'smoke', speed: 0.2, up: 0.4, spread: 0.1, life: 0.6, size: 0.35 },
-        });
+        const emitters = [];
+        if (style === 'ash') {
+          // o sopro: as cinzas saem da mão já pretas
+          const F = forwardFromYaw(f.yaw, new THREE.Vector3());
+          world.fx.burst(f.chestPos().addScaledVector(F, 0.4), { count: 40, color: 0x0a0a0c, kind: 'smoke', speed: 2.5, up: 0.4, life: 0.8, size: 0.3 });
+          emitters.push(world.fx.emitter({
+            rate: 90,
+            follow: () => {
+              ang += 0.55;
+              const r = 0.18 + ((ang * 0.04) % 0.4); // espiral apertada no peito: a cicatriz em espiral
+              const c = f.chestPos();
+              return new THREE.Vector3(c.x + Math.sin(ang) * r, c.y + Math.cos(ang * 0.5) * 0.25, c.z + Math.cos(ang) * r);
+            },
+            particle: { color: 0x0a0a0c, kind: 'smoke', speed: 0.05, up: 0.1, spread: 0.02, life: 0.45, size: 0.14 },
+          }));
+        } else if (style === 'blood') {
+          emitters.push(world.fx.emitter({
+            rate: 50,
+            follow: () => {
+              ang += 0.9;
+              const c = f.chestPos();
+              return new THREE.Vector3(c.x + Math.sin(ang) * 0.6, c.y - 0.6 + Math.random() * 1.2, c.z + Math.cos(ang) * 0.6);
+            },
+            // os fios correm para o corpo
+            particle: { color: a.color ?? 0xc01830, speed: -1.6, spread: 0.05, life: 0.35, size: 0.07 },
+          }));
+        } else if (style === 'comfort') {
+          emitters.push(world.fx.emitter({
+            rate: 40,
+            follow: () => new THREE.Vector3(f.pos.x + (Math.random() - 0.5) * 1.6, f.pos.y + Math.random() * 2.2, f.pos.z + (Math.random() - 0.5) * 1.6),
+            particle: { color: 0xffe0a0, speed: 0.15, up: 0.6, spread: 0.2, life: 0.9, size: 0.12 },
+          }));
+          f.buffTint = { color: 0xffd890, base: 0.14 };
+        } else {
+          emitters.push(world.fx.emitter({
+            rate: 60,
+            follow: () => {
+              ang += 0.35;
+              const r = 0.7 + Math.sin(ang * 0.3) * 0.2;
+              return new THREE.Vector3(f.pos.x + Math.sin(ang) * r, f.pos.y + 0.3 + ((ang * 0.08) % 1.6), f.pos.z + Math.cos(ang) * r);
+            },
+            particle: { color: a.color ?? 0x141018, kind: 'smoke', speed: 0.2, up: 0.4, spread: 0.1, life: 0.6, size: 0.35 },
+          }));
+        }
+        let last = f.health;
+        const label = (a.label || a.name).toUpperCase();
         f.addBuff({
-          type: 'paradiso', name: 'PARADISO', time: a.duration, duration: a.duration,
+          type: 'healing', name: label, time: a.duration, duration: a.duration,
           onTick(dt) {
             if (f.state === 'ko') return;
-            const n = Math.min(a.heal - given, (a.heal / a.duration) * dt);
-            given += n;
-            f.health = Math.min(f.maxHealth, f.health + n);
+            // Conforto de Santo Berço: apanhou → a ilusão se quebra
+            if (a.breakOnHit && f.health < last - 0.5) {
+              this.done = true;
+              f.notify('O CONFORTO SE QUEBROU');
+              world.fx.burst(f.chestPos(), { count: 24, color: 0x8a8090, kind: 'smoke', speed: 2, life: 0.5, size: 0.3 });
+              return;
+            }
+            const still = Math.hypot(f.vel.x, f.vel.z) < 0.5 && ['idle', 'block', 'charging', 'ability'].includes(f.state);
+            const k = a.stillBonus && still ? a.stillBonus : 1;
+            const n = Math.min(a.heal * (a.stillBonus || 1) - given, (a.heal / a.duration) * k * dt);
+            if (n > 0) {
+              given += n;
+              f.health = Math.min(f.maxHealth, f.health + n);
+            }
+            last = f.health;
           },
-          onEnd() { spiral.stop(); },
+          onEnd() {
+            emitters.forEach((e) => e.stop());
+            if (style === 'comfort' && f.buffTint && f.buffTint.color === 0xffd890) f.buffTint = null;
+          },
         });
       });
       tl.end(0.6);

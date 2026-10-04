@@ -980,6 +980,15 @@ export class Fighter {
     out.addScaledVector(b.forward, this.input.moveY);
     // Controle Mental (Gal): o corpo obedece ao contrário
     if (this.buffs && this.buffs.some((x) => x.invertMove)) out.negate();
+    // Hipnose Espiral (Ferreiro): o corpo anda em círculos até o centro da espiral, mesmo sem comando
+    const hyp = this.buffs && this.buffs.find((x) => x.spiralTo);
+    if (hyp) {
+      const dx = hyp.spiralTo.x - this.pos.x;
+      const dz = hyp.spiralTo.z - this.pos.z;
+      const d = Math.hypot(dx, dz) || 1;
+      const pull = new THREE.Vector3(-dz / d, 0, dx / d).multiplyScalar(1).add(new THREE.Vector3(dx / d, 0, dz / d).multiplyScalar(0.3)).normalize().multiplyScalar(0.8);
+      out.multiplyScalar(0.3).add(pull);
+    }
     // Labirinto Mental: o corpo anda numa direção que muda sozinha (como perdido num labirinto)
     const maze = this.buffs && this.buffs.find((x) => x.mazeMove);
     if (maze && out.lengthSq() > 0) {

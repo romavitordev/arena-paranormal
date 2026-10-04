@@ -81,7 +81,7 @@ export default {
       name: 'Facas Amaldiçoadas',
       input: 'carga+dodge', // △ + L2 / Y + LT
       type: 'cursedShots',
-      description: 'Arremessa três facas banhadas em sangue, em leque, que se curvam atrás do alvo.',
+      description: 'Arremessa três facas banhadas em sangue, em leque, que se curvam atrás do alvo e VOLTAM para a mão — a que errou na ida ainda pode acertar na volta.',
       energyCost: 20,
       cooldown: 11,
       anim: 'throw_r',
@@ -90,7 +90,8 @@ export default {
       interval: 0.14,
       count: 3,
       spread: 18,
-      projectile: { visual: 'knife', color: 0xe0204a, speed: 34, range: 24, radius: 0.35, damage: 24, knockback: 1, hitstun: 0.3, homing: 1.0, kind: 'ability', element: 'sangue', hitSound: 'bladeHit' },
+      // voltam para a mão (bumerangue): a que errou na ida ainda pode acertar na volta
+      projectile: { visual: 'knife', color: 0xe0204a, speed: 30, range: 20, radius: 0.35, damage: 24, knockback: 1, hitstun: 0.3, homing: 1.0, boomerang: true, kind: 'ability', element: 'sangue', hitSound: 'bladeHit' },
     },
     {
       // cânone: o ritual dela troca as mentes de duas pessoas de corpo

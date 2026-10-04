@@ -1,7 +1,7 @@
 // Versão do jogo e NOVIDADES (changelog). Cada atualização conta, inclusive as que foram juntas numa só publicação.
 // Para uma nova atualização: suba VERSION e acrescente a entrada no TOPO de CHANGELOG (textos para jogadores, os mesmos
 // do CHANGELOG-CLIENTE.md; detalhes técnicos vão no CHANGELOG-ADMIN.md).
-export const VERSION = 26;
+export const VERSION = 27;
 export const VERSION_LABEL = `v${Math.floor(VERSION / 10)}.${VERSION % 10}`;
 
 export function formatVersion(version) {
@@ -9,6 +9,18 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: 27,
+    date: '2026-10-03',
+    title: 'Rituais com cara própria',
+    items: [
+      'As curas agora são diferentes entre si: o Black Hole da Erin (cinzas pretas que fecham a ferida em espiral) é a mais forte e rápida, como no cânone; o Paradiso do Dante cura 25% mais parado; a Cicatrização do Xande fecha com fios de sangue; o Conforto de Santo Berço do Ferreiro cura muito, devagar — mas a ilusão se quebra se ele apanhar.',
+      'Hipnose Espiral do Ferreiro refeita: o Lodo desenha uma espiral no chão e o alvo anda em círculos até o centro, perto do Ferreiro, sem conseguir defender; lá fica parado, hipnotizado.',
+      'Tempestade Caótica do Labirinto refeita: um círculo marca a área do alvo e raios caóticos caem nela por 2 s — dá para sair de baixo.',
+      'As Facas Amaldiçoadas da Aghata voltam para a mão: a que errou na ida ainda pode acertar na volta.',
+      'Disparo Espiral da Fantasma (especial) agora é cinematográfico: a bala dá a volta na arena desenhando a espiral de Morte e a câmera vai atrás dela até atravessar o alvo.',
+    ],
+  },
   {
     v: 26,
     date: '2026-10-03',
