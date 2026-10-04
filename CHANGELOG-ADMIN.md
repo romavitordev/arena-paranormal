@@ -1,5 +1,29 @@
 # Registro administrativo de alterações
 
+## v3.4 — CPU que aprende
+
+### IA que aprende + esquiva (v3.4)
+- Nível `superhard` (Super Difícil) em `CPU_LEVELS` (IA e configurações): mistake 0, think 0,07–0,14 s, perfect 0,5,
+  `smart` (defesa lida pelo perfil do jogador; atiradores — □ com alcance ≥ 14 e tiro carregado/forte — ficam a 7 m) e
+  `learn`.
+- `src/ai/learner.js`: bandit contextual por tabela. Estado = distância (4 faixas) × estado do adversário (ataca /
+  defende / vulnerável / neutro) × vida baixa. Ações (`CpuController.options`): combo, agarrão, defender, recuar,
+  dash, □, cada habilidade, especial, teleporte/dash longo, carregar, esperar — cada uma com um prior. Escolha:
+  softmax(log prior × 0,6 + Q × 2,2 × confiança) com 8% de exploração. Recompensa 1,5 s depois: (dano causado −
+  1,1 × dano recebido) / 100 (`Fighter.dmgTaken`, total da partida). Tabela do personagem + geral (`_all`).
+  Perfil dos jogadores HUMANOS (adversário sem `input.cpu`): por faixa de distância, quanto atacam / defendem / pulam /
+  atiram (`playerTendency`).
+- Persistência: `localStorage` 'arena.ai.v1' (só o delta deste navegador) + `public/ai/learned.json` (vai com o jogo,
+  `loadLearned` no boot). No dev, `saveLearned` faz POST `/__ai/learned` e o plugin `ai-learned` (vite.config.js) soma
+  o delta no arquivo (o watch ignora `public/ai/**` para não recarregar a página). Salva no fim de cada round
+  (`World.roundNo`) e de vez em quando. O servidor de equilíbrio usa os mesmos plugins (treino CPU × CPU também salva).
+- Esquiva: `tryDodge` não gasta mais na hora; `settleDodge` (ao sair do estado) gasta 1 carga só se `dodge.threat`:
+  golpe/ritual/especial do adversário em andamento a < 3,6 m, projétil inimigo a < 1,8 m, ou acerto anulado pela
+  invulnerabilidade (damage.js). Desviar de Balas (Gal): projétil não gasta.
+- Medido (12 lutas CPU × CPU, Super Difícil × Muito Difícil, pares variados): do zero 6 × 6; com os priors ajustados
+  (combo pesa mais de perto, habilidades sem abertura pesam menos) e o que aprendeu nas 12 anteriores, 7 × 5. O
+  `public/ai/learned.json` sai com esse treino inicial CPU × CPU (sem perfil de jogador — esse só vem de humanos).
+
 ## v3.3 — Cinzas da Decadenza
 
 ### Decadenza de médio alcance (v3.3)

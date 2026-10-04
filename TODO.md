@@ -120,7 +120,10 @@ distorce o resultado"; a vítima vira Transtornada).
 Juan, Ferreiro · B Balu, Kaiser, Arthur, Erin, Agatha, Kemi, Aguiar · C Xande, Lírio, Labirinto. Não decide quem ganha
 (todos em 35–65%), decide a sensação do kit. Fora da escala hoje: **Gal (S) 41%** e **Dante (A) 43%** abaixo do que
 deviam passar; **Kemi (B) 61%** e **Xande (C) 50%** acima — sugestões no fim do arquivo.
-🔴 **Evolução da IA da CPU (pedido do usuário, 2026-10-04):**
+🟡 **Evolução da IA da CPU (pedido do usuário, 2026-10-04):** ✅ (v3.4) Super Difícil + aprendizado (`src/ai/learner.js`)
+contra jogadores e CPU × CPU, perfil do jogador, salvo no navegador e em `public/ai/learned.json` (o dev grava o
+arquivo). Falta: o item 1 (estratégia melhor) nos níveis abaixo do Super Difícil; aprender o golpe que o jogador
+REPETE (hoje só a frequência de atacar/defender/pular/atirar por distância); treinos longos CPU × CPU para o arquivo.
 1. **IA mais inteligente em todos os níveis:** estratégia (distância ideal por kit — atirador longe, pesado perto;
    punir recuperação de golpe/especial; guardar a esquiva para a Substituição; usar a Barra de Transformação na hora
    certa) e uso melhor dos ataques (cada habilidade com quando usar: alcance, alvo caído/atordoado, combo → ritual,

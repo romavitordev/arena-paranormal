@@ -3,7 +3,7 @@ const KEY = 'arena-paranormal:settings';
 
 const DEFAULTS = {
   timer: 99, // segundos por round; 0 = infinito
-  cpuLevel: 'normal', // easy | normal | hard | veryhard
+  cpuLevel: 'normal', // easy | normal | hard | veryhard | superhard
   rounds: 2, // rounds para vencer
   moveMode: 'screen', // screen = direções da tela; enemy = ↑ aproxima, ↓ recua, ←/→ orbitam o adversário
 };
@@ -15,6 +15,7 @@ export const CPU_LEVELS = [
   { id: 'normal', label: 'NORMAL' },
   { id: 'hard', label: 'DIFÍCIL' },
   { id: 'veryhard', label: 'MUITO DIFÍCIL' },
+  { id: 'superhard', label: 'SUPER DIFÍCIL' },
 ];
 export const ROUND_OPTIONS = [1, 2, 3];
 

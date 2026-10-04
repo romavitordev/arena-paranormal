@@ -244,6 +244,7 @@ export class World {
   }
 
   resetRound() {
+    this.roundNo = (this.roundNo || 0) + 1; // a IA que aprende fecha o round quando muda
     this.clearTickers();
     this.clearNpcs();
     for (const f of this.fighters || []) if (f.assists) for (const a of f.assists) a.reset();

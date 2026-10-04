@@ -40,7 +40,10 @@ export function applyHit(world, attacker, victim, o) {
   // golpe contra o chão (o.otg): acerta quem está CAÍDO, uma vez por queda (não vale na invulnerabilidade de levantar)
   const otg = !!o.otg && victim.state === 'downed' && !victim.otgTaken && victim.invuln <= 0 && victim.visible;
   if (otg) o = { ...o, reaction: false, ignoreInvuln: true };
-  if (!o.ignoreInvuln && victim.isInvulnerable()) return 0;
+  if (!o.ignoreInvuln && victim.isInvulnerable()) {
+    if (victim.state === 'dodge' && victim.dodge) victim.dodge.threat = true; // a esquiva desviou de algo: gasta a carga
+    return 0;
+  }
 
 
   // Postura de contra-ataque (ex.: Joui): anula o golpe físico e revida

@@ -159,7 +159,7 @@ function buildSteps(def) {
   }
   steps.push(
     { title: 'DEFESA', cmd: ['@block'], text: 'Segure a defesa por 1 segundo. Parado defende tudo; andando, anda mais rápido mas fica aberto.', needs: ['block'] },
-    { title: 'ESQUIVA', cmd: ['@dodge', '+', 'direção'], text: 'Esquive para um lado. São 4 cargas, que voltam conforme você toma dano. Apanhando, a esquiva vira SUBSTITUIÇÃO.', needs: ['dodge'] },
+    { title: 'ESQUIVA', cmd: ['@dodge', '+', 'direção'], text: 'Esquive para um lado. São 4 cargas — só gasta quando desvia de algo — e voltam conforme você toma dano. Apanhando, a esquiva vira SUBSTITUIÇÃO.', needs: ['dodge'] },
     { title: 'AGARRÃO', cmd: ['@block', '+', '@physical'], text: 'Bem perto do alvo: segure a defesa e aperte o físico. Não pode ser defendido.', needs: ['grab'] },
     { title: 'CARGA DE PODER', cmd: ['@carga'], text: 'Segure por 1 segundo para recuperar sanidade (a energia das habilidades). Andando, carrega pela metade.', needs: ['charge'] },
   );

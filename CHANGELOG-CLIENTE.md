@@ -2,6 +2,11 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.4 — CPU que aprende
+- Novo nível de CPU: SUPER DIFÍCIL. Reage mais rápido, não erra de propósito, pune quem erra um golpe, atiradores mantêm distância — e APRENDE: a cada luta ela vê quais ações deram certo em cada situação (perto, longe, você atacando, você defendendo...) e passa a usá-las mais. Também aprende o SEU jeito de jogar: se você ataca muito de perto, ela defende mais; se defende muito, ela agarra.
+- O que a CPU aprende fica salvo no seu navegador e, a cada versão, um pouco do que ela aprendeu vem junto com o jogo — a IA vai ficando mais esperta a cada atualização.
+- Esquiva: a carga só é gasta quando a esquiva desvia de algo (golpe, ritual, tiro). Esquivar no vazio, só para se mexer, não gasta mais.
+
 ## v3.3 — Cinzas da Decadenza
 - Decadenza do Dante refeita: como no cânone, ele ASSOPRA a fumaça preta com cinzas — agora é de médio alcance (8 m, antes 20), a nuvem anda mais devagar e abre conforme avança (fica mais difícil de desviar de perto, some antes de chegar longe). Dano e decadência contínua iguais.
 - A CPU não gasta mais ataques à distância fora do alcance deles.

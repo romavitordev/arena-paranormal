@@ -1,5 +1,6 @@
 import { distXZ } from '../core/util.js';
 import { COMBAT } from '../config/combat.js';
+import { Episode, stateKey, choose, observePlayer, playerTendency, saveLearned, noteGame } from './learner.js';
 
 // Adversário controlado pelo computador. Gera o mesmo tipo de entrada que um jogador
 // (nada de atalhos internos) e erra de propósito conforme a dificuldade.
@@ -15,6 +16,9 @@ export const CPU_LEVELS = {
   normal: { think: [0.25, 0.45], block: 0.06, dodge: 0.05, perfect: 0, subst: 0.015, mistake: 0.15, combo: [2, 4], ability: 0.12, special: 0.22, vertical: 0.25, tech: 0.35, ranged: 0.45 },
   hard: { think: [0.15, 0.3], block: 0.12, dodge: 0.09, perfect: 0.15, subst: 0.03, mistake: 0.07, combo: [3, 5], ability: 0.16, special: 0.3, vertical: 0.5, tech: 0.6, ranged: 0.5, rush: 0.35 },
   veryhard: { think: [0.1, 0.2], block: 0.2, dodge: 0.14, perfect: 0.35, subst: 0.05, mistake: 0.03, combo: [4, 6], ability: 0.2, special: 0.35, vertical: 0.7, tech: 0.85, ranged: 0.5, rush: 0.6 },
+  // SUPER DIFÍCIL: a IA inteligente no máximo (reage rápido, sem erros de propósito, pune aberturas, lê o jogador) e
+  // APRENDE (learner.js): escolhe entre as ações possíveis pelo que já deu certo em situações parecidas.
+  superhard: { think: [0.07, 0.14], block: 0.26, dodge: 0.17, perfect: 0.5, subst: 0.07, mistake: 0, combo: [4, 6], ability: 0.24, special: 0.4, vertical: 0.8, tech: 0.95, ranged: 0.55, rush: 0.7, smart: true, learn: true },
 };
 
 const rnd = (a, b) => a + Math.random() * (b - a);
@@ -28,10 +32,12 @@ export class CpuController {
     this.holdCharge = 0;
     this.aimHold = 0;
     this.L = CPU_LEVELS[level] || CPU_LEVELS.normal;
+    this.episode = null; // aprendizado (Super Difícil)
   }
 
   attach(fighter) {
     this.fighter = fighter;
+    if (this.L.learn && fighter) this.episode = new Episode(fighter.def.id);
   }
 
   tap(action, extra = {}, raw) {
@@ -71,6 +77,7 @@ export class CpuController {
     if (!opp) return out;
     const L = this.L;
     const k = Math.min(2, dt * 60); // probabilidades "por quadro" independentes do fps
+    if (this.episode) this.learnTick(f, opp, w);
 
     if (this.queue.length) {
       const q = this.queue[0];
@@ -160,14 +167,16 @@ export class CpuController {
         return out;
       }
       const threat = (opp.state === 'attack' || opp.state === 'dashing') && d < 3;
+      // Super Difícil: quem costuma atacar perto faz a CPU defender mais (perfil aprendido dos jogadores)
+      const read = L.smart ? 0.6 + playerTendency(d, 'atk') * 1.6 : 1;
       if (threat) {
         // perfect block: aperta a defesa bem perto do impacto
         const nearImpact = opp.state === 'attack' && opp.combo && opp.combo.windows && opp.stateTime > opp.combo.windows[0][0] - 0.08 && opp.stateTime < opp.combo.windows[0][0];
-        if (nearImpact && Math.random() < L.perfect) {
+        if (nearImpact && Math.random() < Math.min(0.9, L.perfect * read)) {
           this.queue.push({ t: 0.3, held: { block: true } }, { t: 0.04, held: {} });
           return out;
         }
-        if (Math.random() < L.block * defensive * k) {
+        if (Math.random() < L.block * defensive * read * k) {
           this.queue.push({ t: rnd(0.35, 0.7), held: { block: true } }, { t: 0.04, held: {} });
           return out;
         }
@@ -205,6 +214,7 @@ export class CpuController {
       if (Math.random() < 0.15) this.strafe *= -1;
       const r = Math.random();
       const def = f.def;
+      if (L.learn) return this.decideLearned(out, f, opp, d, lowHp, side) || this.move(out, f, d, lowHp, toOpp, side);
       // erros de propósito: hesita, pula à toa ou ataca no vazio
       if (Math.random() < L.mistake) {
         const m = Math.random();
@@ -308,8 +318,14 @@ export class CpuController {
       if (r > 0.96 && f.onGround) this.tap('jump');
     }
 
-    // movimento: aproxima rodeando; com vida baixa mantém distância
-    const keep = lowHp ? 5 : 2.0;
+    return this.move(out, f, d, lowHp, toOpp, side);
+  }
+
+  // movimento: aproxima rodeando; com vida baixa mantém distância (atiradores no Super Difícil: na distância deles)
+  move(out, f, d, lowHp, toOpp, side) {
+    const r = f.def.ranged;
+    const shooter = this.L.smart && r && (r.range || 0) >= 14 && (r.chargeShot || (r.damage || 0) >= 60);
+    const keep = lowHp ? 5 : shooter && f.health > f.maxHealth * 0.5 ? 7 : 2.0;
     const wantClose = d > keep;
     const away = !wantClose && lowHp;
     const mx = (wantClose ? toOpp.x : away ? -toOpp.x : -toOpp.x * 0.3) + side.x * 0.45;
@@ -318,6 +334,97 @@ export class CpuController {
     out.moveX = mx * b.right.x + mz * b.right.z;
     out.moveY = mx * b.forward.x + mz * b.forward.z;
     return out;
+  }
+
+  // ---- APRENDIZADO (Super Difícil)
+  learnTick(f, opp, w) {
+    const now = w.time;
+    this.episode.update(f, opp, now);
+    // perfil do jogador: só observa HUMANOS (o adversário sem controlador de IA)
+    if (opp.input && !opp.input.cpu && opp.state !== 'intro' && opp.state !== 'ko') {
+      this.obsClock = (this.obsClock || 0) + 1;
+      if (this.obsClock % 6 === 0) observePlayer(opp, distXZ(f.pos, opp.pos));
+    }
+    // fim do round (alguém caiu ou o round mudou): fecha o que está pendente e salva
+    const roundOver = f.state === 'ko' || opp.state === 'ko' || this.round !== w.roundNo;
+    if (roundOver && !this.closed) {
+      this.closed = true;
+      this.episode.update(f, opp, now, true);
+      noteGame(); // um round aprendido
+      saveLearned(performance.now(), true);
+    }
+    if (this.round !== w.roundNo) { this.round = w.roundNo; this.closed = false; }
+    else if (f.state !== 'ko' && opp.state !== 'ko') this.closed = false;
+    if (Math.random() < 0.002) saveLearned();
+  }
+
+  // as ações possíveis agora, cada uma com uma preferência "de fábrica" (prior) e como executar
+  options(f, opp, d, lowHp, side) {
+    const def = f.def;
+    const L = this.L;
+    const opts = [];
+    const add = (id, prior, run) => { if (prior > 0) opts.push({ id, prior, run }); };
+    const open = this.aiOk({ ai: { when: 'opening' } }, d, opp, lowHp);
+    const blockerRate = playerTendency(d, 'blk');
+    // perto
+    if (d < 2.3) {
+      add('combo', open ? 4 : lowHp ? 1.2 : 2.8, () => this.combo());
+      if (f.cooldowns.grab <= 0) add('grab', opp.state === 'block' ? 3 : 0.3 + blockerRate * 3, () => this.queue.push({ t: 0.05, held: { block: true } }, { t: 0.06, held: { block: true, physical: true } }, { t: 0.05, held: {} }));
+      if (!open) add('guard', opp.state === 'attack' ? 1.6 : 0.4, () => this.queue.push({ t: rnd(0.3, 0.6), held: { block: true } }, { t: 0.04, held: {} }));
+      if (f.dodges > 1 && f.cooldowns.dodge <= 0) add('backstep', lowHp ? 1 : 0.25, () => this.queue.push({ t: 0.06, held: { dodge: true }, move: { x: -side.z, z: side.x } }, { t: 0.05, held: {} }));
+    }
+    // médio: entra com dash curto
+    if (d > 3.5 && d < 8 && f.cooldowns.dash <= 0) add('dashIn', lowHp ? 0.2 : open ? 1.4 : 0.6, () => this.queue.push({ t: 0.05, held: { jump: true } }, { t: 0.05, held: {} }, { t: 0.05, held: { jump: true } }, { t: 0.05, held: {} }));
+    // à distância
+    const r = def.ranged;
+    if (r && f.cooldowns.ranged <= 0 && d > 3 && d < (r.range ?? 99) + 0.5 && f.energy >= (r.energyCost || 0)) {
+      add('ranged', d > 5 ? 1.4 : 0.5, () => {
+        if (r.chargeShot) { this.queue.push({ t: 0.06, held: { ranged: true } }); this.aimHold = Math.min(1.6, 0.2 + d / 14); } else this.tap('ranged');
+      });
+    }
+    // habilidades
+    for (const a of def.abilities || []) {
+      if (!(a.input.startsWith('block+') || (a.input.startsWith('carga+') && a.input !== 'carga+jump'))) continue;
+      if (f.cooldowns[a.id] > 0 || f.energy < (f.abilityCost ? f.abilityCost(a) : a.energyCost || 0) + 5 || !this.aiOk(a, d, opp, lowHp)) continue;
+      const range = a.range || 10;
+      const self = ['weaponState', 'blink', 'mistCloud', 'healOverTime', 'hatredTemple', 'shadowClones', 'heavyProtection', 'noiseScreen', 'selfBuff'].includes(a.type);
+      if (!self && d > range) continue;
+      const [modKey, btn] = a.input.split('+');
+      add('ab:' + a.id, (a.id === this.lastAbility ? 0.3 : 0.6) * (open && !self ? 2 : 1), () => {
+        this.lastAbility = a.id;
+        if (modKey === 'block') this.queue.push({ t: 0.05, held: { block: true } }, { t: 0.06, held: { block: true, [btn]: true } }, { t: 0.05, held: {} });
+        else this.queue.push({ t: 0.05, held: { carga: true, [btn]: true } }, { t: 0.05, held: {} });
+      });
+    }
+    // especial
+    if (f.specialAvailable() && d < 7) add('special', open ? 2.2 : 1.1, () => { this.tap('carga'); this.tap('carga'); this.tap('physical'); });
+    // longe: aproxima (teleporte ou dash longo)
+    const tele = (def.abilities || []).find((a) => a.input === 'carga+jump');
+    if (tele && f.cooldowns[tele.id] <= 0 && f.energy > tele.energyCost + 10 && d > 4 && d < 14) add('teleport', 0.8, () => this.queue.push({ t: 0.05, held: { carga: true } }, { t: 0.06, held: { carga: true, jump: true } }, { t: 0.05, held: {} }));
+    else if (!tele && f.cooldowns.dash <= 0 && f.energy > 25 && d > 9 && !lowHp) add('longDash', 0.8, () => this.queue.push({ t: 0.05, held: { carga: true } }, { t: 0.06, held: { carga: true, jump: true } }, { t: 0.05, held: {} }));
+    // carregar sanidade (longe, ou adversário caído)
+    if (f.energy < 80 && (d > 6 || opp.state === 'downed')) add('charge', f.energy < 40 ? 1.2 : 0.5, () => { this.holdCharge = rnd(0.5, 1.1); });
+    // esperar / rodear (às vezes não fazer nada é a melhor resposta)
+    add('wait', 0.2, () => {});
+    return opts;
+  }
+
+  decideLearned(out, f, opp, d, lowHp, side) {
+    // regras que não se aprendem (sempre certas): transformar quando der, não bater em quem está caído
+    if (f.canTransform() && d > 3.5) {
+      this.holdCharge = (f.maxEnergy - f.energy) / COMBAT.chargeRate + COMBAT.storm.overcharge + 0.4;
+      return out;
+    }
+    const G = f.def.melee && f.def.melee.ground;
+    if (opp.state === 'downed' && G && !opp.otgTaken && opp.invuln <= 0 && d < G.range + 0.9) { this.tap('physical'); return out; }
+    if (opp.state === 'downed' && opp.invuln > 0) return null;
+    const opts = this.options(f, opp, d, lowHp, side);
+    const key = stateKey(f, opp, d);
+    const pick = choose(f.def.id, key, opts);
+    if (!pick) return null;
+    pick.run();
+    this.episode.record(key, pick.id, f, opp, f.world.time);
+    return this.queue.length || this.holdCharge > 0 || this.aimHold > 0 ? out : null;
   }
 
   // dicas de uso por habilidade (a.ai): when 'opening' (só com o inimigo aberto), 'far' (de longe), 'hurt' (vida baixa);

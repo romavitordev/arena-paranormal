@@ -9,6 +9,7 @@ import { renderPortraits } from './ui/portraits.js';
 import { renderArenaThumbs } from './ui/arenaThumbs.js';
 import { victoryLine } from './config/dialogues.js';
 import { preloadModels } from './models/index.js';
+import { loadLearned } from './ai/learner.js';
 import { ROSTER } from './characters/index.js';
 import { validatePassives } from './combat/passives.js';
 import { Match } from './game/Match.js';
@@ -47,6 +48,8 @@ const screens = document.getElementById('screens');
 const portraits = {};
 const arenaThumbs = {}; // previews dos cenários (gerados depois dos retratos)
 let booted = false;
+// aprendizado da CPU (Super Difícil): o que vem com o jogo + o que este navegador já aprendeu
+loadLearned(import.meta.env.BASE_URL).catch(() => {});
 Promise.all([preloadModels(), preloadArenas()])
   .catch((e) => console.warn(e))
   .then(() => {

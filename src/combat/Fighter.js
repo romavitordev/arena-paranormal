@@ -209,6 +209,7 @@ export class Fighter {
     const cap = this.immortal ? Math.max(0, this.health - 1) : this.health;
     const dealt = Math.min(cap, Math.max(0, n));
     this.health -= dealt;
+    this.dmgTaken = (this.dmgTaken || 0) + dealt; // total da partida (a IA que aprende mede o resultado das ações por ele)
     // Barra de Transformação: enche com o dano recebido (só na forma base de quem transforma)
     if (this.def.awakening && !this.baseForm) this.storm = Math.min(100, this.storm + (dealt / this.maxHealth) * 100 * COMBAT.storm.fillPerHealth);
     // a barra de esquivas recupera conforme toma dano
@@ -250,6 +251,7 @@ export class Fighter {
 
   // ---------------------------------------------------------------- estados
   setState(s) {
+    if (this.state === 'dodge' && s !== 'dodge') this.settleDodge();
     if (s !== 'idle' && this.anim) this.anim.twist = 0; // giro das pernas só existe andando
     if (this.state === 'downed' && s !== 'downed') this.otgTaken = false;
     if (s !== 'attack' && s !== 'ability') this.superArmor = null;
@@ -1424,10 +1426,7 @@ export class Fighter {
       this.notify('SEM ESQUIVAS');
       return;
     }
-    // Desviar de Balas (Gal): esquivar de um projétil que vem vindo não gasta carga
-    const bullet = hasPassive(this, 'bulletDodge') && this.world.projectiles.list.some((p) => p.owner !== this && Math.hypot(p.pos.x - this.pos.x, p.pos.z - this.pos.z) < 7);
-    if (bullet) this.notify('DESVIOU!', true);
-    else this.dodges--;
+    // a carga só é gasta se a esquiva DESVIAR DE ALGO (settleDodge, no fim): esquivar no vazio não gasta
     const d = this.dodgeParams();
     let dir = this.moveInputWorld(v1);
     if (dir.length() < 0.3) {
@@ -1435,7 +1434,7 @@ export class Fighter {
       dir = opp ? v1.subVectors(this.pos, opp.pos).setY(0) : forwardFromYaw(this.yaw, v1).negate();
     }
     dir.normalize();
-    this.dodge = { dir: dir.clone(), speed: d.distance / d.duration, duration: d.duration, cancelAfter: d.cancelAfter };
+    this.dodge = { dir: dir.clone(), speed: d.distance / d.duration, duration: d.duration, cancelAfter: d.cancelAfter, threat: false, bullet: false };
     this.invuln = d.iframes;
     this.cooldowns.dodge = d.cooldown;
     this.cooldownMax.dodge = d.cooldown;
@@ -1460,6 +1459,7 @@ export class Fighter {
   updateDodge(dt) {
     const d = this.dodge;
     const k = this.stateTime / d.duration;
+    this.senseDodgeThreat(d);
     const sp = d.speed * (k < 0.75 ? 1 : 0.4);
     this.vel.x = d.dir.x * sp;
     this.vel.z = d.dir.z * sp;
@@ -1481,6 +1481,29 @@ export class Fighter {
       if (this.input.held.block) this.startBlock();
       else this.setState('idle');
     }
+  }
+
+  // A esquiva desviou de algo? Golpe/ritual/especial do adversário em andamento por perto, um projétil inimigo
+  // passando perto, ou um acerto anulado pela invulnerabilidade da esquiva (damage.js marca dodge.threat).
+  senseDodgeThreat(d) {
+    if (d.threat) return;
+    const opp = this.opponent;
+    if (opp && ['attack', 'special', 'ability', 'dashing', 'ranged'].includes(opp.state) && distXZ(this.pos, opp.pos) < 3.6) d.threat = true;
+    for (const p of this.world.projectiles.list) {
+      if (p.owner === this) continue;
+      if (Math.hypot(p.pos.x - this.pos.x, p.pos.z - this.pos.z) < 1.8) { d.threat = true; d.bullet = true; break; }
+    }
+    if (!d.threat && this.world.npcs.some((n) => n.alive && n.owner !== this && n.state === 'attack' && distXZ(this.pos, n.pos) < 3)) d.threat = true;
+  }
+
+  // fim da esquiva: gasta 1 carga só se desviou de algo (Desviar de Balas do Gal: projétil não gasta)
+  settleDodge() {
+    const d = this.dodge;
+    if (!d || d.settled) return;
+    d.settled = true;
+    if (!d.threat) return;
+    if (d.bullet && hasPassive(this, 'bulletDodge')) { this.notify('DESVIOU!', true); return; }
+    this.dodges = Math.max(0, this.dodges - 1);
   }
 
   // ------------------------------------------------ ataque físico

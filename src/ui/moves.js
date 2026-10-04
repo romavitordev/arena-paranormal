@@ -32,7 +32,7 @@ export function moveListHTML(c) {
   html += row('△ → △ → ○', `Especial: ${c.special.name}`, specialSummary(c));
   html += row('R2 parado', 'Defesa', 'defende tudo, até especial (quebra depois de muito dano)');
   html += row('R2 + andar', 'Defesa em movimento', 'anda mais rápido, mas fica aberto a golpes');
-  html += row('L2 + direção', c.dodge && c.dodge.name ? `Esquiva: ${c.dodge.name}` : 'Esquiva', 'gasta 1 das 4 cargas (recuperam tomando dano)');
+  html += row('L2 + direção', c.dodge && c.dodge.name ? `Esquiva: ${c.dodge.name}` : 'Esquiva', 'gasta 1 das 4 cargas só se desviar de algo (esquivar no vazio não gasta); recuperam tomando dano');
   html += row('× + × (+ direção)', 'Dash', 'na direção do analógico (diagonais também); sem direção, até o adversário');
   html += row('× depois de acertar', 'Dash de perseguição', 'continua o combo (até no ar) · máx. 2 por combo');
   html += row('× ou L2 ao cair', 'Levantar rolando', 'caído não toma dano');

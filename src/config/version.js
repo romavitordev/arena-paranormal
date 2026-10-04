@@ -1,7 +1,7 @@
 // Versão do jogo e NOVIDADES (changelog). Cada atualização conta, inclusive as que foram juntas numa só publicação.
 // Para uma nova atualização: suba VERSION e acrescente a entrada no TOPO de CHANGELOG (textos para jogadores, os mesmos
 // do CHANGELOG-CLIENTE.md; detalhes técnicos vão no CHANGELOG-ADMIN.md).
-export const VERSION = 33;
+export const VERSION = 34;
 export const VERSION_LABEL = `v${Math.floor(VERSION / 10)}.${VERSION % 10}`;
 
 export function formatVersion(version) {
@@ -9,6 +9,16 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: 34,
+    date: '2026-10-04',
+    title: 'CPU que aprende',
+    items: [
+      'Novo nível de CPU: SUPER DIFÍCIL. Reage mais rápido, não erra de propósito, pune quem erra um golpe, atiradores mantêm distância — e APRENDE: a cada luta ela vê quais ações deram certo em cada situação (perto, longe, você atacando, você defendendo...) e passa a usá-las mais. Também aprende o SEU jeito de jogar: se você ataca muito de perto, ela defende mais; se defende muito, ela agarra.',
+      'O que a CPU aprende fica salvo no seu navegador e, a cada versão, um pouco do que ela aprendeu vem junto com o jogo — a IA vai ficando mais esperta a cada atualização.',
+      'Esquiva: a carga só é gasta quando a esquiva desvia de algo (golpe, ritual, tiro). Esquivar no vazio, só para se mexer, não gasta mais.',
+    ],
+  },
   {
     v: 33,
     date: '2026-10-04',

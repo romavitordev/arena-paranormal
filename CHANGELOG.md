@@ -1,5 +1,13 @@
 # Changelog
 
+## v3.4 — 2026-10-04
+
+### Adicionado
+- CPU Super Difícil que aprende (ações por situação e o perfil do jogador), salvo no navegador e em public/ai/learned.json.
+
+### Alterado
+- Esquiva só gasta carga quando desvia de algo.
+
 ## v3.3 — 2026-10-04
 
 ### Alterado
