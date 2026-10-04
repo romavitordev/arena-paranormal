@@ -2,6 +2,11 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v2.8 — Múmia, rastros e vitória de cinema
+- Faixas da Fantasma: agora cobrem o alvo dos pés ao rosto como uma múmia e o prendem por até 2,2 s — apertando os botões sem parar, dá para se soltar antes. (Adaptação: a wiki só diz que as faixas melhoram as habilidades dela e puxam o rifle.)
+- Teletransportes deixam rastro no lugar de onde saíram: sigilos dourados no Kian e a fumaça preta das faixas na Fantasma (os outros já tinham sombra, faíscas e poça de sangue).
+- Tela de vitória com câmera de cinema: aproxima dos vencedores e balança de leve, com os nomes acompanhando.
+
 ## v2.7 — Rituais com cara própria
 - As curas agora são diferentes entre si: o Black Hole da Erin (cinzas pretas que fecham a ferida em espiral) é a mais forte e rápida, como no cânone; o Paradiso do Dante cura 25% mais parado; a Cicatrização do Xande fecha com fios de sangue; o Conforto de Santo Berço do Ferreiro cura muito, devagar — mas a ilusão se quebra se ele apanhar.
 - Hipnose Espiral do Ferreiro refeita: o Lodo desenha uma espiral no chão e o alvo anda em círculos até o centro, perto do Ferreiro, sem conseguir defender; lá fica parado, hipnotizado.

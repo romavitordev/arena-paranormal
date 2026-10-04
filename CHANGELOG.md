@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.8 — 2026-10-03
+
+### Alterado
+- Fantasma: Faixas enrolam o alvo como múmia (até 2,2 s; apertar botões solta antes).
+- Teleportes com rastro (Kian, Fantasma); câmera de cinema na tela de vitória.
+
 ## v2.7 — 2026-10-03
 
 ### Alterado

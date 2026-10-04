@@ -359,6 +359,8 @@ function frame() {
   const dt = clock.getDelta();
   if (game.net) netPump(dt);
   else tick(Math.min(1 / 30, dt));
+  // tela de vitória: a câmera se mexe (World.updateVictoryCam), os nomes acompanham
+  if (game.match && game.match.world && game.match.world.victoryCam) placeVictoryLabels();
   render();
   requestAnimationFrame(frame);
 }

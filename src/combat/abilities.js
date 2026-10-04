@@ -87,6 +87,86 @@ function wrapCoils(world, opp, hold, ropes) {
   });
 }
 
+// FAIXAS DA FANTASMA como MÚMIA (adaptação — a wiki só registra as faixas melhorando as habilidades dela e puxando o
+// rifle; enrolar o alvo combina com a personagem, que domina e amarra os alvos): as faixas cobrem o corpo do alvo dos
+// pés ao rosto, faixa por faixa, e o prendem. Apertar os botões sem parar solta mais cedo (−0,15 s por toque).
+function mummyWrap(world, opp, hold, ropes, { color = 0xd8ccb0 } = {}) {
+  const tex = (() => {
+    const c = document.createElement('canvas');
+    c.width = 128;
+    c.height = 32;
+    const g = c.getContext('2d');
+    g.fillStyle = '#d8ccb0'; g.fillRect(0, 0, 128, 32);
+    g.strokeStyle = 'rgba(60,50,40,0.45)'; g.lineWidth = 1;
+    for (let y = 4; y < 32; y += 6) { g.beginPath(); g.moveTo(0, y); g.lineTo(128, y + 2); g.stroke(); } // trama do pano
+    g.fillStyle = 'rgba(40,30,25,0.25)';
+    for (let i = 0; i < 30; i++) g.fillRect(Math.random() * 128, Math.random() * 32, 3 + Math.random() * 6, 2); // sujeira
+    const t = new THREE.CanvasTexture(c);
+    t.colorSpace = THREE.SRGBColorSpace;
+    t.wrapS = THREE.RepeatWrapping;
+    t.repeat.set(3, 1);
+    return t;
+  })();
+  const mat = new THREE.MeshToonMaterial({ color, map: tex, side: THREE.DoubleSide });
+  const sz = opp.size || 1;
+  const N = 10;
+  const bands = [];
+  for (let i = 0; i < N; i++) {
+    const y = (0.12 + (i / (N - 1)) * 1.62) * sz; // dos pés (0,12) até o rosto (1,74)
+    const r = (i >= N - 2 ? 0.17 : i < 3 ? 0.2 : 0.27) * sz; // pernas e cabeça mais finas que o tronco
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r * 1.04, 0.2 * sz, 18, 1, true), mat);
+    m.userData = { y, tilt: (i % 2 ? 1 : -1) * 0.22, at: i * 0.04 };
+    m.visible = false;
+    world.scene.add(m);
+    bands.push(m);
+  }
+  // pontas soltas balançando
+  const tails = [0.9, 1.5].map((y) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(0.08 * sz, 0.4 * sz), mat);
+    m.userData = { y: y * sz };
+    m.visible = false;
+    world.scene.add(m);
+    return m;
+  });
+  let t = 0;
+  const startY = opp.pos.y;
+  world.addTicker({
+    update(dt) {
+      t += dt;
+      // a vítima se debate: cada botão apertado tira um pouco do tempo preso
+      const inp = opp.input;
+      if (inp && opp.state === 'stun' && (inp.pressed.physical || inp.pressed.jump || inp.pressed.dodge || inp.pressed.ranged || inp.pressed.carga)) {
+        opp.stunTime = Math.max(opp.stateTime + 0.05, opp.stunTime - 0.15);
+        world.fx.burst(opp.chestPos(), { count: 3, color, speed: 2, life: 0.3, size: 0.06 });
+      }
+      for (const b of bands) {
+        const on = t >= b.userData.at;
+        b.visible = on;
+        if (!on) continue;
+        const k = Math.min(1, (t - b.userData.at) / 0.12); // cada faixa chega aberta e aperta
+        b.position.set(opp.pos.x, (opp.pos.y || startY) + b.userData.y, opp.pos.z);
+        b.rotation.set(b.userData.tilt, opp.yaw, b.userData.tilt * 0.5);
+        b.scale.set(1.6 - 0.6 * k, 1, 1.6 - 0.6 * k);
+      }
+      tails.forEach((m, i) => {
+        m.visible = t > 0.3;
+        m.position.set(opp.pos.x + Math.sin(opp.yaw + 1.6) * 0.28, opp.pos.y + m.userData.y - 0.15, opp.pos.z + Math.cos(opp.yaw + 1.6) * 0.28);
+        m.rotation.set(0, opp.yaw + Math.PI / 2, Math.sin(t * 7 + i) * 0.4);
+      });
+      return t >= 0.3 && (opp.state !== 'stun' || t >= hold + 0.1);
+    },
+    dispose() {
+      // rasga: tiras voando
+      world.fx.burst(new THREE.Vector3(opp.pos.x, opp.pos.y + 1, opp.pos.z), { count: 40, color, speed: 4, up: 2, life: 0.6, size: 0.1, gravity: 6 });
+      for (const b of bands) { world.scene.remove(b); b.geometry.dispose(); }
+      for (const m of tails) { world.scene.remove(m); m.geometry.dispose(); }
+      mat.dispose();
+      tex.dispose();
+      if (ropes) ropes.forEach((r) => r.alive && r.stop());
+    },
+  });
+}
+
 export const ABILITY_TYPES = {
   // ------------------------------------------------------------------ JOUI
   // Teleporte das Sombras: afunda na própria sombra e surge atrás do inimigo.
@@ -466,6 +546,15 @@ export const ABILITY_TYPES = {
       world.audio.play('blink');
       world.fx.distort(f.chestPos(), { color: a.color, radius: 1.8, life: 0.35 });
       f.invuln = a.vanishTime + 0.12;
+      // rastro no ponto de partida, com a cara de quem some (a.residue): sigilos dourados (Kian), fumaça das faixas (Fantasma)
+      const origin = new THREE.Vector3(f.pos.x, 0.06, f.pos.z);
+      if (a.residue === 'sigil') {
+        world.fx.ring(origin, { color: a.color, radius: 0.9, life: 1.2 });
+        world.fx.ring(origin, { color: a.color, radius: 0.5, life: 1.0 });
+        world.fx.burst(origin.clone().setY(0.4), { count: 26, color: a.color, speed: 0.6, up: 1.2, life: 1.1, size: 0.08 });
+      } else if (a.residue === 'smoke') {
+        world.fx.burst(origin.clone().setY(0.9), { count: 30, color: 0x0e0c12, kind: 'smoke', speed: 0.5, up: 0.4, life: 1.3, size: 0.6, grow: 0.8 });
+      }
       tl.add(a.vanishTime * 0.6, () => f.setVisible(false));
       tl.add(a.vanishTime, () => {
         f.pos.set(spot.x, 0, spot.z);
@@ -1896,6 +1985,7 @@ Object.assign(ABILITY_TYPES, {
           const hold = a.hold * (opp.def.element === 'conhecimento' ? (a.vsConhecimento || 1) : 1);
           opp.stun(hold, 'stagger');
           if (a.gut) wrapCoils(world, opp, hold, rope);
+          else if (a.mummy) mummyWrap(world, opp, hold, rope, { color: a.ropeColor });
           else world.after(hold * 0.85, stopRope);
           opp.vel.set(0, 0, 0);
           opp.notify(a.caughtMsg || 'PRESO PELAS AMARRAS', true);

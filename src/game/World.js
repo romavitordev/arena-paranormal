@@ -183,8 +183,26 @@ export class World {
     this.camera.updateProjectionMatrix();
     this.cameraRig.pos.copy(this.camera.position);
     this.cameraRig.look.copy(look);
+    // movimento cinematográfico (updateVictoryCam): começa mais longe e alto, aproxima até este enquadramento e fica
+    // balançando de leve em volta dos vencedores (pouco, para não perder a visão livre que foi escolhida)
+    const off = best.cam.clone().sub(center);
+    this.victoryCam = { center: center.clone(), look: look.clone(), yaw: Math.atan2(off.x, off.z), dist: Math.hypot(off.x, off.z), h: best.cam.y, t: 0 };
     // o que ainda ficar entre a câmera e os vencedores fica transparente
     this.cameraRig.updateOcclusion(this.victoryActors.map((x) => ({ visible: true, def: x.def, chestPos: (v) => (v || new THREE.Vector3()).copy(x.rig.root.position).setY(1.2) })), 1 / 60, true);
+  }
+
+  updateVictoryCam(dt) {
+    const v = this.victoryCam;
+    if (!v) return;
+    v.t += dt;
+    const k = Math.min(1, v.t / 1.6);
+    const e = 1 - (1 - k) * (1 - k) * (1 - k); // desacelera no fim
+    const dist = v.dist * (1.35 - 0.35 * e);
+    const yaw = v.yaw + Math.sin(v.t * 0.25) * 0.07 * e;
+    this.camera.position.set(v.center.x + Math.sin(yaw) * dist, v.h + 0.9 * (1 - e) + Math.sin(v.t * 0.4) * 0.05, v.center.z + Math.cos(yaw) * dist);
+    this.camera.lookAt(v.look);
+    this.cameraRig.pos.copy(this.camera.position);
+    this.cameraRig.look.copy(v.look);
   }
 
   // NPCs inimigos de um lutador (os que não são dele)
@@ -285,6 +303,7 @@ export class World {
 
     if (this.victoryActors) {
       for (const actor of this.victoryActors) actor.anim.update(dt);
+      this.updateVictoryCam(dt);
       this.fx.update(dt);
       return;
     }

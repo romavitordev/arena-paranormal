@@ -1,5 +1,19 @@
 # Registro administrativo de alterações
 
+## v2.8 — Múmia, rastros e vitória de cinema
+
+### Lote 2 do TODO (v2.8)
+- Fantasma: `bloodBind` com `mummy: true` → `mummyWrap` (`abilities.js`): 10 faixas (cilindros abertos com textura de pano)
+  dos pés ao rosto, uma a cada 0,04 s, apertando; pontas soltas; `hold` 1,1 → 2,2 s e o alvo se solta mais cedo
+  apertando botões (cada toque tira 0,15 s do `stunTime`). Não está na wiki (adaptação anotada no código).
+- `blink` com `a.residue`: 'sigil' (Kian) e 'smoke' (Fantasma).
+- Vitória: `World.updateVictoryCam` (aproxima de 1,35× a distância e +0,9 m em 1,6 s, depois balança ±0,07 rad);
+  `main.js` reprojeta os nomes a cada quadro enquanto `victoryCam` existe.
+- Conferidos e marcados no TODO: ciclo dos elementos (1.1), Sanidade/PE (1.2), tiros amaldiçoados restantes (já
+  diferentes), equilíbrio do Dante/Juan com as invocações.
+- Equilíbrio depois da v2.7 (1 luta por par, 30 lutas cada): Labirinto 50% (era 39%, com a Tempestade em área),
+  Erin 60% (Black Hole mais forte), Ferreiro 57% (Conforto/Hipnose) — todos na faixa 35–65%.
+
 ## v2.7 — Rituais com cara própria
 
 ### Lote do TODO (v2.7)

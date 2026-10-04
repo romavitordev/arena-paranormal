@@ -120,7 +120,8 @@ distorce o resultado"; a vítima vira Transtornada).
 Juan, Ferreiro · B Balu, Kaiser, Arthur, Erin, Agatha, Kemi, Aguiar · C Xande, Lírio, Labirinto. Não decide quem ganha
 (todos em 35–65%), decide a sensação do kit. Fora da escala hoje: **Gal (S) 41%** e **Dante (A) 43%** abaixo do que
 deviam passar; **Kemi (B) 61%** e **Xande (C) 50%** acima — sugestões no fim do arquivo.
-🟡 **Buffs a fazer (decisão do usuário, ainda NÃO aplicados):** alguns personagens precisam de buff — em especial o
+🟡 **Buffs a fazer (decisão do usuário, ainda NÃO aplicados):** (v2.8: o Labirinto subiu para 50% com a Tempestade
+Caótica em área; Erin 60%, Ferreiro 57%) alguns personagens precisam de buff — em especial o
 **Labirinto** (39%, quase sem ferramentas próprias), e pela escala também Gal (S, 41%), Dante (A, 43%), Arthur (39%) e
 Aghata (39%). Medir com 2–3 lutas por par antes e depois de cada mudança.
 🟡 Equilíbrio: a rodada geral com 1 luta por par oscila ±10–20% (o Aguiar foi de 71% a 36% com −100 de vida). Rodar 2–3 lutas por par para os ajustes finos; conferir Kemi (61%) e Aghata (39%).
@@ -142,15 +143,17 @@ Levantado comparando cada kit com o cânone e procurando habilidades que só rea
 - ✅ (v2.7) **Ferreiro:** Hipnose Espiral própria (espiral de Lodo, anda em círculos até o centro). Era: reaproveita o Controle Mental do Gal; dar a espiral própria (o Lodo girando no chão
   e o alvo andando em círculos até a espiral).
 - ✅ (v2.7, em parte) **Tiros amaldiçoados:** Tempestade Caótica virou chuva de raios em área; facas da Aghata voltam.
-  Continuam iguais: Balas Amaldiçoadas (Kaiser), Pistola Transtornada e Revólver .38 (Kemi/Fantasma). Era: `cursedShots` em 6 kits (Kaiser, Aghata, Labirinto, Kemi ×2, Fantasma): diferenciar —
+  ✅ (v2.8, conferido) os outros já eram diferentes entre si — Balas Amaldiçoadas (Kaiser: três que perseguem, Energia),
+  Pistola Transtornada (arame: sangra e deixa lento) e Revólver .38 (leque de seis, de perto); só o TIPO interno é o mesmo. Era: `cursedShots` em 6 kits (Kaiser, Aghata, Labirinto, Kemi ×2, Fantasma): diferenciar —
   Tempestade Caótica do Labirinto como chuva de projéteis em área; Facas Amaldiçoadas da Aghata voltando para a mão.
 - ✅ (v2.3) **Aghata:** + Passagem de Conhecimento (troca de lugar/mente) e Leitura de Rituais (−40% de dano de rituais), ambos do cânone — agora tem 4.
 - ✅ (v2.3) **Aguiar:** mascarado, todo golpe do machado sangra (corpo a corpo e arremessado).
 - ✅ (v2.7) **Curas** com visual e regra próprios. Era: `healOverTime` em 4 kits (Dante, Erin, Xande, Ferreiro): cada uma com um visual e uma
   condição própria (Paradiso do Dante só funciona parado; Conforto de Santo Berço cura mais perto do altar etc.).
-- 🟡 **Fantasma:** ✅ (v2.7) especial cinematográfico (a bala dá a volta e a câmera segue). Falta: usa as animações humanas da Kemi (já anotado) e o Disparo Espiral é ao mesmo tempo o □ e o especial
+- 🟡 **Fantasma:** ✅ (v2.7) especial cinematográfico (a bala dá a volta e a câmera segue). ✅ (v2.8) Faixas enrolam o alvo
+  como múmia (pedido do usuário; adaptação — não está na wiki). Falta: usa as animações humanas da Kemi (já anotado) e o Disparo Espiral é ao mesmo tempo o □ e o especial
   — o especial podia ser uma versão cinematográfica (um disparo em volta da arena e a câmera seguindo a bala até atingir o adversário).
-- 🟢 **Teleportes** (Joui, Kian, Fantasma, Gal, Diabo): cada um já tem a sua cara; padronizar quem deixa rastro/poça.
+- ✅ (v2.8) **Teleportes:** todos deixam rastro no ponto de partida — sombra (Joui), faíscas (Gal), poça de sangue (Diabo), sigilos dourados (Kian) e fumaça das faixas (Fantasma).
 - ✅ (v2.3) **CPU:** foca invocações fracas (zumbis, clones do Trinitá) e usa o Transportar para arrastar quando colado.
 
 ## Estado na v2.1 (2026-10-03)
@@ -165,7 +168,7 @@ Levantado comparando cada kit com o cânone e procurando habilidades que só rea
 - ✅ (v2.2) Zumbis: sobem rastejando de poças de sangue de verdade e derretem numa poça ao morrer.
 - 🟡 CPU: ✅ (v2.2) o agarrão da Marionete solta mais cedo apertando botões (a CPU já aperta); falta a CPU focar nos zumbis
   fracos para limpar a horda (hoje só bate se estiverem no caminho).
-- 🟢 Rodar a rodada de equilíbrio do Dante e do Juan com as invocações novas (a Marionete perdeu o giro com medo e
+- ✅ (v2.5) Rodar a rodada de equilíbrio do Dante e do Juan com as invocações novas (Dante 46%, Juan 61%) (a Marionete perdeu o giro com medo e
   ganhou o agarrão; a horda pode somar mais dano que o zumbi único de 220 de vida).
 
 ## Estado na v2.0 (2026-10-03)
@@ -219,7 +222,7 @@ Kian 46% · Ferreiro 43% · Arthur 39% · Xande 39% · Aghata 36% · Gal Sal 25%
   rápido no celular.
 - 🟡 **Cenários:** peças juntadas num bloco só (a cidade do Orfanato, o cemitério das Ruínas) não ficam transparentes
   quando tampam a luta (a câmera só chega para a frente) — separar as peças no Blender.
-- 🟢 **Tela de vitória cinematográfica:** movimento de câmera (aproximar/orbitar) e poses refeitas com referência.
+- ✅ (v2.8) **Tela de vitória cinematográfica:** a câmera aproxima e balança de leve (os nomes acompanham). Falta: 🟢 poses refeitas com referência.
 - 🟢 **Formas:** a Fantasma ainda usa as animações humanas da Kemi (só Deus da Morte e Diabo têm as próprias).
 
 ---
@@ -483,7 +486,7 @@ Kian 46% · Ferreiro 43% · Arthur 39% · Xande 39% · Aghata 36% · Gal Sal 25%
 
 ## 1. Universo — o que vale trazer para o jogo
 
-### 1.1 Os cinco elementos e o ciclo de vantagem 🔴
+### 1.1 Os cinco elementos e o ciclo de vantagem ✅ (conferido na v2.8: ciclo em `damage.js`, só para rituais; elemento na HUD e na seleção)
 
 Segundo o *Diário de Deus* (wiki, "Elementos do Outro Lado"), cada elemento supera outro:
 
@@ -514,7 +517,7 @@ Afinidade e origem de cada lutador — ✅ já no jogo (`origin`/`element` nos p
 seleção. Arquivos: `src/config/elements.js` (novo), `damage.js` (multiplicador), `characters/*.js` (`element`).
 Cuidado: com 2 de Sangue e 2 de Conhecimento o ciclo fica desigual — validar com lutas CPU × CPU antes.
 
-### 1.2 Sanidade, PE e Exposição Paranormal (NEX) 🟡
+### 1.2 Sanidade, PE e Exposição Paranormal (NEX) ✅ (conferido na v2.8: a barra é "Sanidade (PE)" e os avisos dizem "SEM SANIDADE"; a barra de Exposição continua só ideia)
 
 - No RPG, a **energia** do jogo corresponde a PE (pontos de esforço) e a **Sanidade** cai ao ver/usar o paranormal.
   Hoje "energia" e "sanidade" são a mesma barra (o Gal drena "sanidade", o Inexistir olha "sanidade cheia").

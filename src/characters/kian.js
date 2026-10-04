@@ -82,6 +82,7 @@ export default {
       flankDistance: 2.2,
       vanishTime: 0.16,
       color: 0xffd88a,
+      residue: 'sigil', // deixa sigilos dourados onde estava
     },
     {
       id: 'transcendencia',

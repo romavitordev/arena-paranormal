@@ -1,7 +1,7 @@
 // Versão do jogo e NOVIDADES (changelog). Cada atualização conta, inclusive as que foram juntas numa só publicação.
 // Para uma nova atualização: suba VERSION e acrescente a entrada no TOPO de CHANGELOG (textos para jogadores, os mesmos
 // do CHANGELOG-CLIENTE.md; detalhes técnicos vão no CHANGELOG-ADMIN.md).
-export const VERSION = 27;
+export const VERSION = 28;
 export const VERSION_LABEL = `v${Math.floor(VERSION / 10)}.${VERSION % 10}`;
 
 export function formatVersion(version) {
@@ -9,6 +9,16 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: 28,
+    date: '2026-10-03',
+    title: 'Múmia, rastros e vitória de cinema',
+    items: [
+      'Faixas da Fantasma: agora cobrem o alvo dos pés ao rosto como uma múmia e o prendem por até 2,2 s — apertando os botões sem parar, dá para se soltar antes. (Adaptação: a wiki só diz que as faixas melhoram as habilidades dela e puxam o rifle.)',
+      'Teletransportes deixam rastro no lugar de onde saíram: sigilos dourados no Kian e a fumaça preta das faixas na Fantasma (os outros já tinham sombra, faíscas e poça de sangue).',
+      'Tela de vitória com câmera de cinema: aproxima dos vencedores e balança de leve, com os nomes acompanhando.',
+    ],
+  },
   {
     v: 27,
     date: '2026-10-03',

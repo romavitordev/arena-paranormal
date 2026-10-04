@@ -98,13 +98,14 @@ export default {
       name: 'Faixas da Fantasma',
       input: 'carga+ranged', // △ + □ / Y + X
       type: 'bloodBind',
-      description: 'Lança as faixas, que enrolam o alvo e o prendem por um instante.',
+      description: 'Lança as faixas, que cobrem o alvo dos pés ao rosto como uma múmia e o prendem por até 2,2 s — apertando os botões sem parar, ele se solta antes.',
       energyCost: 25,
-      cooldown: 13,
+      cooldown: 14,
       windup: 0.25,
       range: 11,
       arc: 50,
-      hold: 1.1,
+      hold: 2.2,
+      mummy: true, // adaptação (não está na wiki): as faixas enrolam o alvo como uma múmia
       damage: 30,
       element: 'morte',
       ropeColor: 0xd8ccb0,
@@ -124,6 +125,7 @@ export default {
       flankDistance: 2.2,
       vanishTime: 0.22,
       color: 0x1a1620,
+      residue: 'smoke', // a fumaça preta das faixas fica para trás
     },
     {
       id: 'analitica',
