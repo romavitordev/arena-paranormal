@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { glowMat } from './rig.js';
-import { m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma } from './weapons.js';
+import { m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace } from './weapons.js';
 export { addJouiProps } from './characters/joui.js';
 
 // Armas e acessórios adicionados em código sobre os modelos do Blender.
@@ -164,6 +164,21 @@ export function addLirioProps(rig) {
   helmet.visible = false;
   sockets.head.add(helmet);
   props.helmet = helmet;
+}
+
+// BALU: o Machado Lancinante nas duas mãos (pegada da Leonora); o Machado Demônio (maça de sangue) fica escondido até
+// a habilidade trocar um pelo outro
+export function addBaluProps(rig) {
+  const { sockets, props } = rig;
+  const axe = baluAxe();
+  axe.rotation.x = -0.25;
+  sockets.handR.add(axe);
+  props.axe = axe;
+  const mace = demonMace();
+  mace.rotation.x = -0.25;
+  mace.visible = false;
+  sockets.handR.add(mace);
+  props.demonMace = mace;
 }
 
 // FERREIRO: a Espada Consumidora (duas mãos)

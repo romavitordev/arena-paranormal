@@ -36,6 +36,8 @@ export function addVictoryClips(CLIPS, k) {
     vic_juan: pose({ sp: [0.45, 0, 0], hd: [-0.35, 0, 0], sR: [-1.0, 0.8, -0.1], eR: [-2.2, 0, 0], sL: [-0.2, 0, 0.8], eL: [-0.2, 0, 0], lR: [0.3, 0, -0.1], kR: [0.25, 0, 0] }),
     // Kemi: braços cruzados, peso numa perna, cabeça baixa ("um contrato é um contrato")
     vic_kemi: pose({ hip: [0, 0.2, 0.06], hd: [0.25, 0.2, 0], sL: [-0.55, -0.95, 0.1], eL: [-2.05, 0, 0], sR: [-0.6, 0.95, -0.1], eR: [-2.0, 0, 0], lL: [-0.15, 0, 0.08], kL: [0.35, 0, 0] }),
+    // Balu: machado apoiado no ombro direito e a mão esquerda acenando, sorriso largo ("deixa que o tio Balu resolve")
+    vic_balu: pose({ hip: [0, 0.15, 0], sp: [-0.08, -0.1, 0], hd: [-0.12, 0.15, 0.06], sR: [-2.0, 0.3, -0.55], eR: [-2.2, 0, 0], sL: [-2.6, 0.2, 0.55], eL: [-0.5, 0, 0], lL: [-0.12, 0, 0.16], lR: [0.12, 0, -0.16] }),
     // A Fantasma: aponta para a câmera — o próximo alvo
     vic_fantasma: pose({ sp: [0.05, -0.25, 0], hd: [0.1, 0.15, 0], sR: [-1.75, 0.4, -0.1], eR: [-0.05, 0, 0] }),
   });

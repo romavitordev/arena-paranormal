@@ -92,7 +92,10 @@ export const cinematicCombo = {
       emitters.forEach((e) => e.stop());
       emitters = [];
       // a peça some no fim — a não ser que um estado ativo a mantenha (ex.: máscara do Aguiar)
-      if (sp.prepare?.showProp && !(sp.prepare.keepIfBuff && f.findBuff(sp.prepare.keepIfBuff))) f.rig.showProp(sp.prepare.showProp, false);
+      if (sp.prepare?.showProp && !(sp.prepare.keepIfBuff && f.findBuff(sp.prepare.keepIfBuff))) {
+        f.rig.showProp(sp.prepare.showProp, false);
+        if (sp.prepare.hideProp) f.rig.showProp(sp.prepare.hideProp, true); // troca de volta (ex.: maça do Balu → machado)
+      }
       if (chainFx) { chainFx.stop(); chainFx = null; }
       hitChains.forEach((c) => c.stop());
       hitChains.length = 0;
@@ -159,6 +162,7 @@ export const cinematicCombo = {
           if (prep.showProp && !propShown && t >= prep.time * 0.55) {
             propShown = true;
             f.rig.showProp(prep.showProp, true);
+            if (prep.hideProp) f.rig.showProp(prep.hideProp, false); // a peça nova ocupa o lugar da antiga
             const p = (prep.showProp === 'maskOn' ? f.rig.joints.hd : f.rig.joints['e' + (prep.arm || 'R')]).getWorldPosition(new THREE.Vector3());
             world.fx.burst(p, { count: 40, color: sp.color, speed: 5, life: 0.5, size: 0.3 });
             world.fx.flash(p, { color: sp.color, size: 2, life: 0.15 });

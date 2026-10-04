@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.6 — 2026-10-03
+
+### Adicionado
+- Novo lutador: Balu (Antônio Pontevedra) — pesado da Ordo Realitas, Machado em Giro, Machado Demônio (paga com vida),
+  Fala Imponente, 110%, Colete, especial Pancada do Urso, falas e assistência.
+- Seleção em duas páginas (16 lutadores).
+
 ## v2.5 — 2026-10-03
 
 ### Equilíbrio

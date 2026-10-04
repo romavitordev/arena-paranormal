@@ -357,7 +357,10 @@ export class Fighter {
     const r = this.def.ranged;
     if (!r) return;
     if (r.showProp) this.rig.showProp(r.showProp, false);
-    if (r.hideProp) this.rig.showProp(r.hideProp, true);
+    // a arma arremessada que volta (returnsProp, ex.: machado do Balu) só reaparece quando chega de volta na mão
+    const flying = r.returnsProp && this.world && this.world.projectiles && this.world.projectiles.list.some((p) => p.owner === this && p.ability.returnsProp === r.returnsProp);
+    const locked = this.propLock && this.propLock[r.hideProp]; // ex.: a maça do Machado Demônio está no lugar do machado
+    if (r.hideProp && !flying && !locked) this.rig.showProp(r.hideProp, true);
   }
 
   startCharging() {

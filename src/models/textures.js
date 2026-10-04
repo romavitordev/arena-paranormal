@@ -600,6 +600,88 @@ export const MATERIAL_TEXTURES = {
     for (let y = 0; y < 256; y += 6) { g.beginPath(); g.moveTo(0, y); g.lineTo(512, y); g.stroke(); }
   }, { wrap: true }),
 
+  // ---------------- BALU: rosto largo e sorridente, bigode grosso e cavanhaque curto no meio do queixo, sobrancelhas
+  // grossas, e a cicatriz em ESPIRAL no lugar da orelha direita (lado direito = x < 256); polo branca com flores
+  // amarelas; antebraços fortes e peludos; jeans azul-claro; fivela do Amuleto (veias vermelhas + Símbolo de Sangue)
+  face_balu: face((g) => {
+    stubble(g, 'rgba(25,18,14,0.22)', 900, { y0: 150, y1: 215, w: 74 });
+    // bigode grosso (a malha dá o volume; a pintura dá a sombra e os fios)
+    g.fillStyle = '#17110f';
+    g.beginPath();
+    g.moveTo(CX - 34, MOUTH_Y + 2);
+    g.quadraticCurveTo(CX - 20, MOUTH_Y - 20, CX, MOUTH_Y - 12);
+    g.quadraticCurveTo(CX + 20, MOUTH_Y - 20, CX + 34, MOUTH_Y + 2);
+    g.quadraticCurveTo(CX, MOUTH_Y - 4, CX - 34, MOUTH_Y + 2);
+    g.fill();
+    // cavanhaque curto só no meio do queixo
+    g.beginPath(); g.ellipse(CX, MOUTH_Y + 30, 10, 12, 0, 0, Math.PI * 2); g.fill();
+    // cicatriz em espiral onde ficava a orelha direita
+    g.strokeStyle = 'rgba(150,80,72,0.85)'; g.lineWidth = 2.6; g.lineCap = 'round';
+    g.beginPath();
+    for (let k = 0; k <= 60; k++) {
+      const a = k * 0.32;
+      const r = 2 + k * 0.33;
+      const x = 128 + Math.cos(a) * r;
+      const y = 132 + Math.sin(a) * r * 1.2;
+      if (k) g.lineTo(x, y); else g.moveTo(x, y);
+    }
+    g.stroke();
+    // marcas de expressão (sempre sorrindo)
+    g.strokeStyle = 'rgba(90,50,35,0.35)'; g.lineWidth = 1.4;
+    for (const s of [-1, 1]) { g.beginPath(); g.moveTo(CX + s * 30, 150); g.quadraticCurveTo(CX + s * 40, 168, CX + s * 34, 182); g.stroke(); }
+  }, {
+    skin: '#c8946e',
+    eye: { iris: '#3a2a20', irisLight: '#6a5040', tilt: -0.04, h: 6 },
+    brow: { angry: -1, thick: 8, color: '#17110f' },
+    mouth: { mouthW: 20, smile: 6, teeth: true },
+  }),
+  shirt_balu: () => canvasTex(512, 512, (g) => {
+    g.fillStyle = '#f3eee2'; g.fillRect(0, 0, 512, 512);
+    // flores amarelas espalhadas (pétalas em estrela) — a camisa mais conhecida dele
+    const flower = (x, y, r, rot) => {
+      g.save(); g.translate(x, y); g.rotate(rot);
+      g.fillStyle = '#e8b23a';
+      for (let k = 0; k < 5; k++) { g.rotate((Math.PI * 2) / 5); g.beginPath(); g.ellipse(0, -r * 0.6, r * 0.32, r * 0.62, 0, 0, Math.PI * 2); g.fill(); }
+      g.fillStyle = '#c47a1a'; g.beginPath(); g.arc(0, 0, r * 0.22, 0, Math.PI * 2); g.fill();
+      g.restore();
+    };
+    const rnd = seeded(41);
+    for (let i = 0; i < 70; i++) flower(rnd() * 512, rnd() * 512, 10 + rnd() * 12, rnd() * 6.28);
+    for (let i = 0; i < 120; i++) { g.fillStyle = 'rgba(232,178,58,0.55)'; g.beginPath(); g.arc(rnd() * 512, rnd() * 512, 2 + rnd() * 3, 0, Math.PI * 2); g.fill(); }
+    // abertura da gola em V no meio da frente (pele) e a carcela
+    g.fillStyle = '#c8946e';
+    g.beginPath(); g.moveTo(232, 0); g.lineTo(256, 70); g.lineTo(280, 0); g.closePath(); g.fill();
+    g.strokeStyle = 'rgba(60,40,20,0.25)'; g.lineWidth = 1;
+    for (let y = 0; y < 512; y += 6) { g.beginPath(); g.moveTo(0, y); g.lineTo(512, y); g.stroke(); }
+  }, { wrap: true }),
+  arms_balu: () => canvasTex(256, 256, (g) => {
+    g.fillStyle = '#c8946e'; g.fillRect(0, 0, 256, 256);
+    // pelos escuros nos antebraços e veias leves
+    for (let i = 0; i < 900; i++) { g.fillStyle = 'rgba(30,20,14,0.3)'; g.fillRect(Math.random() * 256, Math.random() * 256, 1, 2.5); }
+    g.strokeStyle = 'rgba(110,70,60,0.25)'; g.lineWidth = 2;
+    for (let i = 0; i < 6; i++) { const x = 20 + Math.random() * 216; g.beginPath(); g.moveTo(x, 0); g.bezierCurveTo(x + 20, 80, x - 20, 160, x + 10, 256); g.stroke(); }
+  }, { wrap: true }),
+  jeans_balu: () => canvasTex(256, 256, (g) => {
+    g.fillStyle = '#86a6c8'; g.fillRect(0, 0, 256, 256);
+    // trama diagonal do jeans, desbotado no joelho, costura dourada
+    g.strokeStyle = 'rgba(40,60,100,0.22)'; g.lineWidth = 1;
+    for (let i = -256; i < 256; i += 4) { g.beginPath(); g.moveTo(i, 0); g.lineTo(i + 256, 256); g.stroke(); }
+    const fade = g.createRadialGradient(128, 140, 4, 128, 140, 90);
+    fade.addColorStop(0, 'rgba(230,240,250,0.35)'); fade.addColorStop(1, 'rgba(230,240,250,0)');
+    g.fillStyle = fade; g.fillRect(0, 0, 256, 256);
+    g.strokeStyle = 'rgba(200,150,60,0.6)'; g.setLineDash([4, 3]);
+    g.beginPath(); g.moveTo(64, 0); g.lineTo(64, 256); g.moveTo(192, 0); g.lineTo(192, 256); g.stroke();
+    g.setLineDash([]);
+  }, { wrap: true }),
+  amulet_balu: () => canvasTex(128, 128, (g) => {
+    g.fillStyle = '#9a8e80'; g.fillRect(0, 0, 128, 128);
+    // veias vermelhas e o Símbolo de Sangue
+    g.strokeStyle = '#a01018'; g.lineWidth = 3; g.lineCap = 'round';
+    for (let i = 0; i < 9; i++) { g.beginPath(); g.moveTo(64, 64); g.quadraticCurveTo(Math.random() * 128, Math.random() * 128, Math.random() * 128, Math.random() * 128); g.stroke(); }
+    g.strokeStyle = '#ff2a3d'; g.lineWidth = 4;
+    g.beginPath(); g.arc(64, 64, 22, 0, Math.PI * 2); g.moveTo(64, 34); g.lineTo(64, 94); g.moveTo(40, 64); g.lineTo(88, 64); g.stroke();
+  }),
+
   // ---------------- LÍRIO: rosto largo e sorridente, barba loira aparada; camisa azul com o emblema branco;
   // antebraços com cicatrizes de corte (ataduras são malhas à parte)
   face_lirio: face((g) => {

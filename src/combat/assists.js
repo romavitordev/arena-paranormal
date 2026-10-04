@@ -244,6 +244,11 @@ const ACTIONS = {
     moving: (c) => buffOwner(c, 'powerup', { type: 'bloodArmor', name: 'ARMADURA DE SANGUE (JUAN)', time: 6, takenMult: 0.75, takenKinds: ['melee', 'ranged'] }, 0xc01828, 'ARMADURA DE SANGUE'),
     still: (c) => ritualCuts(c, 0xc01828, 75, 'DESCARNAR'),
   },
+  // BALU: andando → Colete Físico-Balístico no parceiro (menos dano de golpes e tiros); parado → machadada por cima
+  balu: {
+    moving: (c) => buffOwner(c, 'powerup', { type: 'vest', name: 'COLETE (BALU)', time: 6, takenMult: 0.8, takenKinds: ['melee', 'ranged'] }, 0xe8b23a, 'COLETE FÍSICO-BALÍSTICO'),
+    still: (c) => rushStrike(c, 'hammer_v', [[0.42, 70]], 'axeHit', { knockback: 4.5 }),
+  },
   // KEMI: andando → Perita (o inimigo fica analisado e recebe mais dano); parado → um tiro da Sniper Fantasma
   kemi: {
     moving: (c) => debuffOpp(c, 'turn_look', { type: 'analyzed', name: 'ANALISADO (KEMI)', time: 6, takenMult: 1.12 }, 0xe8c070, 'PERITA'),

@@ -656,3 +656,45 @@ Transforma no Diabo até o fim do round (+150 de vida), 1x por partida · custo 
 ### Especial: Vestir as Faixas
 
 Transforma na Fantasma até o fim do round (+50 de vida) · custo 50 · cooldown 30 s.
+
+---
+
+## BALU
+
+*O tanque da Equipe Abutres: fica na linha de frente, apanha, sorri e derruba* · arma: Machado Lancinante (pomo de pantera) e o Machado Demônio de sangue
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Machadada lateral | 32 | 2.3 m |  |
+| ○ 2 | Machadada cruzada | 36 | 2.3 m |  |
+| ○ 3 | Machadada por cima | 44 | 2.4 m |  |
+| ○ 4 | Pancada do Urso | 70 | 2.5 m | finalizador: lança |
+| Frente + ○ | Investida do Urso | 40 | 2.4 m |  |
+| Trás + ○ | Recua e machada | 34 | 2.3 m |  |
+| Lado + ○ | Machadada em movimento | 32 | 2.3 m |  |
+| No ar + ○ | Machado aéreo | 40 | 2.3 m | desce com impacto |
+| ↑ + ○ (no combo) | Machado de baixo para cima | 40 | 2.3 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Machado no chão | 48 | 2.3 m | finalizador: derruba |
+
+### Principal (□ / X): Machado em Giro
+
+- Dano 34 · alcance 14 m · cooldown 3 s · custo 0
+
+### Habilidades
+
+- **Amaldiçoar Arma com Sangue** — △ + □ / Y + X · custo 25 · cooldown 18 s
+  Desperta as veias que o Diabo deixou no machado: por alguns segundos cada machadada (e o machado arremessado) abre um sangramento.
+- **Machado Demônio** — △ + ○ / Y + B · custo 0 · cooldown 22 s
+  Crava o pomo de pantera no próprio peito (custa 60 de VIDA, não sanidade): o sangue vira uma maça-estrela no lugar da lâmina por 10 s — golpes físicos 25% mais fortes, mais alcance, sangramento e aguenta 2 golpes sem recuar.
+- **Fala Imponente** — R2 + △ / RT + Y · custo 20 · cooldown 14 s · alcance 9 m
+  O ex-vendedor sabe fazer um discurso firme: grita com o adversário, que fica PROVOCADO (só ataca no corpo a corpo por 4 s), e o Balu recebe 15% menos dano.
+- **110%** — △ + L2 / Y + LT · custo 20 · cooldown 16 s
+  Dá 110% de si: por 6 s os golpes físicos ficam 20% mais fortes e ele anda 10% mais rápido.
+- **Colete Físico-Balístico** — R2 + × / RT + A · custo 25 · cooldown 22 s
+  Fecha o colete e aguenta firme (Resistência à Dor): por 7 s recebe 25% menos dano e aguenta 2 golpes sem recuar, um pouco mais lento.
+
+### Especial: Pancada do Urso
+
+250 de dano · custo 50 · cooldown 14 s.

@@ -2,6 +2,15 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v2.6 — Chegou o Balu
+- NOVO LUTADOR: BALU (Antônio Pontevedra), o ex-agente veterano da Ordo Realitas — o "tanque" da Equipe Abutres. Camisa polo de flores amarelas, bigode, cabelo com gel e o Machado Lancinante com o pomo de pantera.
+- Balu é pesado (1300 de vida, um pouco mais rápido que a Lírio): machadadas com as duas mãos que derrubam e aguentam um golpe pequeno, e uma machadada a mais em quem está caído (Derrubar e Atacar).
+- Machado em Giro (□): arremessa o machado girando e ele volta para a mão — enquanto voa, a mão fica vazia.
+- Machado Demônio (△ + ○): crava o pomo de pantera no próprio peito, paga 60 de VIDA, e o machado vira uma maça-estrela de sangue por 10 s (mais força, alcance e sangramento). Também tem Amaldiçoar Arma com Sangue, Fala Imponente (provoca o adversário), 110% e o Colete Físico-Balístico.
+- Especial do Balu: Pancada do Urso — a maça de sangue nasce na mão e ele desce três machadadas no adversário.
+- Falas próprias com todo o elenco (as da Equipe Abutres, do Kian que quebrou o machado e do Diabo que o amaldiçoou), pose de vitória e assistência na batalha em equipe.
+- A seleção de personagens ganhou a página 2 (LB/RB trocam de página).
+
 ## v2.5 — Equilíbrio: rápidos e pesados
 - Equilíbrio geral: os personagens leves e médios ficaram mais ágeis nos combos (golpes mais rápidos) e um pouco mais velozes — Joui, Aghata, Erin, Xande, Kian, Labirinto, Dante, Kaiser e Gal.
 - Os pesados continuam lentos, mas aguentam mais para segurar os rápidos: Lírio com 1350 de vida, Ferreiro com 1250 e Aguiar com 1150.

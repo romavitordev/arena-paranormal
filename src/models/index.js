@@ -1,7 +1,7 @@
 import { buildKaiser } from './characters/kaiser.js';
 import { buildArthur } from './characters/arthur.js';
 import { buildJoui } from './characters/joui.js';
-import { addKaiserProps, addArthurProps, addJouiProps, addAghataProps, addGalSalProps, addKianProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps, addFerreiroProps, addJuanProps, addKemiProps, addFantasmaProps } from './props.js';
+import { addKaiserProps, addArthurProps, addJouiProps, addAghataProps, addGalSalProps, addKianProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps, addFerreiroProps, addJuanProps, addKemiProps, addFantasmaProps, addBaluProps } from './props.js';
 import { buildAghata } from './characters/aghata.js';
 import { buildGalSal } from './characters/gal_sal.js';
 import { buildKian } from './characters/kian.js';
@@ -32,6 +32,7 @@ export const MODEL_BUILDERS = {
   diabo: buildAghata,
   kemi: buildAghata,
   fantasma: buildAghata,
+  balu: buildArthur,
 };
 
 // Modelos do Blender + armas/acessórios adicionados em código
@@ -54,6 +55,7 @@ const BLENDER_MODELS = {
   diabo: { url: 'models/diabo.glb', props: null }, // Portador do Trono (garras)
   kemi: { url: 'models/kemi.glb', props: addKemiProps },
   fantasma: { url: 'models/fantasma.glb', props: addFantasmaProps }, // forma das Faixas
+  balu: { url: 'models/balu.glb', props: addBaluProps }, // Antônio "Balu" Pontevedra (Machado Lancinante)
 };
 
 const loaded = {};

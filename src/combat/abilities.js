@@ -2079,6 +2079,50 @@ Object.assign(ABILITY_TYPES, {
     },
   },
 
+  // MACHADO DEMÔNIO (Balu — cânone): crava o pomo de pantera do machado no próprio peito; o sangue escorre e vira uma
+  // MAÇA-ESTRELA no lugar da lâmina. Custa VIDA (ele repudia rituais e paga com o próprio sangue), não sanidade.
+  // Usa o mesmo estado da Arma de Sangue (bloodBlade: mais alcance e sangramento) + dano físico maior e armadura.
+  demonAxe: {
+    start(f, a, world) {
+      if (f.findBuff('bloodBlade')) { f.notify('O MACHADO DEMÔNIO JÁ ESTÁ ATIVO'); return null; }
+      if (f.health - a.hpCost < f.maxHealth * 0.1) { f.notify('SEM SANGUE PARA O MACHADO DEMÔNIO'); return null; }
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.anim.play(a.anim || 'concentrate', { restart: true, duration: 0.8 });
+      world.audio.play('bladeHit', { volume: 0.9, pitch: 0.6 });
+      tl.add(0.3, () => {
+        // o pomo no peito: sangue jorra e paga o preço
+        f.health = Math.max(1, f.health - a.hpCost);
+        world.fx.burst(f.chestPos(), { count: 40, color: 0xb01020, speed: 4, life: 0.6, size: 0.2, gravity: 8 });
+        f.notify(`MACHADO DEMÔNIO −${a.hpCost}`, true);
+      });
+      tl.add(0.55, () => {
+        f.rig.showProp(a.fromProp || 'axe', false);
+        f.rig.showProp(a.toProp || 'demonMace', true);
+        f.propLock = { ...(f.propLock || {}), [a.fromProp || 'axe']: true }; // o machado não volta enquanto a maça estiver na mão
+        const hand = f.rig.sockets.handR.getWorldPosition(new THREE.Vector3());
+        world.fx.burst(hand, { count: 50, color: 0xff2030, speed: 5, life: 0.5, size: 0.25 });
+        world.audio.play('ritual', { volume: 0.6, pitch: 0.6 });
+        f.armorHits = (f.armorHits || 0) + (a.armor || 0);
+        const drip = world.fx.emitter({ rate: 14, follow: () => f.rig.sockets.handR.getWorldPosition(new THREE.Vector3()).add(new THREE.Vector3(0, -0.6, 0)), particle: { color: 0xa01018, speed: 0.3, up: -0.5, life: 0.5, size: 0.1, gravity: 9 } });
+        f.addBuff({
+          type: 'bloodBlade', name: 'MACHADO DEMÔNIO', time: a.duration, duration: a.duration,
+          rangeBonus: a.rangeBonus, bleed: a.bleed, mult: a.damageMult, affects: ['melee'],
+          onEnd() {
+            drip.stop();
+            f.armorHits = Math.max(0, (f.armorHits || 0) - (a.armor || 0));
+            if (f.propLock) delete f.propLock[a.fromProp || 'axe'];
+            f.rig.showProp(a.toProp || 'demonMace', false);
+            const flying = f.world.projectiles.list.some((p) => p.owner === f && p.ability.returnsProp === (a.fromProp || 'axe'));
+            if (!flying) f.rig.showProp(a.fromProp || 'axe', true);
+          },
+        });
+      });
+      tl.end(0.8);
+      return seqFrom(tl);
+    },
+  },
+
   // PASSAGEM DE CONHECIMENTO (Aghata — cânone: troca completa de mentes com outra pessoa): as duas mentes trocam de
   // corpo por um instante — na luta, ela e o alvo TROCAM DE LUGAR e o alvo sai desorientado (não sabe de onde veio).
   mindSwap: {

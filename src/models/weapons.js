@@ -789,3 +789,114 @@ export function wraps(len, radius, color = 0xd9d4c8, loose = true) {
   }
   return g;
 }
+
+// MACHADO LANCINANTE (Balu): cabo longo de metal escuro com tiras de couro bege, pomo em CABEÇA DE PANTERA e uma
+// lâmina larga de um lado só, ornamentada com saliências feitas à mão, com um esporão atrás. Duas mãos, mesma pegada
+// da Leonora (pomo em +Y, cabeça em −Y; o fio aponta para a frente do golpe).
+export function baluAxe() {
+  const g = new THREE.Group();
+  const iron = toon(0x2a2a30);
+  const steel = toon(0xc4c4ca);
+  const handle = part(new THREE.CylinderGeometry(0.026, 0.032, 1.08, 10), 0x26262c, { mat: iron });
+  handle.position.y = -0.33;
+  g.add(handle);
+  for (let i = 0; i < 6; i++) { // tiras de couro enroladas no cabo
+    const wrap = part(new THREE.CylinderGeometry(0.036, 0.036, 0.045, 10), 0xb89a70, { outline: false });
+    wrap.position.y = 0.08 - i * 0.075;
+    g.add(wrap);
+  }
+  // pomo: cabeça de pantera (focinho, orelhas, olhos) em metal escuro
+  const panther = new THREE.Group();
+  panther.position.y = 0.25;
+  g.add(panther);
+  const skull = part(new THREE.SphereGeometry(0.05, 12, 10), 0x1e1e24, { mat: iron });
+  skull.scale.set(1, 0.9, 1.15);
+  panther.add(skull);
+  const snout = part(new THREE.SphereGeometry(0.03, 10, 8), 0x1e1e24, { mat: iron });
+  snout.position.set(0, -0.012, 0.045);
+  panther.add(snout);
+  for (const s of [-1, 1]) {
+    const ear = part(new THREE.ConeGeometry(0.016, 0.035, 5), 0x1e1e24, { mat: iron });
+    ear.position.set(s * 0.03, 0.045, -0.005);
+    panther.add(ear);
+    const eyeL = part(new THREE.SphereGeometry(0.007, 6, 4), 0xd8b040, { outline: false, mat: glowMat(0xd8b040, 0.9) });
+    eyeL.position.set(s * 0.02, 0.012, 0.045);
+    panther.add(eyeL);
+  }
+  // cabeça do machado
+  const head = new THREE.Group();
+  head.rotation.y = Math.PI / 2;
+  head.position.y = -0.84;
+  g.add(head);
+  const shape = new THREE.Shape(); // lâmina larga, de um lado só, com o fio curvo bem aberto
+  shape.moveTo(0.03, 0.07);
+  shape.lineTo(0.13, 0.11);
+  shape.quadraticCurveTo(0.2, 0.2, 0.27, 0.19);
+  shape.quadraticCurveTo(0.33, 0, 0.27, -0.19);
+  shape.quadraticCurveTo(0.2, -0.2, 0.13, -0.11);
+  shape.lineTo(0.03, -0.07);
+  shape.lineTo(0.03, 0.07);
+  head.add(part(extrude(shape, 0.02), 0xb4b4bc, { mat: steel }));
+  // saliências feitas à mão na lâmina (ornamentos) e o olho de ferro
+  for (const [x, y] of [[0.1, 0.0], [0.15, 0.06], [0.15, -0.06], [0.2, 0.0]]) {
+    const knob = part(new THREE.SphereGeometry(0.014, 6, 4), 0x2a2a30, { mat: iron });
+    knob.position.set(x, y, 0);
+    knob.scale.set(1, 1, 1.4);
+    head.add(knob);
+  }
+  head.add(part(new THREE.BoxGeometry(0.08, 0.17, 0.07), 0x2a2a30, { mat: iron }));
+  const spur = part(new THREE.ConeGeometry(0.03, 0.13, 6), 0x2a2a30, { mat: iron }); // esporão atrás
+  spur.rotation.z = Math.PI / 2;
+  spur.position.x = -0.09;
+  head.add(spur);
+  // veias vermelhas na lâmina (o Diabo amaldiçoou o machado): finas, coladas nos dois lados
+  const veinMat = toon(0x8a0a14, { emissive: 0x3a0004 });
+  for (const sz of [1, -1]) {
+    for (let k = 0; k < 4; k++) {
+      const pts = [];
+      for (let i = 0; i <= 5; i++) { const t = i / 5; pts.push(new THREE.Vector3(0.05 + t * 0.22, (k - 1.5) * 0.06 * (1 - t * 0.4) + Math.sin(t * 6 + k) * 0.012, sz * 0.012)); }
+      const vein = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 10, 0.004, 4, false), veinMat);
+      head.add(vein);
+    }
+  }
+  return g;
+}
+
+// MACHADO DEMÔNIO (Balu): o pomo de pantera cravado no peito faz o sangue escorrer e, no lugar da lâmina, nasce uma
+// MAÇA-ESTRELA de sangue (bola espinhosa vermelho-escura). Mesmo cabo; trocado com o machado pela habilidade.
+export function demonMace() {
+  const g = new THREE.Group();
+  const mat = bloodMaterial();
+  const handle = part(new THREE.CylinderGeometry(0.026, 0.032, 1.08, 10), 0x26262c, { mat: toon(0x2a2a30) });
+  handle.position.y = -0.33;
+  g.add(handle);
+  const ball = new THREE.Group();
+  ball.position.y = -0.96;
+  g.add(ball);
+  const core = new THREE.Mesh(new THREE.IcosahedronGeometry(0.17, 1), mat);
+  core.userData.outline = true;
+  ball.add(core);
+  // espinhos em todas as direções (distribuição de Fibonacci na esfera)
+  const n = 26;
+  for (let i = 0; i < n; i++) {
+    const y = 1 - (i / (n - 1)) * 2;
+    const r = Math.sqrt(1 - y * y);
+    const a = i * 2.399963;
+    const dir = new THREE.Vector3(Math.cos(a) * r, y, Math.sin(a) * r);
+    const len = 0.12 + (i % 3) * 0.04;
+    const spike = new THREE.Mesh(new THREE.ConeGeometry(0.03, len, 6), mat);
+    spike.position.copy(dir).multiplyScalar(0.15 + len / 2);
+    spike.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
+    ball.add(spike);
+  }
+  // sangue escorrendo pelo cabo
+  for (let k = 0; k < 3; k++) {
+    const drip = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.004, 0.22 + k * 0.08, 6), mat);
+    drip.position.set(Math.cos(k * 2.1) * 0.03, -0.72 + k * 0.05, Math.sin(k * 2.1) * 0.03);
+    g.add(drip);
+  }
+  const glow = new THREE.Mesh(new THREE.SphereGeometry(0.3, 12, 10), glowMat(0xff1030, 0.16));
+  glow.position.y = -0.96;
+  g.add(glow);
+  return g;
+}

@@ -56,7 +56,7 @@ impressionantes (e mais caras/arriscadas); quem é mais fraco ganha consistênci
 | A | Joui | 57% | 1000 | ok |
 | A | Juan (base) | 61% | 1000 | ok (já foi o mais forte; segurar aqui) |
 | A | Ferreiro | 57% | 1250 | ok (força bruta + forma) |
-| B | Balu | — | 1300 (proposta) | pesado "tanque" — meta 45–55% |
+| B | Balu | 50% (60 lutas) | 1300 | pesado "tanque" — dentro da meta |
 | B | Kaiser | 54% | 1000 | ok |
 | B | Arthur | 39% | 1000 | um pouco abaixo |
 | B | Erin | 43% | 1000 | ok |

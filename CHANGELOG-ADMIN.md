@@ -1,5 +1,25 @@
 # Registro administrativo de alterações
 
+## v2.6 — Chegou o Balu
+
+### Novo lutador: BALU (`src/characters/balu.js`)
+- Modelo `tools/blender/char_balu.py` (Builder 1,08 × 1,14 × 1,05 ≈ 1,90 m; sem a orelha direita — espiral pintada no
+  rosto; polo com gola grande e mangas arregaçadas, cinto com a fivela do Amuleto, sapato social; cabelo com gel,
+  bigode e cavanhaque em malha). Texturas `face_balu`, `shirt_balu` (flores amarelas), `arms_balu`, `jeans_balu`,
+  `amulet_balu` (`textures.js`). Armas `baluAxe` (pomo de pantera, veias) e `demonMace` (`weapons.js`);
+  `addBaluProps`. Auditoria: 21k triângulos, altura 2,14 (Lírio 2,09).
+- Kit: animações de duas mãos da Lírio (`hammer_*`, `grip.twoHand`); `ground` com `otg` (Derrubar e Atacar);
+  □ bumerangue com `returnsProp: 'axe'` (novo: o projétil devolve a peça ao dono em todos os caminhos de remoção —
+  `Projectiles.giveBack`; `hideRangedProps` espera o machado voltar). `demonAxe` (novo tipo): custo em vida
+  (`hpCost`), troca `axe` → `demonMace`, buff `bloodBlade` (alcance + sangramento) com `mult` 1,25 e armadura;
+  `propLock` impede o machado de reaparecer por cima da maça. Fala Imponente = `caiDentro` com `near: 99`.
+  Especial `cinematicCombo` com `prepare.hideProp` (novo: troca de peça no especial e devolve no fim).
+- Integração: `ROSTER`, `models/index.js`, `vic_balu`, falas (`dialogues.js`: 30 vitórias novas + trocas com
+  Arthur/Dante/Agatha/Joui/Kian/Juan), assistência (Colete no parceiro / machadada), `lore/membros.json` (id),
+  `check-roster` com contagem de confrontos dinâmica (240) e verificação do kit do Balu.
+- Equilíbrio (CPU × CPU, 2 lutas por par, 60 lutas): **Balu 50%** — melhor contra Arthur e Kemi (4/4), pior contra
+  Joui, Erin e Juan (0/4). Dano: sangramento do Amaldiçoar Arma, machadadas laterais/cruzadas, especial e o giro.
+
 ## v2.5 — Equilíbrio: rápidos e pesados
 
 ### Equilíbrio (CPU × CPU, 75 s)

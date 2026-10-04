@@ -7,9 +7,11 @@
 
 ---
 
-## Novo lutador: BALU (Antônio "Balu" Pontevedra) — preparação 🔴
+## Novo lutador: BALU (Antônio "Balu" Pontevedra) — ✅ adicionado na v2.6
 
-Pesquisa de 2026-10-03 (wiki "Antônio Pontevedra" + lore/MEMBROS.md). Nada implementado ainda.
+Pesquisa de 2026-10-03 (wiki "Antônio Pontevedra" + lore/MEMBROS.md). ✅ Implementado na v2.6 (modelo, kit, falas,
+assistência). Equilíbrio: 50% em 60 lutas (meta 45–55%). Pendente: 🟡 skins alternativas (polo verde, polo roxa, sem camisa com queimaduras); 🟢 animações
+próprias (hoje usa as de duas mãos da Lírio).
 
 ### Quem é (cânone)
 - Ex-agente aposentado da **Ordo Realitas** (Equipe Abutres, Calamidade), voltou a pedido do Senhor Veríssimo.

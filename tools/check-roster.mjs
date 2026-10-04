@@ -63,9 +63,12 @@ try {
 } finally {
   Math.random = originalRandom;
 }
-ok(validIntroScenes && validIntroPairs === 210 && sampleIntro.length === 2 && randomSelectionValid, 'introduções: 210 confrontos, duas cenas alternadas e aleatórias, sem falas de resultado');
-ok(validVictoryLines && validVictoryPairs === 210 && VICTORY_LINES.kaiser.erin.includes(sampleVictory) && randomSelectionValid, 'vitórias: 210 confrontos com duas falas selecionáveis aleatoriamente');
-ok(ROSTER.map((c) => c.name).join() === 'KAISER,ARTHUR CERVERO,JOUI JOUKI,AGHATA,DANTE,ERIN PARKER,GAL SAL,KIAN,AGUIAR,LABIRINTO,XANDE,LÍRIO,FERREIRO,JUAN,KEMI', 'nomes: Kaiser, Arthur Cervero, Joui Jouki, Aghata, Dante, Erin Parker, Gal Sal, Kian, Aguiar, Labirinto, Xande, Lírio, Ferreiro, Juan, Kemi');
+const PAIRS = ids.length * (ids.length - 1);
+ok(validIntroScenes && validIntroPairs === PAIRS && sampleIntro.length === 2 && randomSelectionValid, `introduções: ${PAIRS} confrontos, duas cenas alternadas e aleatórias, sem falas de resultado`);
+ok(validVictoryLines && validVictoryPairs === PAIRS && VICTORY_LINES.kaiser.erin.includes(sampleVictory) && randomSelectionValid, `vitórias: ${PAIRS} confrontos com duas falas selecionáveis aleatoriamente`);
+ok(ROSTER.map((c) => c.name).join() === 'KAISER,ARTHUR CERVERO,JOUI JOUKI,AGHATA,DANTE,ERIN PARKER,GAL SAL,KIAN,AGUIAR,LABIRINTO,XANDE,LÍRIO,FERREIRO,JUAN,KEMI,BALU', 'nomes: Kaiser, Arthur Cervero, Joui Jouki, Aghata, Dante, Erin Parker, Gal Sal, Kian, Aguiar, Labirinto, Xande, Lírio, Ferreiro, Juan, Kemi, Balu');
+const bal = get('balu');
+ok(bal && bal.origin === 'Ordo Realitas' && bal.stats.maxHealth >= 1250 && ['curseWeapon', 'demonAxe', 'caiDentro', 'selfBuff', 'heavyProtection'].every((t) => bal.abilities.some((a) => a.type === t)) && bal.ranged.boomerang && bal.ranged.returnsProp === 'axe' && bal.melee.ground && bal.melee.ground.otg && bal.grip.twoHand, 'Balu: pesado da Ordo Realitas, Amaldiçoar Arma, Machado Demônio (vida), Fala Imponente, 110%, Colete, machado que volta e Derrubar e Atacar');
 const banners = Object.fromEntries(ROSTER.map((c) => [c.id, c.special.banner]));
 ok(banners.gal_sal === 'Injustiça né?' && banners.kaiser === 'Cinerária!' && banners.joui === 'Shi no Kage!' && banners.aghata === 'Descarnar!' && banners.arthur === 'Arma de Sangue!' && banners.kian === 'Inexistir', 'textos dos especiais na tela');
 ok(COMBAT.maxHealth === 1000 && COMBAT.maxEnergy === 100, 'vida 1000 e energia 100');

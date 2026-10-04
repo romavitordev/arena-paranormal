@@ -2,7 +2,7 @@ import { COMBAT } from '../config/combat.js';
 import * as THREE from 'three';
 import { applyHit } from './damage.js';
 import { glowMat } from '../models/rig.js';
-import { knife, mutilatorAxe } from '../models/weapons.js';
+import { knife, mutilatorAxe, baluAxe } from '../models/weapons.js';
 import { createMistZone } from './abilities.js';
 import { addBloodPool } from './bloodPools.js';
 
@@ -214,6 +214,17 @@ const VISUALS = {
     return g;
   },
   // Skate Caótico (Xande): prancha amarela com raios verdes, girando
+  // Machado em Giro (Balu): o Machado Lancinante girando de ponta a ponta (volta para a mão)
+  baluAxe() {
+    const g = new THREE.Group();
+    const spin = new THREE.Group();
+    const axe = baluAxe();
+    axe.position.y = 0.33; // gira em volta do meio do cabo
+    spin.add(axe);
+    g.add(spin);
+    g.userData.tumble = spin;
+    return g;
+  },
   skate(color) {
     const g = new THREE.Group();
     const spin = new THREE.Group();
@@ -372,6 +383,7 @@ export class Projectiles {
           const home = p.owner.chestPos();
           const to = home.clone().sub(p.pos);
           if (to.length() < 0.9 || p.age > 3) {
+            this.giveBack(p);
             w.scene.remove(p.mesh);
             p.mesh.traverse((o) => { if (o.material) o.material.dispose(); });
             this.list.splice(i, 1);
@@ -470,6 +482,7 @@ export class Projectiles {
           if (p.chainFx) p.chainFx.stop();
           w.scene.remove(p.mesh);
           p.mesh.traverse((o) => { if (o.material) o.material.dispose(); });
+          this.giveBack(p);
           this.list.splice(i, 1);
         }
         continue;
@@ -563,6 +576,7 @@ export class Projectiles {
           w.scene.remove(p.mesh);
           p.mesh.traverse((o) => { if (o.material) o.material.dispose(); });
         }
+        this.giveBack(p);
         this.list.splice(i, 1);
       }
     }
@@ -692,10 +706,19 @@ export class Projectiles {
     return false;
   }
 
+  // projétil que é a própria arma (a.returnsProp): a peça volta a aparecer na mão quando ele acaba
+  giveBack(p) {
+    const a = p.ability;
+    if (a.returnsProp && p.owner && p.owner.rig && !(p.owner.propLock && p.owner.propLock[a.returnsProp]) && !this.list.some((q) => q !== p && q.owner === p.owner && q.ability.returnsProp === a.returnsProp)) {
+      p.owner.rig.showProp(a.returnsProp, true);
+    }
+  }
+
   remove(p, fizzle = false) {
     const i = this.list.indexOf(p);
     if (i < 0) return;
     if (fizzle) this.world.fx.burst(p.pos.clone(), { count: 6, color: 0x8a8090, kind: 'smoke', speed: 1, life: 0.3, size: 0.3 });
+    this.giveBack(p);
     if (p.chainFx) p.chainFx.stop();
     this.world.scene.remove(p.mesh);
     p.mesh.traverse((o) => { if (o.material) o.material.dispose(); });

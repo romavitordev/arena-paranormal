@@ -13,11 +13,12 @@ import lirio from './lirio.js';
 import ferreiro from './ferreiro.js';
 import juan from './juan.js';
 import kemi from './kemi.js';
+import balu from './balu.js';
 
 // Elenco jogável, na ordem da tela de seleção.
 // Para adicionar um personagem: crie o arquivo de definição aqui, registre o
 // modelo em models/index.js e acrescente nesta lista.
-export const ROSTER = [kaiser, arthur, joui, aghata, dante, erin, gal_sal, kian, aguiar, labirinto, xande, lirio, ferreiro, juan, kemi];
+export const ROSTER = [kaiser, arthur, joui, aghata, dante, erin, gal_sal, kian, aguiar, labirinto, xande, lirio, ferreiro, juan, kemi, balu];
 
 // RITMO DOS COMBOS (stats.attackSpeed): > 1 deixa os golpes físicos mais rápidos (duração, janelas de acerto,
 // movimentos e invulnerabilidade escalam juntos; a animação acompanha porque toca com a duração do golpe).

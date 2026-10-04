@@ -15,6 +15,7 @@ const CHARACTER_NAMES = {
   ferreiro: 'Ferreiro',
   juan: 'Juan',
   kemi: 'Kemi',
+  balu: 'Balu',
 };
 
 const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi' };
@@ -36,6 +37,7 @@ const INTRO_HOOKS = {
   ferreiro: 'a Espada Consumidora',
   juan: 'o trono',
   kemi: 'o contrato',
+  balu: 'o machado',
 };
 
 const INTRO_OPENERS = {
@@ -54,6 +56,7 @@ const INTRO_OPENERS = {
   ferreiro: (other, hook) => `${other}, você chegou com ${hook}. É motivo de preocupação?`,
   juan: (other, hook) => `${other}, quando os outros veem ${hook}, você acha que enxergam você?`,
   kemi: (other, hook) => `${other}, com ${hook} assim, isso é pessoal ou trabalho?`,
+  balu: (other, hook) => `Opa, ${other}! Chegou com ${hook}, hein. Bora conversar antes ou já vamos pra parte divertida?`,
 };
 
 const INTRO_REPLIES = {
@@ -72,6 +75,7 @@ const INTRO_REPLIES = {
   ferreiro: (other, hook) => `Entendo. ${hook} pode esperar enquanto conversamos, ${other}?`,
   juan: (other, hook) => `${other}, reconheço ${hook}. Ainda quero ouvir você.`,
   kemi: (other, hook) => `${other}, não vou tirar conclusões só por causa de ${hook}. O resto fica no relatório.`,
+  balu: (other, hook) => `Hahaha! Tá bom, ${other}. Mas aviso: o tio Balu já lutou com coisa pior que ${hook}.`,
 };
 
 const INTRO_EXCHANGES = {
@@ -159,6 +163,30 @@ const INTRO_EXCHANGES = {
     { starter: 'labirinto', line: 'Você chama de justiça o caminho que escolheu.', response: 'aguiar', responseLine: 'E você chama de caminho qualquer coisa que leve a Tenebris.' },
     { starter: 'aguiar', line: 'Labirinto, ainda acredita que toda pergunta tem uma saída?', response: 'labirinto', responseLine: 'Não. Algumas portas só servem pra mostrar quem está procurando.' },
   ],
+  'arthur+balu': [
+    { starter: 'balu', line: 'Arthur! Depois disso, macarrão? Eu pago. Quer dizer... a Ordem paga.', response: 'arthur', responseLine: 'Fechado, Balu. Mas dessa vez tu não pede três pratos.' },
+    { starter: 'arthur', line: 'Balu, tu vai mesmo entrar de machado numa conversa?', response: 'balu', responseLine: 'Arthur, eu entro de machado até em velório. Nunca se sabe.' },
+  ],
+  'balu+dante': [
+    { starter: 'balu', line: 'Dante, valeu pela orelha nova. A espiral até combina comigo.', response: 'dante', responseLine: 'Foi o que deu pra fazer com o que o Titã deixou, Balu.' },
+    { starter: 'dante', line: 'Balu, você sabe que eu consertei esse machado, né? Não quebra de novo.', response: 'balu', responseLine: 'Não quebro. No máximo amasso um pouquinho em alguém.' },
+  ],
+  'aghata+balu': [
+    { starter: 'aghata', line: 'Balu, você ainda se recusa a transcender?', response: 'balu', responseLine: 'Me recuso, Agatha. O meu Outro Lado é um bom churrasco.' },
+    { starter: 'balu', line: 'Agatha, se esse livro morder, eu juro que corto ele no meio.', response: 'aghata', responseLine: 'Ele não morde. Eu, às vezes.' },
+  ],
+  'balu+joui': [
+    { starter: 'balu', line: 'Joui, meu filho, tu come direito? Tá muito magro pra segurar essa espada.', response: 'joui', responseLine: 'Como, Balu-san. Só não como por três.' },
+    { starter: 'joui', line: 'Balu-san, você sempre sorri antes de lutar?', response: 'balu', responseLine: 'Sempre. Se eu ficar sério, aí sim tu pode se preocupar.' },
+  ],
+  'balu+kian': [
+    { starter: 'balu', line: 'Tu quebrou meu machado no meio, Kian. Isso eu não esqueço.', response: 'kian', responseLine: 'Quebrarei de novo. E você também.' },
+    { starter: 'kian', line: 'Um homem que repudia o paranormal, carregando uma arma amaldiçoada. Previsível.', response: 'balu', responseLine: 'Previsível é a pancada que tu vai levar, Veríssimo— digo, Kian.' },
+  ],
+  'balu+juan': [
+    { starter: 'balu', line: 'Foi tu, ou aquele bicho aí dentro, que amaldiçoou meu machado?', response: 'juan', responseLine: 'Nós dois, Balu. E você gostou do presente.' },
+    { starter: 'juan', line: 'O Diabo lembra do seu machado no ombro dele, sabia?', response: 'balu', responseLine: 'Ótimo. Então ele já sabe onde vai doer de novo.' },
+  ],
   'labirinto+xande': [
     { starter: 'xande', line: 'Tá, eu não entendi o capacete. Mas vou passar por você.', response: 'labirinto', responseLine: 'Todo caminho passa por aqui. O seu também.' },
     { starter: 'labirinto', line: 'Xande, você sempre escolhe o caminho mais barulhento?', response: 'xande', responseLine: 'Só quando quero que meus amigos saibam onde estou.' },
@@ -197,6 +225,68 @@ export const INTRO_DIALOGUES = buildIntroDialogues();
 
 // ---------------- FALAS DE VITÓRIA: [vencedor][derrotado] (ou .default)
 export const VICTORY_LINES = {
+  balu: {
+    kaiser: [
+      'Kaiser, garoto, tu luta bem. Só precisa comer mais.',
+      'Essa névoa aí não segura um urso, Kaiser.'
+    ],
+    arthur: [
+      'Foi mal, Arthur! O macarrão é por minha conta, prometo.',
+      'Arthur, levanta. Ninguém vai saber que foi o tio Balu.'
+    ],
+    joui: [
+      'Joui, meu filho, espada bonita. Mas machado é machado.',
+      'Calma, Joui. Respira. Foi só um susto.'
+    ],
+    aghata: [
+      'Desculpa, Agatha! Eu juro que mirei no livro.',
+      'Agatha, tu é esperta demais. Por isso eu não deixei tu pensar.'
+    ],
+    dante: [
+      'Desculpa, Dante. Mas tu que me ensinou a não ter medo de nada.',
+      'Calma, Dante, respira. Já passou.'
+    ],
+    erin: [
+      'Granada é bonito, Erin. Mas o tio Balu chega antes da explosão.',
+      'Erin, guarda essas coisas antes que alguém se machuque. Tipo eu.'
+    ],
+    gal_sal: [
+      'Corrente nenhuma segura esse machado, rapaz.',
+      'Tu dança bonito, Gal. Pena que eu não sei dançar, só bater.'
+    ],
+    kian: [
+      'Isso é pelo machado, Kian. O resto da conta a Ordem cobra.',
+      'Quatro mil anos e ainda não aprendeu a desviar de um urso.'
+    ],
+    aguiar: [
+      'Machado contra machado, delegado. O meu é maior.',
+      'Tira essa máscara, Aguiar. Tu não assusta ninguém aqui.'
+    ],
+    labirinto: [
+      'Eu não entendi nada do teu labirinto. Por isso fui reto.',
+      'Saída? Eu fiz uma, ali na parede.'
+    ],
+    xande: [
+      'Skate é legal, menino. Mas tu precisa de mais músculo.',
+      'Bora, Xande, levanta. O tio Balu te paga um lanche.'
+    ],
+    lirio: [
+      'Tu é forte, grandão! Mas o urso aqui é mais velho.',
+      'Leonora e o Machado: empate técnico. Mas quem ficou de pé fui eu.'
+    ],
+    ferreiro: [
+      'Tu é alto, Ferreiro. Mas cai igual a todo mundo.',
+      'Espada de lodo, machado de sangue. Hoje o sangue ganhou.'
+    ],
+    juan: [
+      'O Diabo me deu um machado novo. Eu só devolvi o favor.',
+      'Fica tranquilo, Juan. Dói menos do que parece... eu acho.'
+    ],
+    kemi: [
+      'Atiradora boa, menina. Mas eu já levei tiro à queima-roupa e tô aqui.',
+      'Contrato cancelado, Kemi. O tio Balu não estava no orçamento.'
+    ]
+  },
   kaiser: {
     arthur: [
       'Arthur... você continua sendo uma das poucas pessoas que eu realmente não queria derrotar.',
@@ -253,6 +343,10 @@ export const VICTORY_LINES = {
     kemi: [
       'Kemi, você quase me pegou. Quase ainda conta como erro.',
       'Você foi rápida, Kemi. Mas eu só precisava acertar uma vez.'
+    ],
+    balu: [
+      'Balu, você aguenta pancada demais. Ainda bem que a névoa não cansa.',
+      'Fica deitado um pouco, Balu. Eu cuido do resto.'
     ]
   },
 
@@ -312,6 +406,10 @@ export const VICTORY_LINES = {
     kemi: [
       'Kemi, você quase me fez procurar de onde vinha o tiro. Quase.',
       'Kemi, você é rápida. Só não foi rápida o bastante dessa vez.'
+    ],
+    balu: [
+      'Te devo um macarrão, Balu. Mas hoje quem paga é tu.',
+      'Desculpa, véio. Um braço só, mas mira não falta.'
     ]
   },
 
@@ -371,6 +469,10 @@ export const VICTORY_LINES = {
     kemi: [
       'Kemi, você quase me fez esquecer que uma luta pode terminar num segundo.',
       'Kemi, você espera o momento certo. Eu só precisei chegar primeiro.'
+    ],
+    balu: [
+      'Balu-san, desculpe. Você ainda é o mais forte da sala.',
+      'Força não basta, Balu-san. Precisa de silêncio também.'
     ]
   },
 
@@ -430,6 +532,10 @@ export const VICTORY_LINES = {
     kemi: [
       'Kemi, você passou a luta inteira tentando desaparecer. Eu só precisei esperar.',
       'Você é boa em se esconder, Kemi. Só não é boa o bastante pra desaparecer de mim.'
+    ],
+    balu: [
+      'Força física é ótima, Balu. Ritual é melhor.',
+      'Te avisei que esse machado ia te dar dor de cabeça.'
     ]
   },
 
@@ -489,6 +595,10 @@ export const VICTORY_LINES = {
     kemi: [
       'Kemi, você passou tempo demais observando minhas mãos. Deveria ter observado meus pés.',
       'Kemi, você percebeu meu ataque tarde demais.'
+    ],
+    balu: [
+      'Sem orelha e agora sem fôlego. Descansa, Balu.',
+      'Eu conserto o machado de novo. Mas você fica parado.'
     ]
   },
 
@@ -548,6 +658,10 @@ export const VICTORY_LINES = {
     kemi: [
       'Kemi, você quase me acertou! Isso foi assustador. Faz de novo depois.',
       'Kemi, você é assustadoramente rápida. Eu gostei.'
+    ],
+    balu: [
+      'Desculpa, Balu! A granada era pro outro lado, juro.',
+      'Tamanho não segura explosão, grandão.'
     ]
   },
 
@@ -607,6 +721,10 @@ export const VICTORY_LINES = {
     kemi: [
       'Kemi, você fala pouco. Ainda assim, eu consegui entender exatamente o que você faria.',
       'Você tentou ser imprevisível, Kemi. Não foi suficiente.'
+    ],
+    balu: [
+      'Um urso acorrentado. Que imagem bonita.',
+      'Você protege todo mundo, Balu. Quem protege você?'
     ]
   },
 
@@ -666,6 +784,10 @@ export const VICTORY_LINES = {
     kemi: [
       'Kemi, você aprendeu a sobreviver escondida. Não confunda sobrevivência com liberdade.',
       'Você sabe desaparecer, Kemi. Mas não pode desaparecer de alguém como eu.'
+    ],
+    balu: [
+      'O machado quebrou uma vez. O homem quebra do mesmo jeito.',
+      'Força bruta. A forma mais antiga e mais previsível de perder.'
     ]
   },
 
@@ -725,6 +847,10 @@ export const VICTORY_LINES = {
     kemi: [
       'Kemi, você sabe esperar. Eu também.',
       'Você esperou pelo momento certo, Kemi. Eu também estava esperando.'
+    ],
+    balu: [
+      'Ha ha... urso grande, pele grossa. Dá mais trabalho, só isso.',
+      'Machado bonito, Balu. Vai ficar ótimo na minha coleção.'
     ]
   },
 
@@ -784,6 +910,10 @@ export const VICTORY_LINES = {
     kemi: [
       'Kemi, você sabe se esconder. Eu sei procurar.',
       'Você quase desapareceu de mim, Kemi. Quase.'
+    ],
+    balu: [
+      'Você foi reto. O labirinto não tem reta.',
+      'A força te trouxe até a porta. Não te deu a chave.'
     ]
   },
 
@@ -843,6 +973,10 @@ export const VICTORY_LINES = {
     kemi: [
       'Kemi, você é rápida demais! Quase me fez correr atrás de você.',
       'Kemi, você quase desapareceu antes que eu conseguisse acertar.'
+    ],
+    balu: [
+      'Desculpa, tio Balu! O skate pegou mais forte do que eu queria.',
+      'Por eles... e um pouquinho por mim também.'
     ]
   },
 
@@ -902,6 +1036,10 @@ export const VICTORY_LINES = {
     kemi: [
       'Kemi, menina, você some ligeiro! Ainda bem que eu acertei quando apareceu.',
       'Kemi, você é ligeira que só. Mas uma hora aparece no lugar errado.'
+    ],
+    balu: [
+      'A Leonora gostou de você, Balu. Bate igual a ela.',
+      'Parede contra urso. A parede ficou.'
     ]
   },
 
@@ -961,6 +1099,10 @@ export const VICTORY_LINES = {
     kemi: [
       'Kemi, você luta como alguém que aprendeu cedo a não depender de ninguém.',
       'Kemi, você aprendeu a lutar sozinha. Espero que um dia não precise mais.'
+    ],
+    balu: [
+      'Força e fé, Balu. Faltou a fé.',
+      'Santo Berço não cai para um homem só.'
     ]
   },
 
@@ -1020,6 +1162,10 @@ export const VICTORY_LINES = {
     kemi: [
       'Kemi, você me olhou a luta inteira como se estivesse calculando um contrato.',
       'Kemi, você observa demais. Às vezes é melhor agir antes.'
+    ],
+    balu: [
+      'O machado ainda é meu, Balu. Você só empresta.',
+      'Doeu? Que bom. O sangue lembra.'
     ]
   },
 
@@ -1079,6 +1225,10 @@ export const VICTORY_LINES = {
     juan: [
       'Juan... você não parece um alvo comum. Isso torna o trabalho mais interessante.',
       'Você não é um alvo normal, Juan. Finalmente uma coisa interessante.'
+    ],
+    balu: [
+      'Alvo grande, fácil de acertar.',
+      'Nada pessoal, Balu. Mas você estava no caminho do contrato.'
     ]
   }
 };
@@ -1099,6 +1249,7 @@ const VICTORY_FALLBACKS = {
   ferreiro: 'Santo Berço fica em pé. É tudo que importa.',
   juan: 'Não foi redenção. Mas foi um começo.',
   kemi: 'Alvo abatido. Trabalho encerrado.',
+  balu: 'Viu? Eu falei que o tio Balu resolvia.',
 };
 
 export function victoryLine(winner, loser, loserName = CHARACTER_NAMES[loser] || loser) {
