@@ -1,5 +1,11 @@
 # Registro administrativo de alterações
 
+## v3.6 — Substituição no lugar
+
+### Posicionamento da substituição (v3.6)
+- `Fighter.trySubstitution`: remove o cálculo de coordenadas atrás do oponente; o lutador conserva X/Z ao escapar, zera Y/velocidade e recebe invulnerabilidade breve. Player e CPU usam a mesma implementação.
+- Remove `COMBAT.substitution.behind`; atualiza os textos do README, dos movimentos e do TODO.
+
 ## v3.5 — Super Difícil de verdade
 
 ### Vitória sem duplicar formas + Super Difícil mais forte (v3.5)

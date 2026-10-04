@@ -1,7 +1,7 @@
 // Versão do jogo e NOVIDADES (changelog). Cada atualização conta, inclusive as que foram juntas numa só publicação.
 // Para uma nova atualização: suba VERSION e acrescente a entrada no TOPO de CHANGELOG (textos para jogadores, os mesmos
 // do CHANGELOG-CLIENTE.md; detalhes técnicos vão no CHANGELOG-ADMIN.md).
-export const VERSION = 35;
+export const VERSION = 36;
 export const VERSION_LABEL = `v${Math.floor(VERSION / 10)}.${VERSION % 10}`;
 
 export function formatVersion(version) {
@@ -9,6 +9,14 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: 36,
+    date: '2026-10-04',
+    title: 'Substituição no lugar',
+    items: [
+      'Substituição: ao usar L2 enquanto apanha, o lutador cancela o golpe e reaparece no mesmo lugar, sem teleportar para trás do atacante.',
+    ],
+  },
   {
     v: 35,
     date: '2026-10-04',

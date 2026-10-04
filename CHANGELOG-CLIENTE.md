@@ -2,6 +2,9 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.6 — Substituição no lugar
+- Substituição: ao usar L2 enquanto apanha, o lutador cancela o golpe e reaparece no mesmo lugar, sem teleportar para trás do atacante.
+
 ## v3.5 — Super Difícil de verdade
 - Tela de vitória: quem venceu transformado aparece SÓ na forma (Diabo, Deus da Morte ou Fantasma) — antes, na batalha em equipe, o Juan/Ferreiro/Kemi aparecia junto com a forma.
 - Deus da Morte: novo especial ENVELHECIMENTO (no lugar do Heilag Vagga) — agarra o adversário pelo pescoço, ergue e o envelhece: cabelo branco, pele acinzentada, corpo curvado, e fica fraco até o fim do round (40% menos dano, 30% mais lento, sem recuperar sanidade). O preparo é visível (dá para esquivar), só pega de perto, uma vez por round e com recarga longa.

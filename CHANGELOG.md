@@ -1,5 +1,10 @@
 # Changelog
 
+## v3.6 — 2026-10-04
+
+### Corrigido
+- Substituição: ao usar L2 enquanto apanha, o lutador cancela o golpe e reaparece no mesmo lugar, sem teleportar para trás do atacante.
+
 ## v3.5 — 2026-10-04
 
 ### Corrigido

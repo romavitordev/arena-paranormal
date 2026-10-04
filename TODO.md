@@ -305,7 +305,7 @@ Kian 46% · Ferreiro 43% · Arthur 39% · Xande 39% · Aghata 36% · Gal Sal 25%
 - ✅ 2.5 Agatha: combo 152 → 172, Colar Banhado em Sangue. (Nome e visual canônicos **ainda aguardam decisão**.)
 - ✅ 2.6 Gal: Teletransporte em faíscas douradas (R1 + ×) e Desviar de Balas.
 - ✅ 3.1 escala de combo + limite de 1 lançamento por combo + contador "N ACERTOS".
-- ✅ 3.2 Substituição (L2 apanhando, 1 carga).
+- ✅ 3.2 Substituição (L2 apanhando, 1 carga; cancela o golpe e mantém a posição).
 - ✅ 3.3 escapar do agarrão (R2 + ○ logo no começo).
 - ✅ 3.4 Transcender para todos (vida ≤ 30%, segurar △). (v2.9: SUBSTITUÍDO pela Barra de Transformação — só Juan, Kemi e Ferreiro)
 - ✅ 3.6 buffer de comandos e pausa no impacto por peso.
@@ -722,11 +722,9 @@ Arquivo: `damage.js`. Mostrar "N HITS" na HUD (estilo Storm). Resolve parte da d
 golpes.
 
 ### 3.2 Substituição (escape no meio do combo) ✅ (`trySubstitution`)
-No Storm 4 a **substituição** usa a mesma barra de 4 cargas e funciona **enquanto você apanha** — o jogo já tem 4
-cargas de esquiva que recuperam tomando dano (igual ao Storm), mas a esquiva só sai do neutro. Proposta: L2 durante
-o hitstun gasta 1 carga (ou 2) e teleporta o personagem para as costas/lado do atacante com um tronco/efeito do
-elemento dele (fumaça preta Kaiser, sangue Agatha, sigilos Kian...). Bloquear durante especiais e agarrões.
-Arquivos: `Fighter.updateHitstun`, `tryDodge` com flag `substitution`.
+A substituição funciona com L2 durante o hitstun: gasta 1 carga, cancela o golpe recebido e mantém o lutador na
+posição em que estava ao ativar; não o teleporta para trás do atacante. Tem invulnerabilidade breve e efeito visual
+de troca. Arquivo: `Fighter.trySubstitution`.
 
 ### 3.3 Escapar do agarrão (throw tech) ✅ ("ESCAPOU!")
 Em jogos tradicionais, quem é agarrado pode apertar o botão de agarrão na hora para se soltar. Proposta: se a

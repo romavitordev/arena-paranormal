@@ -2380,7 +2380,7 @@ export class Fighter {
 
   // ------------------------------------------------ dano recebido
   updateHitstun(dt) {
-    // SUBSTITUIÇÃO: L2 enquanto apanha gasta carga de esquiva e reaparece atrás do atacante
+    // SUBSTITUIÇÃO: L2 enquanto apanha gasta carga de esquiva e cancela o golpe sem mudar de posição
     if (this.input.pressed.dodge && this.trySubstitution()) return;
     if (this.onGround) {
       const f = Math.exp(-dt * 6);
@@ -2472,10 +2472,7 @@ export class Fighter {
     // "tronco": nuvem no lugar onde estava + faíscas do elemento
     this.world.fx.play('FX_TELEPORT', from, { color: col, kind: 'smoke' });
     this.world.audio.play('teleport', { volume: 0.8 });
-    const behind = opp.yaw + Math.PI;
-    const tx = opp.pos.x + Math.sin(behind) * S.behind;
-    const tz = opp.pos.z + Math.cos(behind) * S.behind;
-    this.pos.set(tx, 0, tz);
+    this.pos.y = 0;
     this.vel.set(0, 0, 0);
     this.onGround = true;
     this.launched = false;

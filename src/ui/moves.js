@@ -41,7 +41,7 @@ export function moveListHTML(c) {
   if (!(c.abilities || []).some((a) => a.input === 'carga+jump')) html += row('△ + ×', 'Dash longo', 'persegue o adversário · 10 de sanidade');
   html += row('R2 + ○', 'Agarrão', `curta distância, não pode ser defendido (só esquivado) · ${COMBAT.grab.damage} de dano`);
   html += row('R2 + ○ ao ser agarrado', 'Escapar do agarrão', 'logo no começo: os dois se soltam, sem dano');
-  html += row('L2 apanhando', 'Substituição', 'gasta 1 carga de esquiva e reaparece atrás do atacante');
+  html += row('L2 apanhando', 'Substituição', 'gasta 1 carga de esquiva e cancela o golpe sem sair do lugar');
   if (c.awakening) html += row(`Barra de Transformação cheia + vida ≤ ${Math.round(COMBAT.storm.healthRatio * 100)}%: segurar △`, c.awakening.name, `a sanidade enche e passa do limite: ${specialSummary({ special: c.awakening })} · a barra enche apanhando e zera a cada round`);
   if (c.defense && c.defense.perfectBlock) html += row('R2 no tempo exato', 'Bloqueio Perfeito', 'anula o golpe físico e atordoa o atacante');
   for (const p of c.passives || []) {
