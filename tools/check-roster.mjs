@@ -212,7 +212,7 @@ for (const cfg of Object.values(ARENA_CFGS)) {
 // ---------------- Dante ----------------
 const dan = get('dante');
 ok(dan && dan.origin === 'Ordo Realitas' && dan.element === 'morte', 'Dante: Ordo Realitas, Morte');
-ok(dan && dan.ranged.name === 'Decadenza' && dan.ranged.onHit.bleed, 'Dante: □ Decadenza com decadência contínua');
+ok(dan && dan.ranged.name === 'Decadenza' && dan.ranged.onHit.bleed && dan.ranged.range <= 10 && dan.ranged.grow > 0, 'Dante: □ Decadenza soprada, médio alcance (≤ 10 m), nuvem que abre, decadência contínua');
 ok(dan && ['shadowClones', 'lodoTentacles', 'healOverTime'].every((t) => dan.abilities.some((a) => a.type === t)), 'Dante: Trinitá, Tentáculos de Lodo e Paradiso');
 ok(dan && dan.special.type === 'marionette' && dan.special.duration <= 30 && dan.special.cooldown >= 30, 'Dante: especial Invocação da Marionete (NPC por tempo limitado, recarga alta)');
 ok(dan && dan.abilities.find((a) => a.type === 'shadowClones').cooldown >= 30, 'Dante: Trinitá com recarga longa');

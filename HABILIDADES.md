@@ -228,7 +228,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ### Principal (□ / X): Decadenza
 
-- Dano 30 · alcance 20 m · cooldown 4.2 s · custo 12
+- Dano 30 · alcance 8 m · cooldown 4.2 s · custo 12
 
 ### Habilidades
 

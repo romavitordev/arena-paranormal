@@ -1,7 +1,7 @@
 // Versão do jogo e NOVIDADES (changelog). Cada atualização conta, inclusive as que foram juntas numa só publicação.
 // Para uma nova atualização: suba VERSION e acrescente a entrada no TOPO de CHANGELOG (textos para jogadores, os mesmos
 // do CHANGELOG-CLIENTE.md; detalhes técnicos vão no CHANGELOG-ADMIN.md).
-export const VERSION = 32;
+export const VERSION = 33;
 export const VERSION_LABEL = `v${Math.floor(VERSION / 10)}.${VERSION % 10}`;
 
 export function formatVersion(version) {
@@ -9,6 +9,15 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: 33,
+    date: '2026-10-04',
+    title: 'Cinzas da Decadenza',
+    items: [
+      'Decadenza do Dante refeita: como no cânone, ele ASSOPRA a fumaça preta com cinzas — agora é de médio alcance (8 m, antes 20), a nuvem anda mais devagar e abre conforme avança (fica mais difícil de desviar de perto, some antes de chegar longe). Dano e decadência contínua iguais.',
+      'A CPU não gasta mais ataques à distância fora do alcance deles.',
+    ],
+  },
   {
     v: 32,
     date: '2026-10-04',

@@ -1,5 +1,10 @@
 # Changelog
 
+## v3.3 — 2026-10-04
+
+### Alterado
+- Dante: Decadenza soprada de médio alcance (8 m), nuvem que abre; CPU respeita o alcance do □.
+
 ## v3.2 — 2026-10-04
 
 ### Alterado

@@ -268,7 +268,7 @@ export class CpuController {
         return out;
       }
       // à distância: principal (sniper do Arthur: segura para carregar — quanto mais longe, mais tempo)
-      if (def.ranged && f.cooldowns.ranged <= 0 && d > 5 && r < L.ranged * (lowHp ? 1.4 : 1) && f.energy >= (def.ranged.energyCost || 0)) {
+      if (def.ranged && f.cooldowns.ranged <= 0 && d > 5 && d < (def.ranged.range ?? 99) + 0.5 && r < L.ranged * (lowHp ? 1.4 : 1) && f.energy >= (def.ranged.energyCost || 0)) {
         if (def.ranged.chargeShot) {
           this.queue.push({ t: 0.06, held: { ranged: true } });
           this.aimHold = Math.min(1.6, 0.2 + d / 14);

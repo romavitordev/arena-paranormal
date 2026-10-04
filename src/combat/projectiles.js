@@ -494,9 +494,11 @@ export class Projectiles {
         const d = stepLen / steps;
         p.pos.addScaledVector(p.dir, d);
         p.traveled += d;
+        // a.grow: a nuvem abre conforme anda (Decadenza: as cinzas sopradas se espalham) — raio × (1 + grow × fração)
+        p.r = a.radius * (1 + (a.grow || 0) * Math.min(1, p.traveled / a.range));
         if (a.visual === 'shockwave') p.pos.y = 0.55; // a onda corre pelo chão
         if (a.visual === 'shadow') p.pos.y = 0.12;
-        const npc = w.npcs.find((n) => n.alive && n.owner !== p.owner && n.hitTest(p.pos, a.radius));
+        const npc = w.npcs.find((n) => n.alive && n.owner !== p.owner && n.hitTest(p.pos, p.r ?? a.radius));
         if (npc) {
           npc.hitBy(p.owner, a.damage, { kind: 'ranged' });
           w.fx.impact(p.pos.clone(), a.color ?? 0xffffff, 0.8);
@@ -504,7 +506,7 @@ export class Projectiles {
           break;
         }
         const target = w.opponentOf(p.owner);
-        if (!p.hitOnce && target && target.state !== 'ko' && !target.isInvulnerable() && target.hitTestPoint(p.pos, a.radius)) {
+        if (!p.hitOnce && target && target.state !== 'ko' && !target.isInvulnerable() && target.hitTestPoint(p.pos, p.r ?? a.radius)) {
           // Sniper da Morte: quem já está morrendo (pouca vida) leva o tiro inteiro da espiral
           const exec = a.execute && target.health / target.maxHealth <= a.execute.below ? a.execute.mult : 1;
           if (exec > 1) target.notify('ESPIRAL DA MORTE', true);
@@ -538,6 +540,7 @@ export class Projectiles {
         }
       }
       p.mesh.position.copy(p.pos);
+      if (a.grow && p.r) p.mesh.scale.setScalar(p.r / a.radius);
       if (a.spiral) {
         // balas curvas puxadas pelas faixas: a bala desenha uma espiral em volta da linha de tiro
         const side = new THREE.Vector3().crossVectors(p.dir, new THREE.Vector3(0, 1, 0));
@@ -569,7 +572,12 @@ export class Projectiles {
         w.fx.lightning(p.pos, p.pos.clone().add(new THREE.Vector3((Math.random() - 0.5), (Math.random() - 0.5), (Math.random() - 0.5)).multiplyScalar(1.6)), { color: a.color, life: 0.08 });
       }
       if (a.visual === 'shadow') w.fx.burst(p.pos.clone().setY(0.3), { count: 2, color: 0x0a0608, kind: 'smoke', speed: 0.8, up: 0.8, life: 0.5, size: 0.5 });
-      if (a.visual === 'decay') w.fx.burst(p.pos, { count: 3, color: 0x0c0a0e, kind: 'smoke', speed: 0.5, up: 0.3, life: 0.7, size: 0.55 });
+      if (a.visual === 'decay') {
+        // fumaça preta + CINZAS sopradas (cinza claro), abrindo junto com a nuvem
+        const k = (p.r ?? a.radius) / a.radius;
+        w.fx.burst(p.pos, { count: 3, color: 0x0c0a0e, kind: 'smoke', speed: 0.5 * k, up: 0.3, life: 0.7, size: 0.55 * k });
+        w.fx.burst(p.pos, { count: 4, color: 0x8a8490, speed: 1.2 * k, spread: 0.6, life: 0.5, size: 0.07 });
+      }
       if (dead) {
         if (p.chainFx) p.chainFx.stop();
         if (!p.stuck) {

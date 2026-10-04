@@ -2,6 +2,10 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.3 — Cinzas da Decadenza
+- Decadenza do Dante refeita: como no cânone, ele ASSOPRA a fumaça preta com cinzas — agora é de médio alcance (8 m, antes 20), a nuvem anda mais devagar e abre conforme avança (fica mais difícil de desviar de perto, some antes de chegar longe). Dano e decadência contínua iguais.
+- A CPU não gasta mais ataques à distância fora do alcance deles.
+
 ## v3.2 — Cada um agarra do seu jeito
 - Cada personagem tem o seu próprio agarrão, fechando com um golpe dos seus poderes: Acácia explodindo (Kaiser), a garra da Arma de Sangue (Arthur), poça de sombra e corte em X (Joui), Descarnar (Aghata e Xande), Tentáculos de Lodo que deixam lento (Dante), bomba (Erin), sigilo e correntes que roubam sanidade (Gal), a escrita do Inexistir (Kian), machado na nuca (Aguiar), raios caóticos (Labirinto), martelo/machado enterrando no chão (Lírio e Balu), a Espada Consumidora (Ferreiro), faca no pescoço que cura (Juan), tiro à queima-roupa (Kemi) — e também Diabo, Fantasma e Deus da Morte.
 - O dano total do agarrão continua 70; os efeitos extras são pequenos (sangramento curto, um pouco de sanidade, lentidão curta).

@@ -37,7 +37,8 @@ export default {
     air: { name: 'Pisão espiral', anim: 'air_kick', dur: 0.45, active: [0.15, 0.35], damage: 38, range: 1.9, arc: 110, knockback: 4, slam: 15, vertical: 2.2, sound: 'swing', hitSound: 'heavyPunch' },
   },
 
-  // Decadência "Decadenza": fumaça preta soprada que, ao tocar, acelera a decadência do corpo (dano contínuo)
+  // Decadência "Decadenza" (cânone: a fumaça preta sai da BOCA e vai até o alvo; ao tocar, degradação acelerada):
+  // ele ASSOPRA cinzas e fumaça — MÉDIO alcance (8 m), nuvem lenta que abre conforme anda (grow), dano contínuo.
   ranged: {
     name: 'Decadenza',
     type: 'projectile',
@@ -48,9 +49,10 @@ export default {
     count: 1,
     interval: 0,
     damage: 30,
-    range: 20,
-    speed: 17, // nuvem lenta
-    radius: 0.65,
+    range: 8, // médio alcance (era 20): o sopro não vai longe
+    speed: 12, // nuvem lenta
+    radius: 0.5,
+    grow: 1.6, // abre de 0,5 m até ~1,3 m no fim do alcance
     spread: 0,
     knockback: 1.2,
     hitstun: 0.3,

@@ -1,5 +1,13 @@
 # Registro administrativo de alterações
 
+## v3.3 — Cinzas da Decadenza
+
+### Decadenza de médio alcance (v3.3)
+- Projéteis: `a.grow` (novo) — raio de acerto `p.r = radius × (1 + grow × fração do alcance)` e a malha escala junto
+  (também vale para NPCs). Visual `decay` solta cinzas claras além da fumaça.
+- Dante: Decadenza `range` 20 → 8, `speed` 17 → 12, `radius` 0,65 → 0,5, `grow` 1,6 (até ~1,3 m).
+- CPU: só usa o □ se a distância for menor que `ranged.range` + 0,5.
+
 ## v3.2 — Cada um agarra do seu jeito
 
 ### Agarrão próprio de cada um (v3.2)
