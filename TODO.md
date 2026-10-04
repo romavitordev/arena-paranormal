@@ -120,6 +120,25 @@ distorce o resultado"; a vítima vira Transtornada).
 Juan, Ferreiro · B Balu, Kaiser, Arthur, Erin, Agatha, Kemi, Aguiar · C Xande, Lírio, Labirinto. Não decide quem ganha
 (todos em 35–65%), decide a sensação do kit. Fora da escala hoje: **Gal (S) 41%** e **Dante (A) 43%** abaixo do que
 deviam passar; **Kemi (B) 61%** e **Xande (C) 50%** acima — sugestões no fim do arquivo.
+🔴 **Evolução da IA da CPU (pedido do usuário, 2026-10-04):**
+1. **IA mais inteligente em todos os níveis:** estratégia (distância ideal por kit — atirador longe, pesado perto;
+   punir recuperação de golpe/especial; guardar a esquiva para a Substituição; usar a Barra de Transformação na hora
+   certa) e uso melhor dos ataques (cada habilidade com quando usar: alcance, alvo caído/atordoado, combo → ritual,
+   não gastar o ataque à distância fora do alcance ✅ v3.3). Hoje: `CpuController` com probabilidades fixas por nível
+   e dicas `ai: { max, min, when }` em algumas habilidades.
+2. **Novo nível SUPER DIFÍCIL:** já começa com a IA inteligente acima no máximo (reação rápida, quase sem erros de
+   propósito, lê o adversário).
+3. **Aprendizado (machine learning) no Super Difícil:** aprende a cada round e evolui a cada batalha. Proposta:
+   - estado simples (distância, vida/sanidade dos dois, estado do adversário, recargas) → valores por AÇÃO (atacar,
+     defender, esquivar, cada habilidade, ataque à distância, agarrão, carregar), aprendidos por recompensa (dano
+     causado − dano recebido, vitória do round) — Q-learning/bandit por par de personagens, leve o bastante para rodar
+     no navegador e na rede (determinístico: aprende só no fim do round, não muda a luta no meio do lockstep);
+   - também aprende o JOGADOR: quais golpes ele repete e como reage (para punir padrões);
+   - salva o que aprendeu: no jogo, em armazenamento local; para o repositório, um treino CPU × CPU
+     (`runBalance` em modo treino) exporta `src/ai/learned.json`, que entra no próximo commit/push — cada versão sai
+     com uma IA mais treinada. O jogo carrega o `learned.json` como ponto de partida e mistura com o aprendizado local.
+   - cuidado: limitar o quanto o aprendido pode desviar (não virar uma IA que só faz uma coisa), e manter os níveis
+     fácil/normal sem aprendizado.
 ✅ (v3.1) **Agarrões em cutscene (pedido do usuário, 2026-10-04):** feito no genérico — passada a janela de escape, a
 câmera chega perto e gira, o atacante dá dois golpes com o estilo dele (os dois primeiros golpes do próprio combo) e
 arremessa (70 no total, igual). ✅ (v3.2) cena própria de cada personagem e forma em `src/combat/grabScenes.js`
