@@ -139,6 +139,14 @@ export default {
     color: 0x9a6aff,
   },
 
+  // DESPERTAR (Barra de Transformação cheia + vida baixa, segurando △) — cânone: Consumir Momento — prende o instante e o usa: os rituais voltam muito mais rápido. Até o fim do round.
+  awakening: {
+    name: 'Consumir Momento',
+    banner: 'Consumir Momento',
+    type: 'awakenMode',
+    mult: 1.1, cdRate: 1.4, energyRegenMult: 1.5, aura: 'flame', color: 0x9a6aff, heal: 0.1,
+  },
+
   passives: [
     { type: 'mentalMaze', stunMult: 0.6 }, // Mente Labiríntica: a mente se protege — atordoamentos duram 40% menos
   ],

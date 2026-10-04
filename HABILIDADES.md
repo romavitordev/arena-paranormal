@@ -63,6 +63,10 @@ especial = Carga → Carga → ○ (custa 50, ofensivos causam 250, nunca hitkil
 
 Solta a névoa e, dentro dela, conjura a **Acácia amplificada pela Cinerária** (250 de dano). Depois a névoa fica **parada no mapa** por 10 s; com o Kaiser dentro dela: +25% de dano, esquiva com 1.6× invulnerabilidade e metade do cooldown, corpo translúcido, área de 5 m onde o inimigo fica 20% mais lento, não regenera energia e os projéteis perdem 50% da velocidade. Custo 50 · cooldown 22 s.
 
+### Transformação: Combate Perfeito
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +15% de dano, +10% de velocidade, recargas 30% mais rápidas, cura 10% na hora.
+
 ---
 
 ## ARTHUR CERVERO
@@ -102,6 +106,10 @@ Solta a névoa e, dentro dela, conjura a **Acácia amplificada pela Cinerária**
 ### Especial: Arma de Sangue
 
 250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: Magnum Opus
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +20% de dano, −10% de dano recebido, braço de sangue, cura 10% na hora.
 
 ---
 
@@ -146,6 +154,10 @@ Solta a névoa e, dentro dela, conjura a **Acácia amplificada pela Cinerária**
 
 250 de dano · custo 50 · cooldown 14 s.
 
+### Transformação: Técnica Secreta
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +15% de dano, +15% de velocidade, recargas 20% mais rápidas, cura 10% na hora.
+
 ---
 
 ## AGHATA
@@ -188,6 +200,10 @@ Solta a névoa e, dentro dela, conjura a **Acácia amplificada pela Cinerária**
 
 250 de dano · custo 50 · cooldown 14 s.
 
+### Transformação: Passagem de Conhecimento Expandido
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +15% de dano (habilidades, especial), recargas 50% mais rápidas, sanidade regenera +60%, cura 10% na hora.
+
 ---
 
 ## DANTE
@@ -228,6 +244,10 @@ Solta a névoa e, dentro dela, conjura a **Acácia amplificada pela Cinerária**
 ### Especial: Invocação: A Marionete
 
 Invoca a Marionete, que luta ao seu lado · custo 50 · cooldown 50 s.
+
+### Transformação: Afinidade com o Outro Lado
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +25% de dano (habilidades, especial), recargas 30% mais rápidas, regenera 4 de vida/s, cura 10% na hora.
 
 ---
 
@@ -271,6 +291,10 @@ Invoca a Marionete, que luta ao seu lado · custo 50 · cooldown 50 s.
 ### Especial: Supernova
 
 250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: Bênção Maldita
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +10% de dano, sanidade regenera +40%, regenera 6 de vida/s, cura 12% na hora.
 
 ---
 
@@ -319,6 +343,10 @@ Invoca a Marionete, que luta ao seu lado · custo 50 · cooldown 50 s.
 
 250 de dano · custo 50 · cooldown 14 s.
 
+### Transformação: Afinidade com Precognição
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +10% de dano, −15% de dano recebido, +15% de velocidade, cura 10% na hora.
+
 ---
 
 ## KIAN
@@ -364,6 +392,10 @@ Invoca a Marionete, que luta ao seu lado · custo 50 · cooldown 50 s.
 
 Corpo a corpo, 2x por partida, não pode ser defendido: o alvo vira pó. Escapa esquivando no contato; com a sanidade cheia resiste levando 450 de dano (nunca morre por isso). Custo 50.
 
+### Transformação: Invólucro do Conhecimento
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +15% de dano, golpes físicos atravessam a defesa, cura 10% na hora.
+
 ---
 
 ## AGUIAR
@@ -406,6 +438,10 @@ Corpo a corpo, 2x por partida, não pode ser defendido: o alvo vira pó. Escapa 
 
 250 de dano · custo 50 · cooldown 14 s.
 
+### Transformação: Predador Perfeito
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +15% de dano, +10% de velocidade, todo golpe sangra, cura 10% na hora.
+
 ---
 
 ## LABIRINTO
@@ -446,6 +482,10 @@ Corpo a corpo, 2x por partida, não pode ser defendido: o alvo vira pó. Escapa 
 ### Especial: O Labirinto é a Resposta
 
 250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: Consumir Momento
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +10% de dano, recargas 40% mais rápidas, sanidade regenera +50%, cura 10% na hora.
 
 ---
 
@@ -491,6 +531,10 @@ Corpo a corpo, 2x por partida, não pode ser defendido: o alvo vira pó. Escapa 
 
 250 de dano · custo 50 · cooldown 14 s.
 
+### Transformação: Gladiador Paranormal
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +20% de dano (físico), −10% de dano recebido, aguenta 1 golpe sem reagir a cada 4 s, cura 10% na hora.
+
 ---
 
 ## LÍRIO
@@ -532,6 +576,10 @@ Corpo a corpo, 2x por partida, não pode ser defendido: o alvo vira pó. Escapa 
 ### Especial: Leonora
 
 250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: Sangue de Ferro
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +10% de dano, −25% de dano recebido, aguenta 1 golpe sem reagir a cada 3 s, cura 10% na hora.
 
 ---
 
@@ -710,3 +758,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 ### Especial: Pancada do Urso
 
 250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: Resistência à Dor
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +20% de dano (físico), −20% de dano recebido, aguenta 1 golpe sem reagir a cada 3.5 s, cura 10% na hora.

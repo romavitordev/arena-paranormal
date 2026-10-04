@@ -152,6 +152,14 @@ export default {
     length: 3.4,
   },
 
+  // DESPERTAR (Barra de Transformação cheia + vida baixa, segurando △) — cânone: Predador Perfeito — o Mutilador Noturno caçando: todo golpe do machado sangra. Até o fim do round.
+  awakening: {
+    name: 'Predador Perfeito',
+    banner: 'Predador Perfeito',
+    type: 'awakenMode',
+    mult: 1.15, speedMult: 1.1, meleeBleed: { dps: 4, duration: 2.5 }, aura: 'blood', color: 0xc01818, heal: 0.1,
+  },
+
   passives: [
     { type: 'sonOfPain', after: 3, mult: 0.75 }, // Filho da Dor: apanhando seguido, resiste mais
   ],

@@ -71,6 +71,22 @@ export function specialSummary(c) {
     case 'ghostBands': return `transforma na Fantasma ${until(sp.duration)}${life}`;
     case 'devilDeal': return `o alvo fica transtornado por ${sp.duration || 8} s: não defende e recebe mais dano; o Diabo se cura`;
     case 'marionette': return 'invoca a Marionete, que luta ao seu lado';
+    case 'awakenMode': {
+      const pct = (m) => `${m > 1 ? '+' : '−'}${Math.round(Math.abs(m - 1) * 100)}%`;
+      const parts = [];
+      if (sp.mult) parts.push(`${pct(sp.mult)} de dano${sp.affects ? ` (${sp.affects.map((k) => ({ melee: 'físico', ranged: 'distância', ability: 'habilidades', special: 'especial' })[k]).join(', ')})` : ''}`);
+      if (sp.takenMult) parts.push(`${pct(sp.takenMult)} de dano recebido`);
+      if (sp.speedMult) parts.push(`${pct(sp.speedMult)} de velocidade`);
+      if (sp.cdRate) parts.push(`recargas ${Math.round((sp.cdRate - 1) * 100)}% mais rápidas`);
+      if (sp.energyRegenMult) parts.push(`sanidade regenera ${pct(sp.energyRegenMult)}`);
+      if (sp.regen) parts.push(`regenera ${sp.regen} de vida/s`);
+      if (sp.armorEvery) parts.push(`aguenta 1 golpe sem reagir a cada ${sp.armorEvery} s`);
+      if (sp.unblockable) parts.push('golpes físicos atravessam a defesa');
+      if (sp.meleeBleed) parts.push('todo golpe sangra');
+      if (sp.bloodArmSide) parts.push('braço de sangue');
+      if (sp.heal) parts.push(`cura ${Math.round(sp.heal * 100)}% na hora`);
+      return `desperta até o fim do round: ${parts.join(', ')}`;
+    }
     default: return `${sp.damage ?? COMBAT.specialDamage} de dano`;
   }
 }

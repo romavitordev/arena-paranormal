@@ -529,10 +529,12 @@ export class Fighter {
       if (this.message.time <= 0) this.message = null;
     }
 
-    // cooldowns individuais
+    // cooldowns individuais (cdRate: estados que aceleram as recargas, ex.: Despertar)
+    let cdRate = 1;
+    for (const b of this.buffs) if (b.cdRate) cdRate *= b.cdRate;
     for (const k in this.cooldowns) {
       if (this.cooldowns[k] > 0) {
-        this.cooldowns[k] -= dt;
+        this.cooldowns[k] -= dt * (k === 'dodge' ? 1 : cdRate);
         if (this.cooldowns[k] <= 0) {
           this.cooldowns[k] = 0;
           if (k === 'ranged' || k === 'special') this.world.audio.play(k === 'ranged' && this.def.ranged?.visual === 'bullet' ? 'reload' : 'ready', { volume: 0.6 });
@@ -551,7 +553,9 @@ export class Fighter {
     }
     // energia
     if (this.state !== 'ko' && this.state !== 'special' && !this.buffs.some((b) => b.noRegen)) {
-      this.addEnergy(COMBAT.energyRegen * dt * this.world.energyRegenFactor(this));
+      let enMult = 1;
+      for (const b of this.buffs) if (b.energyRegenMult) enMult *= b.energyRegenMult;
+      this.addEnergy(COMBAT.energyRegen * dt * this.world.energyRegenFactor(this) * enMult);
     }
     // resistência da defesa
     if (this.state !== 'block') {
@@ -1784,7 +1788,7 @@ export class Fighter {
       otg: !!s.otg,
       high: fin && fin.high,
       spike: fin && fin.spike,
-      unblockable: !!this.findBuff('transcend'),
+      unblockable: !!this.findBuff('transcend') || this.buffs.some((b) => b.unblockable),
       dir, strike: s, sound: s.hitSound,
       color: s.impactFx === 'sigil' ? 0xffffff : undefined,
       scale: s.impactScale,

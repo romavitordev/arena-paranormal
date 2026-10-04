@@ -184,6 +184,14 @@ export default {
     shots: 'flurry',
   },
 
+  // DESPERTAR (Barra de Transformação cheia + vida baixa, segurando △) — cânone: Afinidade com Precognição — vê o golpe antes de ele vir. Até o fim do round.
+  awakening: {
+    name: 'Afinidade com Precognição',
+    banner: 'Afinidade com Precognição',
+    type: 'awakenMode',
+    mult: 1.1, takenMult: 0.85, speedMult: 1.15, aura: 'sigil', color: 0xffcf4a, heal: 0.1,
+  },
+
   passives: [
     { type: 'bulletDodge' }, // Desviar de Balas: esquivar de projéteis não gasta carga
     { type: 'meleeDrain', energyRatio: 1.5, giveEnergyToAttacker: true }, // a sanidade que ele tira do inimigo vai para ele (Gal com 21–29% de vitórias)

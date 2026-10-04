@@ -1,5 +1,10 @@
 # Changelog
 
+## v3.0 — 2026-10-04
+
+### Adicionado
+- Despertar (Barra de Transformação) para os 13 personagens sem forma própria, com estados do cânone.
+
 ## v2.9 — 2026-10-04
 
 ### Adicionado

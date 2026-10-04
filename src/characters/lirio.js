@@ -196,6 +196,14 @@ export default {
   // auxiliar de equipe: entra sozinho para proteger o parceiro que está apanhando (ver combat/assists.js)
   assistAuto: { comboHits: 3, cooldownMult: 1.35 },
 
+  // DESPERTAR (Barra de Transformação cheia + vida baixa, segurando △) — cânone: Sangue de Ferro e Casca Grossa — a raiva da Lírio vira uma muralha. Até o fim do round.
+  awakening: {
+    name: 'Sangue de Ferro',
+    banner: 'Sangue de Ferro',
+    type: 'awakenMode',
+    mult: 1.1, takenMult: 0.75, armorEvery: 3, aura: 'flame', color: 0xd8a040, heal: 0.1,
+  },
+
   passives: [
     { type: 'ironBlood' }, // Sangue de Ferro: mais vitalidade (+15% de vida)
     { type: 'thickSkin', knockback: 0.65, chip: 0.6, guard: 0.7 }, // Casca Grossa: menos recuo; defendendo, perde menos

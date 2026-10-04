@@ -1,7 +1,7 @@
 // Versão do jogo e NOVIDADES (changelog). Cada atualização conta, inclusive as que foram juntas numa só publicação.
 // Para uma nova atualização: suba VERSION e acrescente a entrada no TOPO de CHANGELOG (textos para jogadores, os mesmos
 // do CHANGELOG-CLIENTE.md; detalhes técnicos vão no CHANGELOG-ADMIN.md).
-export const VERSION = 29;
+export const VERSION = 30;
 export const VERSION_LABEL = `v${Math.floor(VERSION / 10)}.${VERSION % 10}`;
 
 export function formatVersion(version) {
@@ -9,6 +9,18 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: 30,
+    date: '2026-10-04',
+    title: 'Todos despertam',
+    items: [
+      'Todos os personagens agora têm a Barra de Transformação. Quem não tem uma forma própria DESPERTA (cena curta, cura 10% e fica assim até o fim do round), cada um com um estado do cânone:',
+      'Kaiser — Combate Perfeito (mais dano e velocidade, recargas mais rápidas) · Arthur — Magnum Opus (Arma de Sangue no ombro que ele perdeu, mais dano, aguenta mais) · Joui — Técnica Secreta (mais rápido e forte) · Aghata — Passagem de Conhecimento Expandido (rituais voltam e recarregam muito mais rápido) · Dante — Afinidade com o Outro Lado (rituais de Morte mais fortes, regenera vida).',
+      'Erin — Bênção Maldita (regenera vida, mais sanidade) · Gal — Afinidade com Precognição (recebe menos dano, mais rápido) · Kian — Invólucro do Conhecimento (golpes físicos atravessam a defesa) · Aguiar — Predador Perfeito (todo golpe do machado sangra) · Labirinto — Consumir Momento (recargas bem mais rápidas).',
+      'Xande — Gladiador Paranormal (físico mais forte, aguenta 1 golpe sem reagir a cada 4 s) · Lírio — Sangue de Ferro (recebe 25% menos dano, aguenta golpes) · Balu — Resistência à Dor (com raiva: recebe menos dano e bate mais forte).',
+      'Juan, Kemi e Ferreiro continuam se transformando no Diabo, na Fantasma e no Deus da Morte.',
+    ],
+  },
   {
     v: 29,
     date: '2026-10-04',

@@ -1,5 +1,17 @@
 # Registro administrativo de alterações
 
+## v3.0 — Todos despertam
+
+### Despertar para todos (v3.0)
+- `awakenMode` (novo tipo em `src/combat/specials/awakenMode.js`): cena de 1,4 s (faceClose + orbit, banner, anel,
+  flash) e o buff `awakened` até o fim do round (`time: Infinity`; `reset()` limpa os buffs). Campos: `mult`/`affects`,
+  `takenMult`, `speedMult`, `cdRate`, `energyRegenMult`, `regen`, `armorEvery`, `unblockable`, `meleeBleed`,
+  `bloodArmSide` (+ `bloodArmor`), `heal`, `aura` ('flame' | 'smoke' | 'sigil' | 'blood').
+- Fighter: `cdRate` dos buffs acelera as recargas (menos a da esquiva); `energyRegenMult` multiplica a regeneração de
+  sanidade; `unblockable` de qualquer buff vale para o físico (antes só o buff `transcend`).
+- `awakening` nos 13 kits sem forma (nomes do cânone, ver `lore/membros.json`); `check-roster` exige `awakening` em
+  todos; `specialSummary` descreve o `awakenMode`; HUD corta nomes longos na barra.
+
 ## v2.9 — Barra de Transformação
 
 ### Barra de Transformação (v2.9)

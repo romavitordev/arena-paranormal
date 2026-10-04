@@ -163,6 +163,14 @@ export default {
     color: 0xff7a2a,
   },
 
+  // DESPERTAR (Barra de Transformação cheia + vida baixa, segurando △) — cânone: Bênção Maldita — a energia do Outro Lado cura e empurra o corpo além do limite. Até o fim do round.
+  awakening: {
+    name: 'Bênção Maldita',
+    banner: 'Bênção Maldita',
+    type: 'awakenMode',
+    mult: 1.1, regen: 6, energyRegenMult: 1.4, aura: 'flame', color: 0x7ad8ff, heal: 0.12,
+  },
+
   passives: [
     { type: 'electricAmulet', damage: 4, color: 0x5ae8ff }, // Amuleto Elétrico: choque em quem bate nela
   ],

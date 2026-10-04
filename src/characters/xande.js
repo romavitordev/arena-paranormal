@@ -166,6 +166,14 @@ export default {
     length: 3.4,
   },
 
+  // DESPERTAR (Barra de Transformação cheia + vida baixa, segurando △) — cânone: Gladiador Paranormal — o caçador que aprendeu a lutar com o paranormal; aguenta golpes. Até o fim do round.
+  awakening: {
+    name: 'Gladiador Paranormal',
+    banner: 'Gladiador Paranormal',
+    type: 'awakenMode',
+    mult: 1.2, affects: ['melee'], takenMult: 0.9, armorEvery: 4, aura: 'flame', color: 0xd0102a, heal: 0.1,
+  },
+
   passives: [
     { type: 'paranormalGladiator', energy: 3 }, // Gladiador Paranormal: +3 de sanidade a cada golpe físico que acerta
   ],

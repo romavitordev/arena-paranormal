@@ -158,8 +158,9 @@ Exemplo: X=100, Y=60 → o inimigo perde 100, recupera 60 (saldo −40) e perde 
 - **Esquiva:** L2/LT + direção. 4 cargas que recuperam conforme toma dano.
 - **Substituição:** L2/LT **enquanto apanha** gasta 1 carga e reaparece atrás do atacante (como no Storm).
 - **Agarrão:** R2 + ○. Não pode ser defendido; quem é agarrado escapa com **R2 + ○ logo no começo**, ou esquivando antes.
-- **Barra de Transformação (Juan, Kemi, Ferreiro):** enche conforme apanha. Cheia e com a vida em 35% ou menos, segure
-  △ até a sanidade encher e passar do limite (+1 s): o personagem se transforma (Diabo, Fantasma, Deus da Morte).
+- **Barra de Transformação (todos):** enche conforme apanha. Cheia e com a vida em 35% ou menos, segure
+  △ até a sanidade encher e passar do limite (+1 s): Juan, Kemi e Ferreiro se transformam (Diabo, Fantasma, Deus da
+  Morte); os outros DESPERTAM num estado do cânone até o fim do round (Magnum Opus, Predador Perfeito, Sangue de Ferro...).
   Zera a cada round. (O antigo Transcender para todos saiu na v2.9.)
 - **Falas de introdução:** antes do ROUND 1, cada dupla tem entradas caminhando e falas originais baseadas na
   personalidade e nas relações conhecidas (pule com × ou Start); depois aparece **LUTEM**. As falas de vitória também

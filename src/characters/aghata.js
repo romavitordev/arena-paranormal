@@ -143,6 +143,14 @@ export default {
     ],
   },
 
+  // DESPERTAR (Barra de Transformação cheia + vida baixa, segurando △) — cânone: Passagem de Conhecimento Expandido — o ritual dela levado ao máximo: os rituais voltam rápido e custam menos. Até o fim do round.
+  awakening: {
+    name: 'Passagem de Conhecimento Expandido',
+    banner: 'Passagem de Conhecimento Expandido',
+    type: 'awakenMode',
+    mult: 1.15, affects: ['ability', 'special'], cdRate: 1.5, energyRegenMult: 1.6, aura: 'sigil', color: 0xffd060, heal: 0.1,
+  },
+
   passives: [
     { type: 'bloodNecklace', resist: 0.85, bleedMult: 1.1 }, // Colar Banhado em Sangue: resiste a Sangue, sangramento um pouco mais forte
   ],

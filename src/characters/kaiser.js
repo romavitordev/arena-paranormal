@@ -178,6 +178,14 @@ export default {
     flowerStorm: { shares: [0.12, 0.12, 0.12, 0.14, 0.15, 0.35], interval: 0.2 },
   },
 
+  // DESPERTAR (Barra de Transformação cheia + vida baixa, segurando △) — cânone: Combate Perfeito — a névoa da Cinerária em volta e cada movimento no lugar certo. Até o fim do round.
+  awakening: {
+    name: 'Combate Perfeito',
+    banner: 'Combate Perfeito',
+    type: 'awakenMode',
+    mult: 1.15, speedMult: 1.1, cdRate: 1.3, aura: 'smoke', color: 0xb8b4c0, heal: 0.1,
+  },
+
   passives: [
     { type: 'resistant', mult: 0.9, kinds: ['melee'] }, // Resistente: armadura natural contra dano físico (cânone)
     { type: 'elementalAffinity', mult: 1.15 }, // Afinidade Elemental: conectado à Energia, rituais 15% mais fortes

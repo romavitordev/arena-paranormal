@@ -158,6 +158,7 @@ ok(inj.special.approach === 'chain' && inj.special.applyMeleePassives === false,
 const des = get('kian');
 const fistAnims = ['jab', 'cross', 'hook_l', 'hook_r', 'uppercut', 'heavy_punch', 'wave_punch', 'body_blow', 'dash_punch', 'shove', 'meteor_punch', 'flurry'];
 ok(des.unarmed && allStrikes(des).every((s) => fistAnims.includes(s.anim) && !s.trail), 'Kian: físico só com punhos');
+ok(ROSTER.every((c) => c.awakening && c.awakening.name && c.awakening.type), `todos com transformação/despertar na Barra de Transformação (faltam: ${ROSTER.filter((c) => !c.awakening).map((c) => c.id).join(', ') || 'nenhum'})`);
 ok(des.special.type === 'erase' && des.special.unblockable && des.special.resistDamage > 0, 'Kian: especial Inexistir (indefensável, resiste com sanidade cheia)');
 ok(des.special.usesPerMatch === 2 && !des.special.bonusUseOnTranscend, 'Kian: Inexistir 2x por partida (o bônus do Transcender virou fixo)');
 ok(des.abilities.some((a) => a.type === 'levitation') && !des.abilities.some((a) => a.type === 'transcend'), 'Kian: Levitação no lugar da Transcendência');

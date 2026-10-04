@@ -139,6 +139,14 @@ export default {
     color: 0x8ad8c0,
   },
 
+  // DESPERTAR (Barra de Transformação cheia + vida baixa, segurando △) — cânone: transcendeu depois de Tirigan e Sukkalgir e ganhou Afinidade com o Outro Lado — rituais de Morte mais fortes. Até o fim do round.
+  awakening: {
+    name: 'Afinidade com o Outro Lado',
+    banner: 'Afinidade com o Outro Lado',
+    type: 'awakenMode',
+    mult: 1.25, affects: ['ability', 'special'], cdRate: 1.3, regen: 4, aura: 'smoke', color: 0x3a3442, heal: 0.1,
+  },
+
   passives: [
     { type: 'ritualFocus', mult: 0.9 }, // Concentração Inquebrável: rituais custam 10% menos sanidade
   ],

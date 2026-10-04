@@ -170,6 +170,14 @@ export default {
     color: 0xffd88a,
   },
 
+  // DESPERTAR (Barra de Transformação cheia + vida baixa, segurando △) — cânone: o Invólucro do Conhecimento (textos pela pele, olhos amarelos) — o primeiro a transcender: os golpes atravessam a defesa. Até o fim do round.
+  awakening: {
+    name: 'Invólucro do Conhecimento',
+    banner: 'Invólucro do Conhecimento',
+    type: 'awakenMode',
+    mult: 1.15, unblockable: true, aura: 'sigil', color: 0xffd88a, heal: 0.1,
+  },
+
   passives: [
     { type: 'precognition' }, // Precognição: não é pego desprevenido (sem bônus de costas nem "surpreso")
   ],

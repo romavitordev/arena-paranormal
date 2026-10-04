@@ -45,7 +45,7 @@ canvas#game { display: block; position: fixed; inset: 0; width: 100%; height: 10
 .panel.p2 .bar.storm { margin-left: auto; }
 .bar.storm .fill { background: linear-gradient(90deg, #5a0e2a, #ff4a3a); }
 .bar.storm .over { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: #fff; mix-blend-mode: screen; opacity: .85; }
-.bar.storm span { position: absolute; top: -1px; right: 4px; font-size: 7px; line-height: 9px; letter-spacing: .08em; color: rgba(255,255,255,.55); }
+.bar.storm span { position: absolute; top: -1px; right: 4px; max-width: 92%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 7px; line-height: 9px; letter-spacing: .08em; color: rgba(255,255,255,.55); }
 .panel.p2 .bar.storm span { right: auto; left: 4px; }
 .bar.storm.full .fill { background: linear-gradient(90deg, #ff4a3a, #ffd27a); }
 .bar.storm.ready { animation: stormPulse .6s ease-in-out infinite alternate; }

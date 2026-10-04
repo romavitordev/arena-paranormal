@@ -133,6 +133,14 @@ export default {
     sound: 'teleport',
   },
 
+  // DESPERTAR (Barra de Transformação cheia + vida baixa, segurando △) — cânone: Técnica Secreta — o espadachim no auge, envolto nas sombras. Até o fim do round.
+  awakening: {
+    name: 'Técnica Secreta',
+    banner: 'Técnica Secreta',
+    type: 'awakenMode',
+    mult: 1.15, speedMult: 1.15, cdRate: 1.2, aura: 'smoke', color: 0x1a1620, heal: 0.1,
+  },
+
   passives: [
     { type: 'decepar', threshold: 0.2, mult: 1.3 }, // Decepar: finalizador +30% em quem está com menos de 20% de vida
     // golpes físicos pelas costas do inimigo (ex.: após o teleporte) causam +25%

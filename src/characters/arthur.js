@@ -156,6 +156,14 @@ export default {
     hideProp: 'claw',
   },
 
+  // DESPERTAR (Barra de Transformação cheia + vida baixa, segurando △) — cânone: Magnum Opus — a obra-prima do atirador; a Arma de Sangue nasce no ombro que ele perdeu e fica. Até o fim do round.
+  awakening: {
+    name: 'Magnum Opus',
+    banner: 'Magnum Opus',
+    type: 'awakenMode',
+    mult: 1.2, takenMult: 0.9, bloodArmSide: 'L', aura: 'blood', color: 0xff1a30, heal: 0.1,
+  },
+
   passives: [
     { type: 'bloodPrice', hpPerPoint: 2, minHealth: 0.15 }, // sem sanidade, paga rituais com a própria vida (cânone: a Arma de Sangue gasta PV)
   ],
