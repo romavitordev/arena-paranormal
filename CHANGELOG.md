@@ -1,5 +1,10 @@
 # Changelog
 
+## v3.2 — 2026-10-04
+
+### Alterado
+- Agarrão próprio para cada personagem (e formas), com finalizador dos seus poderes.
+
 ## v3.1 — 2026-10-04
 
 ### Alterado

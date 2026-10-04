@@ -1,5 +1,14 @@
 # Registro administrativo de alterações
 
+## v3.2 — Cada um agarra do seu jeito
+
+### Agarrão próprio de cada um (v3.2)
+- `src/combat/grabScenes.js`: `GRAB_SCENES[id]` = { beats (2 golpes com anims do kit), fin { t, anim, dur, fx, sound,
+  bleed, drain, heal, slow } } para os 16 + Diabo, Fantasma e Deus da Morte; `FINISHERS` (efeitos visuais por poder).
+  `Fighter.tryGrab` → `startGrabScene` usa a cena do `def.id` (fallback: os dois primeiros golpes do combo). Dano
+  20% + 20% + 60% de 70; o finalizador roda o efeito, fecha a cinemática e arremessa. `check-roster` exige cena para
+  todos (forms incluídas).
+
 ## v3.1 — Agarrão de cinema
 
 ### Agarrão em cutscene (v3.1)

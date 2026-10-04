@@ -15,6 +15,7 @@ import { updateForm, revertForm } from './forms.js';
 import { buildBloodArmor } from '../models/bloodArmor.js';
 import { orbit, twoShot } from '../camera/shots.js';
 import { splitDamage, specialHitFx } from './specials/common.js';
+import { GRAB_SCENES, FINISHERS } from './grabScenes.js';
 
 // estados em que o alvo continua "dentro do combo" (contadores de escala não zeram)
 const COMBO_STATES = new Set(['hitstun', 'stun', 'pulled', 'grabbed', 'ko', 'downed']);
@@ -2085,17 +2086,22 @@ export class Fighter {
     let caught = null;
     let thrown = false;
     let scene = null;
-    // CENA DO AGARRÃO: def.grab.scene (opcional) = [{ t, anim, dur, share, fx, sound }] e o arremesso no fim; sem
-    // ela, usa os dois primeiros golpes do combo do personagem (cada um agarra do seu jeito)
+    // CENA DO AGARRÃO: cada personagem tem a sua (src/combat/grabScenes.js — dois golpes do kit e um finalizador com
+    // os poderes dele); sem cena registrada, usa os dois primeiros golpes do combo e um arremesso simples
     const startGrabScene = () => {
       const strikes = (self.def.melee && self.def.melee.strikes) || [];
-      const beats = G.scene || [
-        { t: 0.12, anim: strikes[0]?.anim || 'jab', dur: 0.28, share: 0.2, fx: { kind: strikes[0]?.trail ? 'slash' : 'punch' }, sound: strikes[0]?.hitSound },
-        { t: 0.48, anim: strikes[1]?.anim || 'heavy_punch', dur: 0.3, share: 0.2, fx: { kind: strikes[1]?.trail ? 'slash' : 'punch', flip: true }, sound: strikes[1]?.hitSound },
-      ];
-      const THROW_AT = (beats.at(-1)?.t ?? 0.5) + 0.42;
-      const END = THROW_AT + 0.5;
-      const parts = splitDamage(G.damage, [...beats.map((x) => x.share), 1 - beats.reduce((n, x) => n + x.share, 0)]);
+      const sc = GRAB_SCENES[self.def.id] || {
+        beats: [
+          { t: 0.12, anim: strikes[0]?.anim || 'jab', dur: 0.28, fx: { kind: strikes[0]?.trail ? 'slash' : 'punch' }, sound: strikes[0]?.hitSound },
+          { t: 0.48, anim: strikes[1]?.anim || 'heavy_punch', dur: 0.3, fx: { kind: strikes[1]?.trail ? 'slash' : 'punch', flip: true }, sound: strikes[1]?.hitSound },
+        ],
+        fin: { t: 0.9, anim: 'throw_grab', dur: 0.5 },
+      };
+      const beats = sc.beats;
+      const fin = sc.fin;
+      const IMPACT = fin.t + fin.dur * 0.4;
+      const END = IMPACT + 0.5;
+      const parts = splitDamage(G.damage, [...beats.map(() => 0.2), 1 - beats.length * 0.2]);
       const col = self.def.energyColor ?? 0xffffff;
       w.beginCinematic(self, caught);
       w.cameraRig.playShots([
@@ -2105,7 +2111,7 @@ export class Fighter {
       let st = 0;
       let i = 0;
       let threw = false;
-      let animThrow = false;
+      let finAnim = false;
       const hold = () => {
         const Fw = forwardFromYaw(self.yaw, v3);
         caught.pos.set(self.pos.x + Fw.x * 0.9, self.pos.y, self.pos.z + Fw.z * 0.9);
@@ -2133,18 +2139,27 @@ export class Fighter {
             w.cameraRig.shake(0.15, 0.12);
             i++;
           }
-          if (!animThrow && st >= THROW_AT - 0.22) {
-            animThrow = true;
-            self.anim.play('throw_grab', { restart: true, duration: 0.5 });
+          if (!finAnim && st >= fin.t) {
+            finAnim = true;
+            self.anim.play(fin.anim, { restart: true, duration: fin.dur, blend: 0.04 });
           }
-          if (!threw && st >= THROW_AT) {
+          if (!threw && st >= IMPACT) {
             threw = true;
             thrown = true;
+            // o finalizador com os poderes do personagem (efeito visual + um efeito pequeno)
+            const fx = FINISHERS[fin.fx];
+            if (fx) fx(w, self, caught, col);
+            if (fin.sound) w.audio.play(fin.sound, { volume: 1 });
             w.endCinematic(); // o arremesso acontece já com o mundo andando (o alvo voa e cai)
             caught.setState('idle');
             hit(parts[parts.length - 1], true);
-            w.fx.burst(caught.chestPos(), { count: 24, color: col, speed: 6, life: 0.4, size: 0.22 });
-            w.cameraRig.shake(0.4, 0.25);
+            if (caught.state !== 'ko') {
+              if (fin.bleed) caught.applyBleed(fin.bleed, self);
+              if (fin.drain) caught.energy = Math.max(0, caught.energy - fin.drain);
+              if (fin.slow) caught.addBuff({ type: 'grabSlow', name: 'LENTO', time: fin.slow.time, duration: fin.slow.time, speedMult: fin.slow.mult });
+            }
+            if (fin.heal) self.health = Math.min(self.maxHealth, self.health + fin.heal);
+            w.cameraRig.shake(0.45, 0.28);
           }
           return threw && st >= END;
         },

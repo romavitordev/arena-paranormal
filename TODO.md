@@ -122,7 +122,8 @@ Juan, Ferreiro · B Balu, Kaiser, Arthur, Erin, Agatha, Kemi, Aguiar · C Xande,
 deviam passar; **Kemi (B) 61%** e **Xande (C) 50%** acima — sugestões no fim do arquivo.
 ✅ (v3.1) **Agarrões em cutscene (pedido do usuário, 2026-10-04):** feito no genérico — passada a janela de escape, a
 câmera chega perto e gira, o atacante dá dois golpes com o estilo dele (os dois primeiros golpes do próprio combo) e
-arremessa (70 no total, igual). Falta: `def.grab.scene` própria em cada kit (abaixo os exemplos). Pedido original: todo agarrão (Defesa + ○ / R2 + B) deve virar uma pequena
+arremessa (70 no total, igual). ✅ (v3.2) cena própria de cada personagem e forma em `src/combat/grabScenes.js`
+(finalizador com os poderes dele). Pedido original: todo agarrão (Defesa + ○ / R2 + B) deve virar uma pequena
 cena: câmera aproxima, os dois travam numa animação de agarrão própria de cada personagem (ex.: chave de braço do
 Kaiser, faca no pescoço do Juan, machado na nuca do Aguiar) e o golpe final com impacto. Hoje é o agarrão genérico
 (`COMBAT.grab`). Como fazer: um `grabCinematic` por kit (como o `cinematicCombo`, curto, ~1,2 s), chamado no lugar do

@@ -1,7 +1,7 @@
 // Versão do jogo e NOVIDADES (changelog). Cada atualização conta, inclusive as que foram juntas numa só publicação.
 // Para uma nova atualização: suba VERSION e acrescente a entrada no TOPO de CHANGELOG (textos para jogadores, os mesmos
 // do CHANGELOG-CLIENTE.md; detalhes técnicos vão no CHANGELOG-ADMIN.md).
-export const VERSION = 31;
+export const VERSION = 32;
 export const VERSION_LABEL = `v${Math.floor(VERSION / 10)}.${VERSION % 10}`;
 
 export function formatVersion(version) {
@@ -9,6 +9,15 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: 32,
+    date: '2026-10-04',
+    title: 'Cada um agarra do seu jeito',
+    items: [
+      'Cada personagem tem o seu próprio agarrão, fechando com um golpe dos seus poderes: Acácia explodindo (Kaiser), a garra da Arma de Sangue (Arthur), poça de sombra e corte em X (Joui), Descarnar (Aghata e Xande), Tentáculos de Lodo que deixam lento (Dante), bomba (Erin), sigilo e correntes que roubam sanidade (Gal), a escrita do Inexistir (Kian), machado na nuca (Aguiar), raios caóticos (Labirinto), martelo/machado enterrando no chão (Lírio e Balu), a Espada Consumidora (Ferreiro), faca no pescoço que cura (Juan), tiro à queima-roupa (Kemi) — e também Diabo, Fantasma e Deus da Morte.',
+      'O dano total do agarrão continua 70; os efeitos extras são pequenos (sangramento curto, um pouco de sanidade, lentidão curta).',
+    ],
+  },
   {
     v: 31,
     date: '2026-10-04',

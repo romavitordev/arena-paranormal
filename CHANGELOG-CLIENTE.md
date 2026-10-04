@@ -2,6 +2,10 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.2 — Cada um agarra do seu jeito
+- Cada personagem tem o seu próprio agarrão, fechando com um golpe dos seus poderes: Acácia explodindo (Kaiser), a garra da Arma de Sangue (Arthur), poça de sombra e corte em X (Joui), Descarnar (Aghata e Xande), Tentáculos de Lodo que deixam lento (Dante), bomba (Erin), sigilo e correntes que roubam sanidade (Gal), a escrita do Inexistir (Kian), machado na nuca (Aguiar), raios caóticos (Labirinto), martelo/machado enterrando no chão (Lírio e Balu), a Espada Consumidora (Ferreiro), faca no pescoço que cura (Juan), tiro à queima-roupa (Kemi) — e também Diabo, Fantasma e Deus da Morte.
+- O dano total do agarrão continua 70; os efeitos extras são pequenos (sangramento curto, um pouco de sanidade, lentidão curta).
+
 ## v3.1 — Agarrão de cinema
 - Agarrão (Defesa + ○) virou cena: depois do instante de escape, a câmera chega perto e gira em volta dos dois, quem agarrou dá dois golpes do seu próprio jeito (faca, machado, socos, espada...) e arremessa. O dano total continua o mesmo, e o escape (Defesa + ○ logo no começo) funciona igual.
 
