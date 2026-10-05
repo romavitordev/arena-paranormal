@@ -4,7 +4,9 @@ Jogo de luta 3D em arena com temática paranormal. Combate rápido e acessível,
 movimentação livre, ataques direcionais, defesa, esquiva, habilidades por combinação de
 botões e especiais cinematográficos. Feito com **Three.js + Vite**, roda no navegador.
 
-Versão atual do jogo: **v3.7**.
+Versão atual do jogo: **v3.5.0**.
+
+A numeração segue **MAJOR.MINOR.PATCH**: microatualizações usam `x.y.z`, atualizações concretas usam `x.y.0` e grandes marcos usam `x.0.0`.
 
 ```bash
 npm install
@@ -162,7 +164,7 @@ Exemplo: X=100, Y=60 → o inimigo perde 100, recupera 60 (saldo −40) e perde 
 - **Barra de Transformação (todos):** enche conforme apanha. Cheia e com a vida em 35% ou menos, segure
   △ até a sanidade encher e passar do limite (+1 s): Juan, Kemi e Ferreiro se transformam (Diabo, Fantasma, Deus da
   Morte); os outros DESPERTAM num estado do cânone até o fim do round (Magnum Opus, Predador Perfeito, Sangue de Ferro...).
-  Zera a cada round. (O antigo Transcender para todos saiu na v2.9.)
+  Zera a cada round. (O antigo Transcender para todos saiu na v2.7.0.)
 - **Falas de introdução:** antes do ROUND 1, cada dupla tem entradas caminhando e falas originais baseadas na
   personalidade e nas relações conhecidas (pule com × ou Start); depois aparece **LUTEM**. As falas de vitória também
   variam por confronto. Quando não há relação canônica conhecida, as provocações evitam inventar um passado comum.

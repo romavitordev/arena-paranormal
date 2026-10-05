@@ -1,23 +1,23 @@
 # Registro administrativo de alterações
 
-## v3.7 — Substituição aprimorada + Online pronto
+## v3.5.0 — Substituição aprimorada + Online pronto
 
-### Posicionamento da substituição (v3.7)
+### Posicionamento da substituição (v3.5.0)
 - `Fighter.trySubstitution` usa `findSpotBehind` para escolher um local livre atrás do oponente, considerando hitboxes, obstáculos e limites da arena. Sem local seguro, a ação não consome carga nem recarga.
 - A substituição mantém o cancelamento do hitstun/combo, a invulnerabilidade breve e os efeitos; a lógica é determinística para os dois lados no modo online.
 
 ### Modo online pronto
 - A changelog para jogadores registra a disponibilidade das salas públicas/privadas por código e das partidas sincronizadas já implementadas em `NetSession`.
 
-## v3.6 — Substituição no lugar
+## v3.4.1 — Substituição no lugar
 
-### Posicionamento da substituição (v3.6)
+### Posicionamento da substituição (v3.4.1)
 - `Fighter.trySubstitution`: remove o cálculo de coordenadas atrás do oponente; o lutador conserva X/Z ao escapar, zera Y/velocidade e recebe invulnerabilidade breve. Player e CPU usam a mesma implementação.
 - Remove `COMBAT.substitution.behind`; atualiza os textos do README, dos movimentos e do TODO.
 
-## v3.5 — Super Difícil de verdade
+## v3.4.0 — Super Difícil de verdade
 
-### Vitória sem duplicar formas + Super Difícil mais forte (v3.5)
+### Vitória sem duplicar formas + Super Difícil mais forte (v3.4.0)
 - `Match` (fim da partida): na equipe, a forma (`winningFighter.def`) entra NO LUGAR do personagem base.
 - `superhard`: think 0,05–0,1 s, block 0,42, dodge 0,3, perfect 0,75, subst 0,12, combo 5–7, rush 0,85, vertical
   0,9, tech 1; `edge` { dealt 1,15, taken 0,85 } → `Fighter.cpuEdge` (damage.js). Reações novas (smart): punição
@@ -29,9 +29,9 @@
   até o fim do round (mult 0,6 em tudo, speedMult 0,7, noRegen). `canStart` recusa quem já está `aged` (1x por
   round). 150 de dano, recarga 60 s.
 
-## v3.4 — CPU que aprende
+## v3.3.0 — CPU que aprende
 
-### IA que aprende + esquiva (v3.4)
+### IA que aprende + esquiva (v3.3.0)
 - Nível `superhard` (Super Difícil) em `CPU_LEVELS` (IA e configurações): mistake 0, think 0,07–0,14 s, perfect 0,5,
   `smart` (defesa lida pelo perfil do jogador; atiradores — □ com alcance ≥ 14 e tiro carregado/forte — ficam a 7 m) e
   `learn`.
@@ -53,34 +53,34 @@
   (combo pesa mais de perto, habilidades sem abertura pesam menos) e o que aprendeu nas 12 anteriores, 7 × 5. O
   `public/ai/learned.json` sai com esse treino inicial CPU × CPU (sem perfil de jogador — esse só vem de humanos).
 
-## v3.3 — Cinzas da Decadenza
+## v3.2.1 — Cinzas da Decadenza
 
-### Decadenza de médio alcance (v3.3)
+### Decadenza de médio alcance (v3.2.1)
 - Projéteis: `a.grow` (novo) — raio de acerto `p.r = radius × (1 + grow × fração do alcance)` e a malha escala junto
   (também vale para NPCs). Visual `decay` solta cinzas claras além da fumaça.
 - Dante: Decadenza `range` 20 → 8, `speed` 17 → 12, `radius` 0,65 → 0,5, `grow` 1,6 (até ~1,3 m).
 - CPU: só usa o □ se a distância for menor que `ranged.range` + 0,5.
 
-## v3.2 — Cada um agarra do seu jeito
+## v3.2.0 — Cada um agarra do seu jeito
 
-### Agarrão próprio de cada um (v3.2)
+### Agarrão próprio de cada um (v3.2.0)
 - `src/combat/grabScenes.js`: `GRAB_SCENES[id]` = { beats (2 golpes com anims do kit), fin { t, anim, dur, fx, sound,
   bleed, drain, heal, slow } } para os 16 + Diabo, Fantasma e Deus da Morte; `FINISHERS` (efeitos visuais por poder).
   `Fighter.tryGrab` → `startGrabScene` usa a cena do `def.id` (fallback: os dois primeiros golpes do combo). Dano
   20% + 20% + 60% de 70; o finalizador roda o efeito, fecha a cinemática e arremessa. `check-roster` exige cena para
   todos (forms incluídas).
 
-## v3.1 — Agarrão de cinema
+## v3.1.0 — Agarrão de cinema
 
-### Agarrão em cutscene (v3.1)
+### Agarrão em cutscene (v3.1.0)
 - `Fighter.tryGrab`: passada a janela `COMBAT.grabTech.window`, `startGrabScene()` — `beginCinematic(self, caught)`,
   `twoShot` + `orbit`, golpes em `def.grab.scene` (opcional: [{ t, anim, dur, share, fx, sound }]) ou, sem ela, os dois
   primeiros golpes do combo do kit (anim + trail → fx 'slash'/'punch'), 20% + 20% + arremesso 60% de `G.damage` (70);
   o arremesso sai com o mundo andando (`endCinematic` antes do `applyHit` final). Escape e erro sem mudança.
 
-## v3.0 — Todos despertam
+## v3.0.0 — Todos despertam
 
-### Despertar para todos (v3.0)
+### Despertar para todos (v3.0.0)
 - `awakenMode` (novo tipo em `src/combat/specials/awakenMode.js`): cena de 1,4 s (faceClose + orbit, banner, anel,
   flash) e o buff `awakened` até o fim do round (`time: Infinity`; `reset()` limpa os buffs). Campos: `mult`/`affects`,
   `takenMult`, `speedMult`, `cdRate`, `energyRegenMult`, `regen`, `armorEvery`, `unblockable`, `meleeBleed`,
@@ -90,9 +90,9 @@
 - `awakening` nos 13 kits sem forma (nomes do cânone, ver `lore/membros.json`); `check-roster` exige `awakening` em
   todos; `specialSummary` descreve o `awakenMode`; HUD corta nomes longos na barra.
 
-## v2.9 — Barra de Transformação
+## v2.7.0 — Barra de Transformação
 
-### Barra de Transformação (v2.9)
+### Barra de Transformação (v2.7.0)
 - `COMBAT.storm` { fillPerHealth 1,4, healthRatio 0,35, overcharge 1 s, decay 1,5 } no lugar de `COMBAT.awaken`.
   `Fighter.storm` (0–100) enche em `takeDamage` (só com `def.awakening` e na forma base) e zera em `reset()`.
   `canTransform()`: barra cheia + vida ≤ 35% (no treino com sanidade infinita: barra cheia e sem a exigência da vida,
@@ -112,9 +112,9 @@
 - Gal: buff ainda NÃO aplicado (a medição saiu inválida — servidor de equilíbrio com código antigo); ficaram no motor
   `mindControl.walkTo/noBlock` e `sweepStrike.pull`, sem uso por enquanto. Detalhes no TODO.
 
-## v2.8 — Múmia, rastros e vitória de cinema
+## v2.6.0 — Múmia, rastros e vitória de cinema
 
-### Lote 2 do TODO (v2.8)
+### Lote 2 do TODO (v2.6.0)
 - Fantasma: `bloodBind` com `mummy: true` → `mummyWrap` (`abilities.js`): 10 faixas (cilindros abertos com textura de pano)
   dos pés ao rosto, uma a cada 0,04 s, apertando; pontas soltas; `hold` 1,1 → 2,2 s e o alvo se solta mais cedo
   apertando botões (cada toque tira 0,15 s do `stunTime`). Não está na wiki (adaptação anotada no código).
@@ -123,12 +123,12 @@
   `main.js` reprojeta os nomes a cada quadro enquanto `victoryCam` existe.
 - Conferidos e marcados no TODO: ciclo dos elementos (1.1), Sanidade/PE (1.2), tiros amaldiçoados restantes (já
   diferentes), equilíbrio do Dante/Juan com as invocações.
-- Equilíbrio depois da v2.7 (1 luta por par, 30 lutas cada): Labirinto 50% (era 39%, com a Tempestade em área),
+- Equilíbrio depois da v2.5.0 (1 luta por par, 30 lutas cada): Labirinto 50% (era 39%, com a Tempestade em área),
   Erin 60% (Black Hole mais forte), Ferreiro 57% (Conforto/Hipnose) — todos na faixa 35–65%.
 
-## v2.7 — Rituais com cara própria
+## v2.5.0 — Rituais com cara própria
 
-### Lote do TODO (v2.7)
+### Lote do TODO (v2.5.0)
 - `healOverTime` com `a.style` ('mist' Dante, 'ash' Erin, 'blood' Xande, 'comfort' Ferreiro), `a.stillBonus` (Dante 1,25)
   e `a.breakOnHit` (Ferreiro); buff `healing` com o nome do ritual (antes todos eram "PARADISO"). Valores: Erin 80 em
   1,8 s (cânone: mais forte que Dante/Joui), Dante 60 (75 parado), Xande 70, Ferreiro 100 em 4 s.
@@ -142,7 +142,7 @@
 - `spiralSnipe`: trajetória `CatmullRomCurve3` em volta do alvo (raio até 8 m) em `sp.flight` 1,6 s com a espiral em
   volta da curva; câmera `chaseShot` presa à bala e corte no rosto do alvo; fim em 1,5 + voo + 1 s.
 
-## v2.6 — Chegou o Balu
+## v2.4.0 — Chegou o Balu
 
 ### Novo lutador: BALU (`src/characters/balu.js`)
 - Modelo `tools/blender/char_balu.py` (Builder 1,08 × 1,14 × 1,05 ≈ 1,90 m; sem a orelha direita — espiral pintada no
@@ -162,7 +162,7 @@
 - Equilíbrio (CPU × CPU, 2 lutas por par, 60 lutas): **Balu 50%** — melhor contra Arthur e Kemi (4/4), pior contra
   Joui, Erin e Juan (0/4). Dano: sangramento do Amaldiçoar Arma, machadadas laterais/cruzadas, especial e o giro.
 
-## v2.5 — Equilíbrio: rápidos e pesados
+## v2.3.2 — Equilíbrio: rápidos e pesados
 
 ### Equilíbrio (CPU × CPU, 75 s)
 - `stats.attackSpeed` (novo, `characters/index.js` → `applyAttackSpeed`): divide `dur`, `active`/`actives`, `iframes` e
@@ -177,13 +177,13 @@
   Dante/Erin 43 · Arthur/Labirinto 39 · Aghata/Kian 32 · Gal 29. Depois dos ajustes: Juan 61% (56 lutas), Gal 41% (56),
   Kian 54% (28), Aghata 39% (28).
 
-## v2.4 — Interface e carregamento
+## v2.3.1 — Interface e carregamento
 
 ### HUD e carregamento
 - `.ab .n` com `line-clamp: 2` + `overflow-wrap: break-word`; classe `long` (8,5 px) para nome > 18 letras ou com palavra > 10 letras; `title` com o nome inteiro (`HUD.js`).
 - `vite.config.js`: `manualChunks` → `three` (node_modules/three, ~608 kB) e `personagens` (`src/characters`, `src/anim`, ~144 kB); principal ~488 kB; `chunkSizeWarningLimit` 650 só por causa do three. Testado no build (`vite preview`, porta 3032): carrega e luta sem erros.
 
-## v2.3 — Ajustes do TODO
+## v2.3.0 — Ajustes do TODO
 
 ### Lote 1 do TODO
 - Santo Berço: `cfg.mist` → `makeMist` (`glbArena.js`): sprites com textura radial (canvas), anel baixo girando (`inner`/`radius`/`swirl`) e `banks` fixos (sobre o labirinto em z ≈ −40); `raycast` vazio (não entra nos raios da câmera); névoa do céu 0,014 → 0,018.
@@ -196,7 +196,7 @@
 - Aghata: novo tipo `mindSwap` (troca as posições, `stun` + `surprised` e o alvo virado de costas; falha em cinemática/invulnerável) em R2 + ×; Leitura de Rituais em R2 + △ com `selfBuff` (o `selfBuff` agora repassa `takenMult`/`takenKinds`), ×0,6 contra `ability`/`special` por 7 s.
 - Aguiar: o `meleeBleed` da máscara vale para `melee` E `ranged` em `damage.js` (antes o machado na corda não sangrava); o `strike.bleed` continua só no corpo a corpo.
 
-## v2.2 — O Diabo reformulado (cânone: wiki "O Diabo", habilidades de Hexatombe)
+## v2.2.0 — O Diabo reformulado (cânone: wiki "O Diabo", habilidades de Hexatombe)
 
 ### Poças de sangue (`src/combat/bloodPools.js`, novo)
 - `addBloodPool(world, owner, x, z, { radius, life })`: ticker do mundo (some sozinha e no fim do round), contorno de
@@ -251,7 +251,7 @@
   no chão), mash para soltar o agarrão da Marionete (−0,15 s por toque).
 - CRLF: arquivos editados por script no Windows voltaram para LF (o repositório é LF).
 
-## v2.1 — Marionete e Zumbis de Sangue refeitos
+## v2.1.0 — Marionete e Zumbis de Sangue refeitos
 
 ### Modelos das invocações (Blender, `tools/blender/npc_*.py` → `public/npcs/*.glb`)
 - Novo tipo `npc_` no `build.mjs` (sai em `public/npcs`); `*_lib.py` são bibliotecas e não viram modelo.
@@ -287,7 +287,7 @@
 - `npcs.html` + `src/dev/npcView.js` (só no dev): as três invocações lado a lado, com cada golpe em loop e parâmetros
   de câmera/pose na URL (`#focus=0&mode=heavy&at=0.55`).
 
-## v2.0 — reanálise geral, recuperação e correções
+## v2.0.0 — reanálise geral, recuperação e correções
 
 ### Recuperação do histórico
 - O commit `29f1170` ("improve mobile play") partiu de uma cópia antiga (`aa0b93d`) e desfez os IDs novos, as 420
@@ -324,7 +324,7 @@
 ### Equilíbrio
 - Rodada geral (210 lutas, CPU normal, 60 s, melhor de 3): Kaiser 75% e Gal Sal 25% fora da margem (±18).
 - `gal_sal.js`: `heal` × 0,6 em todos os golpes → 46% (28 lutas). `kaiser.js`: Jab 20, Direto 23, karambit 30, Chute
-  giratório 56 (combo 194) → 63% (56 lutas). Tabela completa no TODO.md ("Estado na v2.0").
+  giratório 56 (combo 194) → 63% (56 lutas). Tabela completa no TODO.md ("Estado na v2.0.0").
 
 ### Validação
 - `npm run check`, `npm run build`, `npm run audit`, `npm run moves`.
@@ -338,9 +338,9 @@
 - `src/ui/Screens.js` e `src/styles.css` exibem texto e opções sem cobrir a arena; a HUD de combate é ocultada no resultado.
 - Validação: `npm.cmd run build`, `npm.cmd run check` e simulações no navegador confirmaram a arena e os modelos em vitórias solo e em equipe.
 
-## v1.9 — melhorias mobile e navegação
-- Registro público correspondente adicionado a `CHANGELOG-CLIENTE.md`; as entradas v1.8 e v1.7 foram preservadas.
-- `src/config/version.js` passou a anunciar a versão 1.9, com as novidades v1.9, v1.8 e v1.7 também disponíveis no menu do jogo.
+## v1.6.0 — melhorias mobile e navegação
+- Registro público correspondente adicionado a `CHANGELOG-CLIENTE.md`; as entradas v1.5.0 e v1.4.0 foram preservadas.
+- `src/config/version.js` passou a anunciar a versão 1.6.0, com as novidades v1.6.0, v1.5.0 e v1.4.0 também disponíveis no menu do jogo.
 
 ## Interface responsiva sem rolagem
 - As telas `.screen`, a página e o documento bloqueiam rolagem e overscroll.

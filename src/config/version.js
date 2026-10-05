@@ -1,16 +1,18 @@
-// Versão do jogo e NOVIDADES (changelog). Cada atualização conta, inclusive as que foram juntas numa só publicação.
-// Para uma nova atualização: suba VERSION e acrescente a entrada no TOPO de CHANGELOG (textos para jogadores, os mesmos
-// do CHANGELOG-CLIENTE.md; detalhes técnicos vão no CHANGELOG-ADMIN.md).
-export const VERSION = 37;
-export const VERSION_LABEL = `v${Math.floor(VERSION / 10)}.${VERSION % 10}`;
+// Versão semântica do jogo e NOVIDADES (changelog).
+// Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
+export const VERSION = '3.5.0';
+export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
-  return `v${Math.floor(version / 10)}.${version % 10}`;
+  if (typeof version === 'number') {
+    return `v${Math.floor(version / 10)}.${version % 10}`;
+  }
+  return `v${version}`;
 }
 
 export const CHANGELOG = [
   {
-    v: 37,
+    v: '3.5.0',
     date: '2026-10-04',
     title: 'Substituição aprimorada + Online pronto',
     items: [
@@ -19,7 +21,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 36,
+    v: '3.4.1',
     date: '2026-10-04',
     title: 'Substituição no lugar',
     items: [
@@ -27,7 +29,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 35,
+    v: '3.4.0',
     date: '2026-10-04',
     title: 'Super Difícil de verdade',
     items: [
@@ -37,7 +39,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 34,
+    v: '3.3.0',
     date: '2026-10-04',
     title: 'CPU que aprende',
     items: [
@@ -47,7 +49,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 33,
+    v: '3.2.1',
     date: '2026-10-04',
     title: 'Cinzas da Decadenza',
     items: [
@@ -56,7 +58,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 32,
+    v: '3.2.0',
     date: '2026-10-04',
     title: 'Cada um agarra do seu jeito',
     items: [
@@ -65,7 +67,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 31,
+    v: '3.1.0',
     date: '2026-10-04',
     title: 'Agarrão de cinema',
     items: [
@@ -73,7 +75,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 30,
+    v: '3.0.0',
     date: '2026-10-04',
     title: 'Todos despertam',
     items: [
@@ -85,7 +87,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 29,
+    v: '2.7.0',
     date: '2026-10-04',
     title: 'Barra de Transformação',
     items: [
@@ -98,7 +100,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 28,
+    v: '2.6.0',
     date: '2026-10-03',
     title: 'Múmia, rastros e vitória de cinema',
     items: [
@@ -108,7 +110,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 27,
+    v: '2.5.0',
     date: '2026-10-03',
     title: 'Rituais com cara própria',
     items: [
@@ -120,7 +122,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 26,
+    v: '2.4.0',
     date: '2026-10-03',
     title: 'Chegou o Balu',
     items: [
@@ -134,7 +136,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 25,
+    v: '2.3.2',
     date: '2026-10-03',
     title: 'Equilíbrio: rápidos e pesados',
     items: [
@@ -145,7 +147,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 24,
+    v: '2.3.1',
     date: '2026-10-03',
     title: 'Interface e carregamento',
     items: [
@@ -154,7 +156,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 23,
+    v: '2.3.0',
     date: '2026-10-03',
     title: 'Ajustes do TODO',
     items: [
@@ -170,7 +172,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 22,
+    v: '2.2.0',
     date: '2026-10-03',
     title: 'O Diabo reformulado',
     items: [
@@ -191,7 +193,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 21,
+    v: '2.1.0',
     date: '2026-10-03',
     title: 'A Marionete e a horda de sangue',
     items: [
@@ -204,7 +206,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 20,
+    v: '2.0.0',
     date: '2026-10-03',
     title: 'Vitória, celular e correções',
     items: [
@@ -222,7 +224,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 19,
+    v: '1.6.0',
     date: '2026-10-03',
     title: 'Mobile mais fácil de jogar',
     items: [
@@ -234,7 +236,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 18,
+    v: '1.5.0',
     date: '2026-10-03',
     title: 'Novas falas e apresentações',
     items: [
@@ -245,7 +247,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 17,
+    v: '1.4.0',
     date: '2026-10-03',
     title: 'Apresentações e finais aprimorados',
     items: [
@@ -256,7 +258,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 16,
+    v: '1.3.0',
     date: '2026-10-02',
     title: 'Partidas online e novidades de combate',
     items: [
@@ -270,7 +272,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 15,
+    v: '1.2.1',
     date: '2026-10-02',
     title: 'Menus mais fáceis de usar',
     items: [
@@ -280,7 +282,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 14,
+    v: '1.2.0',
     date: '2026-10-02',
     title: 'Tutorial, novo lutador e controles',
     items: [
@@ -292,7 +294,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 13,
+    v: '1.1.2',
     date: '2026-10-02',
     title: 'Correção ao abrir o jogo',
     items: [
@@ -300,7 +302,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 12,
+    v: '1.1.1',
     date: '2026-10-02',
     title: 'Controles revisados',
     items: [
@@ -309,7 +311,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 11,
+    v: '1.1.0',
     date: '2026-10-02',
     title: 'Novos comandos de habilidade',
     items: [
@@ -318,7 +320,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 10,
+    v: '1.0.0',
     date: '2026-10-02',
     title: 'Novo cenário e arenas renovadas',
     items: [
@@ -328,7 +330,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 9,
+    v: '0.8.1',
     date: '2026-10-02',
     title: 'Combate mais equilibrado',
     items: [
@@ -338,7 +340,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 8,
+    v: '0.8.0',
     date: '2026-10-02',
     title: 'Aparência dos personagens renovada',
     items: [
@@ -346,7 +348,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 7,
+    v: '0.7.0',
     date: '2026-10-02',
     title: 'Três novos lutadores',
     items: [
@@ -355,7 +357,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 6,
+    v: '0.6.0',
     date: '2026-10-02',
     title: 'Celular e cenários',
     items: [
@@ -363,7 +365,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 5,
+    v: '0.5.0',
     date: '2026-10-01',
     title: 'Lírio',
     items: [
@@ -371,7 +373,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 4,
+    v: '0.4.0',
     date: '2026-10-01',
     title: 'Primeira publicação',
     items: [
@@ -379,7 +381,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 3,
+    v: '0.3.0',
     date: '2026-10-01',
     title: 'Labirinto e Xande',
     items: [
@@ -387,7 +389,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 2,
+    v: '0.2.0',
     date: '2026-10-01',
     title: 'Batalha em equipe',
     items: [
@@ -395,7 +397,7 @@ export const CHANGELOG = [
     ],
   },
   {
-    v: 1,
+    v: '0.1.0',
     date: '2026-10-01',
     title: 'Arena Paranormal',
     items: [
