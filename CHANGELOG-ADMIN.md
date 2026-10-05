@@ -1,5 +1,15 @@
 # Registro administrativo de alterações
 
+## v3.5.1 — Substituição corrigida
+
+### Posicionamento da substituição (v3.5.1)
+- Bug: `Fighter.trySubstitution` chamava `findSpotBehind(arena, opp.pos, …)`; `opp.pos` (Vector3) não tem `yaw`, o
+  cálculo dava `NaN` e a função sempre retornava `null` — a substituição nunca acontecia (L2 apanhando não fazia nada).
+- Novo `findSubstitutionSpot` (`positioning.js`): passo curto para o lado em relação ao atacante
+  (`COMBAT.substitution.sidestep` 1,2 m + `back` 0,4 m), lado escolhido pelo direcional (sem direcional: direita,
+  depois esquerda), recua se os lados estiverem bloqueados e, sem espaço, fica no mesmo lugar. Determinístico (online).
+  Remove `COMBAT.substitution.behind`. Testes em `tests/positioning.test.js`.
+
 ## v3.5.0 — Substituição aprimorada + Online pronto
 
 ### Posicionamento da substituição (v3.5.0)
