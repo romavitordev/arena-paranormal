@@ -2,6 +2,9 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.5.1 — Substituição corrigida
+- Substituição: ao usar L2 enquanto apanha, o lutador desvia do golpe com um passo curto para o lado (para onde o direcional aponta) e reaparece perto de onde estava — não teleporta mais para as costas do adversário. Também corrige a substituição, que não estava funcionando.
+
 ## v3.5.0 — Substituição aprimorada + Online pronto
 - Substituição: ao usar L2 enquanto apanha, reaparece atrás do adversário em um ponto livre da arena, interrompe o combo e ganha invulnerabilidade breve.
 - Modo online pronto: crie ou entre em salas públicas e privadas por código e jogue partidas sincronizadas pela internet.

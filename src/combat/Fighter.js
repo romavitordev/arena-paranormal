@@ -4,7 +4,7 @@ import { buildModel } from '../models/index.js';
 import { Animator } from '../anim/Animator.js';
 import { clamp, yawTo, turnTowards, forwardFromYaw, distXZ, angleDiff, DEG } from '../core/util.js';
 import { applyHit } from './damage.js';
-import { findSpotBehind, resolveBody } from './positioning.js';
+import { findSubstitutionSpot, resolveBody } from './positioning.js';
 import { startChargeFx } from './chargeFx.js';
 import { ABILITY_TYPES } from './abilities.js';
 import { SPECIALS } from './specials/index.js';
@@ -2380,7 +2380,7 @@ export class Fighter {
 
   // ------------------------------------------------ dano recebido
   updateHitstun(dt) {
-    // SUBSTITUIÇÃO: L2 enquanto apanha gasta carga de esquiva e reaparece atrás do atacante
+    // SUBSTITUIÇÃO: L2 enquanto apanha gasta carga de esquiva e desvia com um passo curto para o lado
     if (this.input.pressed.dodge && this.trySubstitution()) return;
     if (this.onGround) {
       const f = Math.exp(-dt * 6);
@@ -2464,12 +2464,17 @@ export class Fighter {
     }
     const opp = this.opponent;
     if (!opp) return false;
-    const spot = findSpotBehind(this.world.arena, opp.pos, {
-      distance: S.behind,
+    // lado do desvio: o que o direcional aponta (esquerda/direita em relação ao atacante); sem direcional, o lado livre
+    const stick = this.moveInputWorld(new THREE.Vector3());
+    const away = new THREE.Vector3().subVectors(this.pos, opp.pos).setY(0).normalize();
+    const lateral = stick.x * -away.z + stick.z * away.x;
+    const spot = findSubstitutionSpot(this.world.arena, this.pos, opp.pos, {
+      sidestep: S.sidestep,
+      back: S.back,
       radius: this.radius,
-      targetRadius: opp.radius,
+      attackerRadius: opp.radius,
+      side: Math.abs(lateral) > 0.3 ? Math.sign(lateral) : 0,
     });
-    if (!spot) return false;
     this.dodges -= S.charges;
     this.cooldowns.substitution = S.cooldown;
     this.buffered = null; // o L2 da substituição não vira uma esquiva logo depois

@@ -1,5 +1,10 @@
 # Changelog
 
+## v3.5.1 — 2026-10-05
+
+### Corrigido
+- Substituição: ao usar L2 enquanto apanha, o lutador desvia do golpe com um passo curto para o lado (para onde o direcional aponta) e reaparece perto de onde estava — não teleporta mais para as costas do adversário. Também corrige a substituição, que não estava funcionando.
+
 ## v3.5.0 — 2026-10-04
 
 ### Adicionado

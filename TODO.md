@@ -722,8 +722,9 @@ Arquivo: `damage.js`. Mostrar "N HITS" na HUD (estilo Storm). Resolve parte da d
 golpes.
 
 ### 3.2 Substituição (escape no meio do combo) ✅ (`trySubstitution`)
-A substituição funciona com L2 durante o hitstun: gasta 1 carga, cancela o golpe recebido e mantém o lutador na
-posição em que estava ao ativar; não o teleporta para trás do atacante. Tem invulnerabilidade breve e efeito visual
+A substituição funciona com L2 durante o hitstun: gasta 1 carga, cancela o golpe recebido e desvia com um passo curto
+para o lado (direcional escolhe o lado; 1,2 m de lado + 0,4 m para trás), perto de onde estava; não o teleporta para
+trás do atacante. Sem espaço, fica no mesmo lugar. Tem invulnerabilidade breve e efeito visual
 de troca. Arquivo: `Fighter.trySubstitution`.
 
 ### 3.3 Escapar do agarrão (throw tech) ✅ ("ESCAPOU!")

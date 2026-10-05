@@ -4,7 +4,7 @@ Jogo de luta 3D em arena com temática paranormal. Combate rápido e acessível,
 movimentação livre, ataques direcionais, defesa, esquiva, habilidades por combinação de
 botões e especiais cinematográficos. Feito com **Three.js + Vite**, roda no navegador.
 
-Versão atual do jogo: **v3.5.0**.
+Versão atual do jogo: **v3.5.1**.
 
 A numeração segue **MAJOR.MINOR.PATCH**: microatualizações usam `x.y.z`, atualizações concretas usam `x.y.0` e grandes marcos usam `x.0.0`.
 
@@ -57,7 +57,7 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
   Segurando △ para carregar, L2 sozinho continua sendo **esquiva** — dá para fugir no meio da carga.
 - **Dash:** × + × (toque duplo no pulo) avança rápido. △ + × é o dash longo, que persegue o adversário (10 de sanidade); no Joui, △ + × é o Teleporte das Sombras.
 - **Agarrão:** Defesa + ○ (RT + B). Pega de perto e arremessa; não pode ser defendido, só esquivado. Errar deixa você exposto.
-- **Substituição:** aperte L2 enquanto apanha para gastar uma carga, escapar do combo e reaparecer atrás do adversário (ou no ponto seguro mais próximo).
+- **Substituição:** aperte L2 enquanto apanha para gastar uma carga, escapar do combo e desviar com um passo curto para o lado (para onde o direcional aponta), reaparecendo perto de onde estava — nunca nas costas do adversário.
 - **Câmera:** sempre travada no adversário. **L1 / R1** chamam as assistências na batalha em equipe.
 - Cada jogador lê teclado **e** controle ao mesmo tempo.
 - **Menus:** A/× (Pulo, Enter) confirma · B/○ (Ataque físico, Esc) volta.
@@ -159,7 +159,7 @@ Exemplo: X=100, Y=60 → o inimigo perde 100, recupera 60 (saldo −40) e perde 
 - **Defesa direcional:** parado, a defesa gira devagar para acompanhar o adversário — golpes pelos lados podem passar e
   pelas costas não defende.
 - **Esquiva:** L2/LT + direção. 4 cargas que recuperam conforme toma dano.
-- **Substituição:** L2/LT **enquanto apanha** gasta 1 carga, cancela o golpe e reaparece no mesmo lugar.
+- **Substituição:** L2/LT **enquanto apanha** gasta 1 carga, cancela o golpe e desvia com um passo curto para o lado (direcional escolhe o lado); sem espaço, fica no mesmo lugar.
 - **Agarrão:** R2 + ○. Não pode ser defendido; quem é agarrado escapa com **R2 + ○ logo no começo**, ou esquivando antes.
 - **Barra de Transformação (todos):** enche conforme apanha. Cheia e com a vida em 35% ou menos, segure
   △ até a sanidade encher e passar do limite (+1 s): Juan, Kemi e Ferreiro se transformam (Diabo, Fantasma, Deus da

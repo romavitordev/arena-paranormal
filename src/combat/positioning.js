@@ -68,6 +68,40 @@ export function findSpotBehind(arena, target, { distance = 1.5, radius = 0.5, ta
   return { x: candidates[0].x, z: candidates[0].z };
 }
 
+/**
+ * Substituição: passo curto para o lado em relação ao atacante, perto de onde o lutador estava
+ * (nunca para as costas do atacante). side: 1 / -1 (direção preferida) ou 0 (escolhe o lado livre).
+ * Tenta o lado preferido, depois o outro, depois só recuar; sem espaço, fica no mesmo lugar.
+ * Determinística (mesmo resultado nos dois lados do online). Retorna {x, z}.
+ */
+export function findSubstitutionSpot(arena, self, attacker, { sidestep = 1.2, back = 0.4, radius = 0.5, attackerRadius = 0.5, side = 0 } = {}) {
+  let ax = self.x - attacker.x;
+  let az = self.z - attacker.z;
+  const len = Math.hypot(ax, az);
+  if (len < 1e-5) {
+    ax = 0;
+    az = 1;
+  } else {
+    ax /= len;
+    az /= len;
+  }
+  const others = [{ x: attacker.x, z: attacker.z, r: attackerRadius + 0.05 }];
+  const sides = side < 0 ? [-1, 1] : [1, -1];
+  const tries = [];
+  for (const s of sides) {
+    for (const k of [1, 0.6]) {
+      tries.push([-az * s * sidestep * k + ax * back, ax * s * sidestep * k + az * back]);
+    }
+  }
+  tries.push([ax * sidestep, az * sidestep], [ax * back, az * back]);
+  for (const [dx, dz] of tries) {
+    const x = self.x + dx;
+    const z = self.z + dz;
+    if (isSpotFree(arena, x, z, radius, others)) return { x, z };
+  }
+  return { x: self.x, z: self.z };
+}
+
 // Posição livre mais próxima de um ponto desejado (teletransporte).
 export function findFreeSpotNear(arena, x, z, { radius = 0.5, others = [] } = {}) {
   if (isSpotFree(arena, x, z, radius, others)) return { x, z };
