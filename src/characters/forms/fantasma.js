@@ -6,7 +6,7 @@ export default {
   id: 'fantasma',
   form: true,
   baseId: 'kemi',
-  name: 'A FANTASMA (KEMI)',
+  name: 'A FANTASMA', // com as faixas ela é a assassina, não a Kemi
   model: 'fantasma',
   color: '#6a5a48',
   origin: 'Mascarados',

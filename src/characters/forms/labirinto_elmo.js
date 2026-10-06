@@ -15,7 +15,7 @@ export default {
   id: 'labirinto_elmo',
   form: true,
   baseId: 'labirinto',
-  name: '??? (LABIRINTO)',
+  name: '???', // com o capacete ele é o assassino sem nome
   model: 'labirinto_elmo',
   energyColor: 0xc8a0ff,
   info: {

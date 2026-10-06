@@ -1,5 +1,10 @@
 # Registro administrativo de alterações
 
+## v3.7.1 — Nomes dos assassinos
+
+- `name` das formas dos Mascarados sem o nome do agente: `fantasma` → "A FANTASMA", `labirinto_elmo` → "???",
+  `aguiar_mutilador` → "MUTILADOR NOTURNO" (a HUD mostra `def.name` da forma ativa).
+
 ## v3.7.0 — Especiais com aviso + máscaras na Transformação
 
 - Novos tipos de especial: `maskTransform` (cena de pôr a máscara/capacete → `transform` para `sp.form`, +bonusHealth;

@@ -1,5 +1,10 @@
 # Changelog
 
+## v3.7.1 — 2026-10-06
+
+### Alterado
+- Mascarados: ao pôr a máscara na Transformação, o nome na tela muda para o do assassino — A FANTASMA (Kemi), ??? (Labirinto) e MUTILADOR NOTURNO (Aguiar).
+
 ## v3.7.0 — 2026-10-06
 
 ### Alterado
