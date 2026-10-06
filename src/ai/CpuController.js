@@ -75,7 +75,22 @@ export class CpuController {
     }
   }
 
+  // REGRA DO JOGO (Anfitrião) em vigor: a CPU respeita a regra anunciada (não pula / não defende / não dá dash; parada
+  // proibida → anda de lado). O nível mais fácil esquece a regra às vezes.
   produce(dt) {
+    const out = this.produceRaw(dt);
+    const f = this.fighter;
+    const rule = f && f.world && f.world.activeRule;
+    if (rule !== this.lastRule) { this.lastRule = rule; this.ruleForgot = rule && this.L.block < 0.2 && Math.random() < 0.3; }
+    if (!rule || this.ruleForgot) return out;
+    if (rule === 'jump') out.held.jump = false;
+    if (rule === 'block') out.held.block = false;
+    if (rule === 'dash' && out.held.carga) out.held.jump = false;
+    if (rule === 'still' && !out.moveX && !out.moveY && f.state === 'idle') out.moveX = Math.sin(f.world.time * 1.3 || 0) > 0 ? 0.8 : -0.8;
+    return out;
+  }
+
+  produceRaw(dt) {
     const out = { moveX: 0, moveY: 0, held: {} };
     const f = this.fighter;
     if (!f || !f.world) return out;
@@ -299,7 +314,7 @@ export class CpuController {
         this.lastAbility = a.id;
         const [modKey, btn] = a.input.split('+'); // 'carga' (△) ou 'block' (R2)
         const range = a.range || 10;
-        if (d <= range || ['weaponState', 'blink', 'mistCloud', 'healOverTime', 'hatredTemple', 'shadowClones', 'heavyProtection', 'noiseScreen'].includes(a.type)) {
+        if (d <= range || ['weaponState', 'blink', 'mistCloud', 'healOverTime', 'hatredTemple', 'shadowClones', 'heavyProtection', 'noiseScreen', 'gameRule'].includes(a.type)) {
           if (modKey === 'block') this.queue.push({ t: 0.05, held: { block: true } }, { t: 0.06, held: { block: true, [btn]: true } }, { t: 0.05, held: {} });
           else this.queue.push({ t: 0.05, held: { carga: true, [btn]: true } }, { t: 0.05, held: {} });
           return out;
@@ -428,7 +443,7 @@ export class CpuController {
       if (!(a.input.startsWith('block+') || (a.input.startsWith('carga+') && a.input !== 'carga+jump'))) continue;
       if (f.cooldowns[a.id] > 0 || f.energy < (f.abilityCost ? f.abilityCost(a) : a.energyCost || 0) + 5 || !this.aiOk(a, d, opp, lowHp)) continue;
       const range = a.range || 10;
-      const self = ['weaponState', 'blink', 'mistCloud', 'healOverTime', 'hatredTemple', 'shadowClones', 'heavyProtection', 'noiseScreen', 'selfBuff'].includes(a.type);
+      const self = ['weaponState', 'blink', 'mistCloud', 'healOverTime', 'hatredTemple', 'shadowClones', 'heavyProtection', 'noiseScreen', 'selfBuff', 'gameRule'].includes(a.type);
       if (!self && d > range) continue;
       const [modKey, btn] = a.input.split('+');
       add('ab:' + a.id, (a.id === this.lastAbility ? 0.3 : 0.6) * (open && !self ? 2 : 1), () => {

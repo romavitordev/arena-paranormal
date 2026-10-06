@@ -1,5 +1,24 @@
 # Registro administrativo de alterações
 
+## (em andamento, sem versão nem changelog dos jogadores) — Arnaldo Fritz → O Anfitrião e Senhor Veríssimo
+
+Pedido do usuário: só entra no changelog dos jogadores depois da implementação completa (modelos do Blender).
+- Novos no elenco: `arnaldo`, `verissimo`; forma `anfitriao` (detalhes do kit no TODO, seção dos próximos lutadores).
+- Modelos provisórios em `MODEL_VARIANTS` (corpo do Joui / Lírio + `addArnaldoProps` / `addAnfitriaoProps` /
+  `addVerissimoProps`); acessórios novos em `weapons.js`: `swordArnaldo` (fita vermelha), `pocketWatch` (tampa
+  articulada; com a Relíquia os ponteiros giram sem parar), `hostMask`, `roundGlasses`, `mustache`, `necktie`.
+- `maskTransform` cena `watch` + clipes `watch_open` / `watch_raise`.
+- Especial novo `hostGame` (roleta; aviso por `telegraph`); habilidade nova `gameRule` (ticker do mundo,
+  `world.activeRule`; conta pulos e dashes por `Fighter.jumps` / `Fighter.dashes`).
+- `ranged.chaos` (efeito sorteado por disparo, em `fireProjectile`); projéteis aceitam `launch`; puxão do projétil
+  aceita `onHit.pull.anim/sound`; `dashStrike` aceita `guardBreak`; `selfBuff` aceita `extraHit`
+  (`checkMeleeHit`: corte extra depois de cada golpe físico que acerta).
+- Passivas `chronoSense` (em `applyHit`: `trySubstitution({ free: true })`, recarga `chronoCd`) e `verissimoSecret`
+  (em `takeDamage`; `secretUsed` por partida, `secretRound` contra o Kian).
+- Testado no navegador: transformação, roleta (aviso + dano 200–300), Regra do Jogo, Disparo do Caos, Percepção
+  Cronológica, corte extra (26 → 38), Segredo de Veríssimo (fica com 1, o próximo golpe derruba), Emissor puxando e
+  Finta quebrando a defesa. `npm run check` com as regras novas.
+
 ## v3.9.2 — Seleção online no celular
 
 - Causa: na partida online `body.netplay #screens` tinha `pointer-events: none` (cliques não eram sincronizados entre

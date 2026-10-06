@@ -966,3 +966,170 @@ export function gasMask(glow = 0x7aff9a) {
   }
   return g;
 }
+
+// ESPADA DO ARNALDO (Arnaldo Fritz e, depois da morte dele, o Senhor Veríssimo): espada comum, sem nada paranormal —
+// lâmina reta e fina, guarda em cruz simples, cabo escuro e a FITA VERMELHA amarrada na ponta do cabo, caindo solta.
+// Empunhada no cabo (origem); a lâmina segue para -Y, o fio virado para +Z.
+export function swordArnaldo() {
+  const g = new THREE.Group();
+  const grip = part(new THREE.CylinderGeometry(0.019, 0.021, 0.2, 10), 0x2a1c16);
+  grip.position.y = 0.05;
+  g.add(grip);
+  const pommel = part(new THREE.SphereGeometry(0.03, 10, 8), 0xb8a070);
+  pommel.position.y = 0.165;
+  g.add(pommel);
+  const guard = part(new THREE.BoxGeometry(0.03, 0.03, 0.22), 0xb8a070);
+  guard.position.y = -0.06;
+  g.add(guard);
+  for (const s of [-1, 1]) {
+    const tip = part(new THREE.SphereGeometry(0.02, 8, 6), 0xb8a070);
+    tip.position.set(0, -0.06, 0.11 * s);
+    g.add(tip);
+  }
+  const shape = new THREE.Shape();
+  shape.moveTo(-0.028, 0);
+  shape.lineTo(-0.024, -0.82);
+  shape.lineTo(0, -0.92);
+  shape.lineTo(0.024, -0.82);
+  shape.lineTo(0.028, 0);
+  shape.lineTo(-0.028, 0);
+  const blade = part(extrude(shape, 0.01), 0xd8dde4, { mat: toon(0xd8dde4, { emissive: 0x1a2028 }) });
+  blade.rotation.y = -Math.PI / 2;
+  blade.position.y = -0.075;
+  g.add(blade);
+  // a fita vermelha: nó no pomo e duas pontas caindo soltas
+  const RED = 0xc0141c;
+  const knot = part(new THREE.TorusGeometry(0.024, 0.009, 6, 12), RED, { outline: false });
+  knot.position.y = 0.15;
+  knot.rotation.x = Math.PI / 2;
+  g.add(knot);
+  for (const s of [-1, 1]) {
+    const path = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(0, 0.17, 0.01 * s),
+      new THREE.Vector3(0.02 * s, 0.22, -0.03),
+      new THREE.Vector3(0.05 * s, 0.25, -0.1),
+      new THREE.Vector3(0.07 * s, 0.22 + (s > 0 ? 0.02 : -0.02), -0.18),
+    ]);
+    const ribbon = part(new THREE.TubeGeometry(path, 12, 0.01, 4, false), RED, { outline: false });
+    ribbon.scale.set(2.2, 1, 1); // achatada como fita
+    g.add(ribbon);
+  }
+  g.userData.tipLength = 1.0;
+  return g;
+}
+
+// RELÓGIO DE BOLSO de ouro do Arnaldo (com a foto do Thiago). `relic`: dentro da tampa está a Relíquia de Energia
+// (brilho roxo/rosa/azul). A tampa (userData.lid) abre girando no eixo da dobradiça.
+export function pocketWatch({ relic = false } = {}) {
+  const g = new THREE.Group();
+  const GOLD = 0xd4a640;
+  const caseM = part(new THREE.CylinderGeometry(0.045, 0.045, 0.018, 20), GOLD);
+  caseM.rotation.x = Math.PI / 2;
+  g.add(caseM);
+  const crown = part(new THREE.CylinderGeometry(0.008, 0.008, 0.016, 8), GOLD);
+  crown.position.y = 0.052;
+  g.add(crown);
+  const bow = part(new THREE.TorusGeometry(0.014, 0.003, 5, 10), GOLD, { outline: false });
+  bow.position.y = 0.068;
+  g.add(bow);
+  const face = new THREE.Mesh(new THREE.CircleGeometry(0.039, 20), relic ? glowMat(0xb04aff, 0.95) : toon(0xf4ecd8));
+  face.position.z = 0.0095;
+  g.add(face);
+  if (relic) {
+    // a Relíquia: núcleo brilhante e ponteiros girando sem parar
+    const core = new THREE.Mesh(new THREE.OctahedronGeometry(0.018), glowMat(0xff6ad0, 1));
+    core.position.z = 0.016;
+    g.add(core);
+    const halo = new THREE.Mesh(new THREE.CircleGeometry(0.075, 20), glowMat(0x7a5aff, 0.3));
+    halo.position.z = 0.012;
+    g.add(halo);
+    g.userData.core = core;
+  }
+  const hands = new THREE.Group();
+  for (const [len, w] of [[0.032, 0.004], [0.022, 0.006]]) {
+    const h = new THREE.Mesh(new THREE.BoxGeometry(w, len, 0.002), relic ? glowMat(0x7ad0ff, 1) : toon(0x1a1a1a));
+    h.position.y = len / 2;
+    const pivot = new THREE.Group();
+    pivot.add(h);
+    hands.add(pivot);
+  }
+  hands.position.z = 0.012;
+  g.add(hands);
+  g.userData.hands = hands.children;
+  // tampa articulada na dobradiça de cima-esquerda
+  const lidPivot = new THREE.Group();
+  lidPivot.position.set(-0.045, 0, 0.01);
+  const lid = part(new THREE.CylinderGeometry(0.046, 0.046, 0.006, 20), GOLD);
+  lid.rotation.x = Math.PI / 2;
+  lid.position.set(0.045, 0, 0.003);
+  lidPivot.add(lid);
+  g.add(lidPivot);
+  g.userData.lid = lidPivot;
+  return g;
+}
+
+// MÁSCARA DO ANFITRIÃO: máscara de gás com o Símbolo do Anfitrião (o olho dentro do triângulo, em roxo) na testa e
+// os olhos ROXOS brilhando. Fixa no rosto (socket `mouth`).
+export function hostMask() {
+  const g = gasMask(0xb04aff);
+  const sym = new THREE.Group();
+  const tri = new THREE.Mesh(new THREE.RingGeometry(0.026, 0.034, 3), glowMat(0xd070ff, 1));
+  tri.rotation.z = Math.PI / 2;
+  sym.add(tri);
+  const eye = new THREE.Mesh(new THREE.CircleGeometry(0.009, 10), glowMat(0x7ad0ff, 1));
+  eye.position.z = 0.001;
+  sym.add(eye);
+  sym.position.set(0, 0.125, 0.07);
+  sym.rotation.x = -0.35;
+  g.add(sym);
+  return g;
+}
+
+// óculos finos e redondos (Arnaldo)
+export function roundGlasses() {
+  const g = new THREE.Group();
+  const mat = toon(0x2a2a2a);
+  for (const s of [-1, 1]) {
+    const rim = new THREE.Mesh(new THREE.TorusGeometry(0.024, 0.0035, 6, 16), mat);
+    rim.position.set(0.04 * s, 0, 0);
+    g.add(rim);
+    const lens = new THREE.Mesh(new THREE.CircleGeometry(0.022, 14), glowMat(0xcfe6ff, 0.18));
+    lens.position.set(0.04 * s, 0, 0.001);
+    g.add(lens);
+    const arm = new THREE.Mesh(new THREE.BoxGeometry(0.003, 0.003, 0.1), mat);
+    arm.position.set(0.066 * s, 0, -0.05);
+    g.add(arm);
+  }
+  const bridge = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.003, 0.003), mat);
+  g.add(bridge);
+  return g;
+}
+
+// bigode cheio + cavanhaque grisalhos (Veríssimo)
+export function mustache(color = 0xb8b4ac) {
+  const g = new THREE.Group();
+  for (const s of [-1, 1]) {
+    const m = part(new THREE.CapsuleGeometry(0.012, 0.04, 4, 8), color, { outline: false });
+    m.rotation.z = (Math.PI / 2) * s - 0.35 * s;
+    m.position.set(0.024 * s, 0, 0);
+    g.add(m);
+  }
+  const goatee = part(new THREE.ConeGeometry(0.018, 0.04, 8), color, { outline: false });
+  goatee.rotation.x = Math.PI;
+  goatee.position.set(0, -0.06, -0.005);
+  g.add(goatee);
+  return g;
+}
+
+// gravata (no socket do peito): nó + corpo
+export function necktie(color) {
+  const g = new THREE.Group();
+  const knot = part(new THREE.BoxGeometry(0.035, 0.03, 0.02), color, { outline: false });
+  g.add(knot);
+  const body = part(new THREE.ConeGeometry(0.032, 0.26, 4), color, { outline: false });
+  body.rotation.set(Math.PI, Math.PI / 4, 0);
+  body.scale.set(1, 1, 0.35);
+  body.position.y = -0.14;
+  g.add(body);
+  return g;
+}

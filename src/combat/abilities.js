@@ -1876,7 +1876,7 @@ Object.assign(ABILITY_TYPES, {
           if (!opp.isInvulnerable()) {
             applyHit(world, f, opp, {
               damage: a.damage, kind: 'ability', element: a.element, knockback: a.knockback, hitstun: a.hitstun ?? 0.6,
-              launch: !!a.launch, lowLaunch: !!a.launch, guardCrush: a.guardCrush, sound: a.hitSound || 'bladeHit', color: a.color, scale: 1.6, dir: forwardFromYaw(f.yaw),
+              launch: !!a.launch, lowLaunch: !!a.launch, guardCrush: a.guardCrush, guardBreak: a.guardBreak, sound: a.hitSound || 'bladeHit', color: a.color, scale: 1.6, dir: forwardFromYaw(f.yaw),
             });
           }
         }
@@ -2840,6 +2840,78 @@ Object.assign(ABILITY_TYPES, {
   },
 
   // Buff simples em si mesmo (ex.: Velocidade Mortal do Xande)
+  // ------------------------------------------------------------------ O ANFITRIÃO
+  // REGRA DO JOGO: ergue o relógio e impõe uma regra sorteada por alguns segundos, ANUNCIADA na tela. Como no cânone,
+  // a regra vale para os DOIS — quem quebrar leva o castigo (um raio da Energia); o Anfitrião conhece o jogo e leva
+  // só uma parte (a.ownerMult). Regras: proibido pular, defender, correr (dash) ou ficar parado.
+  gameRule: {
+    start(f, a, world) {
+      if (world.activeRule) { f.notify('JÁ HÁ UMA REGRA EM JOGO'); return null; }
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      const opp = f.opponent;
+      if (opp) f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('cast_up', { restart: true, duration: a.windup + 0.3 });
+      world.audio.play('heartbeat', { volume: 0.8 });
+      const hand = () => f.rig.sockets.handL.getWorldPosition(new THREE.Vector3());
+      const glow = world.fx.emitter({ rate: 50, follow: hand, particle: { color: a.color, speed: 1, spread: 0.5, life: 0.35, size: 0.16 } });
+      tl.add(a.windup, () => {
+        glow.stop();
+        const RULES = a.rules || ['jump', 'block', 'dash', 'still'];
+        const rule = RULES[Math.floor(Math.random() * RULES.length)];
+        const TEXT = { jump: 'PROIBIDO PULAR', block: 'PROIBIDO DEFENDER', dash: 'PROIBIDO CORRER', still: 'PROIBIDO FICAR PARADO' };
+        world.showBanner(TEXT[rule], f.def.color);
+        world.audio.play('ritual', { volume: 0.9, pitch: 0.8 });
+        world.fx.flash(hand(), { color: a.color, size: 3, life: 0.25 });
+        world.screenFlash && world.screenFlash('#2a0a40', 0.15);
+        const both = [f, opp].filter(Boolean);
+        both.forEach((x) => x.notify('REGRA: ' + TEXT[rule], true));
+        const st = new Map(both.map((x) => [x, { jumps: x.jumps || 0, dashes: x.dashes || 0, still: 0, guard: 0 }]));
+        let t = 0;
+        let pulse = 0;
+        const punish = (x, dmg) => {
+          const d = Math.round(dmg * (x === f ? a.ownerMult ?? 0.5 : 1));
+          const p = x.chestPos();
+          world.fx.lightning(p.clone().add(new THREE.Vector3(0, 5, 0)), p, { color: a.color, life: 0.3 });
+          world.fx.burst(p, { count: 18, color: a.color, speed: 4, life: 0.4, size: 0.18 });
+          world.audio.play('impact', { volume: 0.8, pitch: 1.4 });
+          x.notify('QUEBROU A REGRA!', true);
+          applyHit(world, f, x, { damage: d, kind: 'ability', element: 'energia', reaction: x !== f, hitstun: 0.25, knockback: 0.5, ignoreInvuln: true, unblockable: true, sound: 'impact', color: a.color, noWeakFx: true });
+        };
+        world.activeRule = rule;
+        world.addTicker({
+          update(dt) {
+            t += dt;
+            pulse -= dt;
+            if (pulse <= 0) {
+              pulse = 0.45;
+              for (const x of both) if (x.state !== 'ko') world.fx.ring(new THREE.Vector3(x.pos.x, 0.06, x.pos.z), { color: a.color, radius: 1.1, life: 0.4, inner: 0.85 });
+            }
+            for (const x of both) {
+              if (x.state === 'ko' || world.cinematic) continue;
+              const s0 = st.get(x);
+              if (rule === 'jump' && (x.jumps || 0) > s0.jumps) { s0.jumps = x.jumps; punish(x, a.damage); }
+              if (rule === 'dash' && (x.dashes || 0) > s0.dashes) { s0.dashes = x.dashes; punish(x, a.damage); }
+              if (rule === 'block') {
+                s0.guard = x.isGuarding() ? s0.guard + dt : 0;
+                if (s0.guard >= 0.6) { s0.guard = 0; punish(x, a.damage * 0.6); }
+              }
+              if (rule === 'still') {
+                const moving = Math.hypot(x.vel.x, x.vel.z) > 0.6 || !x.onGround || x.state !== 'idle';
+                s0.still = moving ? 0 : s0.still + dt;
+                if (s0.still >= 1.2) { s0.still = 0; punish(x, a.damage * 0.6); }
+              }
+            }
+            return t >= a.duration || both.some((x) => x.state === 'ko');
+          },
+          dispose() { world.activeRule = null; },
+        });
+      });
+      tl.end(a.windup + 0.3);
+      return seqFrom(tl, { cancel: () => glow.stop() });
+    },
+  },
+
   selfBuff: {
     start(f, a, world) {
       if (f.findBuff(a.buffType)) { f.notify('JÁ ATIVO'); return null; }
@@ -2850,7 +2922,7 @@ Object.assign(ABILITY_TYPES, {
       tl.add(0.25, () => {
         const trail = world.fx.emitter({ rate: 24, follow: () => f.chestPos(), particle: { color: a.color, speed: 0.4, spread: 0.4, life: 0.4, size: 0.16 } });
         if (a.refillDodges) f.dodges = Math.max(f.dodges, a.refillDodges);
-        f.addBuff({ type: a.buffType, name: a.label || a.name.toUpperCase(), time: a.duration, duration: a.duration, speedMult: a.speedMult, mult: a.damageMult, affects: a.affects, takenMult: a.takenMult, takenKinds: a.takenKinds, onEnd() { trail.stop(); } });
+        f.addBuff({ type: a.buffType, name: a.label || a.name.toUpperCase(), time: a.duration, duration: a.duration, speedMult: a.speedMult, mult: a.damageMult, affects: a.affects, takenMult: a.takenMult, takenKinds: a.takenKinds, extraHit: a.extraHit, onEnd() { trail.stop(); } });
         f.notify(a.label || a.name.toUpperCase(), true);
       });
       tl.end(0.45);

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { glowMat } from './rig.js';
-import { m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask } from './weapons.js';
+import { m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, hostMask, roundGlasses, mustache, necktie } from './weapons.js';
 export { addJouiProps } from './characters/joui.js';
 
 // Armas e acessórios adicionados em código sobre os modelos do Blender.
@@ -318,4 +318,137 @@ export function addLabirintoElmoProps(rig) {
 export function addAguiarMutiladorProps(rig) {
   addAguiarProps(rig);
   if (rig.props.maskOn) rig.showProp('maskOn', true);
+}
+
+// ponteiros do relógio girando (o do Anfitrião gira sem parar, de jeitos aleatórios)
+function tickWatch(watch, crazy) {
+  const face = watch.children.find((c) => c.isMesh && c.geometry.type === 'CircleGeometry');
+  if (!face) return;
+  let last = performance.now();
+  let speed = 1;
+  face.onBeforeRender = () => {
+    const now = performance.now();
+    const dt = Math.min(0.1, (now - last) / 1000);
+    last = now;
+    if (crazy && Math.random() < 0.02) speed = (Math.random() - 0.3) * 30;
+    const [m, h] = watch.userData.hands;
+    m.rotation.z -= dt * (crazy ? speed : 0.6);
+    h.rotation.z -= dt * (crazy ? speed * 0.4 : 0.05);
+    if (watch.userData.core) watch.userData.core.rotation.y += dt * 4;
+  };
+}
+
+// MODELO PROVISÓRIO: recolore (ou esconde) partes do corpo emprestado pelo nome do material do .glb. Os materiais são
+// criados por cópia (rigFromGLB), então mexer neles não afeta o lutador original; a textura sai e fica a cor lisa.
+function restyle(rig, rules) {
+  rig.body.traverse((o) => {
+    if (!o.isMesh || !o.material || !o.material.name) return;
+    const r = rules.find(([re]) => re.test(o.material.name));
+    if (!r) return;
+    const [, look] = r;
+    if (look === 'hide') {
+      o.visible = false;
+      if (o.userData.outlineMesh) o.userData.outlineMesh.visible = false;
+      return;
+    }
+    o.material.map = null;
+    o.material.color.set(look);
+    o.material.needsUpdate = true;
+  });
+}
+
+// ARNALDO FRITZ (corpo provisório: o .glb do Joui, de casaco longo, até o modelo próprio no Blender): a espada da fita
+// vermelha na mão direita, óculos redondos, gravata vermelha e o relógio de bolso de ouro (escondido: aparece na
+// Transformação, na mão esquerda)
+const ARNALDO_LOOK = [
+  [/mask|eyeglow|bead/, 'hide'], // nada da máscara e das contas do Joui
+  [/face_mascarado/, 0xd9a988],
+  [/skin_mascarado/, 0xd9a988],
+  [/HAIR/, 0x4a3020], // cabelo e barba castanhos
+  [/coat/, 0x24222a], // casaco meio longo escuro
+  [/trim_red|rope/, 0x6a4024], // colete marrom
+  [/tunic/, 0xece8e0], // camisa social branca
+  [/pants|wraps/, 0x5a3a24], // calça marrom
+  [/boots|gloves/, 0x2a1c16],
+];
+export function addArnaldoProps(rig) {
+  const { sockets, props } = rig;
+  restyle(rig, ARNALDO_LOOK);
+  const sword = swordArnaldo();
+  sword.rotation.x = -0.25;
+  sockets.handR.add(sword);
+  props.sword = sword;
+  const glasses = roundGlasses();
+  glasses.position.set(0, 0.075, 0.0);
+  sockets.mouth.add(glasses);
+  props.glasses = glasses;
+  const tie = necktie(0xb0141c);
+  tie.position.set(0, 0.06, 0.02);
+  sockets.chest.add(tie);
+  props.tie = tie;
+  const watch = pocketWatch();
+  watch.scale.setScalar(1.8); // grande o bastante para ler na cena da Transformação
+  watch.rotation.set(-1.2, 0, 0);
+  watch.position.set(0, -0.07, 0.07);
+  watch.visible = false;
+  sockets.handL.add(watch);
+  props.watch = watch;
+  tickWatch(watch, false);
+}
+
+// O ANFITRIÃO (forma do Arnaldo): a máscara de gás com o Símbolo e os olhos roxos, as mesmas roupas (gravata
+// vermelha) e o relógio com a Relíquia preso no antebraço esquerdo, girando sem parar
+export function addAnfitriaoProps(rig) {
+  const { sockets, props } = rig;
+  restyle(rig, ARNALDO_LOOK);
+  const mask = hostMask();
+  mask.position.set(0, -0.02, -0.01);
+  sockets.mouth.add(mask);
+  props.hostMask = mask;
+  const tie = necktie(0xb0141c);
+  tie.position.set(0, 0.06, 0.02);
+  sockets.chest.add(tie);
+  props.tie = tie;
+  const watch = pocketWatch({ relic: true });
+  watch.scale.setScalar(1.6);
+  watch.rotation.set(0, Math.PI / 2, 0);
+  watch.position.set(0.06, -0.12, 0);
+  rig.attach('eL', watch);
+  props.watch = watch;
+  tickWatch(watch, true);
+}
+
+// SENHOR VERÍSSIMO (corpo provisório: o .glb do Lírio, de sobretudo, até o modelo próprio no Blender): a mesma espada
+// do Arnaldo, bigode e cavanhaque grisalhos, gravata azul-celeste; a escopeta curta aparece no □
+const VERISSIMO_LOOK = [
+  [/HAIR/, 0xb8b4ac], // cabelo, barba e bigode grisalhos
+  [/coat_lining/, 0x3a2418],
+  [/coat|fur_white|leather_lirio|leather_dark/, 0x5a3a24], // a jaqueta de couro marrom
+  [/shirt/, 0xece8e0], // camisa social branca
+  [/cloth_orange/, 0x6a6a70], // colete cinza
+  [/pants/, 0x3a3a40],
+  [/boot|glove/, 0x141414], // mocassins pretos
+  [/radio|dogtag|gold_paw|bandage/, 'hide'],
+];
+export function addVerissimoProps(rig) {
+  const { sockets, props } = rig;
+  restyle(rig, VERISSIMO_LOOK);
+  const sword = swordArnaldo();
+  sword.rotation.x = -0.25;
+  sockets.handR.add(sword);
+  props.sword = sword;
+  const stache = mustache();
+  stache.position.set(0, -0.005, 0.01);
+  sockets.mouth.add(stache);
+  props.mustache = stache;
+  const tie = necktie(0x6ab0e0);
+  tie.position.set(0, 0.06, 0.02);
+  sockets.chest.add(tie);
+  props.tie = tie;
+  const gun = shotgun();
+  gun.position.y = -0.02;
+  gun.visible = false;
+  sockets.handL.add(gun);
+  props.shotgun = gun;
+  rig.muzzle = gun.userData.muzzle;
 }

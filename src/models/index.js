@@ -1,7 +1,7 @@
 import { buildKaiser } from './characters/kaiser.js';
 import { buildArthur } from './characters/arthur.js';
 import { buildJoui } from './characters/joui.js';
-import { addKaiserProps, addArthurProps, addJouiProps, addAghataProps, addGalSalProps, addKianProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps, addFerreiroProps, addJuanProps, addKemiProps, addFantasmaProps, addBaluProps, addErinCaosProps, addLabirintoElmoProps, addAguiarMutiladorProps } from './props.js';
+import { addKaiserProps, addArthurProps, addJouiProps, addAghataProps, addGalSalProps, addKianProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps, addFerreiroProps, addJuanProps, addKemiProps, addFantasmaProps, addBaluProps, addErinCaosProps, addLabirintoElmoProps, addAguiarMutiladorProps, addArnaldoProps, addAnfitriaoProps, addVerissimoProps } from './props.js';
 import { buildAghata } from './characters/aghata.js';
 import { buildGalSal } from './characters/gal_sal.js';
 import { buildKian } from './characters/kian.js';
@@ -36,6 +36,9 @@ export const MODEL_BUILDERS = {
   erin_caos: buildAghata,
   labirinto_elmo: buildKian,
   aguiar_mutilador: buildJoui,
+  arnaldo: buildJoui,
+  anfitriao: buildJoui,
+  verissimo: buildArthur,
 };
 
 // Modelos do Blender + armas/acessórios adicionados em código
@@ -66,6 +69,10 @@ const MODEL_VARIANTS = {
   erin_caos: { base: 'erin', props: addErinCaosProps }, // máscara de gás (Em Nome do Caos)
   labirinto_elmo: { base: 'labirinto', props: addLabirintoElmoProps }, // Capacete do ???
   aguiar_mutilador: { base: 'aguiar', props: addAguiarMutiladorProps }, // máscara do Mutilador Noturno
+  // PROVISÓRIOS até os modelos do Blender (TODO: Arnaldo, Anfitrião e Veríssimo): corpo de outro lutador + acessórios
+  arnaldo: { base: 'joui', props: addArnaldoProps }, // espada da fita, óculos, gravata vermelha, relógio de bolso
+  anfitriao: { base: 'joui', props: addAnfitriaoProps }, // máscara do Anfitrião + relógio com a Relíquia no braço
+  verissimo: { base: 'lirio', props: addVerissimoProps }, // espada do Arnaldo, bigode, gravata azul, escopeta
 };
 
 const loaded = {};

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Timeline, forwardFromYaw } from '../../core/util.js';
-import { faceClose, orbit, lowAngle } from '../../camera/shots.js';
+import { faceClose, orbit, lowAngle, socketClose } from '../../camera/shots.js';
 import { transform } from '../forms.js';
 
 // PÔR A MÁSCARA (transformação). Para os Mascarados a máscara é o momento em que a Intenção de Assassino desperta —
@@ -15,6 +15,8 @@ import { transform } from '../forms.js';
 //             'mutilador' (Aguiar: close no olho, agacha com o machado esticado e leva a máscara ao rosto)
 //             'gasmask' (Erin, que NÃO é Mascarada: ajoelha rindo com a mão no rosto, ergue-se levando a máscara de gás
 //             ao rosto; verde no lugar do vermelho — referências do usuário)
+//             'watch' (Arnaldo → O Anfitrião: tira o relógio de bolso, abre a tampa, a Relíquia de Energia brilha lá
+//             dentro e ele ergue o relógio; a Energia toma o corpo em roxo, rosa e azul)
 //             omitido: concentra e o acessório aparece
 //   sp.prop   acessório do modelo base que entra no rosto (helmetOn / maskOn)
 //   sp.anim   animação da cena padrão (padrão 'concentrate')
@@ -145,6 +147,56 @@ export const maskTransform = {
       });
       tl.add(1.85, () => maskOn(true));
       total = 2.6;
+    } else if (scene === 'watch') {
+      // 1) tira o relógio do bolso e olha para ele · 2) abre a tampa: a Relíquia brilha lá dentro (close no relógio) ·
+      // 3) ergue o relógio aberto · 4) a Energia explode em roxo, rosa e azul e toma o corpo
+      const watch = prop;
+      const hand = () => (watch ? watch.getWorldPosition(new THREE.Vector3()) : f.chestPos());
+      if (watch) f.rig.showProp(sp.prop, true);
+      f.anim.play('watch_open', { restart: true, duration: 0.9 });
+      world.audio.play('heartbeat', { volume: 0.7 });
+      lightTo = 1.5;
+      world.cameraRig.playShots([
+        faceClose(f, { dur: 1.0, from: 1.9, to: 1.5, side: 0.5, height: hy - 0.2, fov: 38 }),
+        socketClose(f, hand, { dur: 1.0, dist: 0.9, side: 0.35, fov: 34 }),
+        orbit(f, { dur: 1.3, radius: 3.0, height: 1.2, a0: 0.3, a1: 0.9, lookH: 1.5, fov: 48 }), // o relógio erguido
+      ]);
+      tl.add(0.3, () => world.showBanner(sp.banner || sp.name, f.def.color));
+      let lidT = -1;
+      tl.add(1.0, () => {
+        lidT = 0;
+        world.audio.play('ritual', { volume: 0.8, pitch: 1.3 });
+        world.fx.flash(hand(), { color: tint, size: 1.2, life: 0.25 });
+        lightColor = new THREE.Color(tint);
+        lightTo = 6;
+      });
+      const COLORS = [0xb04aff, 0xff6ad0, 0x5aa0ff];
+      let sparks = null;
+      tl.add(1.15, () => {
+        sparks = world.fx.emitter({ rate: 60, follow: hand, particle: { color: COLORS[Math.floor(Math.random() * 3)], speed: 1.2, spread: 0.6, life: 0.4, size: 0.12 } });
+      });
+      tl.add(2.0, () => {
+        f.anim.play('watch_raise', { restart: true, duration: 0.7 });
+        world.audio.play('fearGaze', { volume: 0.7, pitch: 0.5 });
+      });
+      tl.add(2.55, () => {
+        sparks && sparks.stop();
+        const p = hand();
+        world.fx.flash(p, { color: 0xffffff, size: 4, life: 0.25 });
+        for (let i = 0; i < 8; i++) world.fx.lightning(p, f.chestPos().add(new THREE.Vector3((Math.random() - 0.5) * 1.6, (Math.random() - 0.3) * 1.4, (Math.random() - 0.5) * 1.6)), { color: COLORS[i % 3], life: 0.3 });
+        COLORS.forEach((c) => world.fx.burst(f.chestPos(), { count: 40, color: c, speed: 6, life: 0.8, size: 0.25 }));
+        world.fx.distort(f.chestPos(), { color: tint, radius: 2.4, life: 0.4 });
+        world.screenFlash && world.screenFlash('#3a0a5a', 0.3);
+        world.cameraRig.shake(0.45, 0.35);
+        world.audio.play('explosion', { volume: 0.7, pitch: 1.4 });
+        lightTo = 14;
+      });
+      const lid = watch && watch.userData.lid;
+      // a tampa abre girando na dobradiça (0,3 s)
+      tl.each((time, dt) => {
+        if (lid && lidT >= 0 && lidT < 1) { lidT = Math.min(1, lidT + dt / 0.3); lid.rotation.y = -2.3 * lidT; }
+      });
+      total = 3.2;
     } else {
       f.anim.play(sp.anim || 'concentrate', { restart: true, duration: 1.5 });
       world.cameraRig.playShots([
@@ -163,6 +215,7 @@ export const maskTransform = {
       aura.stop();
       world.scene.remove(light);
       if (carry) carry.reset();
+      if (prop && prop.userData && prop.userData.lid) prop.userData.lid.rotation.y = 0; // relógio fechado de novo
     };
     const finish = () => {
       if (done) return;

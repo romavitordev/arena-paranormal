@@ -146,6 +146,12 @@ export const PASSIVES = {
   mentalMaze: {},
   // Erin (Em Nome do Caos) — Sem Sanidade: barra zerada e travada; os custos saem da vida (Fighter.addEnergy/spendEnergy)
   noSanity: {},
+  // O Anfitrião — Percepção Cronológica: sabe o que ainda vai acontecer; de tempos em tempos desvia sozinho de um golpe
+  // (cooldown em passive.cooldown; lido em damage.applyHit → Fighter.trySubstitution({ free }))
+  chronoSense: {},
+  // Senhor Veríssimo — Segredo de Veríssimo: sabe como vai morrer; uma vez por partida um golpe fatal o deixa com 1 de
+  // vida (contra o Kian, uma vez por round; lido em Fighter.takeDamage)
+  verissimoSecret: {},
   // Kemi — Sede de Vingança (o poder de intenção da Lena no corpo dela): ao cair abaixo de passive.below de vida pela
   // primeira vez no round, revida com tudo — mais dano e velocidade por um tempo e sanidade de volta
   revenge: {

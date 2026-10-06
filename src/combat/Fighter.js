@@ -96,6 +96,8 @@ export class Fighter {
     this.dodgeDmgAcc = 0;
     this.dodgeLockout = 0;
     this.sacrificeWin = false;
+    this.chronoCd = 0; // Percepção Cronológica (Anfitrião): recarga da esquiva automática
+    this.secretRound = false; // Segredo de Veríssimo contra o Kian: uma vez por round
     for (const k in this.cooldowns) this.cooldowns[k] = 0;
     this.carga = { stage: 0, timer: 0 };
     this.combo = { chain: -1, steps: 0, grace: 0, queued: null, strike: null, hits: [], windows: [] };
@@ -223,6 +225,21 @@ export class Fighter {
       if (this.dodges < COMBAT.dodge.charges) this.dodges++;
     }
     this.flash = 0.12;
+    // SEGREDO DE VERÍSSIMO: ele sabe como vai morrer — uma vez por partida, o golpe que o mataria o deixa com 1 de vida
+    // (contra o Kian, que não pode matá-lo, vale uma vez por round)
+    if (this.health <= 0 && !this.sacrificeWin && hasPassive(this, 'verissimoSecret')) {
+      const vsKian = this.opponent && (this.opponent.def.baseId || this.opponent.def.id) === 'kian';
+      if (vsKian ? !this.secretRound : !this.secretUsed) {
+        if (vsKian) this.secretRound = true;
+        else this.secretUsed = true;
+        this.health = 1;
+        this.invuln = Math.max(this.invuln, 1.0);
+        this.notify('SEGREDO DE VERÍSSIMO', true);
+        this.world.fx.burst(this.chestPos(), { count: 30, color: 0x6ab0e0, speed: 4, life: 0.6, size: 0.22 });
+        this.world.audio.play('perfectBlock', { volume: 0.8, pitch: 0.8 });
+        return dealt;
+      }
+    }
     if (this.health <= 0 && this.lethalHook) {
       const hook = this.lethalHook;
       this.lethalHook = null;
@@ -543,6 +560,7 @@ export class Fighter {
     this.stateTime += dt;
     if (this.invuln > 0) this.invuln -= dt;
     if (this.dodgeLockout > 0) this.dodgeLockout -= dt;
+    if (this.chronoCd > 0) this.chronoCd -= dt;
     if (this.overcharge > 0 && this.state !== 'charging') this.overcharge = Math.max(0, this.overcharge - dt * COMBAT.storm.decay);
     updateForm(this, dt);
     if (this.message) {
@@ -801,6 +819,7 @@ export class Fighter {
       this.notify('SEM SANIDADE');
       return;
     }
+    if (kind !== 'step') this.dashes = (this.dashes || 0) + 1; // contado pela Regra do Jogo do Anfitrião ("proibido correr")
     const opp = this.opponent;
     let dir;
     const stick = kind === 'short' || kind === 'step' ? this.moveInputWorld(new THREE.Vector3()) : null;
@@ -1102,6 +1121,7 @@ export class Fighter {
       }
     }
     if (inp.pressed.jump && this.onGround) {
+      this.jumps = (this.jumps || 0) + 1; // contado pela Regra do Jogo do Anfitrião ("proibido pular")
       this.vel.y = COMBAT.jumpVelocity;
       this.onGround = false;
       this.anim.play('jump', { restart: true });
@@ -1847,6 +1867,17 @@ export class Fighter {
     }
     if (res === 'countered' || res === 'parried') return;
     this.combo.lastHit = true;
+    // INTELIGÊNCIA ESTRATÉGICA (Veríssimo): enquanto a ordem vale, cada golpe físico que acerta ganha um corte extra
+    const extra = this.buffs.find((b) => b.extraHit);
+    if (extra && typeof res === 'number' && opp.state !== 'ko') {
+      const eh = extra.extraHit;
+      this.world.after(eh.delay ?? 0.1, () => {
+        if (opp.state === 'ko' || this.state === 'ko') return;
+        const p = opp.chestPos();
+        this.world.fx.slash(p, this.yaw + Math.PI / 2, { color: eh.color ?? this.def.energyColor, radius: 1.2, arc: 2.2, life: 0.22, width: 0.25 });
+        applyHit(this.world, this, opp, { damage: eh.damage, kind: 'melee', reaction: false, strike: { damage: eh.damage, noPassive: true }, sound: 'bladeHit', color: eh.color, scale: 0.8 });
+      });
+    }
     if (typeof res === 'number' && opp.state !== 'ko') {
       if (s.launcher) {
         // ↑ + ○: o alvo sobe e o atacante vai junto
@@ -2128,6 +2159,12 @@ export class Fighter {
   fireProjectile(r0) {
     let r = r0;
     // estado temporário da arma (Rebirth do Arthur)
+    // tiro do Caos (Anfitrião): o efeito é sorteado a cada disparo e a cor mostra qual saiu
+    if (r.chaos) {
+      const c = r.chaos[Math.floor(Math.random() * r.chaos.length)];
+      r = { ...r, ...c };
+      if (c.label) this.notify(c.label, true);
+    }
     const ws = this.buffs.find((b) => b.type === 'weaponState' && b.shots > 0);
     if (ws) {
       r = { ...r0, ...ws.projectile, damage: r0.damage + ws.bonusDamage, cursed: true };
@@ -2582,10 +2619,12 @@ export class Fighter {
     }
   }
 
-  trySubstitution() {
+  // free: desvio que não gasta esquiva nem recarga (Percepção Cronológica do Anfitrião)
+  trySubstitution({ free = false, label = 'SUBSTITUIÇÃO!' } = {}) {
     const S = COMBAT.substitution;
-    if (this.cooldowns.substitution > 0 || this.world.cinematic) return false;
-    if (this.dodges < S.charges) {
+    if (this.world.cinematic) return false;
+    if (!free && this.cooldowns.substitution > 0) return false;
+    if (!free && this.dodges < S.charges) {
       this.notify('SEM ESQUIVAS');
       return false;
     }
@@ -2602,8 +2641,10 @@ export class Fighter {
       attackerRadius: opp.radius,
       side: Math.abs(lateral) > 0.3 ? Math.sign(lateral) : 0,
     });
-    this.spendDodges(S.charges);
-    this.cooldowns.substitution = S.cooldown;
+    if (!free) {
+      this.spendDodges(S.charges);
+      this.cooldowns.substitution = S.cooldown;
+    }
     this.lastEvadeAt = this.world.inputTime;
     this.buffered = null; // o L2 da substituição não vira uma esquiva logo depois
     const col = ELEMENTS[this.def.element] ? new THREE.Color(ELEMENTS[this.def.element].color).getHex() : this.def.energyColor;
@@ -2622,7 +2663,7 @@ export class Fighter {
     this.setState('idle');
     this.anim.play('idle', { restart: true, blend: 0.03 });
     this.world.fx.burst(this.chestPos(), { count: 18, color: col, speed: 4, life: 0.3, size: 0.18 });
-    this.notify('SUBSTITUIÇÃO!', true);
+    this.notify(label, true);
     if (!hasPassive(opp, 'precognition')) opp.surprised = 0.25;
     // o atacante bate no "tronco": a sequência dele acaba aqui (não emenda o próximo golpe) e fica exposto
     if (opp.state === 'attack') opp.combo.blocked = true;
