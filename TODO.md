@@ -32,8 +32,12 @@
    e entraram três formas novas fortes (???, Mutilador Noturno, Erin Em Nome do Caos — explosão de 450). Rodar
    `runBalance` (2–3 lutas por par) e ajustar; conferir também quem estava fora da escala (Gal, Dante, Arthur, Aghata,
    Kian, Kemi — ver "Plano de buffs" mais abaixo).
-2. 🔴 **Próximos lutadores: Arnaldo Fritz (→ O Anfitrião) e Senhor Veríssimo** — pesquisa e proposta de kit prontas
-   (seção abaixo); falta o usuário decidir os kits e fazer os modelos no Blender (+ a espada da fita vermelha).
+2. 🟡 **Arnaldo Fritz (→ O Anfitrião) e Senhor Veríssimo** — KITS IMPLEMENTADOS e jogáveis (2026-10-06, seção
+   abaixo), com modelo PROVISÓRIO (corpo do Joui / do Lírio + acessórios em código: espada da fita, óculos, gravatas,
+   relógio, máscara do Anfitrião, bigode). **Ainda NÃO estão no changelog dos jogadores** (pedido do usuário: só
+   depois da implementação completa). Falta: modelos no Blender (Arnaldo, Anfitrião com cabos, Veríssimo e a espada
+   `swordArnaldo` com a fita balançando), poses de vitória próprias, ajuste fino de equilíbrio e da IA.
+   **Aguardando as imagens de referência do usuário** (Arnaldo, Anfitrião, Veríssimo) para ajustar visual e modelos.
 3. ✅ **HUD de batalha** — concluído (confirmado pelo usuário em 2026-10-06).
 4. 🟡 **Nome/logo do jogo** — parcialmente feito (usuário, 2026-10-06). Falta: decidir se fica "Arena Paranormal";
    música e sons de navegação no menu; transições entre telas; demais telas no visual da tela inicial nova.
@@ -135,8 +139,28 @@ Ordem combinada com o usuário (2026-10-06): 9 → 7 (adiado: Blender) → 6 →
     (contra o Kian, sempre que o Kian der o golpe final);
   - especial com aviso: comanda o ataque e finaliza com a espada.
 
-### Passos de implementação
-1. Conferir nomes/detalhes na wiki (navegador) e decidir os kits com o usuário.
+### ✅ Implementado (2026-10-06) — ainda fora do changelog dos jogadores
+- `src/characters/arnaldo.js`: esgrima teatral (5 golpes), □ Emissor de Pulsos (parado ATRAI até a espada; ← + □
+  AFASTA e derruba), △→○ Finta Teatral (avanço que quebra a defesa), △→□ Pulso Paranormal (polarize), R2+× Rodopio da
+  Fita, △+L2 Aniquilador (+20% físico, 1 esquiva), R2+△ Ensaio Geral (−25% físico/tiro), especial Ato Final
+  (cinematicCombo com avanço esquivável). Transformação: `maskTransform` cena `watch` (tira o relógio, abre a tampa, a
+  Relíquia brilha, ergue o relógio; aura roxa).
+- `src/characters/forms/anfitriao.js` (kit inteiro novo, Energia): golpes de Energia com o braço do relógio; □
+  Disparo do Caos (efeito sorteado por tiro: roxo dano / azul lentidão / rosa empurrão — `ranged.chaos`); △→○ Regra
+  do Jogo (`gameRule`: proibido pular / defender / correr / ficar parado por 6 s, anunciada, vale para os dois — o
+  Anfitrião leva metade); △→□ Distorção (troca de lugar); R2+× Tempo Distorcido; △+L2 A Plateia; passiva Percepção
+  Cronológica (`chronoSense`: desvia sozinho de um golpe a cada 15 s); especial O Jogo do Anfitrião (`hostGame`: aviso
+  de 1 s com o relógio erguido, roleta em volta do alvo — RAIO/CHOQUE/TROCA — dano sempre entre 200 e 300).
+- `src/characters/verissimo.js`: esgrima econômica (4 golpes), ← + ○ Guarda do Comandante (contra-ataque), □
+  escopeta curta, △→○ Inteligência Estratégica ("Ordem!": corte extra a cada golpe físico por 7 s — `extraHit`),
+  △→□ Análise Tática, R2+× Investida dos Aniquiladores, △+L2 Jaqueta de Veríssimo, Bloqueio Perfeito maior,
+  especial Ordem de Ataque, Despertar Líder dos Aniquiladores, passiva Segredo de Veríssimo (`verissimoSecret`: 1x por
+  partida o golpe fatal deixa com 1 de vida; contra o Kian, 1x por round).
+- Falas de introdução (pares Arnaldo×Veríssimo, ×Dante, ×Kian, ×Erin; Veríssimo×Kian, ×Arthur, ×Balu) e de vitória
+  contra todo o elenco; assistências e agarrões próprios.
+
+### Passos que faltam
+1. Conferir nomes/detalhes na wiki (navegador).
 2. Modelos no Blender: Arnaldo, Anfitrião (máscara, cabos, relógio roxo) e Veríssimo + prop `swordArnaldo` (fita).
 3. `src/characters/arnaldo.js`, `src/characters/forms/anfitriao.js` (awakening do Arnaldo), `src/characters/verissimo.js`.
 4. Falas de intro por par (Arnaldo × Veríssimo, Arnaldo × Dante, Anfitrião × Kian, Veríssimo × Kian).

@@ -68,7 +68,7 @@ try {
 const PAIRS = ids.length * (ids.length - 1);
 ok(validIntroScenes && validIntroPairs === PAIRS && sampleIntro.length === 2 && randomSelectionValid, `introduções: ${PAIRS} confrontos, duas cenas alternadas e aleatórias, sem falas de resultado`);
 ok(validVictoryLines && validVictoryPairs === PAIRS && VICTORY_LINES.kaiser.erin.includes(sampleVictory) && randomSelectionValid, `vitórias: ${PAIRS} confrontos com duas falas selecionáveis aleatoriamente`);
-ok(ROSTER.map((c) => c.name).join() === 'KAISER,ARTHUR CERVERO,JOUI JOUKI,AGHATA,DANTE,ERIN PARKER,GAL SAL,KIAN,AGUIAR,LABIRINTO,XANDE,LÍRIO,FERREIRO,JUAN,KEMI,BALU', 'nomes: Kaiser, Arthur Cervero, Joui Jouki, Aghata, Dante, Erin Parker, Gal Sal, Kian, Aguiar, Labirinto, Xande, Lírio, Ferreiro, Juan, Kemi, Balu');
+ok(ROSTER.map((c) => c.name).join() === 'KAISER,ARTHUR CERVERO,JOUI JOUKI,AGHATA,DANTE,ERIN PARKER,GAL SAL,KIAN,AGUIAR,LABIRINTO,XANDE,LÍRIO,FERREIRO,JUAN,KEMI,BALU,ARNALDO FRITZ,SENHOR VERÍSSIMO', 'nomes: Kaiser, Arthur Cervero, Joui Jouki, Aghata, Dante, Erin Parker, Gal Sal, Kian, Aguiar, Labirinto, Xande, Lírio, Ferreiro, Juan, Kemi, Balu, Arnaldo Fritz, Senhor Veríssimo');
 const bal = get('balu');
 ok(bal && bal.origin === 'Ordo Realitas' && bal.stats.maxHealth >= 1250 && ['curseWeapon', 'demonAxe', 'caiDentro', 'selfBuff', 'heavyProtection'].every((t) => bal.abilities.some((a) => a.type === t)) && bal.ranged.boomerang && bal.ranged.returnsProp === 'axe' && bal.melee.ground && bal.melee.ground.otg && bal.grip.twoHand, 'Balu: pesado da Ordo Realitas, Amaldiçoar Arma, Machado Demônio (vida), Fala Imponente, 110%, Colete, machado que volta e Derrubar e Atacar');
 const banners = Object.fromEntries(ROSTER.map((c) => [c.id, c.special.banner]));
@@ -191,6 +191,17 @@ ok(pas('gal_sal', 'bulletDodge') && abil('gal_sal', 'sparkTeleport'), 'Gal: Desv
 const mods = (c) => (c.abilities || []).filter((a) => a.input.startsWith('block+') || a.input.startsWith('carga+')).map((a) => a.input);
 ok(ROSTER.every((c) => new Set(mods(c)).size === mods(c).length), 'nenhum R1 + botão repetido no mesmo personagem');
 ok(COMBAT.comboScaling[0] === 1 && COMBAT.comboScaling.at(-1) >= 0.5 && COMBAT.substitution && COMBAT.grabTech && COMBAT.storm && !COMBAT.awaken, 'escala de combo, substituição, escape do agarrão e Barra de Transformação configurados (sem Transcender)');
+
+// ---------------- Arnaldo Fritz → O Anfitrião, Senhor Veríssimo ----------------
+const arn = get('arnaldo');
+const anf = getForm('anfitriao');
+const ver = get('verissimo');
+ok(arn && arn.awakening.type === 'maskTransform' && arn.awakening.scene === 'watch' && arn.awakening.form === 'anfitriao' && anf && anf.baseId === 'arnaldo', 'Arnaldo: Transformação pelo relógio de bolso (Relíquia) → O Anfitrião');
+ok(arn && arn.ranged.onHit.pull && arn.ranged.variants.back.launch && arn.abilities.some((a) => a.type === 'dashStrike' && a.guardBreak), 'Arnaldo: Emissor de Pulsos (atrai / ← afasta) e Finta Teatral que quebra a defesa');
+ok(anf && anf.name === 'O ANFITRIÃO' && anf.special.type === 'hostGame' && anf.special.minDamage >= 150 && anf.special.maxDamage <= 320 && anf.abilities.some((a) => a.type === 'gameRule') && anf.ranged.chaos.length === 3 && anf.passives.some((p) => p.type === 'chronoSense'), 'Anfitrião: kit novo — Jogo do Anfitrião (200–300), Regra do Jogo, Disparo do Caos e Percepção Cronológica');
+ok(anf && !anf.abilities.some((a) => arn.abilities.some((b) => b.id === a.id)) && anf.melee.name !== arn.melee.name, 'Anfitrião: nada do kit da forma base continua');
+ok(ver && ver.passives.some((p) => p.type === 'verissimoSecret') && ver.abilities.some((a) => a.extraHit) && ver.melee.back.counter && ver.defense.perfectBlock.window > COMBAT.block.perfect.window, 'Veríssimo: Segredo de Veríssimo, Inteligência Estratégica (corte extra), Guarda do Comandante e Bloqueio Perfeito maior');
+ok(GRAB_SCENES.anfitriao && GRAB_SCENES.arnaldo && GRAB_SCENES.verissimo, 'Arnaldo, Anfitrião e Veríssimo com agarrão próprio');
 
 // ---------------- Cenários: sem frestas entre retângulos andáveis ----------------
 // Onde dois retângulos se encontram, a sobreposição tem que passar do diâmetro do corpo; senão o lutador trava.

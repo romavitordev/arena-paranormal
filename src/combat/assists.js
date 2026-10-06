@@ -249,6 +249,16 @@ const ACTIONS = {
     moving: (c) => buffOwner(c, 'powerup', { type: 'vest', name: 'COLETE (BALU)', time: 6, takenMult: 0.8, takenKinds: ['melee', 'ranged'] }, 0xe8b23a, 'COLETE FÍSICO-BALÍSTICO'),
     still: (c) => rushStrike(c, 'hammer_v', [[0.42, 70]], 'axeHit', { knockback: 4.5 }),
   },
+  // ARNALDO: andando → Aniquilador no parceiro (golpes físicos mais fortes); parado → o Ato Final (corte de palco)
+  arnaldo: {
+    moving: (c) => buffOwner(c, 'concentrate', { type: 'annihilator', name: 'ANIQUILADOR (ARNALDO)', time: 6, mult: 1.2, affects: ['melee'] }, 0xe0b040, 'ANIQUILADOR'),
+    still: (c) => rushStrike(c, 'slash_finisher', [[0.42, 66]], 'slashFinal', { knockback: 4 }),
+  },
+  // VERÍSSIMO: andando → Inteligência Estratégica no parceiro (corte extra em cada golpe); parado → Comando com a espada
+  verissimo: {
+    moving: (c) => buffOwner(c, 'point', { type: 'strategicOrder', name: 'ORDEM! (VERÍSSIMO)', time: 6, extraHit: { damage: 10, delay: 0.1, color: 0x6ab0e0 } }, 0x6ab0e0, 'INTELIGÊNCIA ESTRATÉGICA'),
+    still: (c) => rushStrike(c, 'slash_v', [[0.4, 64]], 'slashFinal', { knockback: 4 }),
+  },
   // KEMI: andando → Perita (o inimigo fica analisado e recebe mais dano); parado → um tiro da Sniper Fantasma
   kemi: {
     moving: (c) => debuffOpp(c, 'turn_look', { type: 'analyzed', name: 'ANALISADO (KEMI)', time: 6, takenMult: 1.12 }, 0xe8c070, 'PERITA'),

@@ -331,8 +331,8 @@ export class Projectiles {
       const F = new THREE.Vector3().subVectors(target.pos, o.pos).setY(0).normalize();
       const to = new THREE.Vector3(o.pos.x + F.x * (a.onHit.pull.distance ?? 1.6), target.pos.y, o.pos.z + F.z * (a.onHit.pull.distance ?? 1.6));
       target.pullTo(to, { time: a.onHit.pull.time ?? 0.3, after: a.onHit.pull.after ?? 0.6 });
-      o.anim.play('chain_pull', { restart: true, duration: 0.4 });
-      w.audio.play('chainPull');
+      o.anim.play(a.onHit.pull.anim || 'chain_pull', { restart: true, duration: 0.4 });
+      w.audio.play(a.onHit.pull.sound || 'chainPull');
       if (p.chainFx) {
         const fx = p.chainFx;
         const hand = o.rig.sockets.handR;
@@ -465,7 +465,7 @@ export class Projectiles {
           if (a.explode) this.explode(p);
           else {
             const res = applyHit(w, p.owner, target, {
-              damage: a.damage, kind: a.kind || 'ranged', knockback: a.knockback, hitstun: a.hitstun,
+              damage: a.damage, kind: a.kind || 'ranged', knockback: a.knockback, hitstun: a.hitstun, launch: !!a.launch, lowLaunch: !!a.launch,
               dir: p.vel.clone().setY(0).normalize(), color: a.color, sound: a.hitSound, scale: a.impactScale || 1, pos: p.pos.clone(),
               reaction: !(a.onHit && a.onHit.pull),
             });

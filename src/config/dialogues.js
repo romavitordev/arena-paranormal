@@ -16,9 +16,11 @@ const CHARACTER_NAMES = {
   juan: 'Juan',
   kemi: 'Kemi',
   balu: 'Balu',
+  arnaldo: 'Arnaldo',
+  verissimo: 'Veríssimo',
 };
 
-const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi' };
+const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo' };
 
 const INTRO_IDS = Object.keys(CHARACTER_NAMES);
 const INTRO_HOOKS = {
@@ -38,6 +40,8 @@ const INTRO_HOOKS = {
   juan: 'o trono',
   kemi: 'o contrato',
   balu: 'o machado',
+  arnaldo: 'a espada da fita vermelha',
+  verissimo: 'a espada do Arnaldo',
 };
 
 const INTRO_OPENERS = {
@@ -57,6 +61,8 @@ const INTRO_OPENERS = {
   juan: (other, hook) => `${other}, quando os outros veem ${hook}, você acha que enxergam você?`,
   kemi: (other, hook) => `${other}, com ${hook} assim, isso é pessoal ou trabalho?`,
   balu: (other, hook) => `Opa, ${other}! Chegou com ${hook}, hein. Bora conversar antes ou já vamos pra parte divertida?`,
+  arnaldo: (other, hook) => `${other}, que entrada! Trouxe ${hook} para o palco, então. Qual é o seu papel nesta cena?`,
+  verissimo: (other, hook) => `${other}. Vi ${hook} no relatório. Me diga o que veio fazer aqui, sem rodeios.`,
 };
 
 const INTRO_REPLIES = {
@@ -76,6 +82,8 @@ const INTRO_REPLIES = {
   juan: (other, hook) => `${other}, reconheço ${hook}. Ainda quero ouvir você.`,
   kemi: (other, hook) => `${other}, não vou tirar conclusões só por causa de ${hook}. O resto fica no relatório.`,
   balu: (other, hook) => `Hahaha! Tá bom, ${other}. Mas aviso: o tio Balu já lutou com coisa pior que ${hook}.`,
+  arnaldo: (other, hook) => `Ah, ${other}, ${hook} rende um belo segundo ato. Vamos ver se você sabe as falas.`,
+  verissimo: (other, hook) => `Anotado, ${other}. ${hook} não muda o plano. Nunca muda.`,
 };
 
 const INTRO_EXCHANGES = {
@@ -186,6 +194,34 @@ const INTRO_EXCHANGES = {
   'balu+juan': [
     { starter: 'balu', line: 'Foi tu, ou aquele bicho aí dentro, que amaldiçoou meu machado?', response: 'juan', responseLine: 'Nós dois, Balu. E você gostou do presente.' },
     { starter: 'juan', line: 'O Diabo lembra do seu machado no ombro dele, sabia?', response: 'balu', responseLine: 'Ótimo. Então ele já sabe onde vai doer de novo.' },
+  ],
+  'arnaldo+verissimo': [
+    { starter: 'verissimo', line: 'Arnaldo, você ainda segura a espada como se tivesse plateia.', response: 'arnaldo', responseLine: 'Sempre tem plateia, meu velho. Hoje é você.' },
+    { starter: 'arnaldo', line: 'Cuide bem dessa espada quando for sua, Veríssimo.', response: 'verissimo', responseLine: 'Não fale assim. Eu ainda preciso de você na Ordem.' },
+  ],
+  'arnaldo+dante': [
+    { starter: 'arnaldo', line: 'Dante! O menino do Santa Menefreda. Olha o tamanho que ficou.', response: 'dante', responseLine: 'O orfanato só ficou de pé por sua causa, Arnaldo. Eu não esqueço.' },
+    { starter: 'dante', line: 'Arnaldo, você financiava o orfanato e nunca contou pra ninguém.', response: 'arnaldo', responseLine: 'Um bom ator sabe a hora de ficar fora do palco, Dante.' },
+  ],
+  'arnaldo+kian': [
+    { starter: 'arnaldo', line: 'Eu perguntei à Magistrada como derrotar você, Kian. A resposta veio num relógio.', response: 'kian', responseLine: 'Então você já sabe o preço dessa resposta, ator.' },
+    { starter: 'kian', line: 'Arnaldo Fritz. Uma fama inteira construída sobre uma mentira.', response: 'arnaldo', responseLine: 'A fama era o figurino. A Ordem sempre foi o papel.' },
+  ],
+  'kian+verissimo': [
+    { starter: 'kian', line: 'Veríssimo. Eu conheço o fim de todos. O seu continua escondido.', response: 'verissimo', responseLine: 'E vai continuar, Kian. Esse segredo não é seu.' },
+    { starter: 'verissimo', line: 'Da última vez eu parei o seu golpe com uma espada comum.', response: 'kian', responseLine: 'Da última vez eu não estava com pressa.' },
+  ],
+  'arthur+verissimo': [
+    { starter: 'verissimo', line: 'Arthur, de pé. Missão nenhuma termina com agente sentado.', response: 'arthur', responseLine: 'Sim, senhor. Mas o senhor sabe que eu sento quando dá.' },
+    { starter: 'arthur', line: 'Senhor Veríssimo, obrigado por aquela vez com o Kian.', response: 'verissimo', responseLine: 'Não agradeça. Só não me faça repetir.' },
+  ],
+  'balu+verissimo': [
+    { starter: 'balu', line: 'Veríssimo! Voltei porque tu pediu. Agora não reclama do barulho.', response: 'verissimo', responseLine: 'Eu pedi o Balu inteiro, barulho incluído.' },
+    { starter: 'verissimo', line: 'Balu, sem decisões precipitadas hoje.', response: 'balu', responseLine: 'Precipitado eu? Eu só chego antes do plano.' },
+  ],
+  'arnaldo+erin': [
+    { starter: 'erin', line: 'Arnaldo, esse relógio de bolso... posso abrir?', response: 'arnaldo', responseLine: 'Esse não, Erin. Esse guarda a coisa mais preciosa que eu tenho.' },
+    { starter: 'arnaldo', line: 'Erin, querida, granada não é adereço de cena.', response: 'erin', responseLine: 'Tudo é adereço de cena se você for corajoso o bastante.' },
   ],
   'labirinto+xande': [
     { starter: 'xande', line: 'Tá, eu não entendi o capacete. Mas vou passar por você.', response: 'labirinto', responseLine: 'Todo caminho passa por aqui. O seu também.' },
@@ -1233,6 +1269,311 @@ export const VICTORY_LINES = {
   }
 };
 
+// ARNALDO FRITZ e SENHOR VERÍSSIMO: as falas de vitória deles e as de quem vence contra eles
+const VICTORY_NEW = {
+  arnaldo: {
+    kaiser: [
+      'Kaiser, você tem presença de palco. Falta só ensaiar a queda.',
+      'Belíssima névoa, rapaz. Mas o holofote é meu esta noite.'
+    ],
+    arthur: [
+      'Arthur, eu treinei a sua equipe. Achou mesmo que eu não conhecia os seus truques?',
+      'Levanta, Arthur. Agente da Ordem não fica no chão depois do terceiro ato.'
+    ],
+    joui: [
+      'Joui, katana bonita. Mas uma espada comum, bem empunhada, ainda faz milagres.',
+      'Rápido demais, garoto. O público nem viu. Eu vi.'
+    ],
+    aghata: [
+      'Agatha, você lê rituais. Eu leio pessoas. Hoje ganhou a leitura mais antiga.',
+      'Que estreia, Agatha. Volte quando tiver decorado o texto.'
+    ],
+    dante: [
+      'Dante, me perdoe. O Santa Menefreda continua sendo a sua casa.',
+      'Você cresceu, menino. Mas o velho Arnaldo ainda sabe um passo ou dois.'
+    ],
+    erin: [
+      'Erin, explosões são ótimas no cinema. Na vida real, eu prefiro a espada.',
+      'Bravo, Erin! Só faltou a parte em que você acerta.'
+    ],
+    gal_sal: [
+      'Correntes, Gal? Já vi números de escapismo melhores.',
+      'O seu Deus pode assistir. Eu faço questão de plateia.'
+    ],
+    kian: [
+      'Mais uma cena que você não previu, Kian.',
+      'O relógio do Thiago ainda bate. O seu tempo, não.'
+    ],
+    aguiar: [
+      'Máscara não é personagem, Aguiar. Personagem é quem está por baixo.',
+      'Caçador da noite? O espetáculo acabou antes do seu toque de recolher.'
+    ],
+    labirinto: [
+      'Um labirinto é só um cenário mal iluminado, rapaz.',
+      'Encontrei a saída. Ela estava na ponta da minha espada.'
+    ],
+    xande: [
+      'Xande, energia demais e roteiro de menos.',
+      'Que vigor! Eu tinha isso aos vinte. Hoje tenho experiência.'
+    ],
+    lirio: [
+      'Lírio, a Leonora é pesada. Eu só precisei desviar dela.',
+      'Você é a parede, Lírio. Eu sou a porta dos fundos.'
+    ],
+    ferreiro: [
+      'Guardião de Santo Berço, que presença! Mas o palco é meu.',
+      'Uma espada consumidora contra uma espada comum. Quem diria, não?'
+    ],
+    juan: [
+      'Juan, o Diabo é um coadjuvante muito exigente.',
+      'Sangue e drama. Eu prefiro o meu drama sem manchas.'
+    ],
+    kemi: [
+      'Kemi, você atira como quem já ensaiou. Eu também ensaiei.',
+      'A Fantasma sai de cena. Aplausos para a atiradora.'
+    ],
+    balu: [
+      'Balu, meu caro! Força bruta precisa de coreografia.',
+      'O tio Balu caiu. Alguém traga um prato de comida pra ele.'
+    ],
+    verissimo: [
+      'Desculpe, velho amigo. Hoje o protagonista sou eu.',
+      'Veríssimo, guarde a lição: nunca subestime um ator.'
+    ],
+  },
+  verissimo: {
+    kaiser: [
+      'Kaiser, coragem não substitui plano.',
+      'Bom trabalho, agente. Ainda não é o suficiente.'
+    ],
+    arthur: [
+      'Arthur, relatório completo amanhã. Inclusive desta derrota.',
+      'Você é bom, Arthur. Por isso eu exijo mais.'
+    ],
+    joui: [
+      'Joui, velocidade sem disciplina é só pressa.',
+      'Levante. Vou te mandar para o treinamento outra vez.'
+    ],
+    aghata: [
+      'Agatha, pare de se meter onde não foi chamada.',
+      'Inteligência você tem. Agora aprenda a obedecer uma ordem.'
+    ],
+    dante: [
+      'Dante, o Lodo não ganha discussão comigo.',
+      'Você é teimoso, Dante. Eu sou mais.'
+    ],
+    erin: [
+      'Erin, a próxima granada vai para o almoxarifado. Fechada.',
+      'Agente Parker, menos explosão e mais estratégia.'
+    ],
+    gal_sal: [
+      'Correntes não seguram quem já planejou a saída.',
+      'A Ordem não negocia com a sua justiça, Gal.'
+    ],
+    kian: [
+      'Eu disse que você não consegue me matar, Kian.',
+      'O meu segredo continua guardado. E você, no chão.'
+    ],
+    aguiar: [
+      'Mais um Mascarado no relatório.',
+      'A noite acabou para você, Aguiar.'
+    ],
+    labirinto: [
+      'Todo labirinto tem saída para quem anda com mapa.',
+      'Arquivem esse capacete com o resto das evidências.'
+    ],
+    xande: [
+      'Xande, a raiva te deixa previsível.',
+      'Força tem limite. Disciplina, não.'
+    ],
+    lirio: [
+      'Lírio, proteger os outros é nobre. Proteger a si mesmo também é necessário.',
+      'Boa parede, Lírio. Parede não anda.'
+    ],
+    ferreiro: [
+      'Ferreiro, Santo Berço vai continuar de pé. Você só vai descansar um pouco.',
+      'Espada contra espada. A minha tinha dono melhor.'
+    ],
+    juan: [
+      'Juan, o Diabo não comanda esta operação.',
+      'Contenham o alvo. Ele não sai mais daqui.'
+    ],
+    kemi: [
+      'Kemi, mira perfeita. Posição errada.',
+      'Atiradora neutralizada. Próximo.'
+    ],
+    balu: [
+      'Balu, eu te chamei de volta para ajudar, não para apanhar.',
+      'De pé, Balu. A Ordem ainda precisa de você.'
+    ],
+    arnaldo: [
+      'Arnaldo... a espada sempre foi melhor na sua mão.',
+      'Velho amigo, você me ensinou essa estocada.'
+    ],
+  },
+  kaiser: {
+    arnaldo: [
+      'Senhor Arnaldo, o senhor faz um show, mas a névoa não aplaude.',
+      'Arnaldo, pede desculpa pro público por mim.'
+    ],
+    verissimo: [
+      'Senhor Veríssimo, desculpa. Eu segui o plano... o meu.',
+      'Relatório? Escreve que a névoa venceu, chefe.'
+    ],
+  },
+  arthur: {
+    arnaldo: [
+      'Arnaldo, você me treinou bem demais. Agora aguenta.',
+      'Foi mal, mestre. A aula de hoje foi minha.'
+    ],
+    verissimo: [
+      'Senhor, de pé. Missão nenhuma termina com o chefe sentado.',
+      'Senhor Veríssimo, eu aprendi. Só não do jeito que o senhor queria.'
+    ],
+  },
+  joui: {
+    arnaldo: [
+      'Arnaldo-san, muito teatral. Eu só cortei o roteiro.',
+      'Belo floreio, Arnaldo-san. O meu foi mais curto.'
+    ],
+    verissimo: [
+      'Senhor Veríssimo, perdão. A sombra chegou antes da ordem.',
+      'Disciplina, senhor? Eu chamo de velocidade.'
+    ],
+  },
+  aghata: {
+    arnaldo: [
+      'Arnaldo, eu li o seu relógio antes de você abrir.',
+      'Lindo espetáculo, Arnaldo. Pena que eu sei o final.'
+    ],
+    verissimo: [
+      'Senhor Veríssimo, eu me meti, e deu certo.',
+      'Viu? Às vezes desobedecer funciona.'
+    ],
+  },
+  dante: {
+    arnaldo: [
+      'Arnaldo, eu devo tudo a você. Hoje paguei uma parte com uma surra.',
+      'Desculpa, Arnaldo. O orfanato continua de pé, e o senhor também, mais ou menos.'
+    ],
+    verissimo: [
+      'Senhor Veríssimo, o Lodo nunca foi bom em seguir ordens.',
+      'O senhor é teimoso. Eu fui criado por freiras.'
+    ],
+  },
+  erin: {
+    arnaldo: [
+      'Arnaldo, eu disse que queria abrir o relógio!',
+      'Bum! Esse foi o efeito especial, seu Arnaldo.'
+    ],
+    verissimo: [
+      'Almoxarifado? Tarde demais, chefe!',
+      'Senhor Veríssimo, isso foi estratégia. Explosiva, mas estratégia.'
+    ],
+  },
+  gal_sal: {
+    arnaldo: [
+      'A sua peça terminou, ator.',
+      'Belo figurino, Arnaldo. Ainda assim, injusto.'
+    ],
+    verissimo: [
+      'A Ordem caiu primeiro, Veríssimo.',
+      'Ordens não seguram correntes.'
+    ],
+  },
+  kian: {
+    arnaldo: [
+      'O relógio não te salvou, Arnaldo. Ele só marcou a hora.',
+      'Eu sabia o fim desta cena antes de você subir ao palco.'
+    ],
+    verissimo: [
+      'Você continua vivo, Veríssimo. Por enquanto.',
+      'O seu segredo te protege. A sua espada, não.'
+    ],
+  },
+  aguiar: {
+    arnaldo: [
+      'Ha ha... o ator caiu sem roteiro.',
+      'Eu caço quem faz barulho, Arnaldo. E você faz muito.'
+    ],
+    verissimo: [
+      'O chefe da Ordem no chão. Isso dá uma bela história.',
+      'Ha ha... ordens não funcionam na floresta.'
+    ],
+  },
+  labirinto: {
+    arnaldo: [
+      'O palco também era um labirinto, Arnaldo.',
+      'Você procurou a plateia. Achou só paredes.'
+    ],
+    verissimo: [
+      'Nenhum mapa da Ordem cobre esta saída.',
+      'Até o líder se perde aqui dentro.'
+    ],
+  },
+  xande: {
+    arnaldo: [
+      'Seu Arnaldo, o show foi bom, mas o meu bateu mais forte.',
+      'Valeu pela aula, mestre. Hoje eu dei a minha.'
+    ],
+    verissimo: [
+      'Senhor Veríssimo, com todo respeito: pancada também é estratégia.',
+      'Por eles, chefe. Sempre por eles.'
+    ],
+  },
+  lirio: {
+    arnaldo: [
+      'Seu Arnaldo, a Leonora não entende de teatro.',
+      'Foi uma luta bonita, Arnaldo. A parede só não caiu.'
+    ],
+    verissimo: [
+      'Senhor Veríssimo, eu protegi o senhor de si mesmo.',
+      'Parede não anda, mas também não cai, chefe.'
+    ],
+  },
+  ferreiro: {
+    arnaldo: [
+      'Ator de longe, guerreiro de perto. Santo Berço respeita os dois.',
+      'A sua espada é comum, Arnaldo. A sua coragem, não.'
+    ],
+    verissimo: [
+      'Líder de homens, descanse. Santo Berço segue de pé.',
+      'A espada do seu amigo é boa. A mão ainda treme.'
+    ],
+  },
+  juan: {
+    arnaldo: [
+      'O Diabo adorou a sua apresentação, Arnaldo.',
+      'Mais um rosto famoso para o trono.'
+    ],
+    verissimo: [
+      'Veríssimo, o Diabo não recebe ordens.',
+      'A Ordem inteira não segura o que mora em mim.'
+    ],
+  },
+  kemi: {
+    arnaldo: [
+      'Alvo famoso abatido. Sem autógrafo.',
+      'Um tiro limpo, Arnaldo. Nada de bis.'
+    ],
+    verissimo: [
+      'O líder caiu. O contrato continua.',
+      'Mira perfeita, posição perfeita, senhor Veríssimo.'
+    ],
+  },
+  balu: {
+    arnaldo: [
+      'Arnaldo, tu é bom ator. Mas machado não lê roteiro.',
+      'Foi mal, seu Arnaldo! Depois eu pago o jantar.'
+    ],
+    verissimo: [
+      'Viu, Veríssimo? Valeu me chamar de volta.',
+      'Desculpa, chefe! Decisão precipitada, mas funcionou.'
+    ],
+  },
+};
+for (const [w, m] of Object.entries(VICTORY_NEW)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
+
 const VICTORY_FALLBACKS = {
   kaiser: 'A névoa não escolheu por mim. Desta vez, eu fiquei.',
   arthur: 'Acabou. Agora posso garantir que ninguém mais se machuque.',
@@ -1250,6 +1591,8 @@ const VICTORY_FALLBACKS = {
   juan: 'Não foi redenção. Mas foi um começo.',
   kemi: 'Alvo abatido. Trabalho encerrado.',
   balu: 'Viu? Eu falei que o tio Balu resolvia.',
+  arnaldo: 'E fecham-se as cortinas. Aplausos, por favor.',
+  verissimo: 'Missão cumprida. Relatório na minha mesa amanhã.',
 };
 
 export function victoryLine(winner, loser, loserName = CHARACTER_NAMES[loser] || loser) {

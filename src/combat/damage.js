@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { PASSIVES } from './passives.js';
+import { PASSIVES, hasPassive } from './passives.js';
 import { COMBAT } from '../config/combat.js';
 import { angleDiff, yawTo, DEG } from '../core/util.js';
 import { elementMultiplier } from '../config/elements.js';
@@ -45,6 +45,16 @@ export function applyHit(world, attacker, victim, o) {
     return 0;
   }
 
+  // PERCEPÇÃO CRONOLÓGICA (Anfitrião): ele já sabe o que vai acontecer — de tempos em tempos desvia sozinho de um golpe
+  // (não vale contra especiais nem no meio de uma cena)
+  if (!o.ignoreInvuln && o.kind !== 'special' && (victim.chronoCd || 0) <= 0 && hasPassive(victim, 'chronoSense')
+    && ['idle', 'walk', 'run', 'charging', 'block', 'attack', 'ranged', 'hitstun'].includes(victim.state)) {
+    const P = victim.def.passives.find((p) => p.type === 'chronoSense');
+    if (victim.trySubstitution({ free: true, label: 'PERCEPÇÃO CRONOLÓGICA!' })) {
+      victim.chronoCd = P.cooldown ?? 15;
+      return 0;
+    }
+  }
 
   // Postura de contra-ataque (ex.: Joui): anula o golpe físico e revida
   if (o.kind === 'melee' && victim.state === 'attack' && victim.combo.strike && victim.combo.strike.counter && !victim.combo.counterUsed) {
