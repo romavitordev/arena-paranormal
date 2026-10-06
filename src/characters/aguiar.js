@@ -164,6 +164,7 @@ export default {
     name: 'Máscara do Mutilador Noturno',
     banner: 'Máscara do Mutilador Noturno',
     type: 'maskTransform',
+    scene: 'mutilador', // agachado com o machado esticado, leva a máscara ao rosto (GIF de referência)
     form: 'aguiar_mutilador',
     formBanner: 'Mutilador Noturno',
     prop: 'maskOn',

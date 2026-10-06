@@ -167,6 +167,23 @@ function mummyWrap(world, opp, hold, ropes, { color = 0xd8ccb0 } = {}) {
   });
 }
 
+// ARMADURA DE SANGUE (Juan / Henri), seguindo o GIF de referência do usuário: o sangue EXPLODE do ombro esquerdo em
+// espinhos que se espalham para fora e para cima, e endurece na casca (Fighter.updateBloodShell) — fundo vermelho.
+function bloodEruption(f, world) {
+  const sh = f.rig.joints.sL ? f.rig.joints.sL.getWorldPosition(new THREE.Vector3()) : f.chestPos();
+  const side = new THREE.Vector3(Math.cos(f.yaw), 0, -Math.sin(f.yaw)); // esquerda do personagem
+  for (let i = 0; i < 9; i++) {
+    const dir = side.clone().multiplyScalar(0.6 + Math.random() * 0.6).add(new THREE.Vector3((Math.random() - 0.5) * 0.6, 0.3 + Math.random() * 0.9, (Math.random() - 0.5) * 0.6)).normalize();
+    world.fx.tracer(sh, sh.clone().addScaledVector(dir, 0.7 + Math.random() * 0.9), { color: i % 3 ? 0x9a0010 : 0xff2030, life: 0.35, width: 0.035 + Math.random() * 0.03 });
+  }
+  world.fx.burst(sh, { count: 45, color: 0xa01018, speed: 6, life: 0.6, size: 0.16, gravity: 9 });
+  world.fx.burst(sh, { count: 14, color: 0x3a0006, kind: 'smoke', speed: 1.5, life: 0.7, size: 0.5 });
+  world.fx.flash(sh, { color: 0xff1a1a, size: 1.8, life: 0.15 });
+  world.screenFlash && world.screenFlash('#6a0000', 0.15);
+  world.cameraRig.shake(0.25, 0.2);
+  world.audio.play('descarnar', { volume: 0.6, pitch: 0.7 });
+}
+
 export const ABILITY_TYPES = {
   // ------------------------------------------------------------------ JOUI
   // Teleporte das Sombras: afunda na própria sombra e surge atrás do inimigo.
@@ -2097,6 +2114,7 @@ Object.assign(ABILITY_TYPES, {
         if (a.prop) f.rig.showProp(a.prop, true);
         f.armorHits = (f.armorHits || 0) + a.armor;
         world.fx.play('FX_DUST', f.pos, { scale: 0.8 });
+        if (a.bloodArmor) bloodEruption(f, world);
         f.addBuff({
           type: 'heavyProtection', name: label, time: a.duration, duration: a.duration, takenMult: a.takenMult, speedMult: a.speedMult, bloodArmor: !!a.bloodArmor,
           ...bloodArmBuff(a),
