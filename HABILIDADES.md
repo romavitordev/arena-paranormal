@@ -234,7 +234,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 - **Embaralhar "Trinitá"** — △ + □ / Y + X · custo 40 · cooldown 45 s
   Vira um vulto preto, troca de lugar e cria 3 cópias com vontade própria (4 Dantes em campo). Cada cópia causa metade do dano dele e some ao ser destruída ou quando o tempo acaba.
-- **Tentáculos de Lodo** — △ + ○ / Y + B · custo 30 · cooldown 14 s · dano 60 · alcance 10 m
+- **Tentáculos de Lodo** — △ + ○ / Y + B · custo 30 · cooldown 11 s · dano 70 · alcance 10 m
   Põe a mão no chão: tentáculos de Lodo Preto brotam embaixo do inimigo, prendem e comprimem.
 - **Cicatrização "Paradiso"** — R2 + △ / RT + Y · custo 30 · cooldown 26 s
   Assopra uma névoa preta em espiral que envelhece as próprias feridas até cicatrizarem. Parado, cicatriza 25% mais.
@@ -292,9 +292,9 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 250 de dano · custo 50 · cooldown 14 s.
 
-### Transformação: Bênção Maldita
+### Transformação: Em Nome do Caos
 
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +10% de dano, sanidade regenera +40%, regenera 6 de vida/s, cura 12% na hora.
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
 
 ---
 
@@ -329,10 +329,10 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
   Prende a corrente no adversário e puxa o PRÓPRIO Gal até o adversário, chegando com um corte cruzado.
 - **Teletransporte** — R2 + × / RT + A · custo 22 · cooldown 9 s
   Some em faíscas douradas e surge atrás do adversário, como fez com Arthur e Erin no orfanato.
-- **Controle Mental** — △ + ○ / Y + B · custo 35 · cooldown 24 s · alcance 10 m
-  Um sigilo dourado sobre a cabeça do alvo: por alguns segundos o corpo dele obedece ao contrário (direções invertidas).
-- **Corrente Giratória** — △ + L2 / Y + LT · custo 25 · cooldown 13 s · dano 75
-  Gira as duas lâminas presas às correntes em volta do corpo: três cortes em área, o último lança.
+- **Controle Mental** — △ + ○ / Y + B · custo 35 · cooldown 18 s · alcance 10 m
+  Um sigilo dourado sobre a cabeça do alvo: por alguns segundos o corpo dele obedece ao Gal — anda sozinho até ele e não consegue defender.
+- **Corrente Giratória** — △ + L2 / Y + LT · custo 25 · cooldown 11 s · dano 75
+  Gira as duas lâminas presas às correntes em volta do corpo: três cortes em área, o último lança — o 1º giro laça e arrasta quem estiver perto.
 - **Velocidade Mortal** — R2 + △ / RT + Y · custo 25 · cooldown 20 s
   O ritual do Leque da Fatalidade distorce o tempo em volta dele: fica muito mais rápido e recupera todas as esquivas.
 - **Bloqueio Perfeito** — defender no instante exato (0.15 s) anula o dano e atordoa o atacante por 0.7 s
@@ -400,7 +400,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ## AGUIAR
 
-*Caçador paciente: prende, marca e mutila — e vira o Mutilador quando põe a máscara* · arma: Machado do Mutilador (com corda para arremessar e puxar)
+*Caçador paciente: prende, marca e mutila — e vira o Mutilador Noturno quando põe a máscara (Transformação)* · arma: Machado do Mutilador (com corda para arremessar e puxar)
 
 ### Físico (○ / B)
 
@@ -425,8 +425,8 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ### Habilidades
 
-- **Máscara do Mutilador Noturno** — △ + ○ / Y + B · custo 35 · cooldown 30 s
-  Põe a máscara branca da mão vermelha: a intenção assassina toma conta — bate mais forte, anda mais rápido, aguenta 3 golpes sem reagir e todo golpe do machado (corpo a corpo ou na corda) faz sangrar enquanto estiver mascarado. Mas não consegue mais defender.
+- **Ataque Especial** — △ + ○ / Y + B · custo 30 · cooldown 12 s · dano 90 · alcance 2.2 m
+  Concentra a força num golpe só: ergue o machado e crava por cima com tudo — gasta muito da defesa e derruba. Preparação longa (aguenta um golpe pequeno depois de firmar os pés); errar deixa ele aberto.
 - **Armadilha de Urso** — △ + L2 / Y + LT · custo 20 · cooldown 12 s · dano 40
   Arma uma armadilha de urso no chão à frente. Quem pisar fica preso, toma dano e sangra. Só uma por vez.
 - **Cães de Caça** — R2 + △ / RT + Y · custo 25 · cooldown 14 s · dano 30
@@ -434,19 +434,19 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 - **Predador de Sangue** — R2 + × / RT + A · custo 20 · cooldown 20 s
   Memoriza o cheiro da vítima: por alguns segundos rastreia o sangue dela, anda mais rápido e todo ataque contra ela fica mais forte.
 
-### Especial: Finalização do Mutilador
+### Especial: Caçada no Acampamento
 
 250 de dano · custo 50 · cooldown 14 s.
 
-### Transformação: Predador Perfeito
+### Transformação: Máscara do Mutilador Noturno
 
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +15% de dano, +10% de velocidade, todo golpe sangra, cura 10% na hora.
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
 
 ---
 
 ## LABIRINTO
 
-*Controla o espaço: perde o inimigo num labirinto e consome o chão onde ele pisa* · arma: A Antena (lança com parabólica)
+*Controla o espaço com rituais à distância — e vira o ??? quando põe o capacete* · arma: A Antena (lança com parabólica)
 
 ### Físico (○ / B)
 
@@ -471,21 +471,19 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 ### Habilidades
 
 - **Labirinto Mental** — △ + □ / Y + X · custo 30 · cooldown 18 s · alcance 11 m
-  Prende a mente do alvo num labirinto: por alguns segundos ele anda numa direção que muda sozinha. Com o capacete vira Labirinto Abissal (dura mais).
-- **Consumir Momento** — △ + ○ / Y + B · custo 30 · cooldown 12 s · dano 70
-  Marca o chão onde o alvo pisa com uma espiral; ao estalar os dedos ela estoura e destrói a área (Morte). Dá para sair de cima se perceber a marca. Com o capacete, a área e o dano crescem.
-- **Capacete do ???** — R2 + △ / RT + Y · custo 35 · cooldown 30 s
-  Põe o elmo do sorriso: por alguns segundos os rituais e a Rajada ficam mais fortes (Tempestade Caótica), o Labirinto Mental vira Abissal e o Consumir Momento cresce.
-- **Tempestade Caótica** — △ + L2 / Y + LT · custo 30 · cooldown 15 s · dano 20 · alcance 18 m
-  A parabólica chama uma tempestade em cima do alvo: um círculo avisa a área e oito raios caóticos caem nela por 2 s — metade mira onde o alvo está. Saia de baixo!
+  Prende a mente do alvo num labirinto: por alguns segundos ele anda numa direção que muda sozinha. Com o capacete vira Labirinto Abissal.
+- **Mapa Sanguíneo** — △ + ○ / Y + B · custo 20 · cooldown 20 s
+  Desenha um mapa com gotas de sangue que mostra onde a vítima está: por alguns segundos ele a rastreia, anda mais rápido e os ataques contra ela ficam mais fortes. Com o capacete vira Revelação Sanguínea.
+- **Capturar Momento** — △ + L2 / Y + LT · custo 25 · cooldown 22 s
+  Marca o lugar com um símbolo que capta imagens e sons: ele vê o que vem — recupera 2 esquivas e fica mais atento por alguns segundos.
 
 ### Especial: O Labirinto é a Resposta
 
 250 de dano · custo 50 · cooldown 14 s.
 
-### Transformação: Consumir Momento
+### Transformação: Capacete do ???
 
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +10% de dano, recargas 40% mais rápidas, sanidade regenera +50%, cura 10% na hora.
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
 
 ---
 

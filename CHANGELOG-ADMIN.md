@@ -1,6 +1,20 @@
 # Registro administrativo de alterações
 
-## v3.7.0 — Especiais com aviso
+## v3.7.0 — Especiais com aviso + máscaras na Transformação
+
+- Novos tipos de especial: `maskTransform` (cena de pôr a máscara/capacete → `transform` para `sp.form`, +bonusHealth;
+  `sp.prop` aparece no modelo base durante a cena) e `kamikaze` (pinos → corre `sp.speed` até `sp.contact` ou `sp.run`
+  s → explode `sp.damage` em `sp.radius`; defesa de frente leva `guardedMult` e quebra; quem usa marca
+  `sacrificeWin` e morre). `Match.endRound`: os dois em K.O. → vence quem tem `sacrificeWin`.
+- `MODEL_VARIANTS` em `models/index.js`: formas que reaproveitam um .glb com acessórios diferentes
+  (`labirinto_elmo` com `helmetOn`, `aguiar_mutilador` com `maskOn`, `erin_caos` com `gasMask()` procedural no socket
+  `mouth`).
+- Formas novas (`characters/forms/`): `labirinto_elmo`, `aguiar_mutilador`, `erin_caos` (espalham o kit base e
+  sobrescrevem). Awakenings de Labirinto/Aguiar/Erin viraram `maskTransform`.
+- Labirinto: sem `helmetForm`/`consumeMoment`/`chaosStorm` no kit base (entram Mapa Sanguíneo `predatorScent` e
+  Capturar Momento `blessing`); `abyssMaze` não mostra mais o capacete. Aguiar: sem `maskForm` (entra Ataque Especial
+  `heavyBlow`), especial sem `prepare.showProp`.
+- CPU: `sacrificeOk` — só usa o especial `kamikaze` se o adversário tiver vida ≤ 80% do dano.
 
 - Novo `src/combat/specials/telegraph.js`: tipos de especial que acertam à distância sem projétil definem
   `telegraph(f, sp)` → `{ time, anim, mark }` (ritual 0,85 s `cast_up` · abyssMaze 0,85 s · spiralSnipe 0,8 s
