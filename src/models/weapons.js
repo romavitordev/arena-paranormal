@@ -1042,25 +1042,14 @@ export function swordArnaldo() {
   edgeM.rotation.y = -Math.PI / 2;
   edgeM.position.y = -0.08;
   g.add(edgeM);
-  // as duas fitas vinho: presas na guarda, caindo longas e soltas para trás
-  const RIBBON = 0x7a1424;
+  // as duas fitas VERMELHAS presas na guarda: tiras com FÍSICA própria (balançam no idle, na corrida, nos golpes e no dash)
+  const RIBBON = 0xd01c30;
   const knot = part(new THREE.TorusGeometry(0.02, 0.008, 6, 12), RIBBON, { outline: false });
   knot.position.y = -0.04;
   knot.rotation.x = Math.PI / 2;
   g.add(knot);
-  [[0.0, 0.42], [0.03, 0.34]].forEach(([dz, len], k) => {
-    const sgn = k ? 1 : -1;
-    const path = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(0, -0.04, -0.02),
-      new THREE.Vector3(0.01 * sgn, -0.02, -0.08 - dz),
-      new THREE.Vector3(0.03 * sgn, -0.1, -0.13 - dz),
-      new THREE.Vector3(0.02 * sgn, -0.04 - len * 0.6, -0.16 - dz),
-      new THREE.Vector3(0.04 * sgn, -0.04 - len, -0.2 - dz),
-    ]);
-    const ribbon = part(new THREE.TubeGeometry(path, 20, 0.009, 4, false), RIBBON, { outline: false });
-    ribbon.scale.set(2.4, 1, 1); // achatada como fita
-    g.add(ribbon);
-  });
+  g.add(physicsRibbon(new THREE.Vector3(0, -0.04, -0.012), 0.46, 0.05, RIBBON, 0.6));
+  g.add(physicsRibbon(new THREE.Vector3(0, -0.04, 0.012), 0.38, 0.044, RIBBON, -0.5));
   g.userData.tipLength = 1.05;
   return g;
 }
@@ -1217,5 +1206,142 @@ export function necktie(color) {
   body.scale.set(1, 1, 0.35);
   body.position.y = -0.14;
   g.add(body);
+  return g;
+}
+
+// FITA COM FÍSICA: uma tira presa num ponto do objeto (local) que cai e balança com a gravidade e a inércia do movimento
+// (corrente de pontos com Verlet, em coordenadas do mundo; a malha é refeita no espaço local a cada quadro).
+export function physicsRibbon(anchor, len, width, color, sway = 0.5, n = 10) {
+  const geo = new THREE.BufferGeometry();
+  const pos = new Float32Array((n + 1) * 2 * 3);
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  const idx = [];
+  for (let i = 0; i < n; i++) { const a = i * 2; idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2); }
+  geo.setIndex(idx);
+  const mesh = new THREE.Mesh(geo, new THREE.MeshToonMaterial({ color, emissive: color, emissiveIntensity: 0.25, side: THREE.DoubleSide }));
+  mesh.frustumCulled = false;
+  mesh.userData.outline = false;
+  const seg = len / n;
+  const P = [];
+  const O = [];
+  let ready = false;
+  let last = 0;
+  const inv = new THREE.Matrix4();
+  const tmp = new THREE.Vector3();
+  const side = new THREE.Vector3();
+  const grav = new THREE.Vector3(0, -9.8, 0);
+  mesh.onBeforeRender = () => {
+    const now = performance.now();
+    const dt = Math.min(1 / 30, Math.max(1 / 240, (now - last) / 1000 || 1 / 60));
+    last = now;
+    const parent = mesh.parent;
+    if (!parent) return;
+    parent.updateWorldMatrix(true, false);
+    const root = tmp.copy(anchor).applyMatrix4(parent.matrixWorld);
+    if (!ready) {
+      for (let i = 0; i <= n; i++) { P.push(root.clone().add(new THREE.Vector3(0, -i * seg, 0))); O.push(P[i].clone()); }
+      ready = true;
+    }
+    const t = now / 1000;
+    const wind = new THREE.Vector3(Math.sin(t * 1.7) * sway, 0, Math.cos(t * 1.3) * sway * 0.6);
+    P[0].copy(root);
+    O[0].copy(root);
+    for (let i = 1; i <= n; i++) { // Verlet: inércia + gravidade + um vento leve (a fita nunca fica parada)
+      const p = P[i];
+      const v = p.clone().sub(O[i]).multiplyScalar(0.96);
+      O[i].copy(p);
+      p.add(v).addScaledVector(grav, dt * dt).addScaledVector(wind, dt * dt);
+    }
+    for (let it = 0; it < 4; it++) { // comprimento fixo de cada pedaço
+      for (let i = 1; i <= n; i++) {
+        const a = P[i - 1];
+        const b = P[i];
+        const d = b.clone().sub(a);
+        const l = d.length() || 1e-6;
+        const k = (l - seg) / l;
+        if (i === 1) b.addScaledVector(d, -k);
+        else { a.addScaledVector(d, k * 0.5); b.addScaledVector(d, -k * 0.5); }
+      }
+      P[0].copy(root);
+    }
+    inv.copy(parent.matrixWorld).invert();
+    for (let i = 0; i <= n; i++) {
+      const dir = i < n ? P[i + 1].clone().sub(P[i]) : P[i].clone().sub(P[i - 1]);
+      side.set(dir.z, 0, -dir.x).normalize().multiplyScalar(width * (1 - i / n * 0.4) / 2); // largura da fita
+      const l = P[i].clone().add(side).applyMatrix4(inv);
+      const r = P[i].clone().sub(side).applyMatrix4(inv);
+      pos.set([l.x, l.y, l.z, r.x, r.y, r.z], i * 6);
+    }
+    geo.attributes.position.needsUpdate = true;
+    geo.computeVertexNormals();
+  };
+  // primeira pose (antes do 1º quadro): pendurada
+  for (let i = 0; i <= n; i++) pos.set([anchor.x - width / 2, anchor.y - i * seg, anchor.z, anchor.x + width / 2, anchor.y - i * seg, anchor.z], i * 6);
+  return mesh;
+}
+
+// EMISSOR DE PULSOS PARANORMAIS (Arnaldo — wiki): CAIXA coberta de Sigilos de Conhecimento, detalhes DOURADOS, cabos e
+// fios saindo de um buraco. userData.glow: o brilho que acende na ativação.
+export function pulseEmitter() {
+  const g = new THREE.Group();
+  const tex = (() => {
+    const c = document.createElement('canvas');
+    c.width = c.height = 128;
+    const x = c.getContext('2d');
+    x.fillStyle = '#2a2016'; x.fillRect(0, 0, 128, 128);
+    x.strokeStyle = '#f2c230'; x.lineWidth = 3; x.lineCap = 'round';
+    for (let k = 0; k < 6; k++) { // sigilos de Conhecimento (traços angulosos)
+      x.beginPath();
+      let px = 20 + Math.random() * 88;
+      let py = 20 + Math.random() * 88;
+      x.moveTo(px, py);
+      for (let j = 0; j < 4; j++) { px += (Math.random() - 0.5) * 40; py += (Math.random() - 0.5) * 40; x.lineTo(px, py); }
+      x.stroke();
+    }
+    x.strokeRect(6, 6, 116, 116);
+    const t = new THREE.CanvasTexture(c);
+    t.colorSpace = THREE.SRGBColorSpace;
+    return t;
+  })();
+  const box = part(new THREE.BoxGeometry(0.16, 0.11, 0.12), 0xffffff, { mat: new THREE.MeshToonMaterial({ map: tex }) });
+  g.add(box);
+  for (const sx of [-1, 1]) for (const sz of [-1, 1]) { // cantos dourados
+    const c = part(new THREE.BoxGeometry(0.022, 0.12, 0.022), 0xd4a640, { outline: false });
+    c.position.set(sx * 0.08, 0, sz * 0.06);
+    g.add(c);
+  }
+  const hole = part(new THREE.CylinderGeometry(0.025, 0.025, 0.01, 12), 0x050505, { outline: false });
+  hole.position.y = 0.056;
+  g.add(hole);
+  const glow = new THREE.Mesh(new THREE.SphereGeometry(0.03, 10, 8), glowMat(0xf2c230, 0));
+  glow.position.y = 0.06;
+  g.add(glow);
+  g.userData.glow = glow;
+  // cabos e fios saindo do buraco
+  for (let i = 0; i < 4; i++) {
+    const a = i * 1.6;
+    const pts = [new THREE.Vector3(0, 0.055, 0), new THREE.Vector3(Math.cos(a) * 0.04, 0.1, Math.sin(a) * 0.04), new THREE.Vector3(Math.cos(a) * 0.09, 0.08, Math.sin(a) * 0.09), new THREE.Vector3(Math.cos(a) * 0.1, 0.02, Math.sin(a) * 0.1)];
+    g.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 10, 0.005, 4, false), toon([0xb02020, 0x2050b0, 0xd0a020, 0x202020][i])));
+  }
+  return g;
+}
+
+// BANDOLEIRA com cartuchos (Veríssimo): faixa de couro atravessando o peito com os cartuchos vermelhos
+export function bandolier() {
+  const g = new THREE.Group();
+  const strap = part(new THREE.BoxGeometry(0.06, 0.62, 0.012), 0x4a2e1a);
+  strap.rotation.z = 0.75;
+  g.add(strap);
+  for (let i = 0; i < 9; i++) {
+    const shell = part(new THREE.CylinderGeometry(0.009, 0.009, 0.045, 8), 0xb02a20, { outline: false });
+    const t = (i - 4) * 0.055;
+    shell.position.set(Math.sin(0.75) * -t, Math.cos(0.75) * t, 0.012);
+    shell.rotation.z = 0.75;
+    g.add(shell);
+    const cap = part(new THREE.CylinderGeometry(0.0095, 0.0095, 0.012, 8), 0xd4a640, { outline: false });
+    cap.position.copy(shell.position).add(new THREE.Vector3(Math.sin(0.75) * 0.02, -Math.cos(0.75) * 0.02, 0));
+    cap.rotation.z = 0.75;
+    g.add(cap);
+  }
   return g;
 }

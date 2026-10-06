@@ -313,6 +313,21 @@ function tendonRopes(g, w, h) {
   }
 }
 
+// veias de Energia (Anfitrião): linhas tortas rosa e azul brilhando sobre o roxo
+function energyVeins(g, w, h) {
+  const rnd = seeded(13);
+  for (let i = 0; i < 26; i++) {
+    g.strokeStyle = rnd() < 0.5 ? 'rgba(255,106,208,0.85)' : 'rgba(90,170,255,0.85)';
+    g.lineWidth = 1 + rnd() * 2.5;
+    g.beginPath();
+    let x = rnd() * w;
+    let y = rnd() * h;
+    g.moveTo(x, y);
+    for (let k = 0; k < 8; k++) { x += (rnd() - 0.5) * 40; y += (rnd() - 0.5) * 40; g.lineTo(x, y); }
+    g.stroke();
+  }
+}
+
 export const MATERIAL_TEXTURES = {
   // ---------------- KAISER: queimadura no lado ESQUERDO (x > 256)
   face_cineraria: face((g) => {
@@ -635,6 +650,97 @@ export const MATERIAL_TEXTURES = {
     brow: { angry: -1, thick: 8, color: '#17110f' },
     mouth: { mouthW: 20, smile: 6, teeth: true },
   }),
+  // ---------------- ARNALDO FRITZ (Desconjuração/Calamidade): ~50 anos, barba castanha bem aparada, olhar confiante de
+  // ator (meio sorriso de canto), rugas leves de expressão
+  face_arnaldo: face((g) => {
+    stubble(g, 'rgba(62,38,20,0.5)', 1600, { y0: 140, y1: 225, w: 82 });
+    g.strokeStyle = 'rgba(110,70,50,0.35)'; g.lineWidth = 1.3;
+    for (const s of [-1, 1]) { // pés de galinha e marca do sorriso
+      for (let k = 0; k < 3; k++) { g.beginPath(); g.moveTo(CX + s * 58, EYE_Y - 4 + k * 5); g.lineTo(CX + s * 68, EYE_Y - 7 + k * 7); g.stroke(); }
+      g.beginPath(); g.moveTo(CX + s * 26, 150); g.quadraticCurveTo(CX + s * 34, 166, CX + s * 30, 180); g.stroke();
+    }
+    g.beginPath(); g.moveTo(CX - 18, EYE_Y - 34); g.lineTo(CX + 18, EYE_Y - 34); g.stroke(); // ruga da testa
+  }, {
+    skin: '#d4a484',
+    eye: { iris: '#4a3018', irisLight: '#7a5a38', tilt: 0.02, h: 7, lid: 3.6 },
+    brow: { angry: 1, thick: 6, color: '#3e2614', arch: 3 },
+    mouth: { mouthW: 18, smirk: true, lipLine: true },
+  }),
+  // ANFITRIÃO: matéria caótica da Energia — roxo com veias rosa e azul pulsando (o rosto fica sob a máscara)
+  face_anfitriao: () => canvasTex(512, 256, (g) => {
+    g.fillStyle = '#6a2ac0'; g.fillRect(0, 0, 512, 256);
+    energyVeins(g, 512, 256);
+  }, { wrap: true }),
+  skin_anfitriao: () => canvasTex(256, 256, (g) => {
+    g.fillStyle = '#6a2ac0'; g.fillRect(0, 0, 256, 256);
+    energyVeins(g, 256, 256);
+  }, { wrap: true }),
+  // colete MARROM abotoado com a camisa social BRANCA aparecendo em V no peito (a gravata é malha)
+  vest_arnaldo: () => canvasTex(512, 512, (g) => {
+    g.fillStyle = '#5a3a24'; g.fillRect(0, 0, 512, 512);
+    const rnd = seeded(7);
+    for (let i = 0; i < 2600; i++) { g.fillStyle = `rgba(${rnd() < 0.5 ? '30,18,10' : '120,86,60'},0.12)`; g.fillRect(rnd() * 512, rnd() * 512, 2, 2); }
+    // o V fica embaixo da textura (o UV do tronco tem v=1 no pescoço)
+    g.fillStyle = '#eeeae2'; // camisa branca no V
+    g.beginPath(); g.moveTo(196, 512); g.lineTo(256, 322); g.lineTo(316, 512); g.closePath(); g.fill();
+    g.strokeStyle = 'rgba(30,18,10,0.6)'; g.lineWidth = 3; // borda do colete
+    g.beginPath(); g.moveTo(196, 512); g.lineTo(256, 322); g.lineTo(316, 512); g.stroke();
+    g.fillStyle = 'rgba(30,18,10,0.35)'; // bolsos
+    for (const x of [150, 330]) g.fillRect(x, 207, 46, 5);
+  }, { wrap: true }),
+  coat_arnaldo: () => canvasTex(256, 256, (g) => {
+    g.fillStyle = '#26252c'; g.fillRect(0, 0, 256, 256);
+    const rnd = seeded(9);
+    for (let i = 0; i < 1500; i++) { g.fillStyle = `rgba(${rnd() < 0.5 ? '10,10,14' : '70,68,80'},0.14)`; g.fillRect(rnd() * 256, rnd() * 256, 1.5, 3); }
+  }, { wrap: true }),
+  pants_arnaldo: () => canvasTex(256, 256, (g) => {
+    g.fillStyle = '#5a4030'; g.fillRect(0, 0, 256, 256);
+    g.strokeStyle = 'rgba(40,26,16,0.4)'; g.lineWidth = 2; // vinco
+    for (const x of [64, 192]) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, 256); g.stroke(); }
+  }, { wrap: true }),
+  // ---------------- SENHOR VERÍSSIMO (Calamidade): 60 anos, cansado e pálido, OLHEIRAS grandes, rugas fundas, olhar
+  // sério e concentrado; barba e bigode grisalhos (a malha dá o volume)
+  face_verissimo: face((g) => {
+    stubble(g, 'rgba(150,146,140,0.55)', 1800, { y0: 135, y1: 230, w: 88 });
+    g.strokeStyle = 'rgba(100,70,60,0.4)'; g.lineWidth = 1.6;
+    for (let k = 0; k < 3; k++) { g.beginPath(); g.moveTo(CX - 30, EYE_Y - 32 - k * 7); g.quadraticCurveTo(CX, EYE_Y - 36 - k * 7, CX + 30, EYE_Y - 32 - k * 7); g.stroke(); } // testa
+    g.beginPath(); g.moveTo(CX - 6, EYE_Y - 20); g.lineTo(CX - 4, EYE_Y - 8); g.moveTo(CX + 6, EYE_Y - 20); g.lineTo(CX + 4, EYE_Y - 8); g.stroke(); // vinco entre as sobrancelhas
+    for (const s of [-1, 1]) {
+      g.fillStyle = 'rgba(90,60,70,0.28)'; // olheiras fundas
+      g.beginPath(); g.ellipse(CX + s * 32, EYE_Y + 13, 19, 8, 0, 0, Math.PI * 2); g.fill();
+      g.beginPath(); g.moveTo(CX + s * 24, 148); g.quadraticCurveTo(CX + s * 36, 168, CX + s * 32, 190); g.stroke(); // bigode-chinês
+    }
+  }, {
+    skin: '#d8b49c',
+    eye: { iris: '#3a4a5a', irisLight: '#6a7a8a', tilt: -0.06, h: 6, lid: 4, bags: true },
+    brow: { angry: 3, thick: 7, color: '#b8b4ae' },
+    mouth: { mouthW: 18, lipLine: true },
+  }),
+  vest_verissimo: () => canvasTex(512, 512, (g) => {
+    g.fillStyle = '#1c1c20'; g.fillRect(0, 0, 512, 512);
+    const rnd = seeded(5);
+    for (let i = 0; i < 2000; i++) { g.fillStyle = `rgba(${rnd() < 0.5 ? '0,0,0' : '70,70,80'},0.14)`; g.fillRect(rnd() * 512, rnd() * 512, 2, 2); }
+    g.fillStyle = '#efece6'; // camisa branca no V (embaixo da textura = no pescoço)
+    g.beginPath(); g.moveTo(200, 512); g.lineTo(256, 332); g.lineTo(312, 512); g.closePath(); g.fill();
+    g.strokeStyle = 'rgba(0,0,0,0.7)'; g.lineWidth = 3;
+    g.beginPath(); g.moveTo(200, 512); g.lineTo(256, 332); g.lineTo(312, 512); g.stroke();
+    g.fillStyle = 'rgba(80,80,90,0.5)';
+    for (const x of [150, 330]) g.fillRect(x, 208, 46, 4);
+  }, { wrap: true }),
+  shirt_verissimo: () => canvasTex(256, 256, (g) => {
+    g.fillStyle = '#efece6'; g.fillRect(0, 0, 256, 256);
+    const rnd = seeded(3);
+    for (let i = 0; i < 14; i++) {
+      const x = rnd() * 256;
+      g.strokeStyle = 'rgba(120,120,135,0.22)'; g.lineWidth = 3 + rnd() * 5;
+      g.beginPath(); g.moveTo(x, 0); g.bezierCurveTo(x + 20, 90, x - 20, 170, x + 8, 256); g.stroke();
+    }
+  }, { wrap: true }),
+  pants_verissimo: () => canvasTex(256, 256, (g) => {
+    g.fillStyle = '#34405a'; g.fillRect(0, 0, 256, 256);
+    g.strokeStyle = 'rgba(20,26,40,0.45)'; g.lineWidth = 2;
+    for (const x of [64, 192]) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, 256); g.stroke(); }
+  }, { wrap: true }),
   // polo VERDE-CLARA (o desenho de Calamidade, base do modelo): dobras sombreadas, carcela com botões e a abertura em V
   shirt_balu: () => canvasTex(512, 512, (g) => {
     g.fillStyle = '#9cc49a'; g.fillRect(0, 0, 512, 512);

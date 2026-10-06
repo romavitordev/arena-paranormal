@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { glowMat } from './rig.js';
-import { m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, hostMask, roundGlasses, mustache, necktie, neonWraps, watchChain } from './weapons.js';
+import { m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, hostMask, roundGlasses, mustache, necktie, neonWraps, watchChain, pulseEmitter, bandolier } from './weapons.js';
 export { addJouiProps } from './characters/joui.js';
 
 // Armas e acessórios adicionados em código sobre os modelos do Blender.
@@ -338,63 +338,19 @@ function tickWatch(watch, crazy) {
   };
 }
 
-// MODELO PROVISÓRIO: recolore (ou esconde) partes do corpo emprestado pelo nome do material do .glb. Os materiais são
-// criados por cópia (rigFromGLB), então mexer neles não afeta o lutador original; a textura sai e fica a cor lisa.
-function restyle(rig, rules) {
-  rig.body.traverse((o) => {
-    if (!o.isMesh || !o.material || !o.material.name) return;
-    const r = rules.find(([re]) => re.test(o.material.name));
-    if (!r) return;
-    const [, look] = r;
-    if (look === 'hide') {
-      o.visible = false;
-      if (o.userData.outlineMesh) o.userData.outlineMesh.visible = false;
-      return;
-    }
-    o.material.map = null;
-    o.material.color.set(look);
-    o.material.needsUpdate = true;
-  });
-}
-
-// ARNALDO FRITZ (corpo provisório: o .glb do Joui, de casaco longo, até o modelo próprio no Blender): a espada da fita
-// vermelha na mão direita, óculos redondos, gravata vermelha e o relógio de bolso de ouro (escondido: aparece na
-// Transformação, na mão esquerda)
-const ARNALDO_LOOK = [
-  [/mask|eyeglow|bead/, 'hide'], // nada da máscara e das contas do Joui
-  [/face_mascarado/, 0xd9a988],
-  [/skin_mascarado/, 0xd9a988],
-  [/HAIR/, 0x5a3a22], // cabelo castanho
-  [/coat/, 0x34343a], // sobretudo cinza-escuro de gola alta
-  [/trim_red|rope/, 0x2e2e34], // colete risca de giz (cinza-escuro)
-  [/tunic/, 0x8a2a30], // camisa vinho (referências)
-  [/pants|wraps/, 0x2a2a30],
-  [/boots|gloves/, 0x1a1414],
-];
+// ARNALDO FRITZ (modelo próprio: tools/blender/arnaldo_common.py): a espada da fita vermelha (com física) na mão
+// direita, os óculos finos e arredondados, o relógio de bolso de ouro (aparece na Transformação) e o Emissor de Pulsos
+// Paranormais (aparece no □) na mão esquerda
 export function addArnaldoProps(rig) {
   const { sockets, props } = rig;
-  restyle(rig, ARNALDO_LOOK);
   const sword = swordArnaldo();
   sword.rotation.x = -0.25;
   sockets.handR.add(sword);
   props.sword = sword;
-  const glasses = roundGlasses();
-  glasses.position.set(0, 0.075, 0.0);
+  const glasses = roundGlasses({ tint: 0xdde8f0, opacity: 0.22 });
+  glasses.position.set(0, 0.07, 0.012);
   sockets.mouth.add(glasses);
   props.glasses = glasses;
-  const tie = necktie(0x1e2a4a); // gravata azul-marinho sobre a camisa vinho
-  tie.position.set(0, 0.06, 0.02);
-  sockets.chest.add(tie);
-  props.tie = tie;
-  const beard = mustache(0x4a2e1a); // barba curta castanha
-  beard.scale.setScalar(0.8);
-  beard.position.set(0, -0.01, 0.005);
-  sockets.mouth.add(beard);
-  props.beard = beard;
-  const chain = watchChain();
-  chain.position.set(-0.02, -0.12, 0.02);
-  sockets.chest.add(chain);
-  props.chain = chain;
   const watch = pocketWatch();
   watch.scale.setScalar(1.8); // grande o bastante para ler na cena da Transformação
   watch.rotation.set(-1.2, 0, 0);
@@ -403,31 +359,17 @@ export function addArnaldoProps(rig) {
   sockets.handL.add(watch);
   props.watch = watch;
   tickWatch(watch, false);
+  const emitter = pulseEmitter();
+  emitter.position.set(0, -0.06, 0.06);
+  emitter.visible = false;
+  sockets.handL.add(emitter);
+  props.emitter = emitter;
 }
 
-// O ANFITRIÃO (forma do Arnaldo, referências do usuário): a máscara de gás de lentes brilhando e fios neon, fios
-// neon enrolados no corpo, terno escuro com gravata vermelha e o relógio com a Relíquia preso no antebraço esquerdo, girando sem parar
+// O ANFITRIÃO (modelo próprio — máscara fundida, cabos e corpo de Energia vêm do Blender): o relógio com a Relíquia
+// preso no antebraço esquerdo, girando sem parar, e o CABO que sai do peito até ele (acompanha o braço a cada quadro)
 export function addAnfitriaoProps(rig) {
   const { sockets, props } = rig;
-  restyle(rig, [[/tunic/, 0xece8e0], [/trim_red|rope/, 0x5a4a3a], ...ARNALDO_LOOK.map(([re, c]) => [re, re.test('coat') ? 0x2a2440 : c])]); // terno escuro arroxeado, camisa branca, colete
-  const mask = hostMask();
-  mask.position.set(0, -0.02, -0.01);
-  sockets.mouth.add(mask);
-  props.hostMask = mask;
-  const tie = necktie(0xb0141c);
-  tie.position.set(0, 0.06, 0.02);
-  sockets.chest.add(tie);
-  props.tie = tie;
-  // fios neon enrolados no corpo (tronco, braços e pernas), como nas referências
-  const wraps = [];
-  const wrap = (joint, r, len, n) => { const w = neonWraps(r, len, n); rig.attach(joint, w); wraps.push(w); };
-  wrap('sp', 0.2, 0.35, 4);
-  wrap('sL', 0.07, 0.25, 2);
-  wrap('sR', 0.07, 0.25, 2);
-  wrap('eR', 0.06, 0.22, 2);
-  wrap('lL', 0.09, 0.35, 2);
-  wrap('lR', 0.09, 0.35, 2);
-  props.wires = { get visible() { return wraps[0].visible; }, set visible(v) { wraps.forEach((w) => { w.visible = v; }); }, traverse(fn) { wraps.forEach((w) => w.traverse(fn)); } };
   const watch = pocketWatch({ relic: true });
   watch.scale.setScalar(1.6);
   watch.rotation.set(0, Math.PI / 2, 0);
@@ -435,35 +377,59 @@ export function addAnfitriaoProps(rig) {
   rig.attach('eL', watch);
   props.watch = watch;
   tickWatch(watch, true);
+  props.chestCable = liveCable(rig, sockets.chest, watch, 0xff4ad0);
+  // cabos enrolados pelo corpo todo (anéis finos coloridos que balançam um pouco)
+  const wraps = [];
+  for (const [joint, r, len, n] of [['sp', 0.22, 0.4, 4], ['sL', 0.075, 0.26, 2], ['sR', 0.075, 0.26, 2], ['eL', 0.062, 0.2, 1], ['eR', 0.062, 0.2, 2], ['lL', 0.095, 0.36, 2], ['lR', 0.095, 0.36, 2]]) {
+    const w = neonWraps(r, len, n);
+    if (joint === 'sp') w.rotation.x = Math.PI; // no tronco os anéis sobem da cintura para o peito
+    rig.attach(joint, w);
+    wraps.push(w);
+  }
+  let wt = 0;
+  wraps[0].children[0].onBeforeRender = () => { wt += 0.016; wraps.forEach((w, i) => { w.rotation.y = Math.sin(wt * 1.3 + i) * 0.25; if (i === 0) w.rotation.x = Math.PI; }); };
+  props.wires = { get visible() { return wraps[0].visible; }, set visible(v) { wraps.forEach((w) => { w.visible = v; }); }, traverse(fn) { wraps.forEach((w) => w.traverse(fn)); } };
 }
 
-// SENHOR VERÍSSIMO (corpo provisório: o .glb do Lírio, de sobretudo, até o modelo próprio no Blender): a mesma espada
-// do Arnaldo, cabelo, bigode e cavanhaque grisalhos, camisa branca e colete marrom (referências); a escopeta curta
-// aparece no □
-const VERISSIMO_LOOK = [
-  [/HAIR/, 0xa8a49e], // cabelo até os ombros, barba e bigode grisalhos
-  [/coat|fur_white|coat_lining/, 'hide'], // sem casaco: camisa e colete (referências)
-  [/shirt|arms_lirio/, 0xeeeae2], // camisa branca de manga dobrada
-  [/cloth_orange|leather_lirio|leather_dark/, 0x3a2618], // colete marrom-escuro
-  [/pants/, 0x2e2a28],
-  [/boot|glove/, 0x141414],
-  [/radio|dogtag|gold_paw|bandage/, 'hide'],
-];
+// cabo que liga dois pontos do corpo e acompanha o movimento (tubo refeito a cada quadro no espaço do personagem)
+function liveCable(rig, from, to, color) {
+  const mat = new THREE.MeshBasicMaterial({ color });
+  const mesh = new THREE.Mesh(new THREE.BufferGeometry(), mat);
+  mesh.frustumCulled = false;
+  rig.root.add(mesh);
+  const a = new THREE.Vector3();
+  const b = new THREE.Vector3();
+  const inv = new THREE.Matrix4();
+  let t = 0;
+  mesh.onBeforeRender = () => {
+    t += 0.016;
+    rig.root.updateWorldMatrix(true, true);
+    inv.copy(rig.root.matrixWorld).invert();
+    from.getWorldPosition(a).applyMatrix4(inv);
+    to.getWorldPosition(b).applyMatrix4(inv);
+    const mid = a.clone().lerp(b, 0.5).add(new THREE.Vector3(Math.sin(t * 3) * 0.03, -0.12, 0.08));
+    mesh.geometry.dispose();
+    mesh.geometry = new THREE.TubeGeometry(new THREE.CatmullRomCurve3([a, mid, b]), 12, 0.008, 5, false);
+  };
+  return mesh;
+}
+
+// SENHOR VERÍSSIMO (modelo próprio: tools/blender/char_verissimo.py): a espada do Arnaldo (mesmo modelo, com a fita) na
+// mão direita, a bandoleira com cartuchos no peito e a escopeta curta (aparece no □)
 export function addVerissimoProps(rig) {
   const { sockets, props } = rig;
-  restyle(rig, VERISSIMO_LOOK);
   const sword = swordArnaldo();
   sword.rotation.x = -0.25;
   sockets.handR.add(sword);
   props.sword = sword;
-  const stache = mustache();
-  stache.position.set(0, -0.005, 0.01);
-  sockets.mouth.add(stache);
-  props.mustache = stache;
+  const band = bandolier();
+  band.position.set(0, -0.08, 0.035);
+  sockets.chest.add(band);
+  props.bandolier = band;
   const gun = shotgun();
   gun.position.y = -0.02;
   gun.visible = false;
-  sockets.handL.add(gun);
+  sockets.handR.add(gun);
   props.shotgun = gun;
   rig.muzzle = gun.userData.muzzle;
 }
