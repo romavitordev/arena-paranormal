@@ -33,6 +33,7 @@
    `runBalance` (2–3 lutas por par) e ajustar; conferir também quem estava fora da escala (Gal, Dante, Arthur, Aghata,
    Kian, Kemi — ver "Plano de buffs" mais abaixo).
 2. 🟡 **Arnaldo Fritz (→ O Anfitrião) e Senhor Veríssimo** — KITS IMPLEMENTADOS e jogáveis (2026-10-06, seção
+   **UPD etapas 10-11 concluídas** (Anfitrião + sistema de caos — ver CHANGELOG-ADMIN). Próximo: etapas 12-16 (Veríssimo, assistências, cutscenes) e 17-20 (CPU, matchups, balanceamento).
    abaixo), com modelo PROVISÓRIO (corpo do Joui / do Lírio + acessórios em código: espada da fita, óculos, gravatas,
    relógio, máscara do Anfitrião, bigode). **Ainda NÃO estão no changelog dos jogadores** (pedido do usuário: só
    depois da implementação completa). Falta: modelos no Blender (Arnaldo, Anfitrião com cabos, Veríssimo e a espada

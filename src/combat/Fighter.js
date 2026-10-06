@@ -98,7 +98,7 @@ export class Fighter {
     this.dodgeDmgAcc = 0;
     this.dodgeLockout = 0;
     this.sacrificeWin = false;
-    this.chronoCd = 0; // Percepção Cronológica (Anfitrião): recarga da esquiva automática
+    this.chronoCd = 0; // Percepção Anacrônica (Anfitrião): recarga da esquiva automática
     this.secretRound = false; // Segredo de Veríssimo contra o Kian: uma vez por round
     for (const k in this.cooldowns) this.cooldowns[k] = 0;
     this.carga = { stage: 0, timer: 0 };
@@ -2653,7 +2653,7 @@ export class Fighter {
     }
   }
 
-  // free: desvio que não gasta esquiva nem recarga (Percepção Cronológica do Anfitrião)
+  // free: desvio que não gasta esquiva nem recarga (Percepção Anacrônica do Anfitrião)
   trySubstitution({ free = false, label = 'SUBSTITUIÇÃO!' } = {}) {
     const S = COMBAT.substitution;
     if (this.world.cinematic) return false;

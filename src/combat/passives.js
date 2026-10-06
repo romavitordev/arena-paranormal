@@ -146,7 +146,7 @@ export const PASSIVES = {
   mentalMaze: {},
   // Erin (Em Nome do Caos) — Sem Sanidade: barra zerada e travada; os custos saem da vida (Fighter.addEnergy/spendEnergy)
   noSanity: {},
-  // O Anfitrião — Percepção Cronológica: sabe o que ainda vai acontecer; de tempos em tempos desvia sozinho de um golpe
+  // O Anfitrião — Percepção Anacrônica: sabe o que ainda vai acontecer; de tempos em tempos desvia sozinho de um golpe
   // (cooldown em passive.cooldown; lido em damage.applyHit → Fighter.trySubstitution({ free }))
   chronoSense: {},
   // Senhor Veríssimo — Segredo de Veríssimo: sabe como vai morrer; uma vez por partida um golpe fatal o deixa com 1 de
