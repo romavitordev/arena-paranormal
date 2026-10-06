@@ -95,7 +95,7 @@ export function weaknessMult(victim, attacker, o) {
   // vale a MAIOR fraqueza (uma explosão de quem é de Energia não conta duas vezes)
   let m = 1;
   if (W.fire && o.fire) m = Math.max(m, W.fire);
-  const energy = o.element === 'energia' || (attacker.def.element === 'energia' && o.kind !== 'melee');
+  const energy = o.element ? o.element === 'energia' : attacker.def.element === 'energia' && o.kind !== 'melee';
   if (W.energia && energy) m = Math.max(m, W.energia);
   return m;
 }

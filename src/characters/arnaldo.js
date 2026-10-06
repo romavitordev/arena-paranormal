@@ -15,7 +15,7 @@ export default {
   model: 'arnaldo',
   color: '#c0141c',
   origin: 'Ordo Realitas',
-  element: 'conhecimento',
+  element: 'energia',
   energyColor: GOLD,
   info: {
     weapon: 'Espada da fita vermelha e o Emissor de Pulsos Paranormais',

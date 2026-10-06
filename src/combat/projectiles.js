@@ -481,7 +481,7 @@ export class Projectiles {
           else {
             const res = applyHit(w, p.owner, target, {
               damage: a.damage, kind: a.kind || 'ranged', knockback: a.knockback, hitstun: a.hitstun, launch: !!a.launch, lowLaunch: !!a.launch,
-              dir: p.vel.clone().setY(0).normalize(), color: a.color, sound: a.hitSound, scale: a.impactScale || 1, pos: p.pos.clone(),
+              element: a.element, dir: p.vel.clone().setY(0).normalize(), color: a.color, sound: a.hitSound, scale: a.impactScale || 1, pos: p.pos.clone(),
               reaction: !(a.onHit && a.onHit.pull),
             });
             if (typeof res === 'number' && res >= 0) this.applyOnHit(p, target);

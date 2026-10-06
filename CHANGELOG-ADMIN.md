@@ -1,5 +1,16 @@
 # Registro administrativo de alterações
 
+## (em andamento, sem changelog dos jogadores) — afinidades e vantagem elemental
+
+- Bônus do ciclo em `COMBAT.elements`: vantagem passou de +10% para +15% e desvantagem de −10% para −15%; Medo
+  permanece neutro. O ciclo só modifica habilidades e especiais, não golpes físicos nem ataques principais à distância.
+- Projéteis em arco agora encaminham o elemento declarado para `applyHit`; a fraqueza específica à Energia respeita
+  elemento explícito e só infere Energia da afinidade do atacante quando o golpe não declara elemento.
+- Afinidades corrigidas: Arnaldo Fritz → Energia (o Emissor continua Conhecimento por usar Sigilos de Conhecimento);
+  Senhor Veríssimo → Medo.
+- Cobertura adicionada ao `npm run check` para o ciclo, neutralidade de Medo, exceções da fraqueza à Energia e as
+  afinidades de Arnaldo e Veríssimo. Validado também com `npm test` e `npm run build`.
+
 ## (em andamento, sem changelog dos jogadores) — UPD etapas 10-11: O Anfitrião e o sistema de caos
 
 - `combat/chaos.js` (novo): `pickChaos` com raridade (comum 60 · incomum 28 · raro 10 · muito raro 2), histórico de 3

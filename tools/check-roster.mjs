@@ -3,11 +3,12 @@
 import { ROSTER } from '../src/characters/index.js';
 import { GRAB_SCENES, FINISHERS } from '../src/combat/grabScenes.js';
 import { getForm } from '../src/characters/forms/index.js';
+import { weaknessMult } from '../src/combat/forms.js';
 import { COMBAT } from '../src/config/combat.js';
 import { computeDrain, validatePassives } from '../src/combat/passives.js';
 import { CLIPS } from '../src/anim/clips.js';
 import { GAMEPAD_LAYOUT } from '../src/config/controls.js';
-import { ELEMENTS } from '../src/config/elements.js';
+import { BEATS, ELEMENTS, elementMultiplier } from '../src/config/elements.js';
 import * as ARENA_CFGS from '../src/arena/configs.js';
 import { INTRO_DIALOGUES, VICTORY_LINES, introLines, victoryLine } from '../src/config/dialogues.js';
 
@@ -179,7 +180,18 @@ ok(des.dodge.style !== 'inexistir', 'Inexistir não é mais esquiva');
 
 // ---------------- Origem e elemento ----------------
 ok(ROSTER.every((c) => c.origin && ELEMENTS[c.element]), 'todos com origem e elemento válidos');
+ok(Object.entries(BEATS).every(([attack, defense]) => elementMultiplier(attack, defense, COMBAT.elements.advantage, COMBAT.elements.disadvantage) === 1.15
+  && elementMultiplier(defense, attack, COMBAT.elements.advantage, COMBAT.elements.disadvantage) === 0.85)
+  && elementMultiplier('medo', 'morte', COMBAT.elements.advantage, COMBAT.elements.disadvantage) === 1,
+'ciclo elemental: vantagem de 15%, desvantagem de 15% e Medo neutro');
+const energyVulnerable = { def: { weakTo: { energia: 1.5 } } };
+const energyFighter = { def: { element: 'energia' } };
+ok(weaknessMult(energyVulnerable, energyFighter, { kind: 'ranged' }) === 1.5
+  && weaknessMult(energyVulnerable, energyFighter, { kind: 'ranged', element: 'conhecimento' }) === 1
+  && weaknessMult(energyVulnerable, energyFighter, { kind: 'melee' }) === 1,
+'fraqueza à Energia: respeita elemento explícito e não transforma golpes físicos em Energia');
 ok(get('joui').origin === 'Ordo Realitas' && get('joui').element === 'conhecimento', 'Joui Jouki: Ordo Realitas (Conhecimento)');
+ok(get('verissimo').element === 'medo', 'Senhor Veríssimo: afinidade com Medo');
 
 // ---------------- Cânone e mecânicas (TODO 2026-10-01) ----------------
 const pas = (id, t) => (get(id).passives || []).some((p) => p.type === t);
@@ -202,6 +214,7 @@ ok(COMBAT.comboScaling[0] === 1 && COMBAT.comboScaling.at(-1) >= 0.5 && COMBAT.s
 // ---------------- Arnaldo Fritz → O Anfitrião, Senhor Veríssimo ----------------
 const arn = get('arnaldo');
 const anf = getForm('anfitriao');
+ok(arn && arn.element === 'energia', 'Arnaldo Fritz: afinidade com Energia');
 const ver = get('verissimo');
 ok(arn && arn.awakening.type === 'maskTransform' && arn.awakening.scene === 'watch' && arn.awakening.form === 'anfitriao' && anf && anf.baseId === 'arnaldo', 'Arnaldo: Transformação pelo relógio de bolso (Relíquia) → O Anfitrião');
 ok(arn && arn.ranged.onHit.pull && arn.ranged.variants.back.launch && arn.abilities.some((a) => a.type === 'dashStrike' && a.guardBreak), 'Arnaldo: Emissor de Pulsos (atrai / ← afasta) e Finta Teatral que quebra a defesa');

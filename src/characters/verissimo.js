@@ -15,7 +15,7 @@ export default {
   model: 'verissimo',
   color: '#6ab0e0',
   origin: 'Ordo Realitas',
-  element: 'conhecimento',
+  element: 'medo',
   energyColor: BLUE,
   info: {
     weapon: 'A espada do Arnaldo e uma escopeta curta',
