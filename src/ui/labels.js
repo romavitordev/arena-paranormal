@@ -19,6 +19,7 @@ export function setLabelNetplay(v) {
 
 export function actionLabel(playerIndex, action, source = 'keyboard') {
   if (source === 'gamepad') return BUTTON_LABELS.pad[action] || action;
+  if (source === 'touch') return BUTTON_LABELS.touch[action] || action; // celular: os símbolos dos botões da tela
   const layout = KEYBOARD_LAYOUTS[PLAYER_DEVICES[netplay ? 0 : playerIndex].keyboard];
   const codes = layout[action];
   return codes ? keyName(codes[0]) : '?';

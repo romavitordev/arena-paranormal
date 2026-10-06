@@ -124,7 +124,9 @@ export class HomeScreen {
       + this.visibleList.map((o) => `<div class="hopt" data-id="${o.id}"><span class="mk">◆</span>${o.label}${o.sub ? ' ▸' : ''}</div>`).join('');
     this.opts = [...this.listEl.querySelectorAll('.hopt')];
     this.opts.forEach((o, i) => {
-      o.addEventListener('mouseenter', () => { if (this.menu) { this.index = i; this.render(); } });
+      // destaque ao passar o MOUSE (só mouse: no celular, mudar a tela no "hover" fazia o navegador engolir o 1º toque —
+      // era preciso tocar duas vezes para escolher uma opção do submenu)
+      o.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse' && this.menu) { this.index = i; this.render(); } });
       o.addEventListener('click', () => { this.clicked = i; });
     });
     this.render();
