@@ -31,7 +31,7 @@ export function moveListHTML(c) {
   for (const a of c.abilities || []) html += row(INPUT[a.input] || a.input, a.name, `${a.description || ''} (${a.energyCost} de sanidade · recarga ${a.cooldown}s)`);
   html += row('△ → △ → ○', `Especial: ${c.special.name}`, specialSummary(c));
   html += row('R2 parado', 'Defesa', 'defende tudo, até especial (quebra depois de muito dano)');
-  html += row('R2 + andar', 'Defesa em movimento', 'anda mais rápido, mas fica aberto a golpes');
+  html += row('R2 + direção', 'Passo da defesa', 'passos rápidos para os lados / trás, de frente para o rival (como no Storm 4)');
   html += row('L2 + direção', c.dodge && c.dodge.name ? `Esquiva: ${c.dodge.name}` : 'Esquiva', 'gasta 1 das 4 cargas só se desviar de algo (esquivar no vazio não gasta); recuperam tomando dano');
   html += row('× + × (+ direção)', 'Dash', 'na direção do analógico (diagonais também); sem direção, até o adversário');
   html += row('× depois de acertar', 'Dash de perseguição', 'continua o combo (até no ar) · máx. 2 por combo');
@@ -41,7 +41,7 @@ export function moveListHTML(c) {
   if (!(c.abilities || []).some((a) => a.input === 'carga+jump')) html += row('△ + ×', 'Dash longo', 'persegue o adversário · 10 de sanidade');
   html += row('R2 + ○', 'Agarrão', `curta distância, não pode ser defendido (só esquivado) · ${COMBAT.grab.damage} de dano`);
   html += row('R2 + ○ ao ser agarrado', 'Escapar do agarrão', 'logo no começo: os dois se soltam, sem dano');
-  html += row('L2 apanhando', 'Substituição', 'gasta 1 carga de esquiva, cancela o golpe e desvia para o lado, perto de onde estava');
+  html += row('L2 apanhando', 'Substituição', 'apanhando ou atordoado: gasta 1 carga de esquiva, cancela o combo do adversário e desvia para o lado, perto de onde estava');
   if (c.awakening) html += row(`Barra de Transformação cheia + vida ≤ ${Math.round(COMBAT.storm.healthRatio * 100)}%: segurar △`, c.awakening.name, `a sanidade enche e passa do limite: ${specialSummary({ special: c.awakening })} · a barra enche apanhando e zera a cada round`);
   if (c.defense && c.defense.perfectBlock) html += row('R2 no tempo exato', 'Bloqueio Perfeito', 'anula o golpe físico e atordoa o atacante');
   for (const p of c.passives || []) {

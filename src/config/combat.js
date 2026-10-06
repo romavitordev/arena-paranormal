@@ -20,6 +20,7 @@ export const COMBAT = {
 
   // Sequência CARGA → CARGA → ATAQUE FÍSICO
   cargaWindow: 2.5, // segundos para continuar a sequência após cada etapa
+  cargaComboWindow: 0.4, // △ → ○ / △ → □: tempo máximo entre soltar o △ e apertar o segundo botão
   // Comandos de duas teclas (ex.: Energia + Pulo). Tolerância entre os toques.
   chordWindow: 0.16,
 
@@ -54,7 +55,6 @@ export const COMBAT = {
     breakStun: 1.0, // atordoamento quando a defesa quebra
     specialGuardDamage: 70, // especial defendido (parado) gasta muito da defesa
     specialChip: 0.1, // e passa 10% do dano
-    moveSpeedMult: 1.25, // defesa + andar: anda mais rápido, mas fica aberto a golpes
     attackerRecoil: 0.22, // quem bate na defesa fica exposto (contra-ataque)
     pushback: 2.2,
     arc: 110, // só bloqueia golpes vindos da frente (graus)
@@ -70,7 +70,7 @@ export const COMBAT = {
     cooldown: 0.6,
     cancelAfter: 0.45, // fração da esquiva a partir da qual pode contra-atacar
     charges: 4, // barra de esquivas
-    damagePerCharge: 120, // a cada 120 de dano recebido recupera 1 esquiva
+    damagePerCharge: 70, // a cada 70 de dano recebido recupera 1 esquiva
   },
   // ---- Dashes ----
   // A/× + A/× (toque duplo no pulo) = dash curto para frente
@@ -79,8 +79,8 @@ export const COMBAT = {
     doubleTapWindow: 0.32,
     short: { distance: 5, duration: 0.22, cooldown: 0.35, energyCost: 0, stopAt: 1.3 },
     long: { distance: 14, duration: 0.42, cooldown: 1.0, energyCost: 10, stopAt: 1.4, homing: true },
-    // passo da defesa (Storm): segurando Defesa, um toque na direção dá um passo rápido para lá, de frente para o rival
-    step: { distance: 3.4, duration: 0.18, cooldown: 0.32, energyCost: 0, stopAt: 0 },
+    // passo da defesa (Storm 4): segurando Defesa + direção, emenda passos rápidos para lá, de frente para o rival
+    step: { distance: 2.6, duration: 0.2, cooldown: 0.38, energyCost: 0, stopAt: 0 },
   },
   // ---- Agarrão: Defesa + ○/B. Curta distância, NÃO pode ser defendido (só esquivado) ----
   grab: {

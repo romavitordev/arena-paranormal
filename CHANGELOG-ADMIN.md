@@ -1,5 +1,17 @@
 # Registro administrativo de alterações
 
+## v3.6.0 — Defesa estilo Storm + escapes
+
+- Esquiva: `COMBAT.dodge.damagePerCharge` 120 → 70.
+- △ → ○ / △ → □: `chordWithCarga` passa a medir o tempo desde o aperto do △ (`COMBAT.cargaComboWindow` 0,4 s) em vez de
+  usar a janela da sequência do especial (`cargaWindow` 2,5 s, que ainda vale para △ → △ → ○).
+- Defesa + direção: `updateBlock` não anda mais (removidos a defesa andando e `block.moveSpeedMult`); com a direção
+  segurada emenda `startDash('step')` (passo 2,6 m / 0,2 s / recarga 0,38 s, animação `dodge`), de frente para o rival.
+- Substituição: também no estado `stun`; marca `opp.combo.blocked` (a sequência do atacante não emenda e ele recua como
+  em golpe defendido) e zera `opp.airCombo`.
+- Verificado no navegador com `src/dev/testkit.js` (substituição no meio do combo de ○, saindo de atordoamento, △ → ○
+  rápido × lento, passos da defesa).
+
 ## v3.5.1 — Substituição corrigida
 
 ### Posicionamento da substituição (v3.5.1)
