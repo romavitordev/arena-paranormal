@@ -23,6 +23,51 @@ export const CPU_LEVELS = {
 
 const rnd = (a, b) => a + Math.random() * (b - a);
 const PATTERN_WINDOW = 12;
+const ACTIVE_BUFF_TYPES = {
+  weaponState: ['weaponState'],
+  curseWeapon: ['curse'],
+  demonAxe: ['bloodBlade'],
+  heavyProtection: ['heavyProtection'],
+  healOverTime: ['healing'],
+};
+
+export function canSpendDodge(f, emergency = false) {
+  if (!f || f.dodges <= 0 || f.cooldowns.dodge > 0) return false;
+  return emergency || f.dodges > COMBAT.substitution.charges + 1;
+}
+
+export function abilityUsePrior(a, f, opp, { distance, lowHp, opening, threat, lastAbility } = {}) {
+  const selfTarget = SELF_TYPES.includes(a.type);
+  if (!selfTarget && (opp.state === 'downed' || opp.isInvulnerable?.())) return 0;
+  if (a.hpCost && f.health - a.hpCost < f.maxHealth * 0.2) return 0;
+  if (a.ai?.when === 'opening' && !opening) return 0;
+  if (a.ai?.when === 'far' && distance < (a.ai.min || 4)) return 0;
+  if (a.ai?.when === 'hurt' && !lowHp && f.health >= f.maxHealth * 0.6) return 0;
+
+  const knownBuffs = ACTIVE_BUFF_TYPES[a.type] || (a.type === 'selfBuff' ? [a.buffType] : []);
+  if (knownBuffs.some((type) => type && f.findBuff(type))) return 0;
+  if (a.type === 'healOverTime' && f.health > f.maxHealth * 0.72) return 0;
+  if (a.type === 'heavyProtection' && !threat && !lowHp && f.health > f.maxHealth * 0.6) return 0;
+  if (a.type === 'demonAxe' && f.health < f.maxHealth * 0.45) return 0;
+
+  let prior = a.id === lastAbility ? 0.3 : 0.65;
+  if (opening && !selfTarget) prior *= 2.5;
+  if (opp.state === 'block' && a.guardCrush) prior *= 2;
+  if (threat && ['heavyProtection', 'selfBuff'].includes(a.type)) prior *= 2;
+  if (lowHp && a.type === 'healOverTime') prior *= 3;
+  if (lowHp && a.ai?.when === 'hurt') prior *= 1.5;
+  if (distance < 2 && a.range > 4 && !selfTarget) prior *= 0.55;
+  return prior;
+}
+
+function projectileApproach(p, f) {
+  const dx = f.pos.x - p.pos.x;
+  const dz = f.pos.z - p.pos.z;
+  const along = dx * p.dir.x + dz * p.dir.z;
+  const side = Math.abs(dx * p.dir.z - dz * p.dir.x);
+  const radius = (p.ability?.radius || 0.5) + (f.radius || 0.5) + 0.35;
+  return along >= -1 && along <= 8 && side <= radius ? along : Infinity;
+}
 
 export class OpponentPatternMemory {
   constructor() {
@@ -276,7 +321,7 @@ export class CpuController {
     if (lob && lob !== this.readLob && lob.dur - lob.t <= 0.3 && Math.hypot(f.pos.x - lob.target.x, f.pos.z - lob.target.z) < 3 && f.onGround && (f.state === 'idle' || f.state === 'charging' || f.state === 'block')) {
       this.readLob = lob;
       if (Math.random() < Math.min(0.92, (L.block + L.dodge) * 2)) {
-        if (f.dodges > 0 && f.cooldowns.dodge <= 0) this.queue.push({ t: 0.06, held: { dodge: true }, move: side }, { t: 0.05, held: {} });
+        if (canSpendDodge(f)) this.queue.push({ t: 0.06, held: { dodge: true }, move: side }, { t: 0.05, held: {} });
         else this.queue.push({ t: 0.6, held: { block: true } }, { t: 0.04, held: {} });
         return out;
       }
@@ -286,7 +331,7 @@ export class CpuController {
     if (tg && tg !== this.readTelegraph && tg.cfg.time - tg.t <= 0.35 && f.onGround && (f.state === 'idle' || f.state === 'charging' || f.state === 'block')) {
       this.readTelegraph = tg;
       if (Math.random() < Math.min(0.92, (L.block + L.dodge) * 2)) {
-        if (f.dodges > 0 && f.cooldowns.dodge <= 0) this.queue.push({ t: 0.06, held: { dodge: true }, move: side }, { t: 0.05, held: {} });
+        if (canSpendDodge(f)) this.queue.push({ t: 0.06, held: { dodge: true }, move: side }, { t: 0.05, held: {} });
         else this.queue.push({ t: 0.6, held: { block: true } }, { t: 0.04, held: {} });
         return out;
       }
@@ -311,9 +356,9 @@ export class CpuController {
         this.combo();
         return out;
       }
-      const shot = w.projectiles.list.find((p) => p.owner === opp && Math.hypot(p.pos.x - f.pos.x, p.pos.z - f.pos.z) < 6 && (p.dir ? (f.pos.x - p.pos.x) * p.dir.x + (f.pos.z - p.pos.z) * p.dir.z > 0 : true));
+      const shot = w.projectiles.list.find((p) => p.owner === opp && projectileApproach(p, f) < 4.5);
       const evadeChance = L.smart ? 0.45 : L.tactics * 0.3;
-      if (shot && f.cooldowns.dodge <= 0 && f.dodges > 0 && Math.random() < evadeChance * k) {
+      if (shot && canSpendDodge(f, projectileApproach(shot, f) < 1.5) && Math.random() < evadeChance * k) {
         this.queue.push({ t: 0.06, held: { dodge: true }, move: side }, { t: 0.05, held: {} });
         return out;
       }
@@ -321,8 +366,12 @@ export class CpuController {
 
     // ---- reações defensivas
     if ((f.state === 'idle' || f.state === 'charging') && f.onGround) {
-      const incoming = w.projectiles.list.some((p) => p.owner === opp && Math.hypot(p.pos.x - f.pos.x, p.pos.z - f.pos.z) < 9);
-      if (incoming && f.cooldowns.dodge <= 0 && f.dodges > 0 && Math.random() < L.dodge * defensive * k) {
+      const incoming = w.projectiles.list
+        .filter((p) => p.owner === opp)
+        .map((p) => projectileApproach(p, f))
+        .filter((approach) => approach < 4.5)
+        .sort((a, b) => a - b)[0];
+      if (incoming !== undefined && canSpendDodge(f, incoming < 1.5) && Math.random() < L.dodge * defensive * k) {
         this.queue.push({ t: 0.06, held: { dodge: true }, move: side }, { t: 0.05, held: {} });
         return out;
       }
@@ -343,7 +392,7 @@ export class CpuController {
           this.queue.push({ t: rnd(0.35, 0.7), held: { block: true } }, { t: 0.04, held: {} });
           return out;
         }
-        if (f.dodges > 1 && Math.random() < L.dodge * 0.6 * defensive * k) {
+        if (canSpendDodge(f) && Math.random() < L.dodge * 0.6 * defensive * k) {
           this.queue.push({ t: 0.06, held: { dodge: true }, move: side }, { t: 0.05, held: {} });
           return out;
         }
@@ -413,11 +462,22 @@ export class CpuController {
         }
       }
       // habilidades secundárias: △ + ○/□/L2 e R2 + △/×
-      let mods = (def.abilities || []).filter((a) => isModAbility(a) && f.cooldowns[a.id] <= 0 && f.energy >= (f.abilityCost ? f.abilityCost(a) : a.energyCost || 0) + 5 && this.aiOk(a, d, opp, lowHp));
+      const opening = this.aiOk({ ai: { when: 'opening' } }, d, opp, lowHp);
+      const threat = (opp.state === 'attack' || opp.state === 'dashing') && d < 3;
+      let mods = (def.abilities || [])
+        .filter((a) => isModAbility(a) && f.cooldowns[a.id] <= 0 && f.energy >= (f.abilityCost ? f.abilityCost(a) : a.energyCost || 0) + 5 && this.aiOk(a, d, opp, lowHp))
+        .map((a) => ({ ability: a, prior: abilityUsePrior(a, f, opp, { distance: d, lowHp, opening, threat, lastAbility: this.lastAbility }) }))
+        .filter((item) => item.prior > 0);
       // não repetir a mesma habilidade seguida quando houver outra
-      if (mods.length > 1) mods = mods.filter((a) => a.id !== this.lastAbility);
+      if (mods.length > 1 && mods.some((item) => item.ability.id !== this.lastAbility)) {
+        mods = mods.filter((item) => item.ability.id !== this.lastAbility);
+      }
       if (mods.length && r < L.ability) {
-        const a = mods[Math.floor(Math.random() * mods.length)];
+        const total = mods.reduce((sum, item) => sum + item.prior, 0);
+        let roll = Math.random() * total;
+        let picked = mods[mods.length - 1];
+        for (const item of mods) { roll -= item.prior; if (roll <= 0) { picked = item; break; } }
+        const a = picked.ability;
         this.lastAbility = a.id;
         const range = a.range || 10;
         if (d <= range || SELF_TYPES.includes(a.type)) {
@@ -534,7 +594,7 @@ export class CpuController {
       add('combo', open ? 4 : lowHp ? 1.2 : 2.8, () => this.combo());
       if (f.cooldowns.grab <= 0) add('grab', opp.state === 'block' ? 3 : 0.3 + blockerRate * 3, () => this.queue.push({ t: 0.05, held: { block: true } }, { t: 0.06, held: { block: true, physical: true } }, { t: 0.05, held: {} }));
       if (!open) add('guard', opp.state === 'attack' ? 1.6 : 0.4, () => this.queue.push({ t: rnd(0.3, 0.6), held: { block: true } }, { t: 0.04, held: {} }));
-      if (f.dodges > 1 && f.cooldowns.dodge <= 0) add('backstep', lowHp ? 1 : 0.25, () => this.queue.push({ t: 0.06, held: { dodge: true }, move: { x: -side.z, z: side.x } }, { t: 0.05, held: {} }));
+      if (canSpendDodge(f)) add('backstep', lowHp ? 1 : 0.25, () => this.queue.push({ t: 0.06, held: { dodge: true }, move: { x: -side.z, z: side.x } }, { t: 0.05, held: {} }));
     }
     // médio: entra com dash curto
     if (d > 3.5 && d < 8 && f.cooldowns.dash <= 0) add('dashIn', lowHp ? 0.2 : open ? 1.4 : 0.6, () => this.queue.push({ t: 0.05, held: { jump: true } }, { t: 0.05, held: {} }, { t: 0.05, held: { jump: true } }, { t: 0.05, held: {} }));
@@ -552,7 +612,8 @@ export class CpuController {
       const range = a.range || 10;
       const self = SELF_TYPES.includes(a.type);
       if (!self && d > range) continue;
-      add('ab:' + a.id, (a.id === this.lastAbility ? 0.3 : 0.6) * (open && !self ? 2 : 1), () => {
+      const prior = abilityUsePrior(a, f, opp, { distance: d, lowHp, opening: open, threat: (opp.state === 'attack' || opp.state === 'dashing') && d < 3, lastAbility: this.lastAbility });
+      add('ab:' + a.id, prior, () => {
         this.lastAbility = a.id;
         this.pressAbility(a, toOpp, side);
       });
