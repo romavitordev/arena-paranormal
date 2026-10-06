@@ -422,6 +422,9 @@ Diabo 75% desde o 1º round é aceitável (carta na manga).
 Caótica em área; Erin 60%, Ferreiro 57%) alguns personagens precisam de buff — em especial o
 **Labirinto** (39%, quase sem ferramentas próprias), e pela escala também Gal (S, 41%), Dante (A, 43%), Arthur (39%) e
 Aghata (39%). Medir com 2–3 lutas por par antes e depois de cada mudança.
+🟡 Mudar o fundo dos personagnes na seleção e organiza-los por cada time/temporada terá uma cor de background, exemplo Mascarados, Psikolera, Cristino, Vampiros com background vermelho no menu de personagens, Xande, Lirio, Chico, Dara, Morato, Estrangeiro com fundo verde etc..
+🟡 Audio: Buscar em alguma biblioteca de efeitos sonoros publicos cc para melhorar os efeitos sonoros do jogo de golpes etc...
+🟡 Efeitos: Buscar em alguma biblioteca de efeitos 3d de explosões, impactos, projeteis como balas, publicos cc para melhorar os efeitos visuais do jogo de golpes etc...
 🟡 Equilíbrio: a rodada geral com 1 luta por par oscila ±10–20% (o Aguiar foi de 71% a 36% com −100 de vida). Rodar 2–3 lutas por par para os ajustes finos; conferir Kemi (61%) e Aghata (39%).
 ✅ (v2.3) Adição de Névoa no mapa do Santo Berço
 Levantado comparando cada kit com o cânone e procurando habilidades que só reaproveitam um tipo genérico.
