@@ -16,7 +16,7 @@ export default {
   id: 'aguiar_mutilador',
   form: true,
   baseId: 'aguiar',
-  name: 'MUTILADOR NOTURNO (AGUIAR)',
+  name: 'MUTILADOR NOTURNO', // com a máscara ele é o assassino, não o delegado
   model: 'aguiar_mutilador',
   info: {
     weapon: 'Machado do Mutilador + a máscara da mão vermelha',
