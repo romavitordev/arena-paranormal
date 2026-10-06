@@ -2328,3 +2328,74 @@ Cada personagem deve possuir:
 E, principalmente:
 
 > **Nenhum buff, nerf ou valor de balanceamento deste TODO deve ser considerado definitivo antes da bateria de testes. Os dados de telemetria, partidas CPU × CPU e testes manuais devem determinar o balanceamento final.**
+
+## ADENDO FINAL — FUTURO: VERSÃO INSTALÁVEL / SOFTWARE
+
+### Objetivo futuro
+
+O Arena Paranormal não deve permanecer indefinidamente como um jogo executado exclusivamente pelo navegador.
+
+Futuramente, o projeto deverá ser transformado em uma **versão instalável e executável diretamente na máquina do jogador**, funcionando como um software/jogo independente, sem depender da abertura do navegador para jogar.
+
+O formato técnico ainda não está definido e deverá ser estudado posteriormente (por exemplo, executável para Windows ou outra solução adequada à tecnologia utilizada pelo projeto).
+
+### Prioridade atual
+
+**Não iniciar essa migração agora.**
+
+Antes disso, a prioridade é:
+
+* otimizar a versão atual para **mobile**;
+* reduzir travamentos e quedas de desempenho;
+* melhorar consumo de memória;
+* otimizar renderização 3D;
+* reduzir processamento desnecessário;
+* melhorar carregamento de modelos, texturas, efeitos e cenários;
+* testar em dispositivos móveis reais;
+* garantir que a experiência mobile seja estável antes de iniciar uma nova etapa de distribuição.
+
+### Etapa futura — versão instalável para PC
+
+Quando a versão web estiver suficientemente estável e otimizada, estudar a transformação do jogo em uma aplicação/jogo instalável para PC.
+
+Essa etapa deverá avaliar:
+
+* tecnologia mais adequada para empacotar o projeto atual;
+* geração de executável/instalador;
+* execução sem navegador;
+* gerenciamento de arquivos e assets;
+* carregamento e armazenamento local;
+* desempenho superior ou equivalente ao da versão web;
+* suporte a teclado, mouse e controles;
+* resolução e configurações gráficas;
+* sistema de atualização;
+* tratamento de erros e logs;
+* compatibilidade com diferentes máquinas;
+* tamanho final da instalação;
+* possibilidade de versão portátil, caso faça sentido.
+
+**Não assumir antecipadamente que o formato será `.exe`**. A tecnologia e o formato final devem ser escolhidos depois de avaliar a arquitetura do projeto e as opções disponíveis.
+
+### Distribuição futura
+
+O próprio site oficial do Arena Paranormal deverá futuramente oferecer uma área de **Download**, permitindo que o jogador escolha a versão adequada e instale o jogo diretamente.
+
+Possível estrutura futura:
+
+* **Jogar no navegador**
+* **Download para PC**
+* futuramente, caso seja viável:
+
+  * versão Android;
+  * versão iOS;
+  * outras plataformas.
+
+A versão web e a versão instalável devem compartilhar o máximo possível da mesma base do jogo, evitando manter projetos completamente separados.
+
+### Regra de prioridade
+
+A ordem deve ser:
+
+**Otimização mobile → estabilidade geral → versão instalável para PC → distribuição pelo site → possíveis versões para outras plataformas.**
+
+A transformação em software é uma **meta futura de produto**, não uma tarefa imediata do desenvolvimento atual.
