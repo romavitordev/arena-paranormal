@@ -1271,6 +1271,28 @@ export const VICTORY_LINES = {
 
 // ARNALDO FRITZ e SENHOR VERÍSSIMO: as falas de vitória deles e as de quem vence contra eles
 const VICTORY_NEW = {
+  anfitriao: {
+    default: [
+      'Atenção, plateia! O placar disse que eu ganhei. Se ele estiver mentindo, temos um novo vilão!',
+      'Você perdeu, eu ganhei e o relógio discorda. Desempate: pedra, papel ou paradoxo?',
+      'E o prêmio da rodada é... um prêmio! Não tem? Então ganhei duas vezes!',
+      'Eu sabia que você ia cair. Também sabia que ia esquecer por quê. HAHAHA!',
+      'Regra número um: não existem regras! Regra número dois: quem pergunta perde o intervalo!',
+      'Que luta emocionante! Vi o final ontem, amanhã e durante o intervalo!',
+      'Produção, rebobina! Quero ganhar de novo, mas com mais explosões e menos chão!',
+      'A plateia está adorando! Se não estiver, troca a plateia. Se estiver, troca também!',
+      'O relógio mandou parar. Eu mandei esperar a minha entrevista!',
+      'Você quase roubou o protagonismo. Quase! Eu guardei três finais alternativos!',
+      'Temos um vencedor: eu! O outro resultado foi cancelado por excesso de realidade.',
+      'A próxima rodada é agora, antes da última e depois do intervalo! Não saiam daí!',
+      'Pausa para os comerciais! Não temos comerciais? Mostra a minha cara!',
+      'Um ponto para mim, um para o caos e outro para aquela cadeira que olhou torto!',
+      'Você lutou tão bem que eu quase segui as regras. Quase foi horrível!',
+      'Aplausos! Ou vaias! Ou uma vaia ritmada! Banda, toca o contrário!',
+      'Resultado oficial: vitória minha! Resultado secreto: a realidade pediu revanche!',
+      'O prêmio era um jantar com a produção, mas minha esposa levou a mesa e o troféu. Que profissional!',
+    ],
+  },
   arnaldo: {
     kaiser: [
       'Kaiser, você tem presença de palco. Falta só ensaiar a queda.',
@@ -1596,11 +1618,12 @@ const VICTORY_FALLBACKS = {
 };
 
 export function victoryLine(winner, loser, loserName = CHARACTER_NAMES[loser] || loser) {
-  winner = BASE_CHARACTER[winner] || winner;
+  if (winner !== 'anfitriao') winner = BASE_CHARACTER[winner] || winner;
   loser = BASE_CHARACTER[loser] || loser;
   const w = VICTORY_LINES[winner] || {};
   const matchup = w[loser];
-  if (Array.isArray(matchup) && matchup.length) return matchup[Math.floor(Math.random() * matchup.length)];
+  const lines = Array.isArray(matchup) && matchup.length ? matchup : w.default;
+  if (Array.isArray(lines) && lines.length) return lines[Math.floor(Math.random() * lines.length)];
   const fallback = VICTORY_FALLBACKS[winner];
   return matchup || (typeof fallback === 'function' ? fallback(loserName) : fallback) || w.default || '';
 }

@@ -50,24 +50,31 @@ for (const winner of ids) {
 const sampleIntro = introLines('kaiser', 'erin');
 const sampleVictory = victoryLine('kaiser', 'erin');
 let randomSelectionValid = false;
+let hostRandomSelectionValid = false;
 const originalRandom = Math.random;
 try {
   Math.random = () => 0;
   const firstIntro = introLines('kaiser', 'erin');
   const firstVictory = victoryLine('kaiser', 'erin');
+  const firstHostVictory = victoryLine('anfitriao', 'verissimo');
   Math.random = () => 0.999999;
   const secondIntro = introLines('kaiser', 'erin');
   const secondVictory = victoryLine('kaiser', 'erin');
+  const secondHostVictory = victoryLine('anfitriao', 'verissimo');
   randomSelectionValid = firstIntro[0][0] !== secondIntro[0][0]
     && firstVictory !== secondVictory
     && VICTORY_LINES.kaiser.erin.includes(firstVictory)
     && VICTORY_LINES.kaiser.erin.includes(secondVictory);
+  hostRandomSelectionValid = firstHostVictory !== secondHostVictory
+    && VICTORY_LINES.anfitriao.default.includes(firstHostVictory)
+    && VICTORY_LINES.anfitriao.default.includes(secondHostVictory);
 } finally {
   Math.random = originalRandom;
 }
 const PAIRS = ids.length * (ids.length - 1);
 ok(validIntroScenes && validIntroPairs === PAIRS && sampleIntro.length === 2 && randomSelectionValid, `introduções: ${PAIRS} confrontos, duas cenas alternadas e aleatórias, sem falas de resultado`);
 ok(validVictoryLines && validVictoryPairs === PAIRS && VICTORY_LINES.kaiser.erin.includes(sampleVictory) && randomSelectionValid, `vitórias: ${PAIRS} confrontos com duas falas selecionáveis aleatoriamente`);
+ok(VICTORY_LINES.anfitriao.default.length >= 16 && new Set(VICTORY_LINES.anfitriao.default).size === VICTORY_LINES.anfitriao.default.length && hostRandomSelectionValid, 'Anfitrião: falas caóticas próprias, variadas e selecionadas aleatoriamente');
 ok(ROSTER.map((c) => c.name).join() === 'KAISER,ARTHUR CERVERO,JOUI JOUKI,AGHATA,DANTE,ERIN PARKER,GAL SAL,KIAN,AGUIAR,LABIRINTO,XANDE,LÍRIO,FERREIRO,JUAN,KEMI,BALU,ARNALDO FRITZ,SENHOR VERÍSSIMO', 'nomes: Kaiser, Arthur Cervero, Joui Jouki, Aghata, Dante, Erin Parker, Gal Sal, Kian, Aguiar, Labirinto, Xande, Lírio, Ferreiro, Juan, Kemi, Balu, Arnaldo Fritz, Senhor Veríssimo');
 const bal = get('balu');
 ok(bal && bal.origin === 'Ordo Realitas' && bal.stats.maxHealth >= 1250 && ['curseWeapon', 'demonAxe', 'caiDentro', 'selfBuff', 'heavyProtection'].every((t) => bal.abilities.some((a) => a.type === t)) && bal.ranged.boomerang && bal.ranged.returnsProp === 'axe' && bal.melee.ground && bal.melee.ground.otg && bal.grip.twoHand, 'Balu: pesado da Ordo Realitas, Amaldiçoar Arma, Machado Demônio (vida), Fala Imponente, 110%, Colete, machado que volta e Derrubar e Atacar');
