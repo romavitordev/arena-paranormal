@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { glowMat } from './rig.js';
-import { m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, hostMask, roundGlasses, mustache, necktie } from './weapons.js';
+import { m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, hostMask, roundGlasses, mustache, necktie, neonWraps, watchChain } from './weapons.js';
 export { addJouiProps } from './characters/joui.js';
 
 // Armas e acessórios adicionados em código sobre os modelos do Blender.
@@ -364,12 +364,12 @@ const ARNALDO_LOOK = [
   [/mask|eyeglow|bead/, 'hide'], // nada da máscara e das contas do Joui
   [/face_mascarado/, 0xd9a988],
   [/skin_mascarado/, 0xd9a988],
-  [/HAIR/, 0x4a3020], // cabelo e barba castanhos
-  [/coat/, 0x24222a], // casaco meio longo escuro
-  [/trim_red|rope/, 0x6a4024], // colete marrom
-  [/tunic/, 0xece8e0], // camisa social branca
-  [/pants|wraps/, 0x5a3a24], // calça marrom
-  [/boots|gloves/, 0x2a1c16],
+  [/HAIR/, 0x5a3a22], // cabelo castanho
+  [/coat/, 0x34343a], // sobretudo cinza-escuro de gola alta
+  [/trim_red|rope/, 0x2e2e34], // colete risca de giz (cinza-escuro)
+  [/tunic/, 0x8a2a30], // camisa vinho (referências)
+  [/pants|wraps/, 0x2a2a30],
+  [/boots|gloves/, 0x1a1414],
 ];
 export function addArnaldoProps(rig) {
   const { sockets, props } = rig;
@@ -382,10 +382,19 @@ export function addArnaldoProps(rig) {
   glasses.position.set(0, 0.075, 0.0);
   sockets.mouth.add(glasses);
   props.glasses = glasses;
-  const tie = necktie(0xb0141c);
+  const tie = necktie(0x1e2a4a); // gravata azul-marinho sobre a camisa vinho
   tie.position.set(0, 0.06, 0.02);
   sockets.chest.add(tie);
   props.tie = tie;
+  const beard = mustache(0x4a2e1a); // barba curta castanha
+  beard.scale.setScalar(0.8);
+  beard.position.set(0, -0.01, 0.005);
+  sockets.mouth.add(beard);
+  props.beard = beard;
+  const chain = watchChain();
+  chain.position.set(-0.02, -0.12, 0.02);
+  sockets.chest.add(chain);
+  props.chain = chain;
   const watch = pocketWatch();
   watch.scale.setScalar(1.8); // grande o bastante para ler na cena da Transformação
   watch.rotation.set(-1.2, 0, 0);
@@ -396,11 +405,11 @@ export function addArnaldoProps(rig) {
   tickWatch(watch, false);
 }
 
-// O ANFITRIÃO (forma do Arnaldo): a máscara de gás com o Símbolo e os olhos roxos, as mesmas roupas (gravata
-// vermelha) e o relógio com a Relíquia preso no antebraço esquerdo, girando sem parar
+// O ANFITRIÃO (forma do Arnaldo, referências do usuário): a máscara de gás de lentes brilhando e fios neon, fios
+// neon enrolados no corpo, terno escuro com gravata vermelha e o relógio com a Relíquia preso no antebraço esquerdo, girando sem parar
 export function addAnfitriaoProps(rig) {
   const { sockets, props } = rig;
-  restyle(rig, ARNALDO_LOOK);
+  restyle(rig, [[/HAIR/, 'hide'], [/tunic/, 0xece8e0], [/trim_red|rope/, 0x5a4a3a], ...ARNALDO_LOOK.map(([re, c]) => [re, re.test('coat') ? 0x2a2440 : c])]); // terno escuro arroxeado, camisa branca, colete
   const mask = hostMask();
   mask.position.set(0, -0.02, -0.01);
   sockets.mouth.add(mask);
@@ -409,6 +418,16 @@ export function addAnfitriaoProps(rig) {
   tie.position.set(0, 0.06, 0.02);
   sockets.chest.add(tie);
   props.tie = tie;
+  // fios neon enrolados no corpo (tronco, braços e pernas), como nas referências
+  const wraps = [];
+  const wrap = (joint, r, len, n) => { const w = neonWraps(r, len, n); rig.attach(joint, w); wraps.push(w); };
+  wrap('sp', 0.2, 0.35, 4);
+  wrap('sL', 0.07, 0.25, 2);
+  wrap('sR', 0.07, 0.25, 2);
+  wrap('eR', 0.06, 0.22, 2);
+  wrap('lL', 0.09, 0.35, 2);
+  wrap('lR', 0.09, 0.35, 2);
+  props.wires = { get visible() { return wraps[0].visible; }, set visible(v) { wraps.forEach((w) => { w.visible = v; }); }, traverse(fn) { wraps.forEach((w) => w.traverse(fn)); } };
   const watch = pocketWatch({ relic: true });
   watch.scale.setScalar(1.6);
   watch.rotation.set(0, Math.PI / 2, 0);
@@ -419,15 +438,15 @@ export function addAnfitriaoProps(rig) {
 }
 
 // SENHOR VERÍSSIMO (corpo provisório: o .glb do Lírio, de sobretudo, até o modelo próprio no Blender): a mesma espada
-// do Arnaldo, bigode e cavanhaque grisalhos, gravata azul-celeste; a escopeta curta aparece no □
+// do Arnaldo, cabelo, bigode e cavanhaque grisalhos, camisa branca e colete marrom (referências); a escopeta curta
+// aparece no □
 const VERISSIMO_LOOK = [
-  [/HAIR/, 0xb8b4ac], // cabelo, barba e bigode grisalhos
-  [/coat_lining/, 0x3a2418],
-  [/coat|fur_white|leather_lirio|leather_dark/, 0x5a3a24], // a jaqueta de couro marrom
-  [/shirt/, 0xece8e0], // camisa social branca
-  [/cloth_orange/, 0x6a6a70], // colete cinza
-  [/pants/, 0x3a3a40],
-  [/boot|glove/, 0x141414], // mocassins pretos
+  [/HAIR/, 0xc8c4bc], // cabelo até os ombros, barba e bigode grisalhos
+  [/coat|fur_white|coat_lining/, 'hide'], // sem casaco: camisa e colete (referências)
+  [/shirt|arms_lirio/, 0xeeeae2], // camisa branca de manga dobrada
+  [/cloth_orange|leather_lirio|leather_dark/, 0x3a2618], // colete marrom-escuro
+  [/pants/, 0x2e2a28],
+  [/boot|glove/, 0x141414],
   [/radio|dogtag|gold_paw|bandage/, 'hide'],
 ];
 export function addVerissimoProps(rig) {
@@ -441,10 +460,6 @@ export function addVerissimoProps(rig) {
   stache.position.set(0, -0.005, 0.01);
   sockets.mouth.add(stache);
   props.mustache = stache;
-  const tie = necktie(0x6ab0e0);
-  tie.position.set(0, 0.06, 0.02);
-  sockets.chest.add(tie);
-  props.tie = tie;
   const gun = shotgun();
   gun.position.y = -0.02;
   gun.visible = false;

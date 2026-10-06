@@ -967,54 +967,72 @@ export function gasMask(glow = 0x7aff9a) {
   return g;
 }
 
-// ESPADA DO ARNALDO (Arnaldo Fritz e, depois da morte dele, o Senhor Veríssimo): espada comum, sem nada paranormal —
-// lâmina reta e fina, guarda em cruz simples, cabo escuro e a FITA VERMELHA amarrada na ponta do cabo, caindo solta.
-// Empunhada no cabo (origem); a lâmina segue para -Y, o fio virado para +Z.
+// ESPADA DO ARNALDO (Arnaldo Fritz e, depois da morte dele, o Senhor Veríssimo), como na referência do usuário:
+// espada comum, sem nada paranormal — lâmina reta e longa, cinza-escura com o fio claro e ponta em bico; guarda
+// pequena preta e retangular; cabo enrolado em fita bege (losangos) e as duas FITAS VINHO longas presas na guarda,
+// caindo soltas. Empunhada no cabo (origem); a lâmina segue para -Y, o fio virado para +Z.
 export function swordArnaldo() {
   const g = new THREE.Group();
-  const grip = part(new THREE.CylinderGeometry(0.019, 0.021, 0.2, 10), 0x2a1c16);
-  grip.position.y = 0.05;
+  // cabo: fita bege enrolada (faixas inclinadas mais escuras por cima)
+  const grip = part(new THREE.CylinderGeometry(0.02, 0.021, 0.24, 10), 0xd8ccae);
+  grip.position.y = 0.07;
   g.add(grip);
-  const pommel = part(new THREE.SphereGeometry(0.03, 10, 8), 0xb8a070);
-  pommel.position.y = 0.165;
-  g.add(pommel);
-  const guard = part(new THREE.BoxGeometry(0.03, 0.03, 0.22), 0xb8a070);
-  guard.position.y = -0.06;
-  g.add(guard);
-  for (const s of [-1, 1]) {
-    const tip = part(new THREE.SphereGeometry(0.02, 8, 6), 0xb8a070);
-    tip.position.set(0, -0.06, 0.11 * s);
-    g.add(tip);
+  for (let k = 0; k < 5; k++) {
+    const band = part(new THREE.TorusGeometry(0.021, 0.0035, 4, 12), 0x8a7a5a, { outline: false });
+    band.rotation.set(Math.PI / 2 + 0.45, 0, 0);
+    band.position.y = -0.03 + k * 0.045;
+    g.add(band);
   }
-  const shape = new THREE.Shape();
-  shape.moveTo(-0.028, 0);
-  shape.lineTo(-0.024, -0.82);
-  shape.lineTo(0, -0.92);
-  shape.lineTo(0.024, -0.82);
-  shape.lineTo(0.028, 0);
-  shape.lineTo(-0.028, 0);
-  const blade = part(extrude(shape, 0.01), 0xd8dde4, { mat: toon(0xd8dde4, { emissive: 0x1a2028 }) });
+  const cap = part(new THREE.CylinderGeometry(0.022, 0.018, 0.02, 10), 0x1a1a1c);
+  cap.position.y = 0.2;
+  g.add(cap);
+  // guarda: placa preta retangular
+  const guard = part(new THREE.BoxGeometry(0.045, 0.028, 0.13), 0x141416);
+  guard.position.y = -0.065;
+  g.add(guard);
+  // lâmina: corpo cinza-escuro + fio claro na frente
+  const body = new THREE.Shape();
+  body.moveTo(-0.026, 0);
+  body.lineTo(-0.024, -0.86);
+  body.lineTo(0.004, -0.97);
+  body.lineTo(0.026, -0.84);
+  body.lineTo(0.026, 0);
+  body.lineTo(-0.026, 0);
+  const blade = part(extrude(body, 0.009), 0x5c6068, { mat: toon(0x5c6068, { emissive: 0x101418 }) });
   blade.rotation.y = -Math.PI / 2;
-  blade.position.y = -0.075;
+  blade.position.y = -0.08;
   g.add(blade);
-  // a fita vermelha: nó no pomo e duas pontas caindo soltas
-  const RED = 0xc0141c;
-  const knot = part(new THREE.TorusGeometry(0.024, 0.009, 6, 12), RED, { outline: false });
-  knot.position.y = 0.15;
+  const edge = new THREE.Shape();
+  edge.moveTo(0.012, 0);
+  edge.lineTo(0.012, -0.84);
+  edge.lineTo(0.004, -0.95);
+  edge.lineTo(0.028, -0.84);
+  edge.lineTo(0.028, 0);
+  edge.lineTo(0.012, 0);
+  const edgeM = part(extrude(edge, 0.011), 0xd8dde4, { outline: false, mat: toon(0xd8dde4, { emissive: 0x202830 }) });
+  edgeM.rotation.y = -Math.PI / 2;
+  edgeM.position.y = -0.08;
+  g.add(edgeM);
+  // as duas fitas vinho: presas na guarda, caindo longas e soltas para trás
+  const RIBBON = 0x7a1424;
+  const knot = part(new THREE.TorusGeometry(0.02, 0.008, 6, 12), RIBBON, { outline: false });
+  knot.position.y = -0.04;
   knot.rotation.x = Math.PI / 2;
   g.add(knot);
-  for (const s of [-1, 1]) {
+  [[0.0, 0.42], [0.03, 0.34]].forEach(([dz, len], k) => {
+    const sgn = k ? 1 : -1;
     const path = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(0, 0.17, 0.01 * s),
-      new THREE.Vector3(0.02 * s, 0.22, -0.03),
-      new THREE.Vector3(0.05 * s, 0.25, -0.1),
-      new THREE.Vector3(0.07 * s, 0.22 + (s > 0 ? 0.02 : -0.02), -0.18),
+      new THREE.Vector3(0, -0.04, -0.02),
+      new THREE.Vector3(0.01 * sgn, -0.02, -0.08 - dz),
+      new THREE.Vector3(0.03 * sgn, -0.1, -0.13 - dz),
+      new THREE.Vector3(0.02 * sgn, -0.04 - len * 0.6, -0.16 - dz),
+      new THREE.Vector3(0.04 * sgn, -0.04 - len, -0.2 - dz),
     ]);
-    const ribbon = part(new THREE.TubeGeometry(path, 12, 0.01, 4, false), RED, { outline: false });
-    ribbon.scale.set(2.2, 1, 1); // achatada como fita
+    const ribbon = part(new THREE.TubeGeometry(path, 20, 0.009, 4, false), RIBBON, { outline: false });
+    ribbon.scale.set(2.4, 1, 1); // achatada como fita
     g.add(ribbon);
-  }
-  g.userData.tipLength = 1.0;
+  });
+  g.userData.tipLength = 1.05;
   return g;
 }
 
@@ -1068,32 +1086,74 @@ export function pocketWatch({ relic = false } = {}) {
   return g;
 }
 
-// MÁSCARA DO ANFITRIÃO: máscara de gás com o Símbolo do Anfitrião (o olho dentro do triângulo, em roxo) na testa e
-// os olhos ROXOS brilhando. Fixa no rosto (socket `mouth`).
+// MÁSCARA DO ANFITRIÃO (referências do usuário): máscara de gás com duas lentes redondas GRANDES brilhando em
+// branco-rosa, o filtro redondo na frente da boca com a grade em cruz e FIOS NEON (rosa, azul, amarelo, verde)
+// enrolados em volta da cabeça e da máscara. Fixa no rosto (socket `mouth`).
+export const NEON = [0xff4ad0, 0x4ab8ff, 0xffe04a, 0x5aff8a, 0xff4a4a];
 export function hostMask() {
-  const g = gasMask(0xb04aff);
-  const sym = new THREE.Group();
-  const tri = new THREE.Mesh(new THREE.RingGeometry(0.026, 0.034, 3), glowMat(0xd070ff, 1));
-  tri.rotation.z = Math.PI / 2;
-  sym.add(tri);
-  const eye = new THREE.Mesh(new THREE.CircleGeometry(0.009, 10), glowMat(0x7ad0ff, 1));
-  eye.position.z = 0.001;
-  sym.add(eye);
-  sym.position.set(0, 0.125, 0.07);
-  sym.rotation.x = -0.35;
-  g.add(sym);
+  const g = gasMask(0xffc8f0);
+  // lentes maiores com halo forte
+  for (const sx of [-1, 1]) {
+    const lens = new THREE.Mesh(new THREE.CircleGeometry(0.042, 20), glowMat(0xfff0fa, 1));
+    lens.position.set(0.048 * sx, 0.06, 0.082);
+    g.add(lens);
+    const halo = new THREE.Mesh(new THREE.CircleGeometry(0.075, 20), glowMat(0xff6ad0, 0.35));
+    halo.position.set(0.048 * sx, 0.06, 0.084);
+    g.add(halo);
+  }
+  // filtro: disco claro com a grade em cruz
+  const disc = new THREE.Mesh(new THREE.CircleGeometry(0.05, 20), glowMat(0xffd8f0, 0.85));
+  disc.position.set(0, -0.035, 0.126);
+  g.add(disc);
+  for (const r of [0, Math.PI / 2]) {
+    const bar = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.006, 0.004), toon(0x6a2a6a));
+    bar.rotation.z = r;
+    bar.position.set(0, -0.035, 0.128);
+    g.add(bar);
+  }
+  // fios neon em volta da cabeça (anéis inclinados)
+  NEON.forEach((c, i) => {
+    const w = new THREE.Mesh(new THREE.TorusGeometry(0.13 + i * 0.008, 0.0045, 4, 28), glowMat(c, 0.95));
+    w.rotation.set(Math.PI / 2 + (i - 2) * 0.35, (i % 2 ? 1 : -1) * 0.3, 0);
+    w.position.set(0, 0.05 - i * 0.02, -0.04);
+    g.add(w);
+  });
   return g;
 }
 
-// óculos finos e redondos (Arnaldo)
-export function roundGlasses() {
+// FIOS NEON enrolados num pedaço do corpo (tronco, braço, perna do Anfitrião): anéis finos e coloridos, um pouco
+// tortos, em volta do eixo Y local
+export function neonWraps(radius, length, count = 4) {
+  const g = new THREE.Group();
+  for (let i = 0; i < count; i++) {
+    const c = NEON[i % NEON.length];
+    const w = new THREE.Mesh(new THREE.TorusGeometry(radius * (0.95 + Math.random() * 0.15), 0.006, 4, 24), glowMat(c, 0.95));
+    w.rotation.set(Math.PI / 2 + (Math.random() - 0.5) * 0.7, 0, (Math.random() - 0.5) * 0.5);
+    w.position.y = -length * (i + 0.5) / count;
+    g.add(w);
+  }
+  return g;
+}
+
+// corrente de ouro do relógio de bolso: do botão do colete até o bolso (Arnaldo)
+export function watchChain() {
+  const path = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(-0.04, 0, 0),
+    new THREE.Vector3(0.02, -0.05, 0.01),
+    new THREE.Vector3(0.08, -0.04, 0),
+  ]);
+  return part(new THREE.TubeGeometry(path, 12, 0.004, 4, false), 0xd4a640, { outline: false });
+}
+
+// óculos redondos de lente rosa-avermelhada (Arnaldo, como nas referências do usuário)
+export function roundGlasses({ tint = 0xff5a7a, opacity = 0.6 } = {}) {
   const g = new THREE.Group();
   const mat = toon(0x2a2a2a);
   for (const s of [-1, 1]) {
     const rim = new THREE.Mesh(new THREE.TorusGeometry(0.024, 0.0035, 6, 16), mat);
     rim.position.set(0.04 * s, 0, 0);
     g.add(rim);
-    const lens = new THREE.Mesh(new THREE.CircleGeometry(0.022, 14), glowMat(0xcfe6ff, 0.18));
+    const lens = new THREE.Mesh(new THREE.CircleGeometry(0.022, 14), new THREE.MeshBasicMaterial({ color: tint, transparent: true, opacity })); // lente rosa/vermelha (referências)
     lens.position.set(0.04 * s, 0, 0.001);
     g.add(lens);
     const arm = new THREE.Mesh(new THREE.BoxGeometry(0.003, 0.003, 0.1), mat);
