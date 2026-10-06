@@ -13,10 +13,13 @@ import { transform } from '../forms.js';
 // assassino fica com uma AURA vermelha em volta até o fim do round.
 //   sp.scene  'helmet' (Labirinto: segura o capacete no peito, ergue acima da cabeça e encaixa)
 //             'mutilador' (Aguiar: close no olho, agacha com o machado esticado e leva a máscara ao rosto)
-//             omitido: concentra e o acessório aparece (Erin)
+//             'gasmask' (Erin, que NÃO é Mascarada: ajoelha rindo com a mão no rosto, ergue-se levando a máscara de gás
+//             ao rosto; verde no lugar do vermelho — referências do usuário)
+//             omitido: concentra e o acessório aparece
 //   sp.prop   acessório do modelo base que entra no rosto (helmetOn / maskOn)
 //   sp.anim   animação da cena padrão (padrão 'concentrate')
 //   sp.formBanner  letreiro ao virar a forma
+//   sp.tint   cor da cena e da aura quando a máscara encaixa (padrão vermelho; Erin: verde)
 const RED = 0xff1a1a;
 
 // leva o acessório (que mora no osso da cabeça) para outro ponto do mundo sem tirá-lo do lugar: a cada quadro a peça
@@ -50,6 +53,7 @@ export const maskTransform = {
     const tl = new Timeline();
     const col = sp.color ?? f.def.energyColor ?? 0xffffff;
     const scene = sp.scene || null;
+    const tint = sp.tint ?? RED;
     world.beginCinematic(f, null);
     f.vel.set(0, 0, 0);
     const head = () => f.rig.joints.hd.getWorldPosition(new THREE.Vector3()).add(new THREE.Vector3(0, 0.1, 0));
@@ -74,11 +78,11 @@ export const maskTransform = {
     const maskOn = (big = true) => {
       if (prop) f.rig.showProp(sp.prop, true);
       world.audio.play(sp.sound || 'maskOn');
-      world.fx.flash(head(), { color: RED, size: big ? 3 : 2, life: 0.22 });
-      world.fx.burst(head(), { count: 50, color: RED, speed: 5, life: 0.7, size: 0.24, gravity: 3 });
-      world.screenFlash && world.screenFlash('#8a0000', 0.25);
+      world.fx.flash(head(), { color: tint, size: big ? 3 : 2, life: 0.22 });
+      world.fx.burst(head(), { count: 50, color: tint, speed: 5, life: 0.7, size: 0.24, gravity: 3 });
+      world.screenFlash && world.screenFlash('#' + new THREE.Color(tint).multiplyScalar(0.55).getHexString(), 0.25);
       world.cameraRig.shake(0.35, 0.3);
-      lightColor = new THREE.Color(RED);
+      lightColor = new THREE.Color(tint);
       lightTo = 14;
     };
 
@@ -121,6 +125,26 @@ export const maskTransform = {
       });
       tl.add(1.5, () => maskOn(true));
       total = 2.6;
+    } else if (scene === 'gasmask') {
+      // 1) ajoelhada, a mão agarrando o rosto, rindo · 2) levanta levando a máscara de gás das mãos ao rosto ·
+      // 3) as lentes acendem em verde
+      f.anim.play('madness_kneel', { restart: true, duration: 1.2 });
+      offset.copy(fwd).multiplyScalar(0.42).add(new THREE.Vector3(0, -0.45, 0));
+      lightColor = new THREE.Color(tint);
+      lightTo = 4;
+      world.cameraRig.playShots([
+        faceClose(f, { dur: 1.2, from: 2.0, to: 1.6, side: 0.45, height: hy * 0.62, fov: 40 }),
+        faceClose(f, { dur: 1.3, from: 1.6, to: 1.15, side: -0.25, height: hy - 0.05, fov: 36 }),
+      ]);
+      world.audio.play('fearGaze', { volume: 0.7, pitch: 1.7 }); // a risada
+      tl.add(0.3, () => world.showBanner(sp.banner || sp.name, f.def.color));
+      tl.add(0.6, () => world.audio.play('fearGaze', { volume: 0.6, pitch: 1.9 }));
+      tl.add(1.2, () => {
+        f.anim.play('mask_lift', { restart: true, duration: 1.0 });
+        if (carry) { f.rig.showProp(sp.prop, true); moveProp(new THREE.Vector3(), 0.6); }
+      });
+      tl.add(1.85, () => maskOn(true));
+      total = 2.6;
     } else {
       f.anim.play(sp.anim || 'concentrate', { restart: true, duration: 1.5 });
       world.cameraRig.playShots([
@@ -145,18 +169,19 @@ export const maskTransform = {
       done = true;
       cleanup();
       world.endCinematic();
-      world.fx.ring(new THREE.Vector3(f.pos.x, 0.06, f.pos.z), { color: RED, radius: 3, life: 0.5 });
+      world.fx.ring(new THREE.Vector3(f.pos.x, 0.06, f.pos.z), { color: tint, radius: 3, life: 0.5 });
       world.fx.burst(f.chestPos(), { count: 50, color: col, speed: 5, life: 0.7, size: 0.3 });
       const bonus = sp.bonusHealth || 0;
       transform(f, sp.form, { duration: sp.duration, health: f.health + bonus, bonusHealth: bonus, banner: sp.formBanner });
       f.invuln = Math.max(f.invuln, 0.8);
       f.energy = Math.max(f.energy, sp.energy ?? 40);
-      // a aura vermelha da Intenção de Assassino fica em volta até o fim do round (os GIFs: contorno vermelho em chamas)
+      // a aura da Intenção de Assassino (vermelha) fica em volta até o fim do round (os GIFs: contorno vermelho em
+      // chamas); na Erin é o verde do Caos
       if (sp.redAura !== false && scene) {
         const red = world.fx.emitter({
           rate: 16,
           follow: () => new THREE.Vector3(f.pos.x + (Math.random() - 0.5) * 0.9, f.pos.y + 0.3 + Math.random() * 1.6, f.pos.z + (Math.random() - 0.5) * 0.9),
-          particle: { color: RED, speed: 0.6, up: 1.4, spread: 0.3, life: 0.55, size: 0.2 },
+          particle: { color: tint, speed: 0.6, up: 1.4, spread: 0.3, life: 0.55, size: 0.2 },
         });
         f.addBuff({ type: 'killerIntent', time: Infinity, onEnd() { red.stop(); } });
       }
