@@ -1,12 +1,14 @@
 import * as THREE from 'three';
-import { yawTo, distXZ, forwardFromYaw } from '../../core/util.js';
+import { yawTo, distXZ, forwardFromYaw, angleDiff } from '../../core/util.js';
 import { COMBAT } from '../../config/combat.js';
 import { applyHit } from '../damage.js';
-import { splitDamage, trySpecialBlock } from './common.js';
+import { splitDamage } from './common.js';
 import { faceClose, overShoulder, socketClose } from '../../camera/shots.js';
 
-// Especial da Erin — SUPERNOVA (cinemático):
-//  1. close dela CORRENDO com a escopeta na direção do inimigo;
+// Especial da Erin — SUPERNOVA. Para PEGAR o especial ela arremessa primeiro uma GRANADA DE LUZ de verdade (sem parar o
+// mundo): ela voa em arco até onde o adversário estava e estoura num clarão. Dá para escapar — sair do raio, esquivar
+// na hora ou defender de frente (cobre os olhos). Errou: ela fica exposta. CEGOU o adversário: aí sim a cinemática:
+//  1. close dela CORRENDO com a escopeta na direção do inimigo (ele ainda cego);
 //  2. tiro de escopeta à queima-roupa: o inimigo voa para longe;
 //  3. close na mão SEGURANDO A GRANADA (a do coração vermelho);
 //  4. arremessa: a granada explode no inimigo — "SUPERNOVA" na tela — e close nela sorrindo.
@@ -40,7 +42,6 @@ function grenadeMesh(color) {
 }
 
 export const supernova = {
-  telegraph: () => ({ time: 0.75, anim: 'charge', mark: 'sigil' }),
   canStart(f, sp) {
     const opp = f.opponent;
     return !!opp && opp.state !== 'ko' && opp.visible && distXZ(f.pos, opp.pos) <= (sp.range ?? 18);
@@ -48,8 +49,84 @@ export const supernova = {
 
   start(f, sp, world) {
     const opp = f.opponent;
+    const props0 = f.rig.props;
+    // ---------------------------------------------------------------- 1) a granada de luz (não é cinemática)
+    const F0 = sp.flash || {};
+    const flashRadius = F0.radius ?? 2.6;
+    const hand0 = () => f.rig.sockets.handR.getWorldPosition(new THREE.Vector3());
+    f.vel.set(0, 0, 0);
+    f.yaw = yawTo(f.pos, opp.pos);
+    f.anim.play('throw_r', { restart: true, duration: 0.55 });
+    if (props0.daggerR) f.rig.showProp('daggerR', false);
+    world.audio.play('grenadePin', { volume: 0.8 });
+    let lob = null; // granada de luz voando
+    let tt = 0;
+    let caught = null; // virou a cinemática
+    const target = new THREE.Vector3(opp.pos.x, 0.15, opp.pos.z); // onde ele ESTAVA: dá para sair de baixo
+    const flashBang = () => {
+      const p = lob.mesh.position.clone();
+      world.scene.remove(lob.mesh);
+      lob = null;
+      f.threatLob = null;
+      world.fx.flash(p, { color: 0xffffff, size: 8, life: 0.35 });
+      world.fx.ring(new THREE.Vector3(p.x, 0.07, p.z), { color: 0xfff6d0, radius: flashRadius, life: 0.4 });
+      world.fx.burst(p, { count: 40, color: 0xfff6d0, speed: 9, life: 0.4, size: 0.25 });
+      world.audio.play('explosion', { volume: 0.7, pitch: 1.6 });
+      const inside = opp.state !== 'ko' && Math.hypot(opp.pos.x - p.x, opp.pos.z - p.z) <= flashRadius;
+      const facing = Math.abs(angleDiff(opp.yaw, yawTo(opp.pos, p))) <= (COMBAT.block.arc * Math.PI) / 360;
+      if (inside && opp.isGuarding() && facing) { opp.notify('COBRIU OS OLHOS!', true); return false; }
+      if (!inside || opp.isInvulnerable()) { if (inside) opp.notify('DESVIOU!', true); return false; }
+      world.screenFlash && world.screenFlash('#ffffff', 0.25);
+      opp.notify('CEGO!', true);
+      return true;
+    };
+    // errou: sai do especial e fica parada e ABERTA (atordoada, sem Substituição) — durante o especial ela não apanha
+    const whiff = () => {
+      f.notify('ERROU', true);
+      if (props0.daggerR) f.rig.showProp('daggerR', true);
+      f.stun(F0.missRecovery ?? 0.6, 'breath');
+      f.whiffRecovery = true;
+    };
+    const flashSeq = {
+      update(dt) {
+        if (caught) return caught.update(dt);
+        tt += dt;
+        if (!lob && tt >= 0.3) {
+          // solta a granada: arco de 0,65 s até onde ele estava
+          const mesh = grenadeMesh(0xf4f0e0);
+          const start = hand0();
+          mesh.position.copy(start);
+          world.scene.add(mesh);
+          lob = { mesh, start, t: 0, dur: F0.flight ?? 0.65, target };
+          f.threatLob = lob; // a CPU adversária vê a granada vindo
+          world.audio.play('knifeThrow');
+        }
+        if (lob) {
+          lob.t += dt;
+          const u = Math.min(1, lob.t / lob.dur);
+          lob.mesh.position.lerpVectors(lob.start, target, u);
+          lob.mesh.position.y += Math.sin(u * Math.PI) * 2.0;
+          lob.mesh.rotation.x += dt * 12;
+          if (u >= 1) {
+            if (flashBang()) { caught = startCinematic(); return false; }
+            whiff();
+            return true;
+          }
+        }
+        return false;
+      },
+      cancel() {
+        if (lob) world.scene.remove(lob.mesh);
+        f.threatLob = null;
+        if (caught) caught.cancel();
+        if (props0.daggerR) f.rig.showProp('daggerR', true);
+      },
+    };
+    return flashSeq;
+
+    // ---------------------------------------------------------------- 2) cegou: a cinemática da Supernova
+    function startCinematic() {
     const total = sp.damage ?? COMBAT.specialDamage;
-    if (trySpecialBlock(world, f, opp, sp)) return { update: () => true, cancel() {} };
     const [shotDmg, blastDmg] = splitDamage(total, [sp.shotShare ?? 0.35, 1 - (sp.shotShare ?? 0.35)]);
     const color = sp.color;
     const props = f.rig.props;
@@ -57,7 +134,7 @@ export const supernova = {
     world.beginCinematic(f, opp);
     f.vel.set(0, 0, 0);
     f.yaw = yawTo(f.pos, opp.pos);
-    opp.anim.play('idle', { restart: true });
+    opp.anim.play('fear', { restart: true }); // cego pelo clarão
     show('daggerR', false);
     show('shotgun', true);
     f.anim.play('run', { restart: true });
@@ -209,5 +286,6 @@ export const supernova = {
         world.endCinematic();
       },
     };
+    }
   },
 };

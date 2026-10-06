@@ -148,7 +148,8 @@ export default {
     },
   ],
 
-  // Especial SUPERNOVA (cinemático): corre com a escopeta, atira à queima-roupa, o inimigo voa longe,
+  // Especial SUPERNOVA: primeiro arremessa uma GRANADA DE LUZ (de verdade: dá para sair do raio, esquivar ou defender de
+  // frente). Se cegar o adversário, aí sim a cinemática: corre com a escopeta, tiro à queima-roupa, o inimigo voa longe,
   // ela segura a granada do coração vermelho e arremessa — explosão com SUPERNOVA na tela e ela sorrindo
   special: {
     name: 'Supernova',
@@ -160,6 +161,7 @@ export default {
     cooldown: 14,
     // damage: omitido → COMBAT.specialDamage (250)
     range: 18,
+    flash: { radius: 2.6, flight: 0.65, missRecovery: 0.6 }, // a granada de luz que "pega" o especial
     color: 0xff7a2a,
   },
 

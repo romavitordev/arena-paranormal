@@ -153,6 +153,16 @@ export class CpuController {
       if (f.cooldowns.ranged <= 0 && Math.random() < 1 - this.L.mistake * 2.5) { this.tap('ranged'); return out; }
     }
     if (opp.state !== 'specialStart') this.triedInterrupt = false;
+    // granada de luz da Supernova (Erin) caindo perto: sai de baixo esquivando, ou cobre os olhos defendendo
+    const lob = opp.threatLob;
+    if (lob && lob !== this.readLob && lob.dur - lob.t <= 0.3 && Math.hypot(f.pos.x - lob.target.x, f.pos.z - lob.target.z) < 3 && f.onGround && (f.state === 'idle' || f.state === 'charging' || f.state === 'block')) {
+      this.readLob = lob;
+      if (Math.random() < Math.min(0.92, (L.block + L.dodge) * 2)) {
+        if (f.dodges > 0 && f.cooldowns.dodge <= 0) this.queue.push({ t: 0.06, held: { dodge: true }, move: side }, { t: 0.05, held: {} });
+        else this.queue.push({ t: 0.6, held: { block: true } }, { t: 0.04, held: {} });
+        return out;
+      }
+    }
     // especial avisado (sigilo no chão / mira): perto do fim do aviso, esquiva para o lado ou defende
     const tg = opp.pendingSpecial && opp.pendingSpecial.tg;
     if (tg && tg !== this.readTelegraph && tg.cfg.time - tg.t <= 0.35 && f.onGround && (f.state === 'idle' || f.state === 'charging' || f.state === 'block')) {
