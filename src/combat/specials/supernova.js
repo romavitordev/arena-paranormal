@@ -40,6 +40,7 @@ function grenadeMesh(color) {
 }
 
 export const supernova = {
+  telegraph: () => ({ time: 0.75, anim: 'charge', mark: 'sigil' }),
   canStart(f, sp) {
     const opp = f.opponent;
     return !!opp && opp.state !== 'ko' && opp.visible && distXZ(f.pos, opp.pos) <= (sp.range ?? 18);

@@ -4,7 +4,7 @@ Jogo de luta 3D em arena com temática paranormal. Combate rápido e acessível,
 movimentação livre, ataques direcionais, defesa, esquiva, habilidades por combinação de
 botões e especiais cinematográficos. Feito com **Three.js + Vite**, roda no navegador.
 
-Versão atual do jogo: **v3.6.0**.
+Versão atual do jogo: **v3.7.0**.
 
 A numeração segue **MAJOR.MINOR.PATCH**: microatualizações usam `x.y.z`, atualizações concretas usam `x.y.0` e grandes marcos usam `x.0.0`.
 
@@ -160,7 +160,9 @@ Exemplo: X=100, Y=60 → o inimigo perde 100, recupera 60 (saldo −40) e perde 
   pelas costas não defende.
 - **Passo da defesa:** segurando R2/RT, a direção não anda: o personagem emenda passos rápidos para os lados / trás,
   sempre de frente para o rival (como no Storm 4).
-- **Esquiva:** L2/LT + direção. 4 cargas; recupera 1 a cada 70 de dano recebido.
+- **Esquiva:** L2/LT + direção. 4 cargas; recupera 1 a cada 70 de dano recebido. Gastou todas: por 3 s o dano não conta.
+- **Especiais à distância têm aviso:** depois do preparo, o lutador faz o gesto e um sigilo pulsa no chão do alvo (ou a mira
+  brilha nele). Esquive / Substituição no fim do aviso para desviar (quem usou fica exposto) ou defenda de frente.
 - **Substituição:** L2/LT **enquanto apanha ou atordoado** gasta 1 carga, interrompe o combo do adversário (ele fica exposto) e desvia com um passo curto para o lado (direcional escolhe o lado); sem espaço, fica no mesmo lugar.
 - **Agarrão:** R2 + ○. Não pode ser defendido; quem é agarrado escapa com **R2 + ○ logo no começo**, ou esquivando antes.
 - **Barra de Transformação (todos):** enche conforme apanha. Cheia e com a vida em 35% ou menos, segure

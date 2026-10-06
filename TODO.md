@@ -7,6 +7,112 @@
 
 ---
 
+## 🔴 Próximos lutadores: ARNALDO FRITZ (transforma em O ANFITRIÃO) e SENHOR VERÍSSIMO
+
+> Pesquisa de 2026-10-06 (wiki de Ordem Paranormal + `lore/MEMBROS.md`). A wiki estava bloqueada para leitura direta
+> neste ambiente; os dados vieram dos resumos da busca e do banco `lore/membros.json` — conferir no navegador antes de
+> fechar nomes de golpes. Os dois usam **a mesma espada** (a do Arnaldo: o Veríssimo herdou depois da morte dele).
+
+### A espada do Arnaldo (modelo compartilhado)
+- Cânone: espada **comum**, sem nada paranormal, com uma **fita vermelha amarrada na ponta do cabo**. Foi a única
+  arma que o Arnaldo usou ("empunhava espetacularmente bem"); o Veríssimo aparece com ela no fim de Desconjuração.
+  Também foi usada pelo Thiago Fritz.
+- No jogo: **um único prop** (`swordArnaldo`, Blender em `tools/blender/`) usado pelos dois — mesma lâmina, mesma
+  fita (a fita balança com o movimento). Estilo de luta diferente em cada um (ver kits).
+
+### Arnaldo Fritz (forma base)
+- **Quem é:** ator famoso que usava a fama como fachada; um dos agentes mais experientes da Ordo Realitas, membro dos
+  **Aniquiladores** (com Veríssimo, Chizue Akechi, Aaron, Francisca Parker e Cristopher Cohen). Com o Veríssimo,
+  fez algumas das maiores missões da Ordem (mortes de Virgílio Scelto e Juan Davo); treinou a Equipe Kelvin; pai do
+  Thiago Fritz; padrinho/financiador do Orfanato Santa Menefreda (Dante e Beatrice). Classe: **Ocultista**.
+- **Aparência (Desconjuração/Calamidade):** ~50 anos, cabelo arrumado, barba castanha, óculos finos e redondos,
+  casaco meio longo escuro, camisa social branca, **gravata vermelha**, colete marrom, calça e sapatos marrons; no
+  bolso do colete o **relógio de bolso de ouro** com a foto do filho Thiago.
+- **Arsenal no cânone:** a espada; Emissor de Pulsos Paranormais (caixa com Sigilos de Conhecimento que atrai
+  criaturas de um elemento e afasta as do elemento oposto).
+- **Proposta de kit (decidir com o usuário):**
+  - ○ esgrima teatral com a espada da fita (cortes largos, estocadas, finalizador "de palco");
+  - □ **Emissor de Pulsos Paranormais**: pulso em cone que PUXA o adversário (atrair) ou EMPURRA (afastar, com
+    △ → □) — vem direto do item do cânone;
+  - habilidades de ator/veterano (não cânone, só ideia): finta (golpe que engana a defesa), "Aniquilador" (bônus contra
+    quem está transformado/despertado);
+  - especial: sequência de espada da época dos Aniquiladores (cinemática com **aviso**, ver `specials/telegraph.js`).
+- **Transformação (pedido do usuário):** Barra de Transformação cheia + vida baixa, segurando △ (mesmo sistema do
+  Juan/Kemi/Ferreiro — `awakening` + forma em `src/characters/forms/`). Cinemática: ele **tira o relógio de bolso,
+  abre a tampa e dentro está a relíquia** (no cânone: **Relíquia de Energia**, uma das Relíquias da Calamidade — o
+  usuário chama de "relíquia do caos", e Energia é o elemento do caos); o relógio passa a girar sem parar em roxo e ele
+  vira **O ANFITRIÃO** até o fim do round, **trocando o kit inteiro** (nada da forma base continua).
+  - Cânone: a relíquia apareceu no relógio logo depois de ele perguntar à Magistrada como derrotar o Kian; ele a usou
+    no Orfanato e ficou **amalgamado de vez** com o Anfitrião (Calamidade — Episódio 6).
+
+### O Anfitrião (forma do Arnaldo)
+- **Quem é:** portador da Relíquia de Energia — entidade de **Energia** com complementos de **Conhecimento** e
+  **Medo**; manifestação do caos, da transformação e da imprevisibilidade, obcecada em trazer agonia à Realidade com
+  **jogos de regras imprevisíveis** (precisa de plateia). Cultistas: a "Produção do Anfitrião" (reality show).
+- **Poderes (cânone):** distorce a Realidade conforme a vontade dele — as regras dos jogos viram as regras da Realidade;
+  **percepção cronológica distorcida** (sabe do que ainda vai acontecer); faz os jogadores "lembrarem" das regras de um
+  jogo que nunca jogaram.
+- **Aparência:** corpo feito da matéria caótica da Energia, alternando **roxo, rosa e azul**; **máscara de gás com o
+  Símbolo do Anfitrião** e olhos roxos brilhando, fixa no rosto; um **cabo sai do peito até o relógio de bolso**, preso
+  no braço esquerdo; cabos enrolados pelo corpo; aura roxa; as mesmas roupas do Arnaldo no dia em que a relíquia
+  apareceu. O relógio de ouro brilha roxo e gira sem parar, de jeitos aleatórios.
+- **Proposta de kit (tudo novo, imprevisível mas justo):**
+  - ○ golpes de energia caótica com o relógio/cabos (alcance médio, cada sequência muda um pouco o último golpe);
+  - □ disparo de energia cujo efeito é sorteado (dano / lentidão / empurrão) — mostrar o resultado na hora (cor);
+  - △ → ○ **Regra do Jogo**: impõe uma regra por alguns segundos, sorteada e ANUNCIADA na tela (ex.: "quem pular toma
+    dano", "quem defender perde sanidade", "proibido ficar parado") — vale para os dois, como no cânone;
+  - △ → □ **Distorção**: troca de lugar com o adversário ou teleporta para um ponto aleatório perto;
+  - passiva **Percepção Cronológica**: vê o futuro — de tempos em tempos esquiva sozinho de um golpe (recarga longa);
+  - especial **O Jogo do Anfitrião**: aviso claro (o relógio sobe, sigilo no alvo) e, se conectar, uma cena de jogo
+    (roleta/mesa) com resultado sorteado dentro de uma faixa justa (ex.: 200–300 de dano, nunca hitkill).
+  - Equilíbrio: aleatório só no "sabor", nunca no acerto — tudo que acerta precisa de aviso (`telegraph`).
+
+### Senhor Veríssimo
+- **Quem é:** líder da Ordo Realitas (nome verdadeiro desconhecido; "Veríssimo" era a designação genérica dos agentes);
+  manda as equipes em todas as temporadas e treinou vários agentes, inclusive a filha (Mia). Liderou os
+  **Aniquiladores**. Classe **Combatente**, trilha **Comandante de Campo**. Usa a **espada do Arnaldo**.
+- **Habilidades (cânone):** **Inteligência Estratégica** — analisa o inimigo e dá ordens: os aliados ganham um ataque
+  extra; **Segredo de Veríssimo** — sabe como vai morrer, o que impede o Kian de matá-lo. Feito: bloqueou o golpe do
+  Kian que quase matou o Arthur (`lore/ESCALA.md`). Item: Jaqueta de Veríssimo (couro marrom, passada entre agentes).
+- **Aparência:** senhor de 50–60 anos, postura correta; cabelo grisalho, bigode cheio, costeletas e cavanhaque; terno
+  ou camisa social branca + colete cinza + gravata azul-celeste, mocassins pretos (a jaqueta de couro marrom é a
+  opção de visual de campo). Em 1997 (Sinais do Outro Lado) carregava espingarda e faca na bandoleira.
+- **Proposta de kit:**
+  - ○ esgrima disciplinada e econômica com a espada do Arnaldo (contraste com o estilo teatral do Arnaldo);
+  - □ espingarda curta (homenagem ao Veríssimo de 1997) — opcional;
+  - △ → ○ **Inteligência Estratégica**: "Ordem!" — por alguns segundos cada golpe que acerta dá um corte extra; na
+    batalha em equipe, as assistências também ganham o golpe extra;
+  - defesa forte: janela de Perfect Block maior e contra-ataque com a espada (bloqueou o Kian);
+  - passiva **Segredo de Veríssimo**: 1 vez por partida, um golpe que o mataria o deixa com 1 de vida
+    (contra o Kian, sempre que o Kian der o golpe final);
+  - especial com aviso: comanda o ataque e finaliza com a espada.
+
+### Passos de implementação
+1. Conferir nomes/detalhes na wiki (navegador) e decidir os kits com o usuário.
+2. Modelos no Blender: Arnaldo, Anfitrião (máscara, cabos, relógio roxo) e Veríssimo + prop `swordArnaldo` (fita).
+3. `src/characters/arnaldo.js`, `src/characters/forms/anfitriao.js` (awakening do Arnaldo), `src/characters/verissimo.js`.
+4. Falas de intro por par (Arnaldo × Veríssimo, Arnaldo × Dante, Anfitrião × Kian, Veríssimo × Kian).
+5. `npm run check`, `npm run moves`, lutas CPU × CPU para equilibrar.
+
+---
+
+## 🟡 Tela de início, HUD de batalha e identidade visual (pedido do usuário)
+
+O usuário quer **melhorar todo o design da tela de início, a HUD de batalha e a identidade do jogo, incluindo o nome**.
+Hoje: título em texto puro "ARENA PARANORMAL" (`src/ui/Screens.js`, telas `title`/menu), menus em lista, HUD em
+`src/ui/HUD.js` + `src/styles.css` (vida, sanidade, defesa, esquivas, Barra de Transformação, cooldowns).
+- **Nome:** decidir com o usuário se fica "Arena Paranormal" ou muda (ideias: algo com o Outro Lado / Membrana /
+  Ordem) e criar um **logo** (sigilo dos cinco elementos + tipografia própria) para tela de início, aba e carregamento.
+- **Tela de início:** fundo animado com personagens/cenário 3D (não só partículas), logo grande, "pressione start"
+  com animação, menu principal com cartões/ícones, música e sons de navegação, transições entre telas.
+- **HUD de batalha:** redesenhar no estilo Storm 4 — retratos dos lutadores, barras com moldura própria, sanidade e
+  esquivas mais legíveis, timer central, indicador de combo e de dano, avisos (ESPECIAL, ERROU, DESVIOU, SEM ESQUIVAS)
+  com animação, cartões das assistências na batalha em equipe; tudo legível no celular.
+- **Resto do fluxo:** seleção de personagem, configurações, cenário, carregamento e vitória seguindo o mesmo visual.
+- Pedir referências visuais ao usuário (pasta `Referencias visuais/`) antes de começar.
+
+---
+
 ## Novo lutador: BALU (Antônio "Balu" Pontevedra) — ✅ adicionado na v2.6
 
 Pesquisa de 2026-10-03 (wiki "Antônio Pontevedra" + lore/MEMBROS.md). ✅ Implementado na v2.6 (modelo, kit, falas,

@@ -17,6 +17,8 @@ import { yawTo, forwardFromYaw } from '../../core/util.js';
 //    lentos, não regeneram energia e projéteis inimigos perdem velocidade
 export const mistField = {
   canStart: () => true,
+  // só avisa quando a Acácia vai atingir o adversário (flowerStorm); a névoa sozinha não acerta ninguém
+  telegraph: (f, sp) => (sp.flowerStorm && f.opponent && f.opponent.state !== 'ko' ? { time: 0.8, anim: 'powerup', animDuration: 0.8, mark: 'sigil' } : null),
   start(f, sp, world) {
     // com flowerStorm: dentro da névoa ele amplifica a Acácia sobre o inimigo (o especial passa a causar dano)
     const opp = f.opponent;

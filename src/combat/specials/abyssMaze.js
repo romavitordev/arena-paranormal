@@ -37,6 +37,7 @@ function buildMaze(center, color) {
 }
 
 export const abyssMaze = {
+  telegraph: () => ({ time: 0.85, anim: 'cast_up', animDuration: 0.85, mark: 'sigil' }),
   canStart(f, sp) {
     const opp = f.opponent;
     return !!opp && opp.state !== 'ko' && opp.visible && distXZ(f.pos, opp.pos) <= (sp.range ?? 20);
