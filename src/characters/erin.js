@@ -175,6 +175,7 @@ export default {
     anim: 'powerup',
     duration: 0, // até o fim do round
     bonusHealth: 60,
+    energy: 0, // ela perde toda a sanidade
     color: 0xff5a1a,
   },
 

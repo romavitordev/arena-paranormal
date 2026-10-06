@@ -128,6 +128,7 @@ export default {
     name: 'Capacete do ???',
     banner: 'Capacete do ???',
     type: 'maskTransform',
+    scene: 'helmet', // segura o capacete no peito, ergue e encaixa (GIF de referência)
     form: 'labirinto_elmo',
     formBanner: '???',
     prop: 'helmetOn',

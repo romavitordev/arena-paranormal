@@ -128,6 +128,7 @@ export function addLabirintoProps(rig) {
     const hp = props.helmetOn;
     const pp = props.helmetOn_papers;
     props.helmetOn = {
+      parts: [hp, pp], // as peças reais (a cena da Transformação leva o elmo das mãos até a cabeça)
       get visible() { return hp.visible; },
       set visible(v) { hp.visible = v; pp.visible = v; },
       traverse(fn) { hp.traverse(fn); pp.traverse(fn); },

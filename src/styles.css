@@ -39,6 +39,8 @@ canvas#game { display: block; position: fixed; inset: 0; width: 100%; height: 10
 .bar.energy { height: 11px; width: 78%; }
 .panel.p2 .bar.energy { margin-left: auto; }
 .bar.energy .fill { background: linear-gradient(180deg, #b5ecff, var(--energy)); }
+.bar.energy.locked { background: repeating-linear-gradient(135deg, #3a0a10 0 6px, #1a0408 6px 12px); border-color: #8a1020; }
+.bar.energy.locked::after { content: "SEM SANIDADE"; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 800; letter-spacing: .12em; color: #ff5a5a; }
 .bar.energy .mark { position: absolute; top: 0; bottom: 0; width: 2px; background: rgba(0,0,0,.7); }
 /* Barra de Transformação: enche apanhando; pulsa quando dá para transformar; "over" = segurando além da sanidade cheia */
 .bar.storm { height: 7px; width: 60%; margin-top: 3px; position: relative; overflow: visible; }

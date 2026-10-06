@@ -2,6 +2,7 @@ import { COMBAT } from '../config/combat.js';
 import { actionLabel } from './labels.js';
 import { SETTINGS } from '../config/settings.js';
 import { ELEMENTS } from '../config/elements.js';
+import { hasPassive } from '../combat/passives.js';
 import * as THREE from 'three';
 
 const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -145,6 +146,7 @@ export class HUD {
       e.hpNum.textContent = Math.ceil(f.health);
       e.hp.classList.toggle('low', hp < 0.3);
       e.en.style.width = `${(f.energy / f.maxEnergy) * 100}%`;
+      e.en.parentNode.classList.toggle('locked', hasPassive(f, 'noSanity')); // Erin sem sanidade: barra travada
       e.guard.style.width = `${(f.guard / f.maxGuard) * 100}%`;
       e.guardBar.classList.toggle('active', f.state === 'block');
       e.guardBar.classList.toggle('low', f.guard < f.maxGuard * 0.3);
