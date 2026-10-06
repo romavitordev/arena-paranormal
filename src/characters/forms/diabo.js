@@ -7,7 +7,7 @@ export default {
   id: 'diabo',
   form: true,
   baseId: 'juan',
-  name: 'O DIABO (JUAN)',
+  name: 'PORTADOR DO TRONO', // o Juan transformado é o Portador do Trono
   model: 'diabo',
   color: '#a01818',
   origin: 'Relíquia de Sangue',
