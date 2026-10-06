@@ -4,8 +4,9 @@
 // combate no lugar dos óculos. Aqui ela enlouquece de vez: o fascínio por explosões vira devoção ao Caos — SEM
 // SANIDADE (a barra fica zerada e travada; tudo que gastaria sanidade sai da VIDA), golpes mais rápidos e bem mais
 // fortes, granadas mais fortes, nada de cura. Especial: EM NOME DO CAOS (cânone: ferida de morte
-// no Dia Final de Desconjuração, ativou três granadas e se explodiu "em nome do Caos") — corre até o adversário e se
-// explode: dano enorme, mas ela morre. Se levar o adversário junto, ganha o round; se ele sobreviver, ela perde.
+// no Dia Final de Desconjuração, ativou três granadas e se explodiu "em nome do Caos") — joga uma granada de luz; se
+// cegar o adversário, corre até ele, dá o tiro de escopeta e se explode: dano enorme, mas ela morre. Se levar o
+// adversário junto, ganha o round; se ele sobreviver, ela perde.
 import base from '../erin.js';
 
 const CHAOS = 0x7aff9a;
@@ -83,13 +84,11 @@ export default {
     type: 'kamikaze',
     energyCost: 0, // sem sanidade: o preço é a própria vida
     cooldown: 14,
-    damage: 450,
-    radius: 3.4,
-    contact: 1.6,
+    damage: 450, // 15% no tiro de escopeta + 85% na explosão
+    shotShare: 0.15,
+    range: 18,
+    flash: { radius: 2.6, flight: 0.65, missRecovery: 0.7 }, // a granada de luz que "pega" o especial
     speed: 13,
-    run: 1.5,
-    pins: 0.7,
-    guardedMult: 0.5,
     color: 0xff5a1a,
   },
 

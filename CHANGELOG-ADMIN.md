@@ -1,5 +1,22 @@
 # Registro administrativo de alterações
 
+## v3.9.0 — Tela inicial nova
+
+- `ui/titleStage.js` (`TitleStage`): fundo 3D dos menus — 5 lutadores (`LINEUP`) em idle com `SpotLight` de contorno
+  na cor do poder, chão + círculo ritual aditivo girando, `FogExp2`, cinzas (`Points`), câmera com push-in/balanço;
+  montado em `ready()` quando os .glb carregam. Substitui os anéis antigos (`menuScene`) em `main.js`.
+- `HomeScreen`: logo novo (`.t-arena`, `h1[data-text]` com gradiente animado + glitch em `::before/::after`,
+  `.elements`), `.vignette` e `.grain`; sem o SVG do sigilo. CSS: layout de tela grande (título no terço de cima,
+  menu em coluna à esquerda com o logo no canto).
+- Bug dos modelos invisíveis: `rigFromGLB` marca `userData.sharedGeometry` / `material.userData.sharedMap`;
+  `World.dispose`, `SelectStage.dispose`, `portraits` e a Marionete não liberam mais geometria/textura compartilhada
+  do .glb (liberar derrubava as cópias da seleção).
+- `maskTransform`: esconde `sp.prop` no modelo base depois de transformar (e se a cena for cancelada).
+- `kamikaze` reescrito: granada de luz (mesma regra da Supernova, `f.threatLob` para a CPU) → cutscene
+  (corre, escopeta `shotShare`, pinos, explosão) → morte; erro = `stun` com `whiffRecovery`, sem se explodir.
+- Ranged `type: 'beam'` (`Fighter.startBeam`): raio canalizado com ponta que persegue (`track` m/s), pulsos de
+  `damage` a cada `tick` sem reação (dá para fugir). `labirinto_elmo.ranged` usa ele.
+
 ## v3.8.2 — Supernova com granada de luz
 
 - `supernova`: sem `telegraph`; o especial começa com uma granada de luz real (arco de `sp.flash.flight` s até onde o

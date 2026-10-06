@@ -44,18 +44,25 @@ export default {
     air: boost(M.air),
   },
 
-  // □: TEMPESTADE CAÓTICA (cânone: 8d10 — a Rajada era 8d8): raio maior, mais forte e mais rápido
+  // □: TEMPESTADE CAÓTICA (cânone: 8d10 — a Rajada era 8d8). Sem o capacete é uma bola de energia arremessada; com o
+  // capacete vira um RAIO CONTÍNUO que sai da Antena por alguns segundos e PERSEGUE o adversário (dá para fugir
+  // correndo de lado ou com dash, e a defesa de frente segura)
   ranged: {
-    ...base.ranged,
     name: 'Tempestade Caótica',
-    damage: 72,
-    speed: 36,
-    radius: 0.6,
-    knockback: 4,
-    hitstun: 0.55,
-    cooldown: 2.1,
+    type: 'beam',
+    anim: 'point',
+    windup: 0.3,
+    duration: 2.2,
+    recovery: 0.35,
+    tick: 0.15, // pulso de dano
+    damage: 9, // ~14 pulsos se ficar no raio o tempo todo (≈125)
+    range: 20,
+    width: 0.75,
+    track: 6.5, // m/s: a ponta segue o alvo, mas um dash escapa
+    cooldown: 6,
+    energyCost: 0,
     color: 0xc8a0ff,
-    impactScale: 1.8,
+    hitSound: 'impact',
   },
 
   abilities: [

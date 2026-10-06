@@ -75,7 +75,7 @@ export function renderPortraits(roster, renderer, { w = 300, h = 400, anim: anim
     ctx.drawImage(tmp, 0, 0);
     out[def.id] = canvas.toDataURL('image/png');
     scene.remove(rig.root);
-    rig.root.traverse((o) => { if (o.geometry) o.geometry.dispose(); });
+    rig.root.traverse((o) => { if (o.geometry && !o.userData.sharedGeometry) o.geometry.dispose(); });
   }
   renderer.setRenderTarget(prevTarget);
   renderer.setClearColor(0x000000, prevClear);

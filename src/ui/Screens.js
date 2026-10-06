@@ -53,42 +53,21 @@ const HOME_OPTIONS = [
   { id: 'options', label: 'OPÇÕES', desc: 'Tempo da luta e modo de movimento.' },
 ];
 
-function sigilSVG() {
-  // círculo ritualístico genérico (não é o símbolo oficial): anéis, 5 pontos dos elementos e traços
-  const pts = Object.values(ELEMENTS).map((e, i) => {
-    const a = (i / 5) * Math.PI * 2 - Math.PI / 2;
-    return { x: 200 + Math.cos(a) * 150, y: 200 + Math.sin(a) * 150, c: e.color, n: e.name };
-  });
-  const star = [0, 2, 4, 1, 3, 0].map((k) => `${pts[k].x},${pts[k].y}`).join(' ');
-  const ticks = Array.from({ length: 60 }, (_, i) => {
-    const a = (i / 60) * Math.PI * 2;
-    const r1 = i % 5 === 0 ? 176 : 182;
-    return `<line x1="${200 + Math.cos(a) * r1}" y1="${200 + Math.sin(a) * r1}" x2="${200 + Math.cos(a) * 188}" y2="${200 + Math.sin(a) * 188}"/>`;
-  }).join('');
-  return `<svg viewBox="0 0 400 400" aria-hidden="true">
-    <g class="ring-a" fill="none" stroke="currentColor">
-      <circle cx="200" cy="200" r="192" stroke-width="1.5"/><circle cx="200" cy="200" r="170" stroke-width="1"/>
-      <g stroke-width="1.2">${ticks}</g>
-    </g>
-    <g class="ring-b" fill="none" stroke="currentColor" stroke-width="1.2">
-      <polygon points="${star}" opacity=".55"/><circle cx="200" cy="200" r="78" opacity=".7"/><circle cx="200" cy="200" r="66" stroke-dasharray="3 6" opacity=".7"/>
-      ${pts.map((p) => `<circle cx="${p.x}" cy="${p.y}" r="15" stroke="${p.c}" stroke-width="2.2" fill="rgba(8,5,12,.85)"/><circle cx="${p.x}" cy="${p.y}" r="5" fill="${p.c}" stroke="none"/>`).join('')}
-    </g>
-  </svg>`;
-}
-
 export class HomeScreen {
   constructor(root, { portraits = {}, menu = false, touchOnly = false } = {}) {
     this.portraits = portraits;
     this.touchOnly = touchOnly;
     this.index = 0;
     this.el = el(root, 'screen', 'home', `
-      <div class="sigil">${sigilSVG()}</div>
+      <div class="vignette"></div>
+      <div class="grain"></div>
       <div class="fog"></div>
       <div class="logo">
         <div class="kicker">UM JOGO DE LUTA PARANORMAL</div>
-        <h1>ARENA<br><span>PARANORMAL</span></h1>
-        <div class="tag">ORDO REALITAS <i>×</i> ESCRIPTAS <i>×</i> MASCARADOS <i>×</i> OS CINCO</div>
+        <div class="t-arena">ARENA</div>
+        <h1 data-text="PARANORMAL">PARANORMAL</h1>
+        <div class="elements"><i class="ln"></i>${Object.values(ELEMENTS).map((e) => `<b style="--c:${e.color}" title="${e.name}"></b>`).join('')}<i class="ln"></i></div>
+        <div class="tag">ORDO REALITAS <i>·</i> ESCRIPTAS <i>·</i> MASCARADOS <i>·</i> OS CINCO</div>
       </div>
       <div class="press">${touchOnly ? 'TOQUE NA TELA PARA COMEÇAR' : `PRESSIONE <b>START</b>, <b>${OK}</b> OU <kbd>ENTER</kbd>`}</div>
       <div class="menu-home">

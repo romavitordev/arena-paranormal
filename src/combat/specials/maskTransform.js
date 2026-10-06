@@ -172,7 +172,11 @@ export const maskTransform = {
       world.fx.ring(new THREE.Vector3(f.pos.x, 0.06, f.pos.z), { color: tint, radius: 3, life: 0.5 });
       world.fx.burst(f.chestPos(), { count: 50, color: col, speed: 5, life: 0.7, size: 0.3 });
       const bonus = sp.bonusHealth || 0;
+      const baseRig = f.rig;
       transform(f, sp.form, { duration: sp.duration, health: f.health + bonus, bonusHealth: bonus, banner: sp.formBanner });
+      // o modelo base fica guardado para o próximo round: a máscara mostrada na cena tem que sair dele, senão o
+      // personagem volta mascarado (a forma tem a máscara no próprio modelo)
+      if (sp.prop && baseRig.props[sp.prop]) baseRig.showProp(sp.prop, false);
       f.invuln = Math.max(f.invuln, 0.8);
       f.energy = Math.max(f.energy, sp.energy ?? 40);
       // a aura da Intenção de Assassino (vermelha) fica em volta até o fim do round (os GIFs: contorno vermelho em
@@ -205,7 +209,11 @@ export const maskTransform = {
         light.color.lerp(lightColor, Math.min(1, dt * 5));
         return tl.update(dt);
       },
-      cancel: () => { cleanup(); world.endCinematic(); },
+      cancel: () => {
+        cleanup();
+        world.endCinematic();
+        if (!done && prop) f.rig.showProp(sp.prop, false); // cena interrompida: não fica mascarado sem transformar
+      },
     };
   },
 };
