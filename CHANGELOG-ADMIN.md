@@ -1,5 +1,14 @@
 # Registro administrativo de alterações
 
+## v3.8.2 — Supernova com granada de luz
+
+- `supernova`: sem `telegraph`; o especial começa com uma granada de luz real (arco de `sp.flash.flight` s até onde o
+  alvo estava, raio `sp.flash.radius`). No estouro: fora do raio / invulnerável → "DESVIOU" ou erro; defendendo de
+  frente para a Erin → "COBRIU OS OLHOS!"; senão "CEGO!" e a cinemática antiga (corre, escopeta, granada) começa
+  (`startCinematic`, alvo com a animação `fear`). Erro: `stun(missRecovery)` com `whiffRecovery`.
+- `f.threatLob` expõe a granada no ar; a CPU esquiva/defende perto do estouro (mesma chance do aviso).
+- Testado: parado → cinemática (225); saindo de baixo → erro; esquiva → erro; defesa de frente → erro.
+
 ## v3.8.1 — A máscara de gás da Erin
 
 - `gasMask()` (weapons.js) refeita: concha de borracha (metade frontal de esfera), lentes com aro + vidro/halo

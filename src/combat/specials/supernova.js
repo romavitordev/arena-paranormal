@@ -73,7 +73,8 @@ export const supernova = {
       world.fx.burst(p, { count: 40, color: 0xfff6d0, speed: 9, life: 0.4, size: 0.25 });
       world.audio.play('explosion', { volume: 0.7, pitch: 1.6 });
       const inside = opp.state !== 'ko' && Math.hypot(opp.pos.x - p.x, opp.pos.z - p.z) <= flashRadius;
-      const facing = Math.abs(angleDiff(opp.yaw, yawTo(opp.pos, p))) <= (COMBAT.block.arc * Math.PI) / 360;
+      // defender de frente para a Erin cobre os olhos (a granada cai no pé dele, então vale a direção de quem jogou)
+      const facing = Math.abs(angleDiff(opp.yaw, yawTo(opp.pos, f.pos))) <= (COMBAT.block.arc * Math.PI) / 360;
       if (inside && opp.isGuarding() && facing) { opp.notify('COBRIU OS OLHOS!', true); return false; }
       if (!inside || opp.isInvulnerable()) { if (inside) opp.notify('DESVIOU!', true); return false; }
       world.screenFlash && world.screenFlash('#ffffff', 0.25);
