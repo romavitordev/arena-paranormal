@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.9.1';
+export const VERSION = '3.9.2';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,16 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.9.2',
+    date: '2026-10-06',
+    title: 'Seleção online no celular',
+    items: [
+      'Online no celular: dá para escolher o lutador TOCANDO nele (antes o toque não fazia nada na partida online). O 1º toque olha, o 2º confirma.',
+      'Online: os dois jogadores escolhem AO MESMO TEMPO, cada um na própria grade (marcada com "VOCÊ"), e confirmam — ninguém precisa esperar o outro. Depois, qualquer um toca em COMEÇAR.',
+      'Online no celular: as configurações da batalha, a escolha do cenário, a pausa e a tela de vitória também aceitam toque.',
+    ],
+  },
   {
     v: '3.9.1',
     date: '2026-10-06',

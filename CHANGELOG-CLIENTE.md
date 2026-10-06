@@ -2,6 +2,11 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.9.2 — Seleção online no celular
+- Online no celular: dá para escolher o lutador TOCANDO nele (antes o toque não fazia nada na partida online). O 1º toque olha, o 2º confirma.
+- Online: os dois jogadores escolhem AO MESMO TEMPO, cada um na própria grade (marcada com "VOCÊ"), e confirmam — ninguém precisa esperar o outro. Depois, qualquer um toca em COMEÇAR.
+- Online no celular: as configurações da batalha, a escolha do cenário, a pausa e a tela de vitória também aceitam toque.
+
 ## v3.9.1 — Celular
 - Celular: as opções do menu respondem ao PRIMEIRO toque (antes, no submenu, às vezes era preciso tocar duas vezes).
 - Celular: a HUD da luta volta a mostrar as habilidades, numa faixa compacta com o comando de cada uma, a recarga e o contorno de pronta.

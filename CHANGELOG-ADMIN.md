@@ -1,5 +1,20 @@
 # Registro administrativo de alterações
 
+## v3.9.2 — Seleção online no celular
+
+- Causa: na partida online `body.netplay #screens` tinha `pointer-events: none` (cliques não eram sincronizados entre
+  os dois aparelhos), então no celular — sem teclado/controle — não havia como escolher.
+- `Screens.js` `NET_UI` + `onTap`: no online o toque vira um código (1–249: item/lutador, 250: confirmar/COMEÇAR,
+  251/252: página) que viaja nos `flags` do quadro sincronizado (`main.js` `packLocal`, bit 1+, com o nº da tela
+  `uiSeq` nos bits 11+); `applyNetTaps` aplica nos dois aparelhos no mesmo quadro via `screen.netTap(code, slot)`.
+  Toque de uma tela que já fechou é descartado. Telas: seleção, configurações, cenário, pausa (só quem pausou) e
+  vitória (classe `net-taps` libera o toque nelas).
+- Seleção online: cada jogador só toca na própria grade (cabeçalho "VOCÊ"); os dois escolhem e confirmam ao mesmo
+  tempo.
+- `__game.devNet(sessão)`: teste do online sem internet (duas abas ligadas por `BroadcastChannel`).
+- Testado com Playwright: dois celulares deitados (844×390, toque) escolhendo juntos, convidado confirmando antes do
+  anfitrião, COMEÇAR, configurações e cenário — os dois chegam ao carregamento com as mesmas escolhas.
+
 ## v3.9.1 — Celular
 
 - `HomeScreen`: destaque da opção por `pointerenter` só com `pointerType === 'mouse'` (o `mouseenter` mudava a tela

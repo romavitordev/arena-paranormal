@@ -628,8 +628,11 @@ body.touch-capable #changelog .news-nav { display: flex; }
 #lan .lan-input:focus { border-color: #ffd84a; }
 #lan .lan-status { min-height: 1.3em; font-size: 14px; color: #b8a8e0; margin: 6px 0 10px; }
 #lan .lan-status.err { color: #ff6a5a; }
-/* na LAN só o controle/teclado comanda (cliques não são sincronizados entre os dois computadores) */
+/* na LAN o toque/clique só vale nas telas que o sincronizam; no resto, só o controle/teclado comanda */
 body.netplay #screens { pointer-events: none; }
+/* ...menos nas telas que mandam o toque pela rede (Screens.js NET_UI: seleção, configurações, cenário, pausa, vitória) */
+body.netplay #screens .net-taps { pointer-events: auto; }
+body.netplay #screens #victory.net-taps { pointer-events: none; } /* a vitória só recebe toque nas opções */
 #net-badge { position: fixed; right: 12px; bottom: 10px; z-index: 30; font: 800 12px/1.3 system-ui, sans-serif; letter-spacing: .08em; color: #b8a8e0; background: rgba(10, 8, 16, .75); border: 1px solid #3a2a5a; border-radius: 6px; padding: 4px 8px; pointer-events: none; }
 #net-badge.wait { color: #ffd84a; border-color: #8a6a1a; }
 #net-toast { position: fixed; left: 50%; top: 18px; transform: translateX(-50%); z-index: 40; font: 700 15px/1.4 system-ui, sans-serif; color: #fff; background: rgba(120, 20, 30, .92); border-radius: 8px; padding: 10px 16px; max-width: 90vw; text-align: center; }

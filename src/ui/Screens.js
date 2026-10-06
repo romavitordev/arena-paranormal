@@ -27,6 +27,24 @@ const pickRandom = (n, cur, ok = () => true) => {
 const OK = 'A/×';
 const BACK = 'B/○';
 
+// PARTIDA ONLINE: um toque/clique não mexe na tela na hora (cada aparelho ficaria num estado diferente). Ele vira um
+// código que viaja junto com os comandos sincronizados (main.js packLocal → flags) e os dois aparelhos aplicam no mesmo
+// quadro, com o lado de quem tocou (screen.netTap(code, slot)). NET_UI.send existe só durante a partida online.
+export const NET_UI = { send: null, slot: 0 };
+
+// liga o clique de um elemento: fora do online roda fn(null) na hora; no online manda o código (fn(slot) ao chegar)
+function onTap(screen, elm, code, fn) {
+  if (!screen.tapFns) screen.tapFns = {};
+  screen.tapFns[code] = fn;
+  elm.addEventListener('click', () => { if (NET_UI.send) NET_UI.send(code); else fn(null); });
+}
+
+// screen.netTap: aplica o toque que chegou pela rede (slot = de quem tocou)
+function netTapDefault(code, slot) {
+  const fn = this.tapFns && this.tapFns[code];
+  if (fn) fn(slot);
+}
+
 function el(root, cls, id, html) {
   const e = document.createElement('div');
   e.className = cls;
@@ -203,7 +221,10 @@ export class MenuScreen {
     this.el = el(root, `screen ${clear ? 'clear' : ''}`, null,
       `<div class="menu"><h2>${title}</h2>${subtitle ? `<p class="sub">${subtitle}</p>` : ''}${options.map(() => '<div class="opt"></div>').join('')}</div>${extra}`);
     this.opts = [...this.el.querySelectorAll('.opt')];
-    this.opts.forEach((o, i) => o.addEventListener('click', () => { this.clicked = i; }));
+    // no online, só quem controla o menu (ex.: quem pausou) escolhe pelo toque
+    this.opts.forEach((o, i) => onTap(this, o, 1 + i, (slot) => { if (slot === null || this.owner === null || slot === this.owner) this.clicked = i; }));
+    this.el.classList.add('net-taps');
+    this.netTap = netTapDefault;
     this.render();
   }
   render() {
@@ -286,7 +307,8 @@ export class SelectScreen {
       <div class="hint"></div>`);
     this.stage = new SelectStage(ROSTER);
     this.startEl = this.el.querySelector('.startbtn');
-    this.startEl.addEventListener('click', () => { if (this.ready[0] && this.ready[1]) this.startClicked = true; });
+    onTap(this, this.startEl, 250, () => { if (this.ready[0] && this.ready[1]) this.startClicked = true; });
+    this.el.classList.add('net-taps');
     this.sides = [0, 1].map((p) => this.el.querySelector(`.sel-side.s${p + 1}`));
     this.cards = this.sides.map((sd) => [...sd.querySelectorAll('.card')]);
     this.dets = this.sides.map((sd) => sd.querySelector('.det'));
@@ -296,17 +318,34 @@ export class SelectScreen {
     this.pageCount = Math.max(1, Math.ceil(ROSTER.length / SEL_PAGE));
     // setas clicáveis (mouse / toque)
     this.pages.forEach((pg, p) => {
-      pg.querySelector('.pg-prev').addEventListener('click', () => { this.turnPage(p, -1); this.render(); });
-      pg.querySelector('.pg-next').addEventListener('click', () => { this.turnPage(p, 1); this.render(); });
+      pg.querySelector('.pg-prev').addEventListener('click', () => this.tapSide(p, 251));
+      pg.querySelector('.pg-next').addEventListener('click', () => this.tapSide(p, 252));
     });
     this.hint = this.el.querySelector('.hint');
-    this.cards.forEach((list, p) => list.forEach((c, i) => c.addEventListener('click', () => {
-      // no modo contra CPU o lado 2 só é escolhido depois do 1
-      const active = this.cpu ? (this.ready[0] ? 1 : 0) : p;
-      if (active !== p || this.ready[p]) return;
-      if (this.cursor[p] === i) { this.lockPick(p); this.audio.play('confirm'); } else { this.cursor[p] = i; this.audio.play('select'); }
-      this.render();
-    })));
+    // toque no lutador: o 1º toque olha, o 2º no mesmo confirma
+    this.cards.forEach((list, p) => list.forEach((c, i) => c.addEventListener('click', () => this.tapSide(p, 1 + i))));
+    this.render();
+  }
+
+  // toque numa das grades. Online: cada um só mexe na própria grade e os dois escolhem AO MESMO TEMPO (o toque viaja
+  // pela rede e é aplicado no lado de quem tocou); fora do online aplica na hora
+  tapSide(p, code) {
+    if (NET_UI.send) {
+      if (p === NET_UI.slot) NET_UI.send(code);
+      return;
+    }
+    this.netTap(code, p);
+  }
+
+  netTap(code, p) {
+    if (code === 250) { if (this.tapFns && this.tapFns[250]) this.tapFns[250](p); return; }
+    if (code === 251 || code === 252) { this.turnPage(p, code === 251 ? -1 : 1); this.render(); return; }
+    const i = code - 1;
+    if (i < 0 || i >= ROSTER.length) return;
+    // no modo contra CPU o lado 2 só é escolhido depois do 1
+    const active = this.cpu ? (this.ready[0] ? 1 : 0) : p;
+    if (active !== p || this.ready[p]) return;
+    if (this.cursor[p] === i) { this.lockPick(p); this.audio.play('confirm'); } else { this.cursor[p] = i; this.audio.play('select'); }
     this.render();
   }
 
@@ -331,7 +370,8 @@ export class SelectScreen {
         card.classList.toggle('on', this.cursor[p] === i);
         card.classList.toggle('picked', this.team && this.picks[p].includes(i));
       });
-      this.heads[p].textContent = this.ready[p] ? 'PRONTO' : act >= 0 && act !== p ? 'AGUARDANDO' : `ESCOLHENDO${this.team ? ` ${this.picks[p].length + 1}/3` : ''}`;
+      const you = NET_UI.send && p === NET_UI.slot ? 'VOCÊ · ' : ''; // online: qual lado é o seu
+      this.heads[p].textContent = you + (this.ready[p] ? 'PRONTO' : act >= 0 && act !== p ? 'AGUARDANDO' : `ESCOLHENDO${this.team ? ` ${this.picks[p].length + 1}/3` : ''}`);
       this.heads[p].classList.toggle('ok', this.ready[p]);
       // placa com o nome no centro
       const teamLine = this.team ? `<div class="teampicks">${['LÍDER', 'ASSIST. 1', 'ASSIST. 2'].map((lab, k) => {
@@ -499,7 +539,9 @@ export class BattleConfigScreen {
       ${this.rows.map(() => '<div class="opt cfg"></div>').join('')}</div>
       <div class="hint">▲▼ escolher · ◀ ▶ mudar · <b>${OK}</b> confirmar · <b>${BACK}</b> voltar</div>`);
     this.opts = [...this.el.querySelectorAll('.opt')];
-    this.opts.forEach((o, i) => o.addEventListener('click', () => { this.index = i; this.clicked = true; }));
+    this.opts.forEach((o, i) => onTap(this, o, 1 + i, () => { this.index = i; this.clicked = true; }));
+    this.el.classList.add('net-taps');
+    this.netTap = netTapDefault;
     this.render();
   }
   render() {
@@ -557,7 +599,9 @@ export class VictoryScreen {
       </div>
       <div class="vopts">${options.map(() => '<div class="opt"></div>').join('')}</div>`);
     this.opts = [...this.el.querySelectorAll('.vopts .opt')];
-    this.opts.forEach((o, i) => o.addEventListener('click', () => { this.clicked = i; }));
+    this.opts.forEach((o, i) => onTap(this, o, 1 + i, () => { this.clicked = i; }));
+    this.el.classList.add('net-taps');
+    this.netTap = netTapDefault;
     this.render();
   }
   render() {
@@ -614,8 +658,10 @@ export class StageSelectScreen {
     this.prev = this.el.querySelector('.stageinfo .sprev');
     this.confirmEl = this.el.querySelector('.stage-confirm');
     this.thumbs = thumbs;
-    this.cards.forEach((c, i) => c.addEventListener('click', () => { this.index = i; this.render(); }));
-    this.confirmEl.addEventListener('click', () => { this.confirmClicked = true; });
+    this.cards.forEach((c, i) => onTap(this, c, 1 + i, () => { this.index = i; this.render(); }));
+    onTap(this, this.confirmEl, 250, () => { this.confirmClicked = true; });
+    this.el.classList.add('net-taps');
+    this.netTap = netTapDefault;
     this.render();
   }
   // os previews são gerados depois do carregamento: troca a pintura pela imagem assim que existir

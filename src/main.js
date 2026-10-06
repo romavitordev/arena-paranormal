@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { InputManager } from './input/InputManager.js';
 import { AudioManager } from './audio/AudioManager.js';
 import { HUD } from './ui/HUD.js';
-import { HomeScreen, BattleConfigScreen, VictoryScreen, MODES, SelectScreen, MenuScreen, StageSelectScreen, LoadingScreen, CommandsScreen, ChangelogScreen, LanScreen } from './ui/Screens.js';
+import { HomeScreen, BattleConfigScreen, VictoryScreen, MODES, SelectScreen, MenuScreen, StageSelectScreen, LoadingScreen, CommandsScreen, ChangelogScreen, LanScreen, NET_UI } from './ui/Screens.js';
 import { NetSession, Lobby, packInput, unpackInput, seededRandom } from './net/NetSession.js';
 import { setLabelNetplay } from './ui/labels.js';
 import { renderPortraits } from './ui/portraits.js';
@@ -85,12 +85,14 @@ const timeLabel = () => `TEMPO DA LUTA: ${timerLabel()}`;
 const moveLabel = () => `MOVIMENTO: ${SETTINGS.moveMode === 'enemy' ? 'RELATIVO AO INIMIGO' : 'DIREÇÕES DA TELA'}`;
 
 function setScreen(state, screen) {
+  game.uiSeq = ((game.uiSeq || 0) + 1) & 15; // toques online de uma tela que já saiu são descartados (netTaps)
   if (game.screen) game.screen.dispose();
   game.screen = screen;
   game.state = state;
 }
 
 function setOverlay(state, overlay) {
+  game.uiSeq = ((game.uiSeq || 0) + 1) & 15;
   if (game.overlay) game.overlay.dispose();
   game.overlay = overlay;
   game.state = state;
@@ -309,6 +311,8 @@ game.devStart = async ({ kind = 'cpu', team = false, picks, arenaId = DEFAULT_AR
 // Atalho de desenvolvimento: abre a seleção de personagens direto (__game.toSelect('cpu'))
 game.toSelect = (kind = 'cpu', team = false) => { game.mode = { kind, cpu: kind !== 'pvp', team }; toSelect(); };
 
+// Teste do online sem a internet: __game.devNet(sessão já conectada) — ver tests/ (dois navegadores via BroadcastChannel)
+game.devNet = (session) => startNet(session);
 // Atalho de desenvolvimento: __game.quick('joui', 'gal_sal', true)
 game.quick = (a, b, cpu = false, arenaId = DEFAULT_ARENA, dialogue = false) => {
   setOverlay(null, null);
@@ -372,7 +376,20 @@ function packLocal() {
   const d = input.readLocal();
   const held = { ...d.held };
   if (d.escape && game.state !== 'fight') { held.start = false; held.physical = true; }
-  return packInput(d.mx, d.my, held, game.netLoaded ? 1 : 0);
+  // um toque na tela por quadro (código da tela + nº da tela em que foi tocado): ver Screens.js NET_UI
+  const tap = game.netTaps && game.netTaps.length ? game.netTaps.shift() : 0;
+  return packInput(d.mx, d.my, held, (game.netLoaded ? 1 : 0) | (tap << 1));
+}
+
+// aplica os toques que vieram no quadro sincronizado (dos dois jogadores), na tela que está aberta
+function applyNetTaps() {
+  const target = ['pause', 'result', 'commands'].includes(game.state) ? game.overlay : game.screen;
+  input.netFrame.forEach((v, slot) => {
+    const t = v.flags >> 1;
+    if (!t || !target || !target.netTap) return;
+    if ((t >> 10) !== game.uiSeq) return; // tocado numa tela que já fechou
+    target.netTap(t & 1023, slot);
+  });
 }
 
 // resumo do estado da luta para conferir a sincronia
@@ -461,6 +478,10 @@ function startNet(session) {
     p.pressed = {};
   }
   document.body.classList.add('netplay');
+  game.netTaps = [];
+  game.uiSeq = 0; // os dois aparelhos contam as telas a partir daqui (igual nos dois)
+  NET_UI.slot = session.slot;
+  NET_UI.send = (code) => { if (game.netTaps.length < 4) game.netTaps.push(code | (game.uiSeq << 10)); };
   setLabelNetplay(true);
   hud.names = session.names.slice();
   netBadge = document.createElement('div');
@@ -481,6 +502,8 @@ function endNet(reason, byMe = false) {
   game.netLoaded = null;
   input.netFrame = null;
   input.netSlot = undefined;
+  NET_UI.send = null;
+  game.netTaps = null;
   if (net) { if (byMe) net.leave(); else net.close(); }
   if (game.netSettings) { Object.assign(SETTINGS, game.netSettings); game.netSettings = null; }
   document.body.classList.remove('netplay');
@@ -563,6 +586,7 @@ function tick(dt) {
   if (touch) touch.sync(game.state, !!input.teamMode, game.state === 'mainmenu' && game.screen.menu, game.state === 'fight' && !!game.match && ['entrance', 'dialogue'].includes(game.match.phase));
   if (game.tutorial) game.tutorial.el.style.display = game.state === 'fight' ? '' : 'none';
   input.update(dt);
+  if (input.netFrame) applyNetTaps();
   if (input.anyPressed) audio.unlock();
 
   switch (game.state) {
