@@ -138,6 +138,10 @@ export function rigFromGLB(gltf, { scale = 1, outline = 0.012 } = {}) {
       convert.set(src, m);
     }
     o.material = convert.get(src);
+    // a geometria e as texturas vêm do .glb carregado UMA vez e são as mesmas em todas as cópias do personagem
+    // (lutadores, palco da seleção, retratos): quem descarta uma cena não pode liberá-las (ver World.dispose)
+    o.userData.sharedGeometry = true;
+    o.material.userData.sharedMap = true;
     if (!o.material.userData.glow) mats.add(o.material);
   });
   // contornos
@@ -148,6 +152,7 @@ export function rigFromGLB(gltf, { scale = 1, outline = 0.012 } = {}) {
     ol.bind(o.skeleton, o.bindMatrix);
     ol.frustumCulled = false;
     ol.userData.isOutline = true;
+    ol.userData.sharedGeometry = true;
     ol.raycast = () => {};
     o.parent.add(ol);
     o.userData.outlineMesh = ol;

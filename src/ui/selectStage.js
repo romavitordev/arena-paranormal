@@ -166,8 +166,8 @@ export class SelectStage {
   }
 
   dispose() {
-    for (const m of this.cache) for (const e of m.values()) e.rig.root.traverse((o) => { if (o.geometry) o.geometry.dispose(); });
-    for (const S of this.sides) for (const b of S.back) b.rig.root.traverse((o) => { if (o.geometry) o.geometry.dispose(); });
+    for (const m of this.cache) for (const e of m.values()) e.rig.root.traverse((o) => { if (o.geometry && !o.userData.sharedGeometry) o.geometry.dispose(); });
+    for (const S of this.sides) for (const b of S.back) b.rig.root.traverse((o) => { if (o.geometry && !o.userData.sharedGeometry) o.geometry.dispose(); });
     this.cache = [new Map(), new Map()];
   }
 }

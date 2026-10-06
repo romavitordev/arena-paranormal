@@ -621,7 +621,7 @@ export class Marionette {
     this.pool.material.dispose();
     // o modelo é todo dela: libera geometrias e materiais (para de consumir memória e GPU)
     this.model.root.traverse((o) => {
-      if (o.geometry) o.geometry.dispose();
+      if (o.geometry && !o.userData.sharedGeometry) o.geometry.dispose();
       if (o.material && !o.userData.isOutline) o.material.dispose();
     });
   }

@@ -375,10 +375,12 @@ export class World {
     this.projectiles.clear();
     this.fx.clear();
     this.scene.traverse((o) => {
-      if (o.geometry) o.geometry.dispose();
+      // geometria/textura compartilhada dos modelos .glb: liberar aqui deixava os corpos INVISÍVEIS na seleção de
+      // personagem depois de uma partida (só as armas, que são criadas por cópia, apareciam)
+      if (o.geometry && !o.userData.sharedGeometry) o.geometry.dispose();
       if (o.material) {
         const mats = Array.isArray(o.material) ? o.material : [o.material];
-        mats.forEach((m) => { if (m.map) m.map.dispose(); m.dispose(); });
+        mats.forEach((m) => { if (m.map && !m.userData.sharedMap) m.map.dispose(); m.dispose(); });
       }
     });
   }

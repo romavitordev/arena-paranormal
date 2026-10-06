@@ -27,7 +27,7 @@ function runTrack(f, { dur = 1, ahead = 2.2, side = 1.1, height = 1.0, fov = 42 
   };
 }
 
-function grenadeMesh(color) {
+export function grenadeMesh(color) {
   const g = new THREE.Group();
   const body = new THREE.Mesh(new THREE.SphereGeometry(0.15, 10, 8), new THREE.MeshStandardMaterial({ color: 0x3a4a2a, roughness: 0.6 }));
   body.scale.set(1, 1.2, 1);
