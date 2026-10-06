@@ -7,6 +7,7 @@ import { applyHit } from './damage.js';
 import { findSubstitutionSpot, resolveBody } from './positioning.js';
 import { startChargeFx } from './chargeFx.js';
 import { ABILITY_TYPES } from './abilities.js';
+import './hostAbilities.js'; // registra as habilidades do Anfitrião em ABILITY_TYPES
 import { SPECIALS } from './specials/index.js';
 import { telegraphFor, startTelegraph, updateTelegraph, stopTelegraph, telegraphMissed, TELEGRAPH } from './specials/telegraph.js';
 import { hasPassive } from './passives.js';
@@ -17,6 +18,7 @@ import { buildBloodArmor } from '../models/bloodArmor.js';
 import { orbit, twoShot } from '../camera/shots.js';
 import { splitDamage, specialHitFx } from './specials/common.js';
 import { GRAB_SCENES, FINISHERS } from './grabScenes.js';
+import { rollChaosShot, tickHostQuirks } from './chaos.js';
 
 // estados em que o alvo continua "dentro do combo" (contadores de escala não zeram)
 const COMBO_STATES = new Set(['hitstun', 'stun', 'pulled', 'grabbed', 'ko', 'downed']);
@@ -96,7 +98,7 @@ export class Fighter {
     this.dodgeDmgAcc = 0;
     this.dodgeLockout = 0;
     this.sacrificeWin = false;
-    this.chronoCd = 0; // Percepção Cronológica (Anfitrião): recarga da esquiva automática
+    this.chronoCd = 0; // Percepção Anacrônica (Anfitrião): recarga da esquiva automática
     this.secretRound = false; // Segredo de Veríssimo contra o Kian: uma vez por round
     for (const k in this.cooldowns) this.cooldowns[k] = 0;
     this.carga = { stage: 0, timer: 0 };
@@ -561,6 +563,8 @@ export class Fighter {
     if (this.invuln > 0) this.invuln -= dt;
     if (this.dodgeLockout > 0) this.dodgeLockout -= dt;
     if (this.chronoCd > 0) this.chronoCd -= dt;
+    if (this.gestureT > 0) this.gestureT -= dt; // gesto parado (ex.: o Anfitrião inclinando a cabeça) não é trocado pelo idle
+    if (this.def.quirks) tickHostQuirks(this, dt);
     if (this.overcharge > 0 && this.state !== 'charging') this.overcharge = Math.max(0, this.overcharge - dt * COMBAT.storm.decay);
     updateForm(this, dt);
     if (this.message) {
@@ -1156,7 +1160,7 @@ export class Fighter {
         this.anim.speed = this.strideSpeed(this.anim.current, Math.hypot(this.vel.x, this.vel.z));
       }
     } else {
-      this.anim.play('idle');
+      if (!(this.gestureT > 0)) this.anim.play('idle');
       this.anim.speed = 1;
       this.anim.twist = 0;
     }
@@ -1970,11 +1974,22 @@ export class Fighter {
       this.notify('SEM ATAQUE À DISTÂNCIA');
       return;
     }
+    const intent = this.dirIntent();
+    // variante que é uma HABILIDADE do kit (□ + direção do Anfitrião): usa a habilidade (tem recarga própria);
+    // recarregando, sai o □ normal
+    let variant = base.variants && intent.kind !== 'neutral' ? base.variants[intent.kind] : null;
+    if (variant && variant.ability) {
+      const ab = (this.def.abilities || []).find((x) => x.id === variant.ability);
+      if (ab && !(this.cooldowns[ab.id] > 0)) {
+        this.useAbility(ab);
+        return;
+      }
+      variant = null;
+    }
     if (this.cooldowns.ranged > 0) {
       this.notify('RECARREGANDO');
       return;
     }
-    const intent = this.dirIntent();
     if (base.chargeShot) {
       this.startChargeShot(base);
       return;
@@ -1983,7 +1998,6 @@ export class Fighter {
       this.startBeam(base);
       return;
     }
-    const variant = base.variants && intent.kind !== 'neutral' ? base.variants[intent.kind] : null;
     let r = variant ? { ...base, ...variant } : base;
     if (!this.spendEnergy(r.energyCost || 0)) {
       this.notify('SEM SANIDADE');
@@ -2176,10 +2190,10 @@ export class Fighter {
     let r = r0;
     // estado temporário da arma (Rebirth do Arthur)
     // tiro do Caos (Anfitrião): o efeito é sorteado a cada disparo e a cor mostra qual saiu
-    if (r.chaos) {
-      const c = r.chaos[Math.floor(Math.random() * r.chaos.length)];
-      r = { ...r, ...c };
-      if (c.label) this.notify(c.label, true);
+    // (8 cores com raridade, histórico e combinações — combat/chaos.js)
+    if (r.chaosShot) {
+      r = rollChaosShot(this, r);
+      this.notify(r.chaosLabel, true);
     }
     const ws = this.buffs.find((b) => b.type === 'weaponState' && b.shots > 0);
     if (ws) {
@@ -2216,6 +2230,7 @@ export class Fighter {
       dir.normalize();
     }
     this.world.projectiles.spawn(this, r, origin, dir);
+    if (r.afterFire) r.afterFire(this, r, origin, dir);
     this.world.audio.play(r.sound);
     // Trinitá: um clone (só um, para não somar 4 vezes) repete o principal com metade do dano
     if (!r.echo && this.def.id === 'dante') {
@@ -2281,7 +2296,7 @@ export class Fighter {
       const parts = splitDamage(G.damage, [...beats.map(() => 0.2), 1 - beats.length * 0.2]);
       const col = self.def.energyColor ?? 0xffffff;
       w.beginCinematic(self, caught);
-      w.cameraRig.playShots([
+      w.cameraRig.playShots(sc.shots ? sc.shots(self, caught) : [
         twoShot(self, caught, { dur: 0.55, dist: 2.8, height: 1.5, push: 0.5, side: 1, lookH: 1.3 }),
         orbit(self, { dur: END - 0.55, radius: 3.0, height: 1.5, a0: 0.9, a1: 2.0, lookH: 1.2 }),
       ]);
@@ -2334,6 +2349,7 @@ export class Fighter {
               if (fin.bleed) caught.applyBleed(fin.bleed, self);
               if (fin.drain) caught.energy = Math.max(0, caught.energy - fin.drain);
               if (fin.slow) caught.addBuff({ type: 'grabSlow', name: 'LENTO', time: fin.slow.time, duration: fin.slow.time, speedMult: fin.slow.mult });
+              if (fin.invert) caught.addBuff({ type: 'chaosInvert', name: 'DESORIENTADO', time: fin.invert, duration: fin.invert, invertMove: true });
             }
             if (fin.heal) self.health = Math.min(self.maxHealth, self.health + fin.heal);
             w.cameraRig.shake(0.45, 0.28);
@@ -2637,7 +2653,7 @@ export class Fighter {
     }
   }
 
-  // free: desvio que não gasta esquiva nem recarga (Percepção Cronológica do Anfitrião)
+  // free: desvio que não gasta esquiva nem recarga (Percepção Anacrônica do Anfitrião)
   trySubstitution({ free = false, label = 'SUBSTITUIÇÃO!' } = {}) {
     const S = COMBAT.substitution;
     if (this.world.cinematic) return false;

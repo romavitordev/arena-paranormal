@@ -1,5 +1,31 @@
 # Registro administrativo de alterações
 
+## (em andamento, sem changelog dos jogadores) — UPD etapas 10-11: O Anfitrião e o sistema de caos
+
+- `combat/chaos.js` (novo): `pickChaos` com raridade (comum 60 · incomum 28 · raro 10 · muito raro 2), histórico de 3
+  por sorteio (sem repetir), `chaosBoost` (A Plateia deixa o raro mais provável), combinações só em pares permitidos;
+  `world.chaosLog[chave][id]` conta tudo (testes). Disparo do Caos de 8 cores (`rollChaosShot`: ROXO impacto, AZUL
+  lento, ROSA repulsão, AMARELO choque, VERDE troca, VERMELHO explosão, BRANCO duplicação, PRETO falha que volta de
+  outra direção) com ganchos novos nos projéteis (`hitFn`, `expireFn`, `afterFire`, `color2`). Eventos do caos (Botão,
+  roleta gigante, raros): raio, choque, empurrão, lento, explosão, troca, teleporte, controles invertidos, chicote,
+  ataque falso, clone, distorção, sumir, falha na realidade, tiro de outra direção, multidão, relógios, tempestade,
+  Jogo do Orfanato. `HostClone` (máx. 3, tempo limitado, explode no fim perto do alvo). Manias de ambiente
+  (`def.quirks` → `tickHostQuirks`; `Fighter.gestureT` segura o gesto parado).
+- `combat/hostAbilities.js` (novo): `chaosRule` (8 regras, castigo sorteado), `chaosWhip`, `hostDistortion` (pode
+  falhar), `hostTime`, `hostAudience`, `hostButton`, `orphanGame`, `hostClones`, `familyTradition`.
+- `□ + direção` pode soltar uma habilidade (`ranged.variants.X.ability`; recarregando, sai o □ normal); inputs
+  `ranged+forward/back/side` na HUD, lista de comandos e seleção.
+- `hostGame` refeito: apresentador → palco → roleta de 7 casas (textura em canvas) → resultado (RAIO, CHOQUE, CHICOTE,
+  TROCA, DISTORÇÃO, EXPLOSÃO, CLONES) → reverência; variações raras (risada, relógio, roleta falha e gira de novo,
+  reverência atrás do alvo, clone na reverência). Dano 200–300.
+- Agarrão: Visão Traumática (close na máscara via `scene.shots`, tela escura, −20 de sanidade, controles invertidos
+  1,8 s — `fin.invert`). Percepção Anacrônica: o desvio automático dá +20% de dano por 1,5 s.
+- CPU: usa o kit todo (inclusive □ + direção) e obedece às 8 regras. Sons novos: `whip`, `laugh`, `tick`, `button`,
+  `applause`. Clipes novos: `host_press`, `host_charge`, `host_cast`.
+- Testado no navegador: as 9 habilidades sem erro (voltam a `idle`, visível, sem NPC sobrando), □ + frente solta a
+  Chicotada, 300 tiros com as 8 cores e combinações, 40 eventos do Botão, 6 ultimates (237–267, sem cinemática presa,
+  variações sorteadas), agarrão com controles invertidos.
+
 ## v3.9.4 — Balu tanque
 
 - `balu.awakening` (Resistência à Dor): `takenMult` 0,8 → 0,55, `armorEvery` 3,5 → 1,5 com `armorMax: 2` (novo em

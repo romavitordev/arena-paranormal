@@ -45,13 +45,15 @@ export function applyHit(world, attacker, victim, o) {
     return 0;
   }
 
-  // PERCEPÇÃO CRONOLÓGICA (Anfitrião): ele já sabe o que vai acontecer — de tempos em tempos desvia sozinho de um golpe
+  // PERCEPÇÃO ANACRÔNICA (Anfitrião): ele já sabe o que vai acontecer — de tempos em tempos desvia sozinho de um golpe
   // (não vale contra especiais nem no meio de uma cena)
   if (!o.ignoreInvuln && o.kind !== 'special' && (victim.chronoCd || 0) <= 0 && hasPassive(victim, 'chronoSense')
     && ['idle', 'walk', 'run', 'charging', 'block', 'attack', 'ranged', 'hitstun'].includes(victim.state)) {
     const P = victim.def.passives.find((p) => p.type === 'chronoSense');
-    if (victim.trySubstitution({ free: true, label: 'PERCEPÇÃO CRONOLÓGICA!' })) {
+    if (victim.trySubstitution({ free: true, label: 'PERCEPÇÃO ANACRÔNICA!' })) {
       victim.chronoCd = P.cooldown ?? 15;
+      // ele já sabia: o próximo golpe dele (por pouco tempo) vem mais forte
+      if (!victim.findBuff('anachronic')) victim.addBuff({ type: 'anachronic', name: 'JÁ SABIA', time: P.window ?? 1.5, duration: P.window ?? 1.5, mult: P.mult ?? 1.2, affects: ['melee', 'ranged', 'ability'] });
       return 0;
     }
   }
