@@ -8,6 +8,7 @@ import { findSubstitutionSpot, resolveBody } from './positioning.js';
 import { startChargeFx } from './chargeFx.js';
 import { ABILITY_TYPES } from './abilities.js';
 import { SPECIALS } from './specials/index.js';
+import { telegraphFor, startTelegraph, updateTelegraph, stopTelegraph, telegraphMissed, TELEGRAPH } from './specials/telegraph.js';
 import { hasPassive } from './passives.js';
 import { ELEMENTS } from '../config/elements.js';
 import { SETTINGS } from '../config/settings.js';
@@ -93,6 +94,8 @@ export class Fighter {
     this.guardMoving = false;
     this.dodges = COMBAT.dodge.charges;
     this.dodgeDmgAcc = 0;
+    this.dodgeLockout = 0;
+    this.sacrificeWin = false;
     for (const k in this.cooldowns) this.cooldowns[k] = 0;
     this.carga = { stage: 0, timer: 0 };
     this.combo = { chain: -1, steps: 0, grace: 0, queued: null, strike: null, hits: [], windows: [] };
@@ -213,7 +216,8 @@ export class Fighter {
     // Barra de Transformação: enche com o dano recebido (só na forma base de quem transforma)
     if (this.def.awakening && !this.baseForm) this.storm = Math.min(100, this.storm + (dealt / this.maxHealth) * 100 * COMBAT.storm.fillPerHealth);
     // a barra de esquivas recupera conforme toma dano
-    this.dodgeDmgAcc += dealt;
+    // (zerou as esquivas há pouco: o dano não conta até passar COMBAT.dodge.emptyLockout)
+    if (this.dodgeLockout <= 0) this.dodgeDmgAcc += dealt;
     while (this.dodgeDmgAcc >= COMBAT.dodge.damagePerCharge) {
       this.dodgeDmgAcc -= COMBAT.dodge.damagePerCharge;
       if (this.dodges < COMBAT.dodge.charges) this.dodges++;
@@ -331,6 +335,7 @@ export class Fighter {
     this.carga.stage = 0;
     this.setState('stun');
     this.stunTime = time;
+    this.whiffRecovery = false;
     this.anim.play(anim, { restart: true, blend: 0.05 });
   }
 
@@ -527,6 +532,7 @@ export class Fighter {
     }
     this.stateTime += dt;
     if (this.invuln > 0) this.invuln -= dt;
+    if (this.dodgeLockout > 0) this.dodgeLockout -= dt;
     if (this.overcharge > 0 && this.state !== 'charging') this.overcharge = Math.max(0, this.overcharge - dt * COMBAT.storm.decay);
     updateForm(this, dt);
     if (this.message) {
@@ -626,7 +632,7 @@ export class Fighter {
         this.vel.x *= 0.85;
         this.vel.z *= 0.85;
         // atordoado também dá para sair com a Substituição (L2)
-        if (this.input.pressed.dodge && this.trySubstitution()) break;
+        if (!this.whiffRecovery && this.input.pressed.dodge && this.trySubstitution()) break;
         if (this.stateTime >= this.stunTime) this.setState('idle');
         break;
       case 'pulled': this.updatePulled(dt); break;
@@ -1426,6 +1432,7 @@ export class Fighter {
       dir = opp ? v1.subVectors(this.pos, opp.pos).setY(0) : forwardFromYaw(this.yaw, v1).negate();
     }
     dir.normalize();
+    this.lastEvadeAt = this.world.inputTime; // desvia de especiais avisados (specials/telegraph.js)
     this.dodge = { dir: dir.clone(), speed: d.distance / d.duration, duration: d.duration, cancelAfter: d.cancelAfter, threat: false, bullet: false };
     this.invuln = d.iframes;
     this.cooldowns.dodge = d.cooldown;
@@ -1481,11 +1488,22 @@ export class Fighter {
     if (d.threat) return;
     const opp = this.opponent;
     if (opp && ['attack', 'special', 'ability', 'dashing', 'ranged'].includes(opp.state) && distXZ(this.pos, opp.pos) < 3.6) d.threat = true;
+    // especial avisado mirando nela (sigilo no chão / mira) — esquivar dele gasta a carga
+    if (opp && opp.pendingSpecial && opp.pendingSpecial.tg) d.threat = true;
     for (const p of this.world.projectiles.list) {
       if (p.owner === this) continue;
       if (Math.hypot(p.pos.x - this.pos.x, p.pos.z - this.pos.z) < 1.8) { d.threat = true; d.bullet = true; break; }
     }
     if (!d.threat && this.world.npcs.some((n) => n.alive && n.owner !== this && n.state === 'attack' && distXZ(this.pos, n.pos) < 3)) d.threat = true;
+  }
+
+  // gasta cargas de esquiva; ao zerar, a recarga por dano fica travada por um tempo (e o que já tinha acumulado some)
+  spendDodges(n) {
+    this.dodges = Math.max(0, this.dodges - n);
+    if (this.dodges === 0) {
+      this.dodgeLockout = COMBAT.dodge.emptyLockout;
+      this.dodgeDmgAcc = 0;
+    }
   }
 
   // fim da esquiva: gasta 1 carga só se desviou de algo (Desviar de Balas do Gal: projétil não gasta)
@@ -1495,7 +1513,7 @@ export class Fighter {
     d.settled = true;
     if (!d.threat) return;
     if (d.bullet && hasPassive(this, 'bulletDodge')) { this.notify('DESVIOU!', true); return; }
-    this.dodges = Math.max(0, this.dodges - 1);
+    this.spendDodges(1);
   }
 
   // ------------------------------------------------ ataque físico
@@ -2351,12 +2369,39 @@ export class Fighter {
     if (opp) this.yaw = turnTowards(this.yaw, yawTo(this.pos, opp.pos), dt * 10);
     this.vel.x = 0;
     this.vel.z = 0;
-    if (p.t >= COMBAT.specialStartup.time) {
+    if (p.t < COMBAT.specialStartup.time) return;
+    // AVISO (especiais que acertam à distância): gesto + sigilo no alvo antes de conectar — dá para esquivar/defender
+    if (!p.tg) {
       p.aura.stop();
-      this.pendingSpecial = null;
-      this.setState('special');
-      this.seq = p.impl.start(this, p.sp, this.world);
+      const cfg = telegraphFor(p.impl, this, p.sp);
+      if (cfg) {
+        p.tg = startTelegraph(this, cfg);
+        return;
+      }
+    } else {
+      updateTelegraph(this, p.tg, dt);
+      if (p.tg.t < p.tg.cfg.time) return;
+      stopTelegraph(p.tg);
+      const miss = telegraphMissed(this, p.impl, p.sp);
+      if (miss) {
+        this.whiffSpecial(miss);
+        return;
+      }
     }
+    this.pendingSpecial = null;
+    this.setState('special');
+    this.seq = p.impl.start(this, p.sp, this.world);
+  }
+
+  // o especial avisado não conectou: quem usou fica parado e aberto (recarga e sanidade já gastas)
+  whiffSpecial(reason) {
+    const opp = this.opponent;
+    this.pendingSpecial = null;
+    this.notify('ERROU', true);
+    if (opp && reason === 'evaded') opp.notify('DESVIOU!', true);
+    this.world.fx.burst(this.chestPos(), { count: 18, color: 0x8a8090, kind: 'smoke', speed: 2, life: 0.5, size: 0.35 });
+    this.stun(TELEGRAPH.missRecovery, 'breath');
+    this.whiffRecovery = true; // errar o especial não se cancela com a Substituição
   }
 
   // golpe recebido durante o preparo: o especial é cancelado
@@ -2364,6 +2409,7 @@ export class Fighter {
     const p = this.pendingSpecial;
     if (!p) return;
     p.aura.stop();
+    stopTelegraph(p.tg);
     this.pendingSpecial = null;
     this.cooldowns.special = Math.min(this.cooldowns.special, COMBAT.specialStartup.interruptedCooldown);
     this.notify('ESPECIAL INTERROMPIDO!', true);
@@ -2467,8 +2513,9 @@ export class Fighter {
       attackerRadius: opp.radius,
       side: Math.abs(lateral) > 0.3 ? Math.sign(lateral) : 0,
     });
-    this.dodges -= S.charges;
+    this.spendDodges(S.charges);
     this.cooldowns.substitution = S.cooldown;
+    this.lastEvadeAt = this.world.inputTime;
     this.buffered = null; // o L2 da substituição não vira uma esquiva logo depois
     const col = ELEMENTS[this.def.element] ? new THREE.Color(ELEMENTS[this.def.element].color).getHex() : this.def.energyColor;
     const from = this.chestPos();

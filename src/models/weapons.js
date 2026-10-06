@@ -900,3 +900,36 @@ export function demonMace() {
   g.add(glow);
   return g;
 }
+
+// Máscara de gás tecnológica (a da Produção do Anfitrião que a Erin adaptou e passou a usar no lugar dos óculos):
+// borracha escura cobrindo o rosto, duas lentes redondas que brilham e o filtro na frente da boca.
+// Presa no socket `mouth` (frente do rosto, eixo +z para fora).
+export function gasMask(glow = 0x7aff9a) {
+  const g = new THREE.Group();
+  const face = part(new THREE.SphereGeometry(0.13, 14, 10, 0, Math.PI * 2, 0, Math.PI * 0.62), 0x1c1e1a);
+  face.rotation.x = Math.PI / 2;
+  face.scale.set(1, 0.75, 1.05);
+  face.position.set(0, 0.02, -0.1);
+  g.add(face);
+  for (const s of [-1, 1]) {
+    const rim = part(new THREE.TorusGeometry(0.038, 0.012, 6, 14), 0x5a5a52);
+    rim.position.set(0.05 * s, 0.075, 0.015);
+    g.add(rim);
+    const lens = new THREE.Mesh(new THREE.CircleGeometry(0.034, 14), glowMat(glow, 0.85));
+    lens.position.set(0.05 * s, 0.075, 0.02);
+    g.add(lens);
+  }
+  const filter = part(new THREE.CylinderGeometry(0.045, 0.05, 0.08, 12), 0x3a3d34);
+  filter.rotation.x = Math.PI / 2;
+  filter.position.set(0, -0.015, 0.045);
+  g.add(filter);
+  const cap = part(new THREE.CylinderGeometry(0.052, 0.052, 0.015, 12), 0x8a6a2a);
+  cap.rotation.x = Math.PI / 2;
+  cap.position.set(0, -0.015, 0.088);
+  g.add(cap);
+  const strap = part(new THREE.TorusGeometry(0.12, 0.012, 5, 18), 0x24261f);
+  strap.rotation.y = Math.PI / 2;
+  strap.position.set(0, 0.05, -0.12);
+  g.add(strap);
+  return g;
+}

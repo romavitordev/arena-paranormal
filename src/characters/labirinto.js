@@ -1,7 +1,8 @@
 // LABIRINTO (id: labirinto) — Mascarados (Hexatombe). O ocultista e assassino obcecado por labirintos que
 // reuniu os Assassinos; em Hexatombe, o corpo do agente Remi. Luta com "A Antena" (parabólica presa num cabo
-// de ferro, usada como lança e para disparar rituais). Rituais: Rajada Caótica, Labirinto Mental,
-// Consumir Momento; com o Capacete do ??? eles viram Tempestade Caótica, Labirinto Abissal e ficam maiores.
+// de ferro, usada como lança e para disparar rituais). Rituais (cânone): Rajada Caótica, Labirinto Mental, Mapa
+// Sanguíneo e Capturar Momento. O CAPACETE DO ??? só aparece na Transformação (forms/labirinto_elmo.js) e troca tudo:
+// Tempestade Caótica, Labirinto Abissal, Consumir Momento e Revelação Sanguínea.
 export default {
   id: 'labirinto',
   name: 'LABIRINTO',
@@ -13,7 +14,7 @@ export default {
   info: {
     weapon: 'A Antena (lança com parabólica)',
     style: 'Alcance longo com a Antena, rituais à distância e armadilhas de área',
-    identity: 'Controla o espaço: perde o inimigo num labirinto e consome o chão onde ele pisa',
+    identity: 'Controla o espaço com rituais à distância — e vira o ??? quando põe o capacete',
     tagline: 'O que espera no final do labirinto... é você.',
   },
   stats: { moveSpeed: 7.7, attackSpeed: 1.08 },
@@ -70,7 +71,7 @@ export default {
       name: 'Labirinto Mental',
       input: 'carga+ranged', // △ + □ / Y + X
       type: 'mentalMaze',
-      description: 'Prende a mente do alvo num labirinto: por alguns segundos ele anda numa direção que muda sozinha. Com o capacete vira Labirinto Abissal (dura mais).',
+      description: 'Prende a mente do alvo num labirinto: por alguns segundos ele anda numa direção que muda sozinha. Com o capacete vira Labirinto Abissal.',
       energyCost: 30,
       cooldown: 18,
       windup: 0.45,
@@ -82,48 +83,29 @@ export default {
       color: 0x9a6aff,
     },
     {
-      id: 'consumirMomento',
-      name: 'Consumir Momento',
+      id: 'mapaSanguineo',
+      name: 'Mapa Sanguíneo',
       input: 'carga+physical', // △ + ○ / Y + B
-      type: 'consumeMoment',
-      description: 'Marca o chão onde o alvo pisa com uma espiral; ao estalar os dedos ela estoura e destrói a área (Morte). Dá para sair de cima se perceber a marca. Com o capacete, a área e o dano crescem.',
-      energyCost: 30,
-      cooldown: 12,
-      radius: 2.3,
-      damage: 70,
-      delay: 1.1,
-      color: 0xa7a3ad,
+      type: 'predatorScent',
+      description: 'Desenha um mapa com gotas de sangue que mostra onde a vítima está: por alguns segundos ele a rastreia, anda mais rápido e os ataques contra ela ficam mais fortes. Com o capacete vira Revelação Sanguínea.',
+      energyCost: 20,
+      cooldown: 20,
+      duration: 7,
+      damageMult: 1.12,
+      speedMult: 1.06,
+      color: 0xb0101c,
     },
     {
-      id: 'capacete',
-      name: 'Capacete do ???',
-      input: 'block+carga', // R2 + △ / RT + Y
-      type: 'helmetForm',
-      description: 'Põe o elmo do sorriso: por alguns segundos os rituais e a Rajada ficam mais fortes (Tempestade Caótica), o Labirinto Mental vira Abissal e o Consumir Momento cresce.',
-      energyCost: 35,
-      cooldown: 30,
-      duration: 12,
-      damageMult: 1.3,
-      color: 0xd8c8a8,
-    },
-    {
-      id: 'tempestadeCaotica',
-      name: 'Tempestade Caótica',
+      id: 'capturarMomento',
+      name: 'Capturar Momento',
       input: 'carga+dodge', // △ + L2 / Y + LT
-      type: 'chaosStorm',
-      description: 'A parabólica chama uma tempestade em cima do alvo: um círculo avisa a área e oito raios caóticos caem nela por 2 s — metade mira onde o alvo está. Saia de baixo!',
-      energyCost: 30,
-      cooldown: 15,
-      anim: 'point',
-      windup: 0.35,
-      range: 18,
-      radius: 3.2,
-      warn: 0.55,
-      duration: 2,
-      bolts: 8,
-      boltRadius: 0.9,
-      damage: 20,
-      element: 'energia',
+      type: 'blessing',
+      description: 'Marca o lugar com um símbolo que capta imagens e sons: ele vê o que vem — recupera 2 esquivas e fica mais atento por alguns segundos.',
+      energyCost: 25,
+      cooldown: 22,
+      duration: 6,
+      damageMult: 1.05,
+      dodges: 2,
       color: 0x9a6aff,
     },
   ],
@@ -139,12 +121,19 @@ export default {
     color: 0x9a6aff,
   },
 
-  // DESPERTAR (Barra de Transformação cheia + vida baixa, segurando △) — cânone: Consumir Momento — prende o instante e o usa: os rituais voltam muito mais rápido. Até o fim do round.
+  // TRANSFORMAÇÃO (Barra de Transformação cheia + vida baixa, segurando △): para os Mascarados a máscara é a Intenção
+  // de Assassino despertando — o Labirinto põe o CAPACETE DO ??? (o elmo do sorriso) e os rituais viram as versões do
+  // capacete (cânone): Tempestade Caótica, Labirinto Abissal, Consumir Momento e Revelação Sanguínea. Até o fim do round.
   awakening: {
-    name: 'Consumir Momento',
-    banner: 'Consumir Momento',
-    type: 'awakenMode',
-    mult: 1.1, cdRate: 1.4, energyRegenMult: 1.5, aura: 'flame', color: 0x9a6aff, heal: 0.1,
+    name: 'Capacete do ???',
+    banner: 'Capacete do ???',
+    type: 'maskTransform',
+    form: 'labirinto_elmo',
+    formBanner: '???',
+    prop: 'helmetOn',
+    duration: 0, // até o fim do round
+    bonusHealth: 80,
+    color: 0xd8c8a8,
   },
 
   passives: [

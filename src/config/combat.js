@@ -71,6 +71,7 @@ export const COMBAT = {
     cancelAfter: 0.45, // fração da esquiva a partir da qual pode contra-atacar
     charges: 4, // barra de esquivas
     damagePerCharge: 70, // a cada 70 de dano recebido recupera 1 esquiva
+    emptyLockout: 3, // gastou TODAS: por esse tempo (s) o dano recebido não conta para recarregar
   },
   // ---- Dashes ----
   // A/× + A/× (toque duplo no pulo) = dash curto para frente

@@ -13,7 +13,10 @@ import { ghostBands } from './ghostBands.js';
 import { spiralSnipe } from './spiralSnipe.js';
 import { awakenMode } from './awakenMode.js';
 import { ageGrab } from './ageGrab.js';
+import { maskTransform } from './maskTransform.js';
+import { kamikaze } from './kamikaze.js';
 
 // Tipos de especial disponíveis. Cada personagem escolhe um em `special.type`.
 // Para criar um tipo novo: { canStart(f, sp, world), start(f, sp, world) → {update(dt)→done, cancel()} }
-export const SPECIALS = { mistField, cinematicCombo, teleportStrike, ritual, erase, marionette, supernova, abyssMaze, santoPact, devilPact, devilDeal, ghostBands, spiralSnipe, awakenMode, ageGrab };
+// Se acerta à distância sem projétil, defina também telegraph(f, sp) → aviso antes de conectar (ver telegraph.js).
+export const SPECIALS = { mistField, cinematicCombo, teleportStrike, ritual, erase, marionette, supernova, abyssMaze, santoPact, devilPact, devilDeal, ghostBands, spiralSnipe, awakenMode, ageGrab, maskTransform, kamikaze };

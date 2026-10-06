@@ -30,5 +30,8 @@ Atualizar: `npm run lore` (tudo) ou `npm run lore -- Dante` (só um nome). Para 
 | **Juan (Henri)** | Escriptas | Sangue | 6 rituais de Sangue |
 | **Rana** | Escriptas | Energia | leques — o Leque da Fatalidade (Velocidade Mortal) ficou com a Ordem depois da morte dela |
 
+**Próximos (2026-10-06):** **Arnaldo Fritz** (transforma em **O Anfitrião** com a Relíquia de Energia do relógio de
+bolso) e **Senhor Veríssimo** (usa a espada do Arnaldo) — pesquisa e propostas de kit em `TODO.md`.
+
 Quem tem poucos dados na wiki (Aaron, Tirigan, Dagan, Hugo, Cassiano, Tim...) precisa de mais pesquisa ou de
 decisões do usuário antes de virar lutador.

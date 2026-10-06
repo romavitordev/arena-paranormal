@@ -12,6 +12,8 @@ import { trySpecialBlock } from './common.js';
 // Mecanicamente igual aos outros especiais: dano configurável (padrão),
 // respeita a vida, NÃO é hitkill.
 export const teleportStrike = {
+  // aviso: postura do saque (iai) com a sombra marcando o alvo
+  telegraph: () => ({ time: 0.7, anim: 'iai_ready', animDuration: 0.6, mark: 'sigil' }),
   canStart(f, sp, world) {
     const opp = f.opponent;
     if (!opp || opp.state === 'ko' || !opp.visible) return false;

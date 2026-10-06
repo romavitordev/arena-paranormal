@@ -12,6 +12,8 @@ import { faceClose, twoShot, orbit, pullBack } from '../../camera/shots.js';
 const BODY = ['hd', 'sp', 'sL', 'sR', 'eL', 'eR', 'lL', 'lR', 'kL', 'kR', 'sp', 'hd'];
 
 export const ritual = {
+  // aviso: ergue o braço e o sigilo de Sangue pulsa no chão do alvo
+  telegraph: () => ({ time: 0.85, anim: 'cast_up', animDuration: 0.85, mark: 'sigil' }),
   canStart(f, sp) {
     const opp = f.opponent;
     return !!opp && opp.state !== 'ko' && opp.visible && distXZ(f.pos, opp.pos) <= (sp.range ?? 20);

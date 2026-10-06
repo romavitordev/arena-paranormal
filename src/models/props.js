@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { glowMat } from './rig.js';
-import { m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace } from './weapons.js';
+import { m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask } from './weapons.js';
 export { addJouiProps } from './characters/joui.js';
 
 // Armas e acessórios adicionados em código sobre os modelos do Blender.
@@ -293,4 +293,26 @@ export function addKemiProps(rig) {
 
 export function addFantasmaProps(rig) {
   kemiProps(rig, true);
+}
+
+// ERIN — forma "Em Nome do Caos": a máscara de gás da Produção do Anfitrião no rosto (lentes verdes)
+export function addErinCaosProps(rig) {
+  addErinProps(rig);
+  const mask = gasMask(0x7aff9a);
+  const H = rig.sockets.mouth;
+  mask.position.set(0, -0.03, -0.02);
+  H.add(mask);
+  rig.props.gasMask = mask;
+}
+
+// LABIRINTO — forma do Capacete do ???: o elmo do sorriso fica no rosto o tempo todo
+export function addLabirintoElmoProps(rig) {
+  addLabirintoProps(rig);
+  if (rig.props.helmetOn) rig.showProp('helmetOn', true);
+}
+
+// AGUIAR — forma do Mutilador Noturno: a máscara branca da mão vermelha fica no rosto o tempo todo
+export function addAguiarMutiladorProps(rig) {
+  addAguiarProps(rig);
+  if (rig.props.maskOn) rig.showProp('maskOn', true);
 }

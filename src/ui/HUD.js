@@ -177,6 +177,7 @@ export class HUD {
         });
       }
       e.dodgePips.forEach((pip, k) => pip.classList.toggle('on', f.dodges > k));
+      e.dodgePips[0].parentNode.classList.toggle('locked', f.dodgeLockout > 0);
 
       // Carga de Poder: etapas da sequência
       const st = f.carga.stage;

@@ -11,6 +11,8 @@ import { faceClose, overShoulder, pullBack } from '../../camera/shots.js';
 // (vida ≤ sp.executeBelow), a espiral termina o serviço (sp.executeMult).
 // sp.path 'straight' (Kemi, Disparo da Morte): o tempo desacelera e a bala vai RETA, devagar, com a espiral em volta.
 export const spiralSnipe = {
+  // aviso: ajoelha e a mira brilha no alvo
+  telegraph: () => ({ time: 0.8, anim: 'sniper_kneel', animDuration: 0.5, mark: 'laser' }),
   canStart(f, sp) {
     const opp = f.opponent;
     return !!opp && opp.state !== 'ko' && opp.visible && distXZ(f.pos, opp.pos) <= (sp.range ?? 40);

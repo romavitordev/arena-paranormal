@@ -1,7 +1,7 @@
 // AGUIAR / MUTILADOR NOTURNO (id: aguiar) — Mascarados (Natal Macabro / Hexatombe).
 // Delegado Jonas Aguiar, o assassino em série do Acampamento Lua da Benquerença. Combatente:
 // machado de lâmina vermelha (sangramento severo) arremessado na corda para puxar a vítima,
-// armadilhas de urso e a máscara branca com a mão vermelha que desperta o Mutilador Noturno.
+// armadilhas de urso. A máscara branca com a mão vermelha (o Mutilador Noturno) só aparece na Transformação.
 export default {
   id: 'aguiar',
   name: 'AGUIAR',
@@ -13,7 +13,7 @@ export default {
   info: {
     weapon: 'Machado do Mutilador (com corda para arremessar e puxar)',
     style: 'Machadadas pesadas que fazem sangrar, armadilhas e caça ao alvo',
-    identity: 'Caçador paciente: prende, marca e mutila — e vira o Mutilador quando põe a máscara',
+    identity: 'Caçador paciente: prende, marca e mutila — e vira o Mutilador Noturno quando põe a máscara (Transformação)',
     tagline: 'A próxima rodada sou eu.',
   },
   stats: { moveSpeed: 7.4, maxHealth: 1150 }, // pesado: aguenta os rápidos pela vida (1200 deu 71%, 1100 deu 36%)
@@ -70,20 +70,25 @@ export default {
 
   abilities: [
     {
-      id: 'mascara',
-      name: 'Máscara do Mutilador Noturno',
+      id: 'ataqueEspecial',
+      name: 'Ataque Especial',
       input: 'carga+physical', // △ + ○ / Y + B
-      type: 'maskForm',
-      description: 'Põe a máscara branca da mão vermelha: a intenção assassina toma conta — bate mais forte, anda mais rápido, aguenta 3 golpes sem reagir e todo golpe do machado (corpo a corpo ou na corda) faz sangrar enquanto estiver mascarado. Mas não consegue mais defender.',
-      energyCost: 35,
-      cooldown: 30,
-      duration: 10,
-      damageMult: 1.25,
-      speedMult: 1.12,
-      armor: 3,
-      noBlock: true,
-      bleed: { dps: 4, duration: 2.5 },
-      color: 0xd01020,
+      type: 'heavyBlow',
+      description: 'Concentra a força num golpe só: ergue o machado e crava por cima com tudo — gasta muito da defesa e derruba. Preparação longa (aguenta um golpe pequeno depois de firmar os pés); errar deixa ele aberto.',
+      energyCost: 30,
+      cooldown: 12,
+      anim: 'slash_v',
+      duration: 1.2,
+      armorFrom: 0.3,
+      impact: 0.72,
+      step: 5,
+      range: 2.2,
+      arc: 90,
+      damage: 90,
+      knockback: 4,
+      guardCrush: 60,
+      whiffRecovery: 0.5,
+      ai: { when: 'opening', max: 2.5 },
     },
     {
       id: 'armadilha',
@@ -129,17 +134,17 @@ export default {
     },
   ],
 
-  // Especial: põe a máscara e finaliza a vítima a machadadas
+  // Especial (sem a máscara — ela é só da Transformação): o delegado caça e finaliza a vítima a machadadas
   special: {
-    name: 'Finalização do Mutilador',
-    banner: 'Mutilador Noturno!',
+    name: 'Caçada no Acampamento',
+    banner: 'A próxima rodada sou eu.',
     type: 'cinematicCombo',
     energyCost: 50,
     cooldown: 14,
     // damage: omitido → COMBAT.specialDamage (250)
     color: 0xd01020,
-    sound: 'maskOn',
-    prepare: { anim: 'concentrate', time: 0.8, showProp: 'maskOn', keepIfBuff: 'mask' },
+    sound: 'axeHit',
+    prepare: { anim: 'concentrate', time: 0.8 },
     dash: { speed: 18, maxTime: 0.5, contact: 1.9 },
     hits: [
       { t: 0.95, anim: 'slash_d', dur: 0.36, share: 0.15, fx: { kind: 'slash', roll: 0.9 }, sound: 'axeHit' },
@@ -152,12 +157,19 @@ export default {
     length: 3.4,
   },
 
-  // DESPERTAR (Barra de Transformação cheia + vida baixa, segurando △) — cânone: Predador Perfeito — o Mutilador Noturno caçando: todo golpe do machado sangra. Até o fim do round.
+  // TRANSFORMAÇÃO (Barra de Transformação cheia + vida baixa, segurando △): para os Mascarados a máscara é a Intenção de
+  // Assassino despertando — ele põe a máscara branca da mão vermelha e vira o MUTILADOR NOTURNO até o fim do round
+  // (forms/aguiar_mutilador.js): Ataque Mutilador, Predador Perfeito e todo golpe do machado sangra.
   awakening: {
-    name: 'Predador Perfeito',
-    banner: 'Predador Perfeito',
-    type: 'awakenMode',
-    mult: 1.15, speedMult: 1.1, meleeBleed: { dps: 4, duration: 2.5 }, aura: 'blood', color: 0xc01818, heal: 0.1,
+    name: 'Máscara do Mutilador Noturno',
+    banner: 'Máscara do Mutilador Noturno',
+    type: 'maskTransform',
+    form: 'aguiar_mutilador',
+    formBanner: 'Mutilador Noturno',
+    prop: 'maskOn',
+    duration: 0, // até o fim do round
+    bonusHealth: 100,
+    color: 0xd01020,
   },
 
   passives: [
