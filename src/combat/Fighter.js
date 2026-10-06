@@ -244,10 +244,20 @@ export class Fighter {
   }
 
   addEnergy(n) {
+    // SEM SANIDADE (Erin, Em Nome do Caos): a barra fica zerada e travada
+    if (hasPassive(this, 'noSanity')) { this.energy = 0; return; }
     this.energy = clamp(this.energy + n, 0, this.maxEnergy);
   }
 
   spendEnergy(n) {
+    // sem sanidade, tudo que gastaria sanidade sai da vida (bloodPrice)
+    if (n > 0 && hasPassive(this, 'noSanity')) {
+      const P = (this.def.passives || []).find((p) => p.type === 'bloodPrice');
+      const hp = Math.ceil(n * (P?.hpPerPoint ?? 1));
+      if (this.health - hp < this.maxHealth * (P?.minHealth ?? 0.05)) { this.notify('SEM VIDA PARA PAGAR'); return false; }
+      this.health -= hp;
+      return true;
+    }
     if (this.energy < n) return false;
     this.energy -= n;
     return true;
@@ -563,6 +573,7 @@ export class Fighter {
       }
     }
     // energia
+    if (hasPassive(this, 'noSanity')) this.energy = 0; // Em Nome do Caos: nada repõe a sanidade
     if (this.state !== 'ko' && this.state !== 'special' && !this.buffs.some((b) => b.noRegen)) {
       let enMult = 1;
       for (const b of this.buffs) if (b.energyRegenMult) enMult *= b.energyRegenMult;

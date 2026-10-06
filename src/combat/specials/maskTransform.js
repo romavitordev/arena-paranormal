@@ -24,6 +24,8 @@ const RED = 0xff1a1a;
 function carryProp(prop) {
   if (!prop) return null;
   const parts = prop.parts || [prop];
+  // malha presa ao esqueleto (ex.: a máscara do Aguiar) não sai do rosto: ela só aparece quando a mão chega lá
+  if (parts.some((m) => m.isSkinnedMesh)) return null;
   const rest = parts.map((m) => m.position.clone());
   const tmp = new THREE.Vector3();
   return {
@@ -52,6 +54,7 @@ export const maskTransform = {
     f.vel.set(0, 0, 0);
     const head = () => f.rig.joints.hd.getWorldPosition(new THREE.Vector3()).add(new THREE.Vector3(0, 0.1, 0));
     const fwd = forwardFromYaw(f.yaw, new THREE.Vector3());
+    const hy = head().y - f.pos.y; // altura do rosto deste personagem (os planos de câmera usam ela)
     const prop = sp.prop ? f.rig.props[sp.prop] : null;
     const carry = scene ? carryProp(prop) : null;
     const offset = new THREE.Vector3();
@@ -87,9 +90,9 @@ export const maskTransform = {
       if (prop) f.rig.showProp(sp.prop, true);
       offset.copy(fwd).multiplyScalar(0.45).add(new THREE.Vector3(0, -0.55, 0));
       world.cameraRig.playShots([
-        faceClose(f, { dur: 1.3, from: 2.0, to: 1.5, side: 0.5, height: 1.2 }),
-        lowAngle(f, { dur: 0.9, dist: 2.2, side: -0.4 }),
-        faceClose(f, { dur: 1.0, from: 1.6, to: 1.1, side: 0.1 }),
+        faceClose(f, { dur: 1.3, from: 2.9, to: 2.4, side: 0.7, height: hy - 0.3 }),
+        lowAngle(f, { dur: 0.9, dist: 3.0, side: -0.6 }),
+        faceClose(f, { dur: 1.0, from: 2.2, to: 1.6, side: 0.2, height: hy - 0.05 }),
       ]);
       tl.add(0.3, () => world.showBanner(sp.banner || sp.name, f.def.color));
       tl.add(1.1, () => { world.screenFlash && world.screenFlash('#300000', 0.15); world.fx.distort(f.chestPos(), { color: RED, radius: 1.8, life: 0.25 }); });
@@ -103,23 +106,26 @@ export const maskTransform = {
     } else if (scene === 'mutilador') {
       // 1) close no olho no escuro · 2) agacha baixo com o machado na corda esticado de lado · 3) a mão leva a máscara
       // branca ao rosto · 4) tudo fica vermelho
-      f.anim.play('mutilador_mask', { restart: true, duration: 1.1 });
+      f.anim.play('mutilador_mask', { restart: true, duration: 1.6 }); // a mão chega ao rosto junto com a máscara (1,5 s)
       offset.copy(fwd).multiplyScalar(0.4).add(new THREE.Vector3(0, -0.35, 0));
       lightTo = 2;
       world.cameraRig.playShots([
-        faceClose(f, { dur: 0.7, from: 0.9, to: 0.7, side: 0.15, height: 1.0, fov: 30 }),
-        lowAngle(f, { dur: 1.2, dist: 2.6, side: 1.1 }),
-        faceClose(f, { dur: 1.0, from: 1.5, to: 1.1, side: -0.3, height: 0.9 }),
+        faceClose(f, { dur: 0.7, from: 1.5, to: 1.25, side: 0.2, height: hy - 0.35, fov: 32 }), // ele já está abaixando
+        lowAngle(f, { dur: 1.2, dist: 3.2, side: 1.3 }),
+        faceClose(f, { dur: 1.0, from: 2.0, to: 1.5, side: -0.4, height: hy - 0.45 }),
       ]);
       tl.add(0.25, () => world.showBanner(sp.banner || sp.name, f.def.color));
-      tl.add(0.75, () => { if (prop) f.rig.showProp(sp.prop, true); moveProp(new THREE.Vector3(), 0.7); lightTo = 5; });
+      tl.add(0.75, () => {
+        lightTo = 5;
+        if (carry) { f.rig.showProp(sp.prop, true); moveProp(new THREE.Vector3(), 0.7); }
+      });
       tl.add(1.5, () => maskOn(true));
       total = 2.6;
     } else {
       f.anim.play(sp.anim || 'concentrate', { restart: true, duration: 1.5 });
       world.cameraRig.playShots([
         orbit(f, { dur: 0.8, radius: 3.4, height: 1.3, a0: -0.6, a1: 0.1, lookH: 1.1 }),
-        faceClose(f, { dur: 0.9, from: 1.7, to: 1.0, side: 0.2 }),
+        faceClose(f, { dur: 0.9, from: 1.9, to: 1.3, side: 0.2, height: hy }),
       ]);
       world.audio.play(sp.startSound || 'fearGaze', { volume: 0.6, pitch: 0.6 });
       tl.add(0.3, () => world.showBanner(sp.banner || sp.name, f.def.color));

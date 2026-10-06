@@ -1,14 +1,15 @@
 // ERIN — EM NOME DO CAOS. Não aparece na seleção: a Erin vira esta forma na Transformação (Barra cheia + vida baixa,
 // segurando △) e fica assim até o fim do round. A Erin é da Ordo Realitas (NÃO é Mascarada): a máscara dela é a
 // máscara de gás tecnológica de um membro da Produção do Anfitrião, que ela arrancou, adaptou e passou a usar em
-// combate no lugar dos óculos. Aqui ela enlouquece de vez: o fascínio por explosões vira devoção ao Caos — golpes
-// mais rápidos e explosivos, granadas mais fortes, nada de cura. Especial: EM NOME DO CAOS (cânone: ferida de morte
+// combate no lugar dos óculos. Aqui ela enlouquece de vez: o fascínio por explosões vira devoção ao Caos — SEM
+// SANIDADE (a barra fica zerada e travada; tudo que gastaria sanidade sai da VIDA), golpes mais rápidos e bem mais
+// fortes, granadas mais fortes, nada de cura. Especial: EM NOME DO CAOS (cânone: ferida de morte
 // no Dia Final de Desconjuração, ativou três granadas e se explodiu "em nome do Caos") — corre até o adversário e se
 // explode: dano enorme, mas ela morre. Se levar o adversário junto, ganha o round; se ele sobreviver, ela perde.
 import base from '../erin.js';
 
 const CHAOS = 0x7aff9a;
-const frenzy = (s, name) => ({ ...s, ...(name ? { name } : {}), damage: Math.round(s.damage * 1.2), dur: +(s.dur * 0.9).toFixed(3), trail: s.trail ? { ...s.trail, color: 0xff5a1a } : s.trail });
+const frenzy = (s, name) => ({ ...s, ...(name ? { name } : {}), damage: Math.round(s.damage * 1.35), dur: +(s.dur * 0.9).toFixed(3), trail: s.trail ? { ...s.trail, color: 0xff5a1a } : s.trail });
 const M = base.melee;
 const ab = (id) => base.abilities.find((a) => a.id === id);
 
@@ -48,14 +49,14 @@ export default {
   },
 
   // □: escopeta à queima-roupa, mais forte e mais rápida
-  ranged: { ...base.ranged, damage: 13, count: 7, cooldown: 1.5, knockback: 3 },
+  ranged: { ...base.ranged, damage: 14, count: 7, cooldown: 1.5, knockback: 3 },
 
   abilities: [
     {
       ...ab('supernova'),
       description: 'A Supernova do Caos: explosão maior e mais forte, joga o alvo para cima.',
       cooldown: 6,
-      projectile: { ...ab('supernova').projectile, explode: { ...ab('supernova').projectile.explode, radius: 3.2, damage: 95 } },
+      projectile: { ...ab('supernova').projectile, explode: { ...ab('supernova').projectile.explode, radius: 3.2, damage: 115 } },
     },
     {
       ...ab('nebulosa'),
@@ -80,7 +81,7 @@ export default {
     name: 'Em Nome do Caos',
     banner: 'Em nome do Caos!',
     type: 'kamikaze',
-    energyCost: 50,
+    energyCost: 0, // sem sanidade: o preço é a própria vida
     cooldown: 14,
     damage: 450,
     radius: 3.4,
@@ -95,6 +96,8 @@ export default {
   awakening: undefined,
 
   passives: [
+    { type: 'noSanity' }, // Sem Sanidade: a barra fica zerada e travada
+    { type: 'bloodPrice', hpPerPoint: 1, minHealth: 0.03 }, // ...e cada ritual, granada ou dash longo custa VIDA
     { type: 'electricAmulet', damage: 8, color: 0x5ae8ff }, // Amuleto Elétrico mais forte
   ],
 };

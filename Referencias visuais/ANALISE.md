@@ -157,3 +157,20 @@ Feita em 2026-09-30 sobre as 36 imagens desta pasta. Nenhuma alteração no jogo
 8. **Orfanato:** confirmar o nome (Santa Mega-Freira × "Menefreda" dos arquivos) e se é dia nublado ou entardecer com neblina.
 9. **Bar:** luta só dentro, ou dentro + varanda/esquina?
 10. **Coliseu:** em ruínas ou intacto? Com plateia? Dia ensolarado ou entardecer?
+
+---
+
+## TRANSFORMAÇÕES DOS MASCARADOS (GIFs do usuário, 2026-10-06)
+
+Os GIFs ficam na máquina do usuário em `mascarados ref anm/` (e na branch `refs-gifs` do GitHub, só como
+referência — não entram na `main`). Em todos, quando a máscara encaixa a cena **fica vermelha** (luz vermelha forte,
+um quadro de "glitch"/clarão) e o assassino fica com um **contorno vermelho em chamas** em volta, respirando parado.
+
+| GIF | Duração | Sequência | No jogo |
+|---|---|---|---|
+| **labirinto colocando mascara** | 13,8 s | segura o capacete sorridente (boca cheia de dentes) no peito, olhando por cima do ombro → clarão/contorno → ergue o capacete acima da cabeça com as duas mãos e desce encaixando → capacete no rosto, papéis pendurados, aura vermelha | `maskTransform` cena `helmet` (clipes `mask_hold` → `mask_lift`, o elmo viaja das mãos à cabeça) |
+| **aguiar colocando mascara** | 4,6 s | close no olho no escuro → agachado bem baixo, o machado na corda esticado para o lado → a mão esquerda leva a máscara branca ao rosto → fundo todo vermelho, pose agachada mascarada | `maskTransform` cena `mutilador` (clipe `mutilador_mask`; a máscara é presa ao esqueleto, então aparece quando a mão chega ao rosto) |
+| **kemi colocandoi a mascara** | 12,9 s | parada, faixas soltas flutuando em volta dos braços → as faixas chicoteiam, close na mão com rastros vermelhos → a Fantasma: rosto enrolado nas faixas, sobretudo, um braço aberto para o lado, faixas/rastros vermelhos | `ghostBands` (anéis nos braços → chicoteiam com rastro vermelho → faixas sobem pelo corpo → clipe `bands_spread`) |
+| **henri ativandio armadura de sangue** | 5,0 s | encapuzado de pé, fundo vermelho → o sangue explode do ombro em espinhos que se espalham → endurece numa armadura espinhosa de um lado do corpo | Juan: `heavyProtection` com `bloodArmor` dispara `bloodEruption` (espinhos do ombro esquerdo) antes da casca |
+| **jae colocando mascara** | 5,6 s | (Park Jae-Yoon — ainda não está no jogo) noite roxa na floresta, jaqueta listrada vermelha → puxa o capuz pela cabeça → sorriso largo → fundo vermelho, capuz com um **X vermelho** no rosto, contorno vermelho | futuro lutador (ver TODO) |
+| **dalmo colocando mascara** | 10,9 s | (Dalmo Magno — ainda não está no jogo) enorme, de armadura/couro com espinhos, luz vermelha → põe o elmo com as duas mãos → explosão vermelha → elmo redondo com **um olho vermelho**, aura vermelha em chamas | futuro lutador (ver TODO) |

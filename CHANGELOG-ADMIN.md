@@ -1,5 +1,19 @@
 # Registro administrativo de alterações
 
+## v3.8.0 — Máscaras como nas referências
+
+- Referências: GIFs do usuário (branch `refs-gifs`, `mascarados ref anm/`), análise em `Referencias visuais/ANALISE.md`.
+- `maskTransform`: cenas `helmet` (Labirinto) e `mutilador` (Aguiar) com planos pela altura real do rosto, `PointLight`
+  que vai da cor do poder ao vermelho, clarão vermelho e buff `killerIntent` (aura vermelha até o fim do round).
+  `carryProp` leva o acessório das mãos à cabeça (malha presa ao esqueleto não é movida — a do Aguiar só aparece).
+  `labirinto` expõe `props.helmetOn.parts`. Clipes novos: `mask_hold`, `mask_lift`, `mutilador_mask`, `bands_spread`.
+- `ghostBands` (Kemi): anéis nos cotovelos/ombros que chicoteiam (rastro vermelho), `bands_spread` e `killerIntent`.
+- Juan: `bloodEruption` na `heavyProtection` com `bloodArmor`; forma `diabo` com nome "PORTADOR DO TRONO".
+- Erin (`erin_caos`): passivas `noSanity` (energia travada em 0 — `addEnergy`, regen e `spendEnergy` pagam em vida) +
+  `bloodPrice` (1 de vida por ponto, mínimo 3%); dano ×1,35; especial sem custo. HUD: `.bar.energy.locked`
+  ("SEM SANIDADE"). `kamikaze`: ao encostar num alvo que não esquiva → cinemática (rosto, granadas, os dois,
+  `pullBack`) e a explosão aos 1,9 s; a morte dela espera o fim da cena (`setVisible(false)` até lá).
+
 ## v3.7.1 — Nomes dos assassinos
 
 - `name` das formas dos Mascarados sem o nome do agente: `fantasma` → "A FANTASMA", `labirinto_elmo` → "???",

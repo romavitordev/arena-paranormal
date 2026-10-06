@@ -144,6 +144,8 @@ export const PASSIVES = {
   },
   // Labirinto — Mente Labiríntica: atordoamentos duram menos (lido em Fighter.stun)
   mentalMaze: {},
+  // Erin (Em Nome do Caos) — Sem Sanidade: barra zerada e travada; os custos saem da vida (Fighter.addEnergy/spendEnergy)
+  noSanity: {},
   // Kemi — Sede de Vingança (o poder de intenção da Lena no corpo dela): ao cair abaixo de passive.below de vida pela
   // primeira vez no round, revida com tudo — mais dano e velocidade por um tempo e sanidade de volta
   revenge: {

@@ -96,6 +96,13 @@
 
 ---
 
+## 🟢 Futuros Mascarados: PARK JAE-YOON e DALMO MAGNO (com as transformações das referências)
+- Os GIFs `jae colocando mascara` e `dalmo colocando mascara` (análise em `Referencias visuais/ANALISE.md`) já mostram
+  como devem ser as transformações quando eles entrarem: Jae puxa o capuz e aparece o **X vermelho**; Dalmo põe o elmo
+  redondo de **um olho vermelho** numa explosão vermelha. Usar `maskTransform` com uma cena nova para cada um.
+
+---
+
 ## 🟡 Tela de início, HUD de batalha e identidade visual (pedido do usuário)
 
 O usuário quer **melhorar todo o design da tela de início, a HUD de batalha e a identidade do jogo, incluindo o nome**.
