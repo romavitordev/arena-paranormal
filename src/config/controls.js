@@ -7,7 +7,7 @@
 //   carga    → Carga de Poder / Energia     (△ Triângulo / Y)
 //   jump     → Pulo                         (× X / A)
 //   block    → Defesa (segurar)             (R2 / RT)
-//              parado = defende tudo · andando = anda mais rápido, mas aberto
+//              parado = defende tudo · + direção = passos rápidos (Storm 4)
 //   dodge    → Esquiva (+ direção)          (L2 / LT) — 4 cargas
 //   start    → Pausa
 //   assist1  → Chama a assistência 1 (batalha em equipe)       (L1 / LB)

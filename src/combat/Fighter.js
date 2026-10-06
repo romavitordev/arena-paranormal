@@ -625,6 +625,8 @@ export class Fighter {
       case 'stun':
         this.vel.x *= 0.85;
         this.vel.z *= 0.85;
+        // atordoado também dá para sair com a Substituição (L2)
+        if (this.input.pressed.dodge && this.trySubstitution()) break;
         if (this.stateTime >= this.stunTime) this.setState('idle');
         break;
       case 'pulled': this.updatePulled(dt); break;
@@ -801,7 +803,9 @@ export class Fighter {
     this.carga.stage = 0;
     this.setState('dashing');
     this.vel.y = Math.max(0, Math.min(this.vel.y, 2));
-    this.anim.play('dash', { restart: true });
+    // passo da defesa: pulinho curto (pose da esquiva), não a corrida do dash
+    if (kind === 'step') this.anim.play('dodge', { restart: true, duration: cfg.duration, blend: 0.03 });
+    else this.anim.play('dash', { restart: true });
     this.world.audio.play(kind === 'long' ? 'blink' : 'jump', { volume: 0.7 });
     const col = this.def.energyColor;
     this.world.fx.play('FX_DASH', v2.set(this.pos.x, this.pos.y + 0.4, this.pos.z), { color: col, kind });
@@ -936,12 +940,14 @@ export class Fighter {
     return false;
   }
 
-  // △/Y é o MODIFICADOR de ○ e □, como no Storm 4: △ → ○ e △ → □ (um toque depois do outro, dentro da janela da
-  // Carga; também vale junto ou segurando △) soltam a habilidade daquele comando ('carga+physical' / 'carga+ranged')
+  // △/Y é o MODIFICADOR de ○ e □, como no Storm 4: △ → ○ e △ → □ (um toque logo depois do outro, dentro de
+  // COMBAT.cargaComboWindow; também vale junto ou segurando △) soltam a habilidade daquele comando ('carga+physical' / 'carga+ranged')
   // e desfazem a etapa de Carga daquele toque. △ → △ → ○ continua sendo o especial.
   chordWithCarga() {
     const inp = this.input;
-    const seq = this.carga.stage === 1 && this.carga.timer > 0;
+    // em sequência (△, solta, ○/□): só vale logo depois do △ — andar um tempo e apertar ○ é ataque normal
+    const t = inp.pressTime.carga;
+    const seq = this.carga.stage === 1 && t !== undefined && this.world.inputTime - t <= COMBAT.cargaComboWindow;
     if (!inp.pressed.carga && !inp.held.carga && !this.recent('carga') && !seq) return false;
     if (!inp.pressed.carga && this.carga.stage > 0) this.carga.stage -= 1;
     return true;
@@ -1301,8 +1307,6 @@ export class Fighter {
     this.guardMoving = false;
     // momento em que a Defesa foi apertada (usado pelo Bloqueio Perfeito)
     this.blockPressTime = this.input.pressTime.block ?? this.world.inputTime;
-    // já entrou na defesa com a direção apertada: não conta como toque (o passo pede um toque novo)
-    this.blockStickPrev = this.moveInputWorld(v1).length();
     this.vel.x = 0;
     this.vel.z = 0;
     this.anim.play('block', { blend: 0.05 });
@@ -1342,25 +1346,13 @@ export class Fighter {
     }
     const dir = this.moveInputWorld(v1);
     const mag = Math.min(1, dir.length());
-    // DEFESA + TOQUE NA DIREÇÃO = PASSO (como no Storm): sai do neutro e inclina → passo rápido para aquele lado
-    const flick = mag > 0.6 && (this.blockStickPrev ?? 1) < 0.3;
-    this.blockStickPrev = mag;
-    if (flick && this.onGround && this.cooldowns.dash <= 0) {
-      this.guardMoving = false;
-      this.startDash('step');
-      return;
-    }
     if (mag > 0.3) {
-      // DEFESA + ANDAR: movimentação melhor pelo mapa, mas aberto a golpes
-      this.guardMoving = true;
-      dir.normalize();
-      const sp = this.moveSpeed * COMBAT.block.moveSpeedMult * this.world.speedFactor(this) * mag;
-      this.vel.x = dir.x * sp;
-      this.vel.z = dir.z * sp;
-      if (opp && this.lockOn && this.surprised <= 0) this.yaw = turnTowards(this.yaw, yawTo(this.pos, opp.pos), dt * 10);
-      this.anim.play('run');
-      this.anim.speed = 0.75 + mag * 0.5;
-      return;
+      // DEFESA + DIREÇÃO SEGURADA (Storm 4): não anda — emenda passos rápidos para aquele lado, de frente para o rival
+      if (this.onGround && this.cooldowns.dash <= 0) {
+        this.guardMoving = false;
+        this.startDash('step');
+        return;
+      }
     }
     // DEFESA PARADO: defende tudo (até especial), gastando a resistência
     if (this.guardMoving) {
@@ -2496,6 +2488,9 @@ export class Fighter {
     this.world.fx.burst(this.chestPos(), { count: 18, color: col, speed: 4, life: 0.3, size: 0.18 });
     this.notify('SUBSTITUIÇÃO!', true);
     if (!hasPassive(opp, 'precognition')) opp.surprised = 0.25;
+    // o atacante bate no "tronco": a sequência dele acaba aqui (não emenda o próximo golpe) e fica exposto
+    if (opp.state === 'attack') opp.combo.blocked = true;
+    opp.airCombo = null;
     return true;
   }
 

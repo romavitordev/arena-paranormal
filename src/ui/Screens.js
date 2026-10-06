@@ -1006,7 +1006,7 @@ export function controlsTable() {
       ${row('Pulo', 'jump')}
       ${row('Defesa (segurar)', 'block')}
       ${row('Esquiva (+ direção, 4 cargas)', 'dodge')}
-      <tr><td>Defesa + andar</td><td colspan="3">Anda mais rápido, mas fica aberto a golpes</td></tr>
+      <tr><td>Defesa + direção</td><td colspan="3">Passos rápidos para os lados / trás, de frente para o rival</td></tr>
       ${row('Assistência 1 / 2 (equipe)', 'assist1')}
       <tr><td>Dash</td><td colspan="3">Pulo + Pulo (toque duplo)</td></tr>
       <tr><td>Dash longo (Joui: teleporte)</td><td colspan="3">Carga + Pulo</td></tr>

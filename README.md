@@ -4,7 +4,7 @@ Jogo de luta 3D em arena com temática paranormal. Combate rápido e acessível,
 movimentação livre, ataques direcionais, defesa, esquiva, habilidades por combinação de
 botões e especiais cinematográficos. Feito com **Three.js + Vite**, roda no navegador.
 
-Versão atual do jogo: **v3.5.1**.
+Versão atual do jogo: **v3.6.0**.
 
 A numeração segue **MAJOR.MINOR.PATCH**: microatualizações usam `x.y.z`, atualizações concretas usam `x.y.0` e grandes marcos usam `x.0.0`.
 
@@ -53,7 +53,7 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
   (lança, derruba, afasta ou atordoa).
 - **Especial:** △ → △ → ○ (Y → Y → B; teclado I → I → L). Custa 50 de sanidade.
 - **Habilidades secundárias** (sem botão modificador): **△ → ○** e **△ → □** como no Storm 4 (toque △, solte e
-  toque ○ / □ — também valem juntos ou segurando △), **△ + L2** (juntos ou △ logo antes) e **R2 + △** / **R2 + ×** (segurando a defesa). R2 + ○ é o agarrão.
+  toque ○ / □ logo em seguida, em até 0,4 s — também valem juntos ou segurando △), **△ + L2** (juntos ou △ logo antes) e **R2 + △** / **R2 + ×** (segurando a defesa). R2 + ○ é o agarrão.
   Segurando △ para carregar, L2 sozinho continua sendo **esquiva** — dá para fugir no meio da carga.
 - **Dash:** × + × (toque duplo no pulo) avança rápido. △ + × é o dash longo, que persegue o adversário (10 de sanidade); no Joui, △ + × é o Teleporte das Sombras.
 - **Agarrão:** Defesa + ○ (RT + B). Pega de perto e arremessa; não pode ser defendido, só esquivado. Errar deixa você exposto.
@@ -158,8 +158,10 @@ Exemplo: X=100, Y=60 → o inimigo perde 100, recupera 60 (saldo −40) e perde 
   para contra-atacar. O Gal tem uma janela maior e atordoa mais.
 - **Defesa direcional:** parado, a defesa gira devagar para acompanhar o adversário — golpes pelos lados podem passar e
   pelas costas não defende.
-- **Esquiva:** L2/LT + direção. 4 cargas que recuperam conforme toma dano.
-- **Substituição:** L2/LT **enquanto apanha** gasta 1 carga, cancela o golpe e desvia com um passo curto para o lado (direcional escolhe o lado); sem espaço, fica no mesmo lugar.
+- **Passo da defesa:** segurando R2/RT, a direção não anda: o personagem emenda passos rápidos para os lados / trás,
+  sempre de frente para o rival (como no Storm 4).
+- **Esquiva:** L2/LT + direção. 4 cargas; recupera 1 a cada 70 de dano recebido.
+- **Substituição:** L2/LT **enquanto apanha ou atordoado** gasta 1 carga, interrompe o combo do adversário (ele fica exposto) e desvia com um passo curto para o lado (direcional escolhe o lado); sem espaço, fica no mesmo lugar.
 - **Agarrão:** R2 + ○. Não pode ser defendido; quem é agarrado escapa com **R2 + ○ logo no começo**, ou esquivando antes.
 - **Barra de Transformação (todos):** enche conforme apanha. Cheia e com a vida em 35% ou menos, segure
   △ até a sanidade encher e passar do limite (+1 s): Juan, Kemi e Ferreiro se transformam (Diabo, Fantasma, Deus da
