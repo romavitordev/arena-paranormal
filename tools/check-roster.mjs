@@ -191,6 +191,7 @@ ok(weaknessMult(energyVulnerable, energyFighter, { kind: 'ranged' }) === 1.5
   && weaknessMult(energyVulnerable, energyFighter, { kind: 'melee' }) === 1,
 'fraqueza à Energia: respeita elemento explícito e não transforma golpes físicos em Energia');
 ok(get('joui').origin === 'Ordo Realitas' && get('joui').element === 'conhecimento', 'Joui Jouki: Ordo Realitas (Conhecimento)');
+ok(get('xande').element === 'conhecimento', 'Xande: afinidade com Conhecimento');
 ok(get('verissimo').element === 'medo', 'Senhor Veríssimo: afinidade com Medo');
 
 // ---------------- Cânone e mecânicas (TODO 2026-10-01) ----------------

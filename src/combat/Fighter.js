@@ -2521,6 +2521,7 @@ export class Fighter {
     const aura = w.fx.emitter({ rate: 70, follow: () => this.chestPos(), particle: { color: col, speed: 2, spread: 0.6, up: 1, life: 0.35, size: 0.2 } });
     w.audio.play('carga', { pitch: 1.4 });
     this.pendingSpecial = { impl, sp, t: 0, aura };
+    w.onBattleDialogue && w.onBattleDialogue(this, 'special');
   }
 
   updateSpecialStart(dt) {

@@ -1,5 +1,14 @@
 # Registro administrativo de alterações
 
+## (em andamento, sem changelog dos jogadores) — falas do Anfitrião, falas de batalha e afinidade do Xande
+
+- Afinidade do Xande corrigida para Conhecimento; adicionada verificação ao `npm run check`.
+- Falas de batalha adicionadas para vida crítica, especiais e transformações. São trocas curtas de legendas sem
+  pausar o combate, com intervalo mínimo para não se repetirem em excesso.
+- Falas do Anfitrião reescritas com humor ácido, absurdo e provocações pessoais.
+- `src/config/dialogues.js` continua concentrando as falas de introdução e vitória, além das novas falas de batalha.
+  `npm run export:dialogues` exporta todas as falas para `dialogues-export.json`.
+
 ## (em andamento, sem changelog dos jogadores) — afinidades e vantagem elemental
 
 - Bônus do ciclo em `COMBAT.elements`: vantagem passou de +10% para +15% e desvantagem de −10% para −15%; Medo

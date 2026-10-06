@@ -8,7 +8,7 @@ export default {
   model: 'xande',
   color: '#f2c230',
   origin: 'Os Cinco',
-  element: 'sangue', // Lâmina Paranormal: Amaldiçoar Arma com Sangue, Descarnar, Armadura de Sangue
+  element: 'conhecimento',
   energyColor: 0xf2c230,
   info: {
     weapon: 'Taco com arame farpado e o Skate Caótico',

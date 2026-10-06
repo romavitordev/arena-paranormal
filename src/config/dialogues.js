@@ -1,5 +1,5 @@
 // Falas de introducao pre-luta; independentes do resultado.
-const CHARACTER_NAMES = {
+export const CHARACTER_NAMES = {
   kaiser: 'Kaiser',
   arthur: 'Arthur Cervero',
   joui: 'Joui Jouki',
@@ -20,9 +20,9 @@ const CHARACTER_NAMES = {
   verissimo: 'Veríssimo',
 };
 
-const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo' };
+export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo' };
 
-const INTRO_IDS = Object.keys(CHARACTER_NAMES);
+export const INTRO_IDS = Object.keys(CHARACTER_NAMES);
 const INTRO_HOOKS = {
   kaiser: 'a névoa',
   arthur: 'o rifle',
@@ -1273,24 +1273,24 @@ export const VICTORY_LINES = {
 const VICTORY_NEW = {
   anfitriao: {
     default: [
-      'Atenção, plateia! O placar disse que eu ganhei. Se ele estiver mentindo, temos um novo vilão!',
-      'Você perdeu, eu ganhei e o relógio discorda. Desempate: pedra, papel ou paradoxo?',
-      'E o prêmio da rodada é... um prêmio! Não tem? Então ganhei duas vezes!',
-      'Eu sabia que você ia cair. Também sabia que ia esquecer por quê. HAHAHA!',
-      'Regra número um: não existem regras! Regra número dois: quem pergunta perde o intervalo!',
-      'Que luta emocionante! Vi o final ontem, amanhã e durante o intervalo!',
-      'Produção, rebobina! Quero ganhar de novo, mas com mais explosões e menos chão!',
-      'A plateia está adorando! Se não estiver, troca a plateia. Se estiver, troca também!',
-      'O relógio mandou parar. Eu mandei esperar a minha entrevista!',
-      'Você quase roubou o protagonismo. Quase! Eu guardei três finais alternativos!',
-      'Temos um vencedor: eu! O outro resultado foi cancelado por excesso de realidade.',
-      'A próxima rodada é agora, antes da última e depois do intervalo! Não saiam daí!',
-      'Pausa para os comerciais! Não temos comerciais? Mostra a minha cara!',
-      'Um ponto para mim, um para o caos e outro para aquela cadeira que olhou torto!',
-      'Você lutou tão bem que eu quase segui as regras. Quase foi horrível!',
-      'Aplausos! Ou vaias! Ou uma vaia ritmada! Banda, toca o contrário!',
-      'Resultado oficial: vitória minha! Resultado secreto: a realidade pediu revanche!',
-      'O prêmio era um jantar com a produção, mas minha esposa levou a mesa e o troféu. Que profissional!',
+      'Você lutou com tanta confiança que quase me senti mal. Quase; passou.',
+      'Eu tinha preparado um prêmio pra você. Aí você perdeu e fiquei com o prêmio.',
+      'Se alguém perguntar, eu te dei uma chance. Não precisa explicar que era mentira.',
+      'Essa cara é de derrota ou você sempre fica assim quando pensa?',
+      'Você quase me venceu. Eu também quase paguei minhas contas ontem.',
+      'Eu ia deixar você escolher qualquer coisa. Aí lembrei que você escolhe mal.',
+      'Não fica triste. Até aquela cadeira ali achou que ia ganhar.',
+      'Foi por pouco. Quer dizer, por bastante. Mas o "pouco" consola.',
+      'Eu apostei em você. Perdi dinheiro e um pouco do respeito que eu tinha por mim.',
+      'Boa tentativa. Minha esposa também acha que insistir muda alguma coisa.',
+      'Se eu devolver sua dignidade, promete não perder de novo?',
+      'Você caiu de um jeito tão dramático que quase estragou meu humor. Quase.',
+      'Eu gostei de você. Não o suficiente pra parar, mas o suficiente pra lembrar seu nome.',
+      'Pode culpar a sorte. Ela já está acostumada a levar a culpa por você.',
+      'Seus amigos vão perguntar como foi. Mente; diz que eu estava distraído.',
+      'Eu ia te consolar, mas isso exigiria fingir que me importo.',
+      'Não foi uma derrota. Foi uma demonstração pública das suas limitações.',
+      'Você sobreviveu? Ah. Então preciso pensar num prêmio melhor.',
     ],
   },
   arnaldo: {
@@ -1596,7 +1596,7 @@ const VICTORY_NEW = {
 };
 for (const [w, m] of Object.entries(VICTORY_NEW)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
 
-const VICTORY_FALLBACKS = {
+export const VICTORY_FALLBACKS = {
   kaiser: 'A névoa não escolheu por mim. Desta vez, eu fiquei.',
   arthur: 'Acabou. Agora posso garantir que ninguém mais se machuque.',
   joui: 'Terminou. Eu devia ter encontrado outro jeito.',
@@ -1617,15 +1617,154 @@ const VICTORY_FALLBACKS = {
   verissimo: 'Missão cumprida. Relatório na minha mesa amanhã.',
 };
 
-export function victoryLine(winner, loser, loserName = CHARACTER_NAMES[loser] || loser) {
+export const BATTLE_DIALOGUES = {
+  critical: {
+    kaiser: 'Eu já sobrevivi a coisa pior. Não vou cair aqui.',
+    arthur: 'Ainda tô de pé. Vai precisar mais que isso.',
+    joui: 'Eu ainda posso escolher como essa luta termina.',
+    aghata: 'Não vou deixar o medo decidir por mim.',
+    dante: 'A peça não acaba enquanto eu estiver de pé.',
+    erin: 'Isso foi só um teste. Eu ainda tenho uma solução.',
+    gal_sal: 'Eu não vou deixar você decidir o meu fim.',
+    kian: 'O resultado ainda pode surpreender.',
+    aguiar: 'Ha... agora ficou interessante.',
+    labirinto: 'O caminho fica estreito. Ainda há uma saída.',
+    xande: 'Não vou cair antes de tirar os meus daqui.',
+    lirio: 'A Leonora ainda está comigo.',
+    ferreiro: 'Santo Berço precisa de mim. Eu não caio.',
+    juan: 'Eu não vou voltar a ser quem fui.',
+    kemi: 'Ainda não terminei o trabalho.',
+    balu: 'Hahaha! O tio Balu aguenta mais que isso!',
+    arnaldo: 'O espetáculo está longe do último ato!',
+    verissimo: 'Já vi situação pior no relatório. Sigo.',
+    anfitriao: 'Essa dor combina com você. Não sei por quê; combina.',
+  },
+  special: {
+    kaiser: 'A névoa fecha o caminho. Agora, acabou.',
+    arthur: 'Eu queria resolver isso de outro jeito. Mas vamos lá.',
+    joui: 'Vou acabar com isso sem perder quem eu sou.',
+    aghata: 'Encontrei a resposta. Está bem na sua frente.',
+    dante: 'A luz apaga. A peça termina.',
+    erin: 'Anota aí: essa parte vai ser incrível!',
+    gal_sal: 'Você teve a chance de parar. Agora aguenta.',
+    kian: 'Eu já vi este momento acontecer.',
+    aguiar: 'O caçador chegou ao fim da trilha.',
+    labirinto: 'Você entrou no caminho errado.',
+    xande: 'Chegou a hora de virar o jogo!',
+    lirio: 'Leonora, comigo! Vamos nessa!',
+    ferreiro: 'Pelo Santo Berço!',
+    juan: 'Eu escolho o que fazer com esse poder.',
+    kemi: 'Contrato aceito. Alvo marcado.',
+    balu: 'Agora o tio Balu vai mostrar serviço!',
+    arnaldo: 'Senhoras e senhores... chegou a atração principal!',
+    verissimo: 'Chega de conversa. Vou encerrar a missão.',
+    anfitriao: 'Eu ia deixar você sair andando. Aí você me olhou com essa cara.',
+  },
+  transform: {
+    deus_morte: 'A Morte não espera. Ela vem buscar.',
+    diabo: 'Chega de fugir de quem eu sou.',
+    fantasma: 'O contrato cobra. Eu pago.',
+    anfitriao: 'Olha só. Eu também ganhei uma fantasia nova. A sua continua sendo essa cara?',
+  },
+};
+
+export const BATTLE_REPLIES = {
+  critical: {
+    kaiser: 'Então vai ter que me tirar daqui.',
+    arthur: 'Eu também não vou desistir.',
+    joui: 'Ainda dá tempo de parar.',
+    aghata: 'Eu não vou recuar.',
+    dante: 'Que bom. Eu estava só começando.',
+    erin: 'Ótimo! Eu ainda tenho mais ideias.',
+    gal_sal: 'Não vou deixar você escolher por mim.',
+    kian: 'Você ainda acredita que pode mudar o resultado?',
+    aguiar: 'Ha ha... vamos ver quanto tempo dura.',
+    labirinto: 'Toda saída cobra um preço.',
+    xande: 'Então vem. Eu não vou deixar meus amigos pra trás.',
+    lirio: 'A Leonora também não vai deixar.',
+    ferreiro: 'Eu não abandono o meu povo.',
+    juan: 'Eu sei exatamente o que está em jogo.',
+    kemi: 'O trabalho ainda não terminou.',
+    balu: 'Aí sim! Gosto de quem aguenta a pressão.',
+    arnaldo: 'O público quer mais! Não decepcione a plateia.',
+    verissimo: 'Então continue. Eu ainda não encerrei o caso.',
+    anfitriao: 'Sua coragem é comovente. Quase tanto quanto essa estratégia.',
+  },
+  special: {
+    kaiser: 'Eu ainda consigo atravessar essa névoa.',
+    arthur: 'Não vou deixar você passar.',
+    joui: 'Eu vou encontrar outro caminho.',
+    aghata: 'Ainda não terminei de investigar.',
+    dante: 'Eu conheço esse truque.',
+    erin: 'Espera, eu não terminei de analisar!',
+    gal_sal: 'Você não decide quando isso acaba.',
+    kian: 'Já considerei essa possibilidade.',
+    aguiar: 'Dessa vez, a presa escapou.',
+    labirinto: 'Esse caminho ainda tem uma saída.',
+    xande: 'Pode vir. Eu já vi coisa mais estranha.',
+    lirio: 'A gente ainda tá junto, Xande.',
+    ferreiro: 'Santo Berço não vai cair.',
+    juan: 'Esse poder não vai me controlar.',
+    kemi: 'O contrato ainda está em aberto.',
+    balu: 'Hahaha! Essa foi boa. Agora é minha vez!',
+    arnaldo: 'Que espetáculo! Mas ainda não acabou.',
+    verissimo: 'Não se precipite. A luta continua.',
+    anfitriao: 'Vai, capricha. Quero uma história boa pra contar quando você cair.',
+  },
+  transform: {
+    kaiser: 'Eu não vou deixar você perder o controle.',
+    arthur: 'Volta pra si! Ainda dá tempo.',
+    joui: 'Não precisa enfrentar isso sozinho.',
+    aghata: 'O que aconteceu com você?',
+    dante: 'Essa presença... eu conheço.',
+    erin: 'Isso definitivamente não estava no protocolo.',
+    gal_sal: 'Esse poder não muda o que você escolheu.',
+    kian: 'A transformação não altera o desfecho.',
+    aguiar: 'Ha ha... agora a caçada ficou séria.',
+    labirinto: 'Uma nova forma. O mesmo caminho.',
+    xande: 'Seja lá o que for, eu não vou fugir.',
+    lirio: 'Xande, tô contigo!',
+    ferreiro: 'Eu já vi essa escuridão antes.',
+    juan: 'Eu sei o que é ser consumido por isso.',
+    kemi: 'O contrato mudou de forma. Não de preço.',
+    balu: 'Eita! Agora o negócio ficou grande!',
+    arnaldo: 'Uma transformação no meio do ato! Magnífico!',
+    verissimo: 'Identifiquei a mudança. Mantenham a posição.',
+    anfitriao: 'Isso era pra me assustar? Eu já vi coisa mais convincente no espelho.',
+  },
+};
+
+const DIALOGUE_BASE_IDS = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi' };
+
+export function battleLines(speakerId, opponentId, event) {
+  const lines = BATTLE_DIALOGUES[event];
+  const replies = BATTLE_REPLIES[event];
+  if (!lines || !replies) return null;
+
+  const speaker = lines[speakerId] ? speakerId : DIALOGUE_BASE_IDS[speakerId] || speakerId;
+  const opponent = replies[opponentId] ? opponentId : DIALOGUE_BASE_IDS[opponentId] || opponentId;
+  const opening = lines[speaker];
+  const response = replies[opponent];
+  if (!opening || !response) return null;
+  return [[speakerId, opening], [opponentId, response]];
+}
+
+export function victoryLines(winner, loser, loserName = CHARACTER_NAMES[loser] || loser) {
   if (winner !== 'anfitriao') winner = BASE_CHARACTER[winner] || winner;
   loser = BASE_CHARACTER[loser] || loser;
   const w = VICTORY_LINES[winner] || {};
   const matchup = w[loser];
   const lines = Array.isArray(matchup) && matchup.length ? matchup : w.default;
-  if (Array.isArray(lines) && lines.length) return lines[Math.floor(Math.random() * lines.length)];
+  if (Array.isArray(lines) && lines.length) return lines;
+  if (typeof matchup === 'string' && matchup) return [matchup];
   const fallback = VICTORY_FALLBACKS[winner];
-  return matchup || (typeof fallback === 'function' ? fallback(loserName) : fallback) || w.default || '';
+  const line = (typeof fallback === 'function' ? fallback(loserName) : fallback) || (typeof w.default === 'string' ? w.default : '');
+  return line ? [line] : [];
+}
+
+export function victoryLine(winner, loser, loserName = CHARACTER_NAMES[loser] || loser) {
+  const lines = victoryLines(winner, loser, loserName);
+  return lines.length ? lines[Math.floor(Math.random() * lines.length)] : '';
 }
 
 export function introLines(idA, idB) {

@@ -1,7 +1,7 @@
 import { COMBAT } from '../config/combat.js';
 import { SETTINGS } from '../config/settings.js';
 import { World } from './World.js';
-import { introLines } from '../config/dialogues.js';
+import { battleLines, introLines } from '../config/dialogues.js';
 import { Assist } from '../combat/assists.js';
 import { yawTo } from '../core/util.js';
 
@@ -21,6 +21,9 @@ export class Match {
     this.hud = hud;
     this.input = input;
     this.dialogue = dialogue;
+    this.battleDialogue = null;
+    this.battleDialogueNextAt = 0;
+    this.criticalDialogueFired = new Set();
     this.audio = audio;
     this.onEnd = onEnd;
     this.defs = defs;
@@ -33,9 +36,13 @@ export class Match {
       });
     }
     this.world.onKO = () => { this.koPending = true; };
+    this.world.onBattleDialogue = (fighter, event) => this.triggerBattleDialogue(fighter, event);
     // troca de personagem na equipe: a HUD passa a mostrar o novo (nome, habilidades, assistências)
     this.world.onSwitch = () => this.hud.bind(this.world.fighters);
-    this.world.onTransform = () => this.hud.bind(this.world.fighters); // forma nova (Luzidio, Deus da Morte, Diabo): HUD com o nome e as habilidades dela
+    this.world.onTransform = (fighter) => {
+      this.hud.bind(this.world.fighters);
+      this.triggerBattleDialogue(fighter, 'transform');
+    };
     // Injustiça: o inimigo recupera Y de vida e perde sanidade (energia)
     this.world.onDrain = (attacker, victim, heal, removed) => {
       hud.popup(victim.index, `+${fmt(heal)} VIDA`, '#7dffb0');
@@ -142,6 +149,9 @@ export class Match {
   }
 
   startRound() {
+    this.clearBattleDialogue();
+    this.battleDialogueNextAt = this.world.time;
+    this.criticalDialogueFired.clear();
     this.round++;
     this.world.resetRound();
     this.timer = SETTINGS.timer || COMBAT.roundTime;
@@ -182,6 +192,8 @@ export class Match {
       }
       case 'fight':
         w.update(dt);
+        this.checkCriticalDialogues();
+        this.updateBattleDialogue(dt);
         if (!w.cinematic && SETTINGS.timer && !this.training) this.timer -= dt;
         // K.O. só é resolvido depois que o especial termina
         if (this.koPending && !w.cinematic) this.endRound('ko');
@@ -218,6 +230,7 @@ export class Match {
   }
 
   endRound(reason) {
+    this.clearBattleDialogue();
     this.phase = 'roundEnd';
     this.phaseTime = 0;
     const [a, b] = this.fighters;
@@ -247,6 +260,61 @@ export class Match {
 
   render() {
     this.world.render();
+  }
+
+  triggerBattleDialogue(fighter, event) {
+    if (!this.dialogue || this.training || this.phase !== 'fight' || this.battleDialogue) return false;
+    if (this.world.time < this.battleDialogueNextAt) return false;
+    const opponent = fighter.opponent;
+    if (!opponent) return false;
+    const exchange = battleLines(fighter.def.id, opponent.def.id, event);
+    if (!exchange) return false;
+    const fighters = [fighter, opponent];
+    this.battleDialogue = {
+      lines: exchange.map(([id, text], i) => {
+        const speaker = fighters[i];
+        return { name: speaker.def.name, color: speaker.def.color, text, side: speaker.index };
+      }),
+      index: 0,
+      remaining: 1.6,
+    };
+    this.battleDialogueNextAt = this.world.time + 16;
+    this.showBattleDialogueLine();
+    return true;
+  }
+
+  showBattleDialogueLine() {
+    const state = this.battleDialogue;
+    if (!state) return;
+    const line = state.lines[state.index];
+    this.hud.subtitle(line || null);
+    if (line) state.remaining = Math.min(2.4, Math.max(1.6, 1.0 + line.text.length * 0.025));
+  }
+
+  updateBattleDialogue(dt) {
+    if (!this.battleDialogue) return;
+    this.battleDialogue.remaining -= dt;
+    if (this.battleDialogue.remaining > 0) return;
+    this.battleDialogue.index++;
+    if (this.battleDialogue.index >= this.battleDialogue.lines.length) {
+      this.clearBattleDialogue();
+      return;
+    }
+    this.showBattleDialogueLine();
+  }
+
+  checkCriticalDialogues() {
+    if (!this.dialogue || this.training) return;
+    for (const fighter of this.fighters) {
+      if (fighter.state === 'ko' || fighter.health / fighter.maxHealth > 0.25 || this.criticalDialogueFired.has(fighter)) continue;
+      if (this.triggerBattleDialogue(fighter, 'critical')) this.criticalDialogueFired.add(fighter);
+    }
+  }
+
+  clearBattleDialogue() {
+    if (!this.battleDialogue) return;
+    this.battleDialogue = null;
+    this.hud.subtitle(null);
   }
 
   updateTraining(dt) {

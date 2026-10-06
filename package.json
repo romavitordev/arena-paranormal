@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "test": "node --test",
     "check": "node tools/check-roster.mjs",
+    "export:dialogues": "node tools/export-dialogues.mjs",
     "moves": "node tools/gen-moves.mjs",
     "lore": "node tools/fetch-lore.mjs",
     "audit": "node tools/blender/audit.mjs"
