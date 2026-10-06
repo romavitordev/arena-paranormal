@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { forwardFromYaw } from '../core/util.js';
+import { faceClose, twoShot } from '../camera/shots.js';
 
 // CENAS DE AGARRÃO (Defesa + ○): cada personagem agarra do seu jeito e fecha com um golpe dos SEUS poderes.
 // Passada a janela de escape (Fighter.tryGrab), a cena roda: dois golpes (`beats`, com as animações do próprio kit) e
@@ -88,6 +89,16 @@ export const FINISHERS = {
     w.fx.ring(ground(b), { color: col, radius: 1.6, life: 0.5 });
     w.fx.distort(c, { color: col, radius: 2, life: 0.4 });
   },
+  // Anfitrião — VISÃO TRAUMÁTICA: a máscara colada no rosto do alvo, a tela escurece e a mente quebra (sem sangue):
+  // dano de sanidade, desorientação (controles invertidos) e um instante atordoado
+  trauma(w, a, b, col) {
+    const c = b.chestPos();
+    w.screenFlash && w.screenFlash('#000000', 0.55);
+    w.fx.distort(c, { color: col, radius: 2.6, life: 0.6 });
+    w.fx.distort(a.chestPos(), { color: 0x5aa0ff, radius: 1.6, life: 0.5 });
+    for (let i = 0; i < 3; i++) w.fx.ring(c, { color: [0xb04aff, 0xff6ad0, 0x5aa0ff][i], radius: 1.2 + i * 0.5, life: 0.5, vertical: true, yaw: a.yaw });
+    w.audio.play('fearGaze', { volume: 1, pitch: 0.7 });
+  },
   // Lírio / Balu — pancada no chão: levanta e enterra o alvo com o martelo / o machado
   slam(w, a, b, col) {
     w.fx.play('FX_GROUND_SMASH', ground(b), { color: col, scale: 1.2 });
@@ -160,7 +171,16 @@ export const GRAB_SCENES = {
   kemi: scene({ ...S('knife_1'), fx: { kind: 'slash' }, sound: 'bladeHit' }, { ...S('shoulder_bash'), fx: { kind: 'punch' }, sound: 'punch' }, { anim: 'thrust', fx: 'pointBlank', sound: 'sniper' }),
   arnaldo: scene({ ...S('slash_h'), fx: { kind: 'slash' }, sound: 'bladeHit' }, { ...S('thrust'), fx: { kind: 'stab' }, sound: 'bladeHit' }, { anim: 'slash_finisher', fx: 'sigils', sound: 'slashFinal' }),
   verissimo: scene({ ...S('thrust'), fx: { kind: 'stab' }, sound: 'bladeHit' }, { ...S('slash_h_back'), fx: { kind: 'slash', flip: true }, sound: 'bladeHit' }, { anim: 'slash_v', fx: 'pointBlank', sound: 'shotgun' }),
-  anfitriao: scene({ ...S('jab'), fx: { kind: 'punch' }, sound: 'punch' }, { ...S('hook_l'), fx: { kind: 'punch' }, sound: 'punch' }, { anim: 'meteor_punch', fx: 'chaos', sound: 'explosion' }),
+  // Visão Traumática: chicotada de cabo, puxa o rosto do alvo para perto da máscara (a câmera fecha na máscara, que
+  // enche a tela) e a Energia empurra a mente para longe
+  anfitriao: {
+    beats: [{ t: 0.12, ...S('host_lash', 0.32), fx: { kind: 'slash' }, sound: 'whip' }, { t: 0.5, ...S('host_tilt', 0.5), fx: { kind: 'punch' }, sound: 'fearGaze' }],
+    fin: { t: 1.15, dur: 0.45, anim: 'wave_punch', fx: 'trauma', sound: 'shockwave', drain: 20, invert: 1.8 },
+    shots: (a, b) => [
+      twoShot(a, b, { dur: 0.5, dist: 2.8, height: 1.5, push: 0.5, side: 1, lookH: 1.3 }),
+      faceClose(a, { dur: 1.3, from: 1.0, to: 0.5, side: 0.05, height: 1.62, fov: 30 }),
+    ],
+  },
   diabo: scene({ ...S('db_claw_r'), fx: { kind: 'claw' }, sound: 'clawHit' }, { ...S('db_claw_l'), fx: { kind: 'claw', flip: true }, sound: 'clawHit' }, { anim: 'db_rend', fx: 'devil', sound: 'bloodClaw', bleed: { dps: 5, duration: 2 } }),
   fantasma: scene({ ...S('knife_1'), fx: { kind: 'slash' }, sound: 'bladeHit' }, { ...S('shoulder_bash'), fx: { kind: 'punch' }, sound: 'punch' }, { anim: 'thrust', fx: 'bands', sound: 'sniper' }),
   deus_morte: scene({ ...S('dm_slap', 0.34), fx: { kind: 'smash' }, sound: 'heavyPunch' }, { ...S('dm_hook', 0.34), fx: { kind: 'smash' }, sound: 'heavyPunch' }, { anim: 'dm_smash', fx: 'crush', sound: 'heavyPunch' }),

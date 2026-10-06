@@ -328,6 +328,32 @@ const SYNTHS = {
     a.tone(t, 0.6, { vol: 0.5 * v, freq: 70, freqEnd: 30, type: 'sawtooth' });
     a.noise(t, 0.5, { vol: 0.6 * v, type: 'highpass', freq: 2500 });
   },
+  // ---- Anfitrião ----
+  whip: (a, t, v) => {
+    a.noise(t, 0.16, { vol: 0.5 * v, type: 'bandpass', freq: 900, freqEnd: 7000, q: 4 });
+    a.noise(t + 0.12, 0.08, { vol: 0.7 * v, type: 'highpass', freq: 3500 });
+    a.tone(t + 0.12, 0.12, { vol: 0.2 * v, freq: 1800, freqEnd: 400, type: 'triangle' });
+  },
+  // risada distorcida pela máscara: pulsos "ha" descendo de tom
+  laugh: (a, t, v) => {
+    for (let i = 0; i < 5; i++) {
+      a.tone(t + i * 0.13, 0.1, { vol: 0.22 * v, freq: 260 - i * 18, freqEnd: 200 - i * 18, type: 'sawtooth', attack: 0.01 });
+      a.noise(t + i * 0.13, 0.09, { vol: 0.12 * v, type: 'bandpass', freq: 900, q: 5 });
+    }
+  },
+  // palmas da "plateia" (A Plateia): estalos curtos espalhados
+  applause: (a, t, v) => {
+    for (let i = 0; i < 26; i++) a.noise(t + i * 0.045 + (i % 3) * 0.013, 0.035, { vol: (0.18 + (i % 4) * 0.05) * v, type: 'bandpass', freq: 1400 + (i % 5) * 300, q: 2 });
+  },
+  tick: (a, t, v) => {
+    a.noise(t, 0.03, { vol: 0.35 * v, type: 'highpass', freq: 5000 });
+    a.tone(t, 0.04, { vol: 0.12 * v, freq: 2100, type: 'square' });
+  },
+  button: (a, t, v) => {
+    a.tone(t, 0.08, { vol: 0.35 * v, freq: 180, freqEnd: 90, type: 'square' });
+    a.noise(t, 0.06, { vol: 0.4 * v, type: 'lowpass', freq: 900 });
+    a.tone(t + 0.1, 0.5, { vol: 0.2 * v, freq: 880, freqEnd: 1320, type: 'triangle' });
+  },
   select: (a, t, v) => a.tone(t, 0.06, { vol: 0.15 * v, freq: 660, type: 'triangle' }),
   confirm: (a, t, v) => {
     a.tone(t, 0.1, { vol: 0.2 * v, freq: 440, type: 'square' });

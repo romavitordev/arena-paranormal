@@ -133,6 +133,7 @@ export class HUD {
     if (action === 'carga+physical' || action === 'carga+ranged') return `${actionLabel(i, 'carga', source)}·${actionLabel(i, action.slice(6), source)}`;
     if (action.startsWith('carga+')) return `${actionLabel(i, 'carga', source)}+${actionLabel(i, action.slice(6), source)}`;
     if (action.startsWith('block+')) return `${actionLabel(i, 'block', source)}+${actionLabel(i, action.slice(6), source)}`;
+    if (action.startsWith('ranged+')) return `${{ forward: '→', back: '←', side: '↕' }[action.slice(7)] || ''}${actionLabel(i, 'ranged', source)}`; // □ + direção (Anfitrião)
     return actionLabel(i, action, source);
   }
 

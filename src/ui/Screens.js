@@ -271,7 +271,7 @@ export const MODES = {
 // no centro, os lutadores em 3D (SelectStage) entram deslizando ao serem olhados e fazem pose ao confirmar.
 const SEL_COLS = 3;
 const SEL_PAGE = 15; // 15 lutadores por página (3 × 5), sem barra de rolagem; LB/RB trocam de página
-const INPUT_NAMES = { 'carga+jump': 'Energia + Pulo', 'carga+ranged': '△ → □', 'carga+physical': '△ → ○', 'block+carga': 'R2 + △', 'block+jump': 'R2 + ×', 'carga+dodge': '△ + L2' };
+const INPUT_NAMES = { 'carga+jump': 'Energia + Pulo', 'carga+ranged': '△ → □', 'carga+physical': '△ → ○', 'block+carga': 'R2 + △', 'block+jump': 'R2 + ×', 'carga+dodge': '△ + L2', 'ranged+forward': '→ + □', 'ranged+back': '← + □', 'ranged+side': 'lado + □' };
 
 export class SelectScreen {
   constructor(root, { portraits, audio, prev, mode = 'pvp', team = false }) {

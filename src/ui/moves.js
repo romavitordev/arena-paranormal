@@ -9,6 +9,9 @@ const INPUT = {
   'block+carga': 'R2 + △ / RT + Y',
   'block+jump': 'R2 + × / RT + A',
   'carga+dodge': '△ + L2 / Y + LT',
+  'ranged+forward': 'Frente + □ / X',
+  'ranged+back': 'Trás + □ / X',
+  'ranged+side': 'Lado + □ / X',
 };
 const FIN = { launch: 'lança', knockdown: 'derruba', push: 'afasta', stun: 'atordoa' };
 const DIR = { forward: 'Frente + ○', back: 'Trás + ○', side: 'Lado + ○', air: 'No ar + ○', up: '↑ + ○ no combo', down: '↓ + ○ no combo' };
@@ -27,7 +30,7 @@ export function moveListHTML(c) {
   for (const k of ['forward', 'back', 'side', 'air', 'up', 'down']) if (c.melee[k]) html += row(DIR[k], c.melee[k].name, strike(c.melee[k]));
   const r = c.ranged;
   html += row('□ / X', r.name, `${r.damage}${r.count > 1 ? ` × ${r.count}` : ''} de dano · recarga ${r.cooldown}s${r.energyCost ? ` · ${r.energyCost} de sanidade` : ''}`);
-  if (r.variants) for (const [k, v] of Object.entries(r.variants)) html += row(DIR[k].replace('○', '□'), v.label.toLowerCase().replace(/^./, (x) => x.toUpperCase()), `${v.damage}${(v.count ?? r.count) > 1 ? ` × ${v.count ?? r.count}` : ''} de dano`);
+  if (r.variants) for (const [k, v] of Object.entries(r.variants)) if (!v.ability) html += row(DIR[k].replace('○', '□'), v.label.toLowerCase().replace(/^./, (x) => x.toUpperCase()), `${v.damage}${(v.count ?? r.count) > 1 ? ` × ${v.count ?? r.count}` : ''} de dano`);
   for (const a of c.abilities || []) html += row(INPUT[a.input] || a.input, a.name, `${a.description || ''} (${a.energyCost} de sanidade · recarga ${a.cooldown}s)`);
   html += row('△ → △ → ○', `Especial: ${c.special.name}`, specialSummary(c));
   html += row('R2 parado', 'Defesa', 'defende tudo, até especial (quebra depois de muito dano)');

@@ -29,6 +29,12 @@ function sacrificeOk(f, opp) {
   return !sp || sp.type !== 'kamikaze' || opp.health <= sp.damage * 0.8;
 }
 
+// habilidades por comando (△ + ○/□/L2, R2 + △/× e □ + direção do Anfitrião); △ + × fica com a aproximação
+const isModAbility = (a) => a.input.startsWith('block+') || a.input.startsWith('ranged+') || (a.input.startsWith('carga+') && a.input !== 'carga+jump');
+// tipos que não precisam do adversário perto (buffs, invocações, regras do jogo...)
+const SELF_TYPES = ['weaponState', 'blink', 'mistCloud', 'healOverTime', 'hatredTemple', 'shadowClones', 'heavyProtection', 'noiseScreen', 'selfBuff', 'gameRule',
+  'chaosRule', 'hostTime', 'hostAudience', 'hostButton', 'orphanGame', 'hostClones'];
+
 export class CpuController {
   constructor({ level = 'normal' } = {}) {
     this.fighter = null;
@@ -49,6 +55,16 @@ export class CpuController {
 
   tap(action, extra = {}, raw) {
     this.queue.push({ t: 0.06, held: { [action]: true, ...extra }, raw }, { t: 0.05, held: {}, raw });
+  }
+
+  // aperta o comando de uma habilidade; □ + direção vira a direção em relação ao adversário
+  pressAbility(a, toOpp, side) {
+    const [modKey, btn] = a.input.split('+'); // 'carga' (△), 'block' (R2) ou 'ranged' (□ + direção)
+    if (modKey === 'block') this.queue.push({ t: 0.05, held: { block: true } }, { t: 0.06, held: { block: true, [btn]: true } }, { t: 0.05, held: {} });
+    else if (modKey === 'ranged') {
+      const move = btn === 'forward' ? toOpp : btn === 'back' ? { x: -toOpp.x, z: -toOpp.z } : side;
+      this.queue.push({ t: 0.05, held: {}, move }, { t: 0.06, held: { ranged: true }, move }, { t: 0.05, held: {} });
+    } else this.queue.push({ t: 0.05, held: { carga: true, [btn]: true } }, { t: 0.05, held: {} });
   }
 
   // sequência de golpes; às vezes termina com ↑ (lançador + aéreo) ou ↓ (derruba)
@@ -86,7 +102,23 @@ export class CpuController {
     if (rule === 'jump') out.held.jump = false;
     if (rule === 'block') out.held.block = false;
     if (rule === 'dash' && out.held.carga) out.held.jump = false;
-    if (rule === 'still' && !out.moveX && !out.moveY && f.state === 'idle') out.moveX = Math.sin(f.world.time * 1.3 || 0) > 0 ? 0.8 : -0.8;
+    if ((rule === 'still' || rule === 'move') && !out.moveX && !out.moveY) out.moveX = Math.sin(f.world.time * 1.3 || 0) > 0 ? 0.8 : -0.8;
+    if (rule === 'attack') { out.held.physical = false; out.held.ranged = false; }
+    if (rule === 'turn' && (out.moveX || out.moveY)) {
+      // vira a cada pouco mais de 1 s (gira o vetor 90° nos tempos ímpares)
+      if (Math.floor((f.world.time || 0) / 1.2) % 2) { const x = out.moveX; out.moveX = -out.moveY; out.moveY = x; }
+    }
+    if (rule === 'approach') {
+      const opp = f.world.opponentOf(f);
+      if (opp && distXZ(f.pos, opp.pos) > 5) {
+        const b = f.moveBasis();
+        const dx = opp.pos.x - f.pos.x;
+        const dz = opp.pos.z - f.pos.z;
+        const l = Math.hypot(dx, dz) || 1;
+        out.moveX = (dx / l) * b.right.x + (dz / l) * b.right.z;
+        out.moveY = (dx / l) * b.forward.x + (dz / l) * b.forward.z;
+      }
+    }
     return out;
   }
 
@@ -306,17 +338,15 @@ export class CpuController {
         }
       }
       // habilidades secundárias: △ + ○/□/L2 e R2 + △/×
-      let mods = (def.abilities || []).filter((a) => (a.input.startsWith('block+') || (a.input.startsWith('carga+') && a.input !== 'carga+jump')) && f.cooldowns[a.id] <= 0 && f.energy >= (f.abilityCost ? f.abilityCost(a) : a.energyCost || 0) + 5 && this.aiOk(a, d, opp, lowHp));
+      let mods = (def.abilities || []).filter((a) => isModAbility(a) && f.cooldowns[a.id] <= 0 && f.energy >= (f.abilityCost ? f.abilityCost(a) : a.energyCost || 0) + 5 && this.aiOk(a, d, opp, lowHp));
       // não repetir a mesma habilidade seguida quando houver outra
       if (mods.length > 1) mods = mods.filter((a) => a.id !== this.lastAbility);
       if (mods.length && r < L.ability) {
         const a = mods[Math.floor(Math.random() * mods.length)];
         this.lastAbility = a.id;
-        const [modKey, btn] = a.input.split('+'); // 'carga' (△) ou 'block' (R2)
         const range = a.range || 10;
-        if (d <= range || ['weaponState', 'blink', 'mistCloud', 'healOverTime', 'hatredTemple', 'shadowClones', 'heavyProtection', 'noiseScreen', 'gameRule'].includes(a.type)) {
-          if (modKey === 'block') this.queue.push({ t: 0.05, held: { block: true } }, { t: 0.06, held: { block: true, [btn]: true } }, { t: 0.05, held: {} });
-          else this.queue.push({ t: 0.05, held: { carga: true, [btn]: true } }, { t: 0.05, held: {} });
+        if (d <= range || SELF_TYPES.includes(a.type)) {
+          this.pressAbility(a, toOpp, side);
           return out;
         }
       }
@@ -417,6 +447,8 @@ export class CpuController {
   // as ações possíveis agora, cada uma com uma preferência "de fábrica" (prior) e como executar
   options(f, opp, d, lowHp, side) {
     const def = f.def;
+    const tl0 = Math.hypot(opp.pos.x - f.pos.x, opp.pos.z - f.pos.z) || 1;
+    const toOpp = { x: (opp.pos.x - f.pos.x) / tl0, z: (opp.pos.z - f.pos.z) / tl0 };
     const L = this.L;
     const opts = [];
     const add = (id, prior, run) => { if (prior > 0) opts.push({ id, prior, run }); };
@@ -440,16 +472,14 @@ export class CpuController {
     }
     // habilidades
     for (const a of def.abilities || []) {
-      if (!(a.input.startsWith('block+') || (a.input.startsWith('carga+') && a.input !== 'carga+jump'))) continue;
+      if (!isModAbility(a)) continue;
       if (f.cooldowns[a.id] > 0 || f.energy < (f.abilityCost ? f.abilityCost(a) : a.energyCost || 0) + 5 || !this.aiOk(a, d, opp, lowHp)) continue;
       const range = a.range || 10;
-      const self = ['weaponState', 'blink', 'mistCloud', 'healOverTime', 'hatredTemple', 'shadowClones', 'heavyProtection', 'noiseScreen', 'selfBuff', 'gameRule'].includes(a.type);
+      const self = SELF_TYPES.includes(a.type);
       if (!self && d > range) continue;
-      const [modKey, btn] = a.input.split('+');
       add('ab:' + a.id, (a.id === this.lastAbility ? 0.3 : 0.6) * (open && !self ? 2 : 1), () => {
         this.lastAbility = a.id;
-        if (modKey === 'block') this.queue.push({ t: 0.05, held: { block: true } }, { t: 0.06, held: { block: true, [btn]: true } }, { t: 0.05, held: {} });
-        else this.queue.push({ t: 0.05, held: { carga: true, [btn]: true } }, { t: 0.05, held: {} });
+        this.pressAbility(a, toOpp, side);
       });
     }
     // especial

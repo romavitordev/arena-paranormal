@@ -244,11 +244,14 @@ const VISUALS = {
     return g;
   },
   // Rajada Caótica (Labirinto): esfera de energia com coroa de faíscas
-  chaos(color) {
+  // Disparo do Caos do Anfitrião: a cor diz o efeito; color2 = segunda cor (combinação) no anel. O PRETO tem miolo
+  // escuro (sem brilho aditivo) com o anel roxo.
+  chaos(color, a = {}) {
     const g = new THREE.Group();
-    g.add(new THREE.Mesh(new THREE.SphereGeometry(0.2, 10, 8), glowMat(0xffffff, 0.9)));
-    g.add(new THREE.Mesh(new THREE.SphereGeometry(0.42, 10, 8), glowMat(color, 0.45)));
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.4, 0.03, 4, 16), glowMat(color, 0.9));
+    const dark = color < 0x303030;
+    g.add(new THREE.Mesh(new THREE.SphereGeometry(0.2, 10, 8), dark ? new THREE.MeshBasicMaterial({ color: 0x050008 }) : glowMat(0xffffff, 0.9)));
+    g.add(new THREE.Mesh(new THREE.SphereGeometry(0.42, 10, 8), dark ? new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.7, depthWrite: false }) : glowMat(color, 0.45)));
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.4, 0.03, 4, 16), glowMat(a.color2 ?? color, 0.9));
     g.add(ring);
     g.userData.spin = ring;
     return g;
@@ -287,7 +290,7 @@ export class Projectiles {
       const oldest = mine[0];
       for (const q of this.list.filter((x) => x.owner === owner && x.volley === oldest)) this.remove(q, true);
     }
-    const mesh = (VISUALS[ability.visual] || VISUALS.bullet)(ability.color ?? 0xffffff);
+    const mesh = (VISUALS[ability.visual] || VISUALS.bullet)(ability.color ?? 0xffffff, ability);
     mesh.position.copy(origin);
     mesh.lookAt(origin.clone().add(dir));
     this.world.scene.add(mesh);
@@ -406,7 +409,7 @@ export class Projectiles {
         }
         if (p.mesh.userData.spinY) p.mesh.userData.spinY.rotation.y += dt * 18;
       }
-      if (a.visual === 'chaos' && Math.random() < 0.7) w.fx.lightning(p.pos, p.pos.clone().add(new THREE.Vector3((Math.random() - 0.5), (Math.random() - 0.5), (Math.random() - 0.5)).multiplyScalar(1.4)), { color: a.color, life: 0.08 });
+      if (a.visual === 'chaos' && Math.random() < 0.7) w.fx.lightning(p.pos, p.pos.clone().add(new THREE.Vector3((Math.random() - 0.5), (Math.random() - 0.5), (Math.random() - 0.5)).multiplyScalar(1.4)), { color: a.color2 && (Math.random() < 0.5 || a.color < 0x303030) ? a.color2 : a.color, life: 0.08 });
       // BALA CURVA (Disparo Espiral da Fantasma — cânone: "nega toda cobertura que não seja completa"): com o alvo à
       // vista, vai direto nele; com parede/obstáculo no meio, calcula uma rota pelo mapa (refeita a cada 0,25 s) e segue
       // o ponto mais distante dela que já está à vista — passa por qualquer brecha (porta, vão, janela) e acerta. Só a
@@ -528,7 +531,10 @@ export class Projectiles {
             dir: p.dir, color: a.color, sound: a.hitSound, scale: a.impactScale || 1, pos: p.pos.clone(),
             reaction: !(a.onHit && a.onHit.pull),
           });
-          if (typeof res === 'number' && res >= 0) this.applyOnHit(p, target);
+          if (typeof res === 'number' && res >= 0) {
+            this.applyOnHit(p, target);
+            if (a.hitFn && target.state !== 'ko') a.hitFn(w, p.owner, target, p); // efeito da cor do Disparo do Caos
+          }
           if (a.pool) addBloodPool(w, p.owner, target.pos.x, target.pos.z, a.pool);
           if (a.boomerang && !p.back) { p.back = true; p.hitOnce = true; break; }
           if (a.cursed) {
@@ -547,6 +553,7 @@ export class Projectiles {
         }
         if (p.traveled >= a.range && !a.boomerang) {
           w.fx.burst(p.pos, { count: 8, color: a.color, speed: 2, life: 0.3, size: 0.25 });
+          if (a.expireFn) a.expireFn(w, p); // ex.: o tiro PRETO "falha" e volta de outra direção
           if (a.pool) this.poolBelow(p);
           dead = true;
         }

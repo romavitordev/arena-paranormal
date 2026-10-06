@@ -6,7 +6,7 @@
 // Visual: máscara de gás com o Símbolo do Anfitrião e olhos roxos, cabos, o relógio de ouro brilhando em roxo e
 // girando sem parar no braço esquerdo, aura roxa/rosa/azul.
 // Equilíbrio: o aleatório fica só no "sabor" (efeito do tiro, regra sorteada, casa da roleta), nunca no acerto — tudo
-// que acerta de longe tem aviso.
+// que acerta de longe tem aviso. Todo o sorteio passa por combat/chaos.js (raridade, histórico, combinações).
 import base from '../arnaldo.js';
 
 const PURPLE = 0xb04aff;
@@ -31,7 +31,8 @@ export default {
     tagline: 'Bem-vindos ao meu jogo. As regras? Vocês vão lembrar delas.',
   },
   stats: { moveSpeed: 8.6, attackSpeed: 1.1, maxHealth: 1060 }, // cabe a vida extra da Relíquia (+60)
-  anims: { idle: 'idle_fist', run: 'run', charge: 'charge', victory: 'victory', block: 'block' },
+  anims: { idle: 'idle_host', run: 'run', charge: 'charge', victory: 'victory', block: 'block' },
+  quirks: true, // manias do Anfitrião (chaos.js tickHostQuirks): cabeça torta, risadas, tique-taque, passos que "pulam"
   chargeFx: { style: 'default', color: PURPLE },
 
   // ○: golpes de Energia caótica com o braço do relógio e os cabos — cada golpe numa cor do caos
@@ -52,7 +53,10 @@ export default {
     air: { name: 'Queda Livre', anim: 'air_kick', dur: 0.42, active: [0.15, 0.3], damage: 36, range: 2.0, arc: 110, knockback: 3, slam: 16, vertical: 2.3, sound: 'kick', hitSound: 'impact', trail: { color: PURPLE } },
   },
 
-  // □: disparo de Energia com efeito SORTEADO a cada tiro (a cor mostra qual saiu): dano / lentidão / empurrão
+  // □: DISPARO DO CAOS — cada tiro sorteia uma de 8 cores (raridade + histórico, às vezes duas combinadas) e a cor diz
+  // o efeito: ROXO impacto · AZUL distorção (lento) · ROSA repulsão · AMARELO choque · VERDE troca de lugar ·
+  // VERMELHO explosão · BRANCO duplicação · PRETO falha (some no meio do caminho e volta de outra direção).
+  // □ + direção soltam três habilidades do kit (cada uma com a sua recarga; recarregando, sai o tiro normal).
   ranged: {
     name: 'Disparo do Caos',
     type: 'projectile',
@@ -69,27 +73,28 @@ export default {
     spread: 0,
     knockback: 1.2,
     hitstun: 0.35,
-    cooldown: 2.4,
+    cooldown: 2.2,
     energyCost: 0,
     visual: 'chaos',
     color: PURPLE,
     element: 'energia',
     sound: 'shockwave',
     hitSound: 'impact',
-    chaos: [
-      { color: PURPLE, damage: 42 }, // roxo: dano
-      { color: BLUE, damage: 24, onHit: { slow: { mult: 0.6, time: 2.2, name: 'TEMPO LENTO' } } }, // azul: lentidão
-      { color: PINK, damage: 26, knockback: 6, hitstun: 0.5 }, // rosa: empurrão
-    ],
+    chaosShot: true,
+    variants: {
+      forward: { ability: 'chicotada' },
+      back: { ability: 'tradicao' },
+      side: { ability: 'plateia' },
+    },
   },
 
   abilities: [
     {
-      id: 'regraDoJogo',
-      name: 'Regra do Jogo',
-      input: 'carga+physical', // △ + ○ / Y + B
-      type: 'gameRule',
-      description: 'Impõe uma regra sorteada por 6 s, anunciada na tela: proibido pular, defender, correr ou ficar parado. Vale para os DOIS — quem quebrar leva um raio (o Anfitrião conhece o jogo e leva metade).',
+      id: 'regraDoCaos',
+      name: 'Regra do Caos',
+      input: 'carga+physical', // △ → ○
+      type: 'chaosRule',
+      description: 'Impõe uma de 8 regras por 6 s (não pular, não correr, não defender, não ficar parado, não atacar, permanecer em movimento, trocar de direção, aproximar-se). Vale para os DOIS: quem quebrar leva um castigo sorteado (raio, choque, empurrão, explosão ou atordoamento) — o Anfitrião conhece o jogo e leva metade.',
       energyCost: 25,
       cooldown: 18,
       windup: 0.5,
@@ -99,55 +104,127 @@ export default {
       color: PURPLE,
     },
     {
+      id: 'multiplicacao',
+      name: 'Multiplicação',
+      input: 'carga+ranged', // △ → □
+      type: 'hostClones',
+      description: 'Duas cópias de Energia (5 s): cercam, batem, correm e EXPLODEM no fim perto do alvo. Às vezes ele troca de lugar com uma delas — quem é o verdadeiro?',
+      energyCost: 30,
+      cooldown: 20,
+      clones: 2,
+      duration: 5,
+      swapChance: 0.4,
+      color: PINK,
+    },
+    {
       id: 'distorcao',
       name: 'Distorção',
-      input: 'carga+ranged', // △ + □ / Y + X
-      type: 'mindSwap',
-      description: 'Distorce a Realidade: os dois trocam de lugar e o adversário volta desorientado, de costas e atordoado.',
-      energyCost: 25,
-      cooldown: 14,
+      input: 'carga+jump', // △ + ×
+      type: 'hostDistortion',
+      description: 'Some numa dobra da Realidade e reaparece atrás, do lado ou longe do adversário, que fica virado para o lado errado. Nem sempre funciona: às vezes o truque falha e ele surge na frente.',
+      energyCost: 15,
+      cooldown: 7,
       range: 14,
-      windup: 0.3,
-      stun: 0.5,
-      surprise: 0.9,
+      gone: 0.32,
+      surprise: 0.6,
+      recovery: 0.3,
       color: PINK,
     },
     {
       id: 'tempoDistorcido',
       name: 'Tempo Distorcido',
-      input: 'block+jump', // R2 + × / RT + A
-      type: 'selfBuff',
-      buffType: 'deadlySpeed',
-      label: 'TEMPO DISTORCIDO',
-      anim: 'cast_up',
-      description: 'Os ponteiros enlouquecem: fica muito mais rápido por 6 s e recupera todas as esquivas.',
+      input: 'block+jump', // R2 + ×
+      type: 'hostTime',
+      description: 'Os ponteiros enlouquecem: 6 s mais rápido (anda e bate), recupera as esquivas e o tempo pesa em volta do adversário por 3 s.',
       energyCost: 25,
       cooldown: 20,
       duration: 6,
-      speedMult: 1.3,
+      speedMult: 1.25,
+      atkSpeed: 1.12,
       refillDodges: 4,
+      slow: 0.75,
+      slowTime: 3,
+      range: 14,
       color: BLUE,
+    },
+    {
+      id: 'orfanato',
+      name: 'Jogo do Orfanato',
+      input: 'carga+dodge', // △ + L2
+      type: 'orphanGame',
+      description: 'Chamas de Energia em volta da arena e a luz fica roxa por 8 s. A regra do orfanato: quem passar 4 s sem usar um ritual perde sanidade e leva dano de Energia.',
+      energyCost: 30,
+      cooldown: 26,
+      duration: 8,
+      tick: 1.5,
+      drain: 10,
+      damage: 14,
+      radius: 7,
+      color: PURPLE,
+    },
+    {
+      id: 'botao',
+      name: 'Botão do Anfitrião',
+      input: 'block+carga', // R2 + △
+      type: 'hostButton',
+      description: 'Um botão paranormal sobe do chão. Ele hesita... e aperta: um EVENTO DO CAOS sorteado (raio, choque, explosão, troca, clones, controles invertidos, relógios, tempestade...). Do comum ao muito raro.',
+      energyCost: 20,
+      cooldown: 14,
+      pressAt: 0.75,
+      color: PINK,
+    },
+    {
+      id: 'chicotada',
+      name: 'Chicotada do Caos',
+      input: 'ranged+forward', // frente + □
+      type: 'chaosWhip',
+      description: 'Os cabos de Energia viram chicote (alcance 8 m); o estalo tem um efeito sorteado: puxa, dá choque, deixa lento ou joga para o alto.',
+      energyCost: 15,
+      cooldown: 6,
+      windup: 0.28,
+      recovery: 0.3,
+      damage: 38,
+      range: 8,
+      color: PINK,
+    },
+    {
+      id: 'tradicao',
+      name: 'Tradição de Família',
+      input: 'ranged+back', // trás + □
+      type: 'familyTradition',
+      description: 'Junta Energia entre as mãos (parado, dá para interromper) e explode em volta de si (3,4 m), lançando.',
+      energyCost: 30,
+      cooldown: 16,
+      windup: 0.85,
+      recovery: 0.4,
+      radius: 3.4,
+      range: 3.4,
+      damage: 72,
+      knockback: 7,
+      ai: { max: 3.2 },
+      color: PURPLE,
     },
     {
       id: 'plateia',
       name: 'A Plateia',
-      input: 'carga+dodge', // △ + L2 / Y + LT
-      type: 'selfBuff',
-      buffType: 'audience',
-      label: 'A PLATEIA',
-      anim: 'concentrate',
-      description: 'Todo jogo precisa de plateia: por 7 s os rituais e o □ batem 25% mais forte.',
-      energyCost: 25,
-      cooldown: 20,
-      duration: 7,
-      damageMult: 1.25,
+      input: 'ranged+side', // lado + □
+      type: 'hostAudience',
+      description: 'Vira para a plateia, faz uma reverência e recebe os aplausos: +20 de sanidade e, por 8 s, rituais e □ 20% mais fortes e o caos mais generoso com o raro. Fica aberto durante o número.',
+      energyCost: 10,
+      cooldown: 22,
+      duration: 8,
+      damageMult: 1.2,
       affects: ['ranged', 'ability'],
+      energy: 20,
+      animTime: 1.2,
+      ai: { min: 6 },
       color: PINK,
     },
   ],
 
-  // O JOGO DO ANFITRIÃO: aviso claro (o relógio sobe, sigilo no alvo); se conectar, a roleta decide o sabor — o dano
-  // fica sempre entre 200 e 300 (specials/hostGame.js)
+  // O JOGO DO ANFITRIÃO: aviso claro (o relógio sobe, sigilo no alvo); se conectar, vira um programa de auditório:
+  // apresentador → palco → roleta de 7 casas → resultado → reverência. Dano sempre entre 200 e 300
+  // (specials/hostGame.js)
   special: {
     name: 'O Jogo do Anfitrião',
     banner: 'O Jogo do Anfitrião',
@@ -165,6 +242,6 @@ export default {
   awakening: undefined,
 
   passives: [
-    { type: 'chronoSense', cooldown: 15 }, // Percepção Cronológica: de 15 em 15 s desvia sozinho de um golpe
+    { type: 'chronoSense', cooldown: 15 }, // Percepção Anacrônica: de 15 em 15 s desvia sozinho de um golpe (e já sabe o próximo)
   ],
 };
