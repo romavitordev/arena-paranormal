@@ -7,6 +7,47 @@
 
 ---
 
+## 📌 Estado na v3.9.0 (2026-10-06) — o que foi feito e o que FALTA (resumo, revisado)
+
+### ✅ Feito de v3.5.1 a v3.9.0
+- Substituição: passo curto para o lado (não vai mais para as costas); vale atordoado e interrompe o combo do atacante.
+- Esquiva: recarga 1 carga a cada 70 de dano; zerou → 3 s sem recarregar. Y→B com janela de 0,4 s. Defesa + direção
+  = passos rápidos (Storm 4).
+- Especiais à distância com aviso (`specials/telegraph.js`); Supernova da Erin e Em Nome do Caos são "pegos" por uma
+  granada de luz que dá para evitar.
+- Mascarados: máscara só na Transformação, com cena seguindo os GIFs do usuário e nome do assassino na tela
+  (??? · MUTILADOR NOTURNO · A FANTASMA); Juan transformado = PORTADOR DO TRONO; Armadura de Sangue explode do ombro.
+- Erin: Transformação Em Nome do Caos (máscara de gás remodelada, sem sanidade — custos em vida, especial suicida com
+  cutscene; vence o round se levar o rival junto).
+- Labirinto (???): Tempestade Caótica vira raio contínuo que persegue.
+- Tela inicial nova (fundo 3D com os lutadores, logo redesenhado, menu em coluna).
+- Bugs: corpos invisíveis na seleção depois de uma partida; máscara voltando no round seguinte; substituição que não
+  funcionava (v3.5.1).
+- Documentação: Arnaldo Fritz → O Anfitrião e Senhor Veríssimo (seção abaixo); Jae e Dalmo; GIFs em
+  `Referencias visuais/ANALISE.md`.
+
+### ⏳ O que falta (por prioridade)
+1. 🔴 **Equilíbrio depois das mudanças desta rodada** — nada foi medido com lutas CPU × CPU desde a v3.5: os especiais
+   à distância ficaram mais fáceis de evitar (aviso), a esquiva recarrega mais rápido, a Substituição ficou mais forte
+   e entraram três formas novas fortes (???, Mutilador Noturno, Erin Em Nome do Caos — explosão de 450). Rodar
+   `runBalance` (2–3 lutas por par) e ajustar; conferir também quem estava fora da escala (Gal, Dante, Arthur, Aghata,
+   Kian, Kemi — ver "Plano de buffs" mais abaixo).
+2. 🔴 **Próximos lutadores: Arnaldo Fritz (→ O Anfitrião) e Senhor Veríssimo** — pesquisa e proposta de kit prontas
+   (seção abaixo); falta o usuário decidir os kits e fazer os modelos no Blender (+ a espada da fita vermelha).
+3. 🟡 **HUD de batalha** no estilo Storm 4 (retratos, molduras, combo/dano, avisos animados, cartões das assistências).
+4. 🟡 **Nome/logo do jogo:** decidir se fica "Arena Paranormal"; música e sons de navegação no menu; transições entre
+   telas; seleção/configurações/carregamento/vitória no mesmo visual da tela inicial nova.
+5. 🟡 **IA:** estratégia melhor nos níveis abaixo do Super Difícil; aprender o golpe que o jogador REPETE; treino longo
+   CPU × CPU para `public/ai/learned.json`. (A CPU já reage ao aviso dos especiais e à granada de luz.)
+6. 🟡 **Mobile:** 1º toque num submenu às vezes não escolhe; ícones de habilidade por personagem na HUD do celular.
+7. 🟡 **Cenários:** separar no Blender as peças em bloco único (cidade do Orfanato, cemitério das Ruínas) para ficarem
+   transparentes quando tampam a luta.
+8. 🟢 Animações próprias das formas (Fantasma, ???, Mutilador, Erin Em Nome do Caos usam as humanas); poses de vitória
+   refeitas com referência; Jae e Dalmo (futuros Mascarados).
+9. 🟢 Limpeza: a branch `refs-gifs` (só os GIFs de referência) pode ser apagada quando o usuário quiser.
+
+---
+
 ## 🔴 Próximos lutadores: ARNALDO FRITZ (transforma em O ANFITRIÃO) e SENHOR VERÍSSIMO
 
 > Pesquisa de 2026-10-06 (wiki de Ordem Paranormal + `lore/MEMBROS.md`). A wiki estava bloqueada para leitura direta
@@ -103,15 +144,16 @@
 
 ---
 
-## 🟡 Tela de início, HUD de batalha e identidade visual (pedido do usuário)
+## 🟡 Tela de início, HUD de batalha e identidade visual (pedido do usuário) — tela de início ✅ (v3.9.0)
 
 O usuário quer **melhorar todo o design da tela de início, a HUD de batalha e a identidade do jogo, incluindo o nome**.
 Hoje: título em texto puro "ARENA PARANORMAL" (`src/ui/Screens.js`, telas `title`/menu), menus em lista, HUD em
 `src/ui/HUD.js` + `src/styles.css` (vida, sanidade, defesa, esquivas, Barra de Transformação, cooldowns).
 - **Nome:** decidir com o usuário se fica "Arena Paranormal" ou muda (ideias: algo com o Outro Lado / Membrana /
   Ordem) e criar um **logo** (sigilo dos cinco elementos + tipografia própria) para tela de início, aba e carregamento.
-- **Tela de início:** fundo animado com personagens/cenário 3D (não só partículas), logo grande, "pressione start"
-  com animação, menu principal com cartões/ícones, música e sons de navegação, transições entre telas.
+- ✅ (v3.9.0) **Tela de início:** fundo 3D com os lutadores contra a luz, círculo ritual e cinzas
+  (`ui/titleStage.js`), logo redesenhado, vinheta/granulado, "pressione start" animado e menu em coluna. Falta:
+  música e sons de navegação, cartões/ícones nas opções e transições entre telas.
 - **HUD de batalha:** redesenhar no estilo Storm 4 — retratos dos lutadores, barras com moldura própria, sanidade e
   esquivas mais legíveis, timer central, indicador de combo e de dano, avisos (ESPECIAL, ERROU, DESVIOU, SEM ESQUIVAS)
   com animação, cartões das assistências na batalha em equipe; tudo legível no celular.
@@ -392,7 +434,8 @@ Kian 46% · Ferreiro 43% · Arthur 39% · Xande 39% · Aghata 36% · Gal Sal 25%
 - 🟡 **Cenários:** peças juntadas num bloco só (a cidade do Orfanato, o cemitério das Ruínas) não ficam transparentes
   quando tampam a luta (a câmera só chega para a frente) — separar as peças no Blender.
 - ✅ (v2.8) **Tela de vitória cinematográfica:** a câmera aproxima e balança de leve (os nomes acompanham). Falta: 🟢 poses refeitas com referência.
-- 🟢 **Formas:** a Fantasma ainda usa as animações humanas da Kemi (só Deus da Morte e Diabo têm as próprias).
+- 🟢 **Formas:** a Fantasma ainda usa as animações humanas da Kemi (só Deus da Morte e Diabo têm as próprias); as
+  formas novas (???, Mutilador Noturno, Erin Em Nome do Caos) também.
 
 ---
 
@@ -835,10 +878,11 @@ Arquivo: `damage.js`. Mostrar "N HITS" na HUD (estilo Storm). Resolve parte da d
 golpes.
 
 ### 3.2 Substituição (escape no meio do combo) ✅ (`trySubstitution`)
-A substituição funciona com L2 durante o hitstun: gasta 1 carga, cancela o golpe recebido e desvia com um passo curto
-para o lado (direcional escolhe o lado; 1,2 m de lado + 0,4 m para trás), perto de onde estava; não o teleporta para
-trás do atacante. Sem espaço, fica no mesmo lugar. Tem invulnerabilidade breve e efeito visual
-de troca. Arquivo: `Fighter.trySubstitution`.
+A substituição funciona com L2 durante o hitstun ou atordoado: gasta 1 carga, cancela o golpe recebido e desvia com um
+passo curto para o lado (direcional escolhe o lado; 1,2 m de lado + 0,4 m para trás), perto de onde estava; não o
+teleporta para trás do atacante. Sem espaço, fica no mesmo lugar. Interrompe o combo do atacante (ele fica exposto,
+como num golpe defendido). Tem invulnerabilidade breve e efeito visual de troca. Não vale para sair do erro de um
+especial avisado. Arquivo: `Fighter.trySubstitution`.
 
 ### 3.3 Escapar do agarrão (throw tech) ✅ ("ESCAPOU!")
 Em jogos tradicionais, quem é agarrado pode apertar o botão de agarrão na hora para se soltar. Proposta: se a
