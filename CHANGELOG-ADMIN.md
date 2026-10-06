@@ -1,5 +1,13 @@
 # Registro administrativo de alterações
 
+## v3.9.1 — Celular
+
+- `HomeScreen`: destaque da opção por `pointerenter` só com `pointerType === 'mouse'` (o `mouseenter` mudava a tela
+  no "hover" do toque e o navegador engolia o 1º toque).
+- CSS (celular deitado): `.panel .abilities` compacta (38×26, só `.k`, recarga e `.ready`) em vez de escondida.
+- `HUD`: `nocost` ignora quem tem a passiva `bloodPrice`.
+- Testado com Playwright em modo celular (844×390, toque): um toque abre o submenu e um toque escolhe.
+
 ## v3.9.0 — Tela inicial nova
 
 - `ui/titleStage.js` (`TitleStage`): fundo 3D dos menus — 5 lutadores (`LINEUP`) em idle com `SpotLight` de contorno

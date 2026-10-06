@@ -34,17 +34,24 @@
    Kian, Kemi — ver "Plano de buffs" mais abaixo).
 2. 🔴 **Próximos lutadores: Arnaldo Fritz (→ O Anfitrião) e Senhor Veríssimo** — pesquisa e proposta de kit prontas
    (seção abaixo); falta o usuário decidir os kits e fazer os modelos no Blender (+ a espada da fita vermelha).
-3. 🟡 **HUD de batalha** no estilo Storm 4 (retratos, molduras, combo/dano, avisos animados, cartões das assistências).
-4. 🟡 **Nome/logo do jogo:** decidir se fica "Arena Paranormal"; música e sons de navegação no menu; transições entre
-   telas; seleção/configurações/carregamento/vitória no mesmo visual da tela inicial nova.
+3. ✅ **HUD de batalha** — concluído (confirmado pelo usuário em 2026-10-06).
+4. 🟡 **Nome/logo do jogo** — parcialmente feito (usuário, 2026-10-06). Falta: decidir se fica "Arena Paranormal";
+   música e sons de navegação no menu; transições entre telas; demais telas no visual da tela inicial nova.
 5. 🟡 **IA:** estratégia melhor nos níveis abaixo do Super Difícil; aprender o golpe que o jogador REPETE; treino longo
    CPU × CPU para `public/ai/learned.json`. (A CPU já reage ao aviso dos especiais e à granada de luz.)
-6. 🟡 **Mobile:** 1º toque num submenu às vezes não escolhe; ícones de habilidade por personagem na HUD do celular.
-7. 🟡 **Cenários:** separar no Blender as peças em bloco único (cidade do Orfanato, cemitério das Ruínas) para ficarem
-   transparentes quando tampam a luta.
+6. ✅ (v3.9.1) **Mobile:** 1º toque no submenu (o `mouseenter` engolia o toque) e faixa compacta de habilidades na
+   HUD do celular. Falta só conferir num aparelho de verdade (o caso do iPhone não se reproduz no Chromium).
+7. ⏸ **Cenários (DEPOIS — tarefa de Blender, decisão do usuário 2026-10-06):** separar no Blender as peças em bloco
+   único (cidade do Orfanato, cemitério das Ruínas) para ficarem transparentes quando tampam a luta. Alternativa só
+   em código já testada em rascunho (não entrou): ao carregar o cenário, quebrar as malhas grandes em ilhas (vértices
+   soldados + union-find) agrupadas numa grade de ~6 m e tratar cada pedaço como `autoOcc` (`glbArena.js`).
 8. 🟢 Animações próprias das formas (Fantasma, ???, Mutilador, Erin Em Nome do Caos usam as humanas); poses de vitória
    refeitas com referência; Jae e Dalmo (futuros Mascarados).
-9. 🟢 Limpeza: a branch `refs-gifs` (só os GIFs de referência) pode ser apagada quando o usuário quiser.
+9. 🔴 Limpeza: apagar a branch `refs-gifs` (só os GIFs de referência) — pedido do usuário; daqui o GitHub recusa
+   apagar outra branch, então o usuário roda `git push origin --delete refs-gifs` (ou apaga pelo site).
+
+Ordem combinada com o usuário (2026-10-06): 9 → 7 (adiado: Blender) → 6 → 2 → 8 → 1 por último. Tarefas de Blender
+(modelos, cenários) ficam para depois.
 
 ---
 

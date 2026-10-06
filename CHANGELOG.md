@@ -1,5 +1,12 @@
 # Changelog
 
+## v3.9.1 — 2026-10-06
+
+### Corrigido
+- Celular: as opções do menu respondem ao PRIMEIRO toque (antes, no submenu, às vezes era preciso tocar duas vezes).
+- Celular: a HUD da luta volta a mostrar as habilidades, numa faixa compacta com o comando de cada uma, a recarga e o contorno de pronta.
+- HUD: quem paga rituais com vida (Arthur, Erin Em Nome do Caos) não aparece mais com as habilidades bloqueadas por "sem sanidade".
+
 ## v3.9.0 — 2026-10-06
 
 ### Alterado
