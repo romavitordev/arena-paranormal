@@ -6,6 +6,7 @@
   no "hover" do toque e o navegador engolia o 1º toque).
 - CSS (celular deitado): `.panel .abilities` compacta (38×26, só `.k`, recarga e `.ready`) em vez de escondida.
 - `HUD`: `nocost` ignora quem tem a passiva `bloodPrice`.
+- `actionLabel` com `source === 'touch'` usa `BUTTON_LABELS.touch` (antes caía nas teclas do teclado: "J", "E+K").
 - Testado com Playwright em modo celular (844×390, toque): um toque abre o submenu e um toque escolhe.
 
 ## v3.9.0 — Tela inicial nova

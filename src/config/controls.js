@@ -109,4 +109,8 @@ export const BUTTON_LABELS = {
     physical: 'B/○', ranged: 'X/□', carga: 'Y/△', jump: 'A/×',
     block: 'RT/R2', dodge: 'LT/L2', pageL: 'LB/L1', pageR: 'RB/R1', assist1: 'LB/L1', assist2: 'RB/R1', switch1: 'R◀', switch2: 'R▶',
   },
+  // botões da tela (celular/tablet) — os mesmos rótulos de ui/touchControls.js
+  touch: {
+    physical: '○', ranged: '□', carga: '△', jump: '×', block: 'DEF', dodge: 'ESQ', assist1: 'AS1', assist2: 'AS2', switch1: '⇄1', switch2: '⇄2',
+  },
 };
