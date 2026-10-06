@@ -174,3 +174,11 @@ um quadro de "glitch"/clarão) e o assassino fica com um **contorno vermelho em 
 | **henri ativandio armadura de sangue** | 5,0 s | encapuzado de pé, fundo vermelho → o sangue explode do ombro em espinhos que se espalham → endurece numa armadura espinhosa de um lado do corpo | Juan: `heavyProtection` com `bloodArmor` dispara `bloodEruption` (espinhos do ombro esquerdo) antes da casca |
 | **jae colocando mascara** | 5,6 s | (Park Jae-Yoon — ainda não está no jogo) noite roxa na floresta, jaqueta listrada vermelha → puxa o capuz pela cabeça → sorriso largo → fundo vermelho, capuz com um **X vermelho** no rosto, contorno vermelho | futuro lutador (ver TODO) |
 | **dalmo colocando mascara** | 10,9 s | (Dalmo Magno — ainda não está no jogo) enorme, de armadura/couro com espinhos, luz vermelha → põe o elmo com as duas mãos → explosão vermelha → elmo redondo com **um olho vermelho**, aura vermelha em chamas | futuro lutador (ver TODO) |
+
+### Erin — transformação e máscara de gás (2 imagens do usuário, 2026-10-06)
+- **Imagem 1:** ajoelhada num chão sujo, uma mão agarrando o rosto/testa e a outra aberta do lado, sorriso largo e
+  olhos arregalados (enlouquecendo), óculos de aviador com lentes verdes na cabeça, contorno verde brilhando, uma
+  granada com o símbolo do Caos no chão. → pose `madness_kneel` no começo da cena `gasmask`.
+- **Imagem 2:** a máscara de gás: borracha preta cobrindo o rosto, duas lentes redondas com aro **brilhando em verde**,
+  filtro redondo grande na frente/lado e **tubos verdes brilhantes** saindo da máscara e descendo pelo pescoço; ela
+  segura o pino de uma granada que flutua; fundo verde-ácido e amarelo. → `gasMask()` refeita.
