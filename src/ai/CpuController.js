@@ -23,6 +23,12 @@ export const CPU_LEVELS = {
 
 const rnd = (a, b) => a + Math.random() * (b - a);
 
+// especial que mata quem usa (Erin, Em Nome do Caos): só vale se a explosão provavelmente derrubar o adversário
+function sacrificeOk(f, opp) {
+  const sp = f.def.special;
+  return !sp || sp.type !== 'kamikaze' || opp.health <= sp.damage * 0.8;
+}
+
 export class CpuController {
   constructor({ level = 'normal' } = {}) {
     this.fighter = null;
@@ -290,7 +296,7 @@ export class CpuController {
         }
       }
       const tele = (def.abilities || []).find((a) => a.input === 'carga+jump');
-      if (f.specialAvailable() && d < 7 && r < L.special) {
+      if (f.specialAvailable() && sacrificeOk(f, opp) && d < 7 && r < L.special) {
         this.tap('carga');
         this.tap('carga');
         this.tap('physical');
@@ -422,7 +428,7 @@ export class CpuController {
       });
     }
     // especial
-    if (f.specialAvailable() && d < 7) add('special', open ? 2.2 : 1.1, () => { this.tap('carga'); this.tap('carga'); this.tap('physical'); });
+    if (f.specialAvailable() && sacrificeOk(f, opp) && d < 7) add('special', open ? 2.2 : 1.1, () => { this.tap('carga'); this.tap('carga'); this.tap('physical'); });
     // longe: aproxima (teleporte ou dash longo)
     const tele = (def.abilities || []).find((a) => a.input === 'carga+jump');
     if (tele && f.cooldowns[tele.id] <= 0 && f.energy > tele.energyCost + 10 && d > 4 && d < 14) add('teleport', 0.8, () => this.queue.push({ t: 0.05, held: { carga: true } }, { t: 0.06, held: { carga: true, jump: true } }, { t: 0.05, held: {} }));

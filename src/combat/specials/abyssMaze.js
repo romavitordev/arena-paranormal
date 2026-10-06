@@ -57,7 +57,6 @@ export const abyssMaze = {
     const center = opp.pos.clone();
     const maze = buildMaze(center, color);
     world.scene.add(maze.g);
-    const hadHelmet = f.rig.props.helmetOn && f.rig.props.helmetOn.visible;
     world.cameraRig.playShots([
       faceClose(f, { dur: 0.8, from: 1.9, to: 1.25, side: 0.4 }),
       orbit(opp, { dur: 1.2, radius: 5.5, height: 4.5, a0: -0.8, a1: 0.4, lookH: 0.6, fov: 50 }),
@@ -66,7 +65,8 @@ export const abyssMaze = {
     ]);
     world.audio.play('maskOn', { pitch: 0.8 });
     f.anim.play('concentrate', { restart: true, duration: 0.7 });
-    tl.add(0.35, () => { if (f.rig.props.helmetOn) f.rig.showProp('helmetOn', true); world.fx.flash(f.chestPos().add(new THREE.Vector3(0, 0.6, 0)), { color, size: 1.6, life: 0.15 }); });
+    // o capacete NÃO aparece aqui: para os Mascarados a máscara é só da Transformação (forma labirinto_elmo)
+    tl.add(0.35, () => { world.fx.flash(f.chestPos().add(new THREE.Vector3(0, 0.6, 0)), { color, size: 1.6, life: 0.15 }); });
     tl.add(0.6, () => world.showBanner(sp.banner || f.def.name, f.def.color));
     tl.add(0.8, () => { world.audio.play('ritual'); opp.anim.play('fear', { restart: true }); });
     // a vítima vagueia perdida dentro do labirinto
@@ -111,7 +111,6 @@ export const abyssMaze = {
       maze.g.traverse((o) => { if (o.geometry) o.geometry.dispose(); });
       maze.mat.dispose();
       maze.glow.dispose();
-      if (!hadHelmet && f.rig.props.helmetOn && !f.findBuff('helmet')) f.rig.showProp('helmetOn', false);
     };
     return {
       update(dt) {

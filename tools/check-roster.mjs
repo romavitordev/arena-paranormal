@@ -227,8 +227,14 @@ ok(eri && eri.abilities.some((a) => a.type === 'blessing') && eri.abilities.some
 ok(eri && pas('erin', 'electricAmulet') && eri.special.type === 'supernova', 'Erin: Amuleto Elétrico e especial Supernova (escopeta + granada)');
 ok(agu && agu.origin === 'Mascarados' && agu.element === 'sangue', 'Aguiar: Mascarados (Sangue)');
 ok(agu && agu.melee.name.includes('Machado') && agu.melee.strikes.at(-1).bleed, 'Aguiar: machado do Mutilador (o finalizador faz sangrar)');
-ok(agu && ['maskForm', 'bearTrap', 'predatorScent', 'huntingDog'].every((t) => agu.abilities.some((a) => a.type === t)), 'Aguiar: Máscara do Mutilador, Armadilha de Urso, Predador de Sangue e Cães de Caça');
-ok(agu && agu.abilities.find((a) => a.type === 'maskForm').noBlock, 'Aguiar: forma de máscara não consegue defender (intenção assassina)');
+ok(agu && ['heavyBlow', 'bearTrap', 'predatorScent', 'huntingDog'].every((t) => agu.abilities.some((a) => a.type === t)) && !agu.abilities.some((a) => a.type === 'maskForm') && !agu.special.prepare?.showProp, 'Aguiar: Ataque Especial, Armadilha de Urso, Predador de Sangue e Cães de Caça (sem a máscara no kit nem no especial)');
+{
+  const { getForm } = await import('../src/characters/forms/index.js');
+  const mut = getForm('aguiar_mutilador');
+  ok(agu.awakening.type === 'maskTransform' && agu.awakening.form === 'aguiar_mutilador' && mut && mut.baseId === 'aguiar' && mut.melee.strikes.every((s) => s.bleed) && mut.abilities.some((a) => a.name === 'Ataque Mutilador') && mut.abilities.some((a) => a.name === 'Predador Perfeito'), 'Aguiar: a máscara do Mutilador Noturno só na Transformação (Ataque Mutilador, Predador Perfeito, todo golpe sangra)');
+  const caos = getForm('erin_caos');
+  ok(eri.awakening.type === 'maskTransform' && eri.awakening.form === 'erin_caos' && caos && caos.special.type === 'kamikaze' && caos.special.damage >= 400 && !caos.abilities.some((a) => a.id === 'blackHole'), 'Erin: Transformação Em Nome do Caos (máscara de gás) com o especial que se explode');
+}
 ok(agu && pas('aguiar', 'sonOfPain'), 'Aguiar: Filho da Dor');
 const lab = get('labirinto');
 const xan = get('xande');

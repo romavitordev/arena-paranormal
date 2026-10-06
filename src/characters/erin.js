@@ -163,12 +163,19 @@ export default {
     color: 0xff7a2a,
   },
 
-  // DESPERTAR (Barra de Transformação cheia + vida baixa, segurando △) — cânone: Bênção Maldita — a energia do Outro Lado cura e empurra o corpo além do limite. Até o fim do round.
+  // TRANSFORMAÇÃO (Barra de Transformação cheia + vida baixa, segurando △): põe a máscara de gás (a da Produção do
+  // Anfitrião que ela adaptou), enlouquece e abraça o Caos — ERIN, EM NOME DO CAOS até o fim do round
+  // (forms/erin_caos.js), com o especial em que ela corre e se explode. (A Erin é da Ordo Realitas, não é Mascarada.)
   awakening: {
-    name: 'Bênção Maldita',
-    banner: 'Bênção Maldita',
-    type: 'awakenMode',
-    mult: 1.1, regen: 6, energyRegenMult: 1.4, aura: 'flame', color: 0x7ad8ff, heal: 0.12,
+    name: 'Em Nome do Caos',
+    banner: 'Em Nome do Caos',
+    type: 'maskTransform',
+    form: 'erin_caos',
+    formBanner: 'Em Nome do Caos',
+    anim: 'powerup',
+    duration: 0, // até o fim do round
+    bonusHealth: 60,
+    color: 0xff5a1a,
   },
 
   passives: [
