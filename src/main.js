@@ -9,6 +9,7 @@ import { renderPortraits } from './ui/portraits.js';
 import { renderArenaThumbs } from './ui/arenaThumbs.js';
 import { victoryLine } from './config/dialogues.js';
 import { preloadModels } from './models/index.js';
+import { TitleStage } from './ui/titleStage.js';
 import { loadLearned } from './ai/learner.js';
 import { ROSTER } from './characters/index.js';
 import { validatePassives } from './combat/passives.js';
@@ -59,17 +60,10 @@ Promise.all([preloadModels(), preloadArenas()])
     setTimeout(() => Object.assign(arenaThumbs, renderArenaThumbs(renderer)), 50);
   });
 
-// fundo animado dos menus
-const menuScene = new THREE.Scene();
-menuScene.background = new THREE.Color(0x0b0910);
-const menuCam = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 0.1, 100);
-menuCam.position.set(0, 0, 6);
-const ringMat = new THREE.MeshBasicMaterial({ color: 0xa46bff, transparent: true, opacity: 0.35 });
-const rings = [3, 2.3, 1.5].map((r, i) => {
-  const m = new THREE.Mesh(new THREE.TorusGeometry(r, 0.02 + i * 0.01, 6, 80), ringMat);
-  menuScene.add(m);
-  return m;
-});
+// fundo animado dos menus: lutadores em 3D, círculo ritual e cinzas (ui/titleStage.js); montado depois que os modelos
+// carregam
+const titleStage = new TitleStage(ROSTER);
+const menuCam = titleStage.cam;
 
 const game = {
   state: 'title',
@@ -727,9 +721,8 @@ function render() {
   } else if (game.state === 'select' && game.screen && game.screen.stage && !PHONE_LANDSCAPE.matches) {
     game.screen.stage.render(renderer); // seleção: lutadores em 3D no centro
   } else {
-    const t = clock.elapsedTime;
-    rings.forEach((r, i) => { r.rotation.x = t * (0.2 + i * 0.1); r.rotation.y = t * (0.3 - i * 0.07); });
-    renderer.render(menuScene, menuCam);
+    if (booted) titleStage.ready();
+    titleStage.render(renderer);
   }
 }
 requestAnimationFrame(frame);

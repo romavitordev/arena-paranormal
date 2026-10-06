@@ -1932,6 +1932,10 @@ export class Fighter {
       this.startChargeShot(base);
       return;
     }
+    if (base.type === 'beam') {
+      this.startBeam(base);
+      return;
+    }
     const variant = base.variants && intent.kind !== 'neutral' ? base.variants[intent.kind] : null;
     let r = variant ? { ...base, ...variant } : base;
     if (!this.spendEnergy(r.energyCost || 0)) {
@@ -1982,6 +1986,80 @@ export class Fighter {
         return false;
       },
       cancel() { self.hideRangedProps(); },
+    };
+  }
+
+  // RAIO CANALIZADO (Tempestade Caótica do ???): depois do preparo, um raio contínuo sai da Antena por r.duration s;
+  // a ponta PERSEGUE o adversário a r.track m/s (um dash ou correr de lado escapa). Pulsos de r.damage a cada r.tick s
+  // em quem estiver no caminho (largura r.width). É um ataque à distância comum: defesa de frente segura, esquiva
+  // desvia e apanhar no meio interrompe (o estado sai de 'ranged').
+  startBeam(r) {
+    if (!this.spendEnergy(r.energyCost || 0)) {
+      this.notify('SEM SANIDADE');
+      return;
+    }
+    this.cooldowns.ranged = r.cooldown;
+    this.cooldownMax.ranged = r.cooldown;
+    this.setState('ranged');
+    this.vel.x = 0;
+    this.vel.z = 0;
+    const total = r.windup + r.duration + r.recovery;
+    this.anim.play(r.anim || 'point', { duration: total, restart: true });
+    const self = this;
+    const w = this.world;
+    const src = () => (self.rig.sockets.handR ? self.rig.sockets.handR.getWorldPosition(new THREE.Vector3()) : self.chestPos());
+    let aim = null; // ponta do raio
+    let tickT = 0;
+    let hum = 0;
+    const seg = new THREE.Vector3();
+    const toP = new THREE.Vector3();
+    this.seq = {
+      t: 0,
+      update(dt) {
+        this.t += dt;
+        const opp = self.opponent;
+        if (opp) self.yaw = turnTowards(self.yaw, yawTo(self.pos, opp.pos), dt * 3); // gira devagar acompanhando
+        self.vel.x = 0;
+        self.vel.z = 0;
+        const firing = this.t >= r.windup && this.t < r.windup + r.duration;
+        if (this.t < r.windup && Math.random() < 0.6) w.fx.burst(src(), { count: 2, color: r.color, speed: 1.5, life: 0.25, size: 0.12 });
+        if (firing) {
+          const from = src();
+          const want = opp ? opp.chestPos() : from.clone().addScaledVector(forwardFromYaw(self.yaw), r.range);
+          if (!aim) { aim = want.clone(); w.audio.play('shockwave', { volume: 0.8 }); }
+          // a ponta persegue o alvo com velocidade limitada
+          const d = want.clone().sub(aim);
+          const step = r.track * dt;
+          if (d.length() > step) aim.addScaledVector(d.normalize(), step); else aim.copy(want);
+          // limita ao alcance
+          const dir = aim.clone().sub(from);
+          if (dir.length() > r.range) aim.copy(from).addScaledVector(dir.normalize(), r.range);
+          // visual: dois raios tremendo + núcleo claro + faíscas na ponta
+          w.fx.lightning(from, aim, { color: r.color, life: 0.06, segments: 12, jitter: 0.22 });
+          w.fx.lightning(from, aim, { color: 0xffffff, life: 0.05, segments: 8, jitter: 0.08 });
+          w.fx.tracer(from, aim, { color: r.color, life: 0.05, width: r.width * 0.25 });
+          if (Math.random() < 0.7) w.fx.burst(aim, { count: 3, color: r.color, speed: 3, life: 0.25, size: 0.14 });
+          hum -= dt;
+          if (hum <= 0) { hum = 0.35; w.audio.play('shockwave', { volume: 0.25, pitch: 1.6 }); }
+          // pulsos de dano em quem estiver no caminho
+          tickT -= dt;
+          if (tickT <= 0 && opp && opp.state !== 'ko') {
+            tickT = r.tick;
+            seg.subVectors(aim, from);
+            const L = seg.length() || 1;
+            toP.subVectors(opp.chestPos(), from);
+            const k = Math.max(0, Math.min(1, toP.dot(seg) / (L * L)));
+            const dist = toP.addScaledVector(seg, -k).length();
+            if (dist <= r.width) {
+              // só queima (sem travar em atordoamento): quem é pego ainda consegue correr, esquivar ou defender
+              applyHit(w, self, opp, { damage: r.damage, kind: 'ranged', element: 'energia', dir: seg.clone().setY(0).normalize(), reaction: false, sound: r.hitSound || 'impact', color: r.color, scale: 0.9 });
+            }
+          }
+        }
+        if (this.t >= total) return true;
+        return false;
+      },
+      cancel() {},
     };
   }
 
