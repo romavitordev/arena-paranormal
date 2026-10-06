@@ -4,7 +4,7 @@ Jogo de luta 3D em arena com temática paranormal. Combate rápido e acessível,
 movimentação livre, ataques direcionais, defesa, esquiva, habilidades por combinação de
 botões e especiais cinematográficos. Feito com **Three.js + Vite**, roda no navegador.
 
-Versão atual do jogo: **v3.8.1**.
+Versão atual do jogo: **v3.8.2**.
 
 A numeração segue **MAJOR.MINOR.PATCH**: microatualizações usam `x.y.z`, atualizações concretas usam `x.y.0` e grandes marcos usam `x.0.0`.
 
@@ -109,7 +109,7 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 |JOUI JOUKI | Ordo Realitas | Conhecimento | Sombra Rasteira | ○ Olhar do Desespero · L2 Corte das Sombras (investida) (△ + × Teleporte das Sombras) | Shi no Kage | Golpe pelas costas · Decepar |
 | AGHATA | Ordo Realitas | Sangue | Faca Arremessada | □ Amaldiçoar Arma (Sangue) · L2 Facas Amaldiçoadas · R2+× Passagem de Conhecimento · R2+△ Leitura de Rituais (3 em leque) | Descarnar | Colar Banhado em Sangue |
 | DANTE | Ordo Realitas | Morte | Decadenza (fumaça que apodrece) | □ Embaralhar "Trinitá" (3 clones com IA, 50% do dano) · ○ Tentáculos de Lodo · △ Cicatrização "Paradiso" · L2 Poça de Lodo (lentidão) | Invocação: A Marionete (NPC por 18 s, barra preta, pode ser destruída; anda aos trancos, atravessa obstáculos e agarra com a Ironia do Destino) | Concentração Inquebrável (rituais −10% de sanidade) |
-| ERIN PARKER | Ordo Realitas | Energia | Escopeta calibre 12 (leque de chumbo) | □ Granada "Supernova" · × Granada "Nebulosa" (névoa) · ○ Bênção Maldita · △ Black Hole (cura) · L2 Granada de Luz (atordoa) | Supernova (corre, tiro de escopeta e granada) · **Transformação:** Em Nome do Caos (máscara de gás, enlouquece: golpes e granadas mais fortes, sem cura; especial Em Nome do Caos — corre e se explode: 450 de dano, ela morre; se levar o rival junto ganha o round, senão perde) | Amuleto Elétrico (choque em quem bate nela) |
+| ERIN PARKER | Ordo Realitas | Energia | Escopeta calibre 12 (leque de chumbo) | □ Granada "Supernova" · × Granada "Nebulosa" (névoa) · ○ Bênção Maldita · △ Black Hole (cura) · L2 Granada de Luz (atordoa) | Supernova (granada de luz que dá para evitar; se cegar: corre, tiro de escopeta e granada) · **Transformação:** Em Nome do Caos (máscara de gás, enlouquece: golpes e granadas mais fortes, sem cura; especial Em Nome do Caos — corre e se explode: 450 de dano, ela morre; se levar o rival junto ganha o round, senão perde) | Amuleto Elétrico (choque em quem bate nela) |
 | GAL SAL | Escriptas | Conhecimento | Corrente de Captura (procura, prende e puxa) | □ Corrente Gancho · × Teletransporte · L2 Corrente Giratória (área) | Injustiça né? | Cura que cobra sanidade · Desviar de Balas · Bloqueio Perfeito |
 | KIAN | Escriptas | Conhecimento | Impacto Sigilar | □ Teletransporte · ○ Lâmina do Medo · △ Levitação · × Rejeitar Névoa | Inexistir (2x por partida) | Precognição |
 | LABIRINTO | Mascarados | Energia | Rajada Caótica (raio da Antena) | □ Labirinto Mental · ○ Mapa Sanguíneo · L2 Capturar Momento | O Labirinto é a Resposta · **Transformação:** Capacete do ??? → **???** até o fim do round (□ Tempestade Caótica · Labirinto Abissal · Consumir Momento · Tempestade Caótica em área · Revelação Sanguínea; especial mais forte) | Mente Labiríntica (atordoamentos −40%) |
