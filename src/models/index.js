@@ -62,6 +62,9 @@ const BLENDER_MODELS = {
   kemi: { url: 'models/kemi.glb', props: addKemiProps },
   fantasma: { url: 'models/fantasma.glb', props: addFantasmaProps }, // forma das Faixas
   balu: { url: 'models/balu.glb', props: addBaluProps }, // Antônio "Balu" Pontevedra (Machado Lancinante)
+  arnaldo: { url: 'models/arnaldo.glb', props: addArnaldoProps }, // Arnaldo Fritz (Desconjuração/Calamidade)
+  anfitriao: { url: 'models/anfitriao.glb', props: addAnfitriaoProps }, // O Anfitrião (máscara fundida, cabos)
+  verissimo: { url: 'models/verissimo.glb', props: addVerissimoProps }, // Senhor Veríssimo (Calamidade)
 };
 
 // Formas que reaproveitam o .glb de outro modelo, só com os acessórios diferentes (máscaras dos Mascarados, Erin)
@@ -69,10 +72,6 @@ const MODEL_VARIANTS = {
   erin_caos: { base: 'erin', props: addErinCaosProps }, // máscara de gás (Em Nome do Caos)
   labirinto_elmo: { base: 'labirinto', props: addLabirintoElmoProps }, // Capacete do ???
   aguiar_mutilador: { base: 'aguiar', props: addAguiarMutiladorProps }, // máscara do Mutilador Noturno
-  // PROVISÓRIOS até os modelos do Blender (TODO: Arnaldo, Anfitrião e Veríssimo): corpo de outro lutador + acessórios
-  arnaldo: { base: 'joui', props: addArnaldoProps }, // espada da fita, óculos, gravata vermelha, relógio de bolso
-  anfitriao: { base: 'joui', props: addAnfitriaoProps }, // máscara do Anfitrião + relógio com a Relíquia no braço
-  verissimo: { base: 'lirio', props: addVerissimoProps }, // espada do Arnaldo, bigode, gravata azul, escopeta
 };
 
 const loaded = {};

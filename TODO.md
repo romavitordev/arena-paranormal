@@ -139,6 +139,59 @@ Ordem combinada com o usuário (2026-10-06): 9 → 7 (adiado: Blender) → 6 →
     (contra o Kian, sempre que o Kian der o golpe final);
   - especial com aviso: comanda o ataque e finaliza com a espada.
 
+### 🔁 UPD grande pedido pelo usuário (2026-10-06): reconstruir os três (aparência, armas, animações, kit, cutscenes, CPU)
+Ordem combinada: auditoria → referências → modelos (Arnaldo, Veríssimo, Anfitrião) → armas → animações → combate do
+Arnaldo → transformação → Anfitrião + sistema de caos → Veríssimo → assistências → ultimates/cutscenes → CPU →
+matchups → balanceamento. Os números atuais NÃO são definitivos.
+
+**Época escolhida:** Desconjuração/Calamidade (a das referências do usuário e do resto do elenco). Veríssimo jovem de
+Sinais do Outro Lado (37 anos, cabelo castanho curto, polo azul, jaqueta de aviador, calça militar, espingarda e faca)
+fica como skin futura.
+
+**Auditoria (antes do UPD):** Arnaldo e Anfitrião usavam o corpo do Joui e o Veríssimo o do Lírio, recoloridos, com
+acessórios em código — silhuetas genéricas (rabo de cavalo do Joui, sobretudo/cabelo comprido do Lírio). A fita da
+espada era rígida. Kits feitos com tipos genéricos (dashStrike, polarize, selfBuff) e especiais `cinematicCombo`.
+
+**Referências (resumos da wiki via busca — a wiki em si é bloqueada aqui; imagens do usuário em `refs-arnaldo`):**
+- Arnaldo (wiki colada pelo usuário em 2026-10-06):
+  - DESCONJURAÇÃO/CALAMIDADE (a usada): ~50 anos, cabelo arrumado e barba CASTANHOS, óculos FINOS e ARREDONDADOS;
+    casaco meio longo ESCURO, camisa social BRANCA, gravata VERMELHA, colete MARROM, calça e sapatos MARRONS; relógio
+    de bolso de OURO no bolso do colete (foto do Thiago dentro).
+  - SINAIS DO OUTRO LADO (skin futura, 30–40 anos, visual inspirado no Robert Downey Jr.): barba rala, óculos de LENTE
+    VERMELHA, casaco meio longo ACINZENTADO, camisa social AVERMELHADA, gravata AZUL, colete PRETO, calça marrom,
+    sapatos pretos, LUVAS. (Parte das imagens de referência do usuário é desta versão.)
+  - Fala: "Olhos sempre abertos, irmão." (do Arnaldo — o Veríssimo pode usar como homenagem na assistência).
+  - Espada: comum, FITA VERMELHA presa na ponta do cabo; a única arma dele, manuseada "espetacularmente bem".
+  - Emissor de Pulsos Paranormais: CAIXA coberta de Sigilos de Conhecimento, detalhes DOURADOS, cabos e fios saindo de
+    um buraco; isca que atrai criaturas do elemento escolhido e afasta as do oposto.
+  - Relíquia: o relógio de bolso brilha em ROXO e a Relíquia de Energia se manifesta (na frente da Magistrada).
+  - Jogo do Orfanato (2009, contra o Kian): incêndio enorme; perfeito porque o Kian não conjurava rituais.
+- Anfitrião (wiki): ser feito da matéria caótica da Energia, alternando ROXO, ROSA e AZUL; máscara de gás com o
+  Símbolo do Anfitrião e olhos brilhando em roxo, FIXA no rosto; um CABO sai do PEITO até o RELÓGIO DE BOLSO no BRAÇO
+  ESQUERDO; cabos enrolados pelo corpo todo; aura roxa; as MESMAS ROUPAS do Arnaldo no dia da Relíquia.
+- Anfitrião: entidade de Energia (+ Conhecimento e Medo), caos/imprevisibilidade; percepção cronológica distorcida;
+  distorce a Realidade (as regras do jogo viram as da Realidade); MULTIPLICA-SE (cópias iguais ou versões diferentes);
+  teletransporte curto; CHICOTADA DO CAOS (chicote de Energia, dano extremo); JOGO DO ORFANATO (paredes, chão e teto
+  em chamas; quem não usar rituais sofre dano de Energia). Visual (artes): máscara de gás de lentes redondas
+  brilhando, fios neon pela cabeça e corpo, terno escuro, gravata vermelha, chamas roxas/azuis, relógio na corrente.
+- Veríssimo (wiki colada pelo usuário em 2026-10-06):
+  - DESCONJURAÇÃO/CALAMIDADE (a usada): alto e FORTE, 60 anos; cabelo CURTO bem arrumado que desce em COSTELETAS e se
+    junta à BARBA com CAVANHAQUE, grisalhos/esbranquiçados; COLETE PRETO, camisa branca de gola, GRAVATA AZUL, calça
+    azulada da mesma cor da BOTA; OLHEIRAS grandes, rosto esvaído. Em Calamidade: gola e cabelo bagunçados, cavanhaque
+    maior, MANGAS ARREGAÇADAS quase sempre, pele mais pálida. Dia final de Desconjuração: mangas até os cotovelos e a
+    ESPADA DO ARNALDO. Símbolo tatuado nas costas.
+  - Sinais do Outro Lado (skin futura): 37 anos, cabelo curto castanho, bigode com barbichinha, costeletas; polo azul,
+    jaqueta de aviador, calça militar cinza com bolso afivelado, sapatos pretos; ESPINGARDA nas costas com FACA na
+    bandoleira. Enigma do Medo: espada do Arnaldo + REVÓLVER.
+  - "OLHOS SEMPRE ABERTOS!": dita ao BLOQUEAR FACILMENTE o golpe do Gal que ia matar o Arthur (o que o Arnaldo sempre
+    dizia a ele) → base da assistência e da abertura da ultimate (bloqueio → contra-ataque).
+  - Personalidade: cortês, calmo, persuasivo, dialoga antes da violência; a Ordem é "família"; frio e focado na batalha.
+    No Coliseu encarou o Kian: "...pela primeira vez na minha vida eu vou descobrir a verdade... Me mata." — o Kian não
+    pôde. Treinou o Remi em ESGRIMA. Nunca transcendeu.
+  - Habilidades: Segredo de Veríssimo (sabe como vai morrer; o Kian não consegue matá-lo); Inteligência Estratégica
+    (analisa o inimigo e dá COMANDOS: os ALIADOS ganham um ataque extra). Jaqueta de Veríssimo: couro marrom passada
+    entre agentes, proteção.
+
 ### ✅ Implementado (2026-10-06) — ainda fora do changelog dos jogadores
 - `src/characters/arnaldo.js`: esgrima teatral (5 golpes), □ Emissor de Pulsos (parado ATRAI até a espada; ← + □
   AFASTA e derruba), △→○ Finta Teatral (avanço que quebra a defesa), △→□ Pulso Paranormal (polarize), R2+× Rodopio da
