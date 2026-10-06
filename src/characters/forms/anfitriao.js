@@ -167,7 +167,7 @@ export default {
       name: 'Botão do Anfitrião',
       input: 'block+carga', // R2 + △
       type: 'hostButton',
-      description: 'Um botão paranormal sobe do chão. Ele hesita... e aperta: um EVENTO DO CAOS sorteado (raio, choque, explosão, troca, clones, controles invertidos, relógios, tempestade...). Do comum ao muito raro.',
+      description: 'O Anfitrião estala os dedos e leva os dois ao início da arena. Corra até o botão no centro e aperte o botão físico antes do adversário para lançar um evento aleatório do caos contra ele.',
       energyCost: 20,
       cooldown: 14,
       pressAt: 0.75,

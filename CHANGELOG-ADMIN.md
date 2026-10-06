@@ -13,6 +13,10 @@
 
 ## (em andamento, sem changelog dos jogadores) — UPD etapas 10-11: O Anfitrião e o sistema de caos
 
+- Botão do Anfitrião: substituído o evento automático por uma disputa; após o estalo, ambos voltam aos pontos de
+  início da arena, correm até o botão central e acionam-no com o botão físico. Quem apertar primeiro dispara o evento
+  do caos contra o adversário; empate no mesmo quadro usa desempate determinístico. A disputa tem contagem
+  regressiva, bloqueia ataques durante a corrida e encerra com segurança em KO, cancelamento, reset ou timeout.
 - `combat/chaos.js` (novo): `pickChaos` com raridade (comum 60 · incomum 28 · raro 10 · muito raro 2), histórico de 3
   por sorteio (sem repetir), `chaosBoost` (A Plateia deixa o raro mais provável), combinações só em pares permitidos;
   `world.chaosLog[chave][id]` conta tudo (testes). Disparo do Caos de 8 cores (`rollChaosShot`: ROXO impacto, AZUL

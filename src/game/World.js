@@ -351,6 +351,7 @@ export class World {
 
   // corpos não se sobrepõem
   separate() {
+    if (this.hostButtonGame?.phase === 'running') return;
     const [a, b] = this.fighters;
     if (!a.visible || !b.visible) return;
     const dx = b.pos.x - a.pos.x;

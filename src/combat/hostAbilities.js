@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { Timeline, yawTo, distXZ, forwardFromYaw } from '../core/util.js';
 import { applyHit } from './damage.js';
 import { findSpotBehind, findFreeSpotNear } from './positioning.js';
+import { chooseButtonWinner } from './hostButtonRace.js';
 import { ABILITY_TYPES } from './abilities.js';
 import {
   PURPLE, PINK, BLUE, YELLOW, RED, WHITE, NEON,
@@ -319,16 +320,22 @@ Object.assign(ABILITY_TYPES, {
   },
 
   // ---------------------------------------------------------------- Botão do Anfitrião
-  // Um botão paranormal sobe do chão. Ele agacha, a mão paira... (tensão, tique-taque)... aperta: um EVENTO DO CAOS
-  // sorteado (comum → muito raro, com histórico e combinações). Depois ri.
+  // O estalo do Anfitrião reposiciona os dois lutadores e inicia uma corrida até o botão.
   hostButton: {
     start(f, a, world) {
-      const tl = new Timeline();
-      f.vel.set(0, 0, 0);
       const opp = f.opponent;
-      if (opp) f.yaw = yawTo(f.pos, opp.pos);
-      const F = forwardFromYaw(f.yaw);
-      const at = V(f.pos.x + F.x * 0.75, 0, f.pos.z + F.z * 0.75);
+      if (!opp || world.hostButtonGame) return null;
+
+      const players = [f, opp];
+      const spawns = world.arena.spawns || [];
+      const starts = players.map((player, i) => spawns[i] || { x: player.pos.x, z: player.pos.z });
+      const center = V(
+        (starts[0].x + starts[1].x) / 2,
+        0,
+        (starts[0].z + starts[1].z) / 2,
+      );
+      const buttonAt = findFreeSpotNear(world.arena, center.x, center.z, { radius: 0.5, others: [] }) || center;
+      const at = V(buttonAt.x, 0, buttonAt.z);
       const btn = new THREE.Group();
       const baseMat = new THREE.MeshStandardMaterial({ color: 0x1a1420, roughness: 0.6, metalness: 0.4 });
       const capMat = new THREE.MeshStandardMaterial({ color: 0xc0306a, emissive: 0xb04aff, emissiveIntensity: 0.6, roughness: 0.3 });
@@ -343,46 +350,126 @@ Object.assign(ABILITY_TYPES, {
       btn.add(base, cap, ring);
       btn.position.copy(at).setY(-0.3);
       world.scene.add(btn);
-      let cleaned = false;
-      const cleanup = () => {
-        if (cleaned) return;
-        cleaned = true;
-        world.scene.remove(btn);
-        btn.traverse((o) => o.geometry && o.geometry.dispose());
-        [baseMat, capMat, ringMat].forEach((m) => m.dispose());
-      };
-      f.anim.play('host_press', { restart: true, duration: a.pressAt + 0.3 });
-      world.audio.play('heartbeat', { volume: 0.6 });
-      let tick = 0;
-      let pressed = false;
-      tl.each((t, dt) => {
-        // sobe do chão; brilha mais forte e o tique-taque acelera até apertar
-        btn.position.y = Math.min(0, -0.3 + t * 1.2);
-        if (!pressed) {
-          tick -= dt;
-          if (tick <= 0) {
-            tick = 0.22 - 0.14 * Math.min(1, t / a.pressAt);
-            world.audio.play('tick', { volume: 0.6 });
+      const tl = new Timeline();
+      let disposed = false;
+      const game = {
+        phase: 'intro',
+        countdown: 1.8,
+        countdownMark: 3,
+        requests: new Set(),
+        time: 0,
+        frame: 0,
+        controls(player) {
+          return players.includes(player);
+        },
+        captureInput(player) {
+          if (!this.controls(player)) return;
+          if (this.phase === 'running' && player.input.pressed.physical) this.requests.add(player);
+          player.buffered = null;
+          for (const key of Object.keys(player.input.pressed)) player.input.pressed[key] = false;
+          for (const key of Object.keys(player.input.held)) player.input.held[key] = false;
+          if (this.phase !== 'running') {
+            player.input.moveX = 0;
+            player.input.moveY = 0;
+            player.vel.x = 0;
+            player.vel.z = 0;
           }
-          capMat.emissiveIntensity = 0.6 + Math.sin(t * 30) * 0.4 + t;
-          ring.rotation.z += dt * 4;
-        } else {
-          cap.position.y = 0.14;
-          btn.position.y -= dt * 0.5;
+        },
+        update(dt) {
+          if (this.phase === 'finished') return true;
+          if (!alive(f) || !alive(opp)) return true;
+          if (this.phase === 'intro') return false;
+          this.time += dt;
+          this.frame += 1;
+          btn.position.y = this.phase === 'countdown'
+            ? 0.08 + Math.sin(this.time * 12) * 0.08
+            : 0.08 + Math.sin(this.time * 7) * 0.05;
+          ring.rotation.z += dt * 2;
+          capMat.emissiveIntensity = 0.8 + Math.sin(this.time * 12) * 0.35;
+
+          if (this.phase === 'countdown') {
+            this.countdown -= dt;
+            const mark = Math.ceil(this.countdown / 0.6);
+            if (mark < this.countdownMark && mark > 0) {
+              this.countdownMark = mark;
+              for (const player of players) player.notify(String(mark), true);
+              world.showBanner(String(mark), PINK);
+            }
+            if (this.countdown <= 0) {
+              this.phase = 'running';
+              world.audio.play('button', { volume: 0.8 });
+              world.showBanner('CORRAM! APERTE O BOTÃO FÍSICO', PINK);
+              for (const player of players) player.notify('APERTE O BOTÃO FÍSICO NO CENTRO', true);
+            }
+            return false;
+          }
+
+          if (this.phase === 'running') {
+            const winner = chooseButtonWinner([...this.requests], at, this.frame);
+            this.requests.clear();
+            if (winner) {
+              world.audio.play('button', { volume: 1 });
+              world.fx.flash(at.clone().setY(0.3), { color: PINK, size: 2.4, life: 0.2 });
+              world.fx.ring(at.clone().setY(0.05), { color: PURPLE, radius: 3, life: 0.5 });
+              const loser = winner === f ? opp : f;
+              winner.notify('VOCÊ APERTOU PRIMEIRO!', true);
+              loser.notify('O CAOS VAI ATINGIR VOCÊ!', true);
+              const { label } = runChaosEvent(winner, 'button');
+              world.showBanner(label, winner.def.color);
+              this.phase = 'finished';
+              return false;
+            }
+            if (this.time >= 10) {
+              world.showBanner('O BOTÃO SUMIU!', PINK);
+              this.phase = 'finished';
+              return false;
+            }
+          }
+          return false;
+        },
+        dispose() {
+          if (disposed) return;
+          disposed = true;
+          if (world.hostButtonGame === this) world.hostButtonGame = null;
+          world.scene.remove(btn);
+          btn.traverse((o) => o.geometry && o.geometry.dispose());
+          [baseMat, capMat, ringMat].forEach((m) => m.dispose());
+        },
+      };
+      world.hostButtonGame = game;
+      world.addTicker(game);
+      world.beginCinematic(f, opp);
+      f.vel.set(0, 0, 0);
+      f.anim.play('host_snap', { restart: true, duration: 0.65 });
+      world.audio.play('trapSnap', { volume: 0.8 });
+      world.audio.play('heartbeat', { volume: 0.5 });
+
+      tl.add(0.38, () => {
+        for (let i = 0; i < players.length; i++) {
+          const player = players[i];
+          const start = starts[i];
+          player.pos.set(start.x, 0, start.z);
+          player.vel.set(0, 0, 0);
+          player.onGround = true;
+          player.launched = false;
+          if (player !== f) player.setState('idle');
+          player.anim.play('idle', { restart: true, blend: 0.03 });
+          player.yaw = yawTo(player.pos, at);
+          world.fx.play('FX_TELEPORT', player.chestPos(), { color: player.def.energyColor, kind: 'smoke' });
         }
+        btn.position.y = 0;
+        world.endCinematic();
+        game.phase = 'countdown';
+        for (const player of players) player.notify('3', true);
+        world.showBanner('3', PINK);
       });
-      tl.add(a.pressAt, () => {
-        pressed = true;
-        world.audio.play('button', { volume: 1 });
-        world.fx.flash(at.clone().setY(0.3), { color: PINK, size: 2.4, life: 0.2 });
-        world.fx.ring(at.clone().setY(0.05), { color: PURPLE, radius: 3, life: 0.5 });
-        const { label } = runChaosEvent(f, 'button');
-        world.showBanner(label, f.def.color);
+      tl.end(0.65);
+      return seqFrom(tl, {
+        cancel() {
+          world.endCinematic();
+          game.dispose();
+        },
       });
-      tl.add(a.pressAt + 0.35, () => { f.anim.play('host_laugh', { restart: true, duration: 0.8 }); world.audio.play('laugh', { volume: 0.7 }); });
-      tl.add(a.pressAt + 1.0, cleanup);
-      tl.end(a.pressAt + 1.0);
-      return seqFrom(tl, { cancel: cleanup, cancelable: () => pressed && tl.time > a.pressAt + 0.45 });
     },
   },
 
@@ -474,4 +561,3 @@ Object.assign(ABILITY_TYPES, {
     },
   },
 });
-

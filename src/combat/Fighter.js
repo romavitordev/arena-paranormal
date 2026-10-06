@@ -620,6 +620,8 @@ export class Fighter {
     this.dirPressed = mag > 0.5 && (this.prevMoveMag ?? 0) <= 0.5;
     this.prevMoveMag = mag;
 
+    const hostButtonGame = this.world.hostButtonGame;
+    if (hostButtonGame) hostButtonGame.captureInput(this);
     this.bufferInputs();
 
     // batalha em equipe: chamar assistência 1/2 (D-pad ◀/▶) ou TROCAR de personagem (analógico direito ◀/▶)

@@ -105,6 +105,13 @@ export function addCharClips(CLIPS, k) {
     host_present: { dur: 0.7, keys: [k(0, HOST), k(0.4, { ...HLEGS, sp: [-0.05, -0.5, 0], hd: [0, 0.4, 0.2], sL: [-1.5, -0.8, 0.2], eL: [-0.2, 0, 0], sR: [-0.3, 0, -0.9], eR: [-0.4, 0, 0] }), k(1, { ...HLEGS, sp: [-0.05, 0.4, 0], hd: [0, -0.3, 0.3], sL: [-1.5, 0.9, 0.4], eL: [-0.1, 0, 0], sR: [-0.3, 0, -0.9], eR: [-0.4, 0, 0] })] },
     // Chicotada do Caos: o braço sobe atrás da cabeça e desce estalando
     host_lash: { dur: 0.5, keys: [k(0, HOST), k(0.35, { ...HLEGS, sp: [-0.25, -0.5, 0], hd: [0, 0.3, 0.2], sL: [-2.9, 0.5, 0.4], eL: [-1.2, 0, 0] }), k(0.6, { ...HLEGS, h: -0.12, sp: [0.4, 0.4, 0], hd: [0.1, -0.2, 0.3], sL: [-1.0, -0.6, 0.1], eL: [0, 0, 0] }), k(1, HOST)] },
+    // estalo que inicia a disputa pelo botão
+    host_snap: { dur: 0.65, keys: [
+      k(0, HOST),
+      k(0.28, { ...HLEGS, sp: [-0.15, -0.2, 0.1], hd: [0.1, 0.2, 0.15], sR: [-0.55, -0.8, -0.35], eR: [-1.45, 0, 0.2], sL: [-0.2, 0, 1.25], eL: [-0.2, 0, 0] }),
+      k(0.48, { ...HLEGS, sp: [-0.1, -0.15, 0.05], hd: [0.1, 0.25, 0.2], sR: [-0.4, -0.95, -0.25], eR: [-1.55, 0, 0.1], sL: [-0.2, 0, 1.25], eL: [-0.2, 0, 0] }),
+      k(1, HOST),
+    ] },
     // olha para a "câmera" (de frente, cabeça torta) — A Plateia e as ocorrências aleatórias
     host_look: { dur: 0.6, keys: [k(0, HOST), k(0.3, { ...HOST, hip: [0, 0.6, 0], sp: [0, 0.6, 0], hd: [0.05, 0.6, 0.6] }), k(1, { ...HOST, hip: [0, 0.6, 0], sp: [0, 0.6, 0], hd: [0.05, 0.62, 0.65] })] },
     // inclinação impossível (movimento "errado" do caos): o tronco dobra de lado além do normal
