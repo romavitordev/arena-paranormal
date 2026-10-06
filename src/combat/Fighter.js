@@ -640,8 +640,12 @@ export class Fighter {
         if (this.seq) {
           const done = this.seq.update(dt);
           if (done) {
+            const s = this.seq;
             this.seq = null;
-            if (this.state !== 'ko' && this.state !== 'hitstun' && this.state !== 'stun' && this.state !== 'pulled') this.setState('idle');
+            if (this.state !== 'ko' && this.state !== 'hitstun' && this.state !== 'stun' && this.state !== 'pulled') {
+              this.setState('idle');
+              if (s.onDone) s.onDone(); // ex.: Pulso Paranormal → estocada pronta quando o alvo chega
+            }
           } else if (this.state === 'ability' && this.seq.cancelable && this.seq.cancelable()) {
             // habilidades de movimento (teleportes) emendam direto em ataques
             const s = this.seq;
@@ -1615,6 +1619,18 @@ export class Fighter {
 
   startStrike(strike, { index = null, intent = null, branch = false, air = false } = {}) {
     if (!strike) return;
+    // golpes mais rápidos por um buff (ex.: Aniquilador do Arnaldo): escala os tempos do golpe
+    const fast = this.buffs.find((b) => b.atkSpeed);
+    if (fast) {
+      const k = fast.atkSpeed;
+      strike = {
+        ...strike, dur: strike.dur / k,
+        active: strike.active && strike.active.map((t) => t / k),
+        actives: strike.actives && strike.actives.map((w) => w.map((t) => t / k)),
+        iframes: strike.iframes && strike.iframes.map((t) => t / k),
+        motion: strike.motion && strike.motion.map((m) => ({ ...m, t: m.t.map((t) => t / k) })),
+      };
+    }
     this.stopStrikeFx();
     this.setState('attack');
     const c = this.combo;
@@ -2181,6 +2197,8 @@ export class Fighter {
       origin.addScaledVector(forwardFromYaw(this.yaw, v1), 0.4);
     } else if (r.origin === 'ground') {
       origin.set(this.pos.x, 0.15, this.pos.z).addScaledVector(forwardFromYaw(this.yaw, v1), 0.8);
+    } else if (r.origin === 'handL') {
+      this.rig.sockets.handL.getWorldPosition(origin); // ex.: o Emissor de Pulsos na mão esquerda do Arnaldo
     } else if (r.origin === 'hand') {
       this.rig.sockets.handR.getWorldPosition(origin);
     } else if (this.rig.muzzle && this.rig.muzzle.parent && this.rig.muzzle.parent.visible) {

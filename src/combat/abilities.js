@@ -1855,7 +1855,11 @@ Object.assign(ABILITY_TYPES, {
       f.vel.set(0, 0, 0);
       if (opp) f.yaw = yawTo(f.pos, opp.pos);
       const dashTime = a.distance / a.speed;
-      f.anim.play(a.anim || 'dash_slash', { restart: true, duration: a.windup + dashTime + a.recovery });
+      // prelude: um gesto antes do avanço (ex.: a provocação teatral da Finta do Arnaldo)
+      if (a.preludeAnim) {
+        f.anim.play(a.preludeAnim, { restart: true, duration: a.windup });
+        tl.add(a.windup, () => f.anim.play(a.anim || 'dash_slash', { restart: true, duration: dashTime + a.recovery }));
+      } else f.anim.play(a.anim || 'dash_slash', { restart: true, duration: a.windup + dashTime + a.recovery });
       world.audio.play(a.startSound || 'blink', { volume: 0.7 });
       const trail = world.fx.emitter({ rate: 90, follow: () => f.chestPos(), particle: { color: a.color, kind: a.trailKind || 'smoke', speed: 0.5, spread: 0.3, life: 0.35, size: 0.35 } });
       trail.visible = false;
@@ -2792,19 +2796,38 @@ Object.assign(ABILITY_TYPES, {
       const tl = new Timeline();
       f.vel.set(0, 0, 0);
       f.yaw = yawTo(f.pos, opp.pos);
-      f.anim.play('cast_up', { restart: true, duration: a.windup + a.recovery });
+      f.anim.play(a.anim || 'cast_up', { restart: true, duration: a.windup + a.recovery });
       world.audio.play('shockwave', { pitch: 1.3 });
-      const aura = world.fx.emitter({ rate: 60, follow: () => f.chestPos(), particle: { color: a.color, speed: 2, spread: 1, life: 0.3, size: 0.12 } });
+      // Emissor de Pulsos (Arnaldo): a caixa aparece na mão e acende
+      const prop = a.prop && f.rig.props[a.prop];
+      if (prop) f.rig.showProp(a.prop, true);
+      const glow = prop && prop.userData.glow;
+      if (glow) glow.material.opacity = 0.9;
+      const src = () => (prop ? prop.getWorldPosition(new THREE.Vector3()) : f.chestPos());
+      const aura = world.fx.emitter({ rate: 60, follow: src, particle: { color: a.color, speed: 2, spread: 1, life: 0.3, size: 0.12 } });
+      const hideProp = () => { if (prop) { f.rig.showProp(a.prop, false); if (glow) glow.material.opacity = 0; } };
       tl.add(a.windup, () => {
         aura.stop();
         const d = distXZ(f.pos, opp.pos);
         if (d > a.range || opp.isInvulnerable()) { f.notify('FORA DE ALCANCE', true); return; }
-        for (let k = 0; k < 4; k++) world.fx.lightning(f.chestPos(), opp.chestPos(), { color: a.color, life: 0.15 });
+        // a onda paranormal: anéis saindo do Emissor (atrai: fecham sobre o alvo; repele: abrem a partir dele)
+        const pull = d > a.near;
+        for (let k = 0; k < 5; k++) {
+          world.after(k * 0.05, () => {
+            const p = pull ? opp.chestPos() : src();
+            world.fx.ring(p, { color: a.color, radius: pull ? 2.6 - k * 0.4 : 0.6 + k * 0.6, life: 0.3, vertical: true, yaw: f.yaw, inner: 0.85 });
+          });
+        }
+        world.fx.distort(pull ? opp.chestPos() : src(), { color: a.color, radius: 1.8, life: 0.3 });
         if (d > a.near) {
           // atrai: puxa para a frente dele
           const F = new THREE.Vector3().subVectors(opp.pos, f.pos).setY(0).normalize();
           const res = applyHit(world, f, opp, { damage: a.pullDamage, kind: 'ability', knockback: 0, hitstun: 0.5, reaction: false, color: a.color, sound: 'chainPull' });
-          if (typeof res === 'number') opp.pullTo(new THREE.Vector3(f.pos.x + F.x * 1.5, opp.pos.y, f.pos.z + F.z * 1.5), { time: 0.3, after: 0.5 });
+          if (typeof res === 'number') {
+            opp.pullTo(new THREE.Vector3(f.pos.x + F.x * 1.5, opp.pos.y, f.pos.z + F.z * 1.5), { time: 0.3, after: 0.5 });
+            // atrair → posicionar → atacar: a espada já está pronta quando o alvo chega (a.follow = golpe físico)
+            if (a.follow) f.followStrike = a.follow; // sai no fim da habilidade (onDone), quando o alvo chegou
+          }
           opp.notify('ATRAÍDO', true);
         } else {
           // repele: empurra para longe e derruba
@@ -2813,8 +2836,8 @@ Object.assign(ABILITY_TYPES, {
           opp.notify('REPELIDO', true);
         }
       });
-      tl.end(a.windup + a.recovery);
-      return seqFrom(tl, { cancel: () => aura.stop() });
+      tl.end(a.windup + Math.max(a.recovery, a.follow ? 0.32 : 0));
+      return seqFrom(tl, { cancel: () => { aura.stop(); hideProp(); f.followStrike = null; }, onDone: () => { hideProp(); if (f.followStrike) { const s = f.followStrike; f.followStrike = null; f.startStrike(s); } } });
     },
   },
 
@@ -2917,15 +2940,17 @@ Object.assign(ABILITY_TYPES, {
       if (f.findBuff(a.buffType)) { f.notify('JÁ ATIVO'); return null; }
       const tl = new Timeline();
       f.vel.set(0, 0, 0);
-      f.anim.play(a.anim || 'concentrate', { restart: true, duration: 0.45 });
-      world.audio.play('ritual', { volume: 0.5 });
-      tl.add(0.25, () => {
-        const trail = world.fx.emitter({ rate: 24, follow: () => f.chestPos(), particle: { color: a.color, speed: 0.4, spread: 0.4, life: 0.4, size: 0.16 } });
+      const castT = a.animTime ?? 0.45;
+      f.anim.play(a.anim || 'concentrate', { restart: true, duration: castT });
+      world.audio.play(a.sound || 'ritual', { volume: 0.5 });
+      tl.add(Math.min(0.25, castT * 0.6), () => {
+        const trail = a.trail === false ? null : world.fx.emitter({ rate: 24, follow: () => f.chestPos(), particle: { color: a.color, speed: 0.4, spread: 0.4, life: 0.4, size: 0.16 } });
         if (a.refillDodges) f.dodges = Math.max(f.dodges, a.refillDodges);
-        f.addBuff({ type: a.buffType, name: a.label || a.name.toUpperCase(), time: a.duration, duration: a.duration, speedMult: a.speedMult, mult: a.damageMult, affects: a.affects, takenMult: a.takenMult, takenKinds: a.takenKinds, extraHit: a.extraHit, onEnd() { trail.stop(); } });
+        if (a.armor) f.armorHits = (f.armorHits || 0) + a.armor; // estabilidade: aguenta golpes sem recuar
+        f.addBuff({ type: a.buffType, name: a.label || a.name.toUpperCase(), time: a.duration, duration: a.duration, speedMult: a.speedMult, mult: a.damageMult, affects: a.affects, takenMult: a.takenMult, takenKinds: a.takenKinds, extraHit: a.extraHit, atkSpeed: a.atkSpeed, knockbackTakenMult: a.knockbackTakenMult, idleAnim: a.idleAnim, onEnd() { trail && trail.stop(); if (a.armor) f.armorHits = Math.max(0, (f.armorHits || 0) - a.armor); } });
         f.notify(a.label || a.name.toUpperCase(), true);
       });
-      tl.end(0.45);
+      tl.end(castT);
       return seqFrom(tl);
     },
   },

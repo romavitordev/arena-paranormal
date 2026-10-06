@@ -342,6 +342,18 @@ export class Projectiles {
         p.chainFx = null;
       }
       w.onPull && w.onPull(o, target);
+      // atrair → posicionar → atacar (Emissor do Arnaldo): quando o alvo chega, a espada já sai em estocada
+      const follow = a.onHit.pull.follow;
+      if (follow) {
+        w.after((a.onHit.pull.time ?? 0.3) + 0.02, () => {
+          if (o.state !== 'ranged' && o.state !== 'idle') return;
+          if (o.seq && o.seq.cancel) o.seq.cancel();
+          o.seq = null;
+          o.setState('idle');
+          o.startStrike(follow);
+          w.cameraRig.shake(0.12, 0.12);
+        });
+      }
     }
     if (a.onHit.stun) target.stun(a.onHit.stun, a.onHit.stunAnim || 'stagger');
     if (a.onHit.impale) {
