@@ -205,7 +205,8 @@ export class HUD {
         const max = f.cooldownMax[a.key] || 1;
         el.querySelector('.cd').style.setProperty('--p', `${(cd / max) * 100}%`);
         el.querySelector('.s').textContent = cd > 0 ? Math.ceil(cd) : '';
-        const noCost = f.energy < a.cost;
+        // quem paga com vida (Arthur, Erin sem sanidade) não fica "sem sanidade" na HUD
+        const noCost = f.energy < a.cost && !hasPassive(f, 'bloodPrice');
         el.classList.toggle('nocost', noCost && cd <= 0);
         el.classList.toggle('ready', cd <= 0 && !noCost);
       });
