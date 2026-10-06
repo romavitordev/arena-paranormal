@@ -8,6 +8,7 @@ import * as THREE from 'three';
 const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 const DMG_HOLD = 1.2; // segundos que o marcador fica depois do combo acabar
+const SUBTITLE_WORD_INTERVAL = 0.12;
 const _v = new THREE.Vector3();
 
 const COMBO_STATES = new Set(['hitstun', 'stun', 'pulled', 'grabbed', 'downed']);
@@ -41,6 +42,7 @@ export class HUD {
     this.bannerEl = root.querySelector('#banner');
     this.letterbox = root.querySelector('#letterbox');
     this.flashEl = root.querySelector('#flash');
+    this.subtitleState = null;
     this.els = [];
   }
 
@@ -138,6 +140,7 @@ export class HUD {
   }
 
   update(match) {
+    this.updateSubtitle(match?.lastDt || 0);
     if (!this.fighters) return;
     this.fighters.forEach((f, i) => {
       const e = this.els[i];
@@ -247,16 +250,48 @@ export class HUD {
   // Fala de personagem (intro). null esconde.
   subtitle(s) {
     const el = this.subEl;
-    if (!s) { el.classList.remove('on'); return; }
+    const text = el.querySelector('span');
+    if (!s) {
+      this.subtitleState = null;
+      text.textContent = '';
+      el.classList.remove('on');
+      return;
+    }
     el.querySelector('b').textContent = s.name;
     el.querySelector('b').style.color = s.color;
-    const text = el.querySelector('span');
-    text.textContent = s.text;
+    text.textContent = '';
     text.style.borderColor = s.color;
     el.classList.toggle('right', s.side === 1);
+    this.subtitleState = {
+      words: s.text.trim().split(/\s+/).filter(Boolean),
+      elapsed: 0,
+      shown: 0,
+    };
+    this.showNextSubtitleWord();
     el.classList.remove('on');
     void el.offsetWidth;
     el.classList.add('on');
+  }
+
+  updateSubtitle(dt) {
+    const state = this.subtitleState;
+    if (!state || state.shown >= state.words.length) return;
+    state.elapsed += dt;
+    while (state.elapsed >= SUBTITLE_WORD_INTERVAL && state.shown < state.words.length) {
+      state.elapsed -= SUBTITLE_WORD_INTERVAL;
+      this.showNextSubtitleWord();
+    }
+  }
+
+  showNextSubtitleWord() {
+    const state = this.subtitleState;
+    if (!state || state.shown >= state.words.length) return;
+    const word = document.createElement('i');
+    word.className = 'subtitle-word';
+    word.textContent = state.words[state.shown];
+    if (state.shown > 0) this.subEl.querySelector('span').append(' ');
+    this.subEl.querySelector('span').append(word);
+    state.shown++;
   }
 
   // Marcador de dano do combo (estilo Storm 4): mostra só o dano do combo ATUAL de quem está batendo,
