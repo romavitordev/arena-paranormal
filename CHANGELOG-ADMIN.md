@@ -1,5 +1,13 @@
 # Registro administrativo de alterações
 
+## v3.8.1 — A máscara de gás da Erin
+
+- `gasMask()` (weapons.js) refeita: concha de borracha (metade frontal de esfera), lentes com aro + vidro/halo
+  `glowMat`, bocal e tampa, cartucho na bochecha, dois `TubeGeometry` brilhantes até o peito, alças.
+- `addErinProps` cria a máscara escondida no socket `mouth` (a cena leva das mãos ao rosto com `carryProp`);
+  `addErinCaosProps` só a mostra.
+- `maskTransform`: cena `gasmask` (clipe novo `madness_kneel` → `mask_lift`) e `sp.tint` (cor da cena/aura; Erin verde).
+
 ## v3.8.0 — Máscaras como nas referências
 
 - Referências: GIFs do usuário (branch `refs-gifs`, `mascarados ref anm/`), análise em `Referencias visuais/ANALISE.md`.

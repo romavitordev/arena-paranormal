@@ -170,9 +170,11 @@ export default {
     name: 'Em Nome do Caos',
     banner: 'Em Nome do Caos',
     type: 'maskTransform',
+    scene: 'gasmask', // ajoelha rindo com a mão no rosto e veste a máscara de gás (referências do usuário)
+    prop: 'gasMask',
+    tint: 0x7aff9a, // o verde das lentes e do Caos (ela não é Mascarada: nada de vermelho)
     form: 'erin_caos',
     formBanner: 'Em Nome do Caos',
-    anim: 'powerup',
     duration: 0, // até o fim do round
     bonusHealth: 60,
     energy: 0, // ela perde toda a sanidade

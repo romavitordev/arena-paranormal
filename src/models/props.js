@@ -102,6 +102,12 @@ export function addErinProps(rig) {
   gr.visible = false;
   sockets.handR.add(gr);
   props.grenade = gr;
+  // máscara de gás (só aparece na Transformação: na cena ela leva a máscara das mãos ao rosto)
+  const mask = gasMask(0x7aff9a);
+  mask.position.set(0, -0.02, -0.01);
+  mask.visible = false;
+  sockets.mouth.add(mask);
+  props.gasMask = mask;
 }
 
 // AGUIAR: machado do Mutilador na mão direita (sem arma de fogo); máscara (do Blender) escondida
@@ -299,11 +305,7 @@ export function addFantasmaProps(rig) {
 // ERIN — forma "Em Nome do Caos": a máscara de gás da Produção do Anfitrião no rosto (lentes verdes)
 export function addErinCaosProps(rig) {
   addErinProps(rig);
-  const mask = gasMask(0x7aff9a);
-  const H = rig.sockets.mouth;
-  mask.position.set(0, -0.03, -0.02);
-  H.add(mask);
-  rig.props.gasMask = mask;
+  rig.showProp('gasMask', true);
 }
 
 // LABIRINTO — forma do Capacete do ???: o elmo do sorriso fica no rosto o tempo todo

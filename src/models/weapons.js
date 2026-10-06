@@ -901,35 +901,68 @@ export function demonMace() {
   return g;
 }
 
-// Máscara de gás tecnológica (a da Produção do Anfitrião que a Erin adaptou e passou a usar no lugar dos óculos):
-// borracha escura cobrindo o rosto, duas lentes redondas que brilham e o filtro na frente da boca.
-// Presa no socket `mouth` (frente do rosto, eixo +z para fora).
+// Máscara de gás tecnológica (a da Produção do Anfitrião que a Erin adaptou e passou a usar no lugar dos óculos),
+// no estilo da referência do usuário: borracha preta cobrindo dos olhos ao queixo, duas lentes redondas com aro que
+// BRILHAM em verde, o filtro redondo na frente da boca, um cartucho grande na bochecha direita e tubos verdes
+// brilhantes descendo do rosto até o peito. Presa no socket `mouth` (frente do rosto, eixo +z para fora, y para cima).
 export function gasMask(glow = 0x7aff9a) {
   const g = new THREE.Group();
-  const face = part(new THREE.SphereGeometry(0.13, 14, 10, 0, Math.PI * 2, 0, Math.PI * 0.62), 0x1c1e1a);
-  face.rotation.x = Math.PI / 2;
-  face.scale.set(1, 0.75, 1.05);
-  face.position.set(0, 0.02, -0.1);
-  g.add(face);
+  const RUBBER = 0x15171a;
+  // concha de borracha (metade da frente de uma esfera achatada) cobrindo olhos, nariz e boca
+  const shell = part(new THREE.SphereGeometry(0.115, 18, 12, 0, Math.PI, 0, Math.PI), RUBBER); // metade da frente (+z)
+  shell.scale.set(1, 1.18, 0.85);
+  shell.position.set(0, 0.015, -0.035);
+  g.add(shell);
+  // lentes: aro grosso + vidro verde brilhando + halo
   for (const s of [-1, 1]) {
-    const rim = part(new THREE.TorusGeometry(0.038, 0.012, 6, 14), 0x5a5a52);
-    rim.position.set(0.05 * s, 0.075, 0.015);
+    const rim = part(new THREE.CylinderGeometry(0.036, 0.04, 0.03, 18), 0x2a2d30);
+    rim.rotation.x = Math.PI / 2;
+    rim.position.set(0.045 * s, 0.06, 0.06);
     g.add(rim);
-    const lens = new THREE.Mesh(new THREE.CircleGeometry(0.034, 14), glowMat(glow, 0.85));
-    lens.position.set(0.05 * s, 0.075, 0.02);
+    const lens = new THREE.Mesh(new THREE.CircleGeometry(0.03, 18), glowMat(glow, 0.95));
+    lens.position.set(0.045 * s, 0.06, 0.077);
     g.add(lens);
+    const halo = new THREE.Mesh(new THREE.CircleGeometry(0.05, 18), glowMat(glow, 0.25));
+    halo.position.set(0.045 * s, 0.06, 0.08);
+    g.add(halo);
   }
-  const filter = part(new THREE.CylinderGeometry(0.045, 0.05, 0.08, 12), 0x3a3d34);
-  filter.rotation.x = Math.PI / 2;
-  filter.position.set(0, -0.015, 0.045);
-  g.add(filter);
-  const cap = part(new THREE.CylinderGeometry(0.052, 0.052, 0.015, 12), 0x8a6a2a);
+  // filtro redondo na frente da boca (bocal + tampa com grade)
+  const snout = part(new THREE.CylinderGeometry(0.034, 0.042, 0.05, 16), 0x24272b);
+  snout.rotation.x = Math.PI / 2;
+  snout.position.set(0, -0.035, 0.085);
+  g.add(snout);
+  const cap = part(new THREE.CylinderGeometry(0.044, 0.044, 0.018, 16), 0x3a3f44);
   cap.rotation.x = Math.PI / 2;
-  cap.position.set(0, -0.015, 0.088);
+  cap.position.set(0, -0.035, 0.115);
   g.add(cap);
-  const strap = part(new THREE.TorusGeometry(0.12, 0.012, 5, 18), 0x24261f);
-  strap.rotation.y = Math.PI / 2;
-  strap.position.set(0, 0.05, -0.12);
-  g.add(strap);
+  // cartucho grande na bochecha direita, apontando para a frente e para fora
+  const can = part(new THREE.CylinderGeometry(0.04, 0.04, 0.09, 16), 0x1e2124);
+  can.rotation.set(Math.PI / 2, 0, 0);
+  can.rotation.y = -0.6;
+  can.position.set(-0.085, -0.04, 0.06);
+  g.add(can);
+  const canCap = part(new THREE.CylinderGeometry(0.043, 0.043, 0.015, 16), 0x4a4f54);
+  canCap.rotation.set(Math.PI / 2, 0, 0);
+  canCap.rotation.y = -0.6;
+  canCap.position.set(-0.11, -0.04, 0.1);
+  g.add(canCap);
+  // tubos verdes brilhantes: do queixo descendo pelo pescoço até o peito (um de cada lado)
+  for (const s of [-1, 1]) {
+    const path = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(0.025 * s, -0.07, 0.07),
+      new THREE.Vector3(0.07 * s, -0.16, 0.05),
+      new THREE.Vector3(0.1 * s, -0.27, 0.03),
+      new THREE.Vector3(0.08 * s, -0.4, 0.05),
+    ]);
+    const tube = new THREE.Mesh(new THREE.TubeGeometry(path, 16, 0.009, 6, false), glowMat(glow, 0.9));
+    g.add(tube);
+  }
+  // alças pretas em volta da cabeça
+  for (const y of [0.075, -0.02]) {
+    const strap = part(new THREE.TorusGeometry(0.105, 0.01, 5, 20), RUBBER);
+    strap.rotation.x = Math.PI / 2;
+    strap.position.set(0, y, -0.06);
+    g.add(strap);
+  }
   return g;
 }
