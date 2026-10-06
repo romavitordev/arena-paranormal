@@ -11,7 +11,8 @@ import { faceClose, orbit } from '../../camera/shots.js';
 //   cdRate              recargas mais rápidas (1.3 = 30% mais rápido)
 //   energyRegenMult     sanidade regenera mais rápido
 //   regen               vida por segundo
-//   armorEvery          a cada N s fica pronto para aguentar 1 golpe sem reagir
+//   armorEvery          a cada N s ganha 1 golpe que aguenta sem reagir (acumula até armorMax, padrão 1)
+//   knockbackTakenMult  é empurrado menos (0.4 = 40% do empurrão)
 //   unblockable         golpes físicos atravessam a defesa
 //   meleeBleed          todo golpe físico/arremessado sangra
 //   bloodArmSide        braço de sangue (visual da Armadura de Sangue) + bloodArmor
@@ -74,7 +75,7 @@ function applyAwakening(f, sp, world, col) {
   f.addBuff({
     type: 'awakened', name: (sp.label || sp.name).toUpperCase(), time: Infinity, duration: Infinity,
     mult: sp.mult, affects: sp.affects || ['melee', 'ranged', 'ability'], takenMult: sp.takenMult, speedMult: sp.speedMult,
-    cdRate: sp.cdRate, energyRegenMult: sp.energyRegenMult, unblockable: !!sp.unblockable, meleeBleed: sp.meleeBleed,
+    cdRate: sp.cdRate, energyRegenMult: sp.energyRegenMult, knockbackTakenMult: sp.knockbackTakenMult, unblockable: !!sp.unblockable, meleeBleed: sp.meleeBleed,
     bloodArmor: !!sp.bloodArmSide, bloodArmSide: sp.bloodArmSide,
     onTick(dt) {
       if (f.state === 'ko') return;
@@ -84,7 +85,7 @@ function applyAwakening(f, sp, world, col) {
       }
       if (sp.armorEvery) {
         armorClock += dt;
-        if (armorClock >= sp.armorEvery && (f.armorHits || 0) < 1) { armorClock = 0; f.armorHits = 1; }
+        if (armorClock >= sp.armorEvery && (f.armorHits || 0) < (sp.armorMax ?? 1)) { armorClock = 0; f.armorHits = (f.armorHits || 0) + 1; }
       }
     },
     onEnd() { aura.stop(); if (f.buffTint === tint) f.buffTint = null; },

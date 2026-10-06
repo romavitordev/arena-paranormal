@@ -1,5 +1,13 @@
 # Registro administrativo de alterações
 
+## v3.9.4 — Balu tanque
+
+- `balu.awakening` (Resistência à Dor): `takenMult` 0,8 → 0,55, `armorEvery` 3,5 → 1,5 com `armorMax: 2` (novo em
+  `awakenMode`: acumula golpes de armadura), `knockbackTakenMult: 0.4` (novo: buff que reduz o empurrão, lido em
+  `damage.applyHit`), `heal` 0,1 → 0,25, `speedMult: 0.92`.
+- Testado: golpe de abertura do Kaiser 20 → 11 (8 nos seguintes com a escala de combo), golpes absorvidos sem recuar,
+  empurrão ~0.
+
 ## v3.9.3 — Balu novo (+ Arnaldo/Anfitrião/Veríssimo provisórios na main, sem anúncio)
 
 - Referências do usuário na branch `refs-arnaldo` (pastas `Balu/` e `arnaldo verissimo ref/`; pode ser apagada depois).

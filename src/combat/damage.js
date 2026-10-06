@@ -101,6 +101,7 @@ export function applyHit(world, attacker, victim, o) {
     const P = PASSIVES[p.type];
     if (P && P.knockbackTakenMod) kbMult *= P.knockbackTakenMod({ kind: o.kind, passive: p, o });
   }
+  for (const b of victim.buffs || []) if (b.knockbackTakenMult) kbMult *= b.knockbackTakenMult; // ex.: Resistência à Dor (Balu)
 
   // ---------------- defesa ----------------
   const B = COMBAT.block;

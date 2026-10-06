@@ -187,12 +187,16 @@ export default {
     length: 3.6,
   },
 
-  // DESPERTAR (Barra de Transformação cheia + vida baixa, segurando △) — cânone: Força Física e Resistência à Dor — o Balu com raiva: não sente os golpes e bate mais forte. Até o fim do round.
+  // DESPERTAR (Barra de Transformação cheia + vida baixa, segurando △) — cânone: Força Física e Resistência à Dor — o Balu
+  // com raiva vira um TANQUE até o fim do round (pedido do usuário): recebe quase metade do dano, quase não é empurrado,
+  // aguenta golpes sem recuar (até 2 guardados, um novo a cada 1,5 s), recupera um quarto da vida e bate mais forte; em
+  // troca anda um pouco mais devagar.
   awakening: {
     name: 'Resistência à Dor',
     banner: 'Resistência à Dor',
     type: 'awakenMode',
-    mult: 1.2, affects: ['melee'], takenMult: 0.8, armorEvery: 3.5, aura: 'flame', color: 0xd04020, heal: 0.1,
+    mult: 1.2, affects: ['melee'], takenMult: 0.55, armorEvery: 1.5, armorMax: 2, knockbackTakenMult: 0.4, speedMult: 0.92,
+    aura: 'flame', color: 0xd04020, heal: 0.25,
   },
 
   passives: [
