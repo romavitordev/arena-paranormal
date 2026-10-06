@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { Timeline, forwardFromYaw } from '../../core/util.js';
 import { faceClose, orbit, lowAngle, socketClose } from '../../camera/shots.js';
 import { transform } from '../forms.js';
+import { hostMask } from '../../models/weapons.js';
 
 // PÔR A MÁSCARA (transformação). Para os Mascarados a máscara é o momento em que a Intenção de Assassino desperta —
 // só acontece aqui, na Transformação (Barra cheia + vida baixa, segurando △), nunca como habilidade comum:
@@ -89,6 +90,9 @@ export const maskTransform = {
     };
 
     let total;
+    let transformAt = null; // cena com epílogo: transforma antes do fim e mostra a forma nova (watch)
+    let epilogue = null;
+    const scrap = []; // peças temporárias da cena (removidas no fim ou se a cena for interrompida)
     if (scene === 'helmet') {
       // 1) segura o capacete sorridente no peito e olha por cima do ombro · 2) clarão · 3) ergue acima da cabeça e
       // encaixa · 4) a aura vermelha toma conta
@@ -148,55 +152,114 @@ export const maskTransform = {
       tl.add(1.85, () => maskOn(true));
       total = 2.6;
     } else if (scene === 'watch') {
-      // 1) tira o relógio do bolso e olha para ele · 2) abre a tampa: a Relíquia brilha lá dentro (close no relógio) ·
-      // 3) ergue o relógio aberto · 4) a Energia explode em roxo, rosa e azul e toma o corpo
+      // RELÍQUIA DE ENERGIA (Arnaldo → O Anfitrião) — uma cutscene de verdade, em nove fases:
+      //  1 olha o relógio, que começa a brilhar · 2 o ambiente distorce (som estranho) · 3 a Relíquia se manifesta ·
+      //  4 a Energia atravessa o corpo · 5 fios de Energia saltam do relógio para o corpo · 6 a máscara do Anfitrião
+      //  aparece e se FUNDE ao rosto · 7 o corpo fica paranormal (roxo) · 8 a Energia explode · 9 surge o Anfitrião
+      //  (a câmera mostra a forma nova rindo; o relógio gira sem parar)
       const watch = prop;
       const hand = () => (watch ? watch.getWorldPosition(new THREE.Vector3()) : f.chestPos());
+      const COLORS = [0xb04aff, 0xff6ad0, 0x5aa0ff];
       if (watch) f.rig.showProp(sp.prop, true);
       f.anim.play('watch_open', { restart: true, duration: 0.9 });
       world.audio.play('heartbeat', { volume: 0.7 });
       lightTo = 1.5;
       world.cameraRig.playShots([
-        faceClose(f, { dur: 1.0, from: 1.9, to: 1.5, side: 0.5, height: hy - 0.2, fov: 38 }),
-        socketClose(f, hand, { dur: 1.0, dist: 0.9, side: 0.35, fov: 34 }),
-        orbit(f, { dur: 1.3, radius: 3.0, height: 1.2, a0: 0.3, a1: 0.9, lookH: 1.5, fov: 48 }), // o relógio erguido
+        faceClose(f, { dur: 0.9, from: 1.9, to: 1.5, side: 0.5, height: hy - 0.2, fov: 38 }),
+        socketClose(f, hand, { dur: 1.3, dist: 0.85, side: 0.35, fov: 32 }),
+        orbit(f, { dur: 1.1, radius: 2.6, height: 1.4, a0: -0.4, a1: 0.5, lookH: 1.4, fov: 46 }),
+        faceClose(f, { dur: 1.0, from: 1.4, to: 1.0, side: 0.1, height: hy, fov: 34 }),
+        lowAngle(f, { dur: 1.2, dist: 3.4, side: -0.8 }),
       ]);
       tl.add(0.3, () => world.showBanner(sp.banner || sp.name, f.def.color));
+      // 1–2: o relógio acende; o ar em volta distorce e o som fica estranho
       let lidT = -1;
-      tl.add(1.0, () => {
+      tl.add(0.8, () => {
         lidT = 0;
         world.audio.play('ritual', { volume: 0.8, pitch: 1.3 });
         world.fx.flash(hand(), { color: tint, size: 1.2, life: 0.25 });
         lightColor = new THREE.Color(tint);
-        lightTo = 6;
+        lightTo = 5;
       });
-      const COLORS = [0xb04aff, 0xff6ad0, 0x5aa0ff];
+      tl.add(1.2, () => {
+        world.fx.distort(f.chestPos(), { color: tint, radius: 3.4, life: 0.8 });
+        world.audio.play('fearGaze', { volume: 0.6, pitch: 0.35 });
+        world.screenFlash && world.screenFlash('#14062a', 0.25);
+      });
+      // 3: a Relíquia se manifesta (núcleo em três cores girando)
       let sparks = null;
-      tl.add(1.15, () => {
-        sparks = world.fx.emitter({ rate: 60, follow: hand, particle: { color: COLORS[Math.floor(Math.random() * 3)], speed: 1.2, spread: 0.6, life: 0.4, size: 0.12 } });
+      tl.add(1.5, () => {
+        sparks = world.fx.emitter({ rate: 70, follow: hand, particle: { color: COLORS[Math.floor(Math.random() * 3)], speed: 1.4, spread: 0.7, life: 0.45, size: 0.12 } });
+        COLORS.forEach((c) => world.fx.ring(hand(), { color: c, radius: 0.6, life: 0.5, vertical: true, yaw: f.yaw }));
       });
-      tl.add(2.0, () => {
+      // 4: a Energia atravessa o corpo (sobe do braço para o peito e a cabeça)
+      let body = null;
+      tl.add(2.1, () => {
         f.anim.play('watch_raise', { restart: true, duration: 0.7 });
-        world.audio.play('fearGaze', { volume: 0.7, pitch: 0.5 });
+        const J = ['eL', 'sL', 'sp', 'hd', 'sR', 'eR', 'kL', 'kR'];
+        body = world.fx.emitter({ rate: 110, follow: () => f.rig.joints[J[Math.floor(Math.random() * J.length)]].getWorldPosition(new THREE.Vector3()), particle: { color: COLORS[Math.floor(Math.random() * 3)], speed: 0.8, spread: 0.4, up: 0.6, life: 0.45, size: 0.16 } });
+        f.glowTint = { color: tint, base: 0.15 };
       });
-      tl.add(2.55, () => {
+      // 5: fios de Energia saltam do relógio e se enrolam no corpo
+      tl.add(2.6, () => {
+        for (let i = 0; i < 10; i++) {
+          const to = f.chestPos().add(new THREE.Vector3((Math.random() - 0.5) * 0.8, (Math.random() - 0.4) * 1.4, (Math.random() - 0.5) * 0.8));
+          world.fx.lightning(hand(), to, { color: [0xff4ad0, 0x4ab8ff, 0xffe04a, 0x5aff8a][i % 4], life: 0.6 });
+        }
+        world.audio.play('shockwave', { volume: 0.6, pitch: 1.6 });
+      });
+      // 6: a máscara surge na frente do rosto e se FUNDE a ele
+      let ghostMask = null;
+      tl.add(3.0, () => {
+        ghostMask = hostMask();
+        ghostMask.scale.setScalar(0.01);
+        ghostMask.position.set(0, -0.02, 0.25);
+        f.rig.sockets.mouth.add(ghostMask);
+        const gm = ghostMask;
+        scrap.push(() => gm.parent && gm.parent.remove(gm));
+        world.audio.play('maskOn', { volume: 0.9, pitch: 0.7 });
+      });
+      tl.each((time) => {
+        if (!ghostMask || time > 3.75) return;
+        const k = Math.min(1, (time - 3.0) / 0.6);
+        ghostMask.scale.setScalar(0.01 + k * 0.99);
+        ghostMask.position.z = 0.25 * (1 - k * k) - 0.01;
+        ghostMask.rotation.z = (1 - k) * 2.5;
+      });
+      // 7: o corpo vira matéria paranormal (o brilho roxo toma conta)
+      tl.add(3.6, () => {
+        f.glowTint = { color: tint, base: 0.5 };
+        world.fx.flash(head(), { color: tint, size: 2.4, life: 0.25 });
+        world.screenFlash && world.screenFlash('#3a0a5a', 0.2);
+      });
+      // 8: a Energia explode
+      tl.add(4.0, () => {
         sparks && sparks.stop();
-        const p = hand();
-        world.fx.flash(p, { color: 0xffffff, size: 4, life: 0.25 });
-        for (let i = 0; i < 8; i++) world.fx.lightning(p, f.chestPos().add(new THREE.Vector3((Math.random() - 0.5) * 1.6, (Math.random() - 0.3) * 1.4, (Math.random() - 0.5) * 1.6)), { color: COLORS[i % 3], life: 0.3 });
-        COLORS.forEach((c) => world.fx.burst(f.chestPos(), { count: 40, color: c, speed: 6, life: 0.8, size: 0.25 }));
-        world.fx.distort(f.chestPos(), { color: tint, radius: 2.4, life: 0.4 });
-        world.screenFlash && world.screenFlash('#3a0a5a', 0.3);
-        world.cameraRig.shake(0.45, 0.35);
-        world.audio.play('explosion', { volume: 0.7, pitch: 1.4 });
-        lightTo = 14;
+        body && body.stop();
+        const p = f.chestPos();
+        world.fx.flash(p, { color: 0xffffff, size: 5, life: 0.3 });
+        COLORS.forEach((c) => world.fx.burst(p, { count: 50, color: c, speed: 8, life: 0.9, size: 0.28 }));
+        for (let i = 0; i < 3; i++) world.fx.ring(new THREE.Vector3(f.pos.x, 0.07, f.pos.z), { color: COLORS[i], radius: 2.5 + i * 1.5, life: 0.6 + i * 0.1 });
+        world.fx.distort(p, { color: tint, radius: 3.4, life: 0.5 });
+        world.screenFlash && world.screenFlash('#ffffff', 0.25);
+        world.cameraRig.shake(0.6, 0.45);
+        world.audio.play('explosion', { volume: 0.9, pitch: 1.2 });
+        lightTo = 16;
+        if (ghostMask) { ghostMask.parent && ghostMask.parent.remove(ghostMask); ghostMask = null; }
+        f.glowTint = null;
       });
       const lid = watch && watch.userData.lid;
-      // a tampa abre girando na dobradiça (0,3 s)
       tl.each((time, dt) => {
         if (lid && lidT >= 0 && lidT < 1) { lidT = Math.min(1, lidT + dt / 0.3); lid.rotation.y = -2.3 * lidT; }
       });
-      total = 3.2;
+      transformAt = 4.05;
+      // 9: o Anfitrião aparece — câmera nele, risada (feito depois do transform, com o modelo novo)
+      epilogue = () => {
+        f.anim.play('host_laugh', { restart: true, duration: 0.9 });
+        world.audio.play('fearGaze', { volume: 0.8, pitch: 1.5 });
+        world.cameraRig.playShots([faceClose(f, { dur: 1.2, from: 2.2, to: 1.6, side: 0.4, height: hy, fov: 40 })]);
+      };
+      total = 5.3;
     } else {
       f.anim.play(sp.anim || 'concentrate', { restart: true, duration: 1.5 });
       world.cameraRig.playShots([
@@ -216,12 +279,15 @@ export const maskTransform = {
       world.scene.remove(light);
       if (carry) carry.reset();
       if (prop && prop.userData && prop.userData.lid) prop.userData.lid.rotation.y = 0; // relógio fechado de novo
+      scrap.forEach((fn) => fn());
+      scrap.length = 0;
+      if (scene === 'watch') f.glowTint = null;
     };
     const finish = () => {
       if (done) return;
       done = true;
       cleanup();
-      world.endCinematic();
+      if (!epilogue) world.endCinematic();
       world.fx.ring(new THREE.Vector3(f.pos.x, 0.06, f.pos.z), { color: tint, radius: 3, life: 0.5 });
       world.fx.burst(f.chestPos(), { count: 50, color: col, speed: 5, life: 0.7, size: 0.3 });
       const bonus = sp.bonusHealth || 0;
@@ -243,7 +309,20 @@ export const maskTransform = {
         f.addBuff({ type: 'killerIntent', time: Infinity, onEnd() { red.stop(); } });
       }
     };
-    tl.add(total - 0.1, finish);
+    tl.add(transformAt ?? total - 0.1, () => {
+      finish();
+      if (!epilogue) return;
+      // a troca de modelo (applyDef) descarta a sequência atual: o epílogo vira a sequência nova da forma, e é ELA que
+      // encerra a cinematic (senão o mundo ficaria parado para sempre)
+      epilogue();
+      let et = 0;
+      const rest = total - transformAt;
+      f.setState('special');
+      f.seq = {
+        update(dt) { et += dt; if (et >= rest) { world.endCinematic(); return true; } return false; },
+        cancel() { world.endCinematic(); },
+      };
+    });
     tl.end(total);
     return {
       update: (dt) => {
