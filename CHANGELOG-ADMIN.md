@@ -1,5 +1,18 @@
 # Registro administrativo de alterações
 
+## v3.9.3 — Balu novo (+ Arnaldo/Anfitrião/Veríssimo provisórios na main, sem anúncio)
+
+- Referências do usuário na branch `refs-arnaldo` (pastas `Balu/` e `arnaldo verissimo ref/`; pode ser apagada depois).
+- `char_balu.py` v2 (gerado aqui com o `bpy` 4.5 do pip — o mesmo `lib.py`): o cabelo era uma calota menor que a
+  cabeça (ficava careca com uma faixa das mechas em volta) → massa fechada (`hair_volume`: topo, topete e nuca) +
+  mechas com brilho de gel (`hairshine_balu`); bigode maior com pontas caídas e cavanhaque achatado no queixo; tronco e
+  braços mais largos (`width 1.12`, perfil e `arm_r` maiores, mangas mais grossas); gola de polo aberta; `jeans_hip`
+  cobrindo o quadril (a barra da polo aparecia entre as pernas). Textura `shirt_balu`: polo verde-clara (desenho base).
+- `baluAxe` refeito pela referência (lâmina em barba, miolo escuro com furos, ponta-lança, gancho, cabo de madeira com
+  faixa de pano em espiral); pomo de pantera e veias mantidos.
+- Arnaldo/Anfitrião/Veríssimo: visual provisório pelas referências (espada da referência, óculos rosa, fios neon,
+  Veríssimo sem casaco) — entram na main e na seleção, mas continuam fora do changelog dos jogadores.
+
 ## (em andamento, sem versão nem changelog dos jogadores) — Arnaldo Fritz → O Anfitrião e Senhor Veríssimo
 
 Pedido do usuário: só entra no changelog dos jogadores depois da implementação completa (modelos do Blender).

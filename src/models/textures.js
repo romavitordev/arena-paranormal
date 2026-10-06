@@ -635,24 +635,26 @@ export const MATERIAL_TEXTURES = {
     brow: { angry: -1, thick: 8, color: '#17110f' },
     mouth: { mouthW: 20, smile: 6, teeth: true },
   }),
+  // polo VERDE-CLARA (o desenho de Calamidade, base do modelo): dobras sombreadas, carcela com botões e a abertura em V
   shirt_balu: () => canvasTex(512, 512, (g) => {
-    g.fillStyle = '#f3eee2'; g.fillRect(0, 0, 512, 512);
-    // flores amarelas espalhadas (pétalas em estrela) — a camisa mais conhecida dele
-    const flower = (x, y, r, rot) => {
-      g.save(); g.translate(x, y); g.rotate(rot);
-      g.fillStyle = '#e8b23a';
-      for (let k = 0; k < 5; k++) { g.rotate((Math.PI * 2) / 5); g.beginPath(); g.ellipse(0, -r * 0.6, r * 0.32, r * 0.62, 0, 0, Math.PI * 2); g.fill(); }
-      g.fillStyle = '#c47a1a'; g.beginPath(); g.arc(0, 0, r * 0.22, 0, Math.PI * 2); g.fill();
-      g.restore();
-    };
+    g.fillStyle = '#9cc49a'; g.fillRect(0, 0, 512, 512);
+    // dobras do tecido (faixas mais escuras e mais claras, na vertical e em diagonal)
     const rnd = seeded(41);
-    for (let i = 0; i < 70; i++) flower(rnd() * 512, rnd() * 512, 10 + rnd() * 12, rnd() * 6.28);
-    for (let i = 0; i < 120; i++) { g.fillStyle = 'rgba(232,178,58,0.55)'; g.beginPath(); g.arc(rnd() * 512, rnd() * 512, 2 + rnd() * 3, 0, Math.PI * 2); g.fill(); }
-    // abertura da gola em V no meio da frente (pele) e a carcela
+    for (let i = 0; i < 26; i++) {
+      const x = rnd() * 512;
+      const w = 6 + rnd() * 14;
+      g.fillStyle = rnd() < 0.6 ? 'rgba(40,80,50,0.16)' : 'rgba(255,255,255,0.12)';
+      g.beginPath(); g.moveTo(x, 0); g.bezierCurveTo(x + 30, 170, x - 30, 340, x + 10, 512); g.lineTo(x + w + 10, 512); g.bezierCurveTo(x + w - 30, 340, x + w + 30, 170, x + w, 0); g.closePath(); g.fill();
+    }
+    // trama fina do piquê
+    g.strokeStyle = 'rgba(30,60,40,0.10)'; g.lineWidth = 1;
+    for (let y = 0; y < 512; y += 4) { g.beginPath(); g.moveTo(0, y); g.lineTo(512, y); g.stroke(); }
+    // abertura da gola em V no meio da frente (pele), carcela e dois botões
     g.fillStyle = '#c8946e';
-    g.beginPath(); g.moveTo(232, 0); g.lineTo(256, 70); g.lineTo(280, 0); g.closePath(); g.fill();
-    g.strokeStyle = 'rgba(60,40,20,0.25)'; g.lineWidth = 1;
-    for (let y = 0; y < 512; y += 6) { g.beginPath(); g.moveTo(0, y); g.lineTo(512, y); g.stroke(); }
+    g.beginPath(); g.moveTo(228, 0); g.lineTo(256, 78); g.lineTo(284, 0); g.closePath(); g.fill();
+    g.fillStyle = '#86b088'; g.fillRect(250, 78, 12, 70);
+    g.fillStyle = '#e8eee4';
+    for (const y of [96, 128]) { g.beginPath(); g.arc(256, y, 4, 0, Math.PI * 2); g.fill(); }
   }, { wrap: true }),
   arms_balu: () => canvasTex(256, 256, (g) => {
     g.fillStyle = '#c8946e'; g.fillRect(0, 0, 256, 256);

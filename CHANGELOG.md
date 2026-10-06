@@ -1,5 +1,11 @@
 # Changelog
 
+## v3.9.3 — 2026-10-06
+
+### Alterado
+- Balu com modelo novo, seguindo as referências: cabelo preto volumoso penteado para trás com gel, bigode grosso e cavanhaque só no meio do queixo, ombros e braços bem mais fortes, polo verde-clara de gola aberta e jeans até o cinto.
+- Machado do Balu refeito: lâmina grande em barba com o fio de aço claro, miolo escuro com furos e gravações, ponta-lança no alto, gancho atrás e o cabo de madeira com faixas de pano enroladas.
+
 ## v3.9.2 — 2026-10-06
 
 ### Corrigido

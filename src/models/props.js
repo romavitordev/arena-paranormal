@@ -409,7 +409,7 @@ export function addArnaldoProps(rig) {
 // neon enrolados no corpo, terno escuro com gravata vermelha e o relógio com a Relíquia preso no antebraço esquerdo, girando sem parar
 export function addAnfitriaoProps(rig) {
   const { sockets, props } = rig;
-  restyle(rig, [[/HAIR/, 'hide'], [/tunic/, 0xece8e0], [/trim_red|rope/, 0x5a4a3a], ...ARNALDO_LOOK.map(([re, c]) => [re, re.test('coat') ? 0x2a2440 : c])]); // terno escuro arroxeado, camisa branca, colete
+  restyle(rig, [[/tunic/, 0xece8e0], [/trim_red|rope/, 0x5a4a3a], ...ARNALDO_LOOK.map(([re, c]) => [re, re.test('coat') ? 0x2a2440 : c])]); // terno escuro arroxeado, camisa branca, colete
   const mask = hostMask();
   mask.position.set(0, -0.02, -0.01);
   sockets.mouth.add(mask);
@@ -441,7 +441,7 @@ export function addAnfitriaoProps(rig) {
 // do Arnaldo, cabelo, bigode e cavanhaque grisalhos, camisa branca e colete marrom (referências); a escopeta curta
 // aparece no □
 const VERISSIMO_LOOK = [
-  [/HAIR/, 0xc8c4bc], // cabelo até os ombros, barba e bigode grisalhos
+  [/HAIR/, 0xa8a49e], // cabelo até os ombros, barba e bigode grisalhos
   [/coat|fur_white|coat_lining/, 'hide'], // sem casaco: camisa e colete (referências)
   [/shirt|arms_lirio/, 0xeeeae2], // camisa branca de manga dobrada
   [/cloth_orange|leather_lirio|leather_dark/, 0x3a2618], // colete marrom-escuro

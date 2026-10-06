@@ -797,13 +797,15 @@ export function baluAxe() {
   const g = new THREE.Group();
   const iron = toon(0x2a2a30);
   const steel = toon(0xc4c4ca);
-  const handle = part(new THREE.CylinderGeometry(0.026, 0.032, 1.08, 10), 0x26262c, { mat: iron });
+  const handle = part(new THREE.CylinderGeometry(0.026, 0.032, 1.08, 10), 0x4a3424); // cabo de madeira escura
   handle.position.y = -0.33;
   g.add(handle);
-  for (let i = 0; i < 6; i++) { // tiras de couro enroladas no cabo
-    const wrap = part(new THREE.CylinderGeometry(0.036, 0.036, 0.045, 10), 0xb89a70, { outline: false });
-    wrap.position.y = 0.08 - i * 0.075;
-    g.add(wrap);
+  // faixas de pano enroladas em espiral no cabo (empunhadura de cima e perto da cabeça), como na referência
+  for (const [y0, len] of [[0.16, 0.5], [-0.58, 0.16]]) {
+    const pts = [];
+    const turns = len / 0.026; // faixa larga e apertada: as voltas quase se encostam
+    for (let i = 0; i <= 120; i++) { const t = i / 120; const a = t * turns * Math.PI * 2; pts.push(new THREE.Vector3(Math.cos(a) * 0.03, y0 - t * len, Math.sin(a) * 0.03)); }
+    g.add(part(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 320, 0.012, 5, false), 0xb8ae98, { outline: false }));
   }
   // pomo: cabeça de pantera (focinho, orelhas, olhos) em metal escuro
   const panther = new THREE.Group();
@@ -823,38 +825,65 @@ export function baluAxe() {
     eyeL.position.set(s * 0.02, 0.012, 0.045);
     panther.add(eyeL);
   }
-  // cabeça do machado
+  // cabeça do machado (referência do usuário): lâmina GRANDE de um lado só, em barba (desce mais do que sobe), fio
+  // largo e curvo em aço claro, miolo mais escuro com uma fileira de furos e gravações, ponta-lança no alto e um
+  // gancho curvo atrás
   const head = new THREE.Group();
   head.rotation.y = Math.PI / 2;
-  head.position.y = -0.84;
+  head.position.y = -0.8;
   g.add(head);
-  const shape = new THREE.Shape(); // lâmina larga, de um lado só, com o fio curvo bem aberto
-  shape.moveTo(0.03, 0.07);
-  shape.lineTo(0.13, 0.11);
-  shape.quadraticCurveTo(0.2, 0.2, 0.27, 0.19);
-  shape.quadraticCurveTo(0.33, 0, 0.27, -0.19);
-  shape.quadraticCurveTo(0.2, -0.2, 0.13, -0.11);
-  shape.lineTo(0.03, -0.07);
-  shape.lineTo(0.03, 0.07);
-  head.add(part(extrude(shape, 0.02), 0xb4b4bc, { mat: steel }));
-  // saliências feitas à mão na lâmina (ornamentos) e o olho de ferro
-  for (const [x, y] of [[0.1, 0.0], [0.15, 0.06], [0.15, -0.06], [0.2, 0.0]]) {
-    const knob = part(new THREE.SphereGeometry(0.014, 6, 4), 0x2a2a30, { mat: iron });
-    knob.position.set(x, y, 0);
-    knob.scale.set(1, 1, 1.4);
-    head.add(knob);
+  const dark = toon(0x6e6e78);
+  const outer = new THREE.Shape(); // contorno inteiro (aço claro do fio)
+  outer.moveTo(0.03, 0.08);
+  outer.lineTo(0.12, 0.12);
+  outer.quadraticCurveTo(0.2, 0.2, 0.31, 0.22);
+  outer.quadraticCurveTo(0.39, 0.02, 0.33, -0.26);
+  outer.quadraticCurveTo(0.22, -0.3, 0.13, -0.17);
+  outer.lineTo(0.03, -0.09);
+  outer.lineTo(0.03, 0.08);
+  head.add(part(extrude(outer, 0.018), 0xc8ccd2, { mat: steel }));
+  const inner = new THREE.Shape(); // miolo escuro (por cima, nos dois lados)
+  inner.moveTo(0.03, 0.07);
+  inner.lineTo(0.12, 0.1);
+  inner.quadraticCurveTo(0.18, 0.15, 0.25, 0.15);
+  inner.quadraticCurveTo(0.3, 0.0, 0.26, -0.19);
+  inner.quadraticCurveTo(0.19, -0.22, 0.12, -0.14);
+  inner.lineTo(0.03, -0.08);
+  inner.lineTo(0.03, 0.07);
+  const innerM = part(extrude(inner, 0.024), 0x6e6e78, { mat: dark, outline: false });
+  head.add(innerM);
+  // fileira de furos e as gravações
+  for (const [x, y] of [[0.09, 0.05], [0.13, 0.02], [0.17, -0.02], [0.21, -0.07], [0.13, -0.09]]) {
+    for (const sz of [1, -1]) {
+      const hole = part(new THREE.CylinderGeometry(0.012, 0.012, 0.004, 10), 0x16161a, { outline: false });
+      hole.rotation.x = Math.PI / 2;
+      hole.position.set(x, y, sz * 0.0135);
+      head.add(hole);
+    }
   }
-  head.add(part(new THREE.BoxGeometry(0.08, 0.17, 0.07), 0x2a2a30, { mat: iron }));
-  const spur = part(new THREE.ConeGeometry(0.03, 0.13, 6), 0x2a2a30, { mat: iron }); // esporão atrás
-  spur.rotation.z = Math.PI / 2;
-  spur.position.x = -0.09;
-  head.add(spur);
+  for (const sz of [1, -1]) {
+    const eng = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3([
+      new THREE.Vector3(0.06, 0.09, sz * 0.0135), new THREE.Vector3(0.18, 0.12, sz * 0.0135), new THREE.Vector3(0.26, 0.0, sz * 0.0135), new THREE.Vector3(0.22, -0.18, sz * 0.0135),
+    ]), 16, 0.003, 4, false), toon(0x2a2a30));
+    head.add(eng);
+  }
+  // olho de ferro (onde o cabo passa), ponta-lança no alto e gancho curvo atrás
+  head.add(part(new THREE.BoxGeometry(0.08, 0.2, 0.07), 0x2a2a30, { mat: iron }));
+  const spike = part(new THREE.ConeGeometry(0.022, 0.16, 6), 0xc8ccd2, { mat: steel });
+  spike.position.y = 0.17;
+  head.add(spike);
+  const hook = new THREE.Shape();
+  hook.moveTo(-0.03, 0.05);
+  hook.quadraticCurveTo(-0.12, 0.06, -0.17, -0.02);
+  hook.quadraticCurveTo(-0.11, 0.0, -0.03, -0.03);
+  hook.lineTo(-0.03, 0.05);
+  head.add(part(extrude(hook, 0.016), 0xc8ccd2, { mat: steel }));
   // veias vermelhas na lâmina (o Diabo amaldiçoou o machado): finas, coladas nos dois lados
   const veinMat = toon(0x8a0a14, { emissive: 0x3a0004 });
   for (const sz of [1, -1]) {
     for (let k = 0; k < 4; k++) {
       const pts = [];
-      for (let i = 0; i <= 5; i++) { const t = i / 5; pts.push(new THREE.Vector3(0.05 + t * 0.22, (k - 1.5) * 0.06 * (1 - t * 0.4) + Math.sin(t * 6 + k) * 0.012, sz * 0.012)); }
+      for (let i = 0; i <= 5; i++) { const t = i / 5; pts.push(new THREE.Vector3(0.05 + t * 0.22, (k - 1.5) * 0.06 * (1 - t * 0.4) + Math.sin(t * 6 + k) * 0.012, sz * 0.0145)); }
       const vein = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 10, 0.004, 4, false), veinMat);
       head.add(vein);
     }
@@ -1156,9 +1185,6 @@ export function roundGlasses({ tint = 0xff5a7a, opacity = 0.6 } = {}) {
     const lens = new THREE.Mesh(new THREE.CircleGeometry(0.022, 14), new THREE.MeshBasicMaterial({ color: tint, transparent: true, opacity })); // lente rosa/vermelha (referências)
     lens.position.set(0.04 * s, 0, 0.001);
     g.add(lens);
-    const arm = new THREE.Mesh(new THREE.BoxGeometry(0.003, 0.003, 0.1), mat);
-    arm.position.set(0.066 * s, 0, -0.05);
-    g.add(arm);
   }
   const bridge = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.003, 0.003), mat);
   g.add(bridge);
