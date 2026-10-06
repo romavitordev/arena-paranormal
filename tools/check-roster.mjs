@@ -233,7 +233,12 @@ ok(agu && pas('aguiar', 'sonOfPain'), 'Aguiar: Filho da Dor');
 const lab = get('labirinto');
 const xan = get('xande');
 ok(lab && lab.origin === 'Mascarados' && lab.melee.name === 'A Antena' && lab.ranged.name === 'Rajada Caótica', 'Labirinto: Mascarados, A Antena e Rajada Caótica');
-ok(lab && ['mentalMaze', 'consumeMoment', 'helmetForm'].every((t) => abil('labirinto', t)) && lab.special.type === 'abyssMaze', 'Labirinto: Labirinto Mental, Consumir Momento, Capacete do ??? e especial do labirinto');
+ok(lab && ['mentalMaze', 'predatorScent', 'blessing'].every((t) => abil('labirinto', t)) && !abil('labirinto', 'helmetForm') && !abil('labirinto', 'consumeMoment') && lab.special.type === 'abyssMaze', 'Labirinto: Labirinto Mental, Mapa Sanguíneo, Capturar Momento (sem o capacete no kit) e especial do labirinto');
+{
+  const { getForm } = await import('../src/characters/forms/index.js');
+  const elmo = getForm('labirinto_elmo');
+  ok(lab.awakening.type === 'maskTransform' && lab.awakening.form === 'labirinto_elmo' && elmo && elmo.baseId === 'labirinto' && ['mentalMaze', 'consumeMoment', 'chaosStorm', 'predatorScent'].every((t) => elmo.abilities.some((a) => a.type === t)) && elmo.ranged.name === 'Tempestade Caótica', 'Labirinto: o Capacete do ??? só na Transformação (Tempestade Caótica, Labirinto Abissal, Consumir Momento, Revelação Sanguínea)');
+}
 ok(xan && xan.origin === 'Os Cinco' && xan.melee.name.includes('Taco') && xan.ranged.boomerang, 'Xande: Os Cinco, taco com arame farpado e Skate Caótico que volta');
 ok(xan && ['curseWeapon', 'polarize', 'noiseScreen', 'selfBuff'].every((t) => abil('xande', t)) && pas('xande', 'paranormalGladiator'), 'Xande: Amaldiçoar Arma, Polarização Caótica, Tela de Ruído, Velocidade Mortal, Gladiador Paranormal');
 const fer = get('ferreiro');

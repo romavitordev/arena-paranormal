@@ -1,7 +1,7 @@
 import { buildKaiser } from './characters/kaiser.js';
 import { buildArthur } from './characters/arthur.js';
 import { buildJoui } from './characters/joui.js';
-import { addKaiserProps, addArthurProps, addJouiProps, addAghataProps, addGalSalProps, addKianProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps, addFerreiroProps, addJuanProps, addKemiProps, addFantasmaProps, addBaluProps } from './props.js';
+import { addKaiserProps, addArthurProps, addJouiProps, addAghataProps, addGalSalProps, addKianProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps, addFerreiroProps, addJuanProps, addKemiProps, addFantasmaProps, addBaluProps, addErinCaosProps, addLabirintoElmoProps, addAguiarMutiladorProps } from './props.js';
 import { buildAghata } from './characters/aghata.js';
 import { buildGalSal } from './characters/gal_sal.js';
 import { buildKian } from './characters/kian.js';
@@ -33,6 +33,9 @@ export const MODEL_BUILDERS = {
   kemi: buildAghata,
   fantasma: buildAghata,
   balu: buildArthur,
+  erin_caos: buildAghata,
+  labirinto_elmo: buildKian,
+  aguiar_mutilador: buildJoui,
 };
 
 // Modelos do Blender + armas/acessórios adicionados em código
@@ -58,6 +61,13 @@ const BLENDER_MODELS = {
   balu: { url: 'models/balu.glb', props: addBaluProps }, // Antônio "Balu" Pontevedra (Machado Lancinante)
 };
 
+// Formas que reaproveitam o .glb de outro modelo, só com os acessórios diferentes (máscaras dos Mascarados, Erin)
+const MODEL_VARIANTS = {
+  erin_caos: { base: 'erin', props: addErinCaosProps }, // máscara de gás (Em Nome do Caos)
+  labirinto_elmo: { base: 'labirinto', props: addLabirintoElmoProps }, // Capacete do ???
+  aguiar_mutilador: { base: 'aguiar', props: addAguiarMutiladorProps }, // máscara do Mutilador Noturno
+};
+
 const loaded = {};
 
 // Carrega todos os .glb disponíveis (chamado uma vez no início do jogo)
@@ -78,6 +88,12 @@ export async function preloadModels(onProgress) {
 }
 
 export function buildModel(id) {
+  const variant = MODEL_VARIANTS[id];
+  if (variant && loaded[variant.base]) {
+    const rig = rigFromGLB(loaded[variant.base]);
+    variant.props(rig);
+    return rig.finish();
+  }
   if (loaded[id]) {
     const rig = rigFromGLB(loaded[id]);
     BLENDER_MODELS[id].props && BLENDER_MODELS[id].props(rig);

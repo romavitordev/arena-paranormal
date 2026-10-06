@@ -95,6 +95,7 @@ export class Fighter {
     this.dodges = COMBAT.dodge.charges;
     this.dodgeDmgAcc = 0;
     this.dodgeLockout = 0;
+    this.sacrificeWin = false;
     for (const k in this.cooldowns) this.cooldowns[k] = 0;
     this.carga = { stage: 0, timer: 0 };
     this.combo = { chain: -1, steps: 0, grace: 0, queued: null, strike: null, hits: [], windows: [] };

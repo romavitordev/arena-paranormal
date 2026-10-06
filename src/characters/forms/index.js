@@ -3,6 +3,7 @@
 import deusMorte from './deus_morte.js';
 import diabo from './diabo.js';
 import fantasma from './fantasma.js';
+import labirintoElmo from './labirinto_elmo.js';
 
 export const FORMS = {};
 
@@ -15,4 +16,4 @@ export function getForm(id) {
   return FORMS[id];
 }
 
-[deusMorte, diabo, fantasma].forEach(registerForm);
+[deusMorte, diabo, fantasma, labirintoElmo].forEach(registerForm);

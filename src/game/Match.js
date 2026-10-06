@@ -224,6 +224,8 @@ export class Match {
     let winner = -1;
     if (a.state === 'ko' && b.state !== 'ko') winner = 1;
     else if (b.state === 'ko' && a.state !== 'ko') winner = 0;
+    // os dois caíram: quem se explodiu levando o outro junto (Erin, Em Nome do Caos) ganha o round
+    else if (a.state === 'ko' && b.state === 'ko' && a.sacrificeWin !== b.sacrificeWin) winner = a.sacrificeWin ? 0 : 1;
     else if (a.state !== 'ko' && b.state !== 'ko') {
       const ra = a.health / a.maxHealth;
       const rb = b.health / b.maxHealth;
