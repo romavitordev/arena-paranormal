@@ -8,8 +8,8 @@
 // uma máquina que só faz uma coisa.
 //
 // Aprende CONTRA JOGADORES (é o caso principal) e também CPU × CPU. Além das ações, guarda o PERFIL dos jogadores
-// humanos: em cada faixa de distância, o quanto eles atacam, defendem, pulam e atiram — a CPU usa isso para defender
-// mais quando o jogador costuma atacar perto, agarrar quem defende muito etc.
+// humanos: em cada faixa de distância, o quanto eles atacam, defendem, pulam e atiram; também registra os golpes mais
+// repetidos para a CPU adaptar a defesa.
 //
 // Onde fica salvo:
 //   - no navegador (localStorage 'arena.ai.v1') — vale para quem joga a versão publicada;
@@ -23,7 +23,7 @@ const ALPHA = 0.18; // velocidade de aprendizado
 const MAX_Q = 1.5; // o valor aprendido de uma ação fica em [-1.5, 1.5]
 const WINDOW = 1.5; // segundos para medir o resultado de uma ação
 
-let data = { version: VERSION, games: 0, tables: {}, player: {} }; // games = rounds aprendidos
+let data = { version: VERSION, games: 0, tables: {}, player: {}, moves: { seen: 0, counts: {} } }; // games = rounds aprendidos
 let loaded = false;
 let lastSave = 0;
 let dirty = false;
@@ -65,6 +65,10 @@ function mergeInto(dst, src) {
     const P = (dst.player[b] = dst.player[b] || { seen: 0, atk: 0, blk: 0, jump: 0, ranged: 0 });
     for (const k in src.player[b]) P[k] = (P[k] || 0) + src.player[b][k];
   }
+  const moves = (dst.moves = dst.moves || { seen: 0, counts: {} });
+  moves.counts = moves.counts || {};
+  moves.seen += src.moves?.seen || 0;
+  for (const id in src.moves?.counts || {}) moves.counts[id] = (moves.counts[id] || 0) + src.moves.counts[id];
   dst.games = (dst.games || 0) + (src.games || 0);
 }
 
@@ -84,14 +88,18 @@ export async function loadLearned(base = '/') {
     if (raw) {
       const j = JSON.parse(raw);
       // o local guarda SÓ o que foi aprendido depois do arquivo do jogo (delta), para não contar duas vezes
-      if (j && j.version === VERSION && j.delta) { mergeInto(data, j.delta); localDelta = j.delta; }
+      if (j && j.version === VERSION && j.delta) {
+        mergeInto(data, j.delta);
+        localDelta = j.delta;
+        localDelta.moves = localDelta.moves || { seen: 0, counts: {} };
+      }
     }
   } catch { /* armazenamento bloqueado: segue só com o do jogo */ }
   return data;
 }
 
 // o que foi aprendido NESTE navegador (vai para o localStorage e, no dev, para o arquivo)
-let localDelta = { version: VERSION, games: 0, tables: {}, player: {} };
+let localDelta = { version: VERSION, games: 0, tables: {}, player: {}, moves: { seen: 0, counts: {} } };
 
 function cell(tables, id, key, action) {
   const T = (tables[id] = tables[id] || {});
@@ -162,6 +170,22 @@ export function playerTendency(d, what) {
   return neutral * (1 - w) + (P[what] / P.seen) * w;
 }
 
+export function observePlayerMove(move) {
+  if (!move) return;
+  for (const target of [data.moves, localDelta.moves]) {
+    target.seen = (target.seen || 0) + 1;
+    target.counts = target.counts || {};
+    target.counts[move] = (target.counts[move] || 0) + 1;
+  }
+  dirty = true;
+}
+
+export function playerMoveRate(move) {
+  const profile = data.moves;
+  if (!move || !profile || profile.seen < 8) return 0;
+  return (profile.counts?.[move] || 0) / profile.seen;
+}
+
 // ---- episódio: cada controlador registra as ações e o resultado depois de WINDOW s
 export class Episode {
   constructor(id) {
@@ -201,7 +225,7 @@ export function saveLearned(now = performance.now(), force = false) {
     fetch('/__ai/learned', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body })
       .then((r) => {
         if (!r.ok) return;
-        localDelta = { version: VERSION, games: 0, tables: {}, player: {} };
+        localDelta = { version: VERSION, games: 0, tables: {}, player: {}, moves: { seen: 0, counts: {} } };
         try { localStorage.setItem(KEY, JSON.stringify({ version: VERSION, delta: localDelta })); } catch { /* ok */ }
       })
       .catch(() => { /* servidor sem o plugin: fica só no navegador */ });

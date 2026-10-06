@@ -40,10 +40,11 @@
    `swordArnaldo` com a fita balançando), poses de vitória próprias, ajuste fino de equilíbrio e da IA.
    **Aguardando as imagens de referência do usuário** (Arnaldo, Anfitrião, Veríssimo) para ajustar visual e modelos.
 3. ✅ **HUD de batalha** — concluído (confirmado pelo usuário em 2026-10-06).
-4. 🟡 **Nome/logo do jogo** — parcialmente feito (usuário, 2026-10-06). Falta: decidir se fica "Arena Paranormal";
-   música e sons de navegação no menu; transições entre telas; demais telas no visual da tela inicial nova.
-5. 🟡 **IA:** estratégia melhor nos níveis abaixo do Super Difícil; aprender o golpe que o jogador REPETE; treino longo
-   CPU × CPU para `public/ai/learned.json`. (A CPU já reage ao aviso dos especiais e à granada de luz.)
+4. 🟡 **Nome/logo do jogo** — parcialmente feito (usuário, 2026-10-06). Sons de navegação e transições ✅ (2026-10-06).
+   Falta: decidir se fica "Arena Paranormal", música de menu, cartões/ícones nas opções e demais telas no visual da tela inicial.
+5. 🟡 **IA:** estratégia tática e reconhecimento de golpes repetidos ✅ (2026-10-06); falta refinar o uso de cada habilidade,
+   guardar esquivas para a Substituição e fazer treino longo CPU × CPU para `public/ai/learned.json`.
+   (A CPU já reage ao aviso dos especiais e à granada de luz.)
 6. ✅ (v3.9.1) **Mobile:** 1º toque no submenu (o `mouseenter` engolia o toque) e faixa compacta de habilidades na
    HUD do celular. Falta só conferir num aparelho de verdade (o caso do iPhone não se reproduz no Chromium).
 7. ⏸ **Cenários (DEPOIS — tarefa de Blender, decisão do usuário 2026-10-06):** separar no Blender as peças em bloco
@@ -362,13 +363,14 @@ Juan, Ferreiro · B Balu, Kaiser, Arthur, Erin, Agatha, Kemi, Aguiar · C Xande,
 deviam passar; **Kemi (B) 61%** e **Xande (C) 50%** acima — sugestões no fim do arquivo.
 🟡 **Evolução da IA da CPU (pedido do usuário, 2026-10-04):** ✅ (v3.4) Super Difícil + aprendizado (`src/ai/learner.js`)
 contra jogadores e CPU × CPU, perfil do jogador, salvo no navegador e em `public/ai/learned.json` (o dev grava o
-arquivo). Falta: o item 1 (estratégia melhor) nos níveis abaixo do Super Difícil; aprender o golpe que o jogador
-REPETE (hoje só a frequência de atacar/defender/pular/atirar por distância); treinos longos CPU × CPU para o arquivo.
-1. **IA mais inteligente em todos os níveis:** estratégia (distância ideal por kit — atirador longe, pesado perto;
-   punir recuperação de golpe/especial; guardar a esquiva para a Substituição; usar a Barra de Transformação na hora
-   certa) e uso melhor dos ataques (cada habilidade com quando usar: alcance, alvo caído/atordoado, combo → ritual,
-   não gastar o ataque à distância fora do alcance ✅ v3.3). Hoje: `CpuController` com probabilidades fixas por nível
-   e dicas `ai: { max, min, when }` em algumas habilidades.
+arquivo). ✅ (2026-10-06) Difícil/Muito Difícil punem aberturas e mantêm distância de combate adequada; golpes repetidos
+do jogador são reconhecidos durante a luta e registrados no aprendizado salvo. Falta: refinar o uso de cada habilidade,
+guardar esquivas para a Substituição e fazer treinos longos CPU × CPU para o arquivo.
+1. **IA mais inteligente em todos os níveis:** melhorar estratégia (distância ideal por kit — atirador longe, pesado
+   perto; punir recuperação de golpe/especial ✅ (2026-10-06); guardar a esquiva para a Substituição; usar a Barra de
+   Transformação na hora certa) e o uso dos ataques (cada habilidade com quando usar: alcance, alvo caído/atordoado,
+   combo → ritual; não gastar o ataque à distância fora do alcance ✅ v3.3). Hoje: `CpuController` combina regras
+   táticas graduadas por nível com dicas `ai: { max, min, when }` em algumas habilidades.
 2. **Novo nível SUPER DIFÍCIL:** já começa com a IA inteligente acima no máximo (reação rápida, quase sem erros de
    propósito, lê o adversário).
 3. **Aprendizado (machine learning) no Super Difícil:** aprende a cada round e evolui a cada batalha. Proposta:
@@ -376,7 +378,8 @@ REPETE (hoje só a frequência de atacar/defender/pular/atirar por distância); 
      defender, esquivar, cada habilidade, ataque à distância, agarrão, carregar), aprendidos por recompensa (dano
      causado − dano recebido, vitória do round) — Q-learning/bandit por par de personagens, leve o bastante para rodar
      no navegador e na rede (determinístico: aprende só no fim do round, não muda a luta no meio do lockstep);
-   - também aprende o JOGADOR: quais golpes ele repete e como reage (para punir padrões);
+   - também aprende o JOGADOR: quais golpes ele repete ✅ (2026-10-06; memória local e arquivo de aprendizado) e como
+     reage (para punir padrões);
    - salva o que aprendeu: no jogo, em armazenamento local; para o repositório, um treino CPU × CPU
      (`runBalance` em modo treino) exporta `src/ai/learned.json`, que entra no próximo commit/push — cada versão sai
      com uma IA mais treinada. O jogo carrega o `learned.json` como ponto de partida e mistura com o aprendizado local.

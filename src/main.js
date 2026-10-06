@@ -88,6 +88,7 @@ function setScreen(state, screen) {
   game.uiSeq = ((game.uiSeq || 0) + 1) & 15; // toques online de uma tela que já saiu são descartados (netTaps)
   if (game.screen) game.screen.dispose();
   game.screen = screen;
+  if (screen && screen.el) screen.el.classList.add('screen-enter');
   game.state = state;
 }
 
@@ -95,6 +96,7 @@ function setOverlay(state, overlay) {
   game.uiSeq = ((game.uiSeq || 0) + 1) & 15;
   if (game.overlay) game.overlay.dispose();
   game.overlay = overlay;
+  if (overlay && overlay.el) overlay.el.classList.add('screen-enter');
   game.state = state;
 }
 
@@ -109,6 +111,7 @@ function toMainMenu() {
 function toOptions() {
   setScreen('options', new MenuScreen(screens, {
     title: 'OPÇÕES',
+    audio,
     clear: false,
     options: [
       { id: 'time', label: timeLabel },
@@ -160,6 +163,7 @@ async function startMatch() {
         setOverlay('result', new VictoryScreen(screens, {
           winner: def, loser, slot: MODES[game.mode.kind].slots[winner], team: team ? lineup : null,
           line: victoryLine(def.id, loser.id, loser.name),
+          audio,
           options: [
             { id: 'rematch', label: 'REVANCHE' },
             { id: 'select', label: 'SELEÇÃO DE PERSONAGENS' },
@@ -270,6 +274,7 @@ function openPause(by = game.pausedBy) {
   const tut = game.tutorial;
   const tr = !tut && game.match && game.match.training ? game.match.trainingOpts : null;
   setOverlay('pause', new MenuScreen(screens, {
+    audio,
     title: tut ? 'TUTORIAL' : tr ? 'TREINAMENTO' : 'PAUSA',
     subtitle: tr ? 'Ajuste o treino · Select na luta reinicia a posição' : `pausado pelo P${by + 1} — só quem pausou pode continuar`,
     owner: by,

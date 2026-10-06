@@ -1,6 +1,6 @@
 import { distXZ } from '../core/util.js';
 import { COMBAT } from '../config/combat.js';
-import { Episode, stateKey, choose, observePlayer, playerTendency, saveLearned, noteGame } from './learner.js';
+import { Episode, stateKey, choose, observePlayer, observePlayerMove, playerMoveRate, playerTendency, saveLearned, noteGame } from './learner.js';
 
 // Adversário controlado pelo computador. Gera o mesmo tipo de entrada que um jogador
 // (nada de atalhos internos) e erra de propósito conforme a dificuldade.
@@ -12,16 +12,84 @@ import { Episode, stateKey, choose, observePlayer, playerTendency, saveLearned, 
 //  - adversário caído → reposiciona/carrega (caído não toma dano);
 //  - adversário defendendo → agarrão.
 export const CPU_LEVELS = {
-  easy: { think: [0.45, 0.8], block: 0.025, dodge: 0.02, perfect: 0, subst: 0.006, mistake: 0.3, combo: [1, 3], ability: 0.06, special: 0.12, vertical: 0, tech: 0.1, ranged: 0.35 },
-  normal: { think: [0.25, 0.45], block: 0.06, dodge: 0.05, perfect: 0, subst: 0.015, mistake: 0.15, combo: [2, 4], ability: 0.12, special: 0.22, vertical: 0.25, tech: 0.35, ranged: 0.45 },
-  hard: { think: [0.15, 0.3], block: 0.12, dodge: 0.09, perfect: 0.15, subst: 0.03, mistake: 0.07, combo: [3, 5], ability: 0.16, special: 0.3, vertical: 0.5, tech: 0.6, ranged: 0.5, rush: 0.35 },
-  veryhard: { think: [0.1, 0.2], block: 0.2, dodge: 0.14, perfect: 0.35, subst: 0.05, mistake: 0.03, combo: [4, 6], ability: 0.2, special: 0.35, vertical: 0.7, tech: 0.85, ranged: 0.5, rush: 0.6 },
+  easy: { think: [0.45, 0.8], block: 0.025, dodge: 0.02, perfect: 0, subst: 0.006, mistake: 0.3, combo: [1, 3], ability: 0.06, special: 0.12, vertical: 0, tech: 0.1, ranged: 0.35, tactics: 0, adapt: 0 },
+  normal: { think: [0.25, 0.45], block: 0.06, dodge: 0.05, perfect: 0, subst: 0.015, mistake: 0.15, combo: [2, 4], ability: 0.12, special: 0.22, vertical: 0.25, tech: 0.35, ranged: 0.45, tactics: 0.2, adapt: 0.25 },
+  hard: { think: [0.15, 0.3], block: 0.12, dodge: 0.09, perfect: 0.15, subst: 0.03, mistake: 0.07, combo: [3, 5], ability: 0.16, special: 0.3, vertical: 0.5, tech: 0.6, ranged: 0.5, rush: 0.35, tactics: 0.55, adapt: 0.6 },
+  veryhard: { think: [0.1, 0.2], block: 0.2, dodge: 0.14, perfect: 0.35, subst: 0.05, mistake: 0.03, combo: [4, 6], ability: 0.2, special: 0.35, vertical: 0.7, tech: 0.85, ranged: 0.5, rush: 0.6, tactics: 0.8, adapt: 0.85 },
   // SUPER DIFÍCIL: a IA inteligente no máximo (reage rápido, sem erros de propósito, pune aberturas, lê o jogador) e
   // APRENDE (learner.js): escolhe entre as ações possíveis pelo que já deu certo em situações parecidas.
-  superhard: { think: [0.05, 0.1], block: 0.42, dodge: 0.3, perfect: 0.75, subst: 0.12, mistake: 0, combo: [5, 7], ability: 0.24, special: 0.45, vertical: 0.9, tech: 1, ranged: 0.55, rush: 0.85, smart: true, learn: true, edge: { dealt: 1.15, taken: 0.85 } },
+  superhard: { think: [0.05, 0.1], block: 0.42, dodge: 0.3, perfect: 0.75, subst: 0.12, mistake: 0, combo: [5, 7], ability: 0.24, special: 0.45, vertical: 0.9, tech: 1, ranged: 0.55, rush: 0.85, smart: true, learn: true, tactics: 1, adapt: 1, edge: { dealt: 1.15, taken: 0.85 } },
 };
 
 const rnd = (a, b) => a + Math.random() * (b - a);
+const PATTERN_WINDOW = 12;
+
+export class OpponentPatternMemory {
+  constructor() {
+    this.events = new Map();
+    this.lastState = null;
+    this.lastStateTime = 0;
+    this.lastStrike = null;
+    this.lastAbilityUse = {};
+    this.activeMove = null;
+  }
+
+  observe(opp, now) {
+    let move = null;
+    const strike = opp.state === 'attack' && opp.combo && opp.combo.strike;
+    const startedStrike = strike && (
+      this.lastState !== 'attack' ||
+      strike !== this.lastStrike ||
+      opp.stateTime + 0.05 < this.lastStateTime
+    );
+    if (startedStrike) move = `melee:${opp.def.id}:${strike.name || 'physical'}`;
+
+    let abilityMove = null;
+    if (opp.state === 'ability' && opp.lastAbilityUse) {
+      let latestId = null;
+      let latestTime = -Infinity;
+      for (const [id, time] of Object.entries(opp.lastAbilityUse)) {
+        if (time > latestTime) { latestId = id; latestTime = time; }
+        if (time > (this.lastAbilityUse[id] ?? -Infinity)) move = `ability:${opp.def.id}:${id}`;
+      }
+      if (latestId) abilityMove = `ability:${opp.def.id}:${latestId}`;
+    }
+    if (!move && opp.state === 'ranged' && this.lastState !== 'ranged') {
+      move = `ranged:${opp.def.id}:${opp.def.ranged?.type || 'main'}`;
+    }
+    if (!move && opp.state === 'specialStart' && this.lastState !== 'specialStart') {
+      move = `special:${opp.def.id}:${opp.def.special?.type || 'main'}`;
+    }
+
+    this.activeMove = strike
+      ? `melee:${opp.def.id}:${strike.name || 'physical'}`
+      : abilityMove
+        ? abilityMove
+        : opp.state === 'ranged'
+          ? `ranged:${opp.def.id}:${opp.def.ranged?.type || 'main'}`
+          : ['specialStart', 'special'].includes(opp.state)
+            ? `special:${opp.def.id}:${opp.def.special?.type || 'main'}`
+            : null;
+
+    if (move) {
+      const events = (this.events.get(move) || []).filter((time) => now - time <= PATTERN_WINDOW);
+      events.push(now);
+      this.events.set(move, events);
+    }
+    this.lastState = opp.state;
+    this.lastStateTime = opp.stateTime;
+    this.lastStrike = strike;
+    this.lastAbilityUse = { ...(opp.lastAbilityUse || {}) };
+    return move;
+  }
+
+  count(move, now) {
+    if (!move) return 0;
+    const events = (this.events.get(move) || []).filter((time) => now - time <= PATTERN_WINDOW);
+    this.events.set(move, events);
+    return events.length;
+  }
+}
 
 // especial que mata quem usa (Erin, Em Nome do Caos): só vale se a explosão provavelmente derrubar o adversário
 function sacrificeOk(f, opp) {
@@ -45,6 +113,7 @@ export class CpuController {
     this.aimHold = 0;
     this.L = CPU_LEVELS[level] || CPU_LEVELS.normal;
     this.episode = null; // aprendizado (Super Difícil)
+    this.opponentPatterns = new OpponentPatternMemory();
   }
 
   attach(fighter) {
@@ -131,6 +200,8 @@ export class CpuController {
     if (!opp) return out;
     const L = this.L;
     const k = Math.min(2, dt * 60); // probabilidades "por quadro" independentes do fps
+    const observedMove = this.opponentPatterns.observe(opp, w.time);
+    if (observedMove && opp.input && !opp.input.cpu) observePlayerMove(observedMove);
     if (this.episode) this.learnTick(f, opp, w);
 
     if (this.queue.length) {
@@ -233,15 +304,16 @@ export class CpuController {
       return out;
     }
 
-    // ---- Super Difícil: pune NA HORA quem errou um golpe perto (sem esperar o próximo "pensamento") e sai do caminho
-    // dos projéteis para o lado (a esquiva só gasta carga se desviar de algo)
-    if (L.smart && (f.state === 'idle' || f.state === 'charging') && f.onGround) {
-      if (d < 2.4 && this.aiOk({ ai: { when: 'opening' } }, d, opp, lowHp) && opp.state !== 'block' && Math.random() < 0.55 * k) {
+    // ---- níveis táticos: punem aberturas e saem do caminho dos projéteis
+    if ((L.smart || L.tactics >= 0.45) && (f.state === 'idle' || f.state === 'charging') && f.onGround) {
+      const punishChance = L.smart ? 0.55 : Math.max(0, L.tactics - 0.35) * 0.55;
+      if (d < 2.4 && this.aiOk({ ai: { when: 'opening' } }, d, opp, lowHp) && opp.state !== 'block' && Math.random() < punishChance * k) {
         this.combo();
         return out;
       }
       const shot = w.projectiles.list.find((p) => p.owner === opp && Math.hypot(p.pos.x - f.pos.x, p.pos.z - f.pos.z) < 6 && (p.dir ? (f.pos.x - p.pos.x) * p.dir.x + (f.pos.z - p.pos.z) * p.dir.z > 0 : true));
-      if (shot && f.cooldowns.dodge <= 0 && f.dodges > 0 && Math.random() < 0.45 * k) {
+      const evadeChance = L.smart ? 0.45 : L.tactics * 0.3;
+      if (shot && f.cooldowns.dodge <= 0 && f.dodges > 0 && Math.random() < evadeChance * k) {
         this.queue.push({ t: 0.06, held: { dodge: true }, move: side }, { t: 0.05, held: {} });
         return out;
       }
@@ -256,7 +328,10 @@ export class CpuController {
       }
       const threat = (opp.state === 'attack' || opp.state === 'dashing') && d < 3;
       // Super Difícil: quem costuma atacar perto faz a CPU defender mais (perfil aprendido dos jogadores)
-      const read = L.smart ? 0.6 + playerTendency(d, 'atk') * 1.6 : 1;
+      const activeMove = this.opponentPatterns.activeMove;
+      const repeated = this.opponentPatterns.count(activeMove, w.time);
+      const adapt = Math.min(0.75, Math.max((repeated - 1) * 0.18, playerMoveRate(activeMove) * 1.5)) * L.adapt;
+      const read = (L.smart ? 0.6 + playerTendency(d, 'atk') * 1.6 : 1) + adapt;
       if (threat) {
         // perfect block: aperta a defesa bem perto do impacto
         const nearImpact = opp.state === 'attack' && opp.combo && opp.combo.windows && opp.stateTime > opp.combo.windows[0][0] - 0.08 && opp.stateTime < opp.combo.windows[0][0];
@@ -410,7 +485,7 @@ export class CpuController {
   // movimento: aproxima rodeando; com vida baixa mantém distância (atiradores no Super Difícil: na distância deles)
   move(out, f, d, lowHp, toOpp, side) {
     const r = f.def.ranged;
-    const shooter = this.L.smart && r && (r.range || 0) >= 14 && (r.chargeShot || (r.damage || 0) >= 60);
+    const shooter = this.L.tactics >= 0.5 && r && (r.range || 0) >= 14 && (r.chargeShot || (r.damage || 0) >= 60);
     const keep = lowHp ? 5 : shooter && f.health > f.maxHealth * 0.5 ? 7 : 2.0;
     const wantClose = d > keep;
     const away = !wantClose && lowHp;

@@ -214,9 +214,10 @@ const controllers = (input, owner) => (owner === null || owner === undefined ? i
 
 export class MenuScreen {
   // owner: índice do jogador que controla o menu (ex.: só quem pausou despausa); null = todos
-  constructor(root, { title, options, extra = '', clear = true, subtitle = '', owner = null }) {
+  constructor(root, { title, options, extra = '', clear = true, subtitle = '', owner = null, audio = null }) {
     this.options = options;
     this.owner = owner;
+    this.audio = audio;
     this.index = 0;
     this.el = el(root, `screen ${clear ? 'clear' : ''}`, null,
       `<div class="menu"><h2>${title}</h2>${subtitle ? `<p class="sub">${subtitle}</p>` : ''}${options.map(() => '<div class="opt"></div>').join('')}</div>${extra}`);
@@ -239,19 +240,24 @@ export class MenuScreen {
     if (this.clicked !== undefined) {
       const id = this.options[this.clicked].id;
       this.clicked = undefined;
+      this.audio?.play('confirm');
       return id;
     }
     for (const p of controllers(input, this.owner)) {
-      if (p.menu.up) { this.index = (this.index + this.options.length - 1) % this.options.length; this.render(); }
-      if (p.menu.down) { this.index = (this.index + 1) % this.options.length; this.render(); }
-      if (confirm(p) && !this.options[this.index].disabled) return this.options[this.index].id;
-      if (back(p)) return 'back';
-      if (p.pressed.start) return this.options.some((x) => x.id === 'resume') ? 'resume' : 'back';
+      if (p.menu.up) { this.index = (this.index + this.options.length - 1) % this.options.length; this.audio?.play('select'); this.render(); }
+      if (p.menu.down) { this.index = (this.index + 1) % this.options.length; this.audio?.play('select'); this.render(); }
+      if (confirm(p) && !this.options[this.index].disabled) { this.audio?.play('confirm'); return this.options[this.index].id; }
+      if (back(p)) { this.audio?.play('select'); return 'back'; }
+      if (p.pressed.start) {
+        const id = this.options.some((x) => x.id === 'resume') ? 'resume' : 'back';
+        this.audio?.play(id === 'resume' ? 'confirm' : 'select');
+        return id;
+      }
     }
     // Enter/Esc ficam no lado do P1 do teclado
     if (this.owner === null || this.owner === 0) {
-      if (input.keyPressedOnce('Enter')) return this.options[this.index].id;
-      if (input.keyPressedOnce('Escape')) return 'back';
+      if (input.keyPressedOnce('Enter')) { this.audio?.play('confirm'); return this.options[this.index].id; }
+      if (input.keyPressedOnce('Escape')) { this.audio?.play('select'); return 'back'; }
     }
     return null;
   }
@@ -585,8 +591,9 @@ export class BattleConfigScreen {
 
 // Tela de vitória sobre a arena: a equipe fica em pose no cenário e só o lutador ativo fala.
 export class VictoryScreen {
-  constructor(root, { winner, loser, slot, team = null, line, options }) {
+  constructor(root, { winner, loser, slot, team = null, line, options, audio = null }) {
     this.options = options;
+    this.audio = audio;
     this.index = 0;
     this.el = el(root, 'screen', 'victory', `
       <div class="vbg" style="--c:${winner.color}"></div>
@@ -622,14 +629,14 @@ export class VictoryScreen {
     });
   }
   update(input) {
-    if (this.clicked !== undefined) { const id = this.options[this.clicked].id; this.clicked = undefined; return id; }
+    if (this.clicked !== undefined) { const id = this.options[this.clicked].id; this.clicked = undefined; this.audio?.play('confirm'); return id; }
     for (const p of input.players) {
       const n = this.options.length;
-      if (p.menu.left || p.menu.up) { this.index = (this.index + n - 1) % n; this.render(); }
-      if (p.menu.right || p.menu.down) { this.index = (this.index + 1) % n; this.render(); }
-      if (confirm(p) || startGo(p, input) || (p.cpu && p.humanPressed && p.humanPressed.start && !input.keyPressedOnce('Escape'))) return this.options[this.index].id;
+      if (p.menu.left || p.menu.up) { this.index = (this.index + n - 1) % n; this.audio?.play('select'); this.render(); }
+      if (p.menu.right || p.menu.down) { this.index = (this.index + 1) % n; this.audio?.play('select'); this.render(); }
+      if (confirm(p) || startGo(p, input) || (p.cpu && p.humanPressed && p.humanPressed.start && !input.keyPressedOnce('Escape'))) { this.audio?.play('confirm'); return this.options[this.index].id; }
     }
-    if (input.keyPressedOnce('Enter')) return this.options[this.index].id;
+    if (input.keyPressedOnce('Enter')) { this.audio?.play('confirm'); return this.options[this.index].id; }
     return null;
   }
   dispose() { this.el.remove(); }

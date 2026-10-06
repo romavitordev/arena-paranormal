@@ -142,6 +142,9 @@ canvas#game { display: block; position: fixed; inset: 0; width: 100%; height: 10
 /* ---------------- telas ---------------- */
 .screen { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; touch-action: manipulation; background: radial-gradient(ellipse at center, rgba(40,20,70,.55), rgba(5,3,10,.95)); }
 .screen.clear { background: rgba(5,3,10,.6); }
+@keyframes screenEnter { from { opacity: 0; filter: blur(8px); transform: scale(1.015); } to { opacity: 1; filter: none; transform: none; } }
+.screen-enter { animation: screenEnter .28s ease-out both; }
+@media (prefers-reduced-motion: reduce) { .screen-enter { animation-duration: .01ms; } }
 #title h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 12vw, 150px); margin: 0; letter-spacing: .08em; text-shadow: 6px 6px 0 #000, 0 0 50px #a46bff; text-align: center; line-height: .9; }
 #title p { color: var(--muted); letter-spacing: .2em; font-weight: 800; animation: blink 1s infinite alternate; }
 @keyframes blink { to { opacity: .35; } }
