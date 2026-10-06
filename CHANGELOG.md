@@ -1,5 +1,10 @@
 # Changelog
 
+## v3.9.4 — 2026-10-06
+
+### Alterado
+- Balu, Resistência à Dor (transformação): agora vira um TANQUE — recebe 45% menos dano, quase não é empurrado, aguenta golpes sem recuar (guarda até 2, um novo a cada 1,5 s), recupera 25% da vida ao transformar e bate 20% mais forte; em troca anda um pouco mais devagar.
+
 ## v3.9.3 — 2026-10-06
 
 ### Alterado
