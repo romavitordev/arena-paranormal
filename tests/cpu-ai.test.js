@@ -31,7 +31,7 @@ test('CPU ability priorities respond to openings, health, and active buffs', () 
   const fighter = {
     health: 400,
     maxHealth: 1000,
-    findBuff: (type) => type === 'heavyProtection' ? { type } : null,
+    findBuff: (type) => ['heavyProtection', 'healing'].includes(type) ? { type } : null,
   };
   const opponent = { state: 'attack', isInvulnerable: () => false };
   const heal = { id: 'heal', type: 'healOverTime' };

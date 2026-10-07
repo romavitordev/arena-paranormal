@@ -162,7 +162,7 @@ Feita em 2026-09-30 sobre as 36 imagens desta pasta. Nenhuma alteração no jogo
 
 ## TRANSFORMAÇÕES DOS MASCARADOS (GIFs do usuário, 2026-10-06)
 
-Os GIFs ficam na máquina do usuário em `mascarados ref anm/` (e na branch `refs-gifs` do GitHub, só como
+Os GIFs ficam na máquina do usuário em `mascarados ref anm/` (mantidos localmente como
 referência — não entram na `main`). Em todos, quando a máscara encaixa a cena **fica vermelha** (luz vermelha forte,
 um quadro de "glitch"/clarão) e o assassino fica com um **contorno vermelho em chamas** em volta, respirando parado.
 

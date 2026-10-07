@@ -106,9 +106,6 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
 
 ## Git
 
-* [ ] Excluir branch `refs-gifs` do remoto
-* [ ] Conferir branches locais
-* [ ] Remover referências antigas de GIFs
 * [ ] Procurar arquivos temporários
 * [ ] Procurar código morto
 * [ ] Procurar imports antigos
@@ -117,9 +114,6 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
 
 ## Validação
 
-* [ ] Rodar checks disponíveis
-* [ ] Rodar testes
-* [ ] Rodar build
 * [ ] Conferir erros de console
 * [ ] Conferir warnings
 * [ ] Testar inicialização
@@ -341,13 +335,6 @@ mínimo = 50%
 
 # 10. DODGE
 
-* [ ] Confirmar 1 carga a cada 70 de dano
-* [ ] Confirmar 3 segundos sem recarga quando zerado
-* [ ] Confirmar janela Y → B de 0,4s
-* [ ] Defesa + direção = esquiva rápida
-* [ ] Permitir sequência contínua
-* [ ] Defesa voltar quando movimento parar
-* [ ] Melhorar fluidez
 * [ ] Testar contra combos
 * [ ] Testar contra projéteis
 
@@ -369,8 +356,6 @@ mínimo = 50%
 
 * [ ] Conferir dano
 * [ ] Conferir defesa
-* [ ] Conferir throw tech
-* [ ] Conferir janela R2 + ○
 * [ ] Conferir cenas
 * [ ] Conferir câmera
 * [ ] Criar/revisar variações individuais
@@ -1201,36 +1186,8 @@ A arquitetura deve permitir adicionar idiomas sem modificar a lógica do jogo.
 
 # 39. SISTEMA DE LOCALIZAÇÃO
 
-Criar sistema centralizado.
+Estrutura centralizada implementada em `src/i18n/`.
 
-Estrutura sugerida:
-
-```text
-src/
-└── i18n/
-    ├── index.js
-    ├── pt-BR/
-    ├── pt-PT/
-    ├── en/
-    ├── es/
-    ├── de/
-    ├── fr/
-    ├── it/
-    ├── ru/
-    ├── zh/
-    ├── ja/
-    ├── ko/
-    ├── tr/
-    └── pl/
-```
-
-* [ ] IDs únicos
-* [ ] Idioma padrão
-* [ ] Fallback
-* [ ] Seletor
-* [ ] Salvar preferência
-* [ ] Carregar no início
-* [ ] Troca pelas configurações
 * [ ] Remover textos hardcoded gradualmente
 
 ---
@@ -1365,14 +1322,7 @@ Não montar frases concatenando palavras fixas quando a ordem mudar entre idioma
 
 # 44. DETECÇÃO AUTOMÁTICA DE IDIOMA
 
-Opcional:
-
-* [ ] Detectar idioma do navegador
-* [ ] Sugerir idioma
-* [ ] Permitir alteração manual
-* [ ] Salvar preferência
-
-A escolha manual deve sempre ter prioridade.
+Implementado em `src/i18n/index.js` via `detectBrowserLanguage()` respeitando a preferência manual do jogador em primeiro lugar.
 
 ---
 

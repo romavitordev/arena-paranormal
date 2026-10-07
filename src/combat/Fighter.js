@@ -909,6 +909,15 @@ export class Fighter {
     if (k >= 1 || close) {
       this.vel.x *= 0.2;
       this.vel.z *= 0.2;
+      if (d.kind === 'step' && this.input.held.block && this.onGround) {
+        const dir = this.moveInputWorld(v1);
+        if (dir.length() > 0.3 && this.cooldowns.dash <= 0) {
+          this.startDash('step');
+          return;
+        }
+        this.startBlock();
+        return;
+      }
       this.setState('idle');
     }
   }
@@ -2395,7 +2404,10 @@ export class Fighter {
         self.vel.z = 0;
         // escape: Defesa + ○ logo no começo solta os dois, sem dano
         const T = COMBAT.grabTech;
-        if (!thrown && caught.state === 'grabbed' && t <= T.window && caught.input.pressed.physical && caught.input.held.block) {
+        const techPressed = (caught.input.pressed.physical && caught.input.held.block) ||
+                            (caught.input.pressed.block && caught.input.held.physical) ||
+                            (caught.input.pressed.physical && caught.input.pressed.block);
+        if (!thrown && caught.state === 'grabbed' && t <= T.window && techPressed) {
           thrown = true;
           caught.setState('idle');
           const away = new THREE.Vector3().subVectors(caught.pos, self.pos).setY(0).normalize();

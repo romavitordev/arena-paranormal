@@ -81,7 +81,7 @@ export const COMBAT = {
     short: { distance: 5, duration: 0.22, cooldown: 0.35, energyCost: 0, stopAt: 1.3 },
     long: { distance: 14, duration: 0.42, cooldown: 1.0, energyCost: 10, stopAt: 1.4, homing: true },
     // passo da defesa (Storm 4): segurando Defesa + direção, emenda passos rápidos para lá, de frente para o rival
-    step: { distance: 2.6, duration: 0.2, cooldown: 0.38, energyCost: 0, stopAt: 0 },
+    step: { distance: 2.6, duration: 0.2, cooldown: 0.2, energyCost: 0, stopAt: 0 },
   },
   // ---- Agarrão: Defesa + ○/B. Curta distância, NÃO pode ser defendido (só esquivado) ----
   grab: {

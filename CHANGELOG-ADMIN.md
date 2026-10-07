@@ -1,5 +1,17 @@
 # Registro administrativo de alterações
 
+## (em andamento, sem changelog dos jogadores) — estabilidade, limpeza e mecânicas universais de combate (Dodge e Throw Tech)
+
+- Limpeza Git: exclusão da branch remota `refs-gifs`, exclusão da branch local `refs-gifs` e atualização de referências em `ANALISE.md` e `maskTransform.js`.
+- Correção de teste unitário: corrigido mock em `tests/cpu-ai.test.js` para garantir cobertura correta de múltiplos buffs ativos (`heavyProtection` e `healing`).
+- Regeneração da documentação de habilidades: `HABILIDADES.md` atualizado via `npm run moves` incluindo Arnaldo Fritz, Senhor Veríssimo e vantagens elementais ajustadas (+15% / −15%).
+- Esquiva contínua da defesa: `COMBAT.dash.step.cooldown` igualado à duração (0.2s) e `Fighter.updateDash` atualizado para encadear passos rápidos continuamente ao segurar Defesa + Direção e retornar imediatamente à postura de guarda ao soltar a direção.
+- Escape de agarrão (Throw Tech): `Fighter.tryGrab` atualizado para registrar a evasão tanto ao apertar físico segurando defesa quanto ao apertar defesa segurando físico dentro da janela de `grabTech.window` (0.22s).
+- Nova suíte de testes unitários: adicionado `tests/combat-universal.test.js` cobrindo regras de esquiva, passos da defesa, substituição, throw tech e ciclo elemental.
+- Sistema centralizado de internacionalização (i18n): criado módulo `src/i18n/` com suporte estruturado aos 13 idiomas do TODO (`pt-BR`, `pt-PT`, `en`, `es`, `de`, `fr`, `it`, `ru`, `zh`, `ja`, `ko`, `tr`, `pl`), fallback para `pt-BR`, detecção automática de navegador com prioridade manual e interpolação dinâmica (`t(key, params)`).
+- Opção de idioma nas configurações: adicionado seletor `CONFIGURAÇÕES → IDIOMA` integrado ao `SETTINGS.language` e persistido em `localStorage`.
+- Suíte de testes de internacionalização: adicionado `tests/i18n.test.js` cobrindo tradução, interpolação, fallback e troca de idiomas (28 testes passando com sucesso).
+
 ## (em andamento, sem changelog dos jogadores) — falas do Anfitrião, falas de batalha e afinidade do Xande
 
 - Afinidade do Xande corrigida para Conhecimento; adicionada verificação ao `npm run check`.

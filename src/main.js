@@ -16,7 +16,7 @@ import { validatePassives } from './combat/passives.js';
 import { Match } from './game/Match.js';
 import { CpuController } from './ai/CpuController.js';
 import { ARENAS, DEFAULT_ARENA, preloadArenas } from './arena/index.js';
-import { SETTINGS, cycleSetting, TIMER_OPTIONS, timerLabel } from './config/settings.js';
+import { SETTINGS, cycleSetting, TIMER_OPTIONS, timerLabel, LANGUAGE_OPTIONS, languageLabel } from './config/settings.js';
 import { TutorialMode } from './ui/Tutorial.js';
 import { VERSION } from './config/version.js';
 import { TouchControls, isTouchDevice } from './ui/touchControls.js';
@@ -83,6 +83,7 @@ game.renderer = renderer;
 
 const timeLabel = () => `TEMPO DA LUTA: ${timerLabel()}`;
 const moveLabel = () => `MOVIMENTO: ${SETTINGS.moveMode === 'enemy' ? 'RELATIVO AO INIMIGO' : 'DIREÇÕES DA TELA'}`;
+const langLabel = () => `IDIOMA: ${languageLabel()}`;
 
 function setScreen(state, screen) {
   game.uiSeq = ((game.uiSeq || 0) + 1) & 15; // toques online de uma tela que já saiu são descartados (netTaps)
@@ -116,6 +117,7 @@ function toOptions() {
     options: [
       { id: 'time', label: timeLabel },
       { id: 'move', label: moveLabel },
+      { id: 'lang', label: langLabel },
       { id: 'back', label: 'VOLTAR' },
     ],
   }));
@@ -633,6 +635,7 @@ function tick(dt) {
       const c = game.screen.update(input);
       if (c === 'time') { cycleSetting('timer', TIMER_OPTIONS); audio.play('select'); game.screen.render(); }
       else if (c === 'move') { cycleSetting('moveMode', ['screen', 'enemy']); audio.play('select'); game.screen.render(); }
+      else if (c === 'lang') { cycleSetting('language', LANGUAGE_OPTIONS); audio.play('select'); game.screen.render(); }
       else if (c === 'back') toMainMenu();
       break;
     }

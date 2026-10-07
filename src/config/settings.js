@@ -1,3 +1,5 @@
+import { SUPPORTED_LANGUAGES, initLanguage, setLanguage } from '../i18n/index.js';
+
 // Opções do jogador, salvas no navegador (se o navegador permitir).
 const KEY = 'arena-paranormal:settings';
 
@@ -6,6 +8,7 @@ const DEFAULTS = {
   cpuLevel: 'normal', // easy | normal | hard | veryhard | superhard
   rounds: 2, // rounds para vencer
   moveMode: 'screen', // screen = direções da tela; enemy = ↑ aproxima, ↓ recua, ←/→ orbitam o adversário
+  language: 'pt-BR',
 };
 
 // opções das configurações de combate (tela antes do cenário)
@@ -18,6 +21,7 @@ export const CPU_LEVELS = [
   { id: 'superhard', label: 'SUPER DIFÍCIL' },
 ];
 export const ROUND_OPTIONS = [1, 2, 3];
+export const LANGUAGE_OPTIONS = SUPPORTED_LANGUAGES;
 
 function load() {
   try {
@@ -28,20 +32,29 @@ function load() {
     if (!TIMER_OPTIONS.includes(s.timer)) s.timer = DEFAULTS.timer;
     if (!CPU_LEVELS.some((l) => l.id === s.cpuLevel)) s.cpuLevel = DEFAULTS.cpuLevel;
     if (!ROUND_OPTIONS.includes(s.rounds)) s.rounds = DEFAULTS.rounds;
+    if (!LANGUAGE_OPTIONS.some((l) => l.id === s.language)) s.language = initLanguage();
+    else initLanguage(s.language);
     return s;
   } catch {
-    return { ...DEFAULTS };
+    const s = { ...DEFAULTS };
+    s.language = initLanguage();
+    return s;
   }
 }
 
 export const timerLabel = (t = SETTINGS.timer) => (t ? `${t}s` : 'INFINITO');
 export const cpuLabel = (id = SETTINGS.cpuLevel) => (CPU_LEVELS.find((l) => l.id === id) || CPU_LEVELS[1]).label;
+export const languageLabel = (id = SETTINGS.language) => {
+  const item = LANGUAGE_OPTIONS.find((l) => l.id === id) || LANGUAGE_OPTIONS[0];
+  return `${item.flag} ${item.label}`;
+};
 
 // gira uma opção da lista (dir = +1/-1)
 export function cycleSetting(name, list, dir = 1) {
   const vals = list.map((v) => (typeof v === 'object' ? v.id : v));
   const i = Math.max(0, vals.indexOf(SETTINGS[name]));
   SETTINGS[name] = vals[(i + dir + vals.length) % vals.length];
+  if (name === 'language') setLanguage(SETTINGS[name]);
   saveSettings();
   return SETTINGS[name];
 }

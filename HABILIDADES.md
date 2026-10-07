@@ -12,7 +12,7 @@ especial = Carga → Carga → ○ (custa 50, ofensivos causam 250, nunca hitkil
 **Combo vertical:** ↑ + ○ dentro do combo lança e o atacante sobe junto (até 3 golpes aéreos + finalização); ↓ + ○ derruba. × depois de acertar = dash de perseguição (até Infinity por combo).
 **Queda:** caído não toma dano; × ou L2 logo ao cair levanta rolando. **Perfect Block:** defesa no instante do impacto (todos). **Carregar andando:** 45% da velocidade, 50% da carga.
 **Agarrão:** R2 + ○ (curta distância, 70 de dano, não pode ser defendido — só esquivado). **△ é o modificador de ○ e □:** △ + ○ e △ + □ soltam habilidades (veja cada personagem); R2 + △ e R2 + × também (L1 e R1 chamam as assistências).
-**Elementos (só nos rituais — habilidades e especiais):** Sangue > Conhecimento > Energia > Morte > Sangue (+10% / −10%). **Escala de combo:** 1 → 1 → 0.9 → 0.8 → 0.72 → 0.65 → 0.58 → 0.5. **Substituição:** L2 apanhando (1 carga). **Escapar do agarrão:** R2 + ○ logo no começo. **Barra de Transformação** (só quem transforma): enche apanhando; cheia + vida ≤ 35% → segurar △ até a sanidade encher e mais 1 s; zera a cada round.
+**Elementos (só nos rituais — habilidades e especiais):** Sangue > Conhecimento > Energia > Morte > Sangue (+15% / −15%). **Escala de combo:** 1 → 1 → 0.9 → 0.8 → 0.72 → 0.65 → 0.58 → 0.5. **Substituição:** L2 apanhando (1 carga). **Escapar do agarrão:** R2 + ○ logo no começo. **Barra de Transformação** (só quem transforma): enche apanhando; cheia + vida ≤ 35% → segurar △ até a sanidade encher e mais 1 s; zera a cada round.
 **Câmera:** sempre travada no adversário.
 
 ---
@@ -759,4 +759,98 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ### Transformação: Resistência à Dor
 
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +20% de dano (físico), −20% de dano recebido, aguenta 1 golpe sem reagir a cada 3.5 s, cura 10% na hora.
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +20% de dano (físico), −45% de dano recebido, −8% de velocidade, aguenta 1 golpe sem reagir a cada 1.5 s, cura 25% na hora.
+
+---
+
+## ARNALDO FRITZ
+
+*Aniquilador da Ordo Realitas: na Transformação, o relógio de bolso guarda a Relíquia e ele vira O Anfitrião* · arma: Espada da fita vermelha e o Emissor de Pulsos Paranormais
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Abertura de Cena | 26 | 2.15 m |  |
+| ○ 2 | Estocada de Palco | 28 | 2.6 m |  |
+| ○ 3 | Corte em Reverência | 28 | 2.15 m |  |
+| ○ 4 | Floreio | 34 (2 acertos) | 2.2 m |  |
+| ○ 5 | Ato Final | 60 | 2.5 m | finalizador: lança |
+| Frente + ○ | Entrada Triunfal | 36 | 2.2 m |  |
+| Trás + ○ | Mesura e Estocada | 40 | 2.5 m | invulnerável no começo |
+| Lado + ○ | Rodopio | 32 | 2.3 m |  |
+| No ar + ○ | Corte Aéreo | 36 | 2.2 m | desce com impacto |
+| ↑ + ○ (no combo) | Corte Ascendente | 38 | 2.2 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Golpe de Cena | 46 | 2.2 m | finalizador: derruba |
+
+### Principal (□ / X): Emissor de Pulsos Paranormais
+
+- Dano 18 · alcance 14 m · cooldown 3.2 s · custo 0
+- Prende e puxa o inimigo para 1.9 m, abrindo 0.5 s para combar
+- Trás + □: **AFASTAR!** — 26
+
+### Habilidades
+
+- **Finta Teatral** — △ + ○ / Y + B · custo 20 · cooldown 10 s · dano 55 · alcance 2.2 m
+  Provoca com a mão livre, avança e, quando o adversário reage, o corte de verdade entra pela guarda — quebra a defesa.
+- **Pulso Paranormal** — △ + □ / Y + X · custo 25 · cooldown 12 s · alcance 11 m
+  O Emissor de Pulsos no máximo: o alvo LONGE é atraído e recebe a estocada assim que chega; o alvo PERTO é jogado longe e cai.
+- **Rodopio da Fita** — R2 + × / RT + A · custo 20 · cooldown 11 s · dano 60
+  Gira com a espada aberta — a fita vermelha acompanha o giro: dois cortes em área, o último joga longe.
+- **Aniquilador** — △ + L2 / Y + LT · custo 25 · cooldown 20 s
+  O veterano dos Aniquiladores aparece: por 7 s a postura fica agressiva, os golpes físicos saem 15% mais rápidos e 15% mais fortes, e ele recupera uma esquiva.
+- **Ensaio Geral** — R2 + △ / RT + Y · custo 20 · cooldown 18 s
+  Já ensaiou essa cena: por 6 s recebe 20% menos dano, é empurrado bem menos e aguenta 2 golpes sem recuar.
+
+### Especial: Ato Final
+
+250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: A Relíquia do Relógio
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
+
+---
+
+## SENHOR VERÍSSIMO
+
+*Líder da Ordo Realitas: Inteligência Estratégica e o Segredo de Veríssimo* · arma: A espada do Arnaldo e uma escopeta curta
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Estocada curta | 26 | 2.4 m |  |
+| ○ 2 | Corte seco | 28 | 2.1 m |  |
+| ○ 3 | Corte de volta | 28 | 2.1 m |  |
+| ○ 4 | Comando | 56 | 2.3 m | finalizador: lança |
+| Frente + ○ | Avanço do comandante | 36 | 2.2 m |  |
+| Trás + ○ | Guarda do Comandante | 0 | 0 m | contra-ataque (revida 55) |
+| Lado + ○ | Corte lateral | 30 | 2.1 m |  |
+| No ar + ○ | Corte aéreo | 36 | 2.2 m | desce com impacto |
+| ↑ + ○ (no combo) | Corte ascendente | 38 | 2.2 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Golpe de cima | 46 | 2.2 m | finalizador: derruba |
+
+### Principal (□ / X): Escopeta curta
+
+- Dano 11 × 5 · alcance 10 m · cooldown 2.2 s · custo 0
+
+### Habilidades
+
+- **Inteligência Estratégica** — △ + ○ / Y + B · custo 25 · cooldown 18 s
+  "Ordem!" — analisa o inimigo: por 7 s cada golpe físico que acerta ganha um corte extra.
+- **Análise Tática** — △ + □ / Y + X · custo 20 · cooldown 16 s · alcance 14 m
+  Lê o adversário como lê um relatório: por alguns segundos ele recebe mais dano.
+- **Investida dos Aniquiladores** — R2 + × / RT + A · custo 20 · cooldown 10 s · dano 50 · alcance 2.2 m
+  Avança em linha reta com a espada na frente e atravessa a guarda com força.
+- **Jaqueta de Veríssimo** — △ + L2 / Y + LT · custo 25 · cooldown 22 s
+  Fecha a jaqueta de couro passada entre os agentes: por 6 s recebe 20% menos dano e aguenta 1 golpe sem recuar.
+- **Bloqueio Perfeito** — defender no instante exato (0.16 s) anula o dano e atordoa o atacante por 0.6 s
+
+### Especial: Ordem de Ataque
+
+250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: Líder dos Aniquiladores
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +15% de dano (físico, distância, habilidades), −15% de dano recebido, recargas 30% mais rápidas, cura 10% na hora.

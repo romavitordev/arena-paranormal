@@ -9,7 +9,7 @@ import { hostMask } from '../../models/weapons.js';
 // Labirinto → ??? (capacete) · Aguiar → Mutilador Noturno.
 // A Erin (Ordo Realitas, NÃO é Mascarada) usa a mesma cena para pôr a máscara de gás e virar Em Nome do Caos.
 //
-// As cenas seguem os GIFs de referência do usuário (branch refs-gifs, "mascarados ref anm"; análise em
+// As cenas seguem as referências visuais de animação dos Mascarados (análise em
 // Referencias visuais/ANALISE.md): quando a máscara encaixa, a cena fica VERMELHA (luz vermelha forte, clarão) e o
 // assassino fica com uma AURA vermelha em volta até o fim do round.
 //   sp.scene  'helmet' (Labirinto: segura o capacete no peito, ergue acima da cabeça e encaixa)
