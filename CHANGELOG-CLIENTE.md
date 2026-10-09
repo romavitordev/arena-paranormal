@@ -2,6 +2,16 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.11.0 — As Torres
+- Novo modo: TORRES (menu principal). São 8 torres — só a primeira começa aberta; zerar uma destrava a próxima. Escolha a torre e a câmera sobe da base até o topo e se afasta mostrando a torre inteira.
+- Em cada torre você escolhe UM lutador para subir até o fim (não dá para trocar) e a dificuldade, que vale para todos os andares. Venceu, sobe; perdeu, tenta o mesmo andar de novo ou desiste.
+- No topo espera um vilão, diferente a cada subida: O Anfitrião, A Fantasma, o Mutilador Noturno, ???, Erin em Nome do Caos, o Portador do Trono ou O Deus da Morte — mais forte do que numa luta comum. A Torre VIII, a Torre de Babel, coloca os vilões nos andares e O Deus da Morte no topo.
+- Cada torre mostra no menu a dificuldade mais difícil em que você já a zerou.
+- Idiomas: trocar o idioma em OPÇÕES agora traduz o jogo na hora — menus, seleção, pausa, HUD, avisos da luta e partida online, em 13 idiomas. Nomes de golpes, falas e novidades ainda estão em português.
+- Removida a opção de movimento "relativo ao inimigo": o movimento é sempre pelas direções da tela.
+- Arthur ganhou pose de vitória própria, com a sniper apoiada no ombro.
+- Correção: uma luta espelho (por exemplo Kaiser × Kaiser) travava na apresentação.
+
 ## v3.10.1 — Olhos sempre abertos
 - A fita da espada do Arnaldo e do Veríssimo agora fica VERMELHA de verdade — pendurada parada ela aparecia preta.
 - Senhor Veríssimo com nomes da série e do RPG no lugar dos genéricos: Olhos Sempre Abertos! (trás + ○, a frase dele ao bloquear o golpe do Gal e salvar o Arthur — bloqueia e contra-ataca), Em Seu Caminho (a investida, da fala "nós estaremos em seu caminho"), Brecha na Guarda e o especial Oficial Comandante (poderes da trilha Comandante de Campo), Escopeta de Varredura, o Despertar Líder da Ordo Realitas e golpes como Corte de Varredura e Pela Ordo Realitas. Só os nomes mudaram.

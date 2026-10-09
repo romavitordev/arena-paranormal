@@ -1,6 +1,9 @@
 # Registro administrativo de alterações
 
-## (em andamento) — próxima versão
+## v3.11.0 — As Torres
+
+- Versão: `VERSION` 3.10.1 → **3.11.0** (modo novo + idiomas ligados). Changelog dos jogadores com tudo o que
+  estava "em andamento".
 
 - Arthur: pose de vitória própria `vic_arthur` (a sniper apoiada no ombro do único braço, corpo de lado, olhar baixo)
   no lugar de `victory_onearm` (era o punho erguido genérico). Campo novo `def.victoryProp`: `World.showVictoryLineup`

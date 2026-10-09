@@ -1,5 +1,18 @@
 # Changelog
 
+## v3.11.0 — 2026-10-09
+
+### Adicionado
+- Modo TORRES: 8 torres com cadeado, torre em 3D com câmera subindo, lutador fixo, dificuldade para a torre inteira e vilão fortalecido no topo; melhor dificuldade zerada por torre.
+- Interface traduzida em 13 idiomas, trocando na hora (avisos de combate e mensagens online incluídos).
+- Pose de vitória própria do Arthur.
+
+### Removido
+- Opção de movimento "relativo ao inimigo".
+
+### Corrigido
+- Luta espelho travando na introdução.
+
 ## v3.10.1 — 2026-10-08
 
 ### Corrigido

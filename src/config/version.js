@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.10.1';
+export const VERSION = '3.11.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,21 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.11.0',
+    date: '2026-10-09',
+    title: 'As Torres',
+    items: [
+      'Novo modo: TORRES (menu principal). São 8 torres — só a primeira começa aberta; zerar uma destrava a próxima. Escolha a torre e a câmera sobe da base até o topo e se afasta mostrando a torre inteira.',
+      'Em cada torre você escolhe UM lutador para subir até o fim (não dá para trocar) e a dificuldade, que vale para todos os andares. Venceu, sobe; perdeu, tenta o mesmo andar de novo ou desiste.',
+      'No topo espera um vilão, diferente a cada subida: O Anfitrião, A Fantasma, o Mutilador Noturno, ???, Erin em Nome do Caos, o Portador do Trono ou O Deus da Morte — mais forte do que numa luta comum. A Torre VIII, a Torre de Babel, coloca os vilões nos andares e O Deus da Morte no topo.',
+      'Cada torre mostra no menu a dificuldade mais difícil em que você já a zerou.',
+      'Idiomas: trocar o idioma em OPÇÕES agora traduz o jogo na hora — menus, seleção, pausa, HUD, avisos da luta e partida online, em 13 idiomas. Nomes de golpes, falas e novidades ainda estão em português.',
+      'Removida a opção de movimento "relativo ao inimigo": o movimento é sempre pelas direções da tela.',
+      'Arthur ganhou pose de vitória própria, com a sniper apoiada no ombro.',
+      'Correção: uma luta espelho (por exemplo Kaiser × Kaiser) travava na apresentação.',
+    ],
+  },
   {
     v: '3.10.1',
     date: '2026-10-08',
