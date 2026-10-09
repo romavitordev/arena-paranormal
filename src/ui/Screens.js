@@ -7,6 +7,7 @@ import { actionLabel, moveLabel } from './labels.js';
 import { moveListHTML, specialSummary } from './moves.js';
 import { VERSION, VERSION_LABEL, CHANGELOG, formatVersion } from '../config/version.js';
 import { t, getLanguage } from '../i18n/index.js';
+import { roundKey } from '../game/tournament.js';
 
 // Telas fora da luta. Todas recebem as entradas normalizadas dos dois jogadores.
 // Fluxo: Título → Menu principal (P1 VS P2 / P1 VS CPU / Opções) → Personagens →
@@ -66,6 +67,7 @@ const homeOptions = () => [
   { id: 'solo', label: t('menu.solo'), desc: t('menu.solo.desc'), sub: VS_OPTIONS('solo', false) },
   { id: 'team', label: t('menu.team'), desc: t('menu.team.desc'), sub: VS_OPTIONS('team', true) },
   { id: 'tower', label: t('menu.tower'), desc: t('menu.tower.desc') },
+  { id: 'tournament', label: t('menu.tournament'), desc: t('menu.tournament.desc') },
   { id: 'lan', label: t('menu.lan'), desc: t('menu.lan.desc') },
   { id: 'tutorial', label: t('menu.tutorial'), desc: t('menu.tutorial.desc') },
   { id: 'training', label: t('menu.training'), desc: t('menu.training.desc') },
@@ -275,6 +277,7 @@ export const MODES = {
   get training() { return { title: t('menu.training'), slots: ['P1', t('mode.target')], single: true }; },
   get tutorial() { return { title: t('menu.tutorial'), slots: ['P1', t('mode.target')], single: true }; },
   get tower() { return { title: t('menu.tower'), slots: ['P1', 'CPU'], single: true, soloPick: true }; },
+  get tournament() { return { title: t('menu.tournament'), slots: ['P1', 'CPU'], single: true, soloPick: true }; },
 };
 
 // Seleção de personagem no estilo Storm 4: a grade do P1 fica à esquerda e a do P2 à direita;
@@ -285,7 +288,8 @@ const INPUT_NAMES = { 'carga+ranged': '△ → □', 'carga+physical': '△ → 
 const inputName = (k) => (k === 'carga+jump' ? t('input.carga_jump') : k === 'ranged+side' ? `${t('input.side')} + □` : INPUT_NAMES[k] || k);
 
 export class SelectScreen {
-  constructor(root, { portraits, audio, prev, mode = 'pvp', team = false }) {
+  // heading: título no lugar do padrão (TORNEIO: "VEZ DE: JOGADOR 3")
+  constructor(root, { portraits, audio, prev, mode = 'pvp', team = false, heading = null }) {
     this.audio = audio;
     this.mode = mode;
     this.team = team;
@@ -307,7 +311,7 @@ export class SelectScreen {
         <div class="det p${p + 1}"></div>
       </div>`;
     this.el = el(root, 'screen', 'select', `
-      <div class="sel-title">${t(team ? 'sel.title_team' : 'sel.title')} <small>${this.M.title}${team ? ` · ${t('sel.team_sub')}` : ''}</small></div>
+      <div class="sel-title">${heading || t(team ? 'sel.title_team' : 'sel.title')} <small>${this.M.title}${team ? ` · ${t('sel.team_sub')}` : ''}</small></div>
       ${side(0)}
       <div class="sel-center">
         <div class="sel-vs">VS</div>
@@ -427,7 +431,10 @@ export class SelectScreen {
     // B/○ (ou Esc) com ninguém confirmado: volta para a tela inicial
     if (!this.ready[0] && !this.ready[1] && !this.picks[0].length && !this.picks[1].length && (this.bk(p1) || (!this.cpu && this.bk(p2)))) return 'back';
     // TORRE: só o P1 escolhe; os adversários vêm da torre
-    if (this.M.soloPick && this.ready[0]) return { p1: ROSTER[this.cursor[0]], p2: null, cpu: true, mode: this.mode };
+    if (this.M.soloPick && this.ready[0]) {
+      const teams = this.team ? [this.picks[0].map((i) => ROSTER[i])] : null;
+      return { p1: teams ? teams[0][0] : ROSTER[this.cursor[0]], p2: null, teams, cpu: true, mode: this.mode };
+    }
     // os dois confirmados: COMEÇAR leva às configurações da batalha (B desfaz a escolha)
     if (this.ready[0] && this.ready[1]) {
       const humans = this.cpu ? [p1] : [p1, p2];
@@ -893,6 +900,141 @@ export class TowerScreen {
     }
     if (input.keyPressedOnce('Enter')) return this.btns[this.index].dataset.a;
     if (input.keyPressedOnce('Escape')) return this.backId();
+    return null;
+  }
+  dispose() { this.el.remove(); }
+}
+
+// TORNEIO — montagem: quantos participantes, solo/equipe, quem é humano ou CPU, tempo, rounds, dificuldade e cenário.
+// cfg = { count, team, humans: [bool × 8], stage } (o resto fica em SETTINGS, como nas outras lutas).
+// update() devolve 'go', 'back' ou 'move'.
+export class TournamentSetupScreen {
+  constructor(root, { audio, cfg, stages }) {
+    this.audio = audio;
+    this.cfg = cfg;
+    this.stages = stages; // [{ id, name }] — 'random' primeiro
+    this.index = 0;
+    this.el = el(root, 'screen', 'tsetup', `<div class="menu"><h2>${t('tour.setup')}</h2><div class="rows"></div></div>
+      <div class="hint">${t('tour.setup_hint', { ok: OK, back: BACK })}</div>`);
+    this.rowsEl = this.el.querySelector('.rows');
+    this.build();
+  }
+  rowsFor() {
+    const c = this.cfg;
+    const stage = this.stages.find((s) => s.id === c.stage) || this.stages[0];
+    return [
+      { id: 'count', label: t('tour.count'), value: String(c.count) },
+      { id: 'format', label: t('tour.format'), value: c.team ? t('tour.team') : t('tour.solo') },
+      ...Array.from({ length: c.count }, (_, i) => ({ id: `slot:${i}`, label: t('tour.slot', { n: i + 1 }), value: c.humans[i] ? t('tour.human') : 'CPU', human: c.humans[i] })),
+      { id: 'timer', label: t('cfg.time'), value: timerLabel() },
+      { id: 'rounds', label: t('settings.rounds'), value: String(SETTINGS.rounds) },
+      { id: 'cpuLevel', label: t('settings.difficulty'), value: cpuLabel() },
+      { id: 'stage', label: t('tour.stage'), value: stage.name },
+      { id: 'go', label: t('tour.go') },
+    ];
+  }
+  build() {
+    this.rows = this.rowsFor();
+    if (this.index >= this.rows.length) this.index = this.rows.length - 1;
+    this.rowsEl.innerHTML = this.rows.map((r) => `<div class="opt cfg ${r.human ? 'human' : ''}"><span>${r.label}</span>${r.value !== undefined ? `<b>◀ ${r.value} ▶</b>` : ''}</div>`).join('');
+    this.opts = [...this.rowsEl.querySelectorAll('.opt')];
+    this.opts.forEach((o, i) => o.addEventListener('click', () => { this.index = i; this.clicked = true; }));
+    this.render();
+  }
+  render() { this.opts.forEach((o, i) => o.classList.toggle('on', i === this.index)); }
+  change(dir) {
+    const r = this.rows[this.index];
+    const c = this.cfg;
+    if (r.id === 'count') c.count = Math.min(8, Math.max(2, c.count + dir));
+    else if (r.id === 'format') c.team = !c.team;
+    else if (r.id.startsWith('slot:')) { const i = Number(r.id.slice(5)); c.humans[i] = !c.humans[i]; }
+    else if (r.id === 'timer') cycleSetting('timer', TIMER_OPTIONS, dir);
+    else if (r.id === 'rounds') cycleSetting('rounds', ROUND_OPTIONS, dir);
+    else if (r.id === 'cpuLevel') cycleSetting('cpuLevel', CPU_LEVELS, dir);
+    else if (r.id === 'stage') {
+      const k = this.stages.findIndex((s) => s.id === c.stage);
+      c.stage = this.stages[(k + dir + this.stages.length) % this.stages.length].id;
+    } else return;
+    this.audio.play('select');
+    this.build();
+  }
+  update(input) {
+    if (this.clicked) { this.clicked = false; if (this.rows[this.index].id === 'go') return 'go'; this.change(1); }
+    for (const p of input.players) {
+      const n = this.rows.length;
+      if (p.menu.up) { this.index = (this.index + n - 1) % n; this.render(); return 'move'; }
+      if (p.menu.down) { this.index = (this.index + 1) % n; this.render(); return 'move'; }
+      if (p.menu.left) this.change(-1);
+      if (p.menu.right) this.change(1);
+      if (confirm(p) || startGo(p, input)) { if (this.rows[this.index].id === 'go' || startGo(p, input)) return 'go'; this.change(1); }
+      if (back(p)) return 'back';
+    }
+    if (input.keyPressedOnce('Enter')) return 'go';
+    if (input.keyPressedOnce('Escape')) return 'back';
+    return null;
+  }
+  dispose() { this.el.remove(); }
+}
+
+// TORNEIO — a chave: colunas por rodada (quartas → semifinal → final), o vencedor de cada luta em destaque e as lutas
+// sorteadas entre CPUs marcadas. Embaixo a PRÓXIMA LUTA (LUTAR / SAIR DO TORNEIO) ou o CAMPEÃO (CONTINUAR).
+// update() devolve 'fight', 'quit', 'done' ou 'move'.
+export class TournamentScreen {
+  constructor(root, { tour, portraits, next = null, autos = new Set() }) {
+    this.tour = tour;
+    const P = tour.participants;
+    const who = (i) => (i === null || i === undefined ? null : P[i]);
+    const face = (p) => (p ? `<img src="${portraits[p.defs[0].id] || ''}" alt="">` : '<i class="tb-empty"></i>');
+    const side = (p, match, isA) => {
+      if (!p) return `<div class="tb-side empty">${face(null)}<span>—</span></div>`;
+      const idx = isA ? match.a : match.b;
+      const st = match.winner === null ? '' : match.winner === idx ? 'win' : 'lose';
+      return `<div class="tb-side ${st} ${p.human ? 'human' : ''}" style="--c:${p.defs[0].color}">${face(p)}<span><b>${p.name}</b><small>${p.defs.map((d) => d.name).join(' · ')}</small></span></div>`;
+    };
+    const cols = tour.rounds.map((round, r) => {
+      const key = { final: 'tour.round_final', semi: 'tour.round_semi', quarter: 'tour.round_quarter' }[roundKey(round.length)];
+      return `<div class="tb-col"><h4>${t(key)}</h4><div class="tb-list">${round.map((m, i) => {
+        const isNext = next && next.r === r && next.m === i;
+        const bye = r === 0 && m.b === null;
+        const auto = autos.has(`${r}:${i}`);
+        return `<div class="tb-match ${isNext ? 'next' : ''}">${side(who(m.a), m, true)}${bye ? `<div class="tb-side bye"><span>${t('tour.bye')}</span></div>` : side(who(m.b), m, false)}${auto ? `<em class="tb-auto">🎲 ${t('tour.auto')}</em>` : ''}</div>`;
+      }).join('')}</div></div>`;
+    }).join('');
+    let panel;
+    let opts;
+    if (tour.champion !== null) {
+      const c = P[tour.champion];
+      opts = [['done', t('tour.continue')]];
+      panel = `<div class="tb-panel champ" style="--c:${c.defs[0].color}">${face(c)}<div><small>${t('tour.champion')}</small><b>${c.name}</b><p>${t('tour.champion_sub', { name: c.name })}</p></div></div>`;
+    } else {
+      const a = P[next.match.a];
+      const b = P[next.match.b];
+      opts = [['fight', t('tour.fight')], ['quit', t('tour.quit')]];
+      const sides = a.human && b.human ? t('tour.sides', { a: a.name, b: b.name }) : '';
+      panel = `<div class="tb-panel"><div><small>${t('tour.next')}</small><b>${a.name} × ${b.name}</b>${sides ? `<p>${sides}</p>` : ''}</div></div>`;
+    }
+    this.opts = opts;
+    this.index = 0;
+    this.el = el(root, 'screen', 'tbracket', `<h2>${t('menu.tournament')}</h2><div class="tb-cols">${cols}</div>${panel}
+      <div class="tb-btns">${opts.map(([id, l]) => `<div class="opt" data-a="${id}">${l}</div>`).join('')}</div>
+      <div class="hint">${t('tower.menu_hint', { ok: OK, back: BACK })}</div>`);
+    this.btns = [...this.el.querySelectorAll('.tb-btns .opt')];
+    this.btns.forEach((b, i) => onTap(this, b, 1 + i, () => { this.clicked = b.dataset.a; }));
+    this.el.classList.add('net-taps');
+    this.netTap = netTapDefault;
+    this.render();
+  }
+  render() { this.btns.forEach((b, i) => b.classList.toggle('on', i === this.index)); }
+  update(input) {
+    if (this.clicked) { const a = this.clicked; this.clicked = null; return a; }
+    for (const p of input.players) {
+      const n = this.btns.length;
+      if (p.menu.left || p.menu.up) { this.index = (this.index + n - 1) % n; this.render(); return 'move'; }
+      if (p.menu.right || p.menu.down) { this.index = (this.index + 1) % n; this.render(); return 'move'; }
+      if (confirm(p) || startGo(p, input)) return this.btns[this.index].dataset.a;
+      if (back(p)) return this.tour.champion !== null ? 'done' : null;
+    }
+    if (input.keyPressedOnce('Enter')) return this.btns[this.index].dataset.a;
     return null;
   }
   dispose() { this.el.remove(); }

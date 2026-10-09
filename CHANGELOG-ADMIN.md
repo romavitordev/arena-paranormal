@@ -1,5 +1,19 @@
 # Registro administrativo de alterações
 
+## (em andamento) — próxima versão
+
+- **TORNEIO local (v1):** escopo escolhido pelo usuário — local primeiro (online numa próxima versão) e lutas só de
+  CPU sempre sorteadas. `src/game/tournament.js`: chave de eliminatória simples (tamanho = potência de 2; a 1ª rodada
+  junta `order[i]` com `order[i + size/2]`, então nunca sobra luta vazia; quem fica sozinho passa direto),
+  `nextMatch`, `setWinner`, `autoResolve` (resolve TODAS as lutas só de CPU prontas, mesmo com uma de humano antes).
+  Telas `TournamentSetupScreen` (quantidade 2–8, solo/equipe, humano/CPU por vaga, tempo, rounds, dificuldade,
+  cenário fixo/aleatório) e `TournamentScreen` (colunas por rodada, vencedor ✔, sorteadas 🎲, PRÓXIMA LUTA ou
+  CAMPEÃO). Cada humano escolhe na `SelectScreen` (modo `tournament`, `heading` "VEZ DE: JOGADOR n", equipe com 3);
+  CPUs sorteiam. Humano × CPU: humano no P1 (troca os lados se preciso); humano × humano: P1 × P2. A tela de
+  vitória mostra o nome do participante e só CONTINUAR; na pausa SELEÇÃO vira SAIR DO TORNEIO. 26 chaves novas × 13
+  idiomas. 6 testes novos.
+- TODO: tradução do resto do jogo (diálogos, golpes, descrições, nome do jogo…) anotada como a PRÓXIMA TAREFA.
+
 ## v3.12.0 — Golpes que se ouvem
 
 - Versão: `VERSION` 3.11.0 → **3.12.0** (sons e efeitos). Risada gravada do Anfitrião removida a pedido do usuário

@@ -1265,10 +1265,15 @@ Todo texto visível deve passar pelo sistema.
 * [x] LAN
 * [x] Online
 
-## Próximo (pedido do usuário, depois da Torre/Torneio — demorado)
+## PRÓXIMA TAREFA (pedido do usuário em 2026-10-09, depois do Torneio local)
 
-* [ ] Traduzir os DIÁLOGOS (falas de introdução, vitória e batalha em `config/dialogues.js`) para os 13 idiomas
-* [ ] Traduzir o conteúdo dos personagens (golpes, habilidades, descrições)
+Traduzir o resto do jogo para os 13 idiomas:
+
+* [ ] DIÁLOGOS (falas de introdução, vitória e batalha em `config/dialogues.js`)
+* [ ] Nomes de golpes, habilidades, especiais e transformações
+* [ ] Descrições e informações dos personagens (estilo, identidade, frases)
+* [ ] Nome do jogo (logo/título por idioma, se fizer sentido)
+* [ ] Novidades, cenários (nomes e descrições), passos do Tutorial e o resto que ainda está em português
 
 ---
 
@@ -1371,6 +1376,12 @@ Criar modo inspirado no sistema de torneio de jogos de arena, permitindo montar 
 
 O jogador deve poder escolher os participantes e as equipes.
 
+> v1 LOCAL (2026-10-09, escopo escolhido pelo usuário: local primeiro, online depois; lutas só de CPU sempre
+> sorteadas): `src/game/tournament.js` (chave, testes em `tests/tournament.test.js`) + `TournamentSetupScreen` /
+> `TournamentScreen`. 2–8 participantes humano/CPU, solo ou equipe (líder + 2), tempo/rounds/dificuldade/cenário
+> (fixo ou aleatório), cada humano escolhe na vez, CPU sorteia; eliminatória com "passa direto"; humano × CPU com o
+> humano no P1, humano × humano P1 × P2; tela de campeão. Falta o ONLINE (§48).
+
 ---
 
 # 46. TORNEIO — JOGADORES
@@ -1379,14 +1390,14 @@ Suportar:
 
 **1 a 8 jogadores**
 
-* [ ] 1 jogador
-* [ ] 2 jogadores
-* [ ] 3 jogadores
-* [ ] 4 jogadores
-* [ ] 5 jogadores
-* [ ] 6 jogadores
-* [ ] 7 jogadores
-* [ ] 8 jogadores
+* [ ] 1 jogador (o mínimo é 2 participantes; 1 humano + CPUs funciona)
+* [x] 2 jogadores
+* [x] 3 jogadores
+* [x] 4 jogadores
+* [x] 5 jogadores
+* [x] 6 jogadores
+* [x] 7 jogadores
+* [x] 8 jogadores
 
 Participantes podem ser:
 
@@ -1398,13 +1409,13 @@ Participantes podem ser:
 
 # 47. TORNEIO — LOCAL
 
-* [ ] Escolher quantidade de jogadores
-* [ ] Definir cada jogador
-* [ ] Definir CPU
-* [ ] Escolher controles
-* [ ] Escolher equipes
-* [ ] Escolher personagens
-* [ ] Configurar regras
+* [x] Escolher quantidade de jogadores
+* [x] Definir cada jogador
+* [x] Definir CPU
+* [x] Escolher controles (humano × humano: P1 × P2; humano × CPU: humano no P1)
+* [x] Escolher equipes
+* [x] Escolher personagens
+* [x] Configurar regras
 
 ---
 
@@ -1444,13 +1455,13 @@ TIME 2
 - Personagem F
 ```
 
-* [ ] Quantidade de integrantes
-* [ ] Personagens individuais
-* [ ] Humano/CPU
+* [ ] Quantidade de integrantes (fixo: líder + 2)
+* [x] Personagens individuais
+* [x] Humano/CPU
 * [ ] Repetição quando permitido
-* [ ] Assistências
-* [ ] Trocas
-* [ ] HUD
+* [x] Assistências
+* [x] Trocas
+* [x] HUD
 
 ---
 
@@ -1458,16 +1469,16 @@ TIME 2
 
 Criar representação visual.
 
-* [ ] Rodada inicial
-* [ ] Quartas
-* [ ] Semifinal
-* [ ] Final
-* [ ] Vencedor
-* [ ] Eliminado
-* [ ] Avanço automático
-* [ ] CPU × CPU
-* [ ] Humano × CPU
-* [ ] Humano × Humano
+* [x] Rodada inicial
+* [x] Quartas
+* [x] Semifinal
+* [x] Final
+* [x] Vencedor
+* [x] Eliminado
+* [x] Avanço automático
+* [x] CPU × CPU (sorteado)
+* [x] Humano × CPU
+* [x] Humano × Humano
 
 A estrutura deve adaptar-se ao número de participantes.
 
@@ -1475,16 +1486,16 @@ A estrutura deve adaptar-se ao número de participantes.
 
 # 51. TORNEIO — REGRAS
 
-* [ ] Tempo
-* [ ] Rounds
-* [ ] Dificuldade
-* [ ] Cenário
-* [ ] Equipes
-* [ ] Assistências
-* [ ] Condição de vitória
+* [x] Tempo
+* [x] Rounds
+* [x] Dificuldade
+* [x] Cenário
+* [x] Equipes
+* [x] Assistências
+* [x] Condição de vitória
 * [ ] Revanche
-* [ ] Avanço
-* [ ] Eliminação
+* [x] Avanço
+* [x] Eliminação
 
 ---
 
@@ -1508,14 +1519,14 @@ A estrutura deve adaptar-se ao número de participantes.
 
 Todas as informações do torneio devem ser localizáveis.
 
-* [ ] Nome das rodadas
-* [ ] Jogadores
-* [ ] Equipes
-* [ ] Chave
-* [ ] Resultados
-* [ ] Campeão
-* [ ] Eliminado
-* [ ] Configurações
+* [x] Nome das rodadas
+* [x] Jogadores
+* [x] Equipes
+* [x] Chave
+* [x] Resultados
+* [x] Campeão
+* [x] Eliminado
+* [x] Configurações
 
 ---
 
@@ -2209,16 +2220,16 @@ genérico demais), com o motivo. Nenhum item é de balanceamento.
 
 ### Torneio
 
-* [ ] Local
+* [x] Local
 * [ ] Online
-* [ ] 1–8 jogadores
-* [ ] CPU
-* [ ] Equipes
-* [ ] Assistências
-* [ ] Chave
-* [ ] Regras
-* [ ] Resultados
-* [ ] Campeão
+* [x] 1–8 jogadores (2–8 participantes)
+* [x] CPU
+* [x] Equipes
+* [x] Assistências
+* [x] Chave
+* [x] Regras
+* [x] Resultados
+* [x] Campeão
 
 ### Torre
 

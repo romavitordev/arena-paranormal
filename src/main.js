@@ -2,7 +2,8 @@ import * as THREE from 'three';
 import { InputManager } from './input/InputManager.js';
 import { AudioManager } from './audio/AudioManager.js';
 import { HUD } from './ui/HUD.js';
-import { HomeScreen, BattleConfigScreen, VictoryScreen, MODES, SelectScreen, MenuScreen, StageSelectScreen, LoadingScreen, CommandsScreen, ChangelogScreen, LanScreen, TowerScreen, TowerSelectScreen, NET_UI } from './ui/Screens.js';
+import { HomeScreen, BattleConfigScreen, VictoryScreen, MODES, SelectScreen, MenuScreen, StageSelectScreen, LoadingScreen, CommandsScreen, ChangelogScreen, LanScreen, TowerScreen, TowerSelectScreen, TournamentSetupScreen, TournamentScreen, NET_UI } from './ui/Screens.js';
+import { createTournament, nextMatch, setWinner, autoResolve } from './game/tournament.js';
 import { buildTower, pickBoss, towerFloorCount, isTowerUnlocked, bestDifficulty, saveTowerClear, TOWERS, TOWER_DIFFICULTIES, VILLAINS } from './game/tower.js';
 import { TowerStage } from './ui/towerStage.js';
 import { getForm } from './characters/forms/index.js';
@@ -111,6 +112,7 @@ function toMainMenu() {
   setOverlay(null, null);
   closeTowerStage();
   game.towerRun = null;
+  game.tour = null;
   setScreen('mainmenu', new HomeScreen(screens, { portraits, menu: true, touchOnly: touchDevice }));
 }
 
@@ -160,10 +162,11 @@ async function startMatch() {
   await frame();
   await frame();
   const match = new Match({
-    renderer, audio, input, hud, mode: game.mode.kind === 'tutorial' ? 'training' : game.mode.kind === 'tower' ? 'cpu' : game.mode.kind, teams: game.mode.team ? game.pick.teams : null, dialogue: game.mode.kind !== 'training' && game.mode.kind !== 'tutorial',
+    renderer, audio, input, hud, mode: game.mode.kind === 'tutorial' ? 'training' : game.mode.kind === 'tower' ? 'cpu' : game.mode.kind === 'tournament' ? (game.mode.cpu ? 'cpu' : 'pvp') : game.mode.kind, teams: game.mode.team ? game.pick.teams : null, dialogue: game.mode.kind !== 'training' && game.mode.kind !== 'tutorial',
     defs: [p1, p2],
     arenaId: game.arenaId || DEFAULT_ARENA,
     onEnd: ({ winner, def, loser, team }) => {
+      if (game.mode.kind === 'tournament' && game.tourMatch) game.tourMatch.winner = winner; // lado que venceu (0/1)
       // tempo contado pela simulação (e não pelo relógio): na LAN a tela de vitória abre no mesmo quadro nos dois
       match.world.after(0.4, () => {
         if (game.state !== 'fight' || game.match !== match) return;
@@ -172,10 +175,10 @@ async function startMatch() {
         match.world.showVictoryLineup(lineup);
         hud.show(false);
         setOverlay('result', new VictoryScreen(screens, {
-          winner: def, loser, slot: MODES[game.mode.kind].slots[winner], team: team ? lineup : null,
+          winner: def, loser, slot: game.mode.kind === 'tournament' ? game.tourMatch.names[winner] : MODES[game.mode.kind].slots[winner], team: team ? lineup : null,
           line: victoryLine(def.id, loser.id, loser.name),
           audio,
-          options: game.mode.kind === 'tower'
+          options: game.mode.kind === 'tournament' ? [{ id: 'tour_next', label: t('tour.continue') }] : game.mode.kind === 'tower'
             ? (winner === 0
               ? [{ id: 'tower_next', label: t('tower.next') }, { id: 'tower_quit', label: t('tower.quit') }]
               : [{ id: 'rematch', label: t('tower.retry') }, { id: 'tower_quit', label: t('tower.quit') }])
@@ -259,6 +262,14 @@ function setupControllers(match) {
   const [p1, p2] = input.players;
   p1.cpu = kind === 'cvc' ? new CpuController({ level: SETTINGS.cpuLevel }) : null;
   const floor = kind === 'tower' ? game.towerRun.floors[game.towerRun.floor] : null;
+  if (kind === 'tournament') {
+    const [h1, h2] = game.mode.humans;
+    p1.cpu = h1 ? null : new CpuController({ level: SETTINGS.cpuLevel });
+    p2.cpu = h2 ? null : new CpuController({ level: SETTINGS.cpuLevel });
+    if (p1.cpu) p1.cpu.attach(match.fighters[0]);
+    if (p2.cpu) p2.cpu.attach(match.fighters[1]);
+    return;
+  }
   const level = floor ? floor.level : SETTINGS.cpuLevel; // TORRE: a dificuldade é do andar
   p2.cpu = kind === 'cpu' || kind === 'cvc' || kind === 'tower' ? new CpuController({ level }) : null;
   if (kind === 'training' || kind === 'tutorial') p2.setVirtual({ moveX: 0, moveY: 0, held: {} }); // o alvo fica parado (muda na pausa)
@@ -373,6 +384,81 @@ function startTowerFloor() {
   startMatch();
 }
 
+// TORNEIO (local): montagem → cada humano escolhe (CPU sorteia) → chave → lutas com humano → campeão
+function toTourSetup() {
+  endMatch();
+  setOverlay(null, null);
+  if (!game.tourCfg) game.tourCfg = { count: 4, team: false, humans: [true, false, false, false, false, false, false, false], stage: 'random' };
+  const stages = [{ id: 'random', name: t('ui.random') }, ...ARENA_ORDER.filter((id) => ARENAS[id].available).map((id) => ({ id, name: ARENAS[id].name }))];
+  setScreen('tsetup', new TournamentSetupScreen(screens, { audio, cfg: game.tourCfg, stages }));
+}
+
+function randomDefs(n) {
+  const pool = ROSTER.slice();
+  for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; }
+  return pool.slice(0, n);
+}
+
+function startTourPicks() {
+  const cfg = game.tourCfg;
+  let h = 0;
+  let c = 0;
+  game.tourPeople = Array.from({ length: cfg.count }, (_, i) => {
+    const human = cfg.humans[i];
+    const name = human ? t('tour.player', { n: ++h }) : t('tour.cpu_name', { n: ++c });
+    return { id: i, name, human, defs: human ? [] : randomDefs(cfg.team ? 3 : 1) };
+  });
+  game.tourQueue = game.tourPeople.filter((p) => p.human).map((p) => p.id);
+  pickNextTour();
+}
+
+function pickNextTour() {
+  if (!game.tourQueue.length) {
+    game.tour = createTournament(game.tourPeople);
+    game.tourAutos = new Set();
+    for (const d of autoResolve(game.tour)) game.tourAutos.add(`${d.r}:${d.m}`);
+    toTourBracket();
+    return;
+  }
+  const who = game.tourPeople[game.tourQueue[0]];
+  game.mode = { kind: 'tournament', cpu: true, team: game.tourCfg.team };
+  endMatch();
+  setOverlay(null, null);
+  setScreen('select', new SelectScreen(screens, { portraits, audio, mode: 'tournament', team: game.tourCfg.team, heading: t('tour.pick', { name: who.name }) }));
+}
+
+function toTourBracket() {
+  endMatch();
+  setOverlay(null, null);
+  setScreen('tbracket', new TournamentScreen(screens, { tour: game.tour, portraits, next: nextMatch(game.tour), autos: game.tourAutos }));
+}
+
+// luta da chave: o humano fica no lado P1 (se só um for humano)
+function startTourMatch() {
+  const n = nextMatch(game.tour);
+  if (!n) return;
+  let A = game.tour.participants[n.match.a];
+  let B = game.tour.participants[n.match.b];
+  const swapped = !A.human && B.human;
+  if (swapped) [A, B] = [B, A];
+  const team = game.tourCfg.team;
+  game.tourMatch = { ...n, swapped, names: [A.name, B.name] };
+  game.mode = { kind: 'tournament', cpu: !(A.human && B.human), team, humans: [A.human, B.human] };
+  game.pick = { p1: A.defs[0], p2: B.defs[0], teams: team ? [A.defs, B.defs] : null };
+  const avail = ARENA_ORDER.filter((id) => ARENAS[id].available);
+  game.arenaId = game.tourCfg.stage === 'random' ? avail[Math.floor(Math.random() * avail.length)] : game.tourCfg.stage;
+  startMatch();
+}
+
+// terminou a luta: o vencedor sobe na chave e as lutas só de CPU que ficarem prontas são sorteadas
+function tourMatchDone(winnerSide) {
+  const m = game.tourMatch;
+  const sides = m.swapped ? [m.match.b, m.match.a] : [m.match.a, m.match.b];
+  setWinner(game.tour, m.r, m.m, sides[winnerSide]);
+  for (const d of autoResolve(game.tour)) game.tourAutos.add(`${d.r}:${d.m}`);
+  toTourBracket();
+}
+
 function toConfig() {
   endMatch();
   setOverlay(null, null);
@@ -406,7 +492,7 @@ function openPause(by = game.pausedBy) {
       ] : []),
       { id: 'commands', label: t('pause.commands') },
       ...(tut ? [] : [{ id: 'time', label: timeLabel }, { id: 'rematch', label: t('pause.restart') }]),
-      game.mode.kind === 'tower' ? { id: 'tower_quit', label: t('tower.quit') } : { id: 'select', label: tut ? t('pause.other_char') : t('ui.char_select') },
+      game.mode.kind === 'tower' ? { id: 'tower_quit', label: t('tower.quit') } : game.mode.kind === 'tournament' ? { id: 'tour_quit', label: t('tour.quit') } : { id: 'select', label: tut ? t('pause.other_char') : t('ui.char_select') },
       { id: 'main', label: t('ui.main_menu') },
     ],
   }));
@@ -728,6 +814,11 @@ function tick(dt) {
       }
       else if (c === 'news') { audio.play('confirm'); setOverlay('news', new ChangelogScreen(screens)); }
       else if (c === 'lan') { audio.play('confirm'); openOnline(); }
+      else if (c === 'tournament') {
+        audio.play('confirm');
+        game.mode = { kind: 'tournament', cpu: true, team: false };
+        toTourSetup();
+      }
       else if (c === 'tower') {
         audio.play('confirm');
         game.mode = { kind: 'tower', cpu: true, team: false };
@@ -756,7 +847,16 @@ function tick(dt) {
     }
     case 'select': {
       const pick = game.screen.update(input);
-      if (pick === 'back') { if (game.mode.kind === 'tower' && game.towerRun) toTowerView('intro'); else toMainMenu(); }
+      if (pick === 'back') {
+        if (game.mode.kind === 'tower' && game.towerRun) toTowerView('intro');
+        else if (game.mode.kind === 'tournament') toTourSetup();
+        else toMainMenu();
+      }
+      else if (pick && game.mode.kind === 'tournament') {
+        game.tourPeople[game.tourQueue.shift()].defs = pick.teams ? pick.teams[0] : [pick.p1];
+        audio.play('confirm');
+        pickNextTour();
+      }
       else if (pick) {
         game.lastSelect = { cursor: [...game.screen.cursor] };
         game.pick = pick;
@@ -767,6 +867,20 @@ function tick(dt) {
           startMatch();
         } else toConfig();
       }
+      break;
+    }
+    case 'tsetup': {
+      const c = game.screen.update(input);
+      if (c === 'move') audio.play('select');
+      else if (c === 'go') { audio.play('confirm'); startTourPicks(); }
+      else if (c === 'back') { audio.play('select'); toMainMenu(); }
+      break;
+    }
+    case 'tbracket': {
+      const c = game.screen.update(input);
+      if (c === 'move') audio.play('select');
+      else if (c === 'fight') { audio.play('confirm'); startTourMatch(); }
+      else if (c === 'quit' || c === 'done') { audio.play('select'); toMainMenu(); }
       break;
     }
     case 'towers': {
@@ -851,6 +965,10 @@ function tick(dt) {
       } else if (choice === 'time') {
         cycleSetting('timer', TIMER_OPTIONS);
         game.overlay.render();
+      } else if (choice === 'tour_next') {
+        tourMatchDone(game.tourMatch.winner ?? 0);
+      } else if (choice === 'tour_quit') {
+        toMainMenu();
       } else if (choice === 'tower_next') {
         towerWin();
       } else if (choice === 'tower_quit') {
