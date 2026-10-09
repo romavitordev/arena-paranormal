@@ -1,5 +1,15 @@
 # Registro administrativo de alterações
 
+## (em andamento) — próxima versão
+
+- **Seleção agrupada por equipe/temporada (pedido do usuário).** `ROSTER` reordenado pelas associações da wiki
+  (`lore/membros.json`): Ordo Realitas (Equipe E/Força D: Arthur, Joui, Kaiser, Dante, Erin, Aghata; Equipe Abutres:
+  Balu; Aniquiladores: Arnaldo, Veríssimo) → Escriptas (Kian, Gal, Juan) → Os Cinco (Xande, Lírio) → Luzidios
+  (Ferreiro) → página 2: Mascarados (Aguiar, Labirinto, Kemi, Jae). A grade é 3 × 5, então cada grupo ocupa linhas
+  inteiras. Etiqueta colorida de equipe no canto de cada cartão (`TEAM_COLORS`/`TEAM_SHORT` em `Screens.js`, `.tm` no
+  CSS). Juan passou a mostrar a origem "Escriptas" (a wiki o lista entre os Escriptas; antes aparecia como
+  Mascarado). `check-roster` com a nova ordem.
+
 ## v3.14.0 — Acampamento Varminho
 
 - Versão: `VERSION` 3.13.0 → **3.14.0** (Acampamento Varminho, sniper desviável, modelos antigos removidos).

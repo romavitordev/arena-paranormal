@@ -18,10 +18,21 @@ import arnaldo from './arnaldo.js';
 import verissimo from './verissimo.js';
 import jae from './jae.js';
 
-// Elenco jogável, na ordem da tela de seleção.
-// Para adicionar um personagem: crie o arquivo de definição aqui, registre o
-// modelo em models/index.js e acrescente nesta lista.
-export const ROSTER = [kaiser, arthur, joui, aghata, dante, erin, gal_sal, kian, aguiar, labirinto, xande, lirio, ferreiro, juan, kemi, balu, arnaldo, verissimo, jae];
+// Elenco jogável, na ordem da tela de seleção — AGRUPADO POR EQUIPE/TEMPORADA (a grade tem 3 colunas × 5 linhas por
+// página, então cada grupo ocupa linhas inteiras):
+//   página 1: Ordo Realitas — Equipe E / Força D (Arthur, Joui, Kaiser, Dante, Erin, Aghata), Equipe Abutres (Balu) e
+//             Aniquiladores (Arnaldo, Veríssimo) · Escriptas (Kian, Gal, Juan) · Os Cinco (Xande, Lírio) e o Luzidio
+//             de Santo Berço (Ferreiro)
+//   página 2: Mascarados / Assassinos de Hexatombe (Aguiar, Labirinto, Kemi, Jae)
+// Para adicionar um personagem: crie o arquivo de definição aqui, registre o modelo em models/index.js e coloque-o
+// junto da equipe dele nesta lista.
+export const ROSTER = [
+  arthur, joui, kaiser, dante, erin, aghata, balu, arnaldo, verissimo, // Ordo Realitas
+  kian, gal_sal, juan, // Escriptas
+  xande, lirio, // Os Cinco (Sinais do Outro Lado)
+  ferreiro, // Luzidios (O Segredo na Floresta)
+  aguiar, labirinto, kemi, jae, // Mascarados (Hexatombe)
+];
 
 // RITMO DOS COMBOS (stats.attackSpeed): > 1 deixa os golpes físicos mais rápidos (duração, janelas de acerto,
 // movimentos e invulnerabilidade escalam juntos; a animação acompanha porque toca com a duração do golpe).

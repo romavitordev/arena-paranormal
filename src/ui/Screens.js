@@ -287,6 +287,10 @@ const SEL_PAGE = 15; // 15 lutadores por página (3 × 5), sem barra de rolagem;
 const INPUT_NAMES = { 'carga+ranged': '△ → □', 'carga+physical': '△ → ○', 'block+carga': 'R2 + △', 'block+jump': 'R2 + ×', 'carga+dodge': '△ + L2', 'ranged+forward': '→ + □', 'ranged+back': '← + □' };
 const inputName = (k) => (k === 'carga+jump' ? t('input.carga_jump') : k === 'ranged+side' ? `${t('input.side')} + □` : INPUT_NAMES[k] || k);
 
+// cor da etiqueta de equipe nos cartões da seleção (o elenco vem agrupado por equipe em ROSTER)
+const TEAM_SHORT = { 'Ordo Realitas': 'Ordo' }; // cabe no cartão pequeno
+const TEAM_COLORS = { 'Ordo Realitas': '#e0b84a', Escriptas: '#9a7aff', 'Os Cinco': '#4ad88a', Luzidios: '#e8e0b8', Mascarados: '#ff4a52' };
+
 export class SelectScreen {
   // heading: título no lugar do padrão (TORNEIO: "VEZ DE: JOGADOR 3")
   constructor(root, { portraits, audio, prev, mode = 'pvp', team = false, heading = null }) {
@@ -305,6 +309,7 @@ export class SelectScreen {
         <div class="sel-grid">${ROSTER.map((c, i) => `
           <div class="card" data-i="${i}" style="--c:${c.color}">
             <img src="${portraits[c.id]}" alt="${c.name}">
+            <span class="tm" style="--tc:${TEAM_COLORS[c.origin] || '#aaa'}">${TEAM_SHORT[c.origin] || c.origin}</span>
             <div class="cn"><b style="color:${c.color}">${c.name}</b></div>
           </div>`).join('')}
         </div>

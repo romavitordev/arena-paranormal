@@ -17,58 +17,6 @@ especial = Carga → Carga → ○ (custa 50, ofensivos causam 250, nunca hitkil
 
 ---
 
-## KAISER
-
-*Controle de espaço + arma de fogo + névoa* · arma: M4, Desert Eagle e karambit vermelha
-
-### Físico (○ / B)
-
-| Comando | Golpe | Dano | Alcance | Observações |
-|---|---|---|---|---|
-| ○ 1 | Jab | 20 | 1.7 m |  |
-| ○ 2 | Direto | 23 | 1.7 m |  |
-| ○ 3 | Corte de karambit | 30 | 1.7 m |  |
-| ○ 4 | Chute circular | 36 | 1.9 m |  |
-| ○ 5 | Corte cruzado | 30 | 1.8 m |  |
-| ○ 6 | Chute giratório | 56 | 2 m | finalizador: lança |
-| Frente + ○ | Investida | 40 | 1.8 m |  |
-| Trás + ○ | Rasteira de recuo | 34 | 2.4 m | finalizador: derruba, invulnerável no começo |
-| Lado + ○ | Chute lateral | 38 | 1.9 m |  |
-| No ar + ○ | Voadora | 40 | 1.9 m | desce com impacto |
-| ↑ + ○ (no combo) | Chute ascendente | 38 | 1.9 m | finalizador: undefined |
-| ↓ + ○ (no combo) | Coronhada | 46 | 1.9 m | finalizador: derruba |
-
-### Principal (□ / X): M4
-
-- Dano 16 × 4 · alcance 38 m · cooldown 2.6 s · custo 0
-- Frente + □: **DISPARO CONCENTRADO** — 46
-- Trás + □: **DISPARO DE EMERGÊNCIA** — 12 × 3
-- Lado + □: **RAJADA EM MOVIMENTO** — 14 × 4
-
-### Habilidades
-
-- **Sentir Através "Dendrobium"** — R2 + △ / RT + Y · custo 25 · cooldown 14 s · dano 45 · alcance 16 m
-  Raízes roxas e uma flor brotam do chão sob o alvo e o prendem por um instante.
-- **Balas Amaldiçoadas** — R2 + × / RT + A · custo 25 · cooldown 11 s
-  Saca a Desert Eagle e dispara três balas amaldiçoadas com Energia, que procuram o alvo.
-- **Granada "Nebulosa"** — △ + L2 / Y + LT · custo 20 · cooldown 16 s
-  A granada que a Erin fez para ele: explode numa nuvem que deixa o inimigo lento e engole os tiros.
-- **Baforada Cinerária** — △ + □ / Y + X · custo 20 · cooldown 12 s
-  Sopra uma nuvem de névoa à frente: engole projéteis inimigos, deixa o inimigo lento e sem regenerar energia dentro dela.
-- **Acácia** — △ + ○ / Y + B · custo 25 · cooldown 13 s · dano 70 · alcance 18 m
-  Dissipar Espíritos "Acácia": uma chuva de pequenas flores roxas cai sobre o alvo e machuca enquanto ele ficar na área.
-- **Passiva — Resistente:** −10% de dano físico recebido
-
-### Especial: Cinerária
-
-Solta a névoa e, dentro dela, conjura a **Acácia amplificada pela Cinerária** (250 de dano). Depois a névoa fica **parada no mapa** por 10 s; com o Kaiser dentro dela: +25% de dano, esquiva com 1.6× invulnerabilidade e metade do cooldown, corpo translúcido, área de 5 m onde o inimigo fica 20% mais lento, não regenera energia e os projéteis perdem 50% da velocidade. Custo 50 · cooldown 22 s.
-
-### Transformação: Combate Perfeito
-
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +15% de dano, +10% de velocidade, recargas 30% mais rápidas, cura 10% na hora.
-
----
-
 ## ARTHUR CERVERO
 
 *Precisão + sniper + arma amaldiçoada + combate de um braço; sem sanidade, paga os rituais com o próprio sangue* · arma: Sniper
@@ -160,49 +108,55 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ---
 
-## AGHATA
+## KAISER
 
-*Pressão em curta distância + faca + ritual de cortes sobrenaturais* · arma: Faca
+*Controle de espaço + arma de fogo + névoa* · arma: M4, Desert Eagle e karambit vermelha
 
 ### Físico (○ / B)
 
 | Comando | Golpe | Dano | Alcance | Observações |
 |---|---|---|---|---|
-| ○ 1 | Corte curto | 22 | 1.55 m |  |
-| ○ 2 | Corte reverso | 22 | 1.55 m |  |
-| ○ 3 | Estocada | 28 | 1.8 m |  |
-| ○ 4 | Corte descendente | 30 | 1.6 m |  |
-| ○ 5 | Finalizador | 50 | 1.8 m | finalizador: lança |
-| Frente + ○ | Avanço | 34 | 1.8 m |  |
-| Trás + ○ | Esquiva com contra-ataque | 40 | 1.7 m | invulnerável no começo |
-| Lado + ○ | Corte circular | 26 | 1.6 m |  |
-| No ar + ○ | Corte aéreo | 34 | 1.7 m | desce com impacto |
-| ↑ + ○ (no combo) | Facada ascendente | 34 | 1.7 m | finalizador: undefined |
-| ↓ + ○ (no combo) | Facada descendente | 42 | 1.8 m | finalizador: derruba |
+| ○ 1 | Jab | 20 | 1.7 m |  |
+| ○ 2 | Direto | 23 | 1.7 m |  |
+| ○ 3 | Corte de karambit | 30 | 1.7 m |  |
+| ○ 4 | Chute circular | 36 | 1.9 m |  |
+| ○ 5 | Corte cruzado | 30 | 1.8 m |  |
+| ○ 6 | Chute giratório | 56 | 2 m | finalizador: lança |
+| Frente + ○ | Investida | 40 | 1.8 m |  |
+| Trás + ○ | Rasteira de recuo | 34 | 2.4 m | finalizador: derruba, invulnerável no começo |
+| Lado + ○ | Chute lateral | 38 | 1.9 m |  |
+| No ar + ○ | Voadora | 40 | 1.9 m | desce com impacto |
+| ↑ + ○ (no combo) | Chute ascendente | 38 | 1.9 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Coronhada | 46 | 1.9 m | finalizador: derruba |
 
-### Principal (□ / X): Faca Arremessada
+### Principal (□ / X): M4
 
-- Dano 40 · alcance 24 m · cooldown 1.8 s · custo 0
+- Dano 16 × 4 · alcance 38 m · cooldown 2.6 s · custo 0
+- Frente + □: **DISPARO CONCENTRADO** — 46
+- Trás + □: **DISPARO DE EMERGÊNCIA** — 12 × 3
+- Lado + □: **RAJADA EM MOVIMENTO** — 14 × 4
 
 ### Habilidades
 
-- **Amaldiçoar Arma** — △ + □ / Y + X · custo 25 · cooldown 16 s
-  Amaldiçoa a faca com o elemento Sangue: por alguns segundos cada acerto (físico ou faca arremessada) abre um sangramento que continua tirando vida.
-- **Facas Amaldiçoadas** — △ + L2 / Y + LT · custo 20 · cooldown 11 s
-  Arremessa três facas banhadas em sangue, em leque, que se curvam atrás do alvo e VOLTAM para a mão — a que errou na ida ainda pode acertar na volta.
-- **Passagem de Conhecimento** — R2 + × / RT + A · custo 25 · cooldown 14 s · alcance 14 m
-  Troca de mente com o adversário por um instante: os dois trocam de lugar e ele volta desorientado, de costas e atordoado.
-- **Leitura de Rituais** — R2 + △ / RT + Y · custo 20 · cooldown 16 s
-  Lê os rituais do adversário antes de eles chegarem: por 7 s recebe 40% menos dano de rituais e especiais.
-- **Passiva — Colar Banhado em Sangue:** −15% de dano de Sangue; sangramento 10% mais forte
+- **Sentir Através "Dendrobium"** — R2 + △ / RT + Y · custo 25 · cooldown 14 s · dano 45 · alcance 16 m
+  Raízes roxas e uma flor brotam do chão sob o alvo e o prendem por um instante.
+- **Balas Amaldiçoadas** — R2 + × / RT + A · custo 25 · cooldown 11 s
+  Saca a Desert Eagle e dispara três balas amaldiçoadas com Energia, que procuram o alvo.
+- **Granada "Nebulosa"** — △ + L2 / Y + LT · custo 20 · cooldown 16 s
+  A granada que a Erin fez para ele: explode numa nuvem que deixa o inimigo lento e engole os tiros.
+- **Baforada Cinerária** — △ + □ / Y + X · custo 20 · cooldown 12 s
+  Sopra uma nuvem de névoa à frente: engole projéteis inimigos, deixa o inimigo lento e sem regenerar energia dentro dela.
+- **Acácia** — △ + ○ / Y + B · custo 25 · cooldown 13 s · dano 70 · alcance 18 m
+  Dissipar Espíritos "Acácia": uma chuva de pequenas flores roxas cai sobre o alvo e machuca enquanto ele ficar na área.
+- **Passiva — Resistente:** −10% de dano físico recebido
 
-### Especial: Descarnar
+### Especial: Cinerária
 
-250 de dano · custo 50 · cooldown 14 s.
+Solta a névoa e, dentro dela, conjura a **Acácia amplificada pela Cinerária** (250 de dano). Depois a névoa fica **parada no mapa** por 10 s; com o Kaiser dentro dela: +25% de dano, esquiva com 1.6× invulnerabilidade e metade do cooldown, corpo translúcido, área de 5 m onde o inimigo fica 20% mais lento, não regenera energia e os projéteis perdem 50% da velocidade. Custo 50 · cooldown 22 s.
 
-### Transformação: Passagem de Conhecimento Expandido
+### Transformação: Combate Perfeito
 
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +15% de dano (habilidades, especial), recargas 50% mais rápidas, sanidade regenera +60%, cura 10% na hora.
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +15% de dano, +10% de velocidade, recargas 30% mais rápidas, cura 10% na hora.
 
 ---
 
@@ -298,6 +252,241 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ---
 
+## AGHATA
+
+*Pressão em curta distância + faca + ritual de cortes sobrenaturais* · arma: Faca
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Corte curto | 22 | 1.55 m |  |
+| ○ 2 | Corte reverso | 22 | 1.55 m |  |
+| ○ 3 | Estocada | 28 | 1.8 m |  |
+| ○ 4 | Corte descendente | 30 | 1.6 m |  |
+| ○ 5 | Finalizador | 50 | 1.8 m | finalizador: lança |
+| Frente + ○ | Avanço | 34 | 1.8 m |  |
+| Trás + ○ | Esquiva com contra-ataque | 40 | 1.7 m | invulnerável no começo |
+| Lado + ○ | Corte circular | 26 | 1.6 m |  |
+| No ar + ○ | Corte aéreo | 34 | 1.7 m | desce com impacto |
+| ↑ + ○ (no combo) | Facada ascendente | 34 | 1.7 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Facada descendente | 42 | 1.8 m | finalizador: derruba |
+
+### Principal (□ / X): Faca Arremessada
+
+- Dano 40 · alcance 24 m · cooldown 1.8 s · custo 0
+
+### Habilidades
+
+- **Amaldiçoar Arma** — △ + □ / Y + X · custo 25 · cooldown 16 s
+  Amaldiçoa a faca com o elemento Sangue: por alguns segundos cada acerto (físico ou faca arremessada) abre um sangramento que continua tirando vida.
+- **Facas Amaldiçoadas** — △ + L2 / Y + LT · custo 20 · cooldown 11 s
+  Arremessa três facas banhadas em sangue, em leque, que se curvam atrás do alvo e VOLTAM para a mão — a que errou na ida ainda pode acertar na volta.
+- **Passagem de Conhecimento** — R2 + × / RT + A · custo 25 · cooldown 14 s · alcance 14 m
+  Troca de mente com o adversário por um instante: os dois trocam de lugar e ele volta desorientado, de costas e atordoado.
+- **Leitura de Rituais** — R2 + △ / RT + Y · custo 20 · cooldown 16 s
+  Lê os rituais do adversário antes de eles chegarem: por 7 s recebe 40% menos dano de rituais e especiais.
+- **Passiva — Colar Banhado em Sangue:** −15% de dano de Sangue; sangramento 10% mais forte
+
+### Especial: Descarnar
+
+250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: Passagem de Conhecimento Expandido
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +15% de dano (habilidades, especial), recargas 50% mais rápidas, sanidade regenera +60%, cura 10% na hora.
+
+---
+
+## BALU
+
+*O tanque da Equipe Abutres: fica na linha de frente, apanha, sorri e derruba* · arma: Machado Lancinante (pomo de pantera) e o Machado Demônio de sangue
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Machadada lateral | 32 | 2.3 m |  |
+| ○ 2 | Machadada cruzada | 36 | 2.3 m |  |
+| ○ 3 | Machadada por cima | 44 | 2.4 m |  |
+| ○ 4 | Pancada do Urso | 70 | 2.5 m | finalizador: lança |
+| Frente + ○ | Investida do Urso | 40 | 2.4 m |  |
+| Trás + ○ | Recua e machada | 34 | 2.3 m |  |
+| Lado + ○ | Machadada em movimento | 32 | 2.3 m |  |
+| No ar + ○ | Machado aéreo | 40 | 2.3 m | desce com impacto |
+| ↑ + ○ (no combo) | Machado de baixo para cima | 40 | 2.3 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Machado no chão | 48 | 2.3 m | finalizador: derruba |
+
+### Principal (□ / X): Machado em Giro
+
+- Dano 34 · alcance 14 m · cooldown 3 s · custo 0
+
+### Habilidades
+
+- **Amaldiçoar Arma com Sangue** — △ + □ / Y + X · custo 25 · cooldown 18 s
+  Desperta as veias que o Diabo deixou no machado: por alguns segundos cada machadada (e o machado arremessado) abre um sangramento.
+- **Machado Demônio** — △ + ○ / Y + B · custo 0 · cooldown 22 s
+  Crava o pomo de pantera no próprio peito (custa 60 de VIDA, não sanidade): o sangue vira uma maça-estrela no lugar da lâmina por 10 s — golpes físicos 25% mais fortes, mais alcance, sangramento e aguenta 2 golpes sem recuar.
+- **Fala Imponente** — R2 + △ / RT + Y · custo 20 · cooldown 14 s · alcance 9 m
+  O ex-vendedor sabe fazer um discurso firme: grita com o adversário, que fica PROVOCADO (só ataca no corpo a corpo por 4 s), e o Balu recebe 15% menos dano.
+- **110%** — △ + L2 / Y + LT · custo 20 · cooldown 16 s
+  Dá 110% de si: por 6 s os golpes físicos ficam 20% mais fortes e ele anda 10% mais rápido.
+- **Colete Físico-Balístico** — R2 + × / RT + A · custo 25 · cooldown 22 s
+  Fecha o colete e aguenta firme (Resistência à Dor): por 7 s recebe 25% menos dano e aguenta 2 golpes sem recuar, um pouco mais lento.
+
+### Especial: Pancada do Urso
+
+250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: Resistência à Dor
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +20% de dano (físico), −45% de dano recebido, −8% de velocidade, aguenta 1 golpe sem reagir a cada 1.5 s, cura 25% na hora.
+
+---
+
+## ARNALDO FRITZ
+
+*Aniquilador da Ordo Realitas: na Transformação, o relógio de bolso guarda a Relíquia e ele vira O Anfitrião* · arma: Espada da fita vermelha e o Emissor de Pulsos Paranormais
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Abertura de Cena | 26 | 2.15 m |  |
+| ○ 2 | Estocada de Palco | 28 | 2.6 m |  |
+| ○ 3 | Corte em Reverência | 28 | 2.15 m |  |
+| ○ 4 | Floreio | 34 (2 acertos) | 2.2 m |  |
+| ○ 5 | Ato Final | 60 | 2.5 m | finalizador: lança |
+| Frente + ○ | Entrada Triunfal | 36 | 2.2 m |  |
+| Trás + ○ | Mesura e Estocada | 40 | 2.5 m | invulnerável no começo |
+| Lado + ○ | Rodopio | 32 | 2.3 m |  |
+| No ar + ○ | Corte Aéreo | 36 | 2.2 m | desce com impacto |
+| ↑ + ○ (no combo) | Corte Ascendente | 38 | 2.2 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Golpe de Cena | 46 | 2.2 m | finalizador: derruba |
+
+### Principal (□ / X): Emissor de Pulsos Paranormais
+
+- Dano 18 · alcance 14 m · cooldown 3.2 s · custo 0
+- Prende e puxa o inimigo para 1.9 m, abrindo 0.5 s para combar
+- Trás + □: **AFASTAR!** — 26
+
+### Habilidades
+
+- **Finta Teatral** — △ + ○ / Y + B · custo 20 · cooldown 10 s · dano 55 · alcance 2.2 m
+  Provoca com a mão livre, avança e, quando o adversário reage, o corte de verdade entra pela guarda — quebra a defesa.
+- **Pulso Paranormal** — △ + □ / Y + X · custo 25 · cooldown 12 s · alcance 11 m
+  O Emissor de Pulsos no máximo: o alvo LONGE é atraído e recebe a estocada assim que chega; o alvo PERTO é jogado longe e cai.
+- **Rodopio da Fita** — R2 + × / RT + A · custo 20 · cooldown 11 s · dano 60
+  Gira com a espada aberta — a fita vermelha acompanha o giro: dois cortes em área, o último joga longe.
+- **Aniquilador** — △ + L2 / Y + LT · custo 25 · cooldown 20 s
+  O veterano dos Aniquiladores aparece: por 7 s a postura fica agressiva, os golpes físicos saem 15% mais rápidos e 15% mais fortes, e ele recupera uma esquiva.
+- **Ensaio Geral** — R2 + △ / RT + Y · custo 20 · cooldown 18 s
+  Já ensaiou essa cena: por 6 s recebe 20% menos dano, é empurrado bem menos e aguenta 2 golpes sem recuar.
+
+### Especial: Ato Final
+
+250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: A Relíquia do Relógio
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
+
+---
+
+## SENHOR VERÍSSIMO
+
+*Líder da Ordo Realitas: Inteligência Estratégica e o Segredo de Veríssimo* · arma: A espada do Arnaldo e uma escopeta curta
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Estocada do Veterano | 26 | 2.4 m |  |
+| ○ 2 | Corte de Varredura | 28 | 2.1 m |  |
+| ○ 3 | Revés do Comandante | 28 | 2.1 m |  |
+| ○ 4 | Pela Ordo Realitas | 56 | 2.3 m | finalizador: lança |
+| Frente + ○ | Interceptação | 36 | 2.2 m |  |
+| Trás + ○ | Olhos Sempre Abertos! | 0 | 0 m | contra-ataque (revida 55) |
+| Lado + ○ | Flanco da Ordem | 30 | 2.1 m |  |
+| No ar + ○ | Salto do Veterano | 36 | 2.2 m | desce com impacto |
+| ↑ + ○ (no combo) | Ergam-se, Agentes | 38 | 2.2 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Fim da Varredura | 46 | 2.2 m | finalizador: derruba |
+
+### Principal (□ / X): Escopeta de Varredura
+
+- Dano 11 × 5 · alcance 10 m · cooldown 2.2 s · custo 0
+
+### Habilidades
+
+- **Inteligência Estratégica** — △ + ○ / Y + B · custo 25 · cooldown 18 s
+  "Ordem!" — analisa o inimigo: por 7 s cada golpe físico que acerta ganha um corte extra.
+- **Brecha na Guarda** — △ + □ / Y + X · custo 20 · cooldown 16 s · alcance 14 m
+  Poder do Comandante de Campo (RPG): acha a brecha na guarda do adversário — por alguns segundos ele recebe mais dano.
+- **Em Seu Caminho** — R2 + × / RT + A · custo 20 · cooldown 10 s · dano 50 · alcance 2.2 m
+  "Nós estaremos em seu caminho." Avança em linha reta com a espada na frente e atravessa a guarda com força.
+- **Jaqueta de Veríssimo** — △ + L2 / Y + LT · custo 25 · cooldown 22 s
+  Fecha a jaqueta de couro passada entre os agentes: por 6 s recebe 20% menos dano e aguenta 1 golpe sem recuar.
+- **Bloqueio Perfeito** — defender no instante exato (0.16 s) anula o dano e atordoa o atacante por 0.6 s
+
+### Especial: Oficial Comandante
+
+250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: Líder da Ordo Realitas
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +15% de dano (físico, distância, habilidades), −15% de dano recebido, recargas 30% mais rápidas, cura 10% na hora.
+
+---
+
+## KIAN
+
+*Força física absurda + paranormal + mobilidade + ataques devastadores* · arma: Punhos (sem armas)
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Jab | 24 | 1.8 m |  |
+| ○ 2 | Direto | 26 | 1.8 m |  |
+| ○ 3 | Rajada sigilar | 42 (3 acertos) | 1.8 m |  |
+| ○ 4 | Soco no corpo | 28 | 1.7 m |  |
+| ○ 5 | Cruzado | 30 | 1.8 m |  |
+| ○ 6 | Golpe da Transcendência | 60 | 1.9 m | finalizador: lança |
+| Frente + ○ | Avanço | 36 | 1.8 m |  |
+| Trás + ○ | Agarrão e empurrão | 32 | 1.5 m | finalizador: afasta |
+| Lado + ○ | Gancho em movimento | 30 | 1.8 m |  |
+| No ar + ○ | Soco meteoro aéreo | 40 | 1.9 m | desce com impacto |
+| ↑ + ○ (no combo) | Gancho ascendente | 42 | 1.9 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Soco meteoro | 52 | 1.9 m | finalizador: derruba |
+
+### Principal (□ / X): Impacto Sigilar
+
+- Dano 70 · alcance 22 m · cooldown 3.5 s · custo 20
+
+### Habilidades
+
+- **Teletransporte** — △ + □ / Y + X · custo 20 · cooldown 7 s
+  Some numa distorção e reaparece numa posição válida: na direção do analógico ou, sem direção, ao lado do adversário.
+- **Levitação** — R2 + △ / RT + Y · custo 30 · cooldown 15 s · dano 16 · alcance 18 m
+  Ergue a mão e as pedras do chão flutuam em volta dele; depois voam uma a uma contra o alvo (dá para defender ou sair da frente).
+- **Lâmina do Medo** — △ + ○ / Y + B · custo 40 · cooldown 25 s · dano 160 · alcance 2.8 m
+  Manifesta uma lâmina translúcida de medo ao redor da mão para um golpe curto devastador que quebra a defesa. Errar deixa ele exposto.
+- **Rejeitar Névoa** — R2 + × / RT + A · custo 25 · cooldown 16 s
+  Enfraquece drasticamente os rituais na área: dissipa névoas e zonas do inimigo e corta o dano dos rituais e do ataque principal dele por alguns segundos.
+- **Toque da Morte** — △ + L2 / Y + LT · custo 40 · cooldown 55 s · dano 30 · alcance 1.3 m
+  Toca o alvo e o envelhece: ele definha e fica lento por alguns segundos e FRACO (−20% de dano) até o fim do round. Curtíssimo alcance, como o Inexistir — dá para esquivar. Recarga muito longa.
+- **Passiva — Precognição:** não é pego desprevenido (sem bônus de costas nem susto de teleporte)
+
+### Especial: Inexistir
+
+Corpo a corpo, 2x por partida, não pode ser defendido: o alvo vira pó. Escapa esquivando no contato; com a sanidade cheia resiste levando 450 de dano (nunca morre por isso). Custo 50.
+
+### Transformação: Invólucro do Conhecimento
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +15% de dano, golpes físicos atravessam a defesa, cura 10% na hora.
+
+---
+
 ## GAL SAL
 
 *Lâminas + correntes + puxão + cura que drena a sanidade + controle de espaço* · arma: Duas lâminas com correntes
@@ -352,141 +541,48 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ---
 
-## KIAN
+## JUAN
 
-*Força física absurda + paranormal + mobilidade + ataques devastadores* · arma: Punhos (sem armas)
-
-### Físico (○ / B)
-
-| Comando | Golpe | Dano | Alcance | Observações |
-|---|---|---|---|---|
-| ○ 1 | Jab | 24 | 1.8 m |  |
-| ○ 2 | Direto | 26 | 1.8 m |  |
-| ○ 3 | Rajada sigilar | 42 (3 acertos) | 1.8 m |  |
-| ○ 4 | Soco no corpo | 28 | 1.7 m |  |
-| ○ 5 | Cruzado | 30 | 1.8 m |  |
-| ○ 6 | Golpe da Transcendência | 60 | 1.9 m | finalizador: lança |
-| Frente + ○ | Avanço | 36 | 1.8 m |  |
-| Trás + ○ | Agarrão e empurrão | 32 | 1.5 m | finalizador: afasta |
-| Lado + ○ | Gancho em movimento | 30 | 1.8 m |  |
-| No ar + ○ | Soco meteoro aéreo | 40 | 1.9 m | desce com impacto |
-| ↑ + ○ (no combo) | Gancho ascendente | 42 | 1.9 m | finalizador: undefined |
-| ↓ + ○ (no combo) | Soco meteoro | 52 | 1.9 m | finalizador: derruba |
-
-### Principal (□ / X): Impacto Sigilar
-
-- Dano 70 · alcance 22 m · cooldown 3.5 s · custo 20
-
-### Habilidades
-
-- **Teletransporte** — △ + □ / Y + X · custo 20 · cooldown 7 s
-  Some numa distorção e reaparece numa posição válida: na direção do analógico ou, sem direção, ao lado do adversário.
-- **Levitação** — R2 + △ / RT + Y · custo 30 · cooldown 15 s · dano 16 · alcance 18 m
-  Ergue a mão e as pedras do chão flutuam em volta dele; depois voam uma a uma contra o alvo (dá para defender ou sair da frente).
-- **Lâmina do Medo** — △ + ○ / Y + B · custo 40 · cooldown 25 s · dano 160 · alcance 2.8 m
-  Manifesta uma lâmina translúcida de medo ao redor da mão para um golpe curto devastador que quebra a defesa. Errar deixa ele exposto.
-- **Rejeitar Névoa** — R2 + × / RT + A · custo 25 · cooldown 16 s
-  Enfraquece drasticamente os rituais na área: dissipa névoas e zonas do inimigo e corta o dano dos rituais e do ataque principal dele por alguns segundos.
-- **Toque da Morte** — △ + L2 / Y + LT · custo 40 · cooldown 55 s · dano 30 · alcance 1.3 m
-  Toca o alvo e o envelhece: ele definha e fica lento por alguns segundos e FRACO (−20% de dano) até o fim do round. Curtíssimo alcance, como o Inexistir — dá para esquivar. Recarga muito longa.
-- **Passiva — Precognição:** não é pego desprevenido (sem bônus de costas nem susto de teleporte)
-
-### Especial: Inexistir
-
-Corpo a corpo, 2x por partida, não pode ser defendido: o alvo vira pó. Escapa esquivando no contato; com a sanidade cheia resiste levando 450 de dano (nunca morre por isso). Custo 50.
-
-### Transformação: Invólucro do Conhecimento
-
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +15% de dano, golpes físicos atravessam a defesa, cura 10% na hora.
-
----
-
-## AGUIAR
-
-*Caçador paciente: prende, marca e mutila — e vira o Mutilador Noturno quando põe a máscara (Transformação)* · arma: Machado do Mutilador (com corda para arremessar e puxar)
+*Masoquista e imprevisível: quanto mais apanha, mais sanidade; quase morto, senta no Trono e vira o Diabo* · arma: Faca Predadora (lâmina ondulada que absorve sangue)
 
 ### Físico (○ / B)
 
 | Comando | Golpe | Dano | Alcance | Observações |
 |---|---|---|---|---|
-| ○ 1 | Machadada | 34 | 2 m |  |
-| ○ 2 | Machadada de volta | 34 | 2 m |  |
-| ○ 3 | Chute de coturno | 28 | 1.7 m |  |
-| ○ 4 | Golpe por cima | 44 | 2 m |  |
-| ○ 5 | Mutilação | 60 | 2.2 m | finalizador: lança |
-| Frente + ○ | Investida de ombro | 36 | 1.7 m |  |
-| Trás + ○ | Recua e revida | 38 | 1.6 m | invulnerável no começo |
-| Lado + ○ | Machadada lateral | 30 | 2 m |  |
-| No ar + ○ | Machado do alto | 38 | 2 m | desce com impacto |
-| ↑ + ○ (no combo) | Machado para cima | 40 | 2.1 m | finalizador: undefined |
-| ↓ + ○ (no combo) | Machado no chão | 48 | 2.1 m | finalizador: derruba |
+| ○ 1 | Corte rápido | 24 | 1.7 m |  |
+| ○ 2 | Corte de volta | 24 | 1.7 m |  |
+| ○ 3 | Estocada | 28 | 1.9 m |  |
+| ○ 4 | Corte descendente | 30 | 1.7 m |  |
+| ○ 5 | Banho de Sangue | 54 | 1.9 m | finalizador: lança |
+| Frente + ○ | Bote | 32 | 1.9 m |  |
+| Trás + ○ | Recua e corta | 30 | 1.8 m | invulnerável no começo |
+| Lado + ○ | Corte em movimento | 28 | 1.8 m |  |
+| No ar + ○ | Faca aérea | 32 | 1.8 m | desce com impacto |
+| ↑ + ○ (no combo) | Corte para cima | 38 | 1.8 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Faca no chão | 44 | 1.8 m | finalizador: derruba |
 
-### Principal (□ / X): Machado na Corda
+### Principal (□ / X): Lâmina de Sangue
 
-- Dano 30 · alcance 14 m · cooldown 2.6 s · custo 0
-- Prende e puxa o inimigo para 1.6 m, abrindo 0.6 s para combar
+- Dano 24 · alcance 18 m · cooldown 2 s · custo 0
 
 ### Habilidades
 
-- **Ataque Especial** — △ + ○ / Y + B · custo 30 · cooldown 12 s · dano 90 · alcance 2.2 m
-  Concentra a força num golpe só: ergue o machado e crava por cima com tudo — gasta muito da defesa e derruba. Preparação longa (aguenta um golpe pequeno depois de firmar os pés); errar deixa ele aberto.
-- **Armadilha de Urso** — △ + L2 / Y + LT · custo 20 · cooldown 12 s · dano 40
-  Arma uma armadilha de urso no chão à frente. Quem pisar fica preso, toma dano e sangra. Só uma por vez.
-- **Cães de Caça** — R2 + △ / RT + Y · custo 25 · cooldown 14 s · dano 30
-  Assobia e um dos Rottweilers do acampamento corre até a vítima, morde (prende por um instante e faz sangrar) e volta.
-- **Predador de Sangue** — R2 + × / RT + A · custo 20 · cooldown 20 s
-  Memoriza o cheiro da vítima: por alguns segundos rastreia o sangue dela, anda mais rápido e todo ataque contra ela fica mais forte.
+- **Descarnar Discente** — R2 + △ / RT + Y · custo 30 · cooldown 14 s · dano 80 · alcance 9 m
+  Ritual de Sangue: cortes surgem no corpo do alvo, um atrás do outro (dano alto e sangramento).
+- **Perturbação Discente** — △ + ○ / Y + B · custo 20 · cooldown 12 s · dano 30 · alcance 5 m
+  Uma ordem simples a quem está perto: "PARE!" (paralisa), "VENHA!" (puxa) ou "AJOELHE!" (derruba). Sai uma ao acaso.
+- **Vínculo de Sangue** — △ + □ / Y + X · custo 25 · cooldown 20 s · alcance 9 m
+  Marca o próprio corpo e o do alvo: por 8 s, 30% do dano que o Juan recebe é replicado no alvo.
+- **Armadura de Sangue Diabólica** — △ + L2 / Y + LT · custo 30 · cooldown 24 s
+  Também nasce sozinha depois de sangrar o bastante (a cada 400 de dano recebido, mais curta, e usa a recarga). O próprio sangue endurece numa armadura com espinhos: recebe 30% menos dano, aguenta 2 golpes sem recuar e fica mais rápido. O braço da faca vira uma arma de sangue: golpes físicos 25% mais fortes.
 
-### Especial: Caçada no Acampamento
+### Especial: Hemorragia Severa
 
 250 de dano · custo 50 · cooldown 14 s.
 
-### Transformação: Máscara do Mutilador Noturno
+### Transformação: Renascimento
 
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
-
----
-
-## LABIRINTO
-
-*Controla o espaço com rituais à distância — e vira o ??? quando põe o capacete* · arma: A Antena (lança com parabólica)
-
-### Físico (○ / B)
-
-| Comando | Golpe | Dano | Alcance | Observações |
-|---|---|---|---|---|
-| ○ 1 | Estocada | 30 | 2.5 m |  |
-| ○ 2 | Varrida | 32 | 2.5 m |  |
-| ○ 3 | Varrida de volta | 32 | 2.5 m |  |
-| ○ 4 | Golpe da parabólica | 40 | 2.4 m |  |
-| ○ 5 | Giro da Antena | 58 | 3 m | finalizador: lança |
-| Frente + ○ | Investida da lança | 34 | 2.6 m |  |
-| Trás + ○ | Recua e estoca | 34 | 2.4 m | invulnerável no começo |
-| Lado + ○ | Varrida lateral | 30 | 2.5 m |  |
-| No ar + ○ | Antena do alto | 36 | 2.4 m | desce com impacto |
-| ↑ + ○ (no combo) | Antena para cima | 40 | 2.4 m | finalizador: undefined |
-| ↓ + ○ (no combo) | Antena no chão | 46 | 2.4 m | finalizador: derruba |
-
-### Principal (□ / X): Rajada Caótica
-
-- Dano 56 · alcance 20 m · cooldown 2.4 s · custo 0
-
-### Habilidades
-
-- **Labirinto Mental** — △ + □ / Y + X · custo 30 · cooldown 18 s · alcance 11 m
-  Prende a mente do alvo num labirinto: por alguns segundos ele anda numa direção que muda sozinha. Com o capacete vira Labirinto Abissal.
-- **Mapa Sanguíneo** — △ + ○ / Y + B · custo 20 · cooldown 20 s
-  Desenha um mapa com gotas de sangue que mostra onde a vítima está: por alguns segundos ele a rastreia, anda mais rápido e os ataques contra ela ficam mais fortes. Com o capacete vira Revelação Sanguínea.
-- **Capturar Momento** — △ + L2 / Y + LT · custo 25 · cooldown 22 s
-  Marca o lugar com um símbolo que capta imagens e sons: ele vê o que vem — recupera 2 esquivas e fica mais atento por alguns segundos.
-
-### Especial: O Labirinto é a Resposta
-
-250 de dano · custo 50 · cooldown 14 s.
-
-### Transformação: Capacete do ???
-
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → transforma no Diabo até o fim do round (+150 de vida).
 
 ---
 
@@ -630,48 +726,92 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ---
 
-## JUAN
+## AGUIAR
 
-*Masoquista e imprevisível: quanto mais apanha, mais sanidade; quase morto, senta no Trono e vira o Diabo* · arma: Faca Predadora (lâmina ondulada que absorve sangue)
+*Caçador paciente: prende, marca e mutila — e vira o Mutilador Noturno quando põe a máscara (Transformação)* · arma: Machado do Mutilador (com corda para arremessar e puxar)
 
 ### Físico (○ / B)
 
 | Comando | Golpe | Dano | Alcance | Observações |
 |---|---|---|---|---|
-| ○ 1 | Corte rápido | 24 | 1.7 m |  |
-| ○ 2 | Corte de volta | 24 | 1.7 m |  |
-| ○ 3 | Estocada | 28 | 1.9 m |  |
-| ○ 4 | Corte descendente | 30 | 1.7 m |  |
-| ○ 5 | Banho de Sangue | 54 | 1.9 m | finalizador: lança |
-| Frente + ○ | Bote | 32 | 1.9 m |  |
-| Trás + ○ | Recua e corta | 30 | 1.8 m | invulnerável no começo |
-| Lado + ○ | Corte em movimento | 28 | 1.8 m |  |
-| No ar + ○ | Faca aérea | 32 | 1.8 m | desce com impacto |
-| ↑ + ○ (no combo) | Corte para cima | 38 | 1.8 m | finalizador: undefined |
-| ↓ + ○ (no combo) | Faca no chão | 44 | 1.8 m | finalizador: derruba |
+| ○ 1 | Machadada | 34 | 2 m |  |
+| ○ 2 | Machadada de volta | 34 | 2 m |  |
+| ○ 3 | Chute de coturno | 28 | 1.7 m |  |
+| ○ 4 | Golpe por cima | 44 | 2 m |  |
+| ○ 5 | Mutilação | 60 | 2.2 m | finalizador: lança |
+| Frente + ○ | Investida de ombro | 36 | 1.7 m |  |
+| Trás + ○ | Recua e revida | 38 | 1.6 m | invulnerável no começo |
+| Lado + ○ | Machadada lateral | 30 | 2 m |  |
+| No ar + ○ | Machado do alto | 38 | 2 m | desce com impacto |
+| ↑ + ○ (no combo) | Machado para cima | 40 | 2.1 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Machado no chão | 48 | 2.1 m | finalizador: derruba |
 
-### Principal (□ / X): Lâmina de Sangue
+### Principal (□ / X): Machado na Corda
 
-- Dano 24 · alcance 18 m · cooldown 2 s · custo 0
+- Dano 30 · alcance 14 m · cooldown 2.6 s · custo 0
+- Prende e puxa o inimigo para 1.6 m, abrindo 0.6 s para combar
 
 ### Habilidades
 
-- **Descarnar Discente** — R2 + △ / RT + Y · custo 30 · cooldown 14 s · dano 80 · alcance 9 m
-  Ritual de Sangue: cortes surgem no corpo do alvo, um atrás do outro (dano alto e sangramento).
-- **Perturbação Discente** — △ + ○ / Y + B · custo 20 · cooldown 12 s · dano 30 · alcance 5 m
-  Uma ordem simples a quem está perto: "PARE!" (paralisa), "VENHA!" (puxa) ou "AJOELHE!" (derruba). Sai uma ao acaso.
-- **Vínculo de Sangue** — △ + □ / Y + X · custo 25 · cooldown 20 s · alcance 9 m
-  Marca o próprio corpo e o do alvo: por 8 s, 30% do dano que o Juan recebe é replicado no alvo.
-- **Armadura de Sangue Diabólica** — △ + L2 / Y + LT · custo 30 · cooldown 24 s
-  Também nasce sozinha depois de sangrar o bastante (a cada 400 de dano recebido, mais curta, e usa a recarga). O próprio sangue endurece numa armadura com espinhos: recebe 30% menos dano, aguenta 2 golpes sem recuar e fica mais rápido. O braço da faca vira uma arma de sangue: golpes físicos 25% mais fortes.
+- **Ataque Especial** — △ + ○ / Y + B · custo 30 · cooldown 12 s · dano 90 · alcance 2.2 m
+  Concentra a força num golpe só: ergue o machado e crava por cima com tudo — gasta muito da defesa e derruba. Preparação longa (aguenta um golpe pequeno depois de firmar os pés); errar deixa ele aberto.
+- **Armadilha de Urso** — △ + L2 / Y + LT · custo 20 · cooldown 12 s · dano 40
+  Arma uma armadilha de urso no chão à frente. Quem pisar fica preso, toma dano e sangra. Só uma por vez.
+- **Cães de Caça** — R2 + △ / RT + Y · custo 25 · cooldown 14 s · dano 30
+  Assobia e um dos Rottweilers do acampamento corre até a vítima, morde (prende por um instante e faz sangrar) e volta.
+- **Predador de Sangue** — R2 + × / RT + A · custo 20 · cooldown 20 s
+  Memoriza o cheiro da vítima: por alguns segundos rastreia o sangue dela, anda mais rápido e todo ataque contra ela fica mais forte.
 
-### Especial: Hemorragia Severa
+### Especial: Caçada no Acampamento
 
 250 de dano · custo 50 · cooldown 14 s.
 
-### Transformação: Renascimento
+### Transformação: Máscara do Mutilador Noturno
 
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → transforma no Diabo até o fim do round (+150 de vida).
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
+
+---
+
+## LABIRINTO
+
+*Controla o espaço com rituais à distância — e vira o ??? quando põe o capacete* · arma: A Antena (lança com parabólica)
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Estocada | 30 | 2.5 m |  |
+| ○ 2 | Varrida | 32 | 2.5 m |  |
+| ○ 3 | Varrida de volta | 32 | 2.5 m |  |
+| ○ 4 | Golpe da parabólica | 40 | 2.4 m |  |
+| ○ 5 | Giro da Antena | 58 | 3 m | finalizador: lança |
+| Frente + ○ | Investida da lança | 34 | 2.6 m |  |
+| Trás + ○ | Recua e estoca | 34 | 2.4 m | invulnerável no começo |
+| Lado + ○ | Varrida lateral | 30 | 2.5 m |  |
+| No ar + ○ | Antena do alto | 36 | 2.4 m | desce com impacto |
+| ↑ + ○ (no combo) | Antena para cima | 40 | 2.4 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Antena no chão | 46 | 2.4 m | finalizador: derruba |
+
+### Principal (□ / X): Rajada Caótica
+
+- Dano 56 · alcance 20 m · cooldown 2.4 s · custo 0
+
+### Habilidades
+
+- **Labirinto Mental** — △ + □ / Y + X · custo 30 · cooldown 18 s · alcance 11 m
+  Prende a mente do alvo num labirinto: por alguns segundos ele anda numa direção que muda sozinha. Com o capacete vira Labirinto Abissal.
+- **Mapa Sanguíneo** — △ + ○ / Y + B · custo 20 · cooldown 20 s
+  Desenha um mapa com gotas de sangue que mostra onde a vítima está: por alguns segundos ele a rastreia, anda mais rápido e os ataques contra ela ficam mais fortes. Com o capacete vira Revelação Sanguínea.
+- **Capturar Momento** — △ + L2 / Y + LT · custo 25 · cooldown 22 s
+  Marca o lugar com um símbolo que capta imagens e sons: ele vê o que vem — recupera 2 esquivas e fica mais atento por alguns segundos.
+
+### Especial: O Labirinto é a Resposta
+
+250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: Capacete do ???
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
 
 ---
 
@@ -717,146 +857,6 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 ### Transformação: Vestir as Faixas
 
 Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → transforma na Fantasma até o fim do round (+50 de vida).
-
----
-
-## BALU
-
-*O tanque da Equipe Abutres: fica na linha de frente, apanha, sorri e derruba* · arma: Machado Lancinante (pomo de pantera) e o Machado Demônio de sangue
-
-### Físico (○ / B)
-
-| Comando | Golpe | Dano | Alcance | Observações |
-|---|---|---|---|---|
-| ○ 1 | Machadada lateral | 32 | 2.3 m |  |
-| ○ 2 | Machadada cruzada | 36 | 2.3 m |  |
-| ○ 3 | Machadada por cima | 44 | 2.4 m |  |
-| ○ 4 | Pancada do Urso | 70 | 2.5 m | finalizador: lança |
-| Frente + ○ | Investida do Urso | 40 | 2.4 m |  |
-| Trás + ○ | Recua e machada | 34 | 2.3 m |  |
-| Lado + ○ | Machadada em movimento | 32 | 2.3 m |  |
-| No ar + ○ | Machado aéreo | 40 | 2.3 m | desce com impacto |
-| ↑ + ○ (no combo) | Machado de baixo para cima | 40 | 2.3 m | finalizador: undefined |
-| ↓ + ○ (no combo) | Machado no chão | 48 | 2.3 m | finalizador: derruba |
-
-### Principal (□ / X): Machado em Giro
-
-- Dano 34 · alcance 14 m · cooldown 3 s · custo 0
-
-### Habilidades
-
-- **Amaldiçoar Arma com Sangue** — △ + □ / Y + X · custo 25 · cooldown 18 s
-  Desperta as veias que o Diabo deixou no machado: por alguns segundos cada machadada (e o machado arremessado) abre um sangramento.
-- **Machado Demônio** — △ + ○ / Y + B · custo 0 · cooldown 22 s
-  Crava o pomo de pantera no próprio peito (custa 60 de VIDA, não sanidade): o sangue vira uma maça-estrela no lugar da lâmina por 10 s — golpes físicos 25% mais fortes, mais alcance, sangramento e aguenta 2 golpes sem recuar.
-- **Fala Imponente** — R2 + △ / RT + Y · custo 20 · cooldown 14 s · alcance 9 m
-  O ex-vendedor sabe fazer um discurso firme: grita com o adversário, que fica PROVOCADO (só ataca no corpo a corpo por 4 s), e o Balu recebe 15% menos dano.
-- **110%** — △ + L2 / Y + LT · custo 20 · cooldown 16 s
-  Dá 110% de si: por 6 s os golpes físicos ficam 20% mais fortes e ele anda 10% mais rápido.
-- **Colete Físico-Balístico** — R2 + × / RT + A · custo 25 · cooldown 22 s
-  Fecha o colete e aguenta firme (Resistência à Dor): por 7 s recebe 25% menos dano e aguenta 2 golpes sem recuar, um pouco mais lento.
-
-### Especial: Pancada do Urso
-
-250 de dano · custo 50 · cooldown 14 s.
-
-### Transformação: Resistência à Dor
-
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +20% de dano (físico), −45% de dano recebido, −8% de velocidade, aguenta 1 golpe sem reagir a cada 1.5 s, cura 25% na hora.
-
----
-
-## ARNALDO FRITZ
-
-*Aniquilador da Ordo Realitas: na Transformação, o relógio de bolso guarda a Relíquia e ele vira O Anfitrião* · arma: Espada da fita vermelha e o Emissor de Pulsos Paranormais
-
-### Físico (○ / B)
-
-| Comando | Golpe | Dano | Alcance | Observações |
-|---|---|---|---|---|
-| ○ 1 | Abertura de Cena | 26 | 2.15 m |  |
-| ○ 2 | Estocada de Palco | 28 | 2.6 m |  |
-| ○ 3 | Corte em Reverência | 28 | 2.15 m |  |
-| ○ 4 | Floreio | 34 (2 acertos) | 2.2 m |  |
-| ○ 5 | Ato Final | 60 | 2.5 m | finalizador: lança |
-| Frente + ○ | Entrada Triunfal | 36 | 2.2 m |  |
-| Trás + ○ | Mesura e Estocada | 40 | 2.5 m | invulnerável no começo |
-| Lado + ○ | Rodopio | 32 | 2.3 m |  |
-| No ar + ○ | Corte Aéreo | 36 | 2.2 m | desce com impacto |
-| ↑ + ○ (no combo) | Corte Ascendente | 38 | 2.2 m | finalizador: undefined |
-| ↓ + ○ (no combo) | Golpe de Cena | 46 | 2.2 m | finalizador: derruba |
-
-### Principal (□ / X): Emissor de Pulsos Paranormais
-
-- Dano 18 · alcance 14 m · cooldown 3.2 s · custo 0
-- Prende e puxa o inimigo para 1.9 m, abrindo 0.5 s para combar
-- Trás + □: **AFASTAR!** — 26
-
-### Habilidades
-
-- **Finta Teatral** — △ + ○ / Y + B · custo 20 · cooldown 10 s · dano 55 · alcance 2.2 m
-  Provoca com a mão livre, avança e, quando o adversário reage, o corte de verdade entra pela guarda — quebra a defesa.
-- **Pulso Paranormal** — △ + □ / Y + X · custo 25 · cooldown 12 s · alcance 11 m
-  O Emissor de Pulsos no máximo: o alvo LONGE é atraído e recebe a estocada assim que chega; o alvo PERTO é jogado longe e cai.
-- **Rodopio da Fita** — R2 + × / RT + A · custo 20 · cooldown 11 s · dano 60
-  Gira com a espada aberta — a fita vermelha acompanha o giro: dois cortes em área, o último joga longe.
-- **Aniquilador** — △ + L2 / Y + LT · custo 25 · cooldown 20 s
-  O veterano dos Aniquiladores aparece: por 7 s a postura fica agressiva, os golpes físicos saem 15% mais rápidos e 15% mais fortes, e ele recupera uma esquiva.
-- **Ensaio Geral** — R2 + △ / RT + Y · custo 20 · cooldown 18 s
-  Já ensaiou essa cena: por 6 s recebe 20% menos dano, é empurrado bem menos e aguenta 2 golpes sem recuar.
-
-### Especial: Ato Final
-
-250 de dano · custo 50 · cooldown 14 s.
-
-### Transformação: A Relíquia do Relógio
-
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
-
----
-
-## SENHOR VERÍSSIMO
-
-*Líder da Ordo Realitas: Inteligência Estratégica e o Segredo de Veríssimo* · arma: A espada do Arnaldo e uma escopeta curta
-
-### Físico (○ / B)
-
-| Comando | Golpe | Dano | Alcance | Observações |
-|---|---|---|---|---|
-| ○ 1 | Estocada do Veterano | 26 | 2.4 m |  |
-| ○ 2 | Corte de Varredura | 28 | 2.1 m |  |
-| ○ 3 | Revés do Comandante | 28 | 2.1 m |  |
-| ○ 4 | Pela Ordo Realitas | 56 | 2.3 m | finalizador: lança |
-| Frente + ○ | Interceptação | 36 | 2.2 m |  |
-| Trás + ○ | Olhos Sempre Abertos! | 0 | 0 m | contra-ataque (revida 55) |
-| Lado + ○ | Flanco da Ordem | 30 | 2.1 m |  |
-| No ar + ○ | Salto do Veterano | 36 | 2.2 m | desce com impacto |
-| ↑ + ○ (no combo) | Ergam-se, Agentes | 38 | 2.2 m | finalizador: undefined |
-| ↓ + ○ (no combo) | Fim da Varredura | 46 | 2.2 m | finalizador: derruba |
-
-### Principal (□ / X): Escopeta de Varredura
-
-- Dano 11 × 5 · alcance 10 m · cooldown 2.2 s · custo 0
-
-### Habilidades
-
-- **Inteligência Estratégica** — △ + ○ / Y + B · custo 25 · cooldown 18 s
-  "Ordem!" — analisa o inimigo: por 7 s cada golpe físico que acerta ganha um corte extra.
-- **Brecha na Guarda** — △ + □ / Y + X · custo 20 · cooldown 16 s · alcance 14 m
-  Poder do Comandante de Campo (RPG): acha a brecha na guarda do adversário — por alguns segundos ele recebe mais dano.
-- **Em Seu Caminho** — R2 + × / RT + A · custo 20 · cooldown 10 s · dano 50 · alcance 2.2 m
-  "Nós estaremos em seu caminho." Avança em linha reta com a espada na frente e atravessa a guarda com força.
-- **Jaqueta de Veríssimo** — △ + L2 / Y + LT · custo 25 · cooldown 22 s
-  Fecha a jaqueta de couro passada entre os agentes: por 6 s recebe 20% menos dano e aguenta 1 golpe sem recuar.
-- **Bloqueio Perfeito** — defender no instante exato (0.16 s) anula o dano e atordoa o atacante por 0.6 s
-
-### Especial: Oficial Comandante
-
-250 de dano · custo 50 · cooldown 14 s.
-
-### Transformação: Líder da Ordo Realitas
-
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +15% de dano (físico, distância, habilidades), −15% de dano recebido, recargas 30% mais rápidas, cura 10% na hora.
 
 ---
 
