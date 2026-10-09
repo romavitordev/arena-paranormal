@@ -65,6 +65,7 @@ const VS_OPTIONS = (prefix, team) => [
 const homeOptions = () => [
   { id: 'solo', label: t('menu.solo'), desc: t('menu.solo.desc'), sub: VS_OPTIONS('solo', false) },
   { id: 'team', label: t('menu.team'), desc: t('menu.team.desc'), sub: VS_OPTIONS('team', true) },
+  { id: 'tower', label: t('menu.tower'), desc: t('menu.tower.desc') },
   { id: 'lan', label: t('menu.lan'), desc: t('menu.lan.desc') },
   { id: 'tutorial', label: t('menu.tutorial'), desc: t('menu.tutorial.desc') },
   { id: 'training', label: t('menu.training'), desc: t('menu.training.desc') },
@@ -273,6 +274,7 @@ export const MODES = {
   cvc: { title: 'CPU VS CPU', slots: ['CPU 1', 'CPU 2'], single: true },
   get training() { return { title: t('menu.training'), slots: ['P1', t('mode.target')], single: true }; },
   get tutorial() { return { title: t('menu.tutorial'), slots: ['P1', t('mode.target')], single: true }; },
+  get tower() { return { title: t('menu.tower'), slots: ['P1', 'CPU'], single: true, soloPick: true }; },
 };
 
 // Seleção de personagem no estilo Storm 4: a grade do P1 fica à esquerda e a do P2 à direita;
@@ -315,6 +317,7 @@ export class SelectScreen {
       ${side(1)}
       <div class="hint"></div>`);
     this.stage = new SelectStage(ROSTER);
+    if (this.M.soloPick) this.el.classList.add('solo-pick');
     this.startEl = this.el.querySelector('.startbtn');
     onTap(this, this.startEl, 250, () => { if (this.ready[0] && this.ready[1]) this.startClicked = true; });
     this.el.classList.add('net-taps');
@@ -403,13 +406,13 @@ export class SelectScreen {
           <dt>${t('sel.special')}</dt><dd class="clamp">${sp ? `${sp.name} · ${specialSummary(c)}` : '—'}</dd>
           <dt>${t('sel.abilities')}</dt><dd>${extras}</dd>
         </dl>`;
-      // modelo 3D no centro
-      this.stage.show(p, front.id, this.ready[p]);
+      // modelo 3D no centro (TORRE: só o do P1)
+      if (!(this.M.soloPick && p === 1)) this.stage.show(p, front.id, this.ready[p]);
       if (this.team) this.stage.setBack(p, (this.ready[p] ? this.picks[p].slice(1) : this.picks[p]).map((i) => ROSTER[i].id));
     }
     this.startEl.classList.toggle('on', this.ready[0] && this.ready[1]);
     const keys = { move: moveLabel(0), jump: actionLabel(0, 'jump'), phys: actionLabel(0, 'physical'), jump2: actionLabel(1, 'jump'), phys2: actionLabel(1, 'physical') };
-    this.hint.innerHTML = t(this.cpu ? 'sel.hint_cpu' : 'sel.hint_pvp', keys)
+    this.hint.innerHTML = t(this.M.soloPick ? 'tower.sel_hint' : this.cpu ? 'sel.hint_cpu' : 'sel.hint_pvp', keys)
       + t('sel.hint_common', { ok: OK, rand: RAND, back: BACK })
       + (this.pageCount > 1 ? t('sel.hint_page', { l: actionLabel(0, 'pageL'), r: actionLabel(0, 'pageR') }) : '');
   }
@@ -423,6 +426,8 @@ export class SelectScreen {
     this.p1 = p1;
     // B/○ (ou Esc) com ninguém confirmado: volta para a tela inicial
     if (!this.ready[0] && !this.ready[1] && !this.picks[0].length && !this.picks[1].length && (this.bk(p1) || (!this.cpu && this.bk(p2)))) return 'back';
+    // TORRE: só o P1 escolhe; os adversários vêm da torre
+    if (this.M.soloPick && this.ready[0]) return { p1: ROSTER[this.cursor[0]], p2: null, cpu: true, mode: this.mode };
     // os dois confirmados: COMEÇAR leva às configurações da batalha (B desfaz a escolha)
     if (this.ready[0] && this.ready[1]) {
       const humans = this.cpu ? [p1] : [p1, p2];
@@ -747,6 +752,66 @@ export class LoadingScreen {
   }
   progress(k) {
     this.fill.style.width = `${Math.round(k * 100)}%`;
+  }
+  dispose() { this.el.remove(); }
+}
+
+// TORRE: mapa vertical dos andares (o topo em cima). Mostra quem já caiu, o adversário da vez e o recorde.
+// done = true: tela de conclusão (topo alcançado). update() devolve 'fight', 'back' ou 'done'.
+export class TowerScreen {
+  constructor(root, { tower, portraits, record = 0, done = false, newRecord = false }) {
+    this.tower = tower;
+    this.done = done;
+    const P = tower.player;
+    const total = tower.floors.length;
+    const floors = tower.floors.map((f, i) => {
+      const state = done || i < tower.floor ? 'won' : i === tower.floor ? 'now' : 'next';
+      return `<div class="tw-floor ${state}${f.boss ? ' boss' : ''}" style="--c:${f.def.color}">
+        <span class="tw-n">${f.boss ? t('tower.boss') : t('tower.floor', { n: i + 1 })}</span>
+        <img src="${portraits[f.def.id] || ''}" alt="">
+        <b>${f.def.name}</b>
+        <small>${cpuLabel(f.level)}</small>
+        <i class="tw-mark">${state === 'won' ? '✔' : state === 'now' ? '◀' : ''}</i>
+      </div>`;
+    }).reverse().join('');
+    this.el = el(root, 'screen', 'tower', `
+      <div class="tw-side" style="--c:${P.color}">
+        <img src="${portraits[P.id] || ''}" alt="">
+        <b>${P.name}</b>
+        <small>${t('tower.record', { n: record, t: total })}${newRecord ? ` · <em>${t('tower.new_record')}</em>` : ''}</small>
+      </div>
+      <div class="tw-main">
+        <h2>${done ? t('tower.done') : `${t('menu.tower')} · ${tower.floors[tower.floor].boss ? t('tower.boss') : t('tower.floor', { n: tower.floor + 1 })}`}</h2>
+        ${done ? `<p class="sub">${t('tower.done_sub', { name: P.name, n: total })}</p>` : ''}
+        <div class="tw-top">${t('tower.top')}</div>
+        <div class="tw-list">${floors}</div>
+        <div class="tw-btns">${done
+          ? `<div class="opt on" data-a="done">${t('tower.continue')}</div>`
+          : `<div class="opt on" data-a="fight">${t('tower.fight')}</div><div class="opt" data-a="back">${t('tower.quit')}</div>`}</div>
+      </div>
+      <div class="hint">${done ? t('news.hint', { ok: OK, back: BACK }).replace(/^◀ ▶[^·]*· /, '') : t('tower.hint', { ok: OK, back: BACK })}</div>`);
+    this.btns = [...this.el.querySelectorAll('.tw-btns .opt')];
+    this.index = 0;
+    this.btns.forEach((b, i) => onTap(this, b, 1 + i, () => { this.clicked = b.dataset.a; }));
+    this.el.classList.add('net-taps');
+    this.netTap = netTapDefault;
+    const now = this.el.querySelector('.tw-floor.now');
+    if (now) setTimeout(() => now.scrollIntoView({ block: 'center' }), 0);
+  }
+  render() {
+    this.btns.forEach((b, i) => b.classList.toggle('on', i === this.index));
+  }
+  update(input) {
+    if (this.clicked) { const a = this.clicked; this.clicked = null; return a; }
+    for (const p of controllers(input, null)) {
+      const n = this.btns.length;
+      if (p.menu.left || p.menu.right || p.menu.up || p.menu.down) { this.index = (this.index + 1) % n; this.render(); return 'move'; }
+      if (confirm(p) || startGo(p, input)) return this.btns[this.index].dataset.a;
+      if (back(p)) return this.done ? 'done' : 'back';
+    }
+    if (input.keyPressedOnce('Enter')) return this.btns[this.index].dataset.a;
+    if (input.keyPressedOnce('Escape')) return this.done ? 'done' : 'back';
+    return null;
   }
   dispose() { this.el.remove(); }
 }

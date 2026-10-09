@@ -1265,6 +1265,11 @@ Todo texto visível deve passar pelo sistema.
 * [x] LAN
 * [x] Online
 
+## Próximo (pedido do usuário, depois da Torre/Torneio — demorado)
+
+* [ ] Traduzir os DIÁLOGOS (falas de introdução, vitória e batalha em `config/dialogues.js`) para os 13 idiomas
+* [ ] Traduzir o conteúdo dos personagens (golpes, habilidades, descrições)
+
 ---
 
 # 41. DIÁLOGOS LOCALIZADOS
@@ -1534,15 +1539,19 @@ Objetivo:
 
 # 55. TORRE — ESTRUTURA
 
-* [ ] Criar modo
-* [ ] Tela de seleção
-* [ ] Mapa vertical
-* [ ] Andares
-* [ ] Adversários
-* [ ] Progressão
-* [ ] Chefes
-* [ ] Topo
-* [ ] Tela de conclusão
+> v1 (2026-10-09): `src/game/tower.js` + `TowerScreen`. 8 andares: 7 adversários sorteados sem repetir (Fácil, Fácil,
+> Normal, Normal, Difícil, Difícil, Muito Difícil) + O DEUS DA MORTE (chefe, Difícil) no topo. Cenário sorteado por
+> andar. Venceu → sobe; perdeu → TENTAR DE NOVO o mesmo andar ou DESISTIR. Recorde por lutador no navegador.
+
+* [x] Criar modo
+* [x] Tela de seleção
+* [x] Mapa vertical
+* [x] Andares
+* [x] Adversários
+* [x] Progressão
+* [ ] Chefes (intermediários)
+* [x] Topo
+* [x] Tela de conclusão
 
 ---
 
@@ -1566,11 +1575,11 @@ ANDAR 5
 TOPO
 ```
 
-* [ ] Definir quantidade de andares
-* [ ] Definir adversários
-* [ ] Definir dificuldade
+* [x] Definir quantidade de andares (8)
+* [x] Definir adversários
+* [x] Definir dificuldade
 * [ ] Definir chefes
-* [ ] Definir chefe final
+* [x] Definir chefe final
 * [ ] Definir recompensas
 * [ ] Definir condições especiais
 
@@ -1592,11 +1601,11 @@ Podem existir:
 
 * chefe.
 
-* [ ] Lista de adversários
+* [x] Lista de adversários
 
-* [ ] Progressão
+* [x] Progressão
 
-* [ ] Evitar repetição
+* [x] Evitar repetição
 
 * [ ] Encontros especiais
 
@@ -1630,10 +1639,10 @@ Regra principal:
 
 Definir:
 
-* [ ] Derrota encerra a torre
-* [ ] Retry
-* [ ] Checkpoint
-* [ ] Andar máximo
+* [ ] Derrota encerra a torre (escolhido: não encerra — dá para tentar o andar de novo)
+* [x] Retry
+* [x] Checkpoint (o andar atual)
+* [x] Andar máximo
 * [ ] Salvar progresso
 * [ ] Estatísticas
 
@@ -1673,17 +1682,17 @@ Não criar um sistema enorme de recompensas antes de definir o escopo.
 
 # 62. TORRE — IDIOMAS
 
-* [ ] Andar
-* [ ] Chefe
-* [ ] Próximo andar
-* [ ] Vitória
-* [ ] Derrota
-* [ ] Topo
+* [x] Andar
+* [x] Chefe
+* [x] Próximo andar
+* [x] Vitória
+* [x] Derrota
+* [x] Topo
 * [ ] Recompensa
-* [ ] Recorde
-* [ ] Continuar
-* [ ] Reiniciar
-* [ ] Falas dos chefes
+* [x] Recorde
+* [x] Continuar
+* [x] Reiniciar
+* [ ] Falas dos chefes (o Deus da Morte usa as falas do Ferreiro; falas próprias de chefe ficam para depois)
 
 ---
 
@@ -2127,27 +2136,29 @@ genérico demais), com o motivo. Nenhum item é de balanceamento.
 
 ## ETAPA 3 — COMBATE
 
-* [ ] Dodge
-* [ ] Substitution
-* [ ] Grab
-* [ ] Throw tech
-* [ ] Combo
-* [ ] Defesa
-* [ ] Wakeup
-* [ ] Telegraphs
-* [ ] Transformações
-* [ ] Assists
+> Etapas 3, 4 e 5 testadas e confirmadas pelo usuário em 2026-10-09.
+
+* [x] Dodge
+* [x] Substitution
+* [x] Grab
+* [x] Throw tech
+* [x] Combo
+* [x] Defesa
+* [x] Wakeup
+* [x] Telegraphs
+* [x] Transformações
+* [x] Assists
 
 ## ETAPA 4 — BALANCEAMENTO
 
-* [ ] Telemetria
-* [ ] CPU × CPU
-* [ ] 2–3 partidas por confronto
-* [ ] Buffs
-* [ ] Nerfs
-* [ ] Reanálise
-* [ ] Testes manuais
-* [ ] Nova telemetria
+* [x] Telemetria
+* [x] CPU × CPU
+* [x] 2–3 partidas por confronto
+* [x] Buffs
+* [x] Nerfs
+* [x] Reanálise
+* [x] Testes manuais
+* [x] Nova telemetria
 
 **Nenhum valor é definitivo antes desta etapa.**
 
@@ -2167,11 +2178,11 @@ genérico demais), com o motivo. Nenhum item é de balanceamento.
 * [x] Coreano
 * [x] Turco
 * [x] Polonês
-* [ ] LAN
-* [ ] Radmin
-* [ ] Mobile
-* [ ] iPhone
-* [ ] Android
+* [x] LAN
+* [x] Radmin
+* [x] Mobile
+* [x] iPhone
+* [x] Android
 
 ## ETAPA 6 — NOVOS MODOS
 
@@ -2190,17 +2201,17 @@ genérico demais), com o motivo. Nenhum item é de balanceamento.
 
 ### Torre
 
-* [ ] Seleção
-* [ ] Andares
-* [ ] Adversários
-* [ ] Progressão
-* [ ] Recuperação
+* [x] Seleção
+* [x] Andares
+* [x] Adversários
+* [x] Progressão
+* [x] Recuperação (cada andar começa com vida e sanidade cheias)
 * [ ] Modificadores
-* [ ] Chefes
-* [ ] Chefe final
+* [ ] Chefes (intermediários)
+* [x] Chefe final (O Deus da Morte)
 * [ ] Recompensas
-* [ ] Topo
-* [ ] Recorde
+* [x] Topo
+* [x] Recorde
 
 ## ETAPA 7 — POLIMENTO
 

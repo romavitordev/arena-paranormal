@@ -21,6 +21,13 @@
   "PRECISA DE N% DE SANIDADE", versões diferentes). Chamado em `Fighter.notify`, no `netToast` e no erro da tela ONLINE;
   o selo ONLINE usa `t()`. Assim as ~195 chamadas de `notify` não mudaram: o que é sistema traduz, o que é nome de
   poder/frase de personagem fica como conteúdo. 279 chaves × 13 idiomas; teste novo do `tAlert`.
+- **TORRE (modo novo, menu principal):** `src/game/tower.js` (montagem com semente + recorde em
+  `localStorage['arena_torre_recorde']`) e `TowerScreen` (mapa vertical). Seleção com `MODES.tower.soloPick` (só o P1
+  escolhe; o lado 2 some). 7 adversários sem repetir com a dificuldade subindo + O DEUS DA MORTE (`getForm`) no topo;
+  `setupControllers` usa o nível do andar; a vitória mostra PRÓXIMO ANDAR / DESISTIR ou TENTAR DE NOVO / DESISTIR.
+  Retrato do chefe gerado junto com o elenco. Correção junto: `Match` achava quem fala na introdução só pelo id —
+  com uma forma (Deus da Morte usa as falas do Ferreiro) quebrava; agora cai para o id da base e, sem achar, para a
+  ordem da fala. Teste novo `tests/tower.test.js`. ETAPAS 3–5 marcadas (testadas pelo usuário).
 - **Removida a opção MOVIMENTO "relativo ao inimigo"** (pedido do usuário: ruim de jogar). `moveBasis()` devolve
   sempre a base da câmera; `moveMode` saiu dos padrões, é apagado das configurações salvas e não vai mais no
   `settings` da sala online.
