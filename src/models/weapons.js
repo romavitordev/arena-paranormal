@@ -1045,8 +1045,8 @@ export function swordArnaldo() {
   // as duas fitas VERMELHAS presas na guarda: tiras com FÍSICA própria (balançam no idle, na corrida, nos golpes e no dash)
   const RIBBON = 0xd01c30;
   const knot = part(new THREE.TorusGeometry(0.02, 0.008, 6, 12), RIBBON, { outline: false, mat: toon(RIBBON, { emissive: RIBBON }) });
-  knot.material.emissiveIntensity = 0.35;
-  knot.material.userData.baseEmissive = { color: new THREE.Color(RIBBON), intensity: 0.35 };
+  knot.material.emissiveIntensity = 0.7;
+  knot.material.userData.baseEmissive = { color: new THREE.Color(RIBBON), intensity: 0.7 };
   knot.position.y = -0.04;
   knot.rotation.x = Math.PI / 2;
   g.add(knot);
@@ -1220,10 +1220,10 @@ export function physicsRibbon(anchor, len, width, color, sway = 0.5, n = 10) {
   const idx = [];
   for (let i = 0; i < n; i++) { const a = i * 2; idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2); }
   geo.setIndex(idx);
-  const mat = new THREE.MeshToonMaterial({ color, emissive: color, emissiveIntensity: 0.35, side: THREE.DoubleSide });
+  const mat = new THREE.MeshToonMaterial({ color, emissive: color, emissiveIntensity: 0.7, side: THREE.DoubleSide });
   // brilho próprio que o "flash" de dano do rig (setTint) devolve ao terminar — sem isso o setTint zerava o emissive a
   // cada quadro e a fita vermelha ficava quase preta na luz do cenário
-  mat.userData.baseEmissive = { color: new THREE.Color(color), intensity: 0.35 };
+  mat.userData.baseEmissive = { color: new THREE.Color(color), intensity: 0.7 };
   const mesh = new THREE.Mesh(geo, mat);
   mesh.frustumCulled = false;
   mesh.userData.outline = false;
@@ -1235,6 +1235,7 @@ export function physicsRibbon(anchor, len, width, color, sway = 0.5, n = 10) {
   const inv = new THREE.Matrix4();
   const tmp = new THREE.Vector3();
   const side = new THREE.Vector3();
+  const faceAxis = new THREE.Vector3();
   const grav = new THREE.Vector3(0, -9.8, 0);
   mesh.onBeforeRender = () => {
     const now = performance.now();
@@ -1273,7 +1274,13 @@ export function physicsRibbon(anchor, len, width, color, sway = 0.5, n = 10) {
     inv.copy(parent.matrixWorld).invert();
     for (let i = 0; i <= n; i++) {
       const dir = i < n ? P[i + 1].clone().sub(P[i]) : P[i].clone().sub(P[i - 1]);
-      side.set(dir.z, 0, -dir.x).normalize().multiplyScalar(width * (1 - i / n * 0.4) / 2); // largura da fita
+      // largura da fita: perpendicular ao trecho, no plano da lâmina (eixo Z da espada no mundo). A conta antiga
+      // (dir.z, 0, −dir.x) dava ZERO com a fita pendurada reta para baixo: largura zero → normais NaN → a luz do
+      // MeshToon ficava NaN e a fita vermelha aparecia PRETA (inclusive o brilho)
+      side.crossVectors(dir, faceAxis.set(0, 0, 1).transformDirection(parent.matrixWorld));
+      if (side.lengthSq() < 1e-8) side.crossVectors(dir, faceAxis.set(1, 0, 0));
+      if (side.lengthSq() < 1e-8) side.set(1, 0, 0);
+      side.normalize().multiplyScalar(width * (1 - i / n * 0.4) / 2);
       const l = P[i].clone().add(side).applyMatrix4(inv);
       const r = P[i].clone().sub(side).applyMatrix4(inv);
       pos.set([l.x, l.y, l.z, r.x, r.y, r.z], i * 6);
