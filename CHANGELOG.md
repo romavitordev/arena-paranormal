@@ -1,5 +1,17 @@
 # Changelog
 
+## v3.14.0 — 2026-10-09
+
+### Adicionado
+- Cenário ACAMPAMENTO VARMINHO (Sinais do Outro Lado): fogueira animada, barracas, van dos Cinco, Estação de Transmissão, céu estrelado.
+- Cenários: estrelas, fogueiras animadas e várias camadas de partículas por config.
+
+### Alterado
+- Tiro carregado da sniper (Arthur, Kemi, Fantasma): laser com atraso, tiro no ponto do laser, aviso antes do disparo automático, bala mais lenta.
+
+### Corrigido
+- Modelo antigo de outro personagem aparecendo quando um .glb falhava (modelos procedurais removidos; download com novas tentativas e aviso).
+
 ## v3.13.0 — 2026-10-09
 
 ### Adicionado

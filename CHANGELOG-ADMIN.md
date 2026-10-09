@@ -1,6 +1,8 @@
 # Registro administrativo de alterações
 
-## (em andamento) — próxima versão
+## v3.14.0 — Acampamento Varminho
+
+- Versão: `VERSION` 3.13.0 → **3.14.0** (Acampamento Varminho, sniper desviável, modelos antigos removidos).
 
 - **Novo cenário: ACAMPAMENTO VARMINHO (Sinais do Outro Lado, ep. 2).** Pesquisa na wiki: o acampamento
   fica ao lado da Estação de Transmissão de Varminho (galpão queimado com o símbolo da emissora pichado, torre de

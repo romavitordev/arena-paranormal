@@ -2,6 +2,11 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.14.0 — Acampamento Varminho
+- Novo cenário: ACAMPAMENTO VARMINHO (Sinais do Outro Lado) — a clareira no mato onde os conspiracionistas esperam os alienígenas, ao lado da estação de TV abandonada de Varminho. Fogueira acesa no centro (não dá para atravessar), barracas, placas escritas à mão ("ELES ESTÃO VINDO!"), o violão do Eriberto, o telescópio da Ludismila, a van "Chico Eletrônicos" dos Cinco e a torre de transmissão ao fundo, debaixo de um céu cheio de estrelas e com vaga-lumes no mato.
+- Sniper do Arthur (e da Kemi e da Fantasma): agora dá para desviar. O laser segue você com atraso — correndo de lado você sai da mira —, o tiro vai para onde o laser está, e com a mira cheia o laser trava e pisca vermelho antes do disparo: é a hora de esquivar. A bala ficou um pouco mais lenta, dá para vê-la.
+- Correção: alguns personagens podiam aparecer com um modelo antigo de outro (ex.: a Erin com a Aghata antiga) quando o arquivo 3D falhava ao baixar. Os modelos antigos foram removidos; o jogo tenta baixar de novo e, se não conseguir, avisa na tela.
+
 ## v3.13.0 — Torneio e o X
 - Novo modo: TORNEIO local, de 2 a 8 participantes, solo ou em equipe. Monte em 3 passos (formato, participantes e regras): cada vaga é HUMANO, CPU ou vazia, e cada humano escolhe o próprio lutador; CPU sem escolha é sorteada. Lutas só entre CPUs são decididas na hora.
 - A chave do torneio é uma árvore espelhada que converge para o troféu no centro: o caminho do vencedor acende em dourado, os eliminados ficam cinza e a próxima luta pulsa com um VS grande.

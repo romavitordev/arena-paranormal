@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.13.0';
+export const VERSION = '3.14.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,16 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.14.0',
+    date: '2026-10-09',
+    title: 'Acampamento Varminho',
+    items: [
+      'Novo cenário: ACAMPAMENTO VARMINHO (Sinais do Outro Lado) — a clareira no mato onde os conspiracionistas esperam os alienígenas, ao lado da estação de TV abandonada de Varminho. Fogueira acesa no centro (não dá para atravessar), barracas, placas escritas à mão ("ELES ESTÃO VINDO!"), o violão do Eriberto, o telescópio da Ludismila, a van "Chico Eletrônicos" dos Cinco e a torre de transmissão ao fundo, debaixo de um céu cheio de estrelas e com vaga-lumes no mato.',
+      'Sniper do Arthur (e da Kemi e da Fantasma): agora dá para desviar. O laser segue você com atraso — correndo de lado você sai da mira —, o tiro vai para onde o laser está, e com a mira cheia o laser trava e pisca vermelho antes do disparo: é a hora de esquivar. A bala ficou um pouco mais lenta, dá para vê-la.',
+      'Correção: alguns personagens podiam aparecer com um modelo antigo de outro (ex.: a Erin com a Aghata antiga) quando o arquivo 3D falhava ao baixar. Os modelos antigos foram removidos; o jogo tenta baixar de novo e, se não conseguir, avisa na tela.',
+    ],
+  },
   {
     v: '3.13.0',
     date: '2026-10-09',
