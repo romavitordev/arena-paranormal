@@ -52,7 +52,14 @@ pancada em saco e foram trocados. Extraídos em `assets_src/oga/<pasta>/`:
 | `teleport` | Teleport Spell | teleporte, piscar | https://opengameart.org/content/teleport-spell |
 | `heartbeat` | Heartbeat (single sound) | batimento | https://opengameart.org/content/heartbeat-single-sound |
 | `jumpland` | Jump Landing Sound | aterrissagem | https://opengameart.org/content/jump-landing-sound |
-| `ghost` | Ghost Monster Voice Moaning & Growling (qubodup) | olhar do medo | https://opengameart.org/content/ghost-monster-voice-moaning-growling |
+| `ghost` | Ghost Monster Voice Moaning & Growling (qubodup) | olhar do medo, máscara | https://opengameart.org/content/ghost-monster-voice-moaning-growling |
+| `magic` | Magic Spell SFX (JaggedStone) | ritual, carga, especial, renascer, lâmina do medo, faixa | https://opengameart.org/content/magic-spell-sfx |
+| `spells` | Spell sounds (Augmentality — CC0 entre as licenças) | especial armado, dreno, renascer | https://opengameart.org/content/spell-sounds |
+| `laugh` | Evil laughter (qubodup) | risada do Anfitrião | https://opengameart.org/content/evil-laughter |
+| `applause` | Applause concert bar 2 (BigSoundBank, CC0) | aplausos da Plateia | https://bigsoundbank.com/applause-concert-bar-2-s2480.html |
+
+Do Kenney Sci-Fi Sounds também saem o campo de força (power-up, especial), o chiado de propulsor (fumaça) e o motor
+grave em loop (zumbido da Carga de Poder, `startLoop`).
 
 Depois: `python tools/import-sounds.py` (gera `public/sounds/*.ogg` e `src/audio/soundFiles.js`) e
 `python tools/import-fx.py` (gera `public/fx/*.png`). Os dois precisam do `ffmpeg`. Nos scripts fica qual arquivo

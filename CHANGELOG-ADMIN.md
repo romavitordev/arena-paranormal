@@ -20,6 +20,12 @@
   (Tikka, Arisaka, Springfield 1917). Também: clawHit/bloodClaw/descarnar (carne molhada + golpe), chainThrow/
   chainPull, whip (whoosh + estalo), teleport/blink, heartbeat, land, jump, fearGaze (gemido fantasma), ko (golpe +
   estrondo grave). 39 nomes, 884 KB.
+- **Sons paranormais (3º pedido):** "Magic Spell SFX", "Spell sounds", "Evil laughter" (OpenGameArt) e aplausos do
+  BigSoundBank (todos CC0) + campo de força / propulsor / motor do Kenney Sci-Fi. Os arquivos de "Spell sounds" têm o
+  mesmo efeito várias vezes em 8–22 s: trechos achados por energia e cortados (`at`, também por camada no `mix`).
+  `startLoop` usa a gravação em loop quando existe (`chargeHum`: motor grave subindo o tom de 0,85× a 1,35× em
+  2,5 s), senão o oscilador de antes. 53 nomes, 155 arquivos, 1,16 MB. Restam sintetizados `ready` e `bladeWave`
+  (sem uso).
 - **VFX de corte e impacto:** `slash()` com UV polar e textura de degradê (cauda transparente → ponta forte, borda
   externa quase branca), varredura da ponta no 1º terço da vida e camada de brilho largo por trás. `FX_HIT_SMALL`:
   núcleo branco em estrela + estouro espinhoso da cor crescendo + faíscas mais rápidas e finas.

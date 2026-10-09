@@ -76,6 +76,22 @@ export class AudioManager {
   startLoop(id, kind = 'chargeHum', pitch = 1) {
     if (!this.ctx || this.loops.has(id)) return;
     const t = this.ctx.currentTime;
+    // gravado (soundFiles.js): toca em loop, subindo o tom enquanto carrega, como o sintetizado fazia
+    const rec = this.buffers[kind];
+    if (rec && rec.length) {
+      const src = this.ctx.createBufferSource();
+      src.buffer = rec[0];
+      src.loop = true;
+      src.playbackRate.setValueAtTime(0.85 * pitch, t);
+      src.playbackRate.linearRampToValueAtTime(1.35 * pitch, t + 2.5);
+      const g = this.ctx.createGain();
+      g.gain.value = 0;
+      g.gain.linearRampToValueAtTime(0.4, t + 0.15);
+      src.connect(g).connect(this.master);
+      src.start();
+      this.loops.set(id, { src, g });
+      return;
+    }
     const osc = this.ctx.createOscillator();
     const osc2 = this.ctx.createOscillator();
     const g = this.ctx.createGain();
@@ -105,8 +121,8 @@ export class AudioManager {
     l.g.gain.cancelScheduledValues(t);
     l.g.gain.setValueAtTime(l.g.gain.value, t);
     l.g.gain.linearRampToValueAtTime(0, t + 0.12);
-    l.osc.stop(t + 0.15);
-    l.osc2.stop(t + 0.15);
+    if (l.src) l.src.stop(t + 0.15);
+    else { l.osc.stop(t + 0.15); l.osc2.stop(t + 0.15); }
     this.loops.delete(id);
   }
 

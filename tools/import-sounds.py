@@ -38,6 +38,10 @@ GHOST = 'oga/ghost/qubodup-GhostMoans/wav/qubodup-GhostMoan{:02d}.wav'
 TELEPORT = 'oga/teleport/teleport.wav'
 HEART = 'oga/heartbeat/heartbeat.mp3_.flac'
 LAND = 'oga/jumpland/jumpland.wav'
+MAGIC = 'oga/magic/magical_{}.ogg'
+SPELL = 'oga/spells/{}.ogg'
+LAUGH = 'oga/laugh/qubodupevillaughter.flac'
+APPLAUSE = 'oga/applause/2480.mp3'
 K_IMPACT = 'kenney/kenney_impact-sounds/Audio/{}.ogg'
 K_RPG = 'kenney/kenney_rpg-audio/Audio/{}.ogg'
 K_SCIFI = 'kenney/kenney_sci-fi-sounds/Audio/{}.ogg'
@@ -54,7 +58,7 @@ def shots(file, times, **opts):
 
 
 def mix(*layers, **opts):
-    """layers: (arquivo, ganho em dB, atraso em ms)"""
+    """layers: (arquivo, ganho em dB, atraso em ms[, início no arquivo em s])"""
     return [('mix', {'layers': layers, **opts})]
 
 
@@ -113,6 +117,26 @@ MAP = {
     'jump': many(SWISH, [8, 3], gain=-8, pitch=0.8),
     'ko': (mix((HITS.format(22), 0, 0), (K_SCIFI.format('lowFrequency_explosion_000'), -6, 0), max=1.0)
            + mix((HITS.format(2), 0, 0), (K_SCIFI.format('lowFrequency_explosion_001'), -6, 0), max=1.0)),
+    # PARANORMAL ("Magic Spell SFX", "Spell sounds", Kenney Sci-Fi): rituais, carga, especial, dreno, renascer…
+    'ritual': many(MAGIC, [1, 4], max=1.3),
+    'carga': many(MAGIC, [3, 5, 6], max=0.6, gain=-3),
+    'armed': [(SPELL.format('electricspell2'), {'at': 9.08, 'max': 0.9})],
+    'specialStart': (mix((MAGIC.format(4), 0, 0), (K_SCIFI.format('forceField_002'), -4, 0), max=1.2)
+                     + mix((MAGIC.format(1), 0, 0), (K_SCIFI.format('forceField_000'), -4, 0), max=1.2)),
+    'powerUp': many(K_SCIFI, ['forceField_000', 'forceField_001', 'forceField_003'], max=0.9),
+    'drain': ([(SPELL.format('healing'), {'at': 11.5, 'max': 0.7, 'pitch': 0.75})]
+              + many(K_SCIFI, ['forceField_004'], max=0.6, pitch=0.7)),
+    'rebirth': mix((SPELL.format('healing'), 0, 0, 11.5), (MAGIC.format(7), -4, 200), max=1.8),
+    'fearBlade': (mix((SWISH.format(10), 0, 0), (MAGIC.format(2), -4, 0), max=0.6)
+                  + mix((SWISH.format(11), 0, 0), (MAGIC.format(5), -4, 0), max=0.6)),
+    'maskOn': mix((MAGIC.format(6), 0, 0), (GHOST.format(5), -6, 0), max=0.9),
+    'smoke': many(K_SCIFI, ['thrusterFire_000', 'thrusterFire_001', 'thrusterFire_002'], max=0.6, gain=-6),
+    'banner': (mix((SWISH.format(4), 0, 0), (MAGIC.format(5), -6, 0), max=0.7)
+               + mix((SWISH.format(9), 0, 0), (MAGIC.format(3), -6, 0), max=0.7)),
+    'laugh': [(LAUGH, {'max': 2.2, 'gain': -3})],
+    'applause': [(APPLAUSE, {'max': 3.0, 'gain': -6})],
+    # zumbido da Carga de Poder (startLoop): toca em loop, sem corte
+    'chargeHum': many(K_SCIFI, ['spaceEngineLow_000'], gain=-4),
     # armas brancas e travas
     'knifeThrow': many(K_RPG, ['drawKnife1', 'drawKnife2', 'drawKnife3']),
     'trapSnap': many(K_RPG, ['metalLatch']),
@@ -154,11 +178,13 @@ def convert(src, dst, opts):
     if src == 'mix':
         layers = opts['layers']
         cmd = ['ffmpeg', '-v', 'error', '-y']
-        for f, _, _ in layers:
+        for f, *_ in layers:
             cmd += ['-i', os.path.join(ASSETS, f)]
         parts = []
-        for i, (_, gain, delay) in enumerate(layers):
-            parts.append(f'[{i}]aformat=channel_layouts=mono,aresample=44100,{TRIM},volume={gain}dB,adelay={delay}[l{i}]')
+        for i, layer in enumerate(layers):
+            _, gain, delay = layer[:3]
+            at = f'atrim=start={layer[3]},asetpts=PTS-STARTPTS,' if len(layer) > 3 else ''
+            parts.append(f'[{i}]aformat=channel_layouts=mono,aresample=44100,{at}{TRIM},volume={gain}dB,adelay={delay}[l{i}]')
         ins = ''.join(f'[l{i}]' for i in range(len(layers)))
         chain = ','.join(['amix=inputs=%d:duration=longest:normalize=0' % len(layers)] + tail(opts))
         cmd += ['-filter_complex', ';'.join(parts) + f';{ins}{chain}', tmp]
