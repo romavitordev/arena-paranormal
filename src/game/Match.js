@@ -71,7 +71,10 @@ export class Match {
     this.round = 1;
     this.timer = SETTINGS.timer || COMBAT.roundTime;
     let nextLineAt = 0;
-    this.lines = introLines(this.defs[0].id, this.defs[1].id).map(([id, text], k) => {
+    // sem fala registrada para o confronto (ex.: espelho Kaiser × Kaiser) entra sem falas em vez de travar a luta
+    let intro = [];
+    try { intro = introLines(this.defs[0].id, this.defs[1].id); } catch (e) { console.warn(e.message); }
+    this.lines = intro.map(([id, text], k) => {
       // forma (ex.: Deus da Morte, chefe da TORRE) fala com as falas da base (Ferreiro); sem achar, vale a ordem
       let fighter = this.defs.findIndex((def) => def.id === id);
       if (fighter < 0) fighter = this.defs.findIndex((def) => BASE_CHARACTER[def.id] === id);

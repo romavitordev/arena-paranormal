@@ -756,61 +756,149 @@ export class LoadingScreen {
   dispose() { this.el.remove(); }
 }
 
-// TORRE: mapa vertical dos andares (o topo em cima). Mostra quem já caiu, o adversário da vez e o recorde.
-// done = true: tela de conclusão (topo alcançado). update() devolve 'fight', 'back' ou 'done'.
-export class TowerScreen {
-  constructor(root, { tower, portraits, record = 0, done = false, newRecord = false }) {
-    this.tower = tower;
-    this.done = done;
-    const P = tower.player;
-    const total = tower.floors.length;
-    const floors = tower.floors.map((f, i) => {
-      const state = done || i < tower.floor ? 'won' : i === tower.floor ? 'now' : 'next';
-      return `<div class="tw-floor ${state}${f.boss ? ' boss' : ''}" style="--c:${f.def.color}">
-        <span class="tw-n">${f.boss ? t('tower.boss') : t('tower.floor', { n: i + 1 })}</span>
-        <img src="${portraits[f.def.id] || ''}" alt="">
-        <b>${f.def.name}</b>
-        <small>${cpuLabel(f.level)}</small>
-        <i class="tw-mark">${state === 'won' ? '✔' : state === 'now' ? '◀' : ''}</i>
-      </div>`;
-    }).reverse().join('');
-    this.el = el(root, 'screen', 'tower', `
-      <div class="tw-side" style="--c:${P.color}">
-        <img src="${portraits[P.id] || ''}" alt="">
-        <b>${P.name}</b>
-        <small>${t('tower.record', { n: record, t: total })}${newRecord ? ` · <em>${t('tower.new_record')}</em>` : ''}</small>
+// TORRES — menu: 8 torres (4 em cima, 4 embaixo). Só a 1ª começa livre; as outras têm cadeado até a anterior ser
+// zerada. Cada carta mostra a dificuldade MAIS DIFÍCIL já zerada naquela torre. update() devolve o índice, 'back' ou
+// 'denied' (torre trancada).
+const towerSvg = (color, n) => {
+  const tiers = Array.from({ length: n }, (_, i) => {
+    const w = 64 - i * (44 / n);
+    const h = 70 / n;
+    const y = 92 - (i + 1) * h;
+    return `<rect x="${50 - w / 2}" y="${y}" width="${w}" height="${h - 1.5}" rx="1.5"/>`;
+  }).join('');
+  return `<svg viewBox="0 0 100 100" aria-hidden="true"><g fill="${color}">${tiers}<polygon points="46,22 54,22 50,9"/></g><rect x="20" y="92" width="60" height="3" fill="${color}" opacity=".5"/></svg>`;
+};
+
+export class TowerSelectScreen {
+  constructor(root, { towers, progress, getName, index = 0 }) {
+    this.towers = towers;
+    this.index = index;
+    this.el = el(root, 'screen', 'towers', `
+      <h2>${t('tower.select_title')}</h2>
+      <div class="tws-grid">${towers.map((tw) => `
+        <div class="tws-card ${tw.unlocked ? '' : 'locked'}" style="--c:${tw.color}">
+          <div class="tws-art">${towerSvg(tw.color, Math.min(8, tw.floorCount))}${tw.unlocked ? '' : '<span class="tws-lock">🔒</span>'}</div>
+          <b>${tw.title}</b>
+          <small>${tw.unlocked ? `${t('tower.floors_n', { n: tw.floorCount })} · ${tw.villain}` : t('tower.locked')}</small>
+          <em class="${tw.best ? 'ok' : ''}">${tw.unlocked ? (tw.best ? `★ ${t('tower.best', { v: tw.best })}` : t('tower.not_cleared')) : t('tower.locked_msg')}</em>
+        </div>`).join('')}
       </div>
-      <div class="tw-main">
-        <h2>${done ? t('tower.done') : `${t('menu.tower')} · ${tower.floors[tower.floor].boss ? t('tower.boss') : t('tower.floor', { n: tower.floor + 1 })}`}</h2>
-        ${done ? `<p class="sub">${t('tower.done_sub', { name: P.name, n: total })}</p>` : ''}
-        <div class="tw-top">${t('tower.top')}</div>
-        <div class="tw-list">${floors}</div>
-        <div class="tw-btns">${done
-          ? `<div class="opt on" data-a="done">${t('tower.continue')}</div>`
-          : `<div class="opt on" data-a="fight">${t('tower.fight')}</div><div class="opt" data-a="back">${t('tower.quit')}</div>`}</div>
-      </div>
-      <div class="hint">${done ? t('news.hint', { ok: OK, back: BACK }).replace(/^◀ ▶[^·]*· /, '') : t('tower.hint', { ok: OK, back: BACK })}</div>`);
-    this.btns = [...this.el.querySelectorAll('.tw-btns .opt')];
-    this.index = 0;
-    this.btns.forEach((b, i) => onTap(this, b, 1 + i, () => { this.clicked = b.dataset.a; }));
+      <div class="hint">${t('tower.select_hint', { ok: OK, back: BACK })}</div>`);
+    void progress; void getName;
+    this.cards = [...this.el.querySelectorAll('.tws-card')];
+    this.cards.forEach((c, i) => onTap(this, c, 1 + i, () => { if (this.index === i) this.clicked = i; else { this.index = i; this.render(); this.moved = true; } }));
     this.el.classList.add('net-taps');
     this.netTap = netTapDefault;
+    this.render();
+  }
+  render() { this.cards.forEach((c, i) => c.classList.toggle('on', i === this.index)); }
+  choose(i) { return this.towers[i].unlocked ? i : 'denied'; }
+  update(input) {
+    if (this.clicked !== undefined) { const i = this.clicked; this.clicked = undefined; return this.choose(i); }
+    if (this.moved) { this.moved = false; return 'move'; }
+    for (const p of controllers(input, null)) {
+      const col = this.index % 4;
+      const row = Math.floor(this.index / 4);
+      let ni = this.index;
+      if (p.menu.left) ni = row * 4 + (col + 3) % 4;
+      if (p.menu.right) ni = row * 4 + (col + 1) % 4;
+      if (p.menu.up || p.menu.down) ni = (1 - row) * 4 + col;
+      if (ni !== this.index) { this.index = ni; this.render(); return 'move'; }
+      if (confirm(p) || startGo(p, input)) return this.choose(this.index);
+      if (back(p)) return 'back';
+    }
+    if (input.keyPressedOnce('Enter')) return this.choose(this.index);
+    if (input.keyPressedOnce('Escape')) return 'back';
+    return null;
+  }
+  dispose() { this.el.remove(); }
+}
+
+// TORRE — a torre em 3D (TowerStage, desenhada atrás) com o painel por cima. Modos:
+//   intro: a câmera sobe da base ao topo e afasta; depois ESCOLHER LUTADOR / VOLTAR ('pick' | 'back')
+//   diff:  o lutador escolhido + as 5 dificuldades ('diff:<id>' | 'reselect')
+//   map:   andares, o da vez em destaque ('fight' | 'quit')
+//   done:  topo alcançado ('done')
+export class TowerScreen {
+  constructor(root, { mode, run, stage, portraits, cpuLabel: label = cpuLabel, difficulties = [], best = null, newBest = false, unlockedNext = null, buffs = [] }) {
+    this.mode = mode;
+    this.run = run;
+    this.stage = stage;
+    this.index = 0;
+    const T = run.tower;
+    const title = T.gauntlet ? t('tower.babel') : t('tower.name', { n: T.numeral });
+    const boss = run.floors.at(-1).def;
+    const head = `<div class="tw-head" style="--c:${T.color}"><small>${t('tower.name', { n: T.numeral })}</small><b>${title}</b>
+      <span>${t('tower.floors_n', { n: run.floors.length })} · ${t('tower.villain')}: <i>${boss.name}</i></span>
+      <span class="tw-best">${best ? `★ ${t('tower.best', { v: label(best) })}` : t('tower.not_cleared')}</span></div>`;
+    let panel = '';
+    let opts = [];
+    if (mode === 'intro') {
+      opts = [['pick', t('tower.pick_fighter')], ['back', t('ui.back')]];
+      panel = `<div class="tw-panel tw-center">${head}</div>`;
+    } else if (mode === 'diff') {
+      const P = run.player;
+      opts = difficulties.map((d) => [`diff:${d}`, `${label(d)}${d === best ? ' ★' : ''}`]).concat([['reselect', t('ui.back')]]);
+      this.buffs = buffs;
+      panel = `<div class="tw-panel">${head}
+        <div class="tw-fighter" style="--c:${P.color}"><img src="${portraits[P.id] || ''}" alt=""><div><b>${P.name}</b><small>${t('tower.fighter_fixed')}</small></div></div>
+        <h3>${t('tower.choose_diff')}</h3><p class="tw-buff"></p></div>`;
+      this.index = Math.max(0, difficulties.indexOf(best || 'normal'));
+    } else if (mode === 'map' || mode === 'done') {
+      const P = run.player;
+      const list = run.floors.map((f, i) => {
+        const st = mode === 'done' || i < run.floor ? 'won' : i === run.floor ? 'now' : 'next';
+        return `<div class="tw-floor ${st}${f.boss ? ' boss' : ''}" style="--c:${f.def.color}"><span class="tw-n">${f.boss ? t('tower.boss') : t('tower.floor', { n: i + 1 })}</span><img src="${portraits[f.def.id] || ''}" alt=""><b>${f.def.name}</b><small>${label(f.level)}</small><i class="tw-mark">${st === 'won' ? '✔' : st === 'now' ? '◀' : ''}</i></div>`;
+      }).reverse().join('');
+      opts = mode === 'done' ? [['done', t('tower.continue')]] : [['fight', t('tower.fight')], ['quit', t('tower.quit')]];
+      const doneTxt = mode === 'done' ? `<h3 class="tw-done">${t('tower.done')}</h3><p>${t('tower.done_sub', { name: P.name, n: run.floors.length })}</p>${newBest ? `<p class="tw-gold">${t('tower.new_best')}</p>` : ''}${unlockedNext ? `<p class="tw-gold">🔓 ${t('tower.unlocked_next', { n: unlockedNext })}</p>` : ''}` : '';
+      panel = `<div class="tw-panel">${head}
+        <div class="tw-fighter" style="--c:${P.color}"><img src="${portraits[P.id] || ''}" alt=""><div><b>${P.name}</b><small>${label(run.difficulty)}</small></div></div>
+        ${doneTxt}<div class="tw-list">${list}</div></div>`;
+    }
+    this.opts = opts;
+    this.el = el(root, 'screen clear', 'tower', `${panel}
+      <div class="tw-btns">${opts.map(([id, l]) => `<div class="opt" data-a="${id}">${l}</div>`).join('')}</div>
+      <div class="hint">${mode === 'intro' ? `<span class="tw-skip">${t('tower.skip')}</span>` : ''}<span class="tw-nav">${t('tower.menu_hint', { ok: OK, back: BACK })}</span></div>`);
+    this.btnBox = this.el.querySelector('.tw-btns');
+    this.btns = [...this.el.querySelectorAll('.tw-btns .opt')];
+    this.btns.forEach((b, i) => onTap(this, b, 1 + i, () => { this.clicked = b.dataset.a; }));
+    this.el.addEventListener('click', () => { if (this.stage && !this.stage.introDone) this.stage.skipIntro(); });
+    this.el.classList.add('net-taps');
+    this.netTap = netTapDefault;
+    this.buffEl = this.el.querySelector('.tw-buff');
     const now = this.el.querySelector('.tw-floor.now');
     if (now) setTimeout(() => now.scrollIntoView({ block: 'center' }), 0);
+    this.render();
   }
+  get waiting() { return this.mode === 'intro' && this.stage && !this.stage.introDone; }
   render() {
+    this.el.classList.toggle('tw-waiting', this.waiting);
     this.btns.forEach((b, i) => b.classList.toggle('on', i === this.index));
+    if (this.buffEl) {
+      const b = this.buffs && this.buffs[this.index];
+      this.buffEl.textContent = b ? t('tower.boss_buff', { hp: b.hp.toFixed(1), d: b.dealt.toFixed(2) }) : '';
+    }
   }
+  backId() { return { intro: 'back', diff: 'reselect', map: 'quit', done: 'done' }[this.mode]; }
   update(input) {
+    // apresentação: qualquer botão pula; os botões só aparecem quando a câmera termina
+    if (this.waiting) {
+      if (input.anyPressed || input.keyPressedOnce('Enter') || input.keyPressedOnce('Escape')) this.stage.skipIntro();
+      return null;
+    }
+    if (this.el.classList.contains('tw-waiting')) { this.render(); this.guard = 0.2; }
+    if (this.guard > 0) { this.guard -= 1 / 60; return null; }
     if (this.clicked) { const a = this.clicked; this.clicked = null; return a; }
     for (const p of controllers(input, null)) {
       const n = this.btns.length;
-      if (p.menu.left || p.menu.right || p.menu.up || p.menu.down) { this.index = (this.index + 1) % n; this.render(); return 'move'; }
+      if (p.menu.up || p.menu.left) { this.index = (this.index + n - 1) % n; this.render(); return 'move'; }
+      if (p.menu.down || p.menu.right) { this.index = (this.index + 1) % n; this.render(); return 'move'; }
       if (confirm(p) || startGo(p, input)) return this.btns[this.index].dataset.a;
-      if (back(p)) return this.done ? 'done' : 'back';
+      if (back(p)) return this.backId();
     }
     if (input.keyPressedOnce('Enter')) return this.btns[this.index].dataset.a;
-    if (input.keyPressedOnce('Escape')) return this.done ? 'done' : 'back';
+    if (input.keyPressedOnce('Escape')) return this.backId();
     return null;
   }
   dispose() { this.el.remove(); }

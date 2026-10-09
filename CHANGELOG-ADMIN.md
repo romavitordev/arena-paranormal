@@ -21,7 +21,17 @@
   "PRECISA DE N% DE SANIDADE", versões diferentes). Chamado em `Fighter.notify`, no `netToast` e no erro da tela ONLINE;
   o selo ONLINE usa `t()`. Assim as ~195 chamadas de `notify` não mudaram: o que é sistema traduz, o que é nome de
   poder/frase de personagem fica como conteúdo. 279 chaves × 13 idiomas; teste novo do `tAlert`.
-- **TORRE (modo novo, menu principal):** `src/game/tower.js` (montagem com semente + recorde em
+- **TORRES v2 (refeito a pedido do usuário):** menu `TowerSelectScreen` com 8 torres 4 × 2 (cadeado até zerar a
+  anterior; mostra a dificuldade mais difícil zerada, `saveTowerClear` só troca por uma mais difícil). Torre 3D em
+  `src/ui/towerStage.js` (zigurate redondo de andares com arcos acesos, rampa em espiral, santuário com feixe de luz,
+  placas com os retratos dos adversários; câmera `intro()` base → topo → afasta e `focus(i)`), desenhada no
+  `render()` no estado `towerview`. `TowerScreen` com modos intro / diff / map / done. Vilão do topo sorteado
+  (`pickBoss`, `VILLAINS`) e buffado em `setupControllers` (maxHealth × e `cpuEdge` dealt/taken × por dificuldade,
+  `BOSS_BUFF`); Torre VIII (Babel) fixa. A dificuldade escolhida vale para todos os andares. Lutador fixo: na pausa da
+  torre SELEÇÃO DE PERSONAGENS vira DESISTIR. Retratos dos vilões gerados com o elenco. Correções junto: luta
+  espelho (Kaiser × Kaiser) travava na introdução por não ter fala registrada — agora entra sem falas; Mutilador,
+  Erin do Caos e ??? (Elmo) usam as falas da base (`BASE_CHARACTER`).
+- **TORRE (modo novo, menu principal) — v1, substituída pela v2 acima:** `src/game/tower.js` (montagem com semente + recorde em
   `localStorage['arena_torre_recorde']`) e `TowerScreen` (mapa vertical). Seleção com `MODES.tower.soloPick` (só o P1
   escolhe; o lado 2 some). 7 adversários sem repetir com a dificuldade subindo + O DEUS DA MORTE (`getForm`) no topo;
   `setupControllers` usa o nível do andar; a vitória mostra PRÓXIMO ANDAR / DESISTIR ou TENTAR DE NOVO / DESISTIR.

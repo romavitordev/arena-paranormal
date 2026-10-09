@@ -2,8 +2,9 @@ import * as THREE from 'three';
 import { InputManager } from './input/InputManager.js';
 import { AudioManager } from './audio/AudioManager.js';
 import { HUD } from './ui/HUD.js';
-import { HomeScreen, BattleConfigScreen, VictoryScreen, MODES, SelectScreen, MenuScreen, StageSelectScreen, LoadingScreen, CommandsScreen, ChangelogScreen, LanScreen, TowerScreen, NET_UI } from './ui/Screens.js';
-import { buildTower, towerRecord, saveTowerRecord } from './game/tower.js';
+import { HomeScreen, BattleConfigScreen, VictoryScreen, MODES, SelectScreen, MenuScreen, StageSelectScreen, LoadingScreen, CommandsScreen, ChangelogScreen, LanScreen, TowerScreen, TowerSelectScreen, NET_UI } from './ui/Screens.js';
+import { buildTower, pickBoss, towerFloorCount, isTowerUnlocked, bestDifficulty, saveTowerClear, TOWERS, TOWER_DIFFICULTIES, BOSS_BUFF, VILLAINS } from './game/tower.js';
+import { TowerStage } from './ui/towerStage.js';
 import { getForm } from './characters/forms/index.js';
 import { NetSession, Lobby, packInput, unpackInput, seededRandom } from './net/NetSession.js';
 import { setLabelNetplay } from './ui/labels.js';
@@ -18,7 +19,7 @@ import { validatePassives } from './combat/passives.js';
 import { Match } from './game/Match.js';
 import { CpuController } from './ai/CpuController.js';
 import { ARENAS, ARENA_ORDER, DEFAULT_ARENA, preloadArenas } from './arena/index.js';
-import { SETTINGS, cycleSetting, TIMER_OPTIONS, timerLabel, LANGUAGE_OPTIONS, languageLabel } from './config/settings.js';
+import { SETTINGS, cycleSetting, TIMER_OPTIONS, timerLabel, cpuLabel, LANGUAGE_OPTIONS, languageLabel } from './config/settings.js';
 import { TutorialMode } from './ui/Tutorial.js';
 import { VERSION } from './config/version.js';
 import { t, tAlert } from './i18n/index.js';
@@ -57,7 +58,7 @@ loadLearned(import.meta.env.BASE_URL).catch(() => {});
 Promise.all([preloadModels(), preloadArenas()])
   .catch((e) => console.warn(e))
   .then(() => {
-    Object.assign(portraits, renderPortraits([...ROSTER, getForm('deus_morte')], renderer)); // + o chefe da TORRE
+    Object.assign(portraits, renderPortraits([...ROSTER, ...VILLAINS.map(getForm)], renderer)); // + os vilões das TORRES
     booted = true;
     // não trava a tela inicial: gera os previews no quadro seguinte
     setTimeout(() => Object.assign(arenaThumbs, renderArenaThumbs(renderer)), 50);
@@ -108,6 +109,8 @@ function toMainMenu() {
   if (game.net) { endNet('Partida online encerrada.', true); return; }
   endMatch();
   setOverlay(null, null);
+  closeTowerStage();
+  game.towerRun = null;
   setScreen('mainmenu', new HomeScreen(screens, { portraits, menu: true, touchOnly: touchDevice }));
 }
 
@@ -255,11 +258,20 @@ function setupControllers(match) {
   const kind = game.mode.kind;
   const [p1, p2] = input.players;
   p1.cpu = kind === 'cvc' ? new CpuController({ level: SETTINGS.cpuLevel }) : null;
-  const level = kind === 'tower' ? game.tower.floors[game.tower.floor].level : SETTINGS.cpuLevel; // TORRE: a dificuldade é do andar
+  const floor = kind === 'tower' ? game.towerRun.floors[game.towerRun.floor] : null;
+  const level = floor ? floor.level : SETTINGS.cpuLevel; // TORRE: a dificuldade é do andar
   p2.cpu = kind === 'cpu' || kind === 'cvc' || kind === 'tower' ? new CpuController({ level }) : null;
   if (kind === 'training' || kind === 'tutorial') p2.setVirtual({ moveX: 0, moveY: 0, held: {} }); // o alvo fica parado (muda na pausa)
   if (p1.cpu) p1.cpu.attach(match.fighters[0]);
   if (p2.cpu) p2.cpu.attach(match.fighters[1]);
+  // TORRE: o vilão do topo vem fortalecido só para essa luta (mais vida, bate mais, apanha menos)
+  if (floor && floor.buff) {
+    const f = match.fighters[1];
+    f.maxHealth = Math.round(f.maxHealth * floor.buff.hp);
+    f.health = f.maxHealth;
+    const e = f.cpuEdge || { dealt: 1, taken: 1 };
+    f.cpuEdge = { dealt: e.dealt * floor.buff.dealt, taken: e.taken * floor.buff.taken };
+  }
 }
 
 // comportamento do alvo no treino
@@ -273,32 +285,92 @@ function applyDummy() {
   else p2.setVirtual({ moveX: 0, moveY: 0, held: mode === 'block' ? { block: true } : {} });
 }
 
-// TORRE: monta a torre do lutador escolhido e mostra o mapa dos andares
-function startTower(player) {
-  const arenas = ARENA_ORDER.filter((id) => ARENAS[id].available);
-  game.tower = buildTower({ player, roster: ROSTER, boss: getForm('deus_morte'), arenas });
-  toTower();
+// TORRES: menu das 8 torres → torre em 3D (a câmera sobe até o topo) → lutador (fixo) → dificuldade → andares
+function towerArenas() {
+  return ARENA_ORDER.filter((id) => ARENAS[id].available);
 }
 
-function toTower(opts = {}) {
+function closeTowerStage() {
+  if (game.towerStage) { game.towerStage.dispose(); game.towerStage = null; }
+}
+
+function toTowerMenu(index = 0) {
   endMatch();
   setOverlay(null, null);
-  const tw = game.tower;
-  setScreen('tower', new TowerScreen(screens, { tower: tw, portraits, record: towerRecord(tw.player.id), ...opts }));
+  closeTowerStage();
+  game.towerRun = null;
+  const towers = TOWERS.map((tw, i) => {
+    const best = bestDifficulty(tw.id);
+    return {
+      color: tw.color,
+      floorCount: towerFloorCount(tw),
+      title: tw.gauntlet ? t('tower.babel') : t('tower.name', { n: tw.numeral }),
+      villain: tw.boss ? getForm(tw.boss).name : t('tower.random_villain'),
+      unlocked: isTowerUnlocked(i),
+      best: best ? cpuLabel(best) : null,
+    };
+  });
+  setScreen('towers', new TowerSelectScreen(screens, { towers, index }));
 }
 
-// venceu o andar: guarda o recorde e sobe (no topo: tela de conclusão)
+// entrou numa torre: sorteia os andares e o vilão desta subida e mostra a câmera subindo
+function openTower(index) {
+  const tower = TOWERS[index];
+  const seed = Date.now();
+  const boss = pickBoss(tower, seed);
+  game.towerIndex = index;
+  game.towerRun = buildTower({ tower, player: null, roster: ROSTER, getForm, arenas: towerArenas(), difficulty: 'normal', seed, boss });
+  closeTowerStage();
+  game.towerStage = new TowerStage({ color: tower.color, floors: game.towerRun.floors.length - 1 });
+  game.towerStage.setFloors(game.towerRun.floors, portraits);
+  game.towerStage.setProgress(-1);
+  game.towerStage.intro();
+  toTowerView('intro');
+}
+
+function toTowerView(mode, extra = {}) {
+  endMatch();
+  setOverlay(null, null);
+  const run = game.towerRun;
+  const stage = game.towerStage;
+  const tower = run.tower;
+  const k = tower.bossBuff || 1;
+  if (mode === 'map') { stage.setProgress(run.floor); stage.focus(run.floor >= run.floors.length - 1 ? stage.n : run.floor); }
+  else if (mode === 'done') { stage.setProgress(run.floors.length, true); stage.focus(null); }
+  else if (mode === 'diff') stage.focus(stage.n);
+  else if (stage.introDone) stage.focus(null);
+  setScreen('towerview', new TowerScreen(screens, {
+    mode, run, stage, portraits, cpuLabel,
+    difficulties: TOWER_DIFFICULTIES,
+    best: bestDifficulty(tower.id),
+    buffs: BOSS_BUFF.map((b) => ({ hp: b.hp * k, dealt: b.dealt * k })),
+    ...extra,
+  }));
+}
+
+// escolheu a dificuldade: monta os andares de novo com ela (mesma semente → mesmos adversários e mesmo vilão)
+function startTowerRun(difficulty) {
+  const old = game.towerRun;
+  game.towerRun = buildTower({ tower: old.tower, player: old.player, roster: ROSTER, getForm, arenas: towerArenas(), difficulty, seed: old.seed, boss: old.boss });
+  game.towerStage.setFloors(game.towerRun.floors, portraits);
+  toTowerView('map');
+}
+
+// venceu o andar: sobe (no topo: guarda a dificuldade zerada e talvez destrave a próxima torre)
 function towerWin() {
-  const tw = game.tower;
-  tw.floor++;
-  const newRecord = saveTowerRecord(tw.player.id, tw.floor);
-  if (tw.floor >= tw.floors.length) { tw.floor = tw.floors.length - 1; toTower({ done: true, newRecord }); }
-  else toTower({ newRecord });
+  const run = game.towerRun;
+  run.floor++;
+  if (run.floor < run.floors.length) { toTowerView('map'); return; }
+  const i = game.towerIndex;
+  const nextWasOpen = i + 1 >= TOWERS.length || isTowerUnlocked(i + 1);
+  const newBest = saveTowerClear(run.tower.id, run.difficulty);
+  const unlockedNext = !nextWasOpen && isTowerUnlocked(i + 1) ? TOWERS[i + 1].numeral : null;
+  toTowerView('done', { newBest, unlockedNext });
 }
 
 function startTowerFloor() {
-  const f = game.tower.floors[game.tower.floor];
-  game.pick = { p1: game.tower.player, p2: f.def };
+  const f = game.towerRun.floors[game.towerRun.floor];
+  game.pick = { p1: game.towerRun.player, p2: f.def };
   game.arenaId = f.arenaId;
   startMatch();
 }
@@ -336,7 +408,7 @@ function openPause(by = game.pausedBy) {
       ] : []),
       { id: 'commands', label: t('pause.commands') },
       ...(tut ? [] : [{ id: 'time', label: timeLabel }, { id: 'rematch', label: t('pause.restart') }]),
-      { id: 'select', label: tut ? t('pause.other_char') : t('ui.char_select') },
+      game.mode.kind === 'tower' ? { id: 'tower_quit', label: t('tower.quit') } : { id: 'select', label: tut ? t('pause.other_char') : t('ui.char_select') },
       { id: 'main', label: t('ui.main_menu') },
     ],
   }));
@@ -661,8 +733,7 @@ function tick(dt) {
       else if (c === 'tower') {
         audio.play('confirm');
         game.mode = { kind: 'tower', cpu: true, team: false };
-        game.lastSelect = null;
-        toSelect();
+        toTowerMenu();
       }
       else if (c === 'back') { audio.play('select'); game.state = 'title'; }
       else if (c === 'move') audio.play('select');
@@ -687,11 +758,11 @@ function tick(dt) {
     }
     case 'select': {
       const pick = game.screen.update(input);
-      if (pick === 'back') toMainMenu();
+      if (pick === 'back') { if (game.mode.kind === 'tower' && game.towerRun) toTowerView('intro'); else toMainMenu(); }
       else if (pick) {
         game.lastSelect = { cursor: [...game.screen.cursor] };
         game.pick = pick;
-        if (game.mode.kind === 'tower') startTower(pick.p1);
+        if (game.mode.kind === 'tower') { game.towerRun.player = pick.p1; toTowerView('diff'); }
         else if (game.mode.kind === 'tutorial') {
           // tutorial: direto para a luta, sem configuração nem escolha de cenário
           game.arenaId = DEFAULT_ARENA;
@@ -700,11 +771,22 @@ function tick(dt) {
       }
       break;
     }
-    case 'tower': {
+    case 'towers': {
       const c = game.screen.update(input);
       if (c === 'move') audio.play('select');
+      else if (c === 'denied') audio.play('denied');
+      else if (c === 'back') { audio.play('select'); toMainMenu(); }
+      else if (typeof c === 'number') { audio.play('confirm'); openTower(c); }
+      break;
+    }
+    case 'towerview': {
+      const c = game.screen.update(input);
+      if (!c) break;
+      if (c === 'move') audio.play('select');
+      else if (c === 'pick' || c === 'reselect') { audio.play('confirm'); game.lastSelect = null; toSelect(); }
+      else if (c.startsWith('diff:')) { audio.play('confirm'); startTowerRun(c.slice(5)); }
       else if (c === 'fight') { audio.play('confirm'); startTowerFloor(); }
-      else if (c === 'back' || c === 'done') { audio.play('select'); game.tower = null; toMainMenu(); }
+      else if (c === 'back' || c === 'quit' || c === 'done') { audio.play('select'); toTowerMenu(game.towerIndex || 0); }
       break;
     }
     case 'config': {
@@ -774,8 +856,7 @@ function tick(dt) {
       } else if (choice === 'tower_next') {
         towerWin();
       } else if (choice === 'tower_quit') {
-        game.tower = null;
-        toMainMenu();
+        toTowerMenu(game.towerIndex || 0);
       } else if (choice === 'rematch') {
         startMatch();
       } else if (choice === 'select') {
@@ -809,6 +890,8 @@ const PHONE_LANDSCAPE = window.matchMedia('(max-height: 520px) and (max-width: 7
 function render() {
   if (game.match && (game.state === 'fight' || game.state === 'pause' || game.state === 'result' || game.state === 'commands')) {
     game.match.render();
+  } else if (game.state === 'towerview' && game.towerStage) {
+    game.towerStage.render(renderer);
   } else if (game.state === 'select' && game.screen && game.screen.stage && !PHONE_LANDSCAPE.matches) {
     game.screen.stage.render(renderer); // seleção: lutadores em 3D no centro
   } else {

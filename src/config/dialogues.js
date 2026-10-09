@@ -20,7 +20,7 @@ export const CHARACTER_NAMES = {
   verissimo: 'Veríssimo',
 };
 
-export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo' };
+export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto' };
 
 export const INTRO_IDS = Object.keys(CHARACTER_NAMES);
 const INTRO_HOOKS = {

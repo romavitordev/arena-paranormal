@@ -1539,9 +1539,14 @@ Objetivo:
 
 # 55. TORRE — ESTRUTURA
 
-> v1 (2026-10-09): `src/game/tower.js` + `TowerScreen`. 8 andares: 7 adversários sorteados sem repetir (Fácil, Fácil,
-> Normal, Normal, Difícil, Difícil, Muito Difícil) + O DEUS DA MORTE (chefe, Difícil) no topo. Cenário sorteado por
-> andar. Venceu → sobe; perdeu → TENTAR DE NOVO o mesmo andar ou DESISTIR. Recorde por lutador no navegador.
+> v2 (2026-10-09, pedido do usuário): menu com **8 torres** (4 em cima, 4 embaixo); só a 1ª livre, as outras com
+> cadeado até zerar a anterior. Clicou → a torre em **3D estilo Babel** (`ui/towerStage.js`): a câmera sobe da base
+> ao topo e afasta mostrando a torre inteira. Escolhe UM lutador (não troca, nem na pausa) e a **dificuldade, que vale
+> para todos os andares**. Andares sem repetir adversário (o próprio lutador pode aparecer: Kaiser × Kaiser vale).
+> No topo um **vilão sorteado a cada subida** (Anfitrião, Fantasma, Mutilador, ???, Erin do Caos, Portador do Trono,
+> Deus da Morte) **fortalecido** conforme a dificuldade (vida ×1,3–2,2, dano ×1,1–1,5, recebe menos). Torre VIII =
+> Torre de Babel: os andares são os vilões e o Deus da Morte no topo, ainda mais forte. O menu mostra a dificuldade
+> MAIS DIFÍCIL já zerada em cada torre (`localStorage['arena_torres']`).
 
 * [x] Criar modo
 * [x] Tela de seleção
@@ -1549,7 +1554,7 @@ Objetivo:
 * [x] Andares
 * [x] Adversários
 * [x] Progressão
-* [ ] Chefes (intermediários)
+* [x] Chefes
 * [x] Topo
 * [x] Tela de conclusão
 
@@ -1578,7 +1583,7 @@ TOPO
 * [x] Definir quantidade de andares (8)
 * [x] Definir adversários
 * [x] Definir dificuldade
-* [ ] Definir chefes
+* [x] Definir chefes
 * [x] Definir chefe final
 * [ ] Definir recompensas
 * [ ] Definir condições especiais
@@ -2207,8 +2212,8 @@ genérico demais), com o motivo. Nenhum item é de balanceamento.
 * [x] Progressão
 * [x] Recuperação (cada andar começa com vida e sanidade cheias)
 * [ ] Modificadores
-* [ ] Chefes (intermediários)
-* [x] Chefe final (O Deus da Morte)
+* [x] Chefes (vilão fortalecido no topo de cada uma das 8 torres)
+* [x] Chefe final (Torre de Babel)
 * [ ] Recompensas
 * [x] Topo
 * [x] Recorde
