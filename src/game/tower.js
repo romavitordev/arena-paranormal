@@ -17,7 +17,7 @@ export const BOSS_BUFF = [
 
 // Vilões possíveis no topo (formas fortes). Com poucos personagens por enquanto, o vilão de cada torre é SORTEADO a
 // cada subida (pedido do usuário) — a torre muda de cor/tamanho, o chefe varia. Só a Torre de Babel é fixa.
-export const VILLAINS = ['anfitriao', 'fantasma', 'aguiar_mutilador', 'labirinto_elmo', 'erin_caos', 'diabo', 'deus_morte'];
+export const VILLAINS = ['anfitriao', 'fantasma', 'aguiar_mutilador', 'labirinto_elmo', 'erin_caos', 'diabo', 'deus_morte', 'colosso'];
 
 // floors: andares ANTES do topo. gauntlet: os andares são esses vilões e o topo é fixo (Torre de Babel); bossBuff: extra
 export const TOWERS = [

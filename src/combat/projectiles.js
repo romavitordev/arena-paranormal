@@ -272,6 +272,27 @@ const VISUALS = {
     const m = new THREE.Mesh(new THREE.SphereGeometry(0.05, 5, 4), glowMat(color, 1));
     return m;
   },
+  // Pneu Estourado (Dalmo, o motorista de ônibus): pneu velho de ônibus girando no ar
+  tire() {
+    const g = new THREE.Group();
+    const spin = new THREE.Group();
+    const rubber = new THREE.Mesh(new THREE.TorusGeometry(0.42, 0.17, 10, 22), new THREE.MeshToonMaterial({ color: 0x1a1a1c }));
+    spin.add(rubber);
+    const rim = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.26, 0.2, 14), new THREE.MeshToonMaterial({ color: 0x8a8a90 }));
+    rim.rotation.x = Math.PI / 2;
+    spin.add(rim);
+    for (let k = 0; k < 12; k++) {
+      const tread = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.05, 0.36), new THREE.MeshToonMaterial({ color: 0x2a2a2e }));
+      const a = (k / 12) * Math.PI * 2;
+      tread.position.set(Math.cos(a) * 0.58, Math.sin(a) * 0.58, 0);
+      tread.rotation.z = a;
+      spin.add(tread);
+    }
+    spin.rotation.y = Math.PI / 2;
+    g.add(spin);
+    g.userData.tumble = spin;
+    return g;
+  },
   shockwave(color) {
     const g = new THREE.Group();
     const arc = new THREE.Mesh(new THREE.TorusGeometry(0.9, 0.12, 6, 20, Math.PI), glowMat(color, 0.9));

@@ -13,7 +13,8 @@ import { MATERIAL_TEXTURES } from '../../models/textures.js';
 // As cenas seguem as referências visuais de animação dos Mascarados (análise em
 // Referencias visuais/ANALISE.md): quando a máscara encaixa, a cena fica VERMELHA (luz vermelha forte, clarão) e o
 // assassino fica com uma AURA vermelha em volta até o fim do round.
-//   sp.scene  'helmet' (Labirinto: segura o capacete no peito, ergue acima da cabeça e encaixa)
+//   sp.scene  'helmet' (Labirinto: segura o capacete no peito, ergue acima da cabeça e encaixa; o Dalmo usa a mesma
+//             cena com o escafandro, troca a roupa e termina agachado de braços abertos — sp.swap / sp.finalAnim)
 //             'mutilador' (Aguiar: close no olho, agacha com o machado esticado e leva a máscara ao rosto)
 //             'gasmask' (Erin, que NÃO é Mascarada: ajoelha rindo com a mão no rosto, ergue-se levando a máscara de gás
 //             ao rosto; verde no lugar do vermelho — referências do usuário)
@@ -103,6 +104,10 @@ export const maskTransform = {
 
     const maskOn = (big = true) => {
       if (prop) f.rig.showProp(sp.prop, true);
+      // sp.swap: troca de roupa junto (Dalmo → Colosso: some a camisa, aparece o traje); sp.finalAnim: pose depois de
+      // encaixar (o Colosso agacha de braços abertos e urra)
+      for (const [p, v] of sp.swap || []) if (f.rig.props[p]) f.rig.showProp(p, v);
+      if (sp.finalAnim) f.anim.play(sp.finalAnim, { restart: true, duration: 0.5 });
       world.audio.play(sp.sound || 'maskOn');
       world.fx.flash(head(), { color: tint, size: big ? 3 : 2, life: 0.22 });
       world.fx.burst(head(), { count: 50, color: tint, speed: 5, life: 0.7, size: 0.24, gravity: 3 });

@@ -283,7 +283,28 @@ export const MODES = {
 // Seleção de personagem no estilo Storm 4: a grade do P1 fica à esquerda e a do P2 à direita;
 // no centro, os lutadores em 3D (SelectStage) entram deslizando ao serem olhados e fazem pose ao confirmar.
 const SEL_COLS = 3;
-const SEL_PAGE = 15; // 15 lutadores por página (3 × 5), sem barra de rolagem; LB/RB trocam de página
+const SEL_PAGE = 15; // até 15 lutadores por página (3 × 5), sem barra de rolagem; LB/RB trocam de página
+// páginas por EQUIPE: o elenco vem agrupado pela origem (ROSTER); uma equipe que não cabe inteira no resto da página
+// começa a página seguinte (ex.: os Mascarados ficam juntos na página 2). Cada página = [início, fim) em ROSTER.
+const SEL_PAGES = (() => {
+  const pages = [[0, 0]];
+  let i = 0;
+  while (i < ROSTER.length) {
+    let j = i;
+    while (j < ROSTER.length && ROSTER[j].origin === ROSTER[i].origin) j++;
+    const cur = pages[pages.length - 1];
+    if (cur[1] > cur[0] && cur[1] - cur[0] + (j - i) > SEL_PAGE) pages.push([i, i]);
+    // equipe maior que uma página inteira: quebra de 15 em 15
+    for (let k = i; k < j; k++) {
+      const pg = pages[pages.length - 1];
+      if (pg[1] - pg[0] >= SEL_PAGE) pages.push([k, k]);
+      pages[pages.length - 1][1] = k + 1;
+    }
+    i = j;
+  }
+  return pages;
+})();
+const pageOf = (i) => Math.max(0, SEL_PAGES.findIndex(([a, b]) => i >= a && i < b));
 const INPUT_NAMES = { 'carga+ranged': '△ → □', 'carga+physical': '△ → ○', 'block+carga': 'R2 + △', 'block+jump': 'R2 + ×', 'carga+dodge': '△ + L2', 'ranged+forward': '→ + □', 'ranged+back': '← + □' };
 const inputName = (k) => (k === 'carga+jump' ? t('input.carga_jump') : k === 'ranged+side' ? `${t('input.side')} + □` : INPUT_NAMES[k] || k);
 
@@ -336,7 +357,7 @@ export class SelectScreen {
     this.heads = this.sides.map((sd) => sd.querySelector('.sel-head .st'));
     this.plates = [this.el.querySelector('.plate.p1'), this.el.querySelector('.plate.p2')];
     this.pages = this.sides.map((sd) => sd.querySelector('.sel-pages'));
-    this.pageCount = Math.max(1, Math.ceil(ROSTER.length / SEL_PAGE));
+    this.pageCount = SEL_PAGES.length;
     // setas clicáveis (mouse / toque)
     this.pages.forEach((pg, p) => {
       pg.querySelector('.pg-prev').addEventListener('click', () => this.tapSide(p, 251));
@@ -383,11 +404,11 @@ export class SelectScreen {
       this.sides[p].classList.toggle('waiting', act >= 0 && act !== p && !this.ready[p]);
       this.sides[p].classList.toggle('done', this.ready[p]);
       // só os 15 da página do cursor aparecem
-      const page = Math.floor(this.cursor[p] / SEL_PAGE);
+      const page = pageOf(this.cursor[p]);
       this.pages[p].classList.toggle('single', this.pageCount < 2);
       this.pages[p].querySelector('.pg-n').textContent = t('sel.page', { n: page + 1, t: this.pageCount });
       this.cards[p].forEach((card, i) => {
-        card.classList.toggle('off', Math.floor(i / SEL_PAGE) !== page);
+        card.classList.toggle('off', pageOf(i) !== page);
         card.classList.toggle('on', this.cursor[p] === i);
         card.classList.toggle('picked', this.team && this.picks[p].includes(i));
       });
@@ -493,9 +514,8 @@ export class SelectScreen {
     // LB / RB (Q / E · PgUp / PgDn): troca de página mantendo a posição na grade
     if (p.pressed.pageL || p.pressed.pageR) { this.turnPage(slot, p.pressed.pageR ? 1 : -1); changed = true; }
     // setas andam dentro da página (de uma ponta passa para a próxima página)
-    const page = Math.floor(this.cursor[slot] / SEL_PAGE);
-    const start = page * SEL_PAGE;
-    const count = Math.min(SEL_PAGE, n - start);
+    const [start, end] = SEL_PAGES[pageOf(this.cursor[slot])];
+    const count = end - start;
     let c = this.cursor[slot] - start;
     if (p.menu.left) c = (c + count - 1) % count;
     if (p.menu.right) c = (c + 1) % count;
@@ -517,11 +537,10 @@ export class SelectScreen {
   // página anterior/seguinte (circular), mantendo a mesma posição na grade quando existe
   turnPage(slot, dir) {
     if (this.pageCount < 2 || this.ready[slot]) return;
-    const n = ROSTER.length;
-    const page = Math.floor(this.cursor[slot] / SEL_PAGE);
-    const pos = this.cursor[slot] % SEL_PAGE;
+    const page = pageOf(this.cursor[slot]);
+    const pos = this.cursor[slot] - SEL_PAGES[page][0];
     const np = (page + dir + this.pageCount) % this.pageCount;
-    this.cursor[slot] = Math.min(np * SEL_PAGE + pos, n - 1);
+    this.cursor[slot] = Math.min(SEL_PAGES[np][0] + pos, SEL_PAGES[np][1] - 1);
     this.audio.play('select');
   }
 

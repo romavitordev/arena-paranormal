@@ -1948,11 +1948,21 @@ Object.assign(ABILITY_TYPES, {
         const inArc = Math.abs(angleDiff(f.yaw, yawTo(f.pos, opp.pos))) <= (a.arc * DEG) / 2;
         if (d <= a.range && inArc && Math.abs(opp.pos.y - f.pos.y) < 1.6) {
           hit = true;
-          applyHit(world, f, opp, {
+          // a.stun (Pressão Atmosférica do Dalmo): o alvo fica ATORDOADO no lugar em vez de ser lançado
+          const res = applyHit(world, f, opp, {
             damage: a.damage, kind: 'ability', element: a.element, knockback: a.knockback, hitstun: 1.0,
-            launch: true, lowLaunch: true, guardCrush: a.guardCrush, sound: 'heavyPunch', scale: 2.2, hitstop: 0.14,
+            launch: !a.stun, lowLaunch: !a.stun, stun: a.stun, guardCrush: a.guardCrush, sound: 'heavyPunch', scale: 2.2, hitstop: 0.14,
             dir: F.clone(), strike: { impactFx: 'smash' },
           });
+          if (a.stun && typeof res === 'number' && opp.state !== 'ko') opp.stun(a.stun);
+        }
+        // a.pressure: o soco solta uma onda de pressão atmosférica (distorção do ar e anel de choque à frente)
+        if (a.pressure) {
+          const c = new THREE.Vector3(f.pos.x + F.x * 1.2, 1.2, f.pos.z + F.z * 1.2);
+          world.fx.distort(c, { color: a.color ?? 0xffb070, radius: a.pressure, life: 0.4 });
+          world.fx.ring(c, { color: a.color ?? 0xffb070, radius: a.pressure, life: 0.35, vertical: true, yaw: f.yaw });
+          world.fx.ring(new THREE.Vector3(f.pos.x + F.x * 1.5, 0.06, f.pos.z + F.z * 1.5), { color: a.color ?? 0xffb070, radius: a.pressure * 1.2, life: 0.45 });
+          world.audio.play('shockwave', { volume: 0.7, pitch: 0.8 });
         }
       });
       // errou: fica cravado no chão por mais tempo (a recuperação anda devagar) — abertura para o adversário
@@ -3246,3 +3256,110 @@ Object.assign(ABILITY_TYPES, {
     },
   },
 });
+
+// ------------------------------------------------------------------ DALMO / COLOSSO
+// AGARRÃO DE ARENA (Dalmo) / ESMAGAR O CRÂNIO (Colosso): avança, agarra o adversário PELA CABEÇA com as duas mãos
+// (a luta com o Mosto), acerta cabeçadas/socos segurando e termina batendo o corpo no chão. a.blows = golpes segurando;
+// a.final = 'slam' (crava no chão) ou 'throw' (arremessa). Não dá para defender (é agarrão), mas a esquiva escapa.
+export const DALMO_TYPES = {
+  arenaGrab: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      if (opp) f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('grab', { restart: true, duration: a.windup + 0.15 });
+      world.audio.play('swing', { volume: 0.7, pitch: 0.7 });
+      let caught = false;
+      const F = () => forwardFromYaw(f.yaw);
+      tl.each((t) => {
+        if (t < a.windup && opp && distXZ(f.pos, opp.pos) > a.range * 0.7) {
+          const d = F();
+          f.vel.x = d.x * a.lunge;
+          f.vel.z = d.z * a.lunge;
+        } else { f.vel.x = 0; f.vel.z = 0; }
+        // segurando: o adversário fica preso na frente, na altura das mãos
+        if (caught && opp.state !== 'ko' && t < a.windup + a.hold) {
+          const d = F();
+          opp.pos.set(f.pos.x + d.x * 1.05, f.pos.y + 0.25, f.pos.z + d.z * 1.05);
+          opp.vel.set(0, 0, 0);
+          opp.yaw = yawTo(opp.pos, f.pos);
+        }
+      });
+      tl.add(a.windup, () => {
+        if (!opp || opp.state === 'ko' || opp.isInvulnerable() || distXZ(f.pos, opp.pos) - opp.radius > a.range || opp.state === 'dodge') { f.notify('ERROU', true); return; }
+        caught = true;
+        opp.stun(a.hold + 0.3, 'hit');
+        opp.notify(a.label || 'AGARRADO!', true);
+        f.anim.play('head_hold', { restart: true, duration: 0.25 });
+        world.audio.play('heavyPunch', { volume: 0.6, pitch: 0.6 });
+      });
+      const blows = a.blows || 2;
+      for (let i = 0; i < blows; i++) {
+        const at = a.windup + 0.25 + (i * (a.hold - 0.35)) / blows;
+        const anim = (a.blowAnims || ['headbutt', 'hook_r'])[i % (a.blowAnims || ['headbutt', 'hook_r']).length];
+        tl.add(at, () => { if (caught && opp.state !== 'ko') f.anim.play(anim, { restart: true, duration: 0.32 }); });
+        tl.add(at + 0.14, () => {
+          if (!caught || opp.state === 'ko') return;
+          applyHit(world, f, opp, { damage: a.blowDamage, kind: 'ability', element: a.element, reaction: false, ignoreInvuln: true, unblockable: true, sound: 'heavyPunch', color: a.color, scale: 1.4, hitstop: 0.08 });
+          world.fx.play('FX_HIT_HEAVY', opp.chestPos().add(new THREE.Vector3(0, 0.3, 0)), { color: 0xf0e0c0, scale: 1.2 });
+          if (a.pressure) world.fx.distort(opp.chestPos(), { color: a.color, radius: 1.6, life: 0.3 });
+          world.cameraRig.shake(0.25, 0.15);
+        });
+      }
+      const endAt = a.windup + a.hold;
+      tl.add(endAt, () => {
+        if (!caught || opp.state === 'ko') return;
+        f.anim.play(a.final === 'throw' ? 'throw_grab' : 'hammer_ground', { restart: true, duration: 0.45 });
+      });
+      tl.add(endAt + 0.16, () => {
+        if (!caught || opp.state === 'ko') return;
+        const d = F();
+        opp.pos.set(f.pos.x + d.x * 1.3, f.pos.y, f.pos.z + d.z * 1.3);
+        applyHit(world, f, opp, {
+          damage: a.finalDamage, kind: 'ability', element: a.element, ignoreInvuln: true, unblockable: true, knockback: a.final === 'throw' ? 7 : 1.5, hitstun: 0.8,
+          launch: a.final === 'throw', lowLaunch: a.final === 'throw', spike: a.final !== 'throw', sound: 'heavyPunch', color: a.color, scale: 2, hitstop: 0.14, dir: d,
+        });
+        world.fx.play('FX_GROUND_SMASH', opp.pos.clone().setY(0), { scale: 1.3 });
+        world.cameraRig.shake(0.55, 0.3);
+        if (a.pressure) {
+          world.fx.ring(new THREE.Vector3(opp.pos.x, 0.06, opp.pos.z), { color: a.color, radius: 3.5, life: 0.5 });
+          world.audio.play('shockwave', { volume: 0.8, pitch: 0.7 });
+        }
+      });
+      tl.end(endAt + 0.6);
+      return seqFrom(tl, { cancel: () => { f.anim.speed = 1; } });
+    },
+  },
+
+  // PISÃO DO COLOSSO: ergue o joelho e crava a bota de cobre no chão — onda de choque em volta (derruba quem estiver
+  // perto; quem está no ar não é atingido). Com super-armadura durante a subida do pé.
+  stompQuake: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      if (opp) f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('stomp', { restart: true, duration: a.duration ?? 0.75 });
+      world.audio.play('carga', { volume: 0.6, pitch: 0.6 });
+      const now = world.time;
+      f.superArmor = { from: now, to: now + a.impact, max: a.armorMax ?? 60, hits: 2 };
+      tl.add(a.impact, () => {
+        const c = new THREE.Vector3(f.pos.x, 0.05, f.pos.z);
+        world.fx.play('FX_GROUND_SMASH', c, { scale: 1.8 });
+        for (let i = 0; i < 3; i++) world.after(i * 0.08, () => world.fx.ring(c, { color: a.color, radius: a.radius * (0.5 + i * 0.3), life: 0.45 }));
+        world.fx.distort(new THREE.Vector3(f.pos.x, 0.8, f.pos.z), { color: a.color, radius: a.radius, life: 0.4 });
+        world.cameraRig.shake(0.8, 0.4);
+        world.audio.play('explosion', { volume: 0.8, pitch: 0.6 });
+        if (!opp || opp.state === 'ko' || opp.isInvulnerable()) return;
+        const d = distXZ(f.pos, opp.pos) - opp.radius;
+        if (d <= a.radius && opp.pos.y < 0.6) {
+          applyHit(world, f, opp, { damage: a.damage, kind: 'ability', element: a.element, knockback: 4, hitstun: 0.8, launch: true, lowLaunch: true, guardCrush: true, sound: 'heavyPunch', color: a.color, scale: 1.8, dir: new THREE.Vector3().subVectors(opp.pos, f.pos).setY(0).normalize() });
+        }
+      });
+      tl.end(a.duration ?? 0.75);
+      return seqFrom(tl);
+    },
+  },
+};
+Object.assign(ABILITY_TYPES, DALMO_TYPES);

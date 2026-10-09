@@ -1002,6 +1002,53 @@ export const MATERIAL_TEXTURES = {
   face_jae: jaeFace(false),
   // o sorriso de canto debaixo do capuz (cena da Transformação, o gif)
   face_jae_grin: jaeFace(true),
+  // DALMO (o Colosso): pele escura, olhar pesado, cicatriz na bochecha esquerda e no nariz, barba rala
+  face_dalmo: face((g) => {
+    g.strokeStyle = 'rgba(30,14,10,0.7)'; g.lineWidth = 3; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(CX + 30, EYE_Y + 16); g.lineTo(CX + 50, EYE_Y + 44); g.stroke();
+    g.beginPath(); g.moveTo(CX - 6, NOSE_Y - 18); g.lineTo(CX + 8, NOSE_Y - 6); g.stroke();
+    g.fillStyle = 'rgba(20,10,8,0.35)';
+    for (let i = 0; i < 260; i++) { const a = Math.random() * Math.PI; const r = 34 + Math.random() * 12; g.fillRect(CX + Math.cos(a) * r * 1.2, MOUTH_Y - 6 + Math.sin(a) * r * 0.75, 1.5, 1.5); }
+  }, {
+    skin: '#5a3a2a',
+    eye: { iris: '#2a1a10', irisLight: '#4a3020', tilt: -0.04, w: 14, h: 6 },
+    brow: { angry: 3, thick: 5, color: '#120c0a' },
+    mouth: { mouthW: 17, lip: 'rgba(70,36,30,0.75)' },
+  }),
+  // tronco do Dalmo: pele escura cheia de cicatrizes das arenas (aparece no Colosso, sem a camisa)
+  torso_dalmo: () => canvasTex(512, 256, (g) => {
+    g.fillStyle = '#5a3a2a'; g.fillRect(0, 0, 512, 256);
+    const sh = g.createLinearGradient(0, 0, 0, 256);
+    sh.addColorStop(0, 'rgba(255,220,190,0.06)'); sh.addColorStop(1, 'rgba(0,0,0,0.25)');
+    g.fillStyle = sh; g.fillRect(0, 0, 512, 256);
+    // peitoral e barriga marcados
+    g.strokeStyle = 'rgba(30,16,10,0.35)'; g.lineWidth = 4;
+    for (const s of [-1, 1]) { g.beginPath(); g.arc(256 + s * 46, 70, 44, 0.2, Math.PI - 0.2); g.stroke(); }
+    g.beginPath(); g.moveTo(256, 40); g.lineTo(256, 200); g.stroke();
+    // cicatrizes: riscos claros com borda escura
+    let seed = 11;
+    const r = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    for (let i = 0; i < 26; i++) {
+      const x = r() * 512; const y = 20 + r() * 220; const len = 18 + r() * 50; const a = r() * Math.PI;
+      g.lineCap = 'round';
+      g.strokeStyle = 'rgba(30,14,10,0.6)'; g.lineWidth = 5;
+      g.beginPath(); g.moveTo(x, y); g.lineTo(x + Math.cos(a) * len, y + Math.sin(a) * len); g.stroke();
+      g.strokeStyle = 'rgba(150,100,80,0.75)'; g.lineWidth = 2;
+      g.beginPath(); g.moveTo(x, y); g.lineTo(x + Math.cos(a) * len, y + Math.sin(a) * len); g.stroke();
+    }
+  }, { wrap: true }),
+  // calça cargo verde-musgo gasta, rasgada nos joelhos (fiapos claros)
+  pants_dalmo: () => canvasTex(256, 256, (g) => {
+    g.fillStyle = '#3e4a34'; g.fillRect(0, 0, 256, 256);
+    for (let i = 0; i < 1400; i++) { g.fillStyle = Math.random() < 0.5 ? 'rgba(20,26,16,0.25)' : 'rgba(110,120,90,0.18)'; g.fillRect(Math.random() * 256, Math.random() * 256, 2, 2); }
+    g.strokeStyle = 'rgba(20,24,14,0.5)'; g.lineWidth = 2;
+    g.beginPath(); g.moveTo(64, 0); g.lineTo(64, 256); g.moveTo(192, 0); g.lineTo(192, 256); g.stroke();
+    for (const x of [128]) {
+      g.fillStyle = 'rgba(22,18,14,0.9)'; g.beginPath(); g.ellipse(x, 150, 26, 12, 0, 0, Math.PI * 2); g.fill();
+      g.strokeStyle = 'rgba(200,190,160,0.8)'; g.lineWidth = 1.5;
+      for (let k = 0; k < 14; k++) { const a = (k / 14) * Math.PI * 2; g.beginPath(); g.moveTo(x + Math.cos(a) * 24, 150 + Math.sin(a) * 11); g.lineTo(x + Math.cos(a) * 30, 150 + Math.sin(a) * 15); g.stroke(); }
+    }
+  }, { wrap: true }),
   // gola alta preta canelada (listras verticais)
   turtleneck_jae: () => canvasTex(256, 256, (g) => {
     g.fillStyle = '#1b191d'; g.fillRect(0, 0, 256, 256);

@@ -176,6 +176,10 @@ export const PASSIVES = {
       attacker.addEnergy && attacker.addEnergy(passive.energy ?? 2);
     },
   },
+  // Dalmo — Golpes de Arena: o finalizador que entra emenda uma cabeçada (lido em Fighter, no acerto do golpe físico)
+  arenaBlows: {},
+  // Colosso — Pressão Atmosférica das Manoplas: onda de pressão em todo soco; finalizador atordoa (lido em Fighter)
+  atmosphericPressure: {},
   meleeDrain: {
     onMeleeHit({ attacker, victim, strike, dealt, attempted, passive, world }) {
       // passive.whileBuff: só vale com o estado ligado (Gal: Ativar Ereshkigal liga a cura que cobra sanidade por alguns s)

@@ -8,7 +8,7 @@ export default {
   name: 'JUAN',
   model: 'juan',
   color: '#c01828',
-  origin: 'Escriptas', // o grupo do Estigma do Desejo em Hexatombe (com Labirinto e Aguiar)
+  origin: 'Mascarados', // o grupo do Estigma do Desejo em Hexatombe (com Labirinto e Aguiar)
   element: 'sangue',
   energyColor: 0xc01828,
   info: {

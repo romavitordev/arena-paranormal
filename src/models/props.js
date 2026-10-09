@@ -515,3 +515,103 @@ export function addJouiProps(rig) {
   props.katana = blade;
   if (props.maskSide) rig.showProp('maskSide', false);
 }
+
+// DALMO / COLOSSO (modelo próprio: tools/blender/char_dalmo.py). O ESCAFANDRO do Colosso fica em código para a cena da
+// Transformação poder levá-lo do peito à cabeça (o gif: segura o capacete, ergue e encaixa): casco de cobre arranhado,
+// os TRÊS visores vermelhos rachados (frente e laterais), rebites, espinhos no alto e atrás e o pingente de axolote rosa
+// pendurado na frente, no canto da visão (wiki: "para que lembre do motivo" — a filha, Manu).
+function colossoHelmet() {
+  const g = new THREE.Group();
+  const copper = new THREE.MeshToonMaterial({ color: 0x8e4a22 });
+  const brass = new THREE.MeshToonMaterial({ color: 0xd0a050 });
+  const dark = new THREE.MeshToonMaterial({ color: 0x2a1a12 });
+  const steel = new THREE.MeshToonMaterial({ color: 0xcfcfd4 });
+  const glass = glowMat(0xff2418, 0.95);
+  const shell = new THREE.Mesh(new THREE.SphereGeometry(0.27, 20, 16), copper);
+  shell.scale.set(1, 1.04, 1);
+  g.add(shell);
+  // riscos fundos no cobre
+  for (let i = 0; i < 7; i++) {
+    const sc = new THREE.Mesh(new THREE.BoxGeometry(0.006, 0.16, 0.006), dark);
+    const a = Math.random() * Math.PI * 2;
+    sc.position.set(Math.sin(a) * 0.268, 0.05 + Math.random() * 0.1, Math.cos(a) * 0.268);
+    sc.rotation.set(0.3, a, Math.random() - 0.5);
+    g.add(sc);
+  }
+  const visor = (r, pos, rotY) => {
+    const v = new THREE.Group();
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(r, r * 0.26, 8, 20), brass);
+    v.add(ring);
+    const disc = new THREE.Mesh(new THREE.CircleGeometry(r * 0.92, 18), glass);
+    disc.position.z = -0.005;
+    v.add(disc);
+    // rachaduras no vidro
+    for (const ang of [0.4, 1.9, 3.6]) {
+      const c = new THREE.Mesh(new THREE.PlaneGeometry(0.006, r * 1.4), new THREE.MeshBasicMaterial({ color: 0x3a0604 }));
+      c.position.z = 0.002;
+      c.rotation.z = ang;
+      v.add(c);
+    }
+    for (let k = 0; k < 8; k++) {
+      const a = (k / 8) * Math.PI * 2;
+      const bolt = new THREE.Mesh(new THREE.SphereGeometry(r * 0.12, 6, 5), brass);
+      bolt.position.set(Math.cos(a) * r * 1.32, Math.sin(a) * r * 1.32, 0.01);
+      v.add(bolt);
+    }
+    v.position.copy(pos);
+    v.rotation.y = rotY;
+    g.add(v);
+    return v;
+  };
+  visor(0.11, new THREE.Vector3(0, 0, 0.262), 0);
+  visor(0.065, new THREE.Vector3(0.258, 0.01, 0.03), Math.PI / 2);
+  visor(0.065, new THREE.Vector3(-0.258, 0.01, 0.03), -Math.PI / 2);
+  // espinhos no alto e atrás
+  for (const [x, y, z] of [[0, 0.27, -0.02], [0.12, 0.23, -0.1], [-0.12, 0.23, -0.1], [0, 0.18, -0.2], [0.18, 0.1, -0.15], [-0.18, 0.1, -0.15]]) {
+    const s = new THREE.Mesh(new THREE.ConeGeometry(0.022, 0.11, 6), steel);
+    const n = new THREE.Vector3(x, y, z).normalize();
+    s.position.set(x, y, z).addScaledVector(n, 0.04);
+    s.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), n);
+    g.add(s);
+  }
+  // anel do pescoço (encaixa na gola de cobre do modelo)
+  const neck = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.035, 8, 22), brass);
+  neck.rotation.x = Math.PI / 2;
+  neck.position.y = -0.23;
+  g.add(neck);
+  // o axolote rosa pendurado no alto da frente
+  const string = new THREE.Mesh(new THREE.CylinderGeometry(0.003, 0.003, 0.08, 4), dark);
+  string.position.set(0.09, 0.2, 0.25);
+  g.add(string);
+  const pink = new THREE.MeshToonMaterial({ color: 0xff8ab8 });
+  const ax = new THREE.Mesh(new THREE.SphereGeometry(0.024, 8, 6), pink);
+  ax.scale.set(1, 0.75, 1.5);
+  ax.position.set(0.09, 0.15, 0.255);
+  g.add(ax);
+  for (const s of [-1, 1]) {
+    const gill = new THREE.Mesh(new THREE.ConeGeometry(0.008, 0.03, 4), pink);
+    gill.position.set(0.09 + s * 0.024, 0.165, 0.255);
+    gill.rotation.z = -s * 1.1;
+    g.add(gill);
+  }
+  return g;
+}
+
+export function addDalmoProps(rig) {
+  const { sockets, props } = rig;
+  const helm = colossoHelmet();
+  helm.position.set(0, 0.17, 0.005);
+  helm.visible = false;
+  sockets.head.add(helm);
+  props.helmet = helm;
+  if (props.colosso) rig.showProp('colosso', false);
+  if (props.shirt) rig.showProp('shirt', true);
+}
+
+// COLOSSO: o escafandro posto, sem a camisa, com as Manoplas e o resto do traje
+export function addColossoProps(rig) {
+  addDalmoProps(rig);
+  rig.showProp('helmet', true);
+  if (rig.props.colosso) rig.showProp('colosso', true);
+  if (rig.props.shirt) rig.showProp('shirt', false);
+}

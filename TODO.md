@@ -1980,12 +1980,12 @@ pode servir como apoio.
 
 ## Dalmo Magno
 
-* [ ] Capacete
-* [ ] Olho vermelho
-* [ ] Explosão vermelha
-* [ ] Pose
-* [ ] Animação
-* [ ] `maskTransform`
+* [x] Capacete (o escafandro em código: `props.js → colossoHelmet`, para a cena levá-lo do peito à cabeça)
+* [x] Olho vermelho (os três visores vermelhos rachados)
+* [x] Explosão vermelha (clarão e aura do `maskTransform`)
+* [x] Pose (`colosso_roar`: agachado de braços abertos, como no gif)
+* [x] Animação (cena `helmet`: segura no peito, ergue, encaixa; troca camisa → traje com `sp.swap`)
+* [x] `maskTransform`
 
 ---
 
@@ -2265,7 +2265,7 @@ genérico demais), com o motivo. Nenhum item é de balanceamento.
 ## ETAPA 8 — CONTEÚDO FUTURO
 
 * [x] Jae-yoon (Jae → X)
-* [ ] Dalmo
+* [x] Dalmo (Dalmo → Colosso)
 * [ ] Novas transformações
 * [ ] Novos personagens
 * [ ] Novos cenários

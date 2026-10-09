@@ -1906,6 +1906,30 @@ export class Fighter {
         applyHit(this.world, this, opp, { damage: eh.damage, kind: 'melee', reaction: false, strike: { damage: eh.damage, noPassive: true }, sound: 'bladeHit', color: eh.color, scale: 0.8 });
       });
     }
+    // DALMO — GOLPES DE ARENA (ficha): o finalizador do combo que entra emenda sozinho um golpe desarmado (cabeçada)
+    // COLOSSO — PRESSÃO ATMOSFÉRICA das Manoplas: todo soco que entra solta uma onda de pressão (dano extra de Energia);
+    // os finalizadores deixam o alvo ATORDOADO
+    const pas = this.def.passives || [];
+    const arena = pas.find((p) => p.type === 'arenaBlows');
+    const press = pas.find((p) => p.type === 'atmosphericPressure');
+    if (press && typeof res === 'number' && opp.state !== 'ko') {
+      const c = opp.chestPos();
+      this.world.fx.distort(c, { color: press.color ?? 0xffb070, radius: s.finisher ? 2.2 : 1.2, life: 0.25 });
+      this.world.fx.ring(c, { color: press.color ?? 0xffb070, radius: s.finisher ? 2.0 : 1.1, life: 0.22, vertical: true, yaw: this.yaw });
+      applyHit(this.world, this, opp, { damage: press.damage ?? 6, kind: 'melee', element: 'energia', reaction: false, strike: { damage: press.damage ?? 6, noPassive: true }, sound: null, color: press.color, scale: 0.6 });
+      if (s.finisher && press.stun && opp.state !== 'ko') { opp.stun(press.stun); opp.notify('ATORDOADO', true); }
+    }
+    if (arena && s.finisher && typeof res === 'number' && opp.state !== 'ko') {
+      this.world.after(arena.delay ?? 0.16, () => {
+        if (opp.state === 'ko' || this.state === 'ko' || distXZ(this.pos, opp.pos) > 2.6) return;
+        this.anim.play('headbutt', { restart: true, duration: 0.3 });
+        this.world.after(0.1, () => {
+          if (opp.state === 'ko') return;
+          applyHit(this.world, this, opp, { damage: arena.damage ?? 14, kind: 'melee', reaction: false, strike: { damage: arena.damage ?? 14, noPassive: true }, sound: 'heavyPunch', scale: 1.1, hitstop: 0.06 });
+          this.world.fx.play('FX_HIT_HEAVY', opp.chestPos().add(new THREE.Vector3(0, 0.35, 0)), { color: 0xf0e0c0, scale: 1 });
+        });
+      });
+    }
     if (typeof res === 'number' && opp.state !== 'ko') {
       if (s.launcher) {
         // ↑ + ○: o alvo sobe e o atacante vai junto

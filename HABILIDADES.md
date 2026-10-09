@@ -541,51 +541,6 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ---
 
-## JUAN
-
-*Masoquista e imprevisível: quanto mais apanha, mais sanidade; quase morto, senta no Trono e vira o Diabo* · arma: Faca Predadora (lâmina ondulada que absorve sangue)
-
-### Físico (○ / B)
-
-| Comando | Golpe | Dano | Alcance | Observações |
-|---|---|---|---|---|
-| ○ 1 | Corte rápido | 24 | 1.7 m |  |
-| ○ 2 | Corte de volta | 24 | 1.7 m |  |
-| ○ 3 | Estocada | 28 | 1.9 m |  |
-| ○ 4 | Corte descendente | 30 | 1.7 m |  |
-| ○ 5 | Banho de Sangue | 54 | 1.9 m | finalizador: lança |
-| Frente + ○ | Bote | 32 | 1.9 m |  |
-| Trás + ○ | Recua e corta | 30 | 1.8 m | invulnerável no começo |
-| Lado + ○ | Corte em movimento | 28 | 1.8 m |  |
-| No ar + ○ | Faca aérea | 32 | 1.8 m | desce com impacto |
-| ↑ + ○ (no combo) | Corte para cima | 38 | 1.8 m | finalizador: undefined |
-| ↓ + ○ (no combo) | Faca no chão | 44 | 1.8 m | finalizador: derruba |
-
-### Principal (□ / X): Lâmina de Sangue
-
-- Dano 24 · alcance 18 m · cooldown 2 s · custo 0
-
-### Habilidades
-
-- **Descarnar Discente** — R2 + △ / RT + Y · custo 30 · cooldown 14 s · dano 80 · alcance 9 m
-  Ritual de Sangue: cortes surgem no corpo do alvo, um atrás do outro (dano alto e sangramento).
-- **Perturbação Discente** — △ + ○ / Y + B · custo 20 · cooldown 12 s · dano 30 · alcance 5 m
-  Uma ordem simples a quem está perto: "PARE!" (paralisa), "VENHA!" (puxa) ou "AJOELHE!" (derruba). Sai uma ao acaso.
-- **Vínculo de Sangue** — △ + □ / Y + X · custo 25 · cooldown 20 s · alcance 9 m
-  Marca o próprio corpo e o do alvo: por 8 s, 30% do dano que o Juan recebe é replicado no alvo.
-- **Armadura de Sangue Diabólica** — △ + L2 / Y + LT · custo 30 · cooldown 24 s
-  Também nasce sozinha depois de sangrar o bastante (a cada 400 de dano recebido, mais curta, e usa a recarga). O próprio sangue endurece numa armadura com espinhos: recebe 30% menos dano, aguenta 2 golpes sem recuar e fica mais rápido. O braço da faca vira uma arma de sangue: golpes físicos 25% mais fortes.
-
-### Especial: Hemorragia Severa
-
-250 de dano · custo 50 · cooldown 14 s.
-
-### Transformação: Renascimento
-
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → transforma no Diabo até o fim do round (+150 de vida).
-
----
-
 ## XANDE
 
 *Brigão versátil: amaldiçoa o taco, puxa ou repele com magnetismo e se protege com a Tela de Ruído* · arma: Taco com arame farpado e o Skate Caótico
@@ -726,6 +681,51 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ---
 
+## DALMO
+
+*Gladiador das arenas clandestinas: pondo o escafandro, vira o Colosso* · arma: Os punhos (e um pneu de ônibus); as Manoplas do Colosso na Transformação
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Direto pesado | 30 | 1.9 m |  |
+| ○ 2 | Cruzado | 32 | 1.9 m |  |
+| ○ 3 | Cotovelada | 30 | 1.6 m |  |
+| ○ 4 | Joelhada | 32 | 1.5 m |  |
+| ○ 5 | Soco de arena | 58 | 2 m | finalizador: lança |
+| Frente + ○ | Ombrada | 40 | 1.9 m |  |
+| Trás + ○ | Cabeçada | 40 | 1.5 m |  |
+| Lado + ○ | Gancho de lado | 34 | 1.9 m |  |
+| No ar + ○ | Martelada no ar | 44 | 1.9 m | desce com impacto |
+| ↑ + ○ (no combo) | Gancho ascendente | 44 | 1.9 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Pisão | 54 | 1.8 m | finalizador: derruba |
+
+### Principal (□ / X): Pneu Estourado
+
+- Dano 42 · alcance 15 m · cooldown 3.6 s · custo 0
+
+### Habilidades
+
+- **Pressão Atmosférica** — △ + ○ / Y + B · custo 25 · cooldown 11 s · dano 58 · alcance 2.4 m
+  Concentra a força num soco que solta uma onda de pressão (dano de Energia): quem é atingido fica ATORDOADO. Aguenta um golpe durante a preparação; errar deixa ele aberto.
+- **Agarrão de Arena** — △ + □ / Y + X · custo 30 · cooldown 12 s · alcance 1.8 m
+  Avança e agarra o adversário pela cabeça: duas cabeçadas segurando e bate o corpo dele no chão. Não dá para defender — só esquivar.
+- **Atropelar** — △ + L2 / Y + LT · custo 20 · cooldown 9 s · dano 44 · alcance 2 m
+  Abaixa o ombro e atropela tudo pela frente como um ônibus desgovernado: quebra a guarda e derruba.
+- **A Glória Era Viciante** — R2 + △ / RT + Y · custo 30 · cooldown 20 s
+  O grito da plateia na cabeça: por 8 s aguenta 3 golpes sem recuar, bate 15% mais forte e recebe 15% menos dano.
+
+### Especial: Finalização de Arena
+
+250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: O Colosso
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
+
+---
+
 ## AGUIAR
 
 *Caçador paciente: prende, marca e mutila — e vira o Mutilador Noturno quando põe a máscara (Transformação)* · arma: Machado do Mutilador (com corda para arremessar e puxar)
@@ -772,44 +772,47 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ---
 
-## LABIRINTO
+## JAE
 
-*Controla o espaço com rituais à distância — e vira o ??? quando põe o capacete* · arma: A Antena (lança com parabólica)
+*Assassina em série: pondo o capuz, vira X* · arma: Punhal X (adaga) e punhais de arremesso
 
 ### Físico (○ / B)
 
 | Comando | Golpe | Dano | Alcance | Observações |
 |---|---|---|---|---|
-| ○ 1 | Estocada | 30 | 2.5 m |  |
-| ○ 2 | Varrida | 32 | 2.5 m |  |
-| ○ 3 | Varrida de volta | 32 | 2.5 m |  |
-| ○ 4 | Golpe da parabólica | 40 | 2.4 m |  |
-| ○ 5 | Giro da Antena | 58 | 3 m | finalizador: lança |
-| Frente + ○ | Investida da lança | 34 | 2.6 m |  |
-| Trás + ○ | Recua e estoca | 34 | 2.4 m | invulnerável no começo |
-| Lado + ○ | Varrida lateral | 30 | 2.5 m |  |
-| No ar + ○ | Antena do alto | 36 | 2.4 m | desce com impacto |
-| ↑ + ○ (no combo) | Antena para cima | 40 | 2.4 m | finalizador: undefined |
-| ↓ + ○ (no combo) | Antena no chão | 46 | 2.4 m | finalizador: derruba |
+| ○ 1 | Corte rápido | 22 | 1.7 m |  |
+| ○ 2 | Corte de volta | 22 | 1.7 m |  |
+| ○ 3 | Punhalada | 26 | 1.8 m |  |
+| ○ 4 | Estocada | 28 | 1.9 m |  |
+| ○ 5 | X | 50 | 1.9 m | finalizador: lança |
+| Frente + ○ | Bote na sombra | 30 | 1.9 m |  |
+| Trás + ○ | Some e volta | 28 | 1.8 m | invulnerável no começo |
+| Lado + ○ | Flanco | 28 | 1.8 m |  |
+| No ar + ○ | Punhal do alto | 30 | 1.8 m | desce com impacto |
+| ↑ + ○ (no combo) | Corte ascendente | 36 | 1.8 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Rasteira | 40 | 1.8 m | finalizador: derruba |
 
-### Principal (□ / X): Rajada Caótica
+### Principal (□ / X): Punhais Arremessados
 
-- Dano 56 · alcance 20 m · cooldown 2.4 s · custo 0
+- Dano 22 × 2 · alcance 24 m · cooldown 2.4 s · custo 0
 
 ### Habilidades
 
-- **Labirinto Mental** — △ + □ / Y + X · custo 30 · cooldown 18 s · alcance 11 m
-  Prende a mente do alvo num labirinto: por alguns segundos ele anda numa direção que muda sozinha. Com o capacete vira Labirinto Abissal.
-- **Mapa Sanguíneo** — △ + ○ / Y + B · custo 20 · cooldown 20 s
-  Desenha um mapa com gotas de sangue que mostra onde a vítima está: por alguns segundos ele a rastreia, anda mais rápido e os ataques contra ela ficam mais fortes. Com o capacete vira Revelação Sanguínea.
-- **Capturar Momento** — △ + L2 / Y + LT · custo 25 · cooldown 22 s
-  Marca o lugar com um símbolo que capta imagens e sons: ele vê o que vem — recupera 2 esquivas e fica mais atento por alguns segundos.
+- **Punhal X** — △ + ○ / Y + B · custo 20 · cooldown 10 s · dano 38 · alcance 1.9 m
+  Avança com o Punhal X num corte em X: quem é acertado fica CEGO por um instante — não consegue se defender nem se virar, e fica desprevenido.
+- **Shhh...** — △ + □ / Y + X · custo 20 · cooldown 12 s
+  Leva o dedo aos lábios e some nas sombras (4 s): quase invisível e mais rápida, o adversário perde o rastro dela. O primeiro ataque sai do escuro e pega o alvo DESPREVENIDO. Tomar dano a revela.
+- **Assassinato Furtivo** — △ + L2 / Y + LT · custo 25 · cooldown 10 s
+  Some e surge pelas costas do alvo já apunhalando: ele fica desprevenido e o golpe entra com o bônus de assassina.
+- **Zona dos Sussurros** — R2 + △ / RT + Y · custo 25 · cooldown 18 s
+  Marca um X vermelho no chão (8 s). Lá dentro ela anda mais rápido, todo golpe dela entra como assassinato e atacar não a tira do Shhh...
+- **Passiva:** golpes físicos pelas costas causam +30%
 
-### Especial: O Labirinto é a Resposta
+### Especial: A Marca do X
 
 250 de dano · custo 50 · cooldown 14 s.
 
-### Transformação: Capacete do ???
+### Transformação: Capuz de X
 
 Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
 
@@ -860,46 +863,88 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ---
 
-## JAE
+## LABIRINTO
 
-*Assassina em série: pondo o capuz, vira X* · arma: Punhal X (adaga) e punhais de arremesso
+*Controla o espaço com rituais à distância — e vira o ??? quando põe o capacete* · arma: A Antena (lança com parabólica)
 
 ### Físico (○ / B)
 
 | Comando | Golpe | Dano | Alcance | Observações |
 |---|---|---|---|---|
-| ○ 1 | Corte rápido | 22 | 1.7 m |  |
-| ○ 2 | Corte de volta | 22 | 1.7 m |  |
-| ○ 3 | Punhalada | 26 | 1.8 m |  |
-| ○ 4 | Estocada | 28 | 1.9 m |  |
-| ○ 5 | X | 50 | 1.9 m | finalizador: lança |
-| Frente + ○ | Bote na sombra | 30 | 1.9 m |  |
-| Trás + ○ | Some e volta | 28 | 1.8 m | invulnerável no começo |
-| Lado + ○ | Flanco | 28 | 1.8 m |  |
-| No ar + ○ | Punhal do alto | 30 | 1.8 m | desce com impacto |
-| ↑ + ○ (no combo) | Corte ascendente | 36 | 1.8 m | finalizador: undefined |
-| ↓ + ○ (no combo) | Rasteira | 40 | 1.8 m | finalizador: derruba |
+| ○ 1 | Estocada | 30 | 2.5 m |  |
+| ○ 2 | Varrida | 32 | 2.5 m |  |
+| ○ 3 | Varrida de volta | 32 | 2.5 m |  |
+| ○ 4 | Golpe da parabólica | 40 | 2.4 m |  |
+| ○ 5 | Giro da Antena | 58 | 3 m | finalizador: lança |
+| Frente + ○ | Investida da lança | 34 | 2.6 m |  |
+| Trás + ○ | Recua e estoca | 34 | 2.4 m | invulnerável no começo |
+| Lado + ○ | Varrida lateral | 30 | 2.5 m |  |
+| No ar + ○ | Antena do alto | 36 | 2.4 m | desce com impacto |
+| ↑ + ○ (no combo) | Antena para cima | 40 | 2.4 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Antena no chão | 46 | 2.4 m | finalizador: derruba |
 
-### Principal (□ / X): Punhais Arremessados
+### Principal (□ / X): Rajada Caótica
 
-- Dano 22 × 2 · alcance 24 m · cooldown 2.4 s · custo 0
+- Dano 56 · alcance 20 m · cooldown 2.4 s · custo 0
 
 ### Habilidades
 
-- **Punhal X** — △ + ○ / Y + B · custo 20 · cooldown 10 s · dano 38 · alcance 1.9 m
-  Avança com o Punhal X num corte em X: quem é acertado fica CEGO por um instante — não consegue se defender nem se virar, e fica desprevenido.
-- **Shhh...** — △ + □ / Y + X · custo 20 · cooldown 12 s
-  Leva o dedo aos lábios e some nas sombras (4 s): quase invisível e mais rápida, o adversário perde o rastro dela. O primeiro ataque sai do escuro e pega o alvo DESPREVENIDO. Tomar dano a revela.
-- **Assassinato Furtivo** — △ + L2 / Y + LT · custo 25 · cooldown 10 s
-  Some e surge pelas costas do alvo já apunhalando: ele fica desprevenido e o golpe entra com o bônus de assassina.
-- **Zona dos Sussurros** — R2 + △ / RT + Y · custo 25 · cooldown 18 s
-  Marca um X vermelho no chão (8 s). Lá dentro ela anda mais rápido, todo golpe dela entra como assassinato e atacar não a tira do Shhh...
-- **Passiva:** golpes físicos pelas costas causam +30%
+- **Labirinto Mental** — △ + □ / Y + X · custo 30 · cooldown 18 s · alcance 11 m
+  Prende a mente do alvo num labirinto: por alguns segundos ele anda numa direção que muda sozinha. Com o capacete vira Labirinto Abissal.
+- **Mapa Sanguíneo** — △ + ○ / Y + B · custo 20 · cooldown 20 s
+  Desenha um mapa com gotas de sangue que mostra onde a vítima está: por alguns segundos ele a rastreia, anda mais rápido e os ataques contra ela ficam mais fortes. Com o capacete vira Revelação Sanguínea.
+- **Capturar Momento** — △ + L2 / Y + LT · custo 25 · cooldown 22 s
+  Marca o lugar com um símbolo que capta imagens e sons: ele vê o que vem — recupera 2 esquivas e fica mais atento por alguns segundos.
 
-### Especial: A Marca do X
+### Especial: O Labirinto é a Resposta
 
 250 de dano · custo 50 · cooldown 14 s.
 
-### Transformação: Capuz de X
+### Transformação: Capacete do ???
 
 Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
+
+---
+
+## JUAN
+
+*Masoquista e imprevisível: quanto mais apanha, mais sanidade; quase morto, senta no Trono e vira o Diabo* · arma: Faca Predadora (lâmina ondulada que absorve sangue)
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Corte rápido | 24 | 1.7 m |  |
+| ○ 2 | Corte de volta | 24 | 1.7 m |  |
+| ○ 3 | Estocada | 28 | 1.9 m |  |
+| ○ 4 | Corte descendente | 30 | 1.7 m |  |
+| ○ 5 | Banho de Sangue | 54 | 1.9 m | finalizador: lança |
+| Frente + ○ | Bote | 32 | 1.9 m |  |
+| Trás + ○ | Recua e corta | 30 | 1.8 m | invulnerável no começo |
+| Lado + ○ | Corte em movimento | 28 | 1.8 m |  |
+| No ar + ○ | Faca aérea | 32 | 1.8 m | desce com impacto |
+| ↑ + ○ (no combo) | Corte para cima | 38 | 1.8 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Faca no chão | 44 | 1.8 m | finalizador: derruba |
+
+### Principal (□ / X): Lâmina de Sangue
+
+- Dano 24 · alcance 18 m · cooldown 2 s · custo 0
+
+### Habilidades
+
+- **Descarnar Discente** — R2 + △ / RT + Y · custo 30 · cooldown 14 s · dano 80 · alcance 9 m
+  Ritual de Sangue: cortes surgem no corpo do alvo, um atrás do outro (dano alto e sangramento).
+- **Perturbação Discente** — △ + ○ / Y + B · custo 20 · cooldown 12 s · dano 30 · alcance 5 m
+  Uma ordem simples a quem está perto: "PARE!" (paralisa), "VENHA!" (puxa) ou "AJOELHE!" (derruba). Sai uma ao acaso.
+- **Vínculo de Sangue** — △ + □ / Y + X · custo 25 · cooldown 20 s · alcance 9 m
+  Marca o próprio corpo e o do alvo: por 8 s, 30% do dano que o Juan recebe é replicado no alvo.
+- **Armadura de Sangue Diabólica** — △ + L2 / Y + LT · custo 30 · cooldown 24 s
+  Também nasce sozinha depois de sangrar o bastante (a cada 400 de dano recebido, mais curta, e usa a recarga). O próprio sangue endurece numa armadura com espinhos: recebe 30% menos dano, aguenta 2 golpes sem recuar e fica mais rápido. O braço da faca vira uma arma de sangue: golpes físicos 25% mais fortes.
+
+### Especial: Hemorragia Severa
+
+250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: Renascimento
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → transforma no Diabo até o fim do round (+150 de vida).

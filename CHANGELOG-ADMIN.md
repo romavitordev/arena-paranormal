@@ -2,6 +2,38 @@
 
 ## (em andamento) — próxima versão
 
+- **Juan de volta aos Mascarados** (pedido do usuário; no futuro talvez vá para os "Sacrifícios"). A seleção agora quebra
+  a página POR EQUIPE (`SEL_PAGES` em `Screens.js`): uma equipe que não cabe inteira no resto da página começa a
+  próxima — os seis Mascarados ficam juntos na página 2.
+- **Novo lutador: DALMO MAGNO / O COLOSSO (Mascarados, Energia).** Referências do usuário (`Referencias visuais/
+  Personagens/Dalmo`, com o dossiê) + wiki (1,85 m, dreads, cicatrizes, axolote da filha Manu; o escafandro com três
+  visores vermelhos rachados e o axolote pendurado; ficha FOR 4 / VIG 3 / AGI 1; Golpes de Arena, Pressão Atmosférica,
+  Manoplas do Colosso). Modelo `tools/blender/char_dalmo.py` → `public/models/dalmo.glb` (enorme: camisa social escura
+  `prop_shirt` com mangas arregaçadas, antebraços enfaixados, pulseira com o axolote, cargo verde rasgada, coturnos;
+  `prop_colosso`: gola de cobre rebitada com espinhos, capa de pano cru no ombro, retalhos, mangueiras vermelhas, arnês e
+  cinturão de espinhos, Manoplas de cobre, botas/caneleiras com espinhos). O escafandro é `colossoHelmet` (props.js).
+  Texturas `face_dalmo`, `torso_dalmo` (cicatrizes), `pants_dalmo`.
+  - **Kit:** combo de socos/cotovelada/joelhada (`arenaBlows`: o finalizador emenda uma cabeçada), □ **Pneu
+    Estourado** (pneu de ônibus em arco, visual `tire`), △→○ **Pressão Atmosférica** (`heavyBlow` com `stun` e
+    `pressure`: atordoa em vez de lançar, onda de pressão), △→□ **Agarrão de Arena** (tipo novo `arenaGrab`: agarra
+    pela cabeça, cabeçadas segurando e crava no chão), △+L2 **Atropelar** (`dashStrike` que quebra a guarda), R2+△ **A
+    Glória Era Viciante** (`selfBuff`: 3 golpes sem recuar, +15% dano, −15% recebido), especial **Finalização de Arena**
+    (castiga, cabeçada, gancho e o PISÃO — a finalização do Mosto). Clipes novos `headbutt`, `stomp`, `head_hold`,
+    `colosso_roar`, vitórias `vic_dalmo`/`vic_colosso`.
+  - **Transformação O Colosso** (cena `helmet` do `maskTransform` + `sp.swap` + `sp.finalAnim`): segura o escafandro
+    no peito, ergue, encaixa, a camisa some e o traje aparece, agacha de braços abertos e a aura vermelha explode (o gif).
+    Forma `forms/colosso.js`: Manoplas (`atmosphericPressure`: todo soco solta pressão de Energia; finalizador atordoa),
+    `thickSkin`, □ **Onda de Choque**, **Pressão Demolidora**, **Esmagar o Crânio**, **Pisão do Colosso** (tipo novo
+    `stompQuake`), especial **Aí Sim, Neném!**. Entra na lista de vilões das Torres.
+  - Falas (abertura/resposta/gancho, cenas com Aguiar, Kemi e Jae, 38 vitórias dele e 38 contra ele, falas de batalha),
+    agarrões `dalmo`/`colosso`, `check-roster` com as regras do Dalmo/Colosso.
+  - Testado: Pressão Atmosférica 58 + atordoa, Agarrão 72, Atropelar 44, pneu 42, especial 209; transformação na ordem
+    certa (capacete → traje → urro → Colosso, 1420 de vida máx.); Pressão Demolidora 74 + atordoa, Esmagar o Crânio 103,
+    Pisão 52, Onda de Choque 36, Aí Sim Neném 263; CPU usa Pressão/Agarrão/Glória e os Golpes de Arena emendam.
+- **CORREÇÃO (câmera/NaN):** com a tela de tamanho zero (janela minimizada) o `aspect` da câmera virava NaN, a câmera e a
+  direção do controle também, e um golpe lateral levava o lutador para posição NaN (sumia da arena para sempre). Agora a
+  câmera usa 16:9 enquanto não há tamanho e a direção do controle nunca fica inválida.
+
 - **Seleção agrupada por equipe/temporada (pedido do usuário).** `ROSTER` reordenado pelas associações da wiki
   (`lore/membros.json`): Ordo Realitas (Equipe E/Força D: Arthur, Joui, Kaiser, Dante, Erin, Aghata; Equipe Abutres:
   Balu; Aniquiladores: Arnaldo, Veríssimo) → Escriptas (Kian, Gal, Juan) → Os Cinco (Xande, Lírio) → Luzidios

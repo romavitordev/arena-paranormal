@@ -43,6 +43,10 @@ export function addVictoryClips(CLIPS, k) {
     // Arthur: a sniper apoiada no ombro (o único braço), corpo de lado e o olhar baixo — "paciente, um tiro basta"
     // JAE: o "shh" — dedo da mão ESQUERDA (a sem arma) na frente dos lábios, cabeça baixa e de lado, o punhal baixo na
     // direita (referência "shiu")
+    // Dalmo: punho direito erguido bem alto (a arte da finalização do Mosto), o outro fechado embaixo, ofegante
+    vic_dalmo: pose({ h: -0.04, hip: [0, 0.1, 0], sp: [0.05, -0.1, 0], hd: [0.1, 0.1, 0], sR: [-2.95, 0, -0.15], eR: [-0.35, 0, 0], sL: [-0.3, 0, 0.3], eL: [-1.2, 0, 0], lL: [-0.15, 0, 0.2], kL: [0.2, 0, 0], lR: [0.15, 0, -0.22], kR: [0.15, 0, 0] }),
+    // Colosso: agachado com os braços abertos, as Manoplas para os lados (o fim do gif da Transformação)
+    vic_colosso: pose({ h: -0.28, sp: [0.3, 0, 0], hd: [-0.25, 0, 0], sL: [-0.55, 0, 1.25], eL: [-0.6, 0, 0], sR: [-0.55, 0, -1.25], eR: [-0.6, 0, 0], lL: [-0.65, 0, 0.35], kL: [1.0, 0, 0], lR: [-0.2, 0, -0.35], kR: [0.85, 0, 0] }),
     vic_jae: pose({ hip: [0, -0.15, 0], sp: [0.08, -0.1, 0], hd: [0.18, 0.15, -0.08], sL: [-1.05, -0.3, 0.4], eL: [-2.2, 0, 0], sR: [0.15, 0, -0.18], eR: [-0.25, 0, 0], lR: [-0.05, 0, -0.08], lL: [0.08, 0, 0.06] }),
     vic_arthur: pose({ hip: [0, -0.25, 0], sp: [0, 0.2, 0], hd: [0.12, 0.25, 0.05], sR: [-2.1, 0.35, -0.55], eR: [-2.2, 0, 0], sL: [0, 0, 0.1], eL: [0, 0, 0], lL: [-0.12, 0, 0.12], kL: [0.15, 0, 0], lR: [0.1, 0, -0.14] }),
     // Arnaldo: o ator agradece a plateia — reverência teatral, a espada aberta para o lado e a mão livre no peito

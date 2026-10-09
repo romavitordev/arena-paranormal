@@ -107,7 +107,10 @@ export class CameraRig {
     const [a, b] = fighters;
     const sep = Math.hypot(a.pos.x - b.pos.x, a.pos.z - b.pos.z);
     const vfov = (this.camera.fov * Math.PI) / 180;
-    const hfov = 2 * Math.atan(Math.tan(vfov / 2) * this.camera.aspect);
+    // janela minimizada / tela de tamanho zero: aspect vira NaN (0/0) e a distância, a câmera e a direção do controle
+    // viravam NaN — os lutadores sumiam da arena (posição NaN) para sempre. Usa 16:9 enquanto não houver tamanho.
+    const asp = Number.isFinite(this.camera.aspect) && this.camera.aspect > 0 ? this.camera.aspect : 16 / 9;
+    const hfov = 2 * Math.atan(Math.tan(vfov / 2) * asp);
     const fitW = (sep / 2 + CAMERA_CFG.margin) / Math.tan(hfov / 2);
     const vert = Math.abs(a.pos.y - b.pos.y);
     const big = Math.max(a.size || 1, b.size || 1);
@@ -194,6 +197,8 @@ export class CameraRig {
     else cam.getWorldDirection(this.basis.forward);
     this.basis.forward.y = 0;
     this.basis.forward.normalize();
+    // nunca deixa o controle com direção inválida (o lutador iria para NaN)
+    if (!Number.isFinite(this.basis.forward.x) || this.basis.forward.lengthSq() < 0.5) this.basis.forward.set(-Math.sin(this.yaw), 0, -Math.cos(this.yaw));
     this.basis.right.set(-this.basis.forward.z, 0, this.basis.forward.x);
   }
 

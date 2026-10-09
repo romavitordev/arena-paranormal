@@ -17,21 +17,23 @@ import balu from './balu.js';
 import arnaldo from './arnaldo.js';
 import verissimo from './verissimo.js';
 import jae from './jae.js';
+import dalmo from './dalmo.js';
 
 // Elenco jogável, na ordem da tela de seleção — AGRUPADO POR EQUIPE/TEMPORADA (a grade tem 3 colunas × 5 linhas por
 // página, então cada grupo ocupa linhas inteiras):
 //   página 1: Ordo Realitas — Equipe E / Força D (Arthur, Joui, Kaiser, Dante, Erin, Aghata), Equipe Abutres (Balu) e
-//             Aniquiladores (Arnaldo, Veríssimo) · Escriptas (Kian, Gal, Juan) · Os Cinco (Xande, Lírio) e o Luzidio
+//             Aniquiladores (Arnaldo, Veríssimo) · Escriptas (Kian, Gal) · Os Cinco (Xande, Lírio) e o Luzidio
 //             de Santo Berço (Ferreiro)
-//   página 2: Mascarados / Assassinos de Hexatombe (Aguiar, Labirinto, Kemi, Jae)
+//   página 2: Mascarados / Assassinos de Hexatombe (Dalmo, Aguiar, Jae, Kemi, Labirinto, Juan) — a seleção quebra a
+//             página por equipe (Screens.js → SEL_PAGES), então o grupo fica junto mesmo se a página 1 não encher
 // Para adicionar um personagem: crie o arquivo de definição aqui, registre o modelo em models/index.js e coloque-o
 // junto da equipe dele nesta lista.
 export const ROSTER = [
   arthur, joui, kaiser, dante, erin, aghata, balu, arnaldo, verissimo, // Ordo Realitas
-  kian, gal_sal, juan, // Escriptas
+  kian, gal_sal, // Escriptas
   xande, lirio, // Os Cinco (Sinais do Outro Lado)
   ferreiro, // Luzidios (O Segredo na Floresta)
-  aguiar, labirinto, kemi, jae, // Mascarados (Hexatombe)
+  dalmo, aguiar, jae, kemi, labirinto, juan, // Mascarados (Hexatombe) — o Juan talvez vá para os "Sacrifícios" no futuro
 ];
 
 // RITMO DOS COMBOS (stats.attackSpeed): > 1 deixa os golpes físicos mais rápidos (duração, janelas de acerto,

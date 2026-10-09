@@ -19,9 +19,10 @@ export const CHARACTER_NAMES = {
   arnaldo: 'Arnaldo',
   verissimo: 'Veríssimo',
   jae: 'Jae',
+  dalmo: 'Dalmo',
 };
 
-export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto', jae_x: 'jae' };
+export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto', jae_x: 'jae', colosso: 'dalmo' };
 
 export const INTRO_IDS = Object.keys(CHARACTER_NAMES);
 const INTRO_HOOKS = {
@@ -44,6 +45,7 @@ const INTRO_HOOKS = {
   arnaldo: 'a espada da fita vermelha',
   verissimo: 'a espada do Arnaldo',
   jae: 'o punhal X',
+  dalmo: 'esses punhos',
 };
 
 const INTRO_OPENERS = {
@@ -66,6 +68,7 @@ const INTRO_OPENERS = {
   arnaldo: (other, hook) => `${other}, que entrada! Trouxe ${hook} para o palco, então. Qual é o seu papel nesta cena?`,
   verissimo: (other, hook) => `${other}. Vi ${hook} no relatório. Me diga o que veio fazer aqui, sem rodeios.`,
   jae: (other, hook) => `${other}... trouxe ${hook}? Shh. Vamos brincar de esconde-esconde.`,
+  dalmo: (other, hook) => `${other}, eu sou grande, mas não sou dois. Vem com ${hook} que eu te mostro a arena.`,
 };
 
 const INTRO_REPLIES = {
@@ -88,6 +91,7 @@ const INTRO_REPLIES = {
   arnaldo: (other, hook) => `Ah, ${other}, ${hook} rende um belo segundo ato. Vamos ver se você sabe as falas.`,
   verissimo: (other, hook) => `Anotado, ${other}. ${hook} não muda o plano. Nunca muda.`,
   jae: (other, hook) => `Que fofo, ${other}. Só ${hook}? Não grita, tá?`,
+  dalmo: (other, hook) => `${hook}? Já apanhei de coisa pior na arena, ${other}. Segura aí.`,
 };
 
 const INTRO_EXCHANGES = {
@@ -206,6 +210,18 @@ const INTRO_EXCHANGES = {
   'jae+kemi': [
     { starter: 'kemi', line: 'Jae. O Dalmo sabe que você está aqui?', response: 'jae', responseLine: 'O Colosso não manda em mim, Kemi. Ninguém manda.' },
     { starter: 'jae', line: 'Kemi, larga esse rifle. De perto é mais divertido.', response: 'kemi', responseLine: 'De perto não tem contrato. Só bagunça.' },
+  ],
+  'aguiar+dalmo': [
+    { starter: 'aguiar', line: 'Dalmo! Trouxe mais passageiro pro acampamento?', response: 'dalmo', responseLine: 'Trouxe você, Aguiar. Desce no próximo ponto.' },
+    { starter: 'dalmo', line: 'Larga o machado, delegado. Arena é no braço.', response: 'aguiar', responseLine: 'Ha ha... então vem, grandão.' },
+  ],
+  'dalmo+kemi': [
+    { starter: 'kemi', line: 'Da última vez eu baixei o rifle, Dalmo.', response: 'dalmo', responseLine: 'Porque viu a Manu comigo. Hoje ela não tá aqui, Kemi.' },
+    { starter: 'dalmo', line: 'Fui eu que te trouxe pro grupo, Kemi.', response: 'kemi', responseLine: 'E eu ainda não cobrei por isso.' },
+  ],
+  'dalmo+jae': [
+    { starter: 'jae', line: 'Shh, Colosso. Você faz barulho demais.', response: 'dalmo', responseLine: 'E você some demais, Jae. Na arena não tem sombra.' },
+    { starter: 'dalmo', line: 'Jae, a glória é minha hoje.', response: 'jae', responseLine: 'Fica com a glória. Eu fico com as costas.' },
   ],
   'arnaldo+verissimo': [
     { starter: 'verissimo', line: 'Arnaldo, você ainda segura a espada como se tivesse plateia.', response: 'arnaldo', responseLine: 'Sempre tem plateia, meu velho. Hoje é você.' },
@@ -1652,6 +1668,52 @@ const VICTORY_JAE = {
 };
 for (const [w, m] of Object.entries(VICTORY_JAE)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
 
+
+// DALMO (o Colosso): falas de vitória dele contra cada um e de cada um contra ele
+const VICTORY_DALMO = {
+  dalmo: {
+    kaiser: ['Névoa não segura soco, Kaiser.', 'Respira fundo. Ah, não dá, né? Fumaça demais.'],
+    arthur: ['Um braço só contra mim? Coragem você tem, Cervero.', 'Fica no chão, motoqueiro. Ninguém vai te buscar.'],
+    joui: ['Rápido, ligeiro... e no chão. Como todos.', 'Katana bonita. Pena que quebrou na minha mão.'],
+    aghata: ['Todo esse estudo e nenhum livro ensina a apanhar.', 'Volta pros livros, menina. Arena não é lugar de ritual.'],
+    dante: ['Faz um discurso agora. Eu espero.', 'Fecha a cortina, Dante. O show acabou no primeiro soco.'],
+    erin: ['Bomba nenhuma derruba um prédio desse tamanho.', 'Barulho bonito. Agora fica quietinha aí.'],
+    gal_sal: ['Corrente? Eu já arrebentei coisa mais grossa.', 'Justiça é pra quem tem tempo, Gal. Eu tenho conta pra pagar.'],
+    kian: ['Previu isso aqui? Previu a minha mão?', 'Muito poder, pouca casca. Rachou.'],
+    aguiar: ['Desculpa, parceiro. Na arena não tem parceiro.', 'Guarda o machado, Aguiar. Hoje a glória é minha.'],
+    labirinto: ['Labirinto? Eu atravessei a parede.', 'Achei a saída. Era passando por cima de você.'],
+    xande: ['Skate não foge de mim, moleque.', 'Teoria da conspiração nenhuma explica esse soco.'],
+    lirio: ['Parede contra parede. A minha é mais grossa.', 'Marreta boa. Mão melhor ainda.'],
+    ferreiro: ['Gigante de Santo Berço... tombou igual aos outros.', 'Espada bonita. Não corta o que não alcança.'],
+    juan: ['Sangue não me assusta, Juan. Eu nado nele toda luta.', 'Vai rindo, vai. Ri no chão agora.'],
+    kemi: ['Você hesitou da primeira vez, Kemi. Hesitou de novo.', 'Eu te trouxe pro grupo. Eu te tiro da arena.'],
+    balu: ['Dois grandões, um só de pé. Adivinha qual.', 'Machado bonito, tio. Agora vai pro chão.'],
+    arnaldo: ['Aplausos? Eu só escuto a plateia gritando o meu nome.', 'Teatro é bonito. Arena é de verdade.'],
+    verissimo: ['A Ordo inteira ia precisar de muito mais.', 'Relatório pronto, velho: perdeu pro motorista.'],
+    jae: ['Pequena, rápida... e embaixo do meu pé.', 'Esconde-esconde acabou, Jae. Te achei.'],
+  },
+  kaiser: { dalmo: ['Grande demais pra desviar da névoa.', 'Até um colosso precisa respirar, Dalmo.'] },
+  arthur: { dalmo: ['Um tiro no lugar certo derruba qualquer tamanho.', 'Não importa o tamanho, Dalmo. Importa a mira.'] },
+  joui: { dalmo: ['Força bruta não alcança sombra.', 'Você bate forte. Eu só não estava lá.'] },
+  aghata: { dalmo: ['Eu sabia exatamente onde você ia pisar.', 'Previsível como uma rota de ônibus, Dalmo.'] },
+  dante: { dalmo: ['Que personagem pesado. Saiu de cena com estrondo.', 'O tempo derruba até colosso.'] },
+  erin: { dalmo: ['Boom! Prédio grande, implosão maior!', 'Calculei a carga certinho pro seu tamanho!'] },
+  gal_sal: { dalmo: ['Grande, forte e preso na minha corrente.', 'Tamanho não é justiça, Dalmo.'] },
+  kian: { dalmo: ['Eu vi o colosso cair antes de você levantar o punho.', 'Força sem visão. Que desperdício.'] },
+  aguiar: { dalmo: ['Ha ha... o grandão caiu. A caça fica comigo.', 'Volta pro ônibus, Dalmo. A estrada é minha.'] },
+  labirinto: { dalmo: ['Grande demais pra caber nos meus corredores.', 'Você se perdeu, Dalmo. Todos se perdem.'] },
+  xande: { dalmo: ['Grande e lento! Valeu, skate!', 'Por eles, Dalmo. Você não ia passar.'] },
+  lirio: { dalmo: ['A parede aguentou. A Leonora agradece.', 'Grandão, mas eu sou mais teimoso.'] },
+  ferreiro: { dalmo: ['Santo Berço já viu gigantes maiores.', 'A Espada Consumidora não liga pro tamanho.'] },
+  juan: { dalmo: ['Seu sangue tem gosto de arena, Dalmo.', 'Ha! O colosso sangra igual a todo mundo.'] },
+  kemi: { dalmo: ['Contrato antigo, Dalmo. Hoje eu terminei.', 'Você me poupou uma vez. Eu não poupei.'] },
+  balu: { dalmo: ['Hahaha! Pode ser grande, mas o tio Balu é maior!', 'Que pancada! Bora comer alguma coisa depois?'] },
+  arnaldo: { dalmo: ['Que entrada! O público adorou a queda.', 'Bravo, Colosso! Mas o último ato era meu.'] },
+  verissimo: { dalmo: ['Olhos sempre abertos, Dalmo. Até pros gigantes.', 'A Ordo tem um lugar pra você. Uma cela.'] },
+  jae: { dalmo: ['Shh, grandão. Dorme.', 'Quanto maior, mais barulho cai. Shh.'] },
+};
+for (const [w, m] of Object.entries(VICTORY_DALMO)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
+
 export const VICTORY_FALLBACKS = {
   kaiser: 'A névoa não escolheu por mim. Desta vez, eu fiquei.',
   arthur: 'Acabou. Agora posso garantir que ninguém mais se machuque.',
@@ -1672,6 +1734,7 @@ export const VICTORY_FALLBACKS = {
   arnaldo: 'E fecham-se as cortinas. Aplausos, por favor.',
   verissimo: 'Missão cumprida. Relatório na minha mesa amanhã.',
   jae: 'Shh. Acabou.',
+  dalmo: 'Pela Manu. Sempre pela Manu.',
 };
 
 export const BATTLE_DIALOGUES = {
@@ -1695,6 +1758,7 @@ export const BATTLE_DIALOGUES = {
     arnaldo: 'O espetáculo está longe do último ato!',
     verissimo: 'Já vi situação pior no relatório. Sigo.',
     jae: 'Sangrando? Ótimo. Agora eu tô acordada.',
+    dalmo: 'Eu já levantei de coisa pior. A plateia quer mais.',
     anfitriao: 'Essa dor combina com você. Não sei por quê; combina.',
   },
   special: {
@@ -1717,6 +1781,7 @@ export const BATTLE_DIALOGUES = {
     arnaldo: 'Senhoras e senhores... chegou a atração principal!',
     verissimo: 'Chega de conversa. Vou encerrar a missão.',
     jae: 'Shh. Não grita.',
+    dalmo: 'Agora você vai ver por que me chamam de Colosso.',
     anfitriao: 'Eu ia deixar você sair andando. Aí você me olhou com essa cara.',
   },
   transform: {
@@ -1725,6 +1790,7 @@ export const BATTLE_DIALOGUES = {
     fantasma: 'O contrato cobra. Eu pago.',
     anfitriao: 'Olha só. Eu também ganhei uma fantasia nova. A sua continua sendo essa cara?',
     jae_x: 'Capuz no lugar. Agora você não vê o meu rosto.',
+    colosso: 'Aí sim, neném!',
   },
 };
 
@@ -1749,6 +1815,7 @@ export const BATTLE_REPLIES = {
     arnaldo: 'O público quer mais! Não decepcione a plateia.',
     verissimo: 'Então continue. Eu ainda não encerrei o caso.',
     jae: 'Shh... só mais um pouquinho.',
+    dalmo: 'Aguenta firme. Ainda falta o último round.',
     anfitriao: 'Sua coragem é comovente. Quase tanto quanto essa estratégia.',
   },
   special: {
@@ -1771,6 +1838,7 @@ export const BATTLE_REPLIES = {
     arnaldo: 'Que espetáculo! Mas ainda não acabou.',
     verissimo: 'A missão continua. Só que agora você está no centro da mira.',
     jae: 'Grita mais alto. Eu gosto.',
+    dalmo: 'Pode vir. Eu sou grande, mas não sou dois.',
     anfitriao: 'Vai, capricha. Quero uma história boa pra contar quando você cair.',
   },
   transform: {
@@ -1793,6 +1861,7 @@ export const BATTLE_REPLIES = {
     arnaldo: 'Uma transformação no meio do ato! Magnífico!',
     verissimo: 'Identifiquei a mudança. Mantenham a posição.',
     jae: 'Fantasia nova? A minha tem capuz.',
+    dalmo: 'Bonito. O meu escafandro é maior.',
     anfitriao: 'Isso era pra me assustar? Eu já vi coisa mais convincente no espelho.',
   },
 };
