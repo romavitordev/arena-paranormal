@@ -18,9 +18,10 @@ export const CHARACTER_NAMES = {
   balu: 'Balu',
   arnaldo: 'Arnaldo',
   verissimo: 'Veríssimo',
+  jae: 'Jae',
 };
 
-export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto' };
+export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto', jae_x: 'jae' };
 
 export const INTRO_IDS = Object.keys(CHARACTER_NAMES);
 const INTRO_HOOKS = {
@@ -42,6 +43,7 @@ const INTRO_HOOKS = {
   balu: 'o machado',
   arnaldo: 'a espada da fita vermelha',
   verissimo: 'a espada do Arnaldo',
+  jae: 'o punhal X',
 };
 
 const INTRO_OPENERS = {
@@ -63,6 +65,7 @@ const INTRO_OPENERS = {
   balu: (other, hook) => `Opa, ${other}! Chegou com ${hook}, hein. Bora conversar antes ou já vamos pra parte divertida?`,
   arnaldo: (other, hook) => `${other}, que entrada! Trouxe ${hook} para o palco, então. Qual é o seu papel nesta cena?`,
   verissimo: (other, hook) => `${other}. Vi ${hook} no relatório. Me diga o que veio fazer aqui, sem rodeios.`,
+  jae: (other, hook) => `${other}... trouxe ${hook}? Shh. Vamos brincar de esconde-esconde.`,
 };
 
 const INTRO_REPLIES = {
@@ -84,6 +87,7 @@ const INTRO_REPLIES = {
   balu: (other, hook) => `Hahaha! Tá bom, ${other}. Mas aviso: o tio Balu já lutou com coisa pior que ${hook}.`,
   arnaldo: (other, hook) => `Ah, ${other}, ${hook} rende um belo segundo ato. Vamos ver se você sabe as falas.`,
   verissimo: (other, hook) => `Anotado, ${other}. ${hook} não muda o plano. Nunca muda.`,
+  jae: (other, hook) => `Que fofo, ${other}. Só ${hook}? Não grita, tá?`,
 };
 
 const INTRO_EXCHANGES = {
@@ -194,6 +198,14 @@ const INTRO_EXCHANGES = {
   'balu+juan': [
     { starter: 'balu', line: 'Foi tu, ou aquele bicho aí dentro, que amaldiçoou meu machado?', response: 'juan', responseLine: 'Nós dois, Balu. E você gostou do presente.' },
     { starter: 'juan', line: 'O Diabo lembra do seu machado no ombro dele, sabia?', response: 'balu', responseLine: 'Ótimo. Então ele já sabe onde vai doer de novo.' },
+  ],
+  'aguiar+jae': [
+    { starter: 'jae', line: 'Aguiar, deixa o machado. Hoje eu quero brincar sozinha.', response: 'aguiar', responseLine: 'Ha ha... a parceira acordou com fome.' },
+    { starter: 'aguiar', line: 'X. Ainda trancando gente na Casa Juno?', response: 'jae', responseLine: 'Só quem merece. Quer uma chave?' },
+  ],
+  'jae+kemi': [
+    { starter: 'kemi', line: 'Jae. O Dalmo sabe que você está aqui?', response: 'jae', responseLine: 'O Colosso não manda em mim, Kemi. Ninguém manda.' },
+    { starter: 'jae', line: 'Kemi, larga esse rifle. De perto é mais divertido.', response: 'kemi', responseLine: 'De perto não tem contrato. Só bagunça.' },
   ],
   'arnaldo+verissimo': [
     { starter: 'verissimo', line: 'Arnaldo, você ainda segura a espada como se tivesse plateia.', response: 'arnaldo', responseLine: 'Sempre tem plateia, meu velho. Hoje é você.' },
@@ -1596,6 +1608,50 @@ const VICTORY_NEW = {
 };
 for (const [w, m] of Object.entries(VICTORY_NEW)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
 
+
+// JAE (Park Jae-Yoon): falas de vitória dela contra cada um e de cada um contra ela
+const VICTORY_JAE = {
+  jae: {
+    kaiser: ['Shh, Kaiser. A névoa não esconde você de mim.', 'Tanta fumaça... e eu te achei pelo cheiro do medo.'],
+    arthur: ['Um braço só e ainda tentou me alcançar. Que fofo.', 'Shh, Arthur. Dorme. Ninguém vem te buscar.'],
+    joui: ['Você também some nas sombras? As minhas são mais escuras.', 'Katana bonita. Pena que eu cheguei antes dela.'],
+    aghata: ['Todo esse conhecimento e você não viu o X debaixo do pé.', 'Lê mais uma página, Aghata. Eu espero... não, não espero.'],
+    dante: ['Fim da peça? Eu nem comecei a me divertir.', 'Seu relógio parou, Dante. O meu nunca começou.'],
+    erin: ['Barulho demais, Erin. Assassinato bom é em silêncio.', 'Suas bombas são lindas. O meu punhal é mais rápido.'],
+    gal_sal: ['Justiça? Eu mato porque posso, Gal. Simples assim.', 'Corrente nenhuma segura quem já está nas suas costas.'],
+    kian: ['Você previu tudo... menos onde eu ia estar.', 'O futuro tinha um X marcado. Era em você.'],
+    aguiar: ['Desculpa, parceiro. Hoje a caçada era minha.', 'Fica com o machado, Aguiar. O troféu é meu.'],
+    labirinto: ['Achei a saída do seu labirinto: passava por você.', 'Labirinto bonito. Eu prefiro casa trancada.'],
+    xande: ['Seus amigos não chegaram a tempo, Xande. Ninguém chega.', 'Tanto barulho pra proteger os outros... e quem protegeu você?'],
+    lirio: ['Grande e lenta, Lírio. Do jeito que eu gosto.', 'A Leonora pesa demais pra acompanhar uma sombra.'],
+    ferreiro: ['Santo Berço vai ter que achar outro protetor.', 'O Luzidio apagou. Shh.'],
+    juan: ['Fugindo de quem você era, Juan? Eu nunca fugi de quem eu sou.', 'O trono pode esperar. Eu não.'],
+    kemi: ['Contrato cancelado, Kemi. Nada pessoal... ou talvez um pouco.', 'Você mira de longe. Eu prefiro sentir de perto.'],
+    balu: ['Quanto mais alto, maior a queda, tio Balu.', 'Toda essa força e nenhum olho nas costas.'],
+    arnaldo: ['Fim do espetáculo, Arnaldo. Sem aplausos.', 'A plateia era só eu. E eu gostei.'],
+    verissimo: ['Olhos sempre abertos? Eu entrei pelas costas, velho.', 'A Ordo perdeu o líder pra uma garota com um punhal.'],
+  },
+  kaiser: { jae: ['Rápida. Mas a névoa vê quem se esconde nela.', 'Guarda esse punhal, Jae. Acabou o jogo.'] },
+  arthur: { jae: ['Pelas costas de novo? Eu aprendi a olhar pra trás.', 'Sem jogo hoje, Jae. Só eu de pé.'] },
+  joui: { jae: ['Você mata porque pode. Eu luto porque preciso.', 'As sombras também me conhecem, Jae.'] },
+  aghata: { jae: ['Eu li cada passo seu antes de você dar.', 'Seu X no chão era previsível, Jae.'] },
+  dante: { jae: ['Que personagem chata. Saiu de cena cedo.', 'Teatro de assassina? Já vi bem melhores.'] },
+  erin: { jae: ['Boom! O silêncio também tem limite, hein?', 'Anotado: assassina rápida, não é à prova de explosão!'] },
+  gal_sal: { jae: ['Pra quem mata porque pode, você caiu bem fácil.', 'Isso é justiça, Jae. Do meu jeito.'] },
+  kian: { jae: ['Eu vi o seu fim antes do capuz cair.', 'O X nunca esteve no meu caminho.'] },
+  aguiar: { jae: ['Ha ha... parceira, a caça é minha.', 'Volta pra Casa Juno, Jae. Ainda tem chave pra esconder.'] },
+  labirinto: { jae: ['Até você se perde aqui dentro.', 'Seu jogo das chaves é brincadeira perto do meu.'] },
+  xande: { jae: ['Meus amigos estão salvos. Você não vai tocar neles.', 'Acabou a brincadeira, Jae.'] },
+  lirio: { jae: ['Rapidinha, hein? A Leonora é mais.', 'Pega leve com esse punhal, menina.'] },
+  ferreiro: { jae: ['Santo Berço não abre a porta pra assassina.', 'O fogo do Luzidio enxerga no escuro.'] },
+  juan: { jae: ['Eu já fui pior que você. Por isso eu sei como parar.', 'Matar porque pode não é liberdade, Jae.'] },
+  kemi: { jae: ['Alvo abatido. Mesmo sendo colega.', 'Você chega perto demais, Jae. Eu nem precisei mirar.'] },
+  balu: { jae: ['Hahaha! Pequena e rápida, mas o tio Balu é maior!', 'Ninguém foge do machado do tio Balu!'] },
+  arnaldo: { jae: ['Que entrada! Mas a saída foi minha.', 'Bravo, Jae! Uma vilã de respeito.'] },
+  verissimo: { jae: ['Olhos sempre abertos, Jae. Inclusive nas costas.', 'Mais uma assassina fora das ruas.'] },
+};
+for (const [w, m] of Object.entries(VICTORY_JAE)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
+
 export const VICTORY_FALLBACKS = {
   kaiser: 'A névoa não escolheu por mim. Desta vez, eu fiquei.',
   arthur: 'Acabou. Agora posso garantir que ninguém mais se machuque.',
@@ -1615,6 +1671,7 @@ export const VICTORY_FALLBACKS = {
   balu: 'Viu? Eu falei que o tio Balu resolvia.',
   arnaldo: 'E fecham-se as cortinas. Aplausos, por favor.',
   verissimo: 'Missão cumprida. Relatório na minha mesa amanhã.',
+  jae: 'Shh. Acabou.',
 };
 
 export const BATTLE_DIALOGUES = {
@@ -1637,6 +1694,7 @@ export const BATTLE_DIALOGUES = {
     balu: 'Hahaha! O tio Balu aguenta mais que isso!',
     arnaldo: 'O espetáculo está longe do último ato!',
     verissimo: 'Já vi situação pior no relatório. Sigo.',
+    jae: 'Sangrando? Ótimo. Agora eu tô acordada.',
     anfitriao: 'Essa dor combina com você. Não sei por quê; combina.',
   },
   special: {
@@ -1658,6 +1716,7 @@ export const BATTLE_DIALOGUES = {
     balu: 'Agora o tio Balu vai mostrar serviço!',
     arnaldo: 'Senhoras e senhores... chegou a atração principal!',
     verissimo: 'Chega de conversa. Vou encerrar a missão.',
+    jae: 'Shh. Não grita.',
     anfitriao: 'Eu ia deixar você sair andando. Aí você me olhou com essa cara.',
   },
   transform: {
@@ -1665,6 +1724,7 @@ export const BATTLE_DIALOGUES = {
     diabo: 'Chega de fugir de quem eu sou.',
     fantasma: 'O contrato cobra. Eu pago.',
     anfitriao: 'Olha só. Eu também ganhei uma fantasia nova. A sua continua sendo essa cara?',
+    jae_x: 'Capuz no lugar. Agora você não vê o meu rosto.',
   },
 };
 
@@ -1688,6 +1748,7 @@ export const BATTLE_REPLIES = {
     balu: 'Aí sim! Gosto de quem aguenta a pressão.',
     arnaldo: 'O público quer mais! Não decepcione a plateia.',
     verissimo: 'Então continue. Eu ainda não encerrei o caso.',
+    jae: 'Shh... só mais um pouquinho.',
     anfitriao: 'Sua coragem é comovente. Quase tanto quanto essa estratégia.',
   },
   special: {
@@ -1709,6 +1770,7 @@ export const BATTLE_REPLIES = {
     balu: 'Hahaha! Agora a brincadeira ficou séria. Me dá um segundo e eu devolvo.',
     arnaldo: 'Que espetáculo! Mas ainda não acabou.',
     verissimo: 'A missão continua. Só que agora você está no centro da mira.',
+    jae: 'Grita mais alto. Eu gosto.',
     anfitriao: 'Vai, capricha. Quero uma história boa pra contar quando você cair.',
   },
   transform: {
@@ -1730,6 +1792,7 @@ export const BATTLE_REPLIES = {
     balu: 'Eita! Agora o negócio ficou grande!',
     arnaldo: 'Uma transformação no meio do ato! Magnífico!',
     verissimo: 'Identifiquei a mudança. Mantenham a posição.',
+    jae: 'Fantasia nova? A minha tem capuz.',
     anfitriao: 'Isso era pra me assustar? Eu já vi coisa mais convincente no espelho.',
   },
 };

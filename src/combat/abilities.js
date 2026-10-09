@@ -1876,10 +1876,11 @@ Object.assign(ABILITY_TYPES, {
           done = true;
           world.fx.slash(f.chestPos(), f.yaw, { color: a.color, radius: 2.2, arc: 2.6, life: 0.3, width: 0.45, roll: 0.5 });
           if (!opp.isInvulnerable()) {
-            applyHit(world, f, opp, {
+            const res = applyHit(world, f, opp, {
               damage: a.damage, kind: 'ability', element: a.element, knockback: a.knockback, hitstun: a.hitstun ?? 0.6,
               launch: !!a.launch, lowLaunch: !!a.launch, guardCrush: a.guardCrush, guardBreak: a.guardBreak, sound: a.hitSound || 'bladeHit', color: a.color, scale: 1.6, dir: forwardFromYaw(f.yaw),
             });
+            if (a.blind && typeof res === 'number' && res > 0) blindFighter(world, opp, a.blind); // Punhal X (Jae)
           }
         }
       });
@@ -3022,3 +3023,142 @@ export function createMistZone(world, owner, o) {
   zone.end = end;
   return zone;
 }
+
+// ------------------------------------------------------------------ JAE (X)
+// CEGO (Punhal X, Zona das Sombras): por um instante o alvo não consegue se defender nem se virar (fica desprevenido —
+// o bônus de assassina da Jae vale). Precognição evita o "desprevenido", não a cegueira.
+export function blindFighter(world, victim, time) {
+  if (!victim || victim.state === 'ko' || time <= 0) return;
+  const cur = victim.findBuff('blind');
+  if (cur) cur.time = Math.max(cur.time, time);
+  else victim.addBuff({ type: 'blind', name: 'CEGO', time, duration: time, noBlock: true });
+  if (victim.state === 'block') victim.setState('idle'); // a guarda cai
+  if (!hasPassive(victim, 'precognition')) victim.surprised = Math.max(victim.surprised || 0, time);
+  victim.notify('CEGO!', true);
+  world.fx.burst(victim.headPos ? victim.headPos() : victim.chestPos(), { count: 10, color: 0x0a0608, kind: 'smoke', speed: 1.2, life: 0.5, size: 0.5 });
+}
+
+// marca do X no chão (Zona dos Sussurros / Zona das Sombras): dois riscos de pincel cruzados
+const _xTex = {};
+function xMarkTexture(color) {
+  const key = String(color);
+  if (_xTex[key]) return _xTex[key];
+  const c = document.createElement('canvas');
+  c.width = c.height = 256;
+  const g = c.getContext('2d');
+  const col = new THREE.Color(color);
+  const rgb = `${Math.round(col.r * 255)},${Math.round(col.g * 255)},${Math.round(col.b * 255)}`;
+  g.lineCap = 'round';
+  for (const [x0, y0, x1, y1] of [[40, 50, 216, 210], [216, 46, 44, 214]]) {
+    for (let k = 0; k < 6; k++) {
+      g.strokeStyle = `rgba(${rgb},${0.25 + k * 0.12})`;
+      g.lineWidth = 26 - k * 4;
+      g.beginPath();
+      g.moveTo(x0 + (Math.random() - 0.5) * 6, y0 + (Math.random() - 0.5) * 6);
+      g.quadraticCurveTo(128 + (Math.random() - 0.5) * 18, 128 + (Math.random() - 0.5) * 18, x1, y1);
+      g.stroke();
+    }
+  }
+  // borda do círculo da zona
+  g.strokeStyle = `rgba(${rgb},0.35)`;
+  g.lineWidth = 4;
+  g.beginPath(); g.arc(128, 128, 122, 0, Math.PI * 2); g.stroke();
+  _xTex[key] = new THREE.CanvasTexture(c);
+  return _xTex[key];
+}
+
+function groundMark(world, pos, radius, color, opacity) {
+  const mat = new THREE.MeshBasicMaterial({ map: xMarkTexture(color), transparent: true, opacity, depthWrite: false, blending: THREE.AdditiveBlending });
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(radius * 2, radius * 2), mat);
+  m.rotation.x = -Math.PI / 2;
+  m.position.set(pos.x, 0.04, pos.z);
+  m.renderOrder = 2;
+  world.scene.add(m);
+  return { mesh: m, mat, dispose() { world.scene.remove(m); m.geometry.dispose(); mat.dispose(); } };
+}
+
+Object.assign(ABILITY_TYPES, {
+  // ZONA DOS SUSSURROS: marca um X no chão onde ela está; dentro da área ela bate mais forte e anda mais rápido
+  whisperZone: {
+    start(f, a, world) {
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.anim.play('sniper_kneel', { restart: true, duration: 0.5 });
+      world.audio.play('ritual', { volume: 0.7 });
+      tl.add(0.3, () => {
+        if (f.whisperZone) f.whisperZone.remove();
+        const pos = new THREE.Vector3(f.pos.x, 0, f.pos.z);
+        const mark = groundMark(world, pos, a.radius, a.color, 0);
+        world.fx.burst(new THREE.Vector3(pos.x, 0.3, pos.z), { count: 30, color: a.color, speed: 4, up: 0.6, life: 0.6, size: 0.25 });
+        let t = 0;
+        let done = false;
+        const self = {
+          update(dt) {
+            t += dt;
+            if (done || t > a.duration || f.state === 'ko') { done = true; return true; }
+            mark.mat.opacity = Math.min(0.85, t * 4) * (t > a.duration - 0.8 ? (a.duration - t) / 0.8 : 1);
+            mark.mesh.rotation.z += dt * 0.15;
+            const inside = Math.hypot(f.pos.x - pos.x, f.pos.z - pos.z) <= a.radius;
+            const buff = f.findBuff('whisperZone');
+            if (inside && !buff) f.addBuff({ type: 'whisperZone', name: 'ZONA DOS SUSSURROS', time: 0.3, duration: 0.3, mult: a.mult, affects: ['melee', 'ranged', 'ability'], speedMult: a.speedMult });
+            else if (inside && buff) buff.time = 0.3;
+            return false;
+          },
+          dispose() { mark.dispose(); if (f.whisperZone === self) f.whisperZone = null; },
+          remove() { done = true; },
+        };
+        f.whisperZone = self;
+        world.addTicker(self);
+      });
+      tl.end(0.5);
+      return seqFrom(tl);
+    },
+  },
+
+  // ZONA DAS SOMBRAS: armadilha de Conhecimento quase invisível no chão; quem pisa toma dano e fica CEGO
+  shadowTrap: {
+    start(f, a, world) {
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.anim.play('sniper_kneel', { restart: true, duration: 0.5 });
+      tl.add(0.3, () => {
+        if (f.shadowTrap) f.shadowTrap.remove();
+        const F = forwardFromYaw(f.yaw);
+        const pos = new THREE.Vector3(f.pos.x + F.x * 1.6, 0, f.pos.z + F.z * 1.6);
+        const mark = groundMark(world, pos, a.radius, a.color, 0.5);
+        world.audio.play('grenadePin', { volume: 0.5 });
+        let t = 0;
+        let sprung = false;
+        let done = false;
+        const self = {
+          update(dt) {
+            t += dt;
+            if (done) return true;
+            if (sprung) { mark.mat.opacity = Math.max(0, mark.mat.opacity - dt * 2); return (done = t > 0.6); }
+            // depois de armada fica quase invisível (só um brilho fraco pulsando)
+            mark.mat.opacity = t < 0.6 ? 0.5 : 0.08 + Math.sin(t * 3) * 0.04;
+            if (t > a.life) return (done = true);
+            const opp = f.opponent;
+            if (t < 0.6 || !opp || opp.state === 'ko' || !opp.onGround || opp.isInvulnerable()) return false;
+            if (Math.hypot(opp.pos.x - pos.x, opp.pos.z - pos.z) > a.radius) return false;
+            sprung = true;
+            t = 0;
+            mark.mat.opacity = 1;
+            world.audio.play('explosion', { volume: 0.5, pitch: 1.3 });
+            world.fx.play('FX_ENERGY', new THREE.Vector3(pos.x, 0.6, pos.z), { color: a.color, scale: 2.2 });
+            world.fx.burst(new THREE.Vector3(pos.x, 0.4, pos.z), { count: 22, color: 0x0a0608, kind: 'smoke', speed: 3, up: 1.6, life: 0.9, size: 0.9, grow: 1 });
+            const res = applyHit(world, f, opp, { damage: a.damage, kind: 'ability', element: a.element, knockback: 0.5, hitstun: 0.4, sound: 'bladeHit', color: a.color, pos: new THREE.Vector3(pos.x, 0.5, pos.z), unblockable: true });
+            if (typeof res === 'number' && opp.state !== 'ko') blindFighter(world, opp, a.blind);
+            return false;
+          },
+          dispose() { mark.dispose(); if (f.shadowTrap === self) f.shadowTrap = null; },
+          remove() { done = true; },
+        };
+        f.shadowTrap = self;
+        world.addTicker(self);
+      });
+      tl.end(0.5);
+      return seqFrom(tl);
+    },
+  },
+});

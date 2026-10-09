@@ -32,7 +32,9 @@ export const PASSIVES = {
       const dz = attacker.pos.z - victim.pos.z;
       const len = Math.hypot(dx, dz) || 1;
       const dot = (fx * dx + fz * dz) / len; // -1 = atacante exatamente atrás
-      return dot < -0.5 ? passive.mult ?? 1.25 : 1;
+      // Jae (surprised): também vale em quem está desprevenido ou cego — "Assassinato Furtivo" do RPG
+      const offGuard = passive.surprised && ((victim.surprised || 0) > 0 || (victim.findBuff && victim.findBuff('blind')));
+      return dot < -0.5 || offGuard ? passive.mult ?? 1.25 : 1;
     },
   },
   // Joui — Decepar: o finalizador corta mais fundo quem já está "morrendo"

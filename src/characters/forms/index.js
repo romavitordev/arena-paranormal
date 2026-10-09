@@ -7,6 +7,7 @@ import labirintoElmo from './labirinto_elmo.js';
 import aguiarMutilador from './aguiar_mutilador.js';
 import erinCaos from './erin_caos.js';
 import anfitriao from './anfitriao.js';
+import jaeX from './jae_x.js';
 
 export const FORMS = {};
 
@@ -19,4 +20,4 @@ export function getForm(id) {
   return FORMS[id];
 }
 
-[deusMorte, diabo, fantasma, labirintoElmo, aguiarMutilador, erinCaos, anfitriao].forEach(registerForm);
+[deusMorte, diabo, fantasma, labirintoElmo, aguiarMutilador, erinCaos, anfitriao, jaeX].forEach(registerForm);

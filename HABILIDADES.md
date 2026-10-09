@@ -857,3 +857,49 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 ### Transformação: Líder da Ordo Realitas
 
 Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +15% de dano (físico, distância, habilidades), −15% de dano recebido, recargas 30% mais rápidas, cura 10% na hora.
+
+---
+
+## JAE
+
+*Assassina em série: puxando o capuz vira X* · arma: Punhal X (adaga) e punhais de arremesso
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Corte rápido | 22 | 1.7 m |  |
+| ○ 2 | Corte de volta | 22 | 1.7 m |  |
+| ○ 3 | Punhalada | 26 | 1.8 m |  |
+| ○ 4 | Estocada | 28 | 1.9 m |  |
+| ○ 5 | X | 50 | 1.9 m | finalizador: lança |
+| Frente + ○ | Bote na sombra | 30 | 1.9 m |  |
+| Trás + ○ | Some e volta | 28 | 1.8 m | invulnerável no começo |
+| Lado + ○ | Flanco | 28 | 1.8 m |  |
+| No ar + ○ | Punhal do alto | 30 | 1.8 m | desce com impacto |
+| ↑ + ○ (no combo) | Corte ascendente | 36 | 1.8 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Rasteira | 40 | 1.8 m | finalizador: derruba |
+
+### Principal (□ / X): Punhais Arremessados
+
+- Dano 22 × 2 · alcance 24 m · cooldown 2.4 s · custo 0
+
+### Habilidades
+
+- **Punhal X** — △ + ○ / Y + B · custo 20 · cooldown 10 s · dano 38 · alcance 1.9 m
+  Avança com o Punhal X e corta: quem é acertado fica CEGO por um instante — não consegue se defender nem se virar.
+- **Zona das Sombras** — △ + □ / Y + X · custo 25 · cooldown 14 s · dano 60
+  Arma uma armadilha de Conhecimento quase invisível no chão (3 m). Quem pisa toma dano de Conhecimento e fica CEGO.
+- **Assassinato Furtivo** — △ + L2 / Y + LT · custo 20 · cooldown 9 s
+  Some nas sombras e surge pelas costas do alvo, que fica desprevenido — o próximo golpe dela entra com o bônus de assassina.
+- **Zona dos Sussurros** — R2 + △ / RT + Y · custo 25 · cooldown 18 s
+  Marca um X vermelho no chão. Dentro da área ela bate 25% mais forte e anda mais rápido (8 s).
+- **Passiva:** golpes físicos pelas costas causam +30%
+
+### Especial: Assassinato Cruel
+
+250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: Capuz do X
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.

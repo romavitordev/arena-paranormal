@@ -29,6 +29,7 @@ const ACTIVE_BUFF_TYPES = {
   demonAxe: ['bloodBlade'],
   heavyProtection: ['heavyProtection'],
   healOverTime: ['healing'],
+  whisperZone: ['whisperZone'], // Jae: não refaz a Zona dos Sussurros enquanto está dentro de uma
 };
 
 export function canSpendDodge(f, emergency = false) {
@@ -146,7 +147,7 @@ function sacrificeOk(f, opp) {
 const isModAbility = (a) => a.input.startsWith('block+') || a.input.startsWith('ranged+') || (a.input.startsWith('carga+') && a.input !== 'carga+jump');
 // tipos que não precisam do adversário perto (buffs, invocações, regras do jogo...)
 const SELF_TYPES = ['weaponState', 'blink', 'mistCloud', 'healOverTime', 'hatredTemple', 'shadowClones', 'heavyProtection', 'noiseScreen', 'selfBuff', 'gameRule',
-  'chaosRule', 'hostTime', 'hostAudience', 'hostButton', 'orphanGame', 'hostClones'];
+  'chaosRule', 'hostTime', 'hostAudience', 'hostButton', 'orphanGame', 'hostClones', 'whisperZone'];
 
 export class CpuController {
   constructor({ level = 'normal' } = {}) {

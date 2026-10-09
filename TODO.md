@@ -1967,12 +1967,16 @@ pode servir como apoio.
 
 ## Park Jae-yoon
 
-* [ ] Capuz
-* [ ] X vermelho
-* [ ] Explosão
-* [ ] Pose
-* [ ] Animação
-* [ ] `maskTransform`
+> 2026-10-09: ADICIONADA como lutadora (Jae) com a forma X (`forms/jae_x.js`), a partir das referências do usuário em
+> `Referencias visuais/Personagens/Jae`. A cena usa o `maskTransform` padrão (concentra, o capuz aparece, vermelho);
+> uma cena própria (puxar o capuz, sorriso, fundo vermelho) como no vídeo de referência fica para depois.
+
+* [x] Capuz
+* [x] X vermelho
+* [x] Explosão (clarão vermelho do `maskTransform`)
+* [ ] Pose (cena própria de puxar o capuz)
+* [ ] Animação (idem)
+* [x] `maskTransform`
 
 ## Dalmo Magno
 
@@ -2260,7 +2264,7 @@ genérico demais), com o motivo. Nenhum item é de balanceamento.
 
 ## ETAPA 8 — CONTEÚDO FUTURO
 
-* [ ] Jae-yoon
+* [x] Jae-yoon (Jae → X)
 * [ ] Dalmo
 * [ ] Novas transformações
 * [ ] Novos personagens

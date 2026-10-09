@@ -2,6 +2,22 @@
 
 ## (em andamento) — próxima versão
 
+- **Nova lutadora: JAE (Park Jae-Yoon, Mascarados/Hexatombe, Sangue)** — referências do usuário em
+  `Referencias visuais/Personagens/Jae`. `src/characters/jae.js` (kit exportado em `JAE_KIT`) e a forma X
+  (`forms/jae_x.js`: +20% nos golpes, cooldowns −30%, cegueira +0,4 s, bônus de assassina 1,45). Modelo próprio
+  `tools/blender/char_jae.py` → `public/models/jae.glb` (sobretudo vermelho longo aberto com lapelas, botões e tiras
+  cinza com fivelas, laços em X e tiras na barra, arnês nas costas, gola alta canelada, tiras vermelhas em X nas
+  pernas, polainas, cabelo com franja). Rosto `face_jae` (maquiagem preta, batom vermelho, pinta) e
+  `turtleneck_jae` em `textures.js`. Props (`props.js`): Punhal X (adaga de guarda de latão) e o capuz do X (casca
+  vermelha aberta, interior escuro, tiras e rebites, rosto escuro com o X vermelho em pinceladas) — variante `jae_x`
+  em `MODEL_VARIANTS`. Habilidades novas em `abilities.js`: `whisperZone` (X no chão; dentro: +25% dano e +12%
+  velocidade), `shadowTrap` (armadilha de Conhecimento quase invisível que cega) e `blindFighter` (CEGO: `noBlock`,
+  derruba a guarda e deixa desprevenido); `dashStrike` aceita `blind`. Passiva `backstab` com `surprised: true`
+  (vale também em desprevenido/cego). Especial Assassinato Cruel (`cinematicCombo`, final em X). Pose de vitória
+  `vic_jae` (o "shh" com a mão esquerda). Falas: abertura/resposta/gancho, cenas próprias com Aguiar e Kemi, 36
+  falas de vitória dela e 36 contra ela, falas de batalha. Agarrão `jae`/`jae_x` (corte na garganta). CPU:
+  Zona dos Sussurros como habilidade de si mesma. `check-roster` com a regra da Jae. Testado no navegador: todas as
+  habilidades, especial, agarrão, transformação, CPU × CPU, introdução e seleção.
 - **CORREÇÃO (travava o jogo): Renascimento do Juan.** No fim da transformação a sequência (`seq.update`) troca a forma
   e zera `this.seq` por dentro; o `Fighter.update` lia `this.seq` de novo depois e dava `TypeError` (onDone de null),
   que derrubava o laço do jogo — tela congelada. Agora guarda a sequência antes de atualizar e não reseta se ela foi

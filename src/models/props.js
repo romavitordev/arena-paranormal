@@ -436,3 +436,99 @@ export function addVerissimoProps(rig) {
   props.shotgun = gun;
   rig.muzzle = gun.userData.muzzle;
 }
+
+// JAE (modelo próprio: tools/blender/char_jae.py): o PUNHAL X na mão direita (adaga de guarda de latão) e, escondido até a
+// Transformação, o CAPUZ do X — capuz vermelho aberto na frente, tiras pretas em X com rebites dourados na lateral e o
+// rosto sumido na escuridão com o X vermelho brilhando no lugar (referências "X", "X corpo" e "shiu")
+function jaeDagger() {
+  const g = new THREE.Group();
+  const grip = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.014, 0.11, 8), new THREE.MeshToonMaterial({ color: 0x2a1a12 }));
+  grip.position.y = 0.03;
+  g.add(grip);
+  const guard = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.016, 0.026), new THREE.MeshToonMaterial({ color: 0xc9a24a, emissive: 0x2a1c06 }));
+  guard.position.y = -0.03;
+  g.add(guard);
+  const pommel = new THREE.Mesh(new THREE.SphereGeometry(0.018, 8, 6), new THREE.MeshToonMaterial({ color: 0xc9a24a }));
+  pommel.position.y = 0.09;
+  g.add(pommel);
+  // lâmina reta de dois gumes, afinando até a ponta
+  const shape = new THREE.Shape();
+  shape.moveTo(-0.018, 0); shape.lineTo(0.018, 0); shape.lineTo(0.012, -0.2); shape.lineTo(0, -0.25); shape.lineTo(-0.012, -0.2); shape.closePath();
+  const blade = new THREE.Mesh(new THREE.ExtrudeGeometry(shape, { depth: 0.006, bevelEnabled: false }), new THREE.MeshToonMaterial({ color: 0xd8d4dc, emissive: 0x221016 }));
+  blade.position.set(0, -0.035, -0.003);
+  blade.rotation.y = Math.PI / 2;
+  g.add(blade);
+  return g;
+}
+
+function jaeHood() {
+  const g = new THREE.Group();
+  const red = new THREE.MeshToonMaterial({ color: 0xa8182a, side: THREE.FrontSide });
+  const inside = new THREE.MeshBasicMaterial({ color: 0x120306, side: THREE.BackSide });
+  const gap = 1.3; // abertura do rosto (em volta de +z)
+  const R = 0.25;
+  const shellGeo = new THREE.SphereGeometry(R, 24, 16, Math.PI / 2 + gap / 2, Math.PI * 2 - gap, 0, Math.PI * 0.9);
+  const shell = new THREE.Mesh(shellGeo, red);
+  shell.scale.set(1, 1.18, 1.1);
+  g.add(shell);
+  // dentro do capuz: escuro (o rosto some)
+  const inner = new THREE.Mesh(shellGeo, inside);
+  inner.scale.set(0.97, 1.15, 1.07);
+  g.add(inner);
+  // ponta do capuz caindo para trás
+  const tip = new THREE.Mesh(new THREE.ConeGeometry(0.1, 0.24, 10), red);
+  tip.position.set(0, 0.2, -0.16);
+  tip.rotation.x = -1.05;
+  g.add(tip);
+  // tiras pretas em X com rebites dourados na lateral esquerda (como na arte)
+  const strapMat = new THREE.MeshToonMaterial({ color: 0x141016 });
+  const gold = new THREE.MeshToonMaterial({ color: 0xc9a24a, emissive: 0x2a1c06 });
+  for (const ang of [0.6, -0.6]) {
+    const st = new THREE.Mesh(new THREE.BoxGeometry(0.014, 0.15, 0.026), strapMat);
+    st.position.set(0.245, 0.06, 0.06);
+    st.rotation.set(0, 0.55, ang);
+    g.add(st);
+  }
+  for (const [y, z] of [[0.12, 0.11], [0.0, 0.11], [0.12, 0.01], [0.0, 0.01]]) {
+    const r = new THREE.Mesh(new THREE.SphereGeometry(0.014, 6, 5), gold);
+    r.position.set(0.252, y, z);
+    g.add(r);
+  }
+  // o rosto: escuridão funda e o X vermelho em dois riscos de pincel brilhando
+  const dark = new THREE.Mesh(new THREE.CircleGeometry(0.15, 20), new THREE.MeshBasicMaterial({ color: 0x030204 }));
+  dark.position.set(0, -0.01, 0.2); // na FRENTE do rosto (a superfície do rosto fica em ~0,15)
+  dark.scale.set(1.05, 1.5, 1);
+  g.add(dark);
+  const xMat = glowMat(0xff1a2a, 1);
+  for (const ang of [0.72, -0.72]) {
+    const bar = new THREE.Mesh(new THREE.PlaneGeometry(0.022, 0.3), xMat);
+    bar.position.set(0, 0.0, 0.205);
+    bar.rotation.z = ang;
+    g.add(bar);
+    // segundo traço mais fino ao lado (pincelada)
+    const thin = new THREE.Mesh(new THREE.PlaneGeometry(0.008, 0.24), xMat);
+    thin.position.set(ang > 0 ? 0.018 : -0.018, 0.012, 0.206);
+    thin.rotation.z = ang + (ang > 0 ? 0.08 : -0.08);
+    g.add(thin);
+  }
+  return g;
+}
+
+export function addJaeProps(rig) {
+  const { sockets, props } = rig;
+  const d = jaeDagger();
+  d.rotation.x = -0.3;
+  sockets.handR.add(d);
+  props.knife = d;
+  const hood = jaeHood();
+  hood.position.set(0, 0.06, -0.015);
+  hood.visible = false;
+  sockets.head.add(hood);
+  props.hoodUp = hood;
+}
+
+// JAE — forma do X: o capuz fica posto o tempo todo
+export function addJaeXProps(rig) {
+  addJaeProps(rig);
+  rig.showProp('hoodUp', true);
+}

@@ -1,7 +1,7 @@
 import { buildKaiser } from './characters/kaiser.js';
 import { buildArthur } from './characters/arthur.js';
 import { buildJoui } from './characters/joui.js';
-import { addKaiserProps, addArthurProps, addJouiProps, addAghataProps, addGalSalProps, addKianProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps, addFerreiroProps, addJuanProps, addKemiProps, addFantasmaProps, addBaluProps, addErinCaosProps, addLabirintoElmoProps, addAguiarMutiladorProps, addArnaldoProps, addAnfitriaoProps, addVerissimoProps } from './props.js';
+import { addKaiserProps, addArthurProps, addJouiProps, addAghataProps, addGalSalProps, addKianProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps, addFerreiroProps, addJuanProps, addKemiProps, addFantasmaProps, addBaluProps, addErinCaosProps, addLabirintoElmoProps, addAguiarMutiladorProps, addArnaldoProps, addAnfitriaoProps, addVerissimoProps, addJaeProps, addJaeXProps } from './props.js';
 import { buildAghata } from './characters/aghata.js';
 import { buildGalSal } from './characters/gal_sal.js';
 import { buildKian } from './characters/kian.js';
@@ -39,6 +39,8 @@ export const MODEL_BUILDERS = {
   arnaldo: buildJoui,
   anfitriao: buildJoui,
   verissimo: buildArthur,
+  jae: buildAghata,
+  jae_x: buildAghata,
 };
 
 // Modelos do Blender + armas/acessórios adicionados em código
@@ -65,6 +67,7 @@ const BLENDER_MODELS = {
   arnaldo: { url: 'models/arnaldo.glb', props: addArnaldoProps }, // Arnaldo Fritz (Desconjuração/Calamidade)
   anfitriao: { url: 'models/anfitriao.glb', props: addAnfitriaoProps }, // O Anfitrião (máscara fundida, cabos)
   verissimo: { url: 'models/verissimo.glb', props: addVerissimoProps }, // Senhor Veríssimo (Calamidade)
+  jae: { url: 'models/jae.glb', props: addJaeProps }, // Park Jae-Yoon (Hexatombe)
 };
 
 // Formas que reaproveitam o .glb de outro modelo, só com os acessórios diferentes (máscaras dos Mascarados, Erin)
@@ -72,6 +75,7 @@ const MODEL_VARIANTS = {
   erin_caos: { base: 'erin', props: addErinCaosProps }, // máscara de gás (Em Nome do Caos)
   labirinto_elmo: { base: 'labirinto', props: addLabirintoElmoProps }, // Capacete do ???
   aguiar_mutilador: { base: 'aguiar', props: addAguiarMutiladorProps }, // máscara do Mutilador Noturno
+  jae_x: { base: 'jae', props: addJaeXProps }, // capuz do X
 };
 
 const loaded = {};
