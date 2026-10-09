@@ -823,18 +823,18 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 | Comando | Golpe | Dano | Alcance | Observações |
 |---|---|---|---|---|
-| ○ 1 | Estocada curta | 26 | 2.4 m |  |
-| ○ 2 | Corte seco | 28 | 2.1 m |  |
-| ○ 3 | Corte de volta | 28 | 2.1 m |  |
-| ○ 4 | Comando | 56 | 2.3 m | finalizador: lança |
-| Frente + ○ | Avanço do comandante | 36 | 2.2 m |  |
-| Trás + ○ | Guarda do Comandante | 0 | 0 m | contra-ataque (revida 55) |
-| Lado + ○ | Corte lateral | 30 | 2.1 m |  |
-| No ar + ○ | Corte aéreo | 36 | 2.2 m | desce com impacto |
-| ↑ + ○ (no combo) | Corte ascendente | 38 | 2.2 m | finalizador: undefined |
-| ↓ + ○ (no combo) | Golpe de cima | 46 | 2.2 m | finalizador: derruba |
+| ○ 1 | Estocada do Veterano | 26 | 2.4 m |  |
+| ○ 2 | Corte de Varredura | 28 | 2.1 m |  |
+| ○ 3 | Revés do Comandante | 28 | 2.1 m |  |
+| ○ 4 | Pela Ordo Realitas | 56 | 2.3 m | finalizador: lança |
+| Frente + ○ | Interceptação | 36 | 2.2 m |  |
+| Trás + ○ | Olhos Sempre Abertos! | 0 | 0 m | contra-ataque (revida 55) |
+| Lado + ○ | Flanco da Ordem | 30 | 2.1 m |  |
+| No ar + ○ | Salto do Veterano | 36 | 2.2 m | desce com impacto |
+| ↑ + ○ (no combo) | Ergam-se, Agentes | 38 | 2.2 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Fim da Varredura | 46 | 2.2 m | finalizador: derruba |
 
-### Principal (□ / X): Escopeta curta
+### Principal (□ / X): Escopeta de Varredura
 
 - Dano 11 × 5 · alcance 10 m · cooldown 2.2 s · custo 0
 
@@ -842,18 +842,18 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 - **Inteligência Estratégica** — △ + ○ / Y + B · custo 25 · cooldown 18 s
   "Ordem!" — analisa o inimigo: por 7 s cada golpe físico que acerta ganha um corte extra.
-- **Análise Tática** — △ + □ / Y + X · custo 20 · cooldown 16 s · alcance 14 m
-  Lê o adversário como lê um relatório: por alguns segundos ele recebe mais dano.
-- **Investida dos Aniquiladores** — R2 + × / RT + A · custo 20 · cooldown 10 s · dano 50 · alcance 2.2 m
-  Avança em linha reta com a espada na frente e atravessa a guarda com força.
+- **Brecha na Guarda** — △ + □ / Y + X · custo 20 · cooldown 16 s · alcance 14 m
+  Poder do Comandante de Campo (RPG): acha a brecha na guarda do adversário — por alguns segundos ele recebe mais dano.
+- **Em Seu Caminho** — R2 + × / RT + A · custo 20 · cooldown 10 s · dano 50 · alcance 2.2 m
+  "Nós estaremos em seu caminho." Avança em linha reta com a espada na frente e atravessa a guarda com força.
 - **Jaqueta de Veríssimo** — △ + L2 / Y + LT · custo 25 · cooldown 22 s
   Fecha a jaqueta de couro passada entre os agentes: por 6 s recebe 20% menos dano e aguenta 1 golpe sem recuar.
 - **Bloqueio Perfeito** — defender no instante exato (0.16 s) anula o dano e atordoa o atacante por 0.6 s
 
-### Especial: Ordem de Ataque
+### Especial: Oficial Comandante
 
 250 de dano · custo 50 · cooldown 14 s.
 
-### Transformação: Líder dos Aniquiladores
+### Transformação: Líder da Ordo Realitas
 
 Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +15% de dano (físico, distância, habilidades), −15% de dano recebido, recargas 30% mais rápidas, cura 10% na hora.

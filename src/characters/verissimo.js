@@ -5,6 +5,10 @@
 // Cânone: Inteligência Estratégica (analisa o inimigo e dá ordens: os aliados ganham um ataque extra), Segredo de
 // Veríssimo (sabe como vai morrer — o Kian não consegue matá-lo); bloqueou o golpe do Kian que quase matou o Arthur.
 // Em 1997 carregava espingarda e faca na bandoleira (o □ é uma escopeta curta).
+// NOMES (pedido do usuário: nada genérico, referência à série/RPG): "Olhos sempre abertos!" (a frase do Arnaldo que ele
+// diz ao bloquear o golpe do Gal e salvar o Arthur, com a espada do amigo), "…que também sintam medo. Porque nós
+// estaremos em seu caminho" (a fala dele), Varredura (o trabalho das equipes da Ordem), a trilha Comandante de Campo
+// do RPG (Brecha na Guarda, Oficial Comandante) e a Ordo Realitas que ele lidera.
 // Modelo próprio do Blender (public/models/verissimo.glb, tools/blender/char_verissimo.py) + acessórios (props.js addVerissimoProps).
 const BLUE = 0x6ab0e0;
 const STEEL = 0xd8dde4;
@@ -21,7 +25,7 @@ export default {
     weapon: 'A espada do Arnaldo e uma escopeta curta',
     style: 'Esgrima disciplinada, defesa sólida e contra-ataque; dá ordens que rendem um corte extra',
     identity: 'Líder da Ordo Realitas: Inteligência Estratégica e o Segredo de Veríssimo',
-    tagline: 'Agentes, em posição. Eu cuido do resto.',
+    tagline: 'Olhos sempre abertos.',
   },
   stats: { moveSpeed: 7.8, maxHealth: 1080 },
   anims: { idle: 'idle_katana', run: 'run', charge: 'charge', victory: 'vic_verissimo', block: 'block_weapon' },
@@ -33,27 +37,28 @@ export default {
   melee: {
     name: 'Espada do Arnaldo',
     strikes: [
-      { name: 'Estocada curta', anim: 'thrust', dur: 0.28, active: [0.09, 0.17], damage: 26, range: 2.4, arc: 50, knockback: 1.1, lunge: 1.3, sound: 'blade', hitSound: 'bladeHit' },
-      { name: 'Corte seco', anim: 'slash_h', dur: 0.3, active: [0.09, 0.18], damage: 28, range: 2.1, arc: 120, knockback: 1.2, lunge: 1.1, sound: 'blade', hitSound: 'bladeHit', trail: { color: STEEL } },
-      { name: 'Corte de volta', anim: 'slash_h_back', dur: 0.3, active: [0.09, 0.18], damage: 28, range: 2.1, arc: 120, knockback: 1.2, lunge: 1.0, sound: 'blade', hitSound: 'bladeHit', trail: { color: STEEL, flip: true } },
-      { name: 'Comando', anim: 'slash_v', dur: 0.46, active: [0.18, 0.28], damage: 56, range: 2.3, arc: 80, lunge: 1.5, finisher: 'launch', guardCrush: 20, sound: 'slashFinal', hitSound: 'heavyPunch', impactScale: 1.5, trail: { color: BLUE, roll: 1.55, big: true } },
+      { name: 'Estocada do Veterano', anim: 'thrust', dur: 0.28, active: [0.09, 0.17], damage: 26, range: 2.4, arc: 50, knockback: 1.1, lunge: 1.3, sound: 'blade', hitSound: 'bladeHit' },
+      { name: 'Corte de Varredura', anim: 'slash_h', dur: 0.3, active: [0.09, 0.18], damage: 28, range: 2.1, arc: 120, knockback: 1.2, lunge: 1.1, sound: 'blade', hitSound: 'bladeHit', trail: { color: STEEL } },
+      { name: 'Revés do Comandante', anim: 'slash_h_back', dur: 0.3, active: [0.09, 0.18], damage: 28, range: 2.1, arc: 120, knockback: 1.2, lunge: 1.0, sound: 'blade', hitSound: 'bladeHit', trail: { color: STEEL, flip: true } },
+      { name: 'Pela Ordo Realitas', anim: 'slash_v', dur: 0.46, active: [0.18, 0.28], damage: 56, range: 2.3, arc: 80, lunge: 1.5, finisher: 'launch', guardCrush: 20, sound: 'slashFinal', hitSound: 'heavyPunch', impactScale: 1.5, trail: { color: BLUE, roll: 1.55, big: true } },
     ],
-    up: { name: 'Corte ascendente', anim: 'slash_up', dur: 0.44, active: [0.15, 0.27], damage: 38, range: 2.2, arc: 110, lunge: 0.9, finisher: 'launchHigh', launcher: true, sound: 'swing', hitSound: 'bladeHit', trail: { color: BLUE, tilt: -1.3 } },
-    down: { name: 'Golpe de cima', anim: 'slash_v', dur: 0.5, active: [0.19, 0.3], damage: 46, range: 2.2, arc: 110, lunge: 1, finisher: 'knockdown', sound: 'swing', hitSound: 'heavyPunch', impactScale: 1.4, trail: { color: BLUE, roll: 1.5 } },
-    forward: { name: 'Avanço do comandante', anim: 'dash_slash', dur: 0.42, active: [0.12, 0.24], damage: 36, range: 2.2, arc: 120, knockback: 2.4, motion: [{ t: [0, 0.22], fwd: 4.4, stopClose: true }], sound: 'blade', hitSound: 'bladeHit', trail: { color: STEEL, tilt: 0.1 } },
-    // postura de guarda: se for atacado no físico na janela, bloqueia e revida (como quando parou o golpe do Kian)
+    up: { name: 'Ergam-se, Agentes', anim: 'slash_up', dur: 0.44, active: [0.15, 0.27], damage: 38, range: 2.2, arc: 110, lunge: 0.9, finisher: 'launchHigh', launcher: true, sound: 'swing', hitSound: 'bladeHit', trail: { color: BLUE, tilt: -1.3 } },
+    down: { name: 'Fim da Varredura', anim: 'slash_v', dur: 0.5, active: [0.19, 0.3], damage: 46, range: 2.2, arc: 110, lunge: 1, finisher: 'knockdown', sound: 'swing', hitSound: 'heavyPunch', impactScale: 1.4, trail: { color: BLUE, roll: 1.5 } },
+    forward: { name: 'Interceptação', anim: 'dash_slash', dur: 0.42, active: [0.12, 0.24], damage: 36, range: 2.2, arc: 120, knockback: 2.4, motion: [{ t: [0, 0.22], fwd: 4.4, stopClose: true }], sound: 'blade', hitSound: 'bladeHit', trail: { color: STEEL, tilt: 0.1 } },
+    // OLHOS SEMPRE ABERTOS!: postura de guarda — se for atacado no físico na janela, bloqueia e revida (como quando parou o
+    // golpe do Gal que ia matar o Arthur)
     back: {
-      name: 'Guarda do Comandante', anim: 'counter_stance', dur: 0.62, active: [0.62, 0.62], damage: 0, range: 0, arc: 0, knockback: 0,
+      name: 'Olhos Sempre Abertos!', anim: 'counter_stance', dur: 0.62, active: [0.62, 0.62], damage: 0, range: 0, arc: 0, knockback: 0,
       counter: { window: [0.05, 0.5], riposte: { damage: 55, finisher: 'launch', anim: 'iai_slash', sound: 'slashFinal' } },
       sound: 'blade',
     },
-    side: { name: 'Corte lateral', anim: 'slash_h', dur: 0.34, active: [0.1, 0.2], damage: 30, range: 2.1, arc: 130, knockback: 1.8, motion: [{ t: [0, 0.22], side: 2.4 }], sound: 'blade', hitSound: 'bladeHit', trail: { color: STEEL, tilt: 0.2 } },
-    air: { name: 'Corte aéreo', anim: 'air_slash', dur: 0.42, active: [0.15, 0.32], damage: 36, range: 2.2, arc: 100, knockback: 3.2, slam: 16, vertical: 2.4, sound: 'blade', hitSound: 'bladeHit', trail: { color: BLUE, roll: 1.5 } },
+    side: { name: 'Flanco da Ordem', anim: 'slash_h', dur: 0.34, active: [0.1, 0.2], damage: 30, range: 2.1, arc: 130, knockback: 1.8, motion: [{ t: [0, 0.22], side: 2.4 }], sound: 'blade', hitSound: 'bladeHit', trail: { color: STEEL, tilt: 0.2 } },
+    air: { name: 'Salto do Veterano', anim: 'air_slash', dur: 0.42, active: [0.15, 0.32], damage: 36, range: 2.2, arc: 100, knockback: 3.2, slam: 16, vertical: 2.4, sound: 'blade', hitSound: 'bladeHit', trail: { color: BLUE, roll: 1.5 } },
   },
 
   // □: escopeta curta (o Veríssimo de 1997): leque forte de perto, fraco de longe
   ranged: {
-    name: 'Escopeta curta',
+    name: 'Escopeta de Varredura',
     type: 'projectile',
     anim: 'shoot_rifle',
     showProp: 'shotgun',
@@ -94,10 +99,10 @@ export default {
     },
     {
       id: 'analiseTatica',
-      name: 'Análise Tática',
+      name: 'Brecha na Guarda',
       input: 'carga+ranged', // △ + □ / Y + X
       type: 'analyze',
-      description: 'Lê o adversário como lê um relatório: por alguns segundos ele recebe mais dano.',
+      description: 'Poder do Comandante de Campo (RPG): acha a brecha na guarda do adversário — por alguns segundos ele recebe mais dano.',
       energyCost: 20,
       cooldown: 16,
       windup: 0.35,
@@ -108,10 +113,10 @@ export default {
     },
     {
       id: 'investida',
-      name: 'Investida dos Aniquiladores',
+      name: 'Em Seu Caminho',
       input: 'block+jump', // R2 + × / RT + A
       type: 'dashStrike',
-      description: 'Avança em linha reta com a espada na frente e atravessa a guarda com força.',
+      description: '"Nós estaremos em seu caminho." Avança em linha reta com a espada na frente e atravessa a guarda com força.',
       energyCost: 20,
       cooldown: 10,
       anim: 'dash_slash',
@@ -142,11 +147,11 @@ export default {
     },
   ],
 
-  // ORDEM DE ATAQUE: comanda o ataque — avança (dá para esquivar do avanço), uma série de estocadas e cortes secos e
-  // finaliza com a espada do Arnaldo
+  // OFICIAL COMANDANTE (o último poder da trilha Comandante de Campo, RPG): comanda o ataque — avança (dá para esquivar do
+  // avanço), uma série de estocadas e cortes e finaliza com a espada do Arnaldo
   special: {
-    name: 'Ordem de Ataque',
-    banner: 'Aniquiladores, agora!',
+    name: 'Oficial Comandante',
+    banner: 'Que também sintam medo!',
     type: 'cinematicCombo',
     energyCost: 50,
     cooldown: 14,
@@ -165,10 +170,10 @@ export default {
     length: 3.1,
   },
 
-  // DESPERTAR: Líder dos Aniquiladores (sem forma própria) — até o fim do round
+  // DESPERTAR: Líder da Ordo Realitas (sem forma própria) — até o fim do round
   awakening: {
-    name: 'Líder dos Aniquiladores',
-    banner: 'Líder dos Aniquiladores',
+    name: 'Líder da Ordo Realitas',
+    banner: 'Líder da Ordo Realitas',
     type: 'awakenMode',
     anim: 'point',
     mult: 1.15, affects: ['melee', 'ranged', 'ability'], takenMult: 0.85, cdRate: 1.3, aura: 'sigil', color: BLUE, heal: 0.1,

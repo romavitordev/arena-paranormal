@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.10.0';
+export const VERSION = '3.10.1';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,15 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.10.1',
+    date: '2026-10-08',
+    title: 'Olhos sempre abertos',
+    items: [
+      'A fita da espada do Arnaldo e do Veríssimo agora fica VERMELHA de verdade — pendurada parada ela aparecia preta.',
+      'Senhor Veríssimo com nomes da série e do RPG no lugar dos genéricos: Olhos Sempre Abertos! (trás + ○, a frase dele ao bloquear o golpe do Gal e salvar o Arthur — bloqueia e contra-ataca), Em Seu Caminho (a investida, da fala "nós estaremos em seu caminho"), Brecha na Guarda e o especial Oficial Comandante (poderes da trilha Comandante de Campo), Escopeta de Varredura, o Despertar Líder da Ordo Realitas e golpes como Corte de Varredura e Pela Ordo Realitas. Só os nomes mudaram.',
+    ],
+  },
   {
     v: '3.10.0',
     date: '2026-10-08',

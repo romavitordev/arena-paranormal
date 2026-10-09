@@ -1,5 +1,23 @@
 # Registro administrativo de alterações
 
+## v3.10.1 — Olhos sempre abertos
+
+- Fita da espada (o usuário viu que continuava preta depois do `baseEmissive` da v3.10.0): a causa real era a largura
+  em `physicsRibbon` — `side = (dir.z, 0, −dir.x)` dá ZERO com a fita pendurada reta para baixo → triângulos sem área →
+  normais NaN → a luz do `MeshToonMaterial` virava NaN e o pixel saía PRETO (o brilho junto). Agora a largura é
+  `dir × eixo Z da espada` (com fallback), sem NaN; brilho próprio 0,35 → 0,7 para o vermelho não sumir na sombra.
+  Medido renderizando num render target: pixel da fita 0,0,0 → 255,5,44 (Veríssimo) e 255,4,27 (Arnaldo).
+- Veríssimo (pedido do usuário: nomes genéricos, "Aniquiladores" não aparece na série — na wiki é a equipe de Varredura
+  que ele liderou, citada em Calamidade 4×12): só NOMES/descrições mudaram, nenhum número. Fontes: wiki "Senhor
+  Veríssimo" ("Olhos sempre abertos!" ao bloquear o golpe do Gal e salvar o Arthur com a espada do Arnaldo; a fala
+  "…que também sintam medo. Porque nós estaremos em seu caminho"; Varredura) e a trilha Comandante de Campo do RPG
+  (Brecha na Guarda, Oficial Comandante — nomes do livro de regras, não confirmados na wiki). Golpes: Estocada do
+  Veterano, Corte de Varredura, Revés do Comandante, Pela Ordo Realitas, Ergam-se Agentes (↑), Fim da Varredura (↓),
+  Interceptação (frente), Olhos Sempre Abertos! (trás, contra-ataque), Flanco da Ordem (lado), Salto do Veterano (ar);
+  □ Escopeta de Varredura; Análise Tática → Brecha na Guarda; Investida dos Aniquiladores → Em Seu Caminho; especial
+  Ordem de Ataque → Oficial Comandante (banner "Que também sintam medo!"); Despertar → Líder da Ordo Realitas;
+  frase de seleção "Olhos sempre abertos.". O "Aniquilador" do Arnaldo ficou (decisão pendente com o usuário).
+
 ## v3.10.0 — Os Aniquiladores (versão estável: Arnaldo, Anfitrião, Veríssimo e correções do TODO)
 
 - Estado do repositório (2026-10-08): o diretório de trabalho tinha 61 arquivos sobrescritos às 14:27:46 com o

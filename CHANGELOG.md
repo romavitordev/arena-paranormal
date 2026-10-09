@@ -1,5 +1,13 @@
 # Changelog
 
+## v3.10.1 — 2026-10-08
+
+### Corrigido
+- Fita da espada do Arnaldo/Veríssimo preta quando pendurada parada.
+
+### Alterado
+- Senhor Veríssimo: golpes e habilidades com nomes da série e do RPG (Olhos Sempre Abertos!, Em Seu Caminho, Brecha na Guarda, Oficial Comandante, Escopeta de Varredura, Líder da Ordo Realitas).
+
 ## v3.10.0 — 2026-10-08
 
 ### Adicionado

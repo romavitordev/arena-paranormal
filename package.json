@@ -1,6 +1,6 @@
 {
   "name": "arena-paranormal",
-  "version": "3.10.0",
+  "version": "3.10.1",
   "private": true,
   "description": "Jogo de luta 3D em arena com temática paranormal (protótipo).",
   "type": "module",

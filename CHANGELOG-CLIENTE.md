@@ -2,6 +2,10 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.10.1 — Olhos sempre abertos
+- A fita da espada do Arnaldo e do Veríssimo agora fica VERMELHA de verdade — pendurada parada ela aparecia preta.
+- Senhor Veríssimo com nomes da série e do RPG no lugar dos genéricos: Olhos Sempre Abertos! (trás + ○, a frase dele ao bloquear o golpe do Gal e salvar o Arthur — bloqueia e contra-ataca), Em Seu Caminho (a investida, da fala "nós estaremos em seu caminho"), Brecha na Guarda e o especial Oficial Comandante (poderes da trilha Comandante de Campo), Escopeta de Varredura, o Despertar Líder da Ordo Realitas e golpes como Corte de Varredura e Pela Ordo Realitas. Só os nomes mudaram.
+
 ## v3.10.0 — Os Aniquiladores
 - Novo lutador: ARNALDO FRITZ (Ordo Realitas, Energia) — o ator dos Aniquiladores. Esgrima teatral com a espada da fita vermelha, o Emissor de Pulsos Paranormais que puxa o adversário até a ponta da espada (ou o joga longe), Finta Teatral que quebra a defesa, Rodopio da Fita, Aniquilador, Ensaio Geral e o especial Ato Final.
 - Transformação do Arnaldo: ele abre o relógio de bolso, a Relíquia de Energia está lá dentro, e ele vira O ANFITRIÃO até o fim do round — kit todo novo: Disparo do Caos que sorteia uma de 8 cores, Regra do Caos (vale para os dois), cópias que explodem, Distorção, Tempo Distorcido, o Jogo do Orfanato, o Botão do Anfitrião (os dois correm até o botão no meio da arena), □ + direção com a Chicotada do Caos, a Tradição de Família e A Plateia, e o especial O Jogo do Anfitrião, um programa de auditório com roleta. Percepção Anacrônica: de tempos em tempos ele desvia sozinho de um golpe.
