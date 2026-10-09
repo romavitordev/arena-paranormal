@@ -385,12 +385,25 @@ function startTowerFloor() {
 }
 
 // TORNEIO (local): montagem → cada humano escolhe (CPU sorteia) → chave → lutas com humano → campeão
-function toTourSetup() {
+function toTourSetup(focus = null) {
   endMatch();
   setOverlay(null, null);
-  if (!game.tourCfg) game.tourCfg = { count: 4, team: false, humans: [true, false, false, false, false, false, false, false], stage: 'random' };
+  if (!game.tourCfg) {
+    const slot = (type) => ({ type, defs: null });
+    game.tourCfg = { team: false, stage: 'random', slots: [slot('human'), slot('cpu'), slot('cpu'), slot('cpu'), slot('empty'), slot('empty'), slot('empty'), slot('empty')] };
+  }
   const stages = [{ id: 'random', name: t('ui.random') }, ...ARENA_ORDER.filter((id) => ARENAS[id].available).map((id) => ({ id, name: ARENAS[id].name }))];
-  setScreen('tsetup', new TournamentSetupScreen(screens, { audio, cfg: game.tourCfg, stages }));
+  setScreen('tsetup', new TournamentSetupScreen(screens, { audio, cfg: game.tourCfg, stages, portraits, focus }));
+}
+
+// escolher o lutador de uma vaga direto na montagem (humano ou CPU)
+function pickTourSlot(i) {
+  const names = game.screen.names();
+  game.tourPickSlot = i;
+  game.mode = { kind: 'tournament', cpu: true, team: game.tourCfg.team };
+  endMatch();
+  setOverlay(null, null);
+  setScreen('select', new SelectScreen(screens, { portraits, audio, mode: 'tournament', team: game.tourCfg.team, heading: t('tour.pick', { name: names[i] }) }));
 }
 
 function randomDefs(n) {
@@ -399,16 +412,19 @@ function randomDefs(n) {
   return pool.slice(0, n);
 }
 
+// COMEÇAR: vagas ocupadas viram participantes; CPU sem escolha sorteia; humano sem escolha escolhe agora
 function startTourPicks() {
   const cfg = game.tourCfg;
   let h = 0;
   let c = 0;
-  game.tourPeople = Array.from({ length: cfg.count }, (_, i) => {
-    const human = cfg.humans[i];
+  game.tourPeople = cfg.slots.filter((s) => s.type !== 'empty').map((s, i) => {
+    const human = s.type === 'human';
     const name = human ? t('tour.player', { n: ++h }) : t('tour.cpu_name', { n: ++c });
-    return { id: i, name, human, defs: human ? [] : randomDefs(cfg.team ? 3 : 1) };
+    const defs = s.defs && s.defs.length ? s.defs : human ? [] : randomDefs(cfg.team ? 3 : 1);
+    return { id: i, name, human, defs };
   });
-  game.tourQueue = game.tourPeople.filter((p) => p.human).map((p) => p.id);
+  game.tourPickSlot = null;
+  game.tourQueue = game.tourPeople.filter((p) => !p.defs.length).map((p) => p.id);
   pickNextTour();
 }
 
@@ -849,13 +865,21 @@ function tick(dt) {
       const pick = game.screen.update(input);
       if (pick === 'back') {
         if (game.mode.kind === 'tower' && game.towerRun) toTowerView('intro');
-        else if (game.mode.kind === 'tournament') toTourSetup();
+        else if (game.mode.kind === 'tournament') { const i = game.tourPickSlot; game.tourPickSlot = null; toTourSetup(i === null || i === undefined ? null : [1 + Math.floor(i / 4), i % 4]); }
         else toMainMenu();
       }
       else if (pick && game.mode.kind === 'tournament') {
-        game.tourPeople[game.tourQueue.shift()].defs = pick.teams ? pick.teams[0] : [pick.p1];
+        const defs = pick.teams ? pick.teams[0] : [pick.p1];
         audio.play('confirm');
-        pickNextTour();
+        if (game.tourPickSlot !== null && game.tourPickSlot !== undefined) {
+          const i = game.tourPickSlot;
+          game.tourCfg.slots[i].defs = defs;
+          game.tourPickSlot = null;
+          toTourSetup([1 + Math.floor(i / 4), i % 4]);
+        } else {
+          game.tourPeople[game.tourQueue.shift()].defs = defs;
+          pickNextTour();
+        }
       }
       else if (pick) {
         game.lastSelect = { cursor: [...game.screen.cursor] };
@@ -872,7 +896,9 @@ function tick(dt) {
     case 'tsetup': {
       const c = game.screen.update(input);
       if (c === 'move') audio.play('select');
+      else if (c === 'denied') audio.play('denied');
       else if (c === 'go') { audio.play('confirm'); startTourPicks(); }
+      else if (c && c.startsWith('pick:')) { audio.play('confirm'); pickTourSlot(Number(c.slice(5))); }
       else if (c === 'back') { audio.play('select'); toMainMenu(); }
       break;
     }

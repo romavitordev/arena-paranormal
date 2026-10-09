@@ -713,37 +713,114 @@ body.touch-ui .startbtn small { display: none; }
   #tower .tw-btns { flex-direction: row; flex-wrap: wrap; width: calc(100% - 32px); }
 }
 
-/* TORNEIO: montagem e chave */
-#tsetup .menu { max-height: 86vh; overflow-y: auto; }
-#tsetup .opt.human span { color: #ffd84a; }
-#tbracket { gap: 2vh; padding: 3vh 16px 9vh; justify-content: flex-start; }
-#tbracket h2 { margin: 0; font: 400 clamp(30px, 4vw, 50px)/1 'Bebas Neue', sans-serif; letter-spacing: .14em; text-shadow: 3px 3px 0 #000; }
-#tbracket .tb-cols { display: flex; gap: clamp(8px, 2vw, 28px); align-items: stretch; width: min(1180px, 100%); overflow-x: auto; flex: 1; min-height: 0; }
-#tbracket .tb-col { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 190px; }
-#tbracket .tb-list { display: flex; flex-direction: column; justify-content: space-around; gap: 8px; flex: 1; }
-#tbracket .tb-col h4 { margin: 0 0 4px; text-align: center; font: 400 18px/1 'Bebas Neue', sans-serif; letter-spacing: .2em; color: var(--muted); }
-#tbracket .tb-match { position: relative; display: flex; flex-direction: column; gap: 2px; padding: 4px; border: 1px solid rgba(255,255,255,.1); border-radius: 5px; background: rgba(10,8,14,.78); }
-#tbracket .tb-match.next { border-color: #ffd84a; box-shadow: 0 0 16px rgba(255,216,74,.3); }
-#tbracket .tb-side { display: flex; align-items: center; gap: 6px; padding: 2px 4px; border-left: 3px solid var(--c, #444); border-radius: 2px; min-height: 34px; }
-#tbracket .tb-side img, #tbracket .tb-empty { width: 30px; height: 30px; object-fit: cover; object-position: top; border-radius: 2px; background: #15111c; flex: none; }
-#tbracket .tb-side span { display: flex; flex-direction: column; min-width: 0; }
-#tbracket .tb-side b { font: 400 16px/1 'Bebas Neue', sans-serif; letter-spacing: .06em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#tbracket .tb-side small { font-size: 10px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#tbracket .tb-side.human b { color: #ffd84a; }
-#tbracket .tb-side.win { background: rgba(125,255,176,.1); }
-#tbracket .tb-side.win b::after { content: ' ✔'; color: #7dffb0; }
-#tbracket .tb-side.lose { opacity: .4; }
-#tbracket .tb-side.empty span, #tbracket .tb-side.bye span { color: var(--muted); font-size: 11px; font-style: italic; }
-#tbracket .tb-side.bye { border-left-color: transparent; }
-#tbracket .tb-auto { font-style: normal; font-size: 10px; color: var(--muted); padding-left: 4px; }
-#tbracket .tb-panel { display: flex; align-items: center; gap: 12px; padding: 8px 16px; border-left: 4px solid #ffd84a; background: rgba(10,8,14,.82); border-radius: 4px; min-width: min(460px, 100%); }
-#tbracket .tb-panel small { font: 400 15px/1 'Bebas Neue', sans-serif; letter-spacing: .25em; color: #ffd84a; }
-#tbracket .tb-panel b { display: block; font: 400 clamp(24px, 3vw, 36px)/1.05 'Bebas Neue', sans-serif; letter-spacing: .06em; }
-#tbracket .tb-panel p { margin: 2px 0 0; font-size: 12px; color: var(--paper); }
-#tbracket .tb-panel.champ { border-left-color: var(--c); }
-#tbracket .tb-panel.champ img { width: 72px; height: 90px; object-fit: cover; object-position: top; border-radius: 4px; border: 2px solid var(--c); }
-#tbracket .tb-panel.champ b { color: var(--c); font-size: clamp(34px, 4.4vw, 56px); text-shadow: 3px 3px 0 #000; }
+/* TORNEIO (estilo Naruto Storm): montagem em 3 passos — formato, participantes (cartas), regras — e COMEÇAR */
+#tsetup { gap: 1vh; padding: 2.4vh 16px 6vh; justify-content: flex-start; overflow-y: auto; background: radial-gradient(ellipse at 50% 22%, #3a1a5e, #0b0812 72%); }
+#tsetup .ts-head { display: flex; align-items: baseline; gap: 18px; }
+#tsetup .ts-head h2 { margin: 0; font: 400 clamp(34px, 4.6vw, 60px)/1 'Bebas Neue', sans-serif; letter-spacing: .18em; text-shadow: 0 0 24px rgba(255,216,74,.35), 3px 3px 0 #000; }
+#tsetup .ts-count { font: 400 18px/1 'Bebas Neue', sans-serif; letter-spacing: .14em; color: var(--muted); }
+#tsetup .ts-count b { font-size: 34px; color: #ffd84a; }
+#tsetup .ts-step { display: flex; align-items: center; gap: 8px; width: min(1080px, 100%); margin-top: .6vh; font: 400 15px/1 'Bebas Neue', sans-serif; letter-spacing: .22em; color: #bfb3d6; }
+#tsetup .ts-step::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(191,179,214,.35), transparent); }
+#tsetup .ts-step span { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: #ffd84a; color: #1a1208; font-size: 14px; letter-spacing: 0; }
+#tsetup .ts-format { display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: rgba(10,8,14,.85); border: 2px solid rgba(255,255,255,.1); }
+#tsetup .ts-format span { padding: 7px 22px; border-radius: 999px; font: 400 19px/1 'Bebas Neue', sans-serif; letter-spacing: .12em; color: #8a80a0; cursor: pointer; transition: background .15s, color .15s; }
+#tsetup .ts-format span:hover { color: #fff; }
+#tsetup .ts-format span.on { background: linear-gradient(180deg, #ffe27a, #d9a52a); color: #1a1208; }
+#tsetup .ts-format.on-focus { border-color: #ffd84a; box-shadow: 0 0 16px rgba(255,216,74,.4); }
+
+#tsetup .ts-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(8px, 1.3vw, 14px); width: min(1080px, 100%); }
+#tsetup .ts-card { position: relative; display: flex; flex-direction: column; height: clamp(170px, 27vh, 250px); border-radius: 10px; overflow: hidden;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--c) 32%, #1c1626), #0c0912 80%); border: 2px solid #3a3346; transition: transform .14s, border-color .14s, box-shadow .14s; }
+#tsetup .ts-card.human { border-color: #c9a23a; }
+#tsetup .ts-card.cpu { border-color: #4a6a9a; }
+#tsetup .ts-card.empty { background: rgba(10,8,14,.4); border: 2px dashed #3a3346; }
+#tsetup .ts-card.on-focus { transform: translateY(-4px); border-color: #ffd84a; border-style: solid; box-shadow: 0 0 24px rgba(255,216,74,.45); }
+/* seletor de tipo (sempre visível) */
+#tsetup .ts-seg { display: flex; margin: 6px; padding: 2px; border-radius: 6px; background: rgba(5,3,10,.85); z-index: 1; }
+#tsetup .ts-seg span { flex: 1; text-align: center; padding: 4px 0; border-radius: 4px; font: 400 13px/1 'Bebas Neue', sans-serif; letter-spacing: .1em; color: #6a6278; cursor: pointer; transition: background .12s, color .12s; }
+#tsetup .ts-seg span:hover { color: #fff; }
+#tsetup .ts-card.human .ts-seg span.on { background: #c9a23a; color: #1a1208; }
+#tsetup .ts-card.cpu .ts-seg span.on { background: #4a6a9a; color: #fff; }
+#tsetup .ts-card.empty .ts-seg span.on { background: #2a2433; color: #bfb3d6; }
+/* retrato = botão de escolher o lutador */
+#tsetup .ts-art { position: relative; flex: 1; min-height: 0; margin-top: -40px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; overflow: hidden; cursor: pointer; }
+#tsetup .ts-art .ts-lead { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform .2s; }
+#tsetup .ts-art:hover .ts-lead { transform: scale(1.04); }
+#tsetup .ts-art em { position: relative; font-style: normal; font: 400 14px/1 'Bebas Neue', sans-serif; letter-spacing: .14em; color: #d8d0e8; text-shadow: 1px 1px 0 #000; }
+#tsetup .ts-art .ts-change { position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); padding: 3px 10px; border-radius: 3px; background: rgba(5,3,10,.82); opacity: 0; transition: opacity .15s; white-space: nowrap; }
+#tsetup .ts-card.on-focus .ts-change, #tsetup .ts-art:hover .ts-change { opacity: 1; }
+#tsetup .ts-mini { position: absolute; right: 6px; bottom: 6px; display: flex; gap: 4px; }
+#tsetup .ts-mini img { width: 30px; height: 30px; object-fit: cover; object-position: top; border-radius: 50%; border: 2px solid #0c0912; background: #15111c; }
+#tsetup .ts-q { font-style: normal; font: 400 52px/1 'Bebas Neue', sans-serif; color: #c9a23a; }
+#tsetup .ts-card.cpu .ts-q { color: #7a9aca; font-size: 40px; }
+#tsetup .ts-art.add { color: #5a5268; }
+#tsetup .ts-art.add:hover { color: #ffd84a; }
+#tsetup .ts-plus { font-style: normal; font: 400 54px/1 'Bebas Neue', sans-serif; color: inherit; }
+#tsetup .ts-art.add em { color: inherit; }
+#tsetup .ts-info { padding: 6px 10px 8px; background: linear-gradient(0deg, rgba(5,3,10,.96), rgba(5,3,10,.7)); }
+#tsetup .ts-info b { display: block; font: 400 20px/1.05 'Bebas Neue', sans-serif; letter-spacing: .08em; }
+#tsetup .ts-card.human .ts-info b { color: #ffd84a; }
+#tsetup .ts-card.empty .ts-info b { color: #5a5268; }
+#tsetup .ts-info small { display: block; font-size: 10px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 12px; }
+
+#tsetup .ts-rules { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; width: min(1080px, 100%); }
+#tsetup .ts-pill { display: flex; flex-direction: column; align-items: center; padding: 6px 10px; border-radius: 8px; background: rgba(10,8,14,.85); border: 2px solid rgba(255,255,255,.1); }
+#tsetup .ts-pill small { font-size: 10px; letter-spacing: .16em; color: var(--muted); }
+#tsetup .ts-pill b { display: flex; align-items: center; gap: 10px; font: 400 20px/1.1 'Bebas Neue', sans-serif; letter-spacing: .08em; white-space: nowrap; }
+#tsetup .ts-pill i { font-style: normal; color: #6a6278; cursor: pointer; padding: 0 4px; }
+#tsetup .ts-pill i:hover { color: #ffd84a; }
+#tsetup .ts-pill.on-focus { border-color: #ffd84a; box-shadow: 0 0 14px rgba(255,216,74,.35); }
+#tsetup .ts-pill.on-focus i { color: #ffd84a; }
+#tsetup .ts-go { margin-top: .8vh; padding: 11px 44px; border-radius: 6px; font: 400 28px/1 'Bebas Neue', sans-serif; letter-spacing: .2em; color: #1a1208; background: linear-gradient(180deg, #ffe27a, #d9a52a); cursor: pointer; box-shadow: 0 4px 0 #7a5a10; transition: transform .12s, box-shadow .12s; }
+#tsetup .ts-go.off { background: #2a2433; color: #8a80a0; box-shadow: none; font-size: 18px; letter-spacing: .1em; cursor: default; }
+#tsetup .ts-go.on-focus { transform: translateY(-2px); box-shadow: 0 4px 0 #7a5a10, 0 0 26px rgba(255,216,74,.6); }
+#tsetup .ts-hint { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: center; gap: 22px; padding: 8px 16px; background: rgba(5,3,10,.9); border-top: 1px solid rgba(255,255,255,.08); font-size: 12px; color: var(--muted); }
+#tsetup .ts-hint-now { color: #ffd84a; }
+@media (max-width: 760px) {
+  #tsetup .ts-grid, #tsetup .ts-rules { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #tsetup .ts-card { height: 150px; }
+  #tsetup .ts-hint { flex-direction: column; gap: 2px; align-items: center; }
+}
+
+/* TORNEIO: chave em árvore espelhada, convergindo para a final no centro */
+#tbracket { gap: 1.2vh; padding: 2.5vh 16px 3vh; justify-content: flex-start; background: radial-gradient(ellipse at 50% 35%, #3a2410, #0b0812 72%); }
+#tbracket h2 { margin: 0; font: 400 clamp(30px, 4vw, 52px)/1 'Bebas Neue', sans-serif; letter-spacing: .2em; text-shadow: 0 0 24px rgba(255,216,74,.35), 3px 3px 0 #000; }
+#tbracket .tb-tree { position: relative; width: min(1200px, 100%); flex: 1; min-height: 240px; max-height: 58vh; }
+#tbracket .tb-tree svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+#tbracket .tb-tree path { fill: none; stroke: #3a3346; stroke-width: 3; vector-effect: non-scaling-stroke; }
+#tbracket .tb-tree path.lit { stroke: #ffd84a; stroke-width: 4; filter: drop-shadow(0 0 4px rgba(255,216,74,.8)); }
+#tbracket .tn { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 2px; z-index: 1; }
+#tbracket .tn img, #tbracket .tn i { width: clamp(40px, 5vw, 58px); height: clamp(40px, 5vw, 58px); border-radius: 50%; object-fit: cover; object-position: top; border: 3px solid var(--c); background: #15111c; box-shadow: 0 0 0 2px #0c0912, 0 4px 10px rgba(0,0,0,.6); }
+#tbracket .tn i { display: grid; place-items: center; font-style: normal; font: 400 24px/1 'Bebas Neue', sans-serif; color: #4a4258; border-style: dashed; }
+#tbracket .tn span { font: 400 clamp(11px, 1.1vw, 14px)/1 'Bebas Neue', sans-serif; letter-spacing: .08em; white-space: nowrap; text-shadow: 1px 1px 0 #000, 0 0 4px #000; }
+#tbracket .tn.human span { color: #ffd84a; }
+#tbracket .tn.big img, #tbracket .tn.big i { width: clamp(52px, 6.4vw, 76px); height: clamp(52px, 6.4vw, 76px); }
+#tbracket .tn.win img { box-shadow: 0 0 0 2px #0c0912, 0 0 16px var(--c), 0 0 26px rgba(255,216,74,.6); }
+#tbracket .tn.lose img { filter: grayscale(1) brightness(.45); }
+#tbracket .tn.lose span { color: #5a5268; text-decoration: line-through; }
+#tbracket .tn.next img, #tbracket .tn.next i { animation: tnPulse 1.1s ease-in-out infinite; border-color: #ffd84a; }
+@keyframes tnPulse { 50% { box-shadow: 0 0 0 2px #0c0912, 0 0 22px rgba(255,216,74,.9); transform: scale(1.06); } }
+#tbracket .tn.bye span { font: italic 11px/1 sans-serif; color: var(--muted); }
+#tbracket .tn.champ img, #tbracket .tn.champ i { width: clamp(70px, 8.6vw, 104px); height: clamp(70px, 8.6vw, 104px); border-width: 4px; border-color: #ffd84a; }
+#tbracket .tn.champ i { font-size: 42px; color: #ffd84a; border-style: solid; }
+#tbracket .tn.champ span { font-size: clamp(14px, 1.6vw, 20px); color: #ffd84a; }
+#tbracket .tn.champ.win img { box-shadow: 0 0 0 3px #0c0912, 0 0 30px #ffd84a, 0 0 60px var(--c); }
+#tbracket .tn-auto { position: absolute; transform: translate(-50%, -50%); font-style: normal; font-size: 13px; opacity: .8; z-index: 2; }
+#tbracket .tv-panel { position: relative; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: clamp(10px, 3vw, 40px); width: min(760px, 100%); padding: 12px 20px 8px;
+  background: linear-gradient(90deg, rgba(10,8,14,.2), rgba(10,8,14,.9) 20%, rgba(10,8,14,.9) 80%, rgba(10,8,14,.2)); border-top: 1px solid rgba(255,216,74,.4); border-bottom: 1px solid rgba(255,216,74,.4); }
+#tbracket .tv-round { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); padding: 2px 14px; background: #ffd84a; color: #1a1208; font: 400 14px/1.3 'Bebas Neue', sans-serif; letter-spacing: .2em; white-space: nowrap; border-radius: 3px; }
+#tbracket .tv-f { display: flex; align-items: center; gap: 10px; min-width: 0; }
+#tbracket .tv-f.r { flex-direction: row-reverse; text-align: right; }
+#tbracket .tv-f img { width: clamp(60px, 7vw, 86px); height: clamp(60px, 7vw, 86px); border-radius: 8px; object-fit: cover; object-position: top; border: 3px solid var(--c); background: #15111c; }
+#tbracket .tv-f b { display: block; font: 400 clamp(20px, 2.6vw, 32px)/1 'Bebas Neue', sans-serif; letter-spacing: .06em; color: var(--c); text-shadow: 2px 2px 0 #000; }
+#tbracket .tv-f small { display: block; font-size: 11px; color: var(--muted); }
+#tbracket .tv-vs { font: italic 400 clamp(38px, 5vw, 64px)/1 'Bebas Neue', sans-serif; color: #ffd84a; text-shadow: 0 0 18px rgba(255,216,74,.6), 3px 3px 0 #000; }
+#tbracket .tv-sides { grid-column: 1 / -1; margin: 0; text-align: center; font-size: 11px; color: var(--muted); }
+#tbracket .tv-panel.champ { display: flex; justify-content: center; gap: 18px; }
+#tbracket .tv-panel.champ img { width: 96px; height: 120px; object-fit: cover; object-position: top; border-radius: 8px; border: 3px solid #ffd84a; box-shadow: 0 0 30px rgba(255,216,74,.5); }
+#tbracket .tv-panel.champ small { font: 400 18px/1 'Bebas Neue', sans-serif; letter-spacing: .25em; color: #ffd84a; }
+#tbracket .tv-panel.champ b { display: block; font: 400 clamp(40px, 5vw, 64px)/1 'Bebas Neue', sans-serif; color: var(--c); text-shadow: 3px 3px 0 #000; }
+#tbracket .tv-panel.champ p { margin: 2px 0 0; font-size: 12px; color: var(--muted); }
 #tbracket .tb-btns { display: flex; gap: 10px; }
-#tbracket .tb-btns .opt { padding: 8px 20px; font: 400 22px/1 'Bebas Neue', sans-serif; letter-spacing: .12em; color: #bfb3d6; border: 1px solid rgba(255,255,255,.15); border-radius: 4px; background: rgba(10,8,14,.75); cursor: pointer; }
-#tbracket .tb-btns .opt.on { color: #fff; border-color: #ffd84a; background: rgba(255,216,74,.16); }
-#tbracket .hint { position: absolute; bottom: 2vh; left: 0; width: 100%; text-align: center; color: var(--muted); font-size: 12px; }
+#tbracket .tb-btns .opt { padding: 8px 26px; font: 400 24px/1 'Bebas Neue', sans-serif; letter-spacing: .14em; color: #bfb3d6; border: 1px solid rgba(255,255,255,.15); border-radius: 4px; background: rgba(10,8,14,.75); cursor: pointer; }
+#tbracket .tb-btns .opt.on { color: #1a1208; border-color: #ffd84a; background: linear-gradient(180deg, #ffe27a, #d9a52a); }

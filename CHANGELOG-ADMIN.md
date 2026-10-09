@@ -13,6 +13,14 @@
   vitória mostra o nome do participante e só CONTINUAR; na pausa SELEÇÃO vira SAIR DO TORNEIO. 26 chaves novas × 13
   idiomas. 6 testes novos.
 - TODO: tradução do resto do jogo (diálogos, golpes, descrições, nome do jogo…) anotada como a PRÓXIMA TAREFA.
+- **Torneio refeito no estilo Naruto Storm (o usuário achou a 1ª versão feia e pouco intuitiva):** montagem em 3
+  passos numerados (① formato, ② participantes, ③ regras) com 8 cartas de vaga — seletor VAZIO | HUMANO | CPU sempre
+  visível em cada carta (clique direto ou A/×), a área do retrato é o botão de escolher o lutador (Y/△ ou clique;
+  CPU sem escolha = sorteado), vagas vazias com "+ ADICIONAR", contador de participantes, regras em pílulas com
+  ◀ ▶ clicáveis, COMEÇAR que avisa quando faltam participantes e barra de dicas que mostra só os botões do item
+  selecionado. A chave virou uma árvore espelhada (SVG) convergindo para o troféu no centro, com medalhões de
+  retrato, caminho do vencedor aceso em dourado, eliminados em cinza, a luta da vez pulsando, painel VS grande e o
+  campeão no centro. Fundo opaco (o 3D do menu atrapalhava).
 
 ## v3.12.0 — Golpes que se ouvem
 
