@@ -2,6 +2,18 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.10.0 — Os Aniquiladores
+- Novo lutador: ARNALDO FRITZ (Ordo Realitas, Energia) — o ator dos Aniquiladores. Esgrima teatral com a espada da fita vermelha, o Emissor de Pulsos Paranormais que puxa o adversário até a ponta da espada (ou o joga longe), Finta Teatral que quebra a defesa, Rodopio da Fita, Aniquilador, Ensaio Geral e o especial Ato Final.
+- Transformação do Arnaldo: ele abre o relógio de bolso, a Relíquia de Energia está lá dentro, e ele vira O ANFITRIÃO até o fim do round — kit todo novo: Disparo do Caos que sorteia uma de 8 cores, Regra do Caos (vale para os dois), cópias que explodem, Distorção, Tempo Distorcido, o Jogo do Orfanato, o Botão do Anfitrião (os dois correm até o botão no meio da arena), □ + direção com a Chicotada do Caos, a Tradição de Família e A Plateia, e o especial O Jogo do Anfitrião, um programa de auditório com roleta. Percepção Anacrônica: de tempos em tempos ele desvia sozinho de um golpe.
+- Novo lutador: SENHOR VERÍSSIMO (Ordo Realitas, Medo) — o líder da Ordem, com a espada do Arnaldo e uma escopeta curta. Inteligência Estratégica (cada golpe que acerta ganha um corte extra), Análise Tática, Investida dos Aniquiladores, Jaqueta de Veríssimo, Guarda do Comandante (trás + ○: bloqueia e contra-ataca), Bloqueio Perfeito mais fácil e o especial Ordem de Ataque. Segredo de Veríssimo: o primeiro golpe fatal da partida o deixa com 1 de vida.
+- Os três têm modelos próprios, poses de vitória, introduções e falas com o elenco todo, agarrão próprio e a CPU usa o kit inteiro.
+- Gal: a cura que cobra sanidade não é mais passiva — agora é ATIVAR ERESHKIGAL (trás + □): por 6 s, cada golpe físico faz o inimigo recuperar parte da vida e pagar com sanidade, que vai para o Gal.
+- Balu: com o Machado Demônio ativo, o Machado em Giro arremessa a maça de sangue que está na mão (antes saía o machado comum).
+- Elementos: a vantagem do ciclo nos rituais passou de 10% para 15% (e a desvantagem de −10% para −15%). Xande agora é de Conhecimento.
+- Falas durante a luta: curtas, sem pausar o combate — com a vida no fim, nos especiais e nas transformações.
+- Defesa: segurando Defesa + direção, os passos rápidos emendam um no outro e voltam à guarda ao soltar. Escapar do agarrão vale nas duas ordens (Defesa + ○ ou ○ + Defesa).
+- Correções: a tela não fica mais preta na vitória com O Anfitrião; a fita da espada do Arnaldo e do Veríssimo voltou a ficar vermelha.
+
 ## v3.9.4 — Balu tanque
 - Balu, Resistência à Dor (transformação): agora vira um TANQUE — recebe 45% menos dano, quase não é empurrado, aguenta golpes sem recuar (guarda até 2, um novo a cada 1,5 s), recupera 25% da vida ao transformar e bate 20% mais forte; em troca anda um pouco mais devagar.
 

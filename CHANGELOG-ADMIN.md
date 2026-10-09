@@ -1,6 +1,6 @@
 # Registro administrativo de alterações
 
-## (em andamento) — versão estável: Arnaldo, Anfitrião, Veríssimo e correções do TODO
+## v3.10.0 — Os Aniquiladores (versão estável: Arnaldo, Anfitrião, Veríssimo e correções do TODO)
 
 - Estado do repositório (2026-10-08): o diretório de trabalho tinha 61 arquivos sobrescritos às 14:27:46 com o
   conteúdo antigo da v3.5 (VERSION 35) por cima do HEAD 3.9.4+. Mesmo padrão da reversão das 03:45: guardado no
@@ -38,8 +38,14 @@
   watchChain; `Screens.js`: COMBAT). Build: o `main` passava de 650 kB (aviso) → chunk `textos` (falas + i18n) no
   `manualChunks`; `main` 595 kB, sem aviso. Versão compilada (`vite preview`) testada: abre, luta, vitória, revanche,
   menu principal, treinamento, seleção com a página 2 (Balu, Arnaldo, Veríssimo).
+- Versão: `VERSION` 3.9.4 → **3.10.0** ("atualização concreta": 3 lutadores novos anunciados). Changelog dos
+  jogadores com o que estava "em andamento" sem anúncio (Arnaldo/Anfitrião/Veríssimo, afinidades ±15%, falas de
+  batalha, passo da defesa contínuo, throw tech nas duas ordens) + o desta versão.
+- NÃO anunciado aos jogadores: o seletor de idioma (CONFIGURAÇÕES → IDIOMA) existe, mas as telas ainda não usam o
+  `t()` do `src/i18n` — trocar o idioma não traduz o jogo. Ligar os textos é a ETAPA 5 do TODO; esconder o seletor até
+  lá depende de decisão do usuário (anotado no TODO).
 
-## (em andamento, sem changelog dos jogadores) — estabilidade, limpeza e mecânicas universais de combate (Dodge e Throw Tech)
+## (anunciado na v3.10.0) — estabilidade, limpeza e mecânicas universais de combate (Dodge e Throw Tech)
 
 - Limpeza Git: exclusão da branch remota `refs-gifs`, exclusão da branch local `refs-gifs` e atualização de referências em `ANALISE.md` e `maskTransform.js`.
 - Correção de teste unitário: corrigido mock em `tests/cpu-ai.test.js` para garantir cobertura correta de múltiplos buffs ativos (`heavyProtection` e `healing`).
@@ -51,7 +57,7 @@
 - Opção de idioma nas configurações: adicionado seletor `CONFIGURAÇÕES → IDIOMA` integrado ao `SETTINGS.language` e persistido em `localStorage`.
 - Suíte de testes de internacionalização: adicionado `tests/i18n.test.js` cobrindo tradução, interpolação, fallback e troca de idiomas (28 testes passando com sucesso).
 
-## (em andamento, sem changelog dos jogadores) — falas do Anfitrião, falas de batalha e afinidade do Xande
+## (anunciado na v3.10.0) — falas do Anfitrião, falas de batalha e afinidade do Xande
 
 - Afinidade do Xande corrigida para Conhecimento; adicionada verificação ao `npm run check`.
 - Falas de batalha adicionadas para vida crítica, especiais e transformações. São trocas curtas de legendas sem
@@ -60,7 +66,7 @@
 - `src/config/dialogues.js` continua concentrando as falas de introdução e vitória, além das novas falas de batalha.
   `npm run export:dialogues` exporta todas as falas para `dialogues-export.json`.
 
-## (em andamento, sem changelog dos jogadores) — afinidades e vantagem elemental
+## (anunciado na v3.10.0) — afinidades e vantagem elemental
 
 - Bônus do ciclo em `COMBAT.elements`: vantagem passou de +10% para +15% e desvantagem de −10% para −15%; Medo
   permanece neutro. O ciclo só modifica habilidades e especiais, não golpes físicos nem ataques principais à distância.
@@ -71,7 +77,7 @@
 - Cobertura adicionada ao `npm run check` para o ciclo, neutralidade de Medo, exceções da fraqueza à Energia e as
   afinidades de Arnaldo e Veríssimo. Validado também com `npm test` e `npm run build`.
 
-## (em andamento, sem changelog dos jogadores) — UPD etapas 10-11: O Anfitrião e o sistema de caos
+## (anunciado na v3.10.0) — UPD etapas 10-11: O Anfitrião e o sistema de caos
 
 - Botão do Anfitrião: substituído o evento automático por uma disputa; após o estalo, ambos voltam aos pontos de
   início da arena, correm até o botão central e acionam-no com o botão físico. Quem apertar primeiro dispara o evento
@@ -122,7 +128,7 @@
 - Arnaldo/Anfitrião/Veríssimo: visual provisório pelas referências (espada da referência, óculos rosa, fios neon,
   Veríssimo sem casaco) — entram na main e na seleção, mas continuam fora do changelog dos jogadores.
 
-## (em andamento, sem versão nem changelog dos jogadores) — Arnaldo Fritz → O Anfitrião e Senhor Veríssimo
+## (anunciado na v3.10.0) — Arnaldo Fritz → O Anfitrião e Senhor Veríssimo
 
 Pedido do usuário: só entra no changelog dos jogadores depois da implementação completa (modelos do Blender).
 - Novos no elenco: `arnaldo`, `verissimo`; forma `anfitriao` (detalhes do kit no TODO, seção dos próximos lutadores).

@@ -1167,6 +1167,10 @@ Tier representa função/força geral e não necessariamente uma obrigação de 
 
 # 37. SISTEMA DE IDIOMAS
 
+> ⚠ **Depende de confirmação do usuário (v3.10.0):** o seletor CONFIGURAÇÕES → IDIOMA já aparece, mas as telas
+> ainda não usam o `t()` de `src/i18n` (trocar o idioma não traduz nada). Decidir: esconder o seletor até ligar os
+> textos, ou deixar visível.
+
 Criar:
 
 **CONFIGURAÇÕES → IDIOMA**

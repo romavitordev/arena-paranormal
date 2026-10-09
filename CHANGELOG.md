@@ -1,5 +1,20 @@
 # Changelog
 
+## v3.10.0 — 2026-10-08
+
+### Adicionado
+- Arnaldo Fritz (transforma em O Anfitrião) e Senhor Veríssimo.
+- Gal: Ativar Ereshkigal (trás + □) liga a cura que cobra sanidade por 6 s.
+- Falas curtas durante a luta (vida crítica, especiais, transformações).
+
+### Alterado
+- Vantagem/desvantagem elemental dos rituais: ±10% → ±15%; Xande de Conhecimento.
+- Passo da defesa contínuo; escape do agarrão nas duas ordens.
+- Balu arremessa a maça do Machado Demônio quando ela está na mão.
+
+### Corrigido
+- Tela preta na vitória com O Anfitrião; fita vermelha da espada voltando a ficar preta.
+
 ## v3.9.4 — 2026-10-06
 
 ### Alterado
