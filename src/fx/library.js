@@ -14,6 +14,7 @@ export const FX_LIBRARY = {
   // golpe comum: faíscas + clarão + anel vertical
   FX_HIT_SMALL(fx, pos, { color = 0xffffff, scale = 1 }) {
     fx.flash(pos, { color, size: 1.4 * scale, life: 0.1 });
+    fx.flash(pos, { color, size: 1.9 * scale, life: 0.09, tex: 'star' });
     fx.burst(pos, { count: Math.round(14 * scale), color, speed: 7 * scale, life: 0.35, size: 0.18, gravity: 6 });
     fx.ring(pos, { color, radius: 1.1 * scale, life: 0.2, vertical: true, yaw: Math.random() * Math.PI });
   },
@@ -22,6 +23,7 @@ export const FX_LIBRARY = {
   FX_HIT_HEAVY(fx, pos, { color = 0xffffff, scale = 1.5 }) {
     FX_LIBRARY.FX_HIT_SMALL(fx, pos, { color, scale });
     fx.ring(v.set(pos.x, 0.06, pos.z), { color, radius: 1.4 * scale, life: 0.3 });
+    fx.burst(v.set(pos.x, 0.25, pos.z), { count: Math.round(5 * scale), color: 0x8a7a66, kind: 'debris', speed: 3.5, up: 2.5, life: 0.55, size: 0.5, gravity: 12 });
   },
 
   // arrancada do dash: rastro de energia (longo) ou poeira (curto)
@@ -39,6 +41,7 @@ export const FX_LIBRARY = {
   // bloqueio perfeito: clarão grande + anel na frente + explosão de faíscas da cor do lutador
   FX_PERFECT_BLOCK(fx, pos, { color = 0xffffff, yaw = 0 }) {
     fx.flash(pos, { color, size: 3.5, life: 0.2 });
+    fx.flash(pos, { color: 0xffffff, size: 5, life: 0.22, tex: 'flare' });
     fx.ring(pos, { color, radius: 2.4, life: 0.35, vertical: true, yaw });
     fx.burst(pos, { count: 30, color, speed: 8, life: 0.4, size: 0.25 });
   },
@@ -51,11 +54,15 @@ export const FX_LIBRARY = {
   // energia paranormal (buff de dano ativo, aura)
   FX_ENERGY(fx, pos, { color = 0xa46bff, scale = 1 }) {
     fx.burst(pos, { count: Math.round(10 * scale), color, speed: 4, life: 0.6, size: 0.35, kind: 'glow' });
+    fx.burst(pos, { count: Math.round(3 * scale), color, speed: 2, life: 0.35, size: 0.9, kind: 'spark' });
   },
 
   // explosão (granadas, projéteis explosivos)
   FX_EXPLOSION(fx, pos, { color = 0xff9a30, scale = 1 }) {
     fx.flash(pos, { color, size: scale * 1.6, life: 0.18 });
+    fx.flash(pos, { color, size: scale * 2.6, life: 0.32, tex: 'fire', grow: 0.6 });
+    fx.flash(pos, { color: 0xfff0c0, size: scale * 2.2, life: 0.14, tex: 'burst', grow: 0.4 });
+    fx.burst(pos, { count: 10, color: 0x6a5a4a, kind: 'debris', speed: 6, up: 3, life: 0.7, size: 0.45, gravity: 14 });
     fx.ring(v.set(pos.x, 0.08, pos.z), { color, radius: scale, life: 0.4 });
     fx.burst(pos, { count: 40, color, speed: 9, up: 2, life: 0.5, size: 0.35 });
     fx.burst(pos, { count: 16, color: 0x2a2420, kind: 'smoke', speed: 2.5, up: 1.2, life: 1.1, size: 1.1, grow: 1 });
@@ -73,6 +80,7 @@ export const FX_LIBRARY = {
     fx.ring(v.set(pos.x, 0.07, pos.z), { color: 0x4a3a2a, radius: 1.6 * scale, life: 0.7 });
     fx.burst(v.set(pos.x, 0.3, pos.z), { count: Math.round(28 * scale), color, kind: 'smoke', speed: 4.5 * scale, up: 0.8, life: 0.9, size: 0.8 * scale, grow: 1.2 });
     fx.burst(v.set(pos.x, 0.25, pos.z), { count: Math.round(24 * scale), color: 0x5a4a3a, speed: 6 * scale, up: 5, life: 0.7, size: 0.12, gravity: 16 });
+    fx.burst(v.set(pos.x, 0.3, pos.z), { count: Math.round(8 * scale), color: 0x7a6a56, kind: 'debris', speed: 5 * scale, up: 4, life: 0.8, size: 0.6 * scale, gravity: 15 });
     fx.flash(v.set(pos.x, 0.4, pos.z), { color: 0xfff0d0, size: 1.6 * scale, life: 0.08 });
   },
 

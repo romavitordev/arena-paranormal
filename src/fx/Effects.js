@@ -8,32 +8,61 @@ import { FX_LIBRARY } from './library.js';
 const VERT = `
 attribute float aSize;
 attribute float aAlpha;
+attribute float aRot;
 attribute vec3 aColor;
 varying float vAlpha;
+varying float vRot;
 varying vec3 vColor;
 void main() {
   vAlpha = aAlpha;
+  vRot = aRot;
   vColor = aColor;
   vec4 mv = modelViewMatrix * vec4(position, 1.0);
   gl_PointSize = aSize * (300.0 / -mv.z);
   gl_Position = projectionMatrix * mv;
 }`;
+// com textura (uHasMap): a imagem branca do pacote de partículas (Kenney, CC0) girada por partícula e pintada com a
+// cor do efeito; sem textura: o círculo suave de sempre
 const FRAG = `
 uniform float uAlpha;
 uniform float uSoft;
+uniform float uHasMap;
+uniform sampler2D uMap;
 varying float vAlpha;
+varying float vRot;
 varying vec3 vColor;
 void main() {
   vec2 c = gl_PointCoord - 0.5;
+  if (uHasMap > 0.5) {
+    float cs = cos(vRot), sn = sin(vRot);
+    vec2 uv = vec2(c.x * cs - c.y * sn, c.x * sn + c.y * cs) + 0.5;
+    vec4 tx = texture2D(uMap, uv);
+    float a = tx.a * max(tx.r, 0.0) * vAlpha * uAlpha;
+    if (a < 0.01) discard;
+    gl_FragColor = vec4(vColor, a);
+    return;
+  }
   float d = length(c);
   if (d > 0.5) discard;
   float a = pow(smoothstep(0.5, 0.0, d), uSoft) * vAlpha * uAlpha;
   gl_FragColor = vec4(vColor, a);
 }`;
 
+// texturas de efeito em public/fx/ (geradas por tools/import-fx.py); carregam uma vez e são reaproveitadas
+const FX_TEX = {};
+export function fxTexture(name) {
+  if (!FX_TEX[name]) {
+    const base = (import.meta.env && import.meta.env.BASE_URL) || '/';
+    FX_TEX[name] = new THREE.TextureLoader().load(`${base}fx/${name}.png`);
+  }
+  return FX_TEX[name];
+}
+
 class ParticlePool {
-  constructor(scene, max, blending, { alpha = 1, soft = 1 } = {}) {
+  constructor(scene, max, blending, { alpha = 1, soft = 1, map = null } = {}) {
     this.max = max;
+    this.rot = new Float32Array(max);
+    this.spin = new Float32Array(max);
     this.pos = new Float32Array(max * 3);
     this.vel = new Float32Array(max * 3);
     this.col = new Float32Array(max * 3);
@@ -51,10 +80,12 @@ class ParticlePool {
     g.setAttribute('aColor', new THREE.BufferAttribute(this.col, 3));
     g.setAttribute('aSize', new THREE.BufferAttribute(this.size, 1));
     g.setAttribute('aAlpha', new THREE.BufferAttribute(this.alpha, 1));
+    g.setAttribute('aRot', new THREE.BufferAttribute(this.rot, 1));
+    this.textured = !!map;
     const m = new THREE.ShaderMaterial({
       vertexShader: VERT,
       fragmentShader: FRAG,
-      uniforms: { uAlpha: { value: alpha }, uSoft: { value: soft } },
+      uniforms: { uAlpha: { value: alpha }, uSoft: { value: soft }, uHasMap: { value: map ? 1 : 0 }, uMap: { value: map } },
       transparent: true,
       depthWrite: false,
       blending,
@@ -75,6 +106,9 @@ class ParticlePool {
     this.life[i] = life; this.maxLife[i] = life;
     this.grav[i] = grav; this.drag[i] = drag;
     this.alpha[i] = 1;
+    // textura: começa num ângulo qualquer e gira devagar (a fumaça não fica repetida)
+    this.rot[i] = Math.random() * Math.PI * 2;
+    this.spin[i] = (Math.random() - 0.5) * 1.6;
   }
 
   update(dt) {
@@ -89,12 +123,14 @@ class ParticlePool {
       this.pos[i * 3 + 2] += this.vel[i * 3 + 2] * dt;
       this.alpha[i] = Math.min(1, k * 1.6);
       this.size[i] = this.size0[i] * (1 + this.grow[i] * (1 - k));
+      if (this.textured) this.rot[i] += this.spin[i] * dt;
     }
     const g = this.points.geometry;
     g.attributes.position.needsUpdate = true;
     g.attributes.aColor.needsUpdate = true;
     g.attributes.aSize.needsUpdate = true;
     g.attributes.aAlpha.needsUpdate = true;
+    if (this.textured) g.attributes.aRot.needsUpdate = true;
   }
 
   clear() {
@@ -110,14 +146,18 @@ export class Effects {
     this.scene = scene;
     this.glow = new ParticlePool(scene, 2500, THREE.AdditiveBlending);
     // fumaça: mais translúcida e com borda bem suave, para parecer névoa
-    this.smoke = new ParticlePool(scene, 2000, THREE.NormalBlending, { alpha: 0.42, soft: 1.8 });
+    this.smoke = new ParticlePool(scene, 2000, THREE.NormalBlending, { alpha: 0.5, soft: 1.8, map: fxTexture('smoke') });
+    // pedrinhas e terra (golpe pesado no chão, explosão)
+    this.debris = new ParticlePool(scene, 400, THREE.NormalBlending, { alpha: 0.95, map: fxTexture('debris') });
+    // faíscas elétricas (energia paranormal)
+    this.spark = new ParticlePool(scene, 400, THREE.AdditiveBlending, { map: fxTexture('spark') });
     this.meshes = []; // {obj, life, maxLife, update}
     this.emitters = new Set();
     this.paused = false;
   }
 
   pool(kind) {
-    return kind === 'smoke' ? this.smoke : this.glow;
+    return kind === 'smoke' ? this.smoke : kind === 'debris' ? this.debris : kind === 'spark' ? this.spark : this.glow;
   }
 
   burst(pos, o = {}) {
@@ -207,13 +247,19 @@ export class Effects {
     return this._addMesh(m, life, (k) => { mat.opacity = k; });
   }
 
+  // clarão; tex: textura de public/fx/ ('star', 'burst', 'fire', 'flare'…) no lugar do brilho redondo; grow: cresce
+  // enquanto some (estouros de explosão)
   flash(pos, o = {}) {
-    const { color = 0xffffff, size = 1, life = 0.08 } = o;
-    const mat = new THREE.SpriteMaterial({ color, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, map: glowTexture() });
+    const { color = 0xffffff, size = 1, life = 0.08, tex = null, grow = 0, blending = THREE.AdditiveBlending } = o;
+    const mat = new THREE.SpriteMaterial({ color, transparent: true, blending, depthWrite: false, map: tex ? fxTexture(tex) : glowTexture() });
+    if (tex) mat.rotation = Math.random() * Math.PI * 2;
     const s = new THREE.Sprite(mat);
     s.position.copy(pos);
     s.scale.setScalar(size);
-    return this._addMesh(s, life, (k) => { mat.opacity = k; s.scale.setScalar(size * (0.6 + k * 0.4)); });
+    return this._addMesh(s, life, (k) => {
+      mat.opacity = k;
+      s.scale.setScalar(grow ? size * (1 + grow * (1 - k)) : size * (0.6 + k * 0.4));
+    });
   }
 
   // ---------------------------------------------------------------- V2
@@ -389,6 +435,8 @@ export class Effects {
     }
     this.glow.update(dt);
     this.smoke.update(dt);
+    this.debris.update(dt);
+    this.spark.update(dt);
     if (this.chains) for (const h of this.chains) { if (!h.alive) this.chains.delete(h); else this._updateChain(h); }
     if (this.runeSets) {
       for (const h of this.runeSets) {
@@ -422,6 +470,8 @@ export class Effects {
   clear() {
     this.glow.clear();
     this.smoke.clear();
+    this.debris.clear();
+    this.spark.clear();
     for (const fx of this.meshes) (fx.parent || this.scene).remove(fx.obj);
     this.meshes.length = 0;
     this.emitters.clear();

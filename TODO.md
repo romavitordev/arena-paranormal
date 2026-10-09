@@ -1853,13 +1853,19 @@ Comportamentos:
 
 Buscar recursos com licença compatível.
 
-* [ ] Socos
-* [ ] Impactos
-* [ ] Bloqueios
+> 2026-10-09: efeitos sonoros CC0 do Kenney (Impact Sounds, RPG Audio, Sci-Fi Sounds, Interface Sounds) via
+> `tools/import-sounds.py` — 20 sons do jogo com 1 a 7 variações sorteadas e tom variado; o resto segue sintetizado.
+> **Falta:** o "whoosh" do golpe no ar (`swing`/`blade`, os mais tocados) — os pacotes do Kenney não têm; candidato
+> CC0: "swishes sound pack" (OpenGameArt, 13 swings, 385 KB), aguardando OK do usuário para baixar. Também faltam
+> tiros (escopeta/sniper/M4), correntes, teleporte e esquiva. O foco é efeito sonoro, não música (pedido do usuário).
+
+* [x] Socos
+* [x] Impactos
+* [x] Bloqueios
 * [ ] Esquivas
 * [ ] Transformações
 * [ ] Especiais
-* [ ] Menus
+* [x] Menus
 * [ ] Vitória
 * [ ] Música do menu
 * [ ] Música de batalha
@@ -1872,13 +1878,17 @@ Buscar recursos com licença compatível.
 
 # 72. EFEITOS VISUAIS
 
-* [ ] Socos
-* [ ] Impactos
-* [ ] Explosões
+> 2026-10-09: texturas CC0 do Kenney Particle Pack (`tools/import-fx.py` → `public/fx/`): fumaça de verdade em todas
+> as partículas de fumaça (girando), clarão de estrela nos golpes, bola de fogo + estouro + pedrinhas na explosão,
+> pedrinhas nos golpes pesados no chão, faíscas elétricas na energia paranormal e brilho no bloqueio perfeito.
+
+* [x] Socos
+* [x] Impactos
+* [x] Explosões
 * [ ] Tiros
 * [ ] Projéteis
-* [ ] Fumaça
-* [ ] Energia
+* [x] Fumaça
+* [x] Energia
 * [ ] Sangue
 * [ ] Teleporte
 * [ ] Efeitos paranormais

@@ -1,12 +1,10 @@
-// Sons do jogo. Cada som tem um nome. Por padrão ele é sintetizado na hora
-// (WebAudio), mas se existir um arquivo em public/sounds/<nome>.ogg|.mp3|.wav
-// listado em SOUND_FILES, o arquivo substitui o som sintetizado.
-//
-// Para trocar um som: coloque o arquivo em public/sounds/ e adicione aqui.
-export const SOUND_FILES = {
-  // m4: 'sounds/m4.ogg',
-  // sniper: 'sounds/sniper.ogg',
-};
+// Sons do jogo. Cada som tem um nome. Por padrão ele é sintetizado na hora (WebAudio); se o nome estiver em
+// SOUND_FILES (src/audio/soundFiles.js, gerado por tools/import-sounds.py a partir dos pacotes CC0), um dos arquivos
+// é sorteado a cada toque, com uma pequena variação de tom. Arquivo que não carregar → volta ao som sintetizado.
+import { SOUND_FILES } from './soundFiles.js';
+
+export { SOUND_FILES };
+const BASE = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.BASE_URL) || '';
 
 export class AudioManager {
   constructor() {
@@ -31,17 +29,19 @@ export class AudioManager {
     const comp = this.ctx.createDynamicsCompressor();
     this.master.connect(comp).connect(this.ctx.destination);
     this.noiseBuf = this._makeNoise(1.5);
-    for (const [name, url] of Object.entries(SOUND_FILES)) this._load(name, url);
+    for (const [name, urls] of Object.entries(SOUND_FILES)) for (const url of [].concat(urls)) this._load(name, url);
   }
 
+  // cada nome guarda uma lista de variações já decodificadas
   async _load(name, url) {
     try {
-      const res = await fetch(url);
+      const res = await fetch(BASE + url);
       if (!res.ok) return;
       const data = await res.arrayBuffer();
-      this.buffers[name] = await this.ctx.decodeAudioData(data);
+      const buf = await this.ctx.decodeAudioData(data);
+      (this.buffers[name] ||= []).push(buf);
     } catch {
-      /* arquivo ausente: segue usando o som sintetizado */
+      /* arquivo ausente ou formato não suportado: segue usando o som sintetizado */
     }
   }
 
@@ -56,9 +56,12 @@ export class AudioManager {
   play(name, opts = {}) {
     if (!this.ctx || !name) return;
     const vol = opts.volume ?? 1;
-    if (this.buffers[name]) {
+    const list = this.buffers[name];
+    if (list && list.length) {
       const src = this.ctx.createBufferSource();
-      src.buffer = this.buffers[name];
+      src.buffer = list[Math.floor(Math.random() * list.length)];
+      // variação de tom (±5%) para golpes repetidos não soarem idênticos; opts.pitch continua valendo
+      src.playbackRate.value = (opts.pitch ?? 1) * (0.95 + Math.random() * 0.1);
       const g = this.ctx.createGain();
       g.gain.value = vol;
       src.connect(g).connect(this.master);

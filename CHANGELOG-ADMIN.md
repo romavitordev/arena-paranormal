@@ -1,5 +1,19 @@
 # Registro administrativo de alterações
 
+## (em andamento) — próxima versão
+
+- **Efeitos sonoros importados (CC0, Kenney):** `tools/import-sounds.py` converte (ffmpeg, mono, 64 kbps) os arquivos
+  escolhidos de `assets_src/kenney/` para `public/sounds/<nome>_<n>.ogg` e gera `src/audio/soundFiles.js`. 20 nomes
+  (punch, heavyPunch, kick, impact, bladeHit, axeHit, knifeThrow, trapSnap, grenadePin, reload, blockHit, guardBreak,
+  perfectBlock, explosion, shockwave, select, confirm, denied, tick, button), 74 arquivos, 428 KB. O `AudioManager`
+  guarda várias variações por nome, sorteia uma e varia o tom ±5%; se um arquivo não carregar (ou o navegador não
+  decodificar .ogg) volta ao som sintetizado. `swing`/`blade` (whoosh) continuam sintetizados — falta pacote.
+- **Texturas de efeitos (CC0, Kenney Particle Pack):** `tools/import-fx.py` → `public/fx/*.png` (7 texturas, ~75 KB).
+  `ParticlePool` aceita textura (girada por partícula no shader); a fumaça usa `smoke`; pools novos `debris` e
+  `spark`; `fx.flash({ tex, grow })`. Receitas da `library.js`: golpe (estrela), golpe pesado (pedrinhas), bloqueio
+  perfeito (flare), energia (faíscas), explosão (fogo + estouro + pedrinhas), marretada no chão (pedrinhas).
+  Créditos/links em `assets_src/README.md`.
+
 ## v3.11.0 — As Torres
 
 - Versão: `VERSION` 3.10.1 → **3.11.0** (modo novo + idiomas ligados). Changelog dos jogadores com tudo o que

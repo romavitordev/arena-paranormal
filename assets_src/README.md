@@ -25,3 +25,19 @@ assets_src/kenney/kenney_nature-kit/Models/GLTF format/*.glb
 ```
 
 Depois: `node tools/blender/build.mjs santo_berco` (ou outro id de cenário).
+
+## Sons e texturas de efeitos (CC0)
+
+Efeitos sonoros e texturas de efeitos também vêm de pacotes CC0 do Kenney, extraídos aqui com o mesmo nome do zip:
+
+| Pacote | Uso | Link |
+|---|---|---|
+| Impact Sounds | socos, chutes, impactos, bloqueios (metal), bloqueio perfeito (sino), machado (madeira) | https://kenney.nl/assets/impact-sounds |
+| RPG Audio | lâmina cortando, machado, faca sacada, travas e cliques de metal | https://kenney.nl/assets/rpg-audio |
+| Sci-Fi Sounds | explosões e ondas de choque | https://kenney.nl/assets/sci-fi-sounds |
+| Interface Sounds | menus: escolher, confirmar, erro, tique, clique | https://kenney.nl/assets/interface-sounds |
+| Particle Pack | texturas de fumaça, clarão, fogo, estouro, faísca elétrica, pedrinhas | https://kenney.nl/assets/particle-pack |
+
+Depois: `python tools/import-sounds.py` (gera `public/sounds/*.ogg` e `src/audio/soundFiles.js`) e
+`python tools/import-fx.py` (gera `public/fx/*.png`). Os dois precisam do `ffmpeg`. Nos scripts fica qual arquivo
+vira qual som/efeito do jogo — para trocar um som, mude o mapa lá e rode de novo.
