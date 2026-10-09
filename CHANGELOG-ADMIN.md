@@ -7,7 +7,13 @@
   (punch, heavyPunch, kick, impact, bladeHit, axeHit, knifeThrow, trapSnap, grenadePin, reload, blockHit, guardBreak,
   perfectBlock, explosion, shockwave, select, confirm, denied, tick, button), 74 arquivos, 428 KB. O `AudioManager`
   guarda várias variações por nome, sorteia uma e varia o tom ±5%; se um arquivo não carregar (ou o navegador não
-  decodificar .ogg) volta ao som sintetizado. `swing`/`blade` (whoosh) continuam sintetizados — falta pacote.
+  decodificar .ogg) volta ao som sintetizado.
+- **Golpes refeitos (o usuário reprovou soco e espada do Kenney):** pacotes CC0 de combate do OpenGameArt em
+  `assets_src/oga/` (37 hits/punches, Punch do qubodup, 20 Sword Sound Effects, swishes). Medido sem ouvir: os do
+  Kenney tinham 0,4–0,65 s de cauda abafada e o chute era só grave (centroide 88 Hz); o pacote de golpes tinha até
+  270 ms de silêncio antes do impacto. O script agora corta o silêncio inicial, normaliza o pico (−1 dB), descarta
+  variações com pico tardio (> 90 ms) e monta `bladeHit`/`slashFinal`/`axeHit` misturando aço + golpe no corpo.
+  `swing`/`blade` (whoosh) agora gravados. Sem camada sintetizada por cima (tentativa intermediária, removida).
 - **Texturas de efeitos (CC0, Kenney Particle Pack):** `tools/import-fx.py` → `public/fx/*.png` (7 texturas, ~75 KB).
   `ParticlePool` aceita textura (girada por partícula no shader); a fumaça usa `smoke`; pools novos `debris` e
   `spark`; `fx.flash({ tex, grow })`. Receitas da `library.js`: golpe (estrela), golpe pesado (pedrinhas), bloqueio

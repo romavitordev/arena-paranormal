@@ -40,7 +40,7 @@ export default defineConfig({
   base: process.env.GITHUB_ACTIONS ? '/arena-paranormal/' : '/',
   plugins: [aiLearnedPlugin()],
   // gravar o aprendizado não pode recarregar a página no meio da luta
-  server: { watch: { ignored: ['**/public/ai/**'] } },
+  server: { watch: { ignored: ['**/public/ai/**', '**/assets_src/**'] } },
   build: {
     target: 'es2022',
     chunkSizeWarningLimit: 650, // o three.js sozinho tem ~610 kB (biblioteca, fica em cache); o resto fica abaixo de 500

@@ -38,6 +38,16 @@ Efeitos sonoros e texturas de efeitos também vêm de pacotes CC0 do Kenney, ext
 | Interface Sounds | menus: escolher, confirmar, erro, tique, clique | https://kenney.nl/assets/interface-sounds |
 | Particle Pack | texturas de fumaça, clarão, fogo, estouro, faísca elétrica, pedrinhas | https://kenney.nl/assets/particle-pack |
 
+Os GOLPES (socos, chutes, espada, whoosh, bloqueio) vêm de pacotes CC0 do OpenGameArt — os do Kenney soavam como
+pancada em saco e foram trocados. Extraídos em `assets_src/oga/<pasta>/`:
+
+| Pasta | Pacote | Uso | Link |
+|---|---|---|---|
+| `hits` | 37 hits/punches (Independent.nu) | socos fortes, chutes, golpes no corpo | https://opengameart.org/content/37-hitspunches |
+| `qubodup_punch` | Punch (qubodup) | socos | https://opengameart.org/content/punch |
+| `sword_attack`, `sword_clash` | 20 Sword Sound Effects (StarNinjas — crédito apreciado) | aço da espada, bloqueio | https://opengameart.org/content/20-sword-sound-effects-attacks-and-clashes |
+| `swishes` | swishes sound pack (artisticdude) | whoosh do golpe no ar | https://opengameart.org/content/swishes-sound-pack |
+
 Depois: `python tools/import-sounds.py` (gera `public/sounds/*.ogg` e `src/audio/soundFiles.js`) e
 `python tools/import-fx.py` (gera `public/fx/*.png`). Os dois precisam do `ffmpeg`. Nos scripts fica qual arquivo
 vira qual som/efeito do jogo — para trocar um som, mude o mapa lá e rode de novo.

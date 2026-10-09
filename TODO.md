@@ -1854,10 +1854,11 @@ Comportamentos:
 Buscar recursos com licença compatível.
 
 > 2026-10-09: efeitos sonoros CC0 do Kenney (Impact Sounds, RPG Audio, Sci-Fi Sounds, Interface Sounds) via
-> `tools/import-sounds.py` — 20 sons do jogo com 1 a 7 variações sorteadas e tom variado; o resto segue sintetizado.
-> **Falta:** o "whoosh" do golpe no ar (`swing`/`blade`, os mais tocados) — os pacotes do Kenney não têm; candidato
-> CC0: "swishes sound pack" (OpenGameArt, 13 swings, 385 KB), aguardando OK do usuário para baixar. Também faltam
-> tiros (escopeta/sniper/M4), correntes, teleporte e esquiva. O foco é efeito sonoro, não música (pedido do usuário).
+> `tools/import-sounds.py`. O usuário ouviu e reprovou os socos e a espada do Kenney (soavam como pancada em saco) →
+> golpes trocados por pacotes CC0 de combate do OpenGameArt (37 hits/punches, Punch, 20 Sword Sound Effects, swishes):
+> silêncio do começo cortado (chegava a 270 ms), pico normalizado, espada acertando = aço + golpe no corpo, whoosh no
+> ar. 23 sons do jogo com variações sorteadas. **Falta:** tiros (escopeta/sniper/M4), correntes, teleporte e esquiva.
+> O foco é efeito sonoro, não música (pedido do usuário).
 
 * [x] Socos
 * [x] Impactos
