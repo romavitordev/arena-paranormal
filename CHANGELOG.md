@@ -1,5 +1,11 @@
 # Changelog
 
+## v3.12.0 — 2026-10-09
+
+### Alterado
+- Efeitos sonoros gravados (CC0) no lugar dos sintetizados: golpes, espadas, whoosh, bloqueios, K.O., tiros (M4, escopetas, sniper), sons paranormais, garras, correntes, teleporte e o zumbido da Carga de Poder (em loop). A risada do Anfitrião continua a sintetizada.
+- Efeitos visuais com texturas (CC0): fumaça, clarão de golpe, explosão, pedrinhas, faíscas elétricas; corte de lâmina com degradê e varredura.
+
 ## v3.11.0 — 2026-10-09
 
 ### Adicionado

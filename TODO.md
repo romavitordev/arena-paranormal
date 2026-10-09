@@ -1860,8 +1860,8 @@ Buscar recursos com licença compatível.
 > ar. Depois (2º pedido): tiros (M4, escopeta, sniper — cada disparo da biblioteca de armas vira uma variação),
 > garras/carne, correntes, chicote, teleporte, batimento, pulo/aterrissagem, medo e K.O. — 39 sons gravados.
 > 3º pedido: os sons paranormais também (ritual, carga, especial armado/início, power-up, dreno, renascer, lâmina do
-> medo, máscara, fumaça, faixa, risada, aplausos e o zumbido em loop da Carga de Poder) — 53 sons gravados. Só
-> `ready` (aviso de interface) segue sintetizado. Trocar um som: mapa de `tools/import-sounds.py`.
+> medo, máscara, fumaça, faixa, aplausos e o zumbido em loop da Carga de Poder) — 52 sons gravados. Seguem
+> sintetizados `ready` (aviso de interface) e `laugh` (a risada gravada do Anfitrião foi reprovada pelo usuário). Trocar um som: mapa de `tools/import-sounds.py`.
 > O foco é efeito sonoro, não música (pedido do usuário).
 
 * [x] Socos

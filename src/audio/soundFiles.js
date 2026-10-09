@@ -41,7 +41,6 @@ export const SOUND_FILES = {
   maskOn: ['sounds/maskOn_0.ogg'],
   smoke: ['sounds/smoke_0.ogg', 'sounds/smoke_1.ogg', 'sounds/smoke_2.ogg'],
   banner: ['sounds/banner_0.ogg', 'sounds/banner_1.ogg'],
-  laugh: ['sounds/laugh_0.ogg'],
   applause: ['sounds/applause_0.ogg'],
   chargeHum: ['sounds/chargeHum_0.ogg'],
   knifeThrow: ['sounds/knifeThrow_0.ogg', 'sounds/knifeThrow_1.ogg', 'sounds/knifeThrow_2.ogg'],

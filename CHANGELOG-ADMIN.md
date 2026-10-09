@@ -1,6 +1,9 @@
 # Registro administrativo de alterações
 
-## (em andamento) — próxima versão
+## v3.12.0 — Golpes que se ouvem
+
+- Versão: `VERSION` 3.11.0 → **3.12.0** (sons e efeitos). Risada gravada do Anfitrião removida a pedido do usuário
+  (`laugh` volta ao sintetizado).
 
 - **Efeitos sonoros importados (CC0, Kenney):** `tools/import-sounds.py` converte (ffmpeg, mono, 64 kbps) os arquivos
   escolhidos de `assets_src/kenney/` para `public/sounds/<nome>_<n>.ogg` e gera `src/audio/soundFiles.js`. 20 nomes

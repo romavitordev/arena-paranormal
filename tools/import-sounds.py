@@ -40,7 +40,6 @@ HEART = 'oga/heartbeat/heartbeat.mp3_.flac'
 LAND = 'oga/jumpland/jumpland.wav'
 MAGIC = 'oga/magic/magical_{}.ogg'
 SPELL = 'oga/spells/{}.ogg'
-LAUGH = 'oga/laugh/qubodupevillaughter.flac'
 APPLAUSE = 'oga/applause/2480.mp3'
 K_IMPACT = 'kenney/kenney_impact-sounds/Audio/{}.ogg'
 K_RPG = 'kenney/kenney_rpg-audio/Audio/{}.ogg'
@@ -133,7 +132,7 @@ MAP = {
     'smoke': many(K_SCIFI, ['thrusterFire_000', 'thrusterFire_001', 'thrusterFire_002'], max=0.6, gain=-6),
     'banner': (mix((SWISH.format(4), 0, 0), (MAGIC.format(5), -6, 0), max=0.7)
                + mix((SWISH.format(9), 0, 0), (MAGIC.format(3), -6, 0), max=0.7)),
-    'laugh': [(LAUGH, {'max': 2.2, 'gain': -3})],
+    # (risada gravada removida a pedido do usuário: 'laugh' volta a ser a sintetizada)
     'applause': [(APPLAUSE, {'max': 3.0, 'gain': -6})],
     # zumbido da Carga de Poder (startLoop): toca em loop, sem corte
     'chargeHum': many(K_SCIFI, ['spaceEngineLow_000'], gain=-4),

@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.11.0';
+export const VERSION = '3.12.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,17 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.12.0',
+    date: '2026-10-09',
+    title: 'Golpes que se ouvem',
+    items: [
+      'Sons de verdade nas lutas: socos, chutes, golpes fortes, espadas acertando, o "whoosh" do golpe no ar, bloqueios e o K.O. agora são gravações — com várias variações sorteadas a cada golpe, para não soar repetido.',
+      'Tiros novos: a M4 do Kaiser, as escopetas da Erin e do Veríssimo e os rifles de precisão do Arthur, da Kemi e da Fantasma, gravados de armas reais.',
+      'Sons paranormais novos: rituais, Carga de Poder (com o zumbido subindo enquanto carrega), especial, dreno, renascer, lâmina do medo, máscara, fumaça, teleporte, garras, correntes, chicote, batimento e os aplausos da Plateia do Anfitrião.',
+      'Efeitos visuais melhores: os cortes de lâmina agora são um arco que varre com a ponta brilhando; os golpes têm um clarão em estrela com estouro da cor do lutador; explosões com bola de fogo e pedrinhas; fumaça de verdade em todo o jogo; faíscas elétricas na energia paranormal.',
+    ],
+  },
   {
     v: '3.11.0',
     date: '2026-10-09',

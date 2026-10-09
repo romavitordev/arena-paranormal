@@ -2,6 +2,12 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.12.0 — Golpes que se ouvem
+- Sons de verdade nas lutas: socos, chutes, golpes fortes, espadas acertando, o "whoosh" do golpe no ar, bloqueios e o K.O. agora são gravações — com várias variações sorteadas a cada golpe, para não soar repetido.
+- Tiros novos: a M4 do Kaiser, as escopetas da Erin e do Veríssimo e os rifles de precisão do Arthur, da Kemi e da Fantasma, gravados de armas reais.
+- Sons paranormais novos: rituais, Carga de Poder (com o zumbido subindo enquanto carrega), especial, dreno, renascer, lâmina do medo, máscara, fumaça, teleporte, garras, correntes, chicote, batimento e os aplausos da Plateia do Anfitrião.
+- Efeitos visuais melhores: os cortes de lâmina agora são um arco que varre com a ponta brilhando; os golpes têm um clarão em estrela com estouro da cor do lutador; explosões com bola de fogo e pedrinhas; fumaça de verdade em todo o jogo; faíscas elétricas na energia paranormal.
+
 ## v3.11.0 — As Torres
 - Novo modo: TORRES (menu principal). São 8 torres — só a primeira começa aberta; zerar uma destrava a próxima. Escolha a torre e a câmera sobe da base até o topo e se afasta mostrando a torre inteira.
 - Em cada torre você escolhe UM lutador para subir até o fim (não dá para trocar) e a dificuldade, que vale para todos os andares. Venceu, sobe; perdeu, tenta o mesmo andar de novo ou desiste.
