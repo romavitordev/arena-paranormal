@@ -644,15 +644,19 @@ export class Fighter {
       case 'ability':
       case 'special':
         if (this.seq) {
-          const done = this.seq.update(dt);
-          if (done) {
-            const s = this.seq;
+          // guarda a sequência ANTES de atualizar: ela pode trocar/zerar this.seq por dentro (ex.: o Renascimento do
+          // Juan troca a forma no meio — antes isso dava erro aqui e travava o jogo inteiro)
+          const cur = this.seq;
+          const done = cur.update(dt);
+          if (done && this.seq && this.seq !== cur) {
+            // a sequência terminou trocando por outra (nova ação já começou): deixa a nova seguir
+          } else if (done) {
             this.seq = null;
             if (this.state !== 'ko' && this.state !== 'hitstun' && this.state !== 'stun' && this.state !== 'pulled') {
               this.setState('idle');
-              if (s.onDone) s.onDone(); // ex.: Pulso Paranormal → estocada pronta quando o alvo chega
+              if (cur.onDone) cur.onDone(); // ex.: Pulso Paranormal → estocada pronta quando o alvo chega
             }
-          } else if (this.state === 'ability' && this.seq.cancelable && this.seq.cancelable()) {
+          } else if (this.seq && this.state === 'ability' && this.seq.cancelable && this.seq.cancelable()) {
             // habilidades de movimento (teleportes) emendam direto em ataques
             const s = this.seq;
             const inp = this.input;

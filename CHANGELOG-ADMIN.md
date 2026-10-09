@@ -2,6 +2,11 @@
 
 ## (em andamento) — próxima versão
 
+- **CORREÇÃO (travava o jogo): Renascimento do Juan.** No fim da transformação a sequência (`seq.update`) troca a forma
+  e zera `this.seq` por dentro; o `Fighter.update` lia `this.seq` de novo depois e dava `TypeError` (onDone de null),
+  que derrubava o laço do jogo — tela congelada. Agora guarda a sequência antes de atualizar e não reseta se ela foi
+  trocada por outra. Testadas as transformações de todos os 18 personagens sem erro.
+
 - **TORNEIO local (v1):** escopo escolhido pelo usuário — local primeiro (online numa próxima versão) e lutas só de
   CPU sempre sorteadas. `src/game/tournament.js`: chave de eliminatória simples (tamanho = potência de 2; a 1ª rodada
   junta `order[i]` com `order[i + size/2]`, então nunca sobra luta vazia; quem fica sozinho passa direto),
