@@ -309,7 +309,6 @@ export default {
   "tower.skip": "任意のボタンでスキップ",
   "tower.choose_diff": "難易度を選べ",
   "tower.fighter_fixed": "このキャラでタワー全体を登る。途中交代不可。",
-  "tower.boss_buff": "強化ボス：体力×{hp}・ダメージ×{d}",
   "tower.select_hint": "◀ ▶ ▲ ▼ 選択 · <b>{ok}</b> 入る · <b>{back}</b> 戻る",
   "tower.menu_hint": "▲ ▼ 選択 · <b>{ok}</b> 決定 · <b>{back}</b> 戻る",
   "tower.new_best": "最高難易度更新！",

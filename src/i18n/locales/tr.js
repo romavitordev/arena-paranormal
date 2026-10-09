@@ -309,7 +309,6 @@ export default {
   "tower.skip": "herhangi bir tuş tanıtımı geçer",
   "tower.choose_diff": "ZORLUK SEÇ",
   "tower.fighter_fixed": "Bu dövüşçü tüm kuleyi tırmanır — yarıda değiştirilemez.",
-  "tower.boss_buff": "Güçlendirilmiş kötü: can ×{hp} · hasar ×{d}",
   "tower.select_hint": "◀ ▶ ▲ ▼ seç · <b>{ok}</b> gir · <b>{back}</b> geri",
   "tower.menu_hint": "▲ ▼ seç · <b>{ok}</b> onayla · <b>{back}</b> geri",
   "tower.new_best": "YENİ EN İYİ ZORLUK!",

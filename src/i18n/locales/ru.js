@@ -309,7 +309,6 @@ export default {
   "tower.skip": "любая кнопка пропускает вступление",
   "tower.choose_diff": "ВЫБЕРИТЕ СЛОЖНОСТЬ",
   "tower.fighter_fixed": "Этот боец проходит всю башню — сменить нельзя.",
-  "tower.boss_buff": "Усиленный злодей: здоровье ×{hp} · урон ×{d}",
   "tower.select_hint": "◀ ▶ ▲ ▼ выбор · <b>{ok}</b> войти · <b>{back}</b> назад",
   "tower.menu_hint": "▲ ▼ выбор · <b>{ok}</b> подтвердить · <b>{back}</b> назад",
   "tower.new_best": "НОВАЯ ЛУЧШАЯ СЛОЖНОСТЬ!",

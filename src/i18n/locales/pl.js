@@ -309,7 +309,6 @@ export default {
   "tower.skip": "dowolny przycisk pomija intro",
   "tower.choose_diff": "WYBIERZ POZIOM TRUDNOŚCI",
   "tower.fighter_fixed": "Ten wojownik przechodzi całą wieżę — bez zmiany w trakcie.",
-  "tower.boss_buff": "Wzmocniony złoczyńca: zdrowie ×{hp} · obrażenia ×{d}",
   "tower.select_hint": "◀ ▶ ▲ ▼ wybierz · <b>{ok}</b> wejdź · <b>{back}</b> wstecz",
   "tower.menu_hint": "▲ ▼ wybierz · <b>{ok}</b> potwierdź · <b>{back}</b> wstecz",
   "tower.new_best": "NOWY NAJLEPSZY POZIOM!",

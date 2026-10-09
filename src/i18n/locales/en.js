@@ -309,7 +309,6 @@ export default {
   "tower.skip": "any button skips the intro",
   "tower.choose_diff": "CHOOSE THE DIFFICULTY",
   "tower.fighter_fixed": "This fighter climbs the whole tower — no switching midway.",
-  "tower.boss_buff": "Empowered villain: health ×{hp} · damage ×{d}",
   "tower.select_hint": "◀ ▶ ▲ ▼ select · <b>{ok}</b> enter · <b>{back}</b> back",
   "tower.menu_hint": "▲ ▼ select · <b>{ok}</b> confirm · <b>{back}</b> back",
   "tower.new_best": "NEW BEST DIFFICULTY!",

@@ -27,7 +27,7 @@
   placas com os retratos dos adversários; câmera `intro()` base → topo → afasta e `focus(i)`), desenhada no
   `render()` no estado `towerview`. `TowerScreen` com modos intro / diff / map / done. Vilão do topo sorteado
   (`pickBoss`, `VILLAINS`) e buffado em `setupControllers` (maxHealth × e `cpuEdge` dealt/taken × por dificuldade,
-  `BOSS_BUFF`); Torre VIII (Babel) fixa. A dificuldade escolhida vale para todos os andares. Lutador fixo: na pausa da
+  `BOSS_BUFF`; o jogador não vê esses números — pedido do usuário); Torre VIII (Babel) fixa. A dificuldade escolhida vale para todos os andares. Lutador fixo: na pausa da
   torre SELEÇÃO DE PERSONAGENS vira DESISTIR. Retratos dos vilões gerados com o elenco. Correções junto: luta
   espelho (Kaiser × Kaiser) travava na introdução por não ter fala registrada — agora entra sem falas; Mutilador,
   Erin do Caos e ??? (Elmo) usam as falas da base (`BASE_CHARACTER`).

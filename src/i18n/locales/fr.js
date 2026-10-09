@@ -309,7 +309,6 @@ export default {
   "tower.skip": "n’importe quel bouton passe l’intro",
   "tower.choose_diff": "CHOISIS LA DIFFICULTÉ",
   "tower.fighter_fixed": "Ce combattant gravit toute la tour — pas de changement en cours.",
-  "tower.boss_buff": "Méchant renforcé : vie ×{hp} · dégâts ×{d}",
   "tower.select_hint": "◀ ▶ ▲ ▼ choisir · <b>{ok}</b> entrer · <b>{back}</b> retour",
   "tower.menu_hint": "▲ ▼ choisir · <b>{ok}</b> valider · <b>{back}</b> retour",
   "tower.new_best": "NOUVELLE MEILLEURE DIFFICULTÉ !",

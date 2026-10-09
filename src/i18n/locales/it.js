@@ -309,7 +309,6 @@ export default {
   "tower.skip": "qualsiasi tasto salta l’intro",
   "tower.choose_diff": "SCEGLI LA DIFFICOLTÀ",
   "tower.fighter_fixed": "Questo lottatore sale tutta la torre — niente cambi a metà.",
-  "tower.boss_buff": "Cattivo potenziato: vita ×{hp} · danni ×{d}",
   "tower.select_hint": "◀ ▶ ▲ ▼ scegli · <b>{ok}</b> entra · <b>{back}</b> indietro",
   "tower.menu_hint": "▲ ▼ scegli · <b>{ok}</b> conferma · <b>{back}</b> indietro",
   "tower.new_best": "NUOVA MIGLIOR DIFFICOLTÀ!",

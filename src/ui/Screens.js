@@ -820,7 +820,7 @@ export class TowerSelectScreen {
 //   map:   andares, o da vez em destaque ('fight' | 'quit')
 //   done:  topo alcançado ('done')
 export class TowerScreen {
-  constructor(root, { mode, run, stage, portraits, cpuLabel: label = cpuLabel, difficulties = [], best = null, newBest = false, unlockedNext = null, buffs = [] }) {
+  constructor(root, { mode, run, stage, portraits, cpuLabel: label = cpuLabel, difficulties = [], best = null, newBest = false, unlockedNext = null }) {
     this.mode = mode;
     this.run = run;
     this.stage = stage;
@@ -839,10 +839,9 @@ export class TowerScreen {
     } else if (mode === 'diff') {
       const P = run.player;
       opts = difficulties.map((d) => [`diff:${d}`, `${label(d)}${d === best ? ' ★' : ''}`]).concat([['reselect', t('ui.back')]]);
-      this.buffs = buffs;
       panel = `<div class="tw-panel">${head}
         <div class="tw-fighter" style="--c:${P.color}"><img src="${portraits[P.id] || ''}" alt=""><div><b>${P.name}</b><small>${t('tower.fighter_fixed')}</small></div></div>
-        <h3>${t('tower.choose_diff')}</h3><p class="tw-buff"></p></div>`;
+        <h3>${t('tower.choose_diff')}</h3></div>`;
       this.index = Math.max(0, difficulties.indexOf(best || 'normal'));
     } else if (mode === 'map' || mode === 'done') {
       const P = run.player;
@@ -866,7 +865,6 @@ export class TowerScreen {
     this.el.addEventListener('click', () => { if (this.stage && !this.stage.introDone) this.stage.skipIntro(); });
     this.el.classList.add('net-taps');
     this.netTap = netTapDefault;
-    this.buffEl = this.el.querySelector('.tw-buff');
     const now = this.el.querySelector('.tw-floor.now');
     if (now) setTimeout(() => now.scrollIntoView({ block: 'center' }), 0);
     this.render();
@@ -875,10 +873,6 @@ export class TowerScreen {
   render() {
     this.el.classList.toggle('tw-waiting', this.waiting);
     this.btns.forEach((b, i) => b.classList.toggle('on', i === this.index));
-    if (this.buffEl) {
-      const b = this.buffs && this.buffs[this.index];
-      this.buffEl.textContent = b ? t('tower.boss_buff', { hp: b.hp.toFixed(1), d: b.dealt.toFixed(2) }) : '';
-    }
   }
   backId() { return { intro: 'back', diff: 'reselect', map: 'quit', done: 'done' }[this.mode]; }
   update(input) {

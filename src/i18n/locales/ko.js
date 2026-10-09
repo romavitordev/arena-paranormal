@@ -309,7 +309,6 @@ export default {
   "tower.skip": "아무 버튼이나 눌러 건너뛰기",
   "tower.choose_diff": "난이도를 선택하세요",
   "tower.fighter_fixed": "이 파이터로 타워 전체를 오릅니다 — 중간에 교체 불가.",
-  "tower.boss_buff": "강화된 악당: 체력 ×{hp} · 대미지 ×{d}",
   "tower.select_hint": "◀ ▶ ▲ ▼ 선택 · <b>{ok}</b> 입장 · <b>{back}</b> 뒤로",
   "tower.menu_hint": "▲ ▼ 선택 · <b>{ok}</b> 확인 · <b>{back}</b> 뒤로",
   "tower.new_best": "최고 난이도 갱신!",

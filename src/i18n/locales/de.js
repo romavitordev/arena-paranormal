@@ -309,7 +309,6 @@ export default {
   "tower.skip": "jede Taste überspringt das Intro",
   "tower.choose_diff": "WÄHLE DIE SCHWIERIGKEIT",
   "tower.fighter_fixed": "Dieser Kämpfer besteigt den ganzen Turm — kein Wechsel unterwegs.",
-  "tower.boss_buff": "Verstärkter Bösewicht: Leben ×{hp} · Schaden ×{d}",
   "tower.select_hint": "◀ ▶ ▲ ▼ wählen · <b>{ok}</b> betreten · <b>{back}</b> zurück",
   "tower.menu_hint": "▲ ▼ wählen · <b>{ok}</b> bestätigen · <b>{back}</b> zurück",
   "tower.new_best": "NEUE BESTE SCHWIERIGKEIT!",

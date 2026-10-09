@@ -3,7 +3,7 @@ import { InputManager } from './input/InputManager.js';
 import { AudioManager } from './audio/AudioManager.js';
 import { HUD } from './ui/HUD.js';
 import { HomeScreen, BattleConfigScreen, VictoryScreen, MODES, SelectScreen, MenuScreen, StageSelectScreen, LoadingScreen, CommandsScreen, ChangelogScreen, LanScreen, TowerScreen, TowerSelectScreen, NET_UI } from './ui/Screens.js';
-import { buildTower, pickBoss, towerFloorCount, isTowerUnlocked, bestDifficulty, saveTowerClear, TOWERS, TOWER_DIFFICULTIES, BOSS_BUFF, VILLAINS } from './game/tower.js';
+import { buildTower, pickBoss, towerFloorCount, isTowerUnlocked, bestDifficulty, saveTowerClear, TOWERS, TOWER_DIFFICULTIES, VILLAINS } from './game/tower.js';
 import { TowerStage } from './ui/towerStage.js';
 import { getForm } from './characters/forms/index.js';
 import { NetSession, Lobby, packInput, unpackInput, seededRandom } from './net/NetSession.js';
@@ -334,7 +334,6 @@ function toTowerView(mode, extra = {}) {
   const run = game.towerRun;
   const stage = game.towerStage;
   const tower = run.tower;
-  const k = tower.bossBuff || 1;
   if (mode === 'map') { stage.setProgress(run.floor); stage.focus(run.floor >= run.floors.length - 1 ? stage.n : run.floor); }
   else if (mode === 'done') { stage.setProgress(run.floors.length, true); stage.focus(null); }
   else if (mode === 'diff') stage.focus(stage.n);
@@ -343,7 +342,6 @@ function toTowerView(mode, extra = {}) {
     mode, run, stage, portraits, cpuLabel,
     difficulties: TOWER_DIFFICULTIES,
     best: bestDifficulty(tower.id),
-    buffs: BOSS_BUFF.map((b) => ({ hp: b.hp * k, dealt: b.dealt * k })),
     ...extra,
   }));
 }

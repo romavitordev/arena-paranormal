@@ -309,7 +309,6 @@ export default {
   "tower.skip": "qualquer botão pula a apresentação",
   "tower.choose_diff": "ESCOLHA A DIFICULDADE",
   "tower.fighter_fixed": "Este lutador sobe a torre inteira — não dá para trocar no meio.",
-  "tower.boss_buff": "Vilão fortalecido: vida ×{hp} · dano ×{d}",
   "tower.select_hint": "◀ ▶ ▲ ▼ escolher · <b>{ok}</b> entrar · <b>{back}</b> voltar",
   "tower.menu_hint": "▲ ▼ escolher · <b>{ok}</b> confirmar · <b>{back}</b> voltar",
   "tower.new_best": "NOVA MELHOR DIFICULDADE!",

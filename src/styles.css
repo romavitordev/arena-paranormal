@@ -687,7 +687,6 @@ body.touch-ui .startbtn small { display: none; }
 #tower .tw-done { color: #ffd84a; font-size: clamp(30px, 4vw, 44px); text-shadow: 3px 3px 0 #000; }
 #tower .tw-panel p { margin: 0; font-size: 13px; }
 #tower .tw-gold { color: #ffd84a; font-weight: 600; letter-spacing: .04em; }
-#tower .tw-buff { color: #ff8a7a; font-size: 12px !important; min-height: 1.2em; }
 #tower .tw-list { display: flex; flex-direction: column; gap: 3px; overflow-y: auto; min-height: 0; padding-right: 4px; scrollbar-width: thin; }
 #tower .tw-floor { display: grid; grid-template-columns: 62px 32px 1fr auto 18px; align-items: center; gap: 8px; padding: 3px 8px; border: 1px solid rgba(255,255,255,.08); border-left: 3px solid var(--c); border-radius: 3px; background: rgba(10,8,14,.72); }
 #tower .tw-floor img { width: 32px; height: 32px; object-fit: cover; object-position: top; border-radius: 2px; background: #15111c; }

@@ -309,7 +309,6 @@ export default {
   "tower.skip": "任意键跳过开场",
   "tower.choose_diff": "选择难度",
   "tower.fighter_fixed": "该角色将攀登整座塔，中途不能更换。",
-  "tower.boss_buff": "强化反派：生命 ×{hp} · 伤害 ×{d}",
   "tower.select_hint": "◀ ▶ ▲ ▼ 选择 · <b>{ok}</b> 进入 · <b>{back}</b> 返回",
   "tower.menu_hint": "▲ ▼ 选择 · <b>{ok}</b> 确认 · <b>{back}</b> 返回",
   "tower.new_best": "新的最高难度！",
