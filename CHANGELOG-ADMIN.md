@@ -1,6 +1,11 @@
 # Registro administrativo de alterações
 
-## (em andamento) — próxima versão
+## v3.13.0 — Torneio e o X
+
+- Versão: `VERSION` 3.12.0 → **3.13.0** (Torneio, Jae, correções da CPU e do Juan).
+- **CPU se transforma de verdade:** a Transformação só era tentada a mais de 4 m e depois das habilidades — colada no
+  adversário a CPU ficava carregando e nunca passava do limite. Agora é prioridade a partir de 1,8 m e a CPU carrega
+  andando para longe. Testado: Juan, Jae e Aguiar transformam em 13–23 s contra um P1 agressivo, sem erros.
 
 - **Nova lutadora: JAE (Park Jae-Yoon, Mascarados/Hexatombe, Sangue)** — referências do usuário em
   `Referencias visuais/Personagens/Jae`. `src/characters/jae.js` (kit exportado em `JAE_KIT`) e a forma X

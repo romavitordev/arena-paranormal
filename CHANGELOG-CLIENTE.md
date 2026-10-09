@@ -2,6 +2,14 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.13.0 — Torneio e o X
+- Novo modo: TORNEIO local, de 2 a 8 participantes, solo ou em equipe. Monte em 3 passos (formato, participantes e regras): cada vaga é HUMANO, CPU ou vazia, e cada humano escolhe o próprio lutador; CPU sem escolha é sorteada. Lutas só entre CPUs são decididas na hora.
+- A chave do torneio é uma árvore espelhada que converge para o troféu no centro: o caminho do vencedor acende em dourado, os eliminados ficam cinza e a próxima luta pulsa com um VS grande.
+- Nova lutadora: JAE (Park Jae-Yoon, Mascarados, Sangue) — a assassina de Natal Macabro e Hexatombe. Rápida e frágil, com o Punhal X: Punhal X (corte em X que deixa CEGO), Shhh... (some nas sombras e o adversário perde o rastro dela), Assassinato Furtivo (surge pelas costas apunhalando), Zona dos Sussurros (dentro do X todo golpe dela é um assassinato) e o especial A Marca do X. Golpes em quem está desprevenido, cego ou de costas doem bem mais.
+- Transformação da Jae: ela puxa o capuz, sorri, sussurra "Shhh..." e o rosto some na escuridão com o X vermelho no lugar — vira X até o fim do round, com a Zona das Sombras (armadilha que deixa cego e SURDO) e o Assassinato Cruel.
+- A CPU agora usa muito mais as habilidades de todos os lutadores (antes boa parte se perdia no meio dos combos) e se transforma quando a barra enche, mesmo colada em você.
+- Correção: a transformação do Juan (Renascimento) travava e congelava o jogo.
+
 ## v3.12.0 — Golpes que se ouvem
 - Sons de verdade nas lutas: socos, chutes, golpes fortes, espadas acertando, o "whoosh" do golpe no ar, bloqueios e o K.O. agora são gravações — com várias variações sorteadas a cada golpe, para não soar repetido.
 - Tiros novos: a M4 do Kaiser, as escopetas da Erin e do Veríssimo e os rifles de precisão do Arthur, da Kemi e da Fantasma, gravados de armas reais.

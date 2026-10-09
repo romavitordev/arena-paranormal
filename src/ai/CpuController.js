@@ -377,8 +377,8 @@ export class CpuController {
     if (this.holdCharge > 0) {
       this.holdCharge -= dt;
       out.held.carga = true;
-      // vida baixa: carrega andando para longe
-      if (lowHp) {
+      // vida baixa (ou indo para a Transformação): carrega andando para longe
+      if (lowHp || f.canTransform()) {
         const b = f.moveBasis();
         out.moveX = -toOpp.x * b.right.x + -toOpp.z * b.right.z;
         out.moveY = -toOpp.x * b.forward.x + -toOpp.z * b.forward.z;
@@ -498,6 +498,13 @@ export class CpuController {
           return out;
         }
       }
+      // Barra de Transformação cheia e vida baixa: prioridade — segura △ (andando para longe, ver holdCharge) até encher
+      // a sanidade e passar do limite. Antes só tentava a mais de 4 m e depois das habilidades: colada no adversário a
+      // CPU quase nunca transformava
+      if (f.canTransform() && d > 1.8 && r < 0.6) {
+        this.holdCharge = (f.maxEnergy - f.energy) / COMBAT.chargeRate + COMBAT.storm.overcharge + 0.4;
+        return out;
+      }
       // habilidades secundárias: △ + ○/□/L2 e R2 + △/×
       const opening = this.aiOk({ ai: { when: 'opening' } }, d, opp, lowHp);
       const threat = (opp.state === 'attack' || opp.state === 'dashing') && d < 3;
@@ -548,11 +555,6 @@ export class CpuController {
       const spx = def.special;
       if (spx && spx.minEnergy && f.cooldowns.special <= 0 && f.energy < spx.minEnergy * f.maxEnergy && d > 4.5 && r < 0.45) {
         this.holdCharge = rnd(1.0, 1.8);
-        return out;
-      }
-      // Barra de Transformação cheia e vida baixa: segura △ até encher a sanidade e passar do limite
-      if (f.canTransform() && d > 4 && r < 0.45) {
-        this.holdCharge = (f.maxEnergy - f.energy) / COMBAT.chargeRate + COMBAT.storm.overcharge + 0.4;
         return out;
       }
       if (f.energy < 45 && d > 9 && r < 0.3) {
@@ -671,7 +673,7 @@ export class CpuController {
 
   decideLearned(out, f, opp, d, lowHp, side) {
     // regras que não se aprendem (sempre certas): transformar quando der, não bater em quem está caído
-    if (f.canTransform() && d > 3.5) {
+    if (f.canTransform() && d > 1.8) {
       this.holdCharge = (f.maxEnergy - f.energy) / COMBAT.chargeRate + COMBAT.storm.overcharge + 0.4;
       return out;
     }

@@ -1,5 +1,18 @@
 # Changelog
 
+## v3.13.0 — 2026-10-09
+
+### Adicionado
+- Modo TORNEIO local (2 a 8 participantes, solo/equipe, humano/CPU por vaga) com montagem em 3 passos e chave em árvore espelhada.
+- Lutadora JAE (Park Jae-Yoon) e a forma X: modelo próprio, kit (Punhal X, Shhh..., Assassinato Furtivo, Zona dos Sussurros, A Marca do X; X: Zona das Sombras e Assassinato Cruel), cena de transformação do capuz, falas e agarrão.
+
+### Alterado
+- CPU guarda a habilidade escolhida no meio de um golpe e usa no primeiro quadro livre; transformação priorizada.
+
+### Corrigido
+- Transformação do Juan (Renascimento) congelava o jogo.
+- Punhais arremessados da Jae não acertavam.
+
 ## v3.12.0 — 2026-10-09
 
 ### Alterado
