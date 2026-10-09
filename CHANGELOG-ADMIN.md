@@ -20,6 +20,11 @@
   15 de sanidade, recarga 14 s, dica de IA `max: 5`. Mesmas proporções da passiva antiga (Y dos golpes, ×1,5 de
   sanidade para o Gal). Testado: sem a Sugada o golpe não cura nem drena; com ela, cura o alvo, drena e dá ao Gal;
   desliga em 6 s.
+- Fita da espada do Arnaldo/Veríssimo voltou a ficar vermelha (pergunta do usuário): desde a física da fita
+  (`physicsRibbon`, commit 52b00c0) o material é criado em código e entrava na lista do "flash" de dano do rig
+  (`glbRig.setTint`), que zera o `emissive` a cada quadro; sem o brilho próprio, o vermelho `0xd01c30` ficava quase
+  preto na luz dos cenários. Agora a fita e o nó marcam `userData.baseEmissive` (vermelho, 0,35), que o `setTint`
+  devolve. Conferido: emissive `#d01c30@0.35` nas duas espadas depois de um flash de dano.
 
 ## (em andamento, sem changelog dos jogadores) — estabilidade, limpeza e mecânicas universais de combate (Dodge e Throw Tech)
 

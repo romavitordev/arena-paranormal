@@ -1044,7 +1044,9 @@ export function swordArnaldo() {
   g.add(edgeM);
   // as duas fitas VERMELHAS presas na guarda: tiras com FÍSICA própria (balançam no idle, na corrida, nos golpes e no dash)
   const RIBBON = 0xd01c30;
-  const knot = part(new THREE.TorusGeometry(0.02, 0.008, 6, 12), RIBBON, { outline: false });
+  const knot = part(new THREE.TorusGeometry(0.02, 0.008, 6, 12), RIBBON, { outline: false, mat: toon(RIBBON, { emissive: RIBBON }) });
+  knot.material.emissiveIntensity = 0.35;
+  knot.material.userData.baseEmissive = { color: new THREE.Color(RIBBON), intensity: 0.35 };
   knot.position.y = -0.04;
   knot.rotation.x = Math.PI / 2;
   g.add(knot);
@@ -1218,7 +1220,11 @@ export function physicsRibbon(anchor, len, width, color, sway = 0.5, n = 10) {
   const idx = [];
   for (let i = 0; i < n; i++) { const a = i * 2; idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2); }
   geo.setIndex(idx);
-  const mesh = new THREE.Mesh(geo, new THREE.MeshToonMaterial({ color, emissive: color, emissiveIntensity: 0.25, side: THREE.DoubleSide }));
+  const mat = new THREE.MeshToonMaterial({ color, emissive: color, emissiveIntensity: 0.35, side: THREE.DoubleSide });
+  // brilho próprio que o "flash" de dano do rig (setTint) devolve ao terminar — sem isso o setTint zerava o emissive a
+  // cada quadro e a fita vermelha ficava quase preta na luz do cenário
+  mat.userData.baseEmissive = { color: new THREE.Color(color), intensity: 0.35 };
+  const mesh = new THREE.Mesh(geo, mat);
   mesh.frustumCulled = false;
   mesh.userData.outline = false;
   const seg = len / n;
