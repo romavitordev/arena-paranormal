@@ -1,5 +1,15 @@
 # Registro administrativo de alterações
 
+## (em andamento) — versão estável: Arnaldo, Anfitrião, Veríssimo e correções do TODO
+
+- Estado do repositório (2026-10-08): o diretório de trabalho tinha 61 arquivos sobrescritos às 14:27:46 com o
+  conteúdo antigo da v3.5 (VERSION 35) por cima do HEAD 3.9.4+. Mesmo padrão da reversão das 03:45: guardado no
+  `git stash` ("reversão acidental 2026-10-08 14:27:46 …", não aplicar) e o trabalho seguiu do HEAD.
+- Tela preta (estabilidade): `liveCable` (`models/props.js`, cabo peito → relógio do Anfitrião) refazia o
+  `TubeGeometry` no `onBeforeRender`; num modelo recém-criado (antes da primeira pose, juntas no mesmo ponto) a curva
+  tinha comprimento zero e o `CatmullRomCurve3` lançava erro DENTRO da renderização — o quadro inteiro ficava preto
+  (visto na tela de vitória com O Anfitrião). Agora o cabo degenerado/NaN não é refeito naquele quadro.
+
 ## (em andamento, sem changelog dos jogadores) — estabilidade, limpeza e mecânicas universais de combate (Dodge e Throw Tech)
 
 - Limpeza Git: exclusão da branch remota `refs-gifs`, exclusão da branch local `refs-gifs` e atualização de referências em `ANALISE.md` e `maskTransform.js`.

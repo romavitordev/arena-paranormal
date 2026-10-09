@@ -407,6 +407,9 @@ function liveCable(rig, from, to, color) {
     inv.copy(rig.root.matrixWorld).invert();
     from.getWorldPosition(a).applyMatrix4(inv);
     to.getWorldPosition(b).applyMatrix4(inv);
+    // modelo recém-criado (antes da primeira pose) tem as juntas no mesmo ponto: a curva teria comprimento zero e o
+    // TubeGeometry quebrava DENTRO da renderização (o quadro inteiro ficava preto — ex.: tela de vitória do Anfitrião)
+    if (!(a.distanceToSquared(b) > 1e-6) || !Number.isFinite(a.x + a.y + a.z + b.x + b.y + b.z)) return;
     const mid = a.clone().lerp(b, 0.5).add(new THREE.Vector3(Math.sin(t * 3) * 0.03, -0.12, 0.08));
     mesh.geometry.dispose();
     mesh.geometry = new THREE.TubeGeometry(new THREE.CatmullRomCurve3([a, mid, b]), 12, 0.008, 5, false);
