@@ -33,7 +33,8 @@ export const PASSIVES = {
       const len = Math.hypot(dx, dz) || 1;
       const dot = (fx * dx + fz * dz) / len; // -1 = atacante exatamente atrás
       // Jae (surprised): também vale em quem está desprevenido ou cego — "Assassinato Furtivo" do RPG
-      const offGuard = passive.surprised && ((victim.surprised || 0) > 0 || (victim.findBuff && victim.findBuff('blind')));
+      // e na Zona dos Sussurros: lá dentro todo golpe dela entra como assassinato
+      const offGuard = passive.surprised && ((victim.surprised || 0) > 0 || (victim.findBuff && (victim.findBuff('blind') || victim.findBuff('deaf'))) || (attacker.findBuff && attacker.findBuff('whisperZone')));
       return dot < -0.5 || offGuard ? passive.mult ?? 1.25 : 1;
     },
   },

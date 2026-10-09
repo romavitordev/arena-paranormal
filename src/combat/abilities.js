@@ -228,9 +228,27 @@ export const ABILITY_TYPES = {
       tl.add(sink + 0.16, () => {
         f.rig.body.position.y = 0;
         world.fx.burst(f.chestPos(), { count: 14, color: a.color, speed: 4, life: 0.3, size: 0.2 });
-        f.anim.play('idle', { restart: true, blend: 0.05 });
+        f.anim.play(a.strike ? a.strike.anim || 'thrust' : 'idle', { restart: true, blend: 0.05, duration: a.strike ? a.strike.dur || 0.32 : undefined });
       });
-      tl.end(sink + 0.22);
+      // a.strike (Jae — Assassinato Furtivo / Cruel): já surge apunhalando as costas (o bônus de assassina vale)
+      const st = a.strike;
+      if (st) {
+        tl.add(sink + 0.16 + (st.at ?? 0.1), () => {
+          if (opp.state === 'ko' || opp.isInvulnerable() || distXZ(f.pos, opp.pos) - opp.radius > (st.range ?? 1.9)) return;
+          const res = applyHit(world, f, opp, {
+            damage: st.damage, kind: 'ability', element: st.element, knockback: st.knockback ?? 1, hitstun: st.hitstun ?? 0.5,
+            sound: st.sound || 'bladeHit', color: a.color, scale: st.big ? 2 : 1.5, dir: forwardFromYaw(f.yaw),
+          });
+          if (typeof res !== 'number' || res <= 0) return;
+          if (st.bleed && opp.state !== 'ko') opp.applyBleed(st.bleed, f);
+          const p = opp.chestPos();
+          world.fx.slash(p, f.yaw, { color: a.color, radius: 1.6, arc: 2.2, life: 0.3, width: 0.4, roll: 0.8 });
+          world.fx.slash(p, f.yaw, { color: a.color, radius: 1.6, arc: 2.2, life: 0.3, width: 0.4, roll: -0.8 });
+          world.fx.burst(p, { count: st.big ? 40 : 22, color: 0xa00818, speed: 5, life: 0.5, size: 0.18, gravity: 4 });
+          if (st.big) { world.cameraRig.shake(0.35, 0.25); world.screenFlash && world.screenFlash('#5a0008', 0.15); }
+        });
+      }
+      tl.end(sink + 0.22 + (st ? (st.dur || 0.32) : 0));
       return seqFrom(tl, {
         cancel: () => { f.setVisible(true); f.rig.body.position.y = 0; },
         cancelable: () => tl.time > sink + 0.1,
@@ -1875,6 +1893,8 @@ Object.assign(ABILITY_TYPES, {
           hit = true;
           done = true;
           world.fx.slash(f.chestPos(), f.yaw, { color: a.color, radius: 2.2, arc: 2.6, life: 0.3, width: 0.45, roll: 0.5 });
+          // o corte em X (Punhal X): segundo risco cruzando o primeiro
+          if (a.xSlash) world.fx.slash(f.chestPos(), f.yaw, { color: a.color, radius: 2.2, arc: 2.6, life: 0.3, width: 0.45, roll: -0.5 });
           if (!opp.isInvulnerable()) {
             const res = applyHit(world, f, opp, {
               damage: a.damage, kind: 'ability', element: a.element, knockback: a.knockback, hitstun: a.hitstun ?? 0.6,
@@ -3038,6 +3058,53 @@ export function blindFighter(world, victim, time) {
   world.fx.burst(victim.headPos ? victim.headPos() : victim.chestPos(), { count: 10, color: 0x0a0608, kind: 'smoke', speed: 1.2, life: 0.5, size: 0.5 });
 }
 
+// SURDO (Zona das Sombras do X): não ouve mais a Jae chegando — perde o rastro dela (não se vira sozinho para ela;
+// a CPU fica perdida) e os golpes dela entram como assassinato
+export function deafFighter(world, victim, time) {
+  if (!victim || victim.state === 'ko' || time <= 0) return;
+  const cur = victim.findBuff('deaf');
+  if (cur) cur.time = Math.max(cur.time, time);
+  else victim.addBuff({ type: 'deaf', name: 'SURDO', time, duration: time });
+  victim.notify('SURDO!', true);
+}
+
+// "SHHH...": a Jae some nas sombras — quase invisível, mais rápida e sem contorno; o adversário perde o rastro dela.
+// O primeiro ataque que ela começa sai do escuro: o alvo fica DESPREVENIDO (bônus de assassina) e ela reaparece.
+// Dentro da Zona dos Sussurros atacar não a revela (a ficha: "não sofre penalidade em Furtividade após ações
+// chamativas"). Tomar dano sempre revela.
+export function veilFighter(world, f, a) {
+  const time = a.duration ?? 4;
+  const cur = f.findBuff('veil');
+  if (cur) { cur.time = Math.max(cur.time, time); return; }
+  const buff = { type: 'veil', name: 'SHHH...', time, duration: time, opacity: a.opacity ?? 0.12, speedMult: a.speedMult ?? 1.15 };
+  f.addBuff(buff);
+  world.fx.shadowDisc(f.pos, { radius: 1.1, life: 0.6 });
+  world.fx.burst(f.chestPos(), { count: 22, color: 0x0a0608, kind: 'smoke', speed: 1.6, up: 0.8, life: 0.7, size: 0.7, grow: 1 });
+  const ACT = ['attack', 'ability', 'ranged', 'grab', 'specialStart', 'special'];
+  let busy = ACT.includes(f.state); // a própria habilidade que o escondeu não conta
+  let hp = f.health;
+  const reveal = () => {
+    if (buff.time <= 0) return;
+    buff.time = 0;
+    world.fx.burst(f.chestPos(), { count: 16, color: 0x0a0608, kind: 'smoke', speed: 2.2, life: 0.5, size: 0.6 });
+  };
+  world.addTicker({
+    update() {
+      if (buff.time <= 0 || !f.buffs.includes(buff)) return true;
+      if (f.state === 'ko' || f.health < hp - 0.01) { reveal(); return true; }
+      hp = f.health;
+      const now = ACT.includes(f.state);
+      if (now && !busy) {
+        const opp = f.opponent;
+        if (opp && opp.state !== 'ko' && !hasPassive(opp, 'precognition')) opp.surprised = Math.max(opp.surprised || 0, a.surprise ?? 0.5);
+        if (!f.findBuff('whisperZone')) reveal();
+      }
+      busy = now;
+      return buff.time <= 0;
+    },
+  });
+}
+
 // marca do X no chão (Zona dos Sussurros / Zona das Sombras): dois riscos de pincel cruzados
 const _xTex = {};
 function xMarkTexture(color) {
@@ -3115,6 +3182,19 @@ Object.assign(ABILITY_TYPES, {
     },
   },
 
+  // "SHHH...": leva o dedo aos lábios, sussurra e some nas sombras (veilFighter)
+  shadowVeil: {
+    start(f, a, world) {
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.anim.play('shh', { restart: true, duration: 0.45 });
+      world.audio.play('shhh', { volume: 0.9 });
+      tl.add(0.22, () => veilFighter(world, f, a));
+      tl.end(0.4);
+      return seqFrom(tl);
+    },
+  },
+
   // ZONA DAS SOMBRAS: armadilha de Conhecimento quase invisível no chão; quem pisa toma dano e fica CEGO
   shadowTrap: {
     start(f, a, world) {
@@ -3148,7 +3228,10 @@ Object.assign(ABILITY_TYPES, {
             world.fx.play('FX_ENERGY', new THREE.Vector3(pos.x, 0.6, pos.z), { color: a.color, scale: 2.2 });
             world.fx.burst(new THREE.Vector3(pos.x, 0.4, pos.z), { count: 22, color: 0x0a0608, kind: 'smoke', speed: 3, up: 1.6, life: 0.9, size: 0.9, grow: 1 });
             const res = applyHit(world, f, opp, { damage: a.damage, kind: 'ability', element: a.element, knockback: 0.5, hitstun: 0.4, sound: 'bladeHit', color: a.color, pos: new THREE.Vector3(pos.x, 0.5, pos.z), unblockable: true });
-            if (typeof res === 'number' && opp.state !== 'ko') blindFighter(world, opp, a.blind);
+            if (typeof res === 'number' && opp.state !== 'ko') {
+              blindFighter(world, opp, a.blind);
+              if (a.deaf) deafFighter(world, opp, a.deaf); // X: cego e SURDO
+            }
             return false;
           },
           dispose() { mark.dispose(); if (f.shadowTrap === self) f.shadowTrap = null; },
@@ -3156,6 +3239,7 @@ Object.assign(ABILITY_TYPES, {
         };
         f.shadowTrap = self;
         world.addTicker(self);
+        if (a.veil) veilFighter(world, f, a.veil);
       });
       tl.end(0.5);
       return seqFrom(tl);

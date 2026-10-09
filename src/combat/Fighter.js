@@ -304,6 +304,13 @@ export class Fighter {
     this.rig.root.visible = v;
   }
 
+  // Perdeu o rastro do adversário (Jae no "Shhh..." ou este lutador SURDO pela Zona das Sombras): a mira não acompanha
+  // ele sozinha — quem joga tem que achá-la de olho
+  lostTrack(opp) {
+    if (!opp || !opp.findBuff) return false;
+    return (!!opp.findBuff('veil') && distXZ(this.pos, opp.pos) > 1.6) || !!this.findBuff('deaf');
+  }
+
   // Translucidez (névoa da Kaiser, Inexistir do Kian)
   setOpacity(a) {
     if (this._opacity === a) return;
@@ -1116,7 +1123,7 @@ export class Fighter {
     } else if (this.riding && mag > 0.05) {
       // no skate: o corpo vira para onde está andando (não fica travado no adversário)
       this.yaw = turnTowards(this.yaw, Math.atan2(dir.x, dir.z), dt * 9);
-    } else if (this.lockOn && opp) this.yaw = turnTowards(this.yaw, yawTo(this.pos, opp.pos), dt * 12);
+    } else if (this.lockOn && opp && !this.lostTrack(opp)) this.yaw = turnTowards(this.yaw, yawTo(this.pos, opp.pos), dt * 12);
     else if (mag > 0.05) this.yaw = turnTowards(this.yaw, Math.atan2(dir.x, dir.z), dt * 14);
 
     // A/× + A/× (toque duplo) = dash curto para frente
@@ -1409,7 +1416,7 @@ export class Fighter {
     this.vel.x *= 0.6;
     this.vel.z *= 0.6;
     if (this.surprised > 0) this.surprised -= dt;
-    else if (opp) this.yaw = turnTowards(this.yaw, yawTo(this.pos, opp.pos), dt * COMBAT.block.turnRate);
+    else if (opp && !this.lostTrack(opp)) this.yaw = turnTowards(this.yaw, yawTo(this.pos, opp.pos), dt * COMBAT.block.turnRate);
     if (this.blockRecoil > 0) {
       this.blockRecoil -= dt;
       if (this.blockRecoil <= 0) this.anim.play('block', { blend: 0.05 });

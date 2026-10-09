@@ -166,6 +166,11 @@ export class AudioManager {
 
 // Biblioteca de sons sintetizados. Nome → função.
 const SYNTHS = {
+  // "Shhh..." da Jae: sopro sibilado (ruído agudo filtrado, entra devagar e some)
+  shhh: (a, t, v) => {
+    a.noise(t, 0.85, { vol: 0.42 * v, type: 'bandpass', freq: 4300, freqEnd: 3100, q: 1.1, attack: 0.18 });
+    a.noise(t + 0.05, 0.7, { vol: 0.18 * v, type: 'highpass', freq: 6500, attack: 0.2 });
+  },
   punch: (a, t, v) => {
     a.tone(t, 0.12, { vol: 0.6 * v, freq: 160, freqEnd: 50, type: 'sine' });
     a.noise(t, 0.08, { vol: 0.5 * v, freq: 1800, freqEnd: 300 });

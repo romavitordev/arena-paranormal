@@ -862,7 +862,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ## JAE
 
-*Assassina em série: puxando o capuz vira X* · arma: Punhal X (adaga) e punhais de arremesso
+*Assassina em série: pondo o capuz, vira X* · arma: Punhal X (adaga) e punhais de arremesso
 
 ### Físico (○ / B)
 
@@ -887,19 +887,19 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 ### Habilidades
 
 - **Punhal X** — △ + ○ / Y + B · custo 20 · cooldown 10 s · dano 38 · alcance 1.9 m
-  Avança com o Punhal X e corta: quem é acertado fica CEGO por um instante — não consegue se defender nem se virar.
-- **Zona das Sombras** — △ + □ / Y + X · custo 25 · cooldown 14 s · dano 60
-  Arma uma armadilha de Conhecimento quase invisível no chão (3 m). Quem pisa toma dano de Conhecimento e fica CEGO.
-- **Assassinato Furtivo** — △ + L2 / Y + LT · custo 20 · cooldown 9 s
-  Some nas sombras e surge pelas costas do alvo, que fica desprevenido — o próximo golpe dela entra com o bônus de assassina.
+  Avança com o Punhal X num corte em X: quem é acertado fica CEGO por um instante — não consegue se defender nem se virar, e fica desprevenido.
+- **Shhh...** — △ + □ / Y + X · custo 20 · cooldown 12 s
+  Leva o dedo aos lábios e some nas sombras (4 s): quase invisível e mais rápida, o adversário perde o rastro dela. O primeiro ataque sai do escuro e pega o alvo DESPREVENIDO. Tomar dano a revela.
+- **Assassinato Furtivo** — △ + L2 / Y + LT · custo 25 · cooldown 10 s
+  Some e surge pelas costas do alvo já apunhalando: ele fica desprevenido e o golpe entra com o bônus de assassina.
 - **Zona dos Sussurros** — R2 + △ / RT + Y · custo 25 · cooldown 18 s
-  Marca um X vermelho no chão. Dentro da área ela bate 25% mais forte e anda mais rápido (8 s).
+  Marca um X vermelho no chão (8 s). Lá dentro ela anda mais rápido, todo golpe dela entra como assassinato e atacar não a tira do Shhh...
 - **Passiva:** golpes físicos pelas costas causam +30%
 
-### Especial: Assassinato Cruel
+### Especial: A Marca do X
 
 250 de dano · custo 50 · cooldown 14 s.
 
-### Transformação: Capuz do X
+### Transformação: Capuz de X
 
 Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.

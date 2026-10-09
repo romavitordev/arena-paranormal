@@ -3,6 +3,7 @@ import { Timeline, forwardFromYaw } from '../../core/util.js';
 import { faceClose, orbit, lowAngle, socketClose } from '../../camera/shots.js';
 import { transform } from '../forms.js';
 import { hostMask } from '../../models/weapons.js';
+import { MATERIAL_TEXTURES } from '../../models/textures.js';
 
 // PÔR A MÁSCARA (transformação). Para os Mascarados a máscara é o momento em que a Intenção de Assassino desperta —
 // só acontece aqui, na Transformação (Barra cheia + vida baixa, segurando △), nunca como habilidade comum:
@@ -16,6 +17,7 @@ import { hostMask } from '../../models/weapons.js';
 //             'mutilador' (Aguiar: close no olho, agacha com o machado esticado e leva a máscara ao rosto)
 //             'gasmask' (Erin, que NÃO é Mascarada: ajoelha rindo com a mão no rosto, ergue-se levando a máscara de gás
 //             ao rosto; verde no lugar do vermelho — referências do usuário)
+//             'hood' (Jae → X: puxa o capuz, sorri e o rosto some com o X; sp.swap troca as peças do capuz)
 //             'watch' (Arnaldo → O Anfitrião: tira o relógio de bolso, abre a tampa, a Relíquia de Energia brilha lá
 //             dentro e ele ergue o relógio; a Energia toma o corpo em roxo, rosa e azul)
 //             omitido: concentra e o acessório aparece
@@ -47,6 +49,27 @@ function carryProp(prop) {
     },
     reset() { parts.forEach((m, i) => m.position.copy(rest[i])); },
   };
+}
+
+// troca a textura do rosto do modelo (ex.: o sorriso da Jae debaixo do capuz); devolve a função que desfaz
+const _faceTex = {};
+function swapFace(rig, from, to) {
+  if (!MATERIAL_TEXTURES[to]) return () => {};
+  if (!_faceTex[to]) {
+    const t = MATERIAL_TEXTURES[to]();
+    _faceTex[to] = t.isTexture ? t : t.map;
+    _faceTex[to].flipY = false;
+    _faceTex[to].needsUpdate = true;
+  }
+  const changed = [];
+  rig.root.traverse((o) => {
+    if (!o.isMesh || !o.material || o.userData.isOutline || !o.material.name || !o.material.name.endsWith('_' + from)) return;
+    if (changed.some((c) => c.m === o.material)) return;
+    changed.push({ m: o.material, map: o.material.map });
+    o.material.map = _faceTex[to];
+    o.material.needsUpdate = true;
+  });
+  return () => changed.forEach((c) => { c.m.map = c.map; c.m.needsUpdate = true; });
 }
 
 export const maskTransform = {
@@ -151,6 +174,32 @@ export const maskTransform = {
       });
       tl.add(1.85, () => maskOn(true));
       total = 2.6;
+    } else if (scene === 'hood') {
+      // JAE → X (o gif "jae colocando mascara"): 1) segura o capuz caído pelas bordas, olhando para a câmera · 2) puxa
+      // por cima da cabeça — o rosto ainda aparece, sorrindo debaixo do capuz · 3) "Shhh..." · 4) tudo fica vermelho, o
+      // rosto some na escuridão e o X acende
+      f.anim.play('hood_grab', { restart: true, duration: 0.5 });
+      lightTo = 2;
+      world.cameraRig.playShots([
+        faceClose(f, { dur: 1.0, from: 1.7, to: 1.35, side: 0.15, height: hy - 0.2, fov: 36 }),
+        faceClose(f, { dur: 1.1, from: 1.3, to: 0.95, side: -0.12, height: hy - 0.02, fov: 32 }),
+        lowAngle(f, { dur: 1.0, dist: 2.9, side: 0.7 }),
+      ]);
+      tl.add(0.25, () => world.showBanner(sp.banner || sp.name, f.def.color));
+      tl.add(0.8, () => {
+        f.anim.play('hood_pull', { restart: true, duration: 0.6 });
+        world.audio.play('swing', { volume: 0.5, pitch: 0.7 });
+      });
+      tl.add(1.15, () => {
+        for (const [p, v] of sp.swap || []) if (f.rig.props[p]) f.rig.showProp(p, v);
+      });
+      // o sorriso aparece debaixo do capuz (o rosto ainda está à mostra até o X acender)
+      tl.add(1.3, () => {
+        if (sp.grin) { const undo = swapFace(f.rig, sp.grin[0], sp.grin[1]); scrap.push(undo); }
+      });
+      tl.add(1.5, () => world.audio.play('shhh', { volume: 1 }));
+      tl.add(2.15, () => maskOn(true));
+      total = 3.0;
     } else if (scene === 'watch') {
       // RELÍQUIA DE ENERGIA (Arnaldo → O Anfitrião) — uma cutscene de verdade, em nove fases:
       //  1 olha o relógio, que começa a brilhar · 2 o ambiente distorce (som estranho) · 3 a Relíquia se manifesta ·
@@ -296,6 +345,7 @@ export const maskTransform = {
       // o modelo base fica guardado para o próximo round: a máscara mostrada na cena tem que sair dele, senão o
       // personagem volta mascarado (a forma tem a máscara no próprio modelo)
       if (sp.prop && baseRig.props[sp.prop]) baseRig.showProp(sp.prop, false);
+      for (const [p, v] of sp.swap || []) if (baseRig.props[p]) baseRig.showProp(p, !v);
       f.invuln = Math.max(f.invuln, 0.8);
       f.energy = Math.max(f.energy, sp.energy ?? 40);
       // a aura da Intenção de Assassino (vermelha) fica em volta até o fim do round (os GIFs: contorno vermelho em
@@ -345,6 +395,7 @@ export const maskTransform = {
         cleanup();
         world.endCinematic();
         if (!done && prop) f.rig.showProp(sp.prop, false); // cena interrompida: não fica mascarado sem transformar
+        if (!done) for (const [p, v] of sp.swap || []) if (f.rig.props[p]) f.rig.showProp(p, !v);
       },
     };
   },

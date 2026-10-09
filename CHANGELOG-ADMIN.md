@@ -18,6 +18,47 @@
   falas de vitória dela e 36 contra ela, falas de batalha. Agarrão `jae`/`jae_x` (corte na garganta). CPU:
   Zona dos Sussurros como habilidade de si mesma. `check-roster` com a regra da Jae. Testado no navegador: todas as
   habilidades, especial, agarrão, transformação, CPU × CPU, introdução e seleção.
+- **Jae refeita (pedido do usuário: modelo e habilidades abaixo dos outros e das referências).** Pesquisa na wiki
+  (Park Jae-Yoon, Natal Macabro/Hexatombe): anuncia o ataque com "Shhh...", espreita nas sombras, inspirada no
+  Ghostface, pessoa não-binária (qualquer pronome); Punhal X = cabo preto, guarda amarela, lâmina longa com recorte;
+  Capuz de X melhora as habilidades (Assassinato Furtivo → Assassinato Cruel, ganha a Zona das Sombras: cego e surdo).
+  - **Modelo novo** (`char_jae.py` reescrito): sobretudo de couro AJUSTADO ao tronco (antes era um tubo que engolia os
+    braços), aberto na frente e abrindo abaixo da cintura; lapelas largas com debrum cinza e botões; cordão do capuz;
+    CAPELETA nos ombros com arnês de tiras e rebites nas costas; tiras na cintura de trás; barra com faixa cinza, laços
+    em X e tirinhas; mangas com faixas/fivelas e X pretos; suspensórios, cinto, abas de bolso, tiras vermelhas em X,
+    meias caneladas e coturnos de sola grossa; cabelo em mechas pontudas (duas cores para separar), franja varrida
+    sobre o olho direito, nuca repicada. Capuz agora é do próprio modelo: `prop_hoodDown` (embolado nas costas),
+    `prop_hoodUp` (alto e pontudo, desce nos ombros, tira em X com rebites) e `prop_hoodX` (escuridão + X brilhando).
+    Textura `coat_jae` (couro com vincos e costura das costas); delineado gatinho no `face_jae` (não parece mais olho
+    roxo). Punhal X refeito em `props.js`. Ferramenta `src/dev/lineup.js` para comparar modelos lado a lado.
+  - **Kit novo:** △→□ **Shhh...** (`shadowVeil`/`veilFighter`: quase invisível 4 s, +15% velocidade, o adversário
+    perde o rastro — `Fighter.lostTrack` não deixa a mira/defesa virar sozinha; a CPU fica perdida — e o primeiro
+    ataque deixa o alvo desprevenido e a revela; dentro da Zona dos Sussurros atacar não revela; tomar dano revela).
+    △+L2 **Assassinato Furtivo** agora surge APUNHALANDO (`teleportBehind` com `strike`). Punhal X com o segundo risco
+    do X (`xSlash`). Zona dos Sussurros: lá dentro todo golpe dela entra como assassinato (`backstab` lê o buff;
+    mult 1,1). Especial **A Marca do X** (começa com o "shh", termina sangrando). Forma X: **Zona das Sombras** no
+    △→□ (cega e deixa **SURDO** 3,5 s — `deafFighter` — e ela some 2,5 s ao armar) e **Assassinato Cruel** (58 + sangra)
+    no △+L2; especial com 300 de dano.
+  - **Transformação com cena própria** (`maskTransform` cena `'hood'`, o gif "jae colocando mascara"): segura o capuz
+    (`hood_grab`), puxa por cima da cabeça (`hood_pull`, o rosto ainda aparece), "Shhh..." (som sintetizado `shhh`) e o
+    vermelho com o X acendendo. `sp.swap` troca as peças do capuz e desfaz no modelo base/na cena interrompida.
+  - Testado no navegador: Shhh (esconde, a CPU perde o rastro, o golpe do escuro entra com bônus: 26 no Kaiser),
+    Furtivo 44, Punhal X 38 + cego, Zona, transformação (sequência das peças certa, vira X com 280 → +80), Zona das
+    Sombras 69 + cego + surdo, Assassinato Cruel 86 + sangra, especial 251, luta contra a CPU sem erros.
+    `check-roster` atualizado; checagens, 41 testes e build ok.
+  - **Sorriso na cena do capuz:** `face_jae_grin` (sorriso com dentes e batom) em `textures.js` (`jaeFace(grin)`); a
+    cena `'hood'` troca a textura do rosto (`sp.grin`, `swapFace` em `maskTransform.js`) quando o capuz sobe e desfaz
+    no fim/na interrupção.
+  - **CORREÇÃO: os punhais arremessados (□) da Jae nunca acertavam.** `spread: 4` foi escrito como graus, mas o
+    `Fighter` soma o spread direto no vetor de mira (fração): as facas saíam para cima e até para trás. Agora 0,06 —
+    testado: as duas facas acertam (44) de 3 a 22 m, de lado, com o alvo andando e na forma X.
+- **CPU usa mais as habilidades (todos os personagens):** a escolha de habilidade feita no meio de um golpe se perdia
+  (o jogo ignora △/R2 + botão enquanto o lutador não está livre). Agora `pressAbility` guarda a escolha
+  (`pendingAbility`, 0,9 s) e aperta no primeiro quadro livre. `def.ai.abilityRate` multiplica a chance por
+  personagem (Jae 1,8). Medido em 60 s contra um P1 ativo: a Jae foi de 1 para 4–5 habilidades (o limite agora é a
+  sanidade).
+- **Transformação do Juan reverificada (não trava):** pelo comando real (segurar △ com a barra cheia) como P1 e P2,
+  espelho Juan × Juan, interrompida por golpe, contra Kaiser/Jae, e o round seguinte volta normal — sem erros.
 - **CORREÇÃO (travava o jogo): Renascimento do Juan.** No fim da transformação a sequência (`seq.update`) troca a forma
   e zera `this.seq` por dentro; o `Fighter.update` lia `this.seq` de novo depois e dava `TypeError` (onDone de null),
   que derrubava o laço do jogo — tela congelada. Agora guarda a sequência antes de atualizar e não reseta se ela foi

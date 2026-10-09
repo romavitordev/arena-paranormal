@@ -1,15 +1,20 @@
 // PARK JAE-YOON — "JAE" ou "X" (id: jae) — Mascarados (Hexatombe), parceira do Mutilador Noturno e do Colosso.
-// Assassina em série furtiva: trancou viajantes na Casa Juno num jogo macabro das chaves. "Ao encontrar no Sangue a
-// liberdade da rebeldia... Jae matava porque podia." (ficha). Atributos: AGI 3, INT 3, FOR 2, PRE 1, VIG 1 → rápida e
-// frágil. Afinidade: SANGUE.
-// Visual (Referencias visuais/Personagens/Jae): 1,70 m, traços coreanos, cabelo preto com franja sobre um olho,
-// maquiagem preta forte nos olhos, batom vermelho, pinta no queixo; gola alta preta canelada; sobretudo VERMELHO longo
-// aberto, com lapelas, botões dourados, tiras cinza com fivelas de latão, tiras pretas em X nos punhos e barra com
-// laços em X e tiras penduradas; luvas sem dedos; por baixo suspensórios cinza, cinto e tiras vermelhas em X nas
-// pernas; coturnos com polainas cinza. Arma: o PUNHAL X (adaga de guarda de latão).
-// Kit do RPG (ficha): Assassinato Furtivo, Zona dos Sussurros, Punhal X (cega), Zona das Sombras (armadilha de
-// Conhecimento que cega) e Assassinato Cruel. TRANSFORMAÇÃO: puxa o capuz — o rosto some na escuridão e um X vermelho
-// aparece no lugar dele: vira X até o fim do round (forms/jae_x.js).
+// Assassina em série furtiva (Natal Macabro): trancou viajantes na Casa Juno num jogo macabro das chaves; espreita como
+// uma sombra entre as árvores, anuncia o ataque sussurrando "Shhh..." e pega o alvo quando ele menos espera; corre de
+// forma quase sobrenatural (wiki). Inspirada no Ghostface. Pessoa não-binária — qualquer pronome vale (wiki).
+// "Ao encontrar no Sangue a liberdade da rebeldia... Jae matava porque podia." Atributos (ficha): AGI 3, INT 3, FOR 2,
+// PRE 1, VIG 1 → rápida e frágil. Afinidade: SANGUE.
+// Visual (Referencias visuais/Personagens/Jae + wiki): 1,70 m, traços coreanos, cabelo preto com franja sobre um olho,
+// maquiagem preta forte nos olhos, batom vermelho, pinta falsa no queixo; gola alta preta; sobretudo de COURO vermelho
+// com capuz, cintos pelo corpo, luvas sem dedos. Arma: o PUNHAL X (cabo preto, guarda amarela, lâmina longa).
+// Kit da ficha / wiki:
+//   Assassinato Furtivo — alvo desprevenido ou flanqueado leva +3d8 → △+L2: some e surge apunhalando as costas;
+//   Zona dos Sussurros — marca uma área com "X": +5 no ataque, não perde a Furtividade ao chamar atenção, melhora o
+//     assassinato → R2+△;
+//   Punhal X — deixa o alvo desprevenido e, se acertar, CEGO por 1 rodada → △→○;
+//   o "Shhh..." e as sombras (personalidade/wiki) → △→□: some nas sombras.
+// CAPUZ DE X (Transformação): ao pôr o capuz as habilidades melhoram — Assassinato Furtivo vira ASSASSINATO CRUEL
+// (+6d8) e ganha a ZONA DAS SOMBRAS (armadilha de Conhecimento de 3 m: cego e SURDO) — forms/jae_x.js.
 const RED = 0xd01828;
 const STEEL = 0xd8d4dc;
 
@@ -50,7 +55,7 @@ export const JAE_KIT = {
     range: 24,
     speed: 44,
     radius: 0.32,
-    spread: 4,
+    spread: 0.06, // desvio do vetor de mira (fração, não graus: com 4 as facas voavam para qualquer lado)
     knockback: 0.8,
     hitstun: 0.3,
     cooldown: 2.4,
@@ -61,13 +66,14 @@ export const JAE_KIT = {
     hitSound: 'bladeHit',
   },
 
+
   abilities: [
     {
       id: 'punhalX',
       name: 'Punhal X',
       input: 'carga+physical', // △ → ○
       type: 'dashStrike',
-      description: 'Avança com o Punhal X e corta: quem é acertado fica CEGO por um instante — não consegue se defender nem se virar.',
+      description: 'Avança com o Punhal X num corte em X: quem é acertado fica CEGO por um instante — não consegue se defender nem se virar, e fica desprevenido.',
       energyCost: 20,
       cooldown: 10,
       windup: 0.15,
@@ -79,37 +85,38 @@ export const JAE_KIT = {
       knockback: 1.2,
       hitstun: 0.5,
       blind: 1.2,
+      xSlash: true,
       color: RED,
       element: 'sangue',
       anim: 'dash_slash',
       hitSound: 'bladeHit',
     },
     {
-      id: 'zonaSombras',
-      name: 'Zona das Sombras',
+      id: 'shhh',
+      name: 'Shhh...',
       input: 'carga+ranged', // △ → □
-      type: 'shadowTrap',
-      description: 'Arma uma armadilha de Conhecimento quase invisível no chão (3 m). Quem pisa toma dano de Conhecimento e fica CEGO.',
-      energyCost: 25,
-      cooldown: 14,
-      radius: 1.6,
-      damage: 60,
-      blind: 1.6,
-      life: 16,
-      element: 'conhecimento',
-      color: 0xe0b030,
+      type: 'shadowVeil',
+      description: 'Leva o dedo aos lábios e some nas sombras (4 s): quase invisível e mais rápida, o adversário perde o rastro dela. O primeiro ataque sai do escuro e pega o alvo DESPREVENIDO. Tomar dano a revela.',
+      energyCost: 20,
+      cooldown: 12,
+      duration: 4,
+      opacity: 0.12,
+      speedMult: 1.15,
+      surprise: 0.6,
+      color: RED,
     },
     {
       id: 'assassinatoFurtivo',
       name: 'Assassinato Furtivo',
       input: 'carga+dodge', // △ + L2
       type: 'teleportBehind',
-      description: 'Some nas sombras e surge pelas costas do alvo, que fica desprevenido — o próximo golpe dela entra com o bônus de assassina.',
-      energyCost: 20,
-      cooldown: 9,
-      distance: 1.3,
+      description: 'Some e surge pelas costas do alvo já apunhalando: ele fica desprevenido e o golpe entra com o bônus de assassina.',
+      energyCost: 25,
+      cooldown: 10,
+      distance: 1.2,
       vanishTime: 0.22,
-      surpriseTime: 0.6,
+      surpriseTime: 0.7,
+      strike: { damage: 34, anim: 'thrust', dur: 0.32, at: 0.1, knockback: 1.2, hitstun: 0.5, element: 'sangue' },
       color: RED,
     },
     {
@@ -117,40 +124,41 @@ export const JAE_KIT = {
       name: 'Zona dos Sussurros',
       input: 'block+carga', // R2 + △
       type: 'whisperZone',
-      description: 'Marca um X vermelho no chão. Dentro da área ela bate 25% mais forte e anda mais rápido (8 s).',
+      description: 'Marca um X vermelho no chão (8 s). Lá dentro ela anda mais rápido, todo golpe dela entra como assassinato e atacar não a tira do Shhh...',
       energyCost: 25,
       cooldown: 18,
       radius: 3.2,
       duration: 8,
-      mult: 1.25,
+      mult: 1.1,
       speedMult: 1.12,
       color: RED,
     },
   ],
 
-  // ASSASSINATO CRUEL: some, surge colada no alvo e abre o corpo em cortes rápidos até o X final
+  // A MARCA DO X: sussurra, some, surge colada no alvo, abre o corpo em cortes rápidos e termina riscando um X enorme —
+  // como no primeiro assassinato dela, quando o X da opressão do pai virou a marca da sua libertação (wiki)
   special: {
-    name: 'Assassinato Cruel',
-    banner: 'Assassinato Cruel',
+    name: 'A Marca do X',
+    banner: 'A Marca do X',
     type: 'cinematicCombo',
     energyCost: 50,
     cooldown: 14,
     color: RED,
     sound: 'specialStart',
-    prepare: { anim: 'vanish', time: 0.35 },
-    dash: { speed: 26, maxTime: 0.4, contact: 1.8 },
+    prepare: { anim: 'shh', time: 0.4 },
+    dash: { speed: 28, maxTime: 0.4, contact: 1.8 },
     hits: [
       { t: 0.6, anim: 'knife_1', dur: 0.22, share: 0.12, fx: { kind: 'slash', tilt: 0.05 }, sound: 'bladeHit' },
       { t: 0.82, anim: 'knife_2', dur: 0.22, share: 0.12, fx: { kind: 'slash', flip: true }, sound: 'bladeHit' },
       { t: 1.04, anim: 'knife_3', dur: 0.24, share: 0.12, fx: { kind: 'stab' }, sound: 'bladeHit' },
       { t: 1.3, anim: 'thrust', dur: 0.26, share: 0.14, fx: { kind: 'stab' }, sound: 'bladeHit' },
-      { t: 1.8, anim: 'dual_cross', dur: 0.44, share: 0.5, fx: { kind: 'cross', big: true }, sound: 'slashFinal', final: true },
+      { t: 1.8, anim: 'dual_cross', dur: 0.44, share: 0.5, fx: { kind: 'cross', big: true }, sound: 'slashFinal', final: true, bleed: { dps: 5, duration: 3 } },
     ],
     bannerAt: 0.2,
     length: 2.8,
   },
 
-  // Jae matava porque podia: golpe em quem está desprevenido, cego ou de costas entra muito mais forte
+  // Jae matava porque podia: golpe em quem está desprevenido, cego, surdo ou de costas entra muito mais forte
   passives: [
     { type: 'backstab', kinds: ['melee', 'ability'], mult: 1.3, surprised: true },
   ],
@@ -166,21 +174,25 @@ export default {
   energyColor: RED,
   info: {
     weapon: 'Punhal X (adaga) e punhais de arremesso',
-    style: 'Assassina furtiva: some, surge pelas costas, cega e corta — rápida e frágil',
-    identity: 'Assassina em série: puxando o capuz vira X',
-    tagline: 'Shh. Não grita.',
+    style: 'Assassina furtiva: some nas sombras, surge pelas costas, cega e corta — rápida e frágil',
+    identity: 'Assassina em série: pondo o capuz, vira X',
+    tagline: 'Shhh. Não grita.',
   },
   ...JAE_KIT,
+  ai: { abilityRate: 1.8 }, // assassina que vive das habilidades (some, surge pelas costas, cega): a CPU usa mais
 
-  // TRANSFORMAÇÃO (Barra de Transformação cheia + vida baixa, segurando △): puxa o capuz, sorri, e o rosto some na
-  // escuridão com o X vermelho no lugar — X até o fim do round
+  // TRANSFORMAÇÃO (Barra cheia + vida baixa, segurando △): CAPUZ DE X — segura o capuz, puxa por cima da cabeça,
+  // sorri, "Shhh..." e o rosto some na escuridão com o X vermelho no lugar (o gif) — X até o fim do round
   awakening: {
-    name: 'Capuz do X',
-    banner: 'Capuz do X',
+    name: 'Capuz de X',
+    banner: 'Capuz de X',
     type: 'maskTransform',
+    scene: 'hood',
     form: 'jae_x',
     formBanner: 'X',
-    prop: 'hoodUp',
+    prop: 'hoodX',
+    swap: [['hoodUp', true], ['hoodDown', false]],
+    grin: ['face_jae', 'face_jae_grin'], // o sorriso debaixo do capuz
     duration: 0, // até o fim do round
     bonusHealth: 80,
     color: RED,

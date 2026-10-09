@@ -265,6 +265,53 @@ function face(paintExtras, o) {
   }, { wrap: true });
 }
 
+// JAE (Park Jae-Yoon): pele clara, maquiagem preta esfumada forte em volta dos olhos escuros, batom vermelho e a pinta
+// falsa no queixo (lado esquerdo dela, x > 256) — referências "jae serio" e "jae rosto"; grin = sorriso com dentes
+function jaeFace(grin) {
+  return face((g) => {
+    g.fillStyle = '#2a1214';
+    g.beginPath(); g.arc(CX + 14, MOUTH_Y + 26, 3.2, 0, Math.PI * 2); g.fill();
+    if (grin) {
+      // batom vermelho em volta do sorriso
+      g.strokeStyle = 'rgba(170,20,36,0.95)'; g.lineWidth = 3;
+      g.beginPath(); g.moveTo(CX - 20, MOUTH_Y - 4); g.quadraticCurveTo(CX, MOUTH_Y + 20, CX + 20, MOUTH_Y - 4); g.stroke();
+      g.lineWidth = 2.2;
+      g.beginPath(); g.moveTo(CX - 20, MOUTH_Y - 4); g.quadraticCurveTo(CX, MOUTH_Y + 2, CX + 20, MOUTH_Y - 4); g.stroke();
+    }
+  }, {
+    skin: '#e6c4a8',
+    before(g) {
+      // sombra preta esfumada, alongada para fora (sem virar "olho roxo")
+      for (const s of [-1, 1]) {
+        const grd = g.createRadialGradient(CX + s * 36, EYE_Y - 1, 3, CX + s * 36, EYE_Y - 1, 22);
+        grd.addColorStop(0, 'rgba(18,8,12,0.7)');
+        grd.addColorStop(0.6, 'rgba(26,10,16,0.32)');
+        grd.addColorStop(1, 'rgba(26,10,16,0)');
+        g.fillStyle = grd;
+        g.beginPath(); g.ellipse(CX + s * 36, EYE_Y - 1, 24, 12, s * -0.12, 0, Math.PI * 2); g.fill();
+      }
+    },
+    after(g) {
+      // delineado preto grosso com a ponta puxada para fora e para cima
+      g.fillStyle = '#0a0608';
+      for (const s of [-1, 1]) {
+        const x = CX + s * 32;
+        g.beginPath();
+        g.moveTo(x - s * 15, EYE_Y - 3);
+        g.quadraticCurveTo(x, EYE_Y - 10, x + s * 15, EYE_Y - 5);
+        g.lineTo(x + s * 25, EYE_Y - 11);
+        g.lineTo(x + s * 15, EYE_Y - 1);
+        g.quadraticCurveTo(x, EYE_Y - 6, x - s * 15, EYE_Y - 1);
+        g.closePath();
+        g.fill();
+      }
+    },
+    eye: { iris: '#2a1810', irisLight: '#5a3a28', tilt: 0.1, lashes: true, w: 15, h: 7 },
+    brow: { angry: 2, thick: 3.5, color: '#100c0e' },
+    mouth: grin ? { mouthW: 12, grin: true } : { mouthW: 14, lip: 'rgba(170,20,36,0.95)' },
+  });
+}
+
 // ------------------------------------------------------------ peles com padrões
 function glyphs(g, x0, y0, w, h, color, size = 11, density = 0.7) {
   g.fillStyle = color;
@@ -952,26 +999,9 @@ export const MATERIAL_TEXTURES = {
   }),
   // JAE (Park Jae-Yoon): pele clara, maquiagem preta esfumada forte em volta dos olhos escuros, batom vermelho e a pinta
   // falsa no queixo (lado esquerdo dela, x > 256) — referências "jae serio" e "jae rosto"
-  face_jae: face((g) => {
-    g.fillStyle = '#2a1214';
-    g.beginPath(); g.arc(CX + 14, MOUTH_Y + 26, 3.2, 0, Math.PI * 2); g.fill();
-  }, {
-    skin: '#e6c4a8',
-    before(g) {
-      // sombra preta esfumada em volta dos dois olhos
-      for (const s of [-1, 1]) {
-        const grd = g.createRadialGradient(CX + s * 32, EYE_Y, 4, CX + s * 32, EYE_Y, 30);
-        grd.addColorStop(0, 'rgba(20,10,14,0.85)');
-        grd.addColorStop(0.55, 'rgba(30,14,20,0.45)');
-        grd.addColorStop(1, 'rgba(30,14,20,0)');
-        g.fillStyle = grd;
-        g.beginPath(); g.ellipse(CX + s * 32, EYE_Y + 1, 30, 18, 0, 0, Math.PI * 2); g.fill();
-      }
-    },
-    eye: { iris: '#2a1810', irisLight: '#5a3a28', tilt: 0.1, lashes: true, w: 15, h: 7 },
-    brow: { angry: 2, thick: 3.5, color: '#100c0e' },
-    mouth: { mouthW: 14, lip: 'rgba(170,20,36,0.95)' },
-  }),
+  face_jae: jaeFace(false),
+  // o sorriso de canto debaixo do capuz (cena da Transformação, o gif)
+  face_jae_grin: jaeFace(true),
   // gola alta preta canelada (listras verticais)
   turtleneck_jae: () => canvasTex(256, 256, (g) => {
     g.fillStyle = '#1b191d'; g.fillRect(0, 0, 256, 256);
@@ -979,6 +1009,26 @@ export const MATERIAL_TEXTURES = {
       g.fillStyle = 'rgba(70,66,74,0.55)'; g.fillRect(x, 0, 2, 256);
       g.fillStyle = 'rgba(0,0,0,0.5)'; g.fillRect(x + 4, 0, 2, 256);
     }
+  }, { wrap: true }),
+  // sobretudo de couro vermelho: vincos verticais escuros, brilhos do couro e a costura do meio das costas (u = 0,5)
+  coat_jae: () => canvasTex(512, 512, (g) => {
+    g.fillStyle = '#a3192a'; g.fillRect(0, 0, 512, 512);
+    let seed = 7;
+    const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    for (let i = 0; i < 46; i++) {
+      const x = rnd() * 512;
+      const w = 3 + rnd() * 10;
+      const y0 = rnd() * 200;
+      const grd = g.createLinearGradient(x - w, 0, x + w, 0);
+      const dark = rnd() < 0.6;
+      const c = dark ? '70,6,16' : '214,70,80';
+      const a = dark ? 0.25 + rnd() * 0.25 : 0.12 + rnd() * 0.12;
+      grd.addColorStop(0, `rgba(${c},0)`); grd.addColorStop(0.5, `rgba(${c},${a})`); grd.addColorStop(1, `rgba(${c},0)`);
+      g.fillStyle = grd;
+      g.fillRect(x - w, y0, w * 2, 512 - y0 * (0.3 + rnd() * 0.5));
+    }
+    g.fillStyle = 'rgba(60,4,12,0.6)'; g.fillRect(254, 0, 3, 512);
+    g.fillStyle = 'rgba(220,90,100,0.25)'; g.fillRect(258, 0, 1, 512);
   }, { wrap: true }),
   // A FANTASMA: rosto todo enfaixado; só os olhos âmbar numa fenda de escuridão
   face_fantasma: () => canvasTex(W, HT, (g) => {

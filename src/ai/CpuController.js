@@ -30,6 +30,7 @@ const ACTIVE_BUFF_TYPES = {
   heavyProtection: ['heavyProtection'],
   healOverTime: ['healing'],
   whisperZone: ['whisperZone'], // Jae: não refaz a Zona dos Sussurros enquanto está dentro de uma
+  shadowVeil: ['veil'], // Jae: não some de novo enquanto já está escondida
 };
 
 export function canSpendDodge(f, emergency = false) {
@@ -147,7 +148,7 @@ function sacrificeOk(f, opp) {
 const isModAbility = (a) => a.input.startsWith('block+') || a.input.startsWith('ranged+') || (a.input.startsWith('carga+') && a.input !== 'carga+jump');
 // tipos que não precisam do adversário perto (buffs, invocações, regras do jogo...)
 const SELF_TYPES = ['weaponState', 'blink', 'mistCloud', 'healOverTime', 'hatredTemple', 'shadowClones', 'heavyProtection', 'noiseScreen', 'selfBuff', 'gameRule',
-  'chaosRule', 'hostTime', 'hostAudience', 'hostButton', 'orphanGame', 'hostClones', 'whisperZone'];
+  'chaosRule', 'hostTime', 'hostAudience', 'hostButton', 'orphanGame', 'hostClones', 'whisperZone', 'shadowVeil'];
 
 export class CpuController {
   constructor({ level = 'normal' } = {}) {
@@ -174,6 +175,12 @@ export class CpuController {
 
   // aperta o comando de uma habilidade; □ + direção vira a direção em relação ao adversário
   pressAbility(a, toOpp, side) {
+    // ocupado (no meio de um golpe): guarda para o primeiro quadro livre
+    if (this.fighter && !this.fighter.canAct()) { this.pendingAbility = { a, ttl: 0.9 }; return; }
+    this.pressAbilityNow(a, toOpp, side);
+  }
+
+  pressAbilityNow(a, toOpp, side) {
     const [modKey, btn] = a.input.split('+'); // 'carga' (△), 'block' (R2) ou 'ranged' (□ + direção)
     if (modKey === 'block') this.queue.push({ t: 0.05, held: { block: true } }, { t: 0.06, held: { block: true, [btn]: true } }, { t: 0.05, held: {} });
     else if (modKey === 'ranged') {
@@ -267,6 +274,22 @@ export class CpuController {
     }
     if (f.state === 'ko' || f.state === 'intro' || opp.state === 'ko') return out;
 
+    // habilidade escolhida no meio de um golpe: o jogo ignora △/R2 + botão enquanto o lutador não está livre, então a
+    // escolha fica guardada e sai no primeiro quadro livre (antes, quase todas se perdiam no meio dos combos)
+    if (this.pendingAbility) {
+      const pend = this.pendingAbility;
+      pend.ttl -= dt;
+      if (pend.ttl <= 0 || f.cooldowns[pend.a.id] > 0) this.pendingAbility = null;
+      else if (f.canAct()) {
+        this.pendingAbility = null;
+        const dd = distXZ(f.pos, opp.pos);
+        const tx = (opp.pos.x - f.pos.x) / (dd || 1);
+        const tz = (opp.pos.z - f.pos.z) / (dd || 1);
+        this.pressAbilityNow(pend.a, { x: tx, z: tz }, { x: -tz * this.strafe, z: tx * this.strafe });
+        return out;
+      }
+    }
+
     // Pacto do Diabo: decide uma vez — com pouca vida aceita mais (o presente cura e enche a sanidade)
     if (f.pactOffer) {
       if (!f.pactOffer.cpuDecided) {
@@ -310,6 +333,19 @@ export class CpuController {
     const side = { x: -toOpp.z * this.strafe, z: toOpp.x * this.strafe };
     const lowHp = f.health < f.maxHealth * 0.3;
     const defensive = lowHp ? 1.8 : 1;
+
+    // Jae no "Shhh..." (quase invisível) ou a CPU SURDA (Zona das Sombras): perde o rastro dela — anda devagar de lado e
+    // às vezes se defende no escuro, até ela atacar ou chegar muito perto
+    if (((opp.findBuff && opp.findBuff('veil')) || (f.findBuff && f.findBuff('deaf'))) && d > 2.2 && (f.state === 'idle' || f.state === 'charging')) {
+      if (Math.random() < 0.025 * k) {
+        this.queue.push({ t: 0.4, held: { block: true } }, { t: 0.04, held: {} });
+        return out;
+      }
+      const b = f.moveBasis();
+      out.moveX = 0.35 * (side.x * b.right.x + side.z * b.right.z);
+      out.moveY = 0.35 * (side.x * b.forward.x + side.z * b.forward.z);
+      return out;
+    }
 
     // adversário preparando o especial: um tiro pode interromper (quanto mais difícil, mais a CPU tenta)
     if (opp.state === 'specialStart' && !this.triedInterrupt && (f.state === 'idle' || f.state === 'charging')) {
@@ -473,7 +509,8 @@ export class CpuController {
       if (mods.length > 1 && mods.some((item) => item.ability.id !== this.lastAbility)) {
         mods = mods.filter((item) => item.ability.id !== this.lastAbility);
       }
-      if (mods.length && r < L.ability) {
+      // def.ai.abilityRate: personagens que vivem das habilidades (Jae) usam mais
+      if (mods.length && r < L.ability * ((def.ai && def.ai.abilityRate) || 1)) {
         const total = mods.reduce((sum, item) => sum + item.prior, 0);
         let roll = Math.random() * total;
         let picked = mods[mods.length - 1];
