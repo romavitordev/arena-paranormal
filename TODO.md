@@ -989,7 +989,7 @@ A dificuldade deve melhorar comportamento, não apenas aumentar dano.
 
 Após finalizar alterações relevantes dos kits:
 
-* [ ] Rodar `npm run balance`
+* [ ] Rodar `npm run balance` (o script ainda não existe — ver §76.5)
 * [ ] CPU × CPU
 * [ ] 2–3 partidas por confronto
 * [ ] Registrar vitórias
@@ -1953,6 +1953,73 @@ Torneio e Torre devem reutilizar:
 * [ ] Sistema de localização
 
 Não criar um segundo sistema de combate separado para cada modo.
+
+---
+
+# 76.5 ANÁLISE DO JOGO (v3.10.1) — MELHORIAS NOVAS
+
+Levantado em 2026-10-08 olhando o código e o jogo rodando. Só entra aqui o que ainda NÃO estava no TODO (ou estava
+genérico demais), com o motivo. Nenhum item é de balanceamento.
+
+## Carregamento e desempenho (celular primeiro)
+
+* [ ] **Carregar sob demanda:** hoje a abertura baixa TUDO — `preloadModels` (todos os ~25 `.glb`, 22 MB) e
+  `preloadArenas` (os 5 cenários, 16 MB). Baixar só no "Carregamento" os lutadores escolhidos (2, ou 6 na equipe) +
+  as formas deles + o cenário, com cache; a seleção mostra os retratos/miniaturas.
+* [ ] **Comprimir os `.glb`** (meshopt ou Draco; texturas em KTX2/WebP). O maior é o Diabo (1,6 MB).
+* [ ] **Opção QUALIDADE GRÁFICA (Alta / Média / Baixa):** antialias, pixel ratio até 2 e sombras ficam sempre ligados
+  (`main.js`). No Baixa: pixel ratio 1, sem sombras, menos partículas e rastros.
+* [ ] **Cabo do Anfitrião** (`props.js` → `liveCable`) cria um `TubeGeometry` novo a cada quadro (lixo de memória a
+  60 fps). Trocar por um buffer fixo atualizado no lugar, como já é feito na fita da espada.
+* [ ] **Contador de desempenho de dev** (FPS, memória, objetos na cena) para medir cada cenário/personagem antes e
+  depois das otimizações acima.
+
+## Opções e acessibilidade
+
+* [ ] **Volume** (geral, efeitos, falas): não existe nas OPÇÕES; o `AudioManager` já aceita volume por som.
+* [ ] **Remapear teclas e botões** (hoje fixos em `config/controls.js`), salvo no navegador.
+* [ ] **Reduzir flashes e tremor de câmera** (conforto/fotossensibilidade): `screenFlash` e `cameraRig.shake` aparecem
+  em quase todo especial e transformação.
+* [ ] **Falas:** velocidade das legendas e opção de desligar as falas durante a luta.
+
+## Treino (ferramentas que faltam além das do §63)
+
+* [ ] Mostrar o **alcance/área** dos golpes e habilidades (cone/círculo no chão).
+* [ ] **Histórico de comandos** na tela (o que foi apertado e quando).
+* [ ] **Gravar e repetir** uma ação do boneco (ex.: ele faz o combo X ou o especial) para treinar defesa, Perfect
+  Block, esquiva e Substituição.
+* [ ] **Dados dos golpes** na lista de comandos: dano, tempo até acertar e recuperação (já estão nos dados dos kits).
+
+## Personagens e animação
+
+* [ ] **Pose de vitória própria para Arthur e Lírio** — são os únicos que ainda usam a genérica.
+* [ ] **Idles próprios:** 5 personagens dividem `idle_knife`, 4 `idle_katana` e 3 `idle_fist`; a pose parada é o que
+  mais aparece (seleção, introdução, entre golpes) e devia mostrar a personalidade de cada um.
+
+## Qualidade do código e testes
+
+* [ ] **Dividir os arquivos gigantes:** `combat/abilities.js` (3 024 linhas) e `combat/Fighter.js` (2 810) em módulos
+  por família (movimento, buffs, invocações, agarrão, esquiva, transformação).
+* [ ] **`npm run check` conferir mais:** toda `anim` usada pelos kits existe em `CLIPS` (hoje só conferido à mão), todo
+  `type` de habilidade/especial existe e todo `sound` existe no `AudioManager`.
+* [ ] **Teste de fumaça automático dos kits:** todas as habilidades, especiais, agarrões e transformações de todos os
+  personagens, sem erro e sem cinemática presa (hoje é feito à mão no navegador) — num navegador sem tela (ex.:
+  Playwright) dentro do `npm test`.
+* [ ] **Mais testes de sistema:** só 28 testes hoje; faltam Barra de Transformação, Despertar, volta da forma no fim do
+  round, cutscene do agarrão e o aprendizado da CPU.
+* [ ] **Script `npm run balance`:** o §32 manda rodar, mas ele não existe no `package.json` — rodar o `runBalance` num
+  navegador sem tela e salvar a tabela em arquivo.
+
+## Online
+
+* [ ] **Netcode com rollback** no lugar do lockstep com atraso (hoje a luta espera o quadro do outro chegar): muito
+  melhor com ping alto. A simulação já usa sorteio com semente; falta salvar/restaurar o estado da luta.
+
+## Para o jogador (fora do Torneio/Torre)
+
+* [ ] **Perfil e estatísticas salvas:** vitórias por personagem, mais usado, maior combo, tempo jogado.
+* [ ] **Fichas dos personagens:** galeria com a lore de cada um (o banco `lore/membros.json` já existe).
+* [ ] **Desafios de combo** curtos por personagem, dentro do Treino.
 
 ---
 
