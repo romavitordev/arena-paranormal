@@ -55,6 +55,8 @@ export default defineConfig({
         manualChunks: (id) => {
           if (id.includes('node_modules/three')) return 'three';
           if (/[\/]src[\/](characters|anim)[\/]/.test(id)) return 'personagens';
+          // textos (falas de introdução/vitória/batalha e traduções): dados que crescem a cada personagem, fora do motor
+          if (/[\/]src[\/](config[\/]dialogues\.js|i18n[\/])/.test(id)) return 'textos';
           return undefined;
         },
       },

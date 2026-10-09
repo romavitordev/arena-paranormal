@@ -31,7 +31,7 @@ export default {
     tagline: 'Bem-vindos ao meu jogo. As regras? Vocês vão lembrar delas.',
   },
   stats: { moveSpeed: 8.6, attackSpeed: 1.1, maxHealth: 1060 }, // cabe a vida extra da Relíquia (+60)
-  anims: { idle: 'idle_host', run: 'run', charge: 'charge', victory: 'victory', block: 'block' },
+  anims: { idle: 'idle_host', run: 'run', charge: 'charge', victory: 'vic_anfitriao', block: 'block' },
   quirks: true, // manias do Anfitrião (chaos.js tickHostQuirks): cabeça torta, risadas, tique-taque, passos que "pulam"
   chargeFx: { style: 'default', color: PURPLE },
 

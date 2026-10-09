@@ -4,8 +4,6 @@ import { findSpotBehind, findFreeSpotNear } from './positioning.js';
 import { applyHit } from './damage.js';
 import { splitDamage } from './specials/common.js';
 import { hasPassive } from './passives.js';
-import { buildModel } from '../models/index.js';
-import { Animator } from '../anim/Animator.js';
 import { DanteClone, CLONE, BloodZombie } from './npcs.js';
 import { buildHuntingDog } from '../models/dog.js';
 import { bloodCoat } from '../models/weapons.js';

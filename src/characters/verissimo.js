@@ -5,7 +5,7 @@
 // Cânone: Inteligência Estratégica (analisa o inimigo e dá ordens: os aliados ganham um ataque extra), Segredo de
 // Veríssimo (sabe como vai morrer — o Kian não consegue matá-lo); bloqueou o golpe do Kian que quase matou o Arthur.
 // Em 1997 carregava espingarda e faca na bandoleira (o □ é uma escopeta curta).
-// Modelo PROVISÓRIO: corpo do Lírio (sobretudo) + acessórios (models/props.js addVerissimoProps) até o .glb próprio.
+// Modelo próprio do Blender (public/models/verissimo.glb, tools/blender/char_verissimo.py) + acessórios (props.js addVerissimoProps).
 const BLUE = 0x6ab0e0;
 const STEEL = 0xd8dde4;
 
@@ -24,7 +24,7 @@ export default {
     tagline: 'Agentes, em posição. Eu cuido do resto.',
   },
   stats: { moveSpeed: 7.8, maxHealth: 1080 },
-  anims: { idle: 'idle_katana', run: 'run', charge: 'charge', victory: 'victory', block: 'block_weapon' },
+  anims: { idle: 'idle_katana', run: 'run', charge: 'charge', victory: 'vic_verissimo', block: 'block_weapon' },
   chargeFx: { style: 'default', color: BLUE },
   dodge: { style: 'default', distance: 4.4 },
   // defesa de veterano (bloqueou o Kian): janela de Bloqueio Perfeito maior e o atacante fica mais tempo aberto

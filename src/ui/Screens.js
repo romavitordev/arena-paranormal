@@ -4,7 +4,6 @@ import { ELEMENTS } from '../config/elements.js';
 import { SETTINGS, TIMER_OPTIONS, CPU_LEVELS, ROUND_OPTIONS, timerLabel, cpuLabel, cycleSetting } from '../config/settings.js';
 import { ARENAS, ARENA_ORDER } from '../arena/index.js';
 import { actionLabel, moveLabel } from './labels.js';
-import { COMBAT } from '../config/combat.js';
 import { moveListHTML, specialSummary } from './moves.js';
 import { VERSION, VERSION_LABEL, CHANGELOG, formatVersion } from '../config/version.js';
 

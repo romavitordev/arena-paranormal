@@ -40,5 +40,11 @@ export function addVictoryClips(CLIPS, k) {
     vic_balu: pose({ hip: [0, 0.15, 0], sp: [-0.08, -0.1, 0], hd: [-0.12, 0.15, 0.06], sR: [-2.0, 0.3, -0.55], eR: [-2.2, 0, 0], sL: [-2.6, 0.2, 0.55], eL: [-0.5, 0, 0], lL: [-0.12, 0, 0.16], lR: [0.12, 0, -0.16] }),
     // A Fantasma: aponta para a câmera — o próximo alvo
     vic_fantasma: pose({ sp: [0.05, -0.25, 0], hd: [0.1, 0.15, 0], sR: [-1.75, 0.4, -0.1], eR: [-0.05, 0, 0] }),
+    // Arnaldo: o ator agradece a plateia — reverência teatral, a espada aberta para o lado e a mão livre no peito
+    vic_arnaldo: pose({ sp: [0.5, 0, 0], hd: [-0.25, 0, 0], sR: [-0.4, 0, -1.2], eR: [-0.15, 0, 0], sL: [-1.0, 0.8, 0.1], eL: [-2.1, 0, 0], lR: [0.35, 0, -0.08], kR: [0.3, 0, 0], lL: [-0.12, 0, 0.1] }),
+    // Veríssimo: o comandante — a espada do Arnaldo de ponta para baixo à frente, as duas mãos no punho, queixo erguido
+    vic_verissimo: pose({ sp: [-0.05, 0, 0], hd: [-0.12, 0, 0], sR: [-0.75, 0.3, 0], eR: [-0.7, 0, 0], sL: [-0.75, -0.3, 0], eL: [-0.7, 0, 0], lL: [-0.08, 0, 0.18], lR: [0.08, 0, -0.18] }),
+    // O Anfitrião: braços abertos para a plateia invisível, a cabeça tombada (o relógio no braço esquerdo erguido)
+    vic_anfitriao: pose({ sp: [-0.12, 0, 0.05], hd: [0.05, 0, 0.5], sL: [-2.3, 0, 0.9], eL: [-0.35, 0, 0], sR: [-0.9, 0, -1.2], eR: [-0.3, 0, 0], lL: [-0.1, 0, 0.18], lR: [0.1, 0, -0.18] }),
   });
 }

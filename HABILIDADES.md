@@ -322,9 +322,12 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 - Dano 25 · alcance 15 m · cooldown 5 s · custo 15
 - Prende e puxa o inimigo para 1.4 m, abrindo 0.7 s para combar
+- Trás + □: **undefined** — undefined
 
 ### Habilidades
 
+- **Ativar Ereshkigal** — ranged+back · custo 15 · cooldown 14 s
+  Por 6 s, cada golpe físico que acerta faz o inimigo recuperar parte da vida e pagar 1,5× isso em sanidade — que vai para o Gal.
 - **Corrente Gancho** — △ + □ / Y + X · custo 20 · cooldown 8 s · dano 28 · alcance 14 m
   Prende a corrente no adversário e puxa o PRÓPRIO Gal até o adversário, chegando com um corte cruzado.
 - **Teletransporte** — R2 + × / RT + A · custo 22 · cooldown 9 s

@@ -15,16 +15,29 @@
   `giveBack`): se o buff acabar no meio do voo, volta para a mão o machado. `demonAxe.onEnd` conta a maça no ar.
   Dano igual. Testado: machado normal vai e volta; com o Demônio a maça vai e volta; buff acabando no ar → machado.
 - Gal (pedido do usuário): a cura que cobra sanidade deixou de ser passiva. `meleeDrain` aceita `whileBuff` (só vale
-  com o buff); habilidade nova **Sugada Mortal** (ritual do cânone do Gal) em trás + □ (`ranged.variants.back.ability`,
-  mesmo mecanismo do Anfitrião — os 5 atalhos △○/△□/△L2/R2△/R2× já estavam ocupados): `selfBuff` `sugada` por 6 s,
+  com o buff); habilidade nova **Ativar Ereshkigal** (nome escolhido pelo usuário — as lâminas Ereshkigal do Gal) em trás + □ (`ranged.variants.back.ability`,
+  mesmo mecanismo do Anfitrião — os 5 atalhos △○/△□/△L2/R2△/R2× já estavam ocupados): `selfBuff` `ereshkigal` por 6 s,
   15 de sanidade, recarga 14 s, dica de IA `max: 5`. Mesmas proporções da passiva antiga (Y dos golpes, ×1,5 de
-  sanidade para o Gal). Testado: sem a Sugada o golpe não cura nem drena; com ela, cura o alvo, drena e dá ao Gal;
+  sanidade para o Gal). Testado: sem a Ereshkigal o golpe não cura nem drena; com ela, cura o alvo, drena e dá ao Gal;
   desliga em 6 s.
 - Fita da espada do Arnaldo/Veríssimo voltou a ficar vermelha (pergunta do usuário): desde a física da fita
   (`physicsRibbon`, commit 52b00c0) o material é criado em código e entrava na lista do "flash" de dano do rig
   (`glbRig.setTint`), que zera o `emissive` a cada quadro; sem o brilho próprio, o vermelho `0xd01c30` ficava quase
   preto na luz dos cenários. Agora a fita e o nó marcam `userData.baseEmissive` (vermelho, 0,35), que o `setTint`
   devolve. Conferido: emissive `#d01c30@0.35` nas duas espadas depois de um flash de dano.
+- Arnaldo, Anfitrião e Veríssimo finalizados (escopo obrigatório da versão): poses de vitória próprias
+  (`vic_arnaldo` — reverência teatral com a espada aberta; `vic_verissimo` — espada de ponta para baixo, as duas mãos
+  no punho; `vic_anfitriao` — braços abertos para a plateia, cabeça tombada) em `anim/victoryClips.js`; comentários de
+  "modelo PROVISÓRIO" atualizados (os `.glb` próprios já existem). Testes no navegador: todas as habilidades, □,
+  especiais (Ato Final 217, Ordem de Ataque 214, O Jogo do Anfitrião 239), agarrões, Transformação pela Barra
+  (Arnaldo → Anfitrião), Segredo de Veríssimo, Guarda do Comandante, corte extra da Inteligência Estratégica,
+  Percepção Anacrônica — sem erro de console; 30 lutas CPU × CPU (nível difícil) com os três usando o kit inteiro.
+  Animações referenciadas pelos três: todas existem em `CLIPS`. README: linhas do elenco do Arnaldo e do Veríssimo,
+  Super Difícil na lista de níveis. HABILIDADES.md regenerado.
+- Limpeza: imports sem uso removidos (`abilities.js`: buildModel/Animator; `props.js`: hostMask, mustache, necktie,
+  watchChain; `Screens.js`: COMBAT). Build: o `main` passava de 650 kB (aviso) → chunk `textos` (falas + i18n) no
+  `manualChunks`; `main` 595 kB, sem aviso. Versão compilada (`vite preview`) testada: abre, luta, vitória, revanche,
+  menu principal, treinamento, seleção com a página 2 (Balu, Arnaldo, Veríssimo).
 
 ## (em andamento, sem changelog dos jogadores) — estabilidade, limpeza e mecânicas universais de combate (Dodge e Throw Tech)
 

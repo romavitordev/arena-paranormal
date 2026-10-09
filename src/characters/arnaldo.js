@@ -5,7 +5,7 @@
 // atraem ou afastam).
 // TRANSFORMAÇÃO (pedido do usuário): tira o relógio de bolso de ouro, abre a tampa e lá dentro está a Relíquia de
 // Energia — vira O ANFITRIÃO até o fim do round, com um kit totalmente novo (forms/anfitriao.js).
-// Modelo PROVISÓRIO: corpo do Joui (casaco longo) + acessórios (models/props.js addArnaldoProps) até o .glb próprio.
+// Modelo próprio do Blender (public/models/arnaldo.glb, tools/blender/char_arnaldo.py) + acessórios (props.js addArnaldoProps).
 const GOLD = 0xe0b040;
 const RED = 0xc0141c;
 
@@ -24,7 +24,7 @@ export default {
     tagline: 'Senhoras e senhores, o espetáculo vai começar.',
   },
   stats: { moveSpeed: 8.2, attackSpeed: 1.05, maxHealth: 1000 },
-  anims: { idle: 'idle_arnaldo', run: 'run', charge: 'charge', victory: 'victory', block: 'block_weapon' },
+  anims: { idle: 'idle_arnaldo', run: 'run', charge: 'charge', victory: 'vic_arnaldo', block: 'block_weapon' },
   chargeFx: { style: 'default', color: GOLD },
   dodge: { style: 'default', distance: 4.6 },
 

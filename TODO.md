@@ -1,6 +1,6 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.9.1
+**Versão de referência atual:** v3.10.0
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente
 
@@ -106,26 +106,30 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
 
 ## Git
 
-* [ ] Procurar arquivos temporários
+* [x] Procurar arquivos temporários
 * [ ] Procurar código morto
-* [ ] Procurar imports antigos
-* [ ] Procurar arquivos duplicados
-* [ ] Corrigir referências quebradas
+* [x] Procurar imports antigos
+* [x] Procurar arquivos duplicados
+* [x] Corrigir referências quebradas
 
 ## Validação
 
-* [ ] Conferir erros de console
-* [ ] Conferir warnings
-* [ ] Testar inicialização
-* [ ] Testar menu
-* [ ] Testar seleção
-* [ ] Testar batalha
-* [ ] Testar vitória
-* [ ] Testar retorno ao menu
-* [ ] Testar reinício
-* [ ] Testar troca entre modos
+* [x] Conferir erros de console
+* [x] Conferir warnings
+* [x] Testar inicialização
+* [x] Testar menu
+* [x] Testar seleção
+* [x] Testar batalha
+* [x] Testar vitória
+* [x] Testar retorno ao menu
+* [x] Testar reinício
+* [x] Testar troca entre modos
 
 ---
+
+> Conferido na versão estável (2026-10-08): nada temporário versionado; imports sem uso removidos; build sem aviso
+> (textos num chunk próprio); versão compilada testada: menu → batalha → vitória → revanche → menu → treinamento.
+> "Procurar código morto" (funções sem uso) fica para depois.
 
 # 4. ARNALDO FRITZ / O ANFITRIÃO / SENHOR VERÍSSIMO
 
@@ -152,87 +156,91 @@ O trabalho pendente é:
 
 ## Modelo
 
-* [ ] Revisar proporções
-* [ ] Revisar rosto
-* [ ] Revisar cabelo/barba
-* [ ] Revisar óculos
-* [ ] Revisar roupas
-* [ ] Revisar relógio
-* [ ] Revisar espada
-* [ ] Revisar materiais
-* [ ] Revisar texturas
-* [ ] Conferir rig
-* [ ] Conferir qualidade no jogo
+* [x] Revisar proporções
+* [x] Revisar rosto
+* [x] Revisar cabelo/barba
+* [x] Revisar óculos
+* [x] Revisar roupas
+* [x] Revisar relógio
+* [x] Revisar espada
+* [x] Revisar materiais
+* [x] Revisar texturas
+* [x] Conferir rig
+* [x] Conferir qualidade no jogo
 
 ## Animações
 
-* [ ] Idle
-* [ ] Caminhada
-* [ ] Corrida
-* [ ] Ataques
-* [ ] Espada
-* [ ] Emissor de Pulsos
-* [ ] Finta Teatral
-* [ ] Pulso Paranormal
-* [ ] Rodopio da Fita
-* [ ] Aniquilador
-* [ ] Ensaio Geral
-* [ ] Ato Final
-* [ ] Transformação
-* [ ] Vitória
+* [x] Idle
+* [x] Caminhada
+* [x] Corrida
+* [x] Ataques
+* [x] Espada
+* [x] Emissor de Pulsos
+* [x] Finta Teatral
+* [x] Pulso Paranormal
+* [x] Rodopio da Fita
+* [x] Aniquilador
+* [x] Ensaio Geral
+* [x] Ato Final
+* [x] Transformação
+* [x] Vitória
 
 ## Combate
 
-* [ ] Testar dano
-* [ ] Testar cooldown
-* [ ] Testar custos
-* [ ] Testar hitboxes
-* [ ] Testar telegraphs
-* [ ] Testar IA
+* [x] Testar dano
+* [x] Testar cooldown
+* [x] Testar custos
+* [x] Testar hitboxes
+* [x] Testar telegraphs
+* [x] Testar IA
 * [ ] Balancear
 
 ---
+
+> Finalizado na versão estável: modelo revisado no jogo (sem problema visível), todas as animações existem e rodam,
+> pose de vitória própria (`vic_arnaldo`), kit inteiro testado sem erro, CPU usa o kit todo e transforma. "Balancear"
+> fica para a etapa de balanceamento.
 
 # 6. O ANFITRIÃO
 
 ## Modelo
 
-* [ ] Revisar matéria de Energia
-* [ ] Revisar máscara
-* [ ] Revisar olhos
-* [ ] Revisar cabos
-* [ ] Revisar relógio
-* [ ] Revisar aura
-* [ ] Revisar materiais
-* [ ] Revisar efeitos
-* [ ] Conferir rig
-* [ ] Conferir leitura durante combate
+* [x] Revisar matéria de Energia
+* [x] Revisar máscara
+* [x] Revisar olhos
+* [x] Revisar cabos
+* [x] Revisar relógio
+* [x] Revisar aura
+* [x] Revisar materiais
+* [x] Revisar efeitos
+* [x] Conferir rig
+* [x] Conferir leitura durante combate
 
 ## Animações
 
-* [ ] Idle
-* [ ] Movimentação
-* [ ] Ataques
-* [ ] Braços de Energia
-* [ ] Distorção
-* [ ] Tempo Distorcido
-* [ ] Transformação
-* [ ] Vitória
+* [x] Idle
+* [x] Movimentação
+* [x] Ataques
+* [x] Braços de Energia
+* [x] Distorção
+* [x] Tempo Distorcido
+* [x] Transformação
+* [x] Vitória
 
 ## Combate
 
-* [ ] Disparo do Caos
-* [ ] Regra do Jogo
-* [ ] Distorção
-* [ ] Tempo Distorcido
-* [ ] A Plateia
-* [ ] ChronoSense
-* [ ] Jogo do Anfitrião
-* [ ] Conferir telegraphs
-* [ ] Conferir counterplay
-* [ ] Conferir aleatoriedade
-* [ ] Garantir que aleatoriedade nunca determine um acerto invisível
-* [ ] Revisar IA
+* [x] Disparo do Caos
+* [x] Regra do Jogo
+* [x] Distorção
+* [x] Tempo Distorcido
+* [x] A Plateia
+* [x] ChronoSense
+* [x] Jogo do Anfitrião
+* [x] Conferir telegraphs
+* [x] Conferir counterplay
+* [x] Conferir aleatoriedade
+* [x] Garantir que aleatoriedade nunca determine um acerto invisível
+* [x] Revisar IA
 * [ ] Balancear
 
 ## Personalidade
@@ -250,60 +258,70 @@ Evitar falas genéricas.
 
 ---
 
+> Finalizado na versão estável: as 9 habilidades, □, especial (aviso de 1 s com sigilo no alvo) e agarrão testados
+> sem erro; Percepção Anacrônica desvia o 1º golpe e entra em recarga; pose de vitória própria (`vic_anfitriao`);
+> corrigida a tela preta do cabo do relógio. "Balancear" fica para a etapa de balanceamento.
+
 # 7. SENHOR VERÍSSIMO
 
 ## Modelo
 
-* [ ] Revisar proporções
-* [ ] Revisar rosto
-* [ ] Revisar cabelo
-* [ ] Revisar barba
-* [ ] Revisar roupa
-* [ ] Revisar gravata
-* [ ] Revisar jaqueta
-* [ ] Revisar espada
-* [ ] Revisar materiais
-* [ ] Revisar texturas
-* [ ] Conferir rig
+* [x] Revisar proporções
+* [x] Revisar rosto
+* [x] Revisar cabelo
+* [x] Revisar barba
+* [x] Revisar roupa
+* [x] Revisar gravata
+* [x] Revisar jaqueta
+* [x] Revisar espada
+* [x] Revisar materiais
+* [x] Revisar texturas
+* [x] Conferir rig
 
 ## Animações
 
-* [ ] Idle
-* [ ] Caminhada
-* [ ] Corrida
-* [ ] Ataques
-* [ ] Guarda do Comandante
-* [ ] Inteligência Estratégica
-* [ ] Análise Tática
-* [ ] Investida dos Aniquiladores
-* [ ] Jaqueta de Veríssimo
-* [ ] Especial
-* [ ] Vitória
+* [x] Idle
+* [x] Caminhada
+* [x] Corrida
+* [x] Ataques
+* [x] Guarda do Comandante
+* [x] Inteligência Estratégica
+* [x] Análise Tática
+* [x] Investida dos Aniquiladores
+* [x] Jaqueta de Veríssimo
+* [x] Especial
+* [x] Vitória
 
 ## Combate
 
-* [ ] Testar Guarda do Comandante
-* [ ] Testar Inteligência Estratégica
-* [ ] Testar Análise Tática
-* [ ] Testar Investida dos Aniquiladores
-* [ ] Testar Jaqueta
-* [ ] Testar Segredo de Veríssimo
-* [ ] Revisar IA
+* [x] Testar Guarda do Comandante
+* [x] Testar Inteligência Estratégica
+* [x] Testar Análise Tática
+* [x] Testar Investida dos Aniquiladores
+* [x] Testar Jaqueta
+* [x] Testar Segredo de Veríssimo
+* [x] Revisar IA
 * [ ] Balancear
 
 ---
 
+> Finalizado na versão estável: Guarda do Comandante contra-ataca, Inteligência Estratégica dá o corte extra (26 → 38),
+> Segredo deixa com 1 de vida, kit e especial sem erro, pose de vitória própria (`vic_verissimo`). "Balancear" fica
+> para a etapa de balanceamento.
+
 # 8. ESPADA DE ARNALDO / VERÍSSIMO
 
-* [ ] Conferir modelo
-* [ ] Conferir proporções
-* [ ] Conferir posicionamento
+* [x] Conferir modelo
+* [x] Conferir proporções
+* [x] Conferir posicionamento
 * [ ] Conferir bainha
-* [ ] Fazer fita vermelha reagir aos movimentos
+* [x] Fazer fita vermelha reagir aos movimentos
 * [ ] Corrigir clipping
-* [ ] Garantir movimentação adequada em cada personagem
+* [x] Garantir movimentação adequada em cada personagem
 
 ---
+
+> Fita voltou a ficar vermelha (o flash de dano zerava o brilho dela). Bainha e clipping fino ficam para depois.
 
 # 9. COMBATE — SISTEMAS UNIVERSAIS
 
@@ -2021,21 +2039,21 @@ Não criar um segundo sistema de combate separado para cada modo.
 
 ## ETAPA 1 — ESTABILIDADE
 
-* [ ] Git
-* [ ] Limpeza
-* [ ] Check
-* [ ] Build
-* [ ] Regressão
+* [x] Git
+* [x] Limpeza
+* [x] Check
+* [x] Build
+* [x] Regressão
 
 ## ETAPA 2 — PERSONAGENS RECENTES
 
-* [ ] Arnaldo
-* [ ] Anfitrião
-* [ ] Veríssimo
-* [ ] Animações
-* [ ] Efeitos
-* [ ] IA
-* [ ] Testes
+* [x] Arnaldo
+* [x] Anfitrião
+* [x] Veríssimo
+* [x] Animações
+* [x] Efeitos
+* [x] IA
+* [x] Testes
 
 ## ETAPA 3 — COMBATE
 

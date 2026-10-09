@@ -63,7 +63,7 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 - **Menus:** A/× (Pulo, Enter) confirma · B/○ (Ataque físico, Esc) volta.
 - **Fluxo:** Tela inicial → Batalha Solo / Batalha em Equipe (P1 VS P2, P1 VS CPU, CPU VS CPU), Tutorial ou Treinamento →
   Personagens (os dois confirmam) → **COMEÇAR** → **Configurações** (tempo 30/60/90/99/120/∞, dificuldade da CPU
-  Fácil/Normal/Difícil/Muito Difícil, rounds 1–3) → Cenário (com preview) → Carregamento → entrada dos lutadores com
+  Fácil/Normal/Difícil/Muito Difícil/Super Difícil, rounds 1–3) → Cenário (com preview) → Carregamento → entrada dos lutadores com
   falas → **LUTEM** → round. ×/Start pula a apresentação; nos rounds seguintes, a chamada mostra o número do round.
 - **Seleção:** Y/△ escolhe personagem ou cenário **aleatório**; B/○ na seleção de personagens (com ninguém confirmado) volta para a tela inicial.
 - **Opções** (menu principal e pausa): Tempo da luta · **Movimento**: direções da tela
@@ -110,7 +110,7 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 | AGHATA | Ordo Realitas | Sangue | Faca Arremessada | □ Amaldiçoar Arma (Sangue) · L2 Facas Amaldiçoadas · R2+× Passagem de Conhecimento · R2+△ Leitura de Rituais (3 em leque) | Descarnar | Colar Banhado em Sangue |
 | DANTE | Ordo Realitas | Morte | Decadenza (fumaça que apodrece) | □ Embaralhar "Trinitá" (3 clones com IA, 50% do dano) · ○ Tentáculos de Lodo · △ Cicatrização "Paradiso" · L2 Poça de Lodo (lentidão) | Invocação: A Marionete (NPC por 18 s, barra preta, pode ser destruída; anda aos trancos, atravessa obstáculos e agarra com a Ironia do Destino) | Concentração Inquebrável (rituais −10% de sanidade) |
 | ERIN PARKER | Ordo Realitas | Energia | Escopeta calibre 12 (leque de chumbo) | □ Granada "Supernova" · × Granada "Nebulosa" (névoa) · ○ Bênção Maldita · △ Black Hole (cura) · L2 Granada de Luz (atordoa) | Supernova (granada de luz que dá para evitar; se cegar: corre, tiro de escopeta e granada) · **Transformação:** Em Nome do Caos (máscara de gás, enlouquece: golpes e granadas mais fortes, sem cura; especial Em Nome do Caos — corre e se explode: 450 de dano, ela morre; se levar o rival junto ganha o round, senão perde) | Amuleto Elétrico (choque em quem bate nela) |
-| GAL SAL | Escriptas | Conhecimento | Corrente de Captura (procura, prende e puxa) | □ Corrente Gancho · × Teletransporte · L2 Corrente Giratória (área) · trás + □ Sugada Mortal (liga a cura que cobra sanidade por 6 s) | Injustiça né? | Desviar de Balas · Bloqueio Perfeito |
+| GAL SAL | Escriptas | Conhecimento | Corrente de Captura (procura, prende e puxa) | □ Corrente Gancho · × Teletransporte · L2 Corrente Giratória (área) · trás + □ Ativar Ereshkigal (liga a cura que cobra sanidade por 6 s) | Injustiça né? | Desviar de Balas · Bloqueio Perfeito |
 | KIAN | Escriptas | Conhecimento | Impacto Sigilar | □ Teletransporte · ○ Lâmina do Medo · △ Levitação · × Rejeitar Névoa | Inexistir (2x por partida) | Precognição |
 | LABIRINTO | Mascarados | Energia | Rajada Caótica (raio da Antena) | □ Labirinto Mental · ○ Mapa Sanguíneo · L2 Capturar Momento | O Labirinto é a Resposta · **Transformação:** Capacete do ??? → **???** até o fim do round (□ Tempestade Caótica · Labirinto Abissal · Consumir Momento · Tempestade Caótica em área · Revelação Sanguínea; especial mais forte) | Mente Labiríntica (atordoamentos −40%) |
 | LÍRIO | Os Cinco | Sangue | Canivete de osso (curto e fraco: ele é de perto) | △ Golpe Pesado · ○ Cai Dentro (corre, ombrada, provoca) · □ Amarras de Sangue "Magras" · × Leonora Amaldiçoada · L2 Proteção Pesada | Leonora ("Hoje 'cê vai conhecer a Leonora!") | Sangue de Ferro (+15% de vida) · Casca Grossa (menos recuo e desgaste na defesa) · Mão Pesada (mais impacto) |
@@ -120,12 +120,14 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 | BALU | Ordo Realitas | Sangue | Machado em Giro (o machado volta para a mão) | △ Amaldiçoar Arma com Sangue · ○ Machado Demônio (paga com vida: maça de sangue) · R2+△ Fala Imponente (provoca) · L2 110% · R2+× Colete Físico-Balístico | Pancada do Urso | Resistência à Dor · Força Física · Derrubar e Atacar |
 | XANDE | Os Cinco | Sangue | Skate Caótico (vai e volta) | □ Amaldiçoar Arma · ○ Polarização Caótica · △ Tela de Ruído (escudo de 140) · × Velocidade Mortal · L2 Cicatrização | Por Eles | Gladiador Paranormal (+3 sanidade por golpe) |
 | AGUIAR | Mascarados | Sangue | Machado na Corda (arremessa, sangra e puxa) | ○ Ataque Especial · L2 Armadilha de Urso · × Predador de Sangue · △ Cães de Caça | Caçada no Acampamento · **Transformação:** Máscara do Mutilador Noturno → **MUTILADOR NOTURNO** até o fim do round (todo golpe sangra, Ataque Mutilador, Predador Perfeito, Finalização do Mutilador) | Filho da Dor (apanhando seguido, resiste mais) |
+| ARNALDO FRITZ | Ordo Realitas | Energia | Emissor de Pulsos Paranormais (atrai e emenda a estocada; trás + □ afasta) | ○ Finta Teatral (quebra a defesa) · □ Pulso Paranormal (atrai longe / joga longe perto) · × Rodopio da Fita · L2 Aniquilador · △ Ensaio Geral | Ato Final (execução teatral: reverência, avanço esquivável, 4 golpes e o impacto chega depois) · **Transformação:** A Relíquia do Relógio → **O ANFITRIÃO** até o fim do round (Disparo do Caos de 8 cores, Regra do Caos, Multiplicação, Distorção, Tempo Distorcido, Jogo do Orfanato, Botão do Anfitrião, □ + direção: Chicotada do Caos / Tradição de Família / A Plateia; especial O Jogo do Anfitrião — a roleta; passiva Percepção Anacrônica) | — |
+| SENHOR VERÍSSIMO | Ordo Realitas | Medo | Escopeta curta (leque forte de perto) | ○ Inteligência Estratégica (corte extra a cada golpe) · □ Análise Tática · × Investida dos Aniquiladores · L2 Jaqueta de Veríssimo | Ordem de Ataque · trás + ○ Guarda do Comandante (contra-ataque) · Despertar: Líder dos Aniquiladores | Segredo de Veríssimo (o primeiro golpe fatal da partida o deixa com 1 de vida) · Bloqueio Perfeito maior |
 
 Todos os especiais ofensivos causam 250 de 1000 de vida (`COMBAT.specialDamage`), nenhum é hitkill.
 Números de tudo em [HABILIDADES.md](HABILIDADES.md). Banco de outros membros das origens (para novos lutadores):
 [lore/MEMBROS.md](lore/MEMBROS.md) · guia em [lore/NOTAS.md](lore/NOTAS.md).
 
-**Regra do Gal Sal** (golpe físico, só com a **Sugada Mortal** ligada — trás + □, 6 s): o golpe tira X de vida do
+**Regra do Gal Sal** (golpe físico, só com **Ativar Ereshkigal** ligado — trás + □, 6 s): o golpe tira X de vida do
 inimigo, em seguida o **inimigo** recupera Y (Y < X) e perde Y × 1,5 de sanidade, que vai para o Gal. O Gal não se cura.
 Exemplo: X=100, Y=60 → o inimigo perde 100, recupera 60 (saldo −40) e perde 90 de sanidade.
 
