@@ -16,6 +16,11 @@
   touchControls.js. Teste novo: todo idioma tem todas as chaves, sem texto vazio e com os mesmos marcadores `{x}`.
   Fica em português (anotado na §37): conteúdo dos personagens, novidades (com aviso), cenários, Tutorial, `notify`
   de combate e erros da conexão.
+- **Idiomas — avisos de combate e online:** `tAlert(texto)` (`src/i18n/index.js`) acha a chave `alert.*` / `combat.*` /
+  `net.*` cujo texto em pt-BR é igual ao do código e devolve no idioma atual (padrões: "X: RECARREGANDO",
+  "PRECISA DE N% DE SANIDADE", versões diferentes). Chamado em `Fighter.notify`, no `netToast` e no erro da tela ONLINE;
+  o selo ONLINE usa `t()`. Assim as ~195 chamadas de `notify` não mudaram: o que é sistema traduz, o que é nome de
+  poder/frase de personagem fica como conteúdo. 279 chaves × 13 idiomas; teste novo do `tAlert`.
 - **Removida a opção MOVIMENTO "relativo ao inimigo"** (pedido do usuário: ruim de jogar). `moveBasis()` devolve
   sempre a base da câmera; `moveMode` saiu dos padrões, é apagado das configurações salvas e não vai mais no
   `settings` da sala online.

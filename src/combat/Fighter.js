@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { tAlert } from '../i18n/index.js';
 import { COMBAT } from '../config/combat.js';
 import { buildModel } from '../models/index.js';
 import { Animator } from '../anim/Animator.js';
@@ -321,7 +322,7 @@ export class Fighter {
   }
 
   notify(text, silent = false) {
-    this.message = { text, time: 1.0 };
+    this.message = { text: tAlert(text), time: 1.0 };
     if (!silent) this.world.audio.play('denied');
   }
 

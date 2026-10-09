@@ -53,3 +53,17 @@ test('i18n: every language has every interface key (no missing or extra keys, no
     }
   }
 });
+
+test('i18n: combat and online alerts written in pt-BR are translated when displayed', async () => {
+  const { tAlert } = await import('../src/i18n/index.js');
+  setLanguage('en');
+  assert.equal(tAlert('ERROU'), 'MISSED');
+  assert.equal(tAlert('BLOQUEIO PERFEITO!'), 'PERFECT BLOCK!');
+  assert.equal(tAlert('Gancho do Kian: RECARREGANDO'), 'Gancho do Kian: RECHARGING');
+  assert.equal(tAlert('PRECISA DE 40% DE SANIDADE'), 'NEEDS 40% SANITY');
+  assert.equal(tAlert('O outro jogador saiu da partida.'), 'The other player left the match.');
+  assert.equal(tAlert('Versões diferentes do jogo (v3.10 na sala, v3.9 aí). Atualizem a página.'), 'Different game versions (v3.10 in the room, v3.9 on your side). Reload the page.');
+  assert.equal(tAlert('TOQUE DA MORTE'), 'TOQUE DA MORTE'); // nome de poder: fica como veio
+  setLanguage('pt-BR');
+  assert.equal(tAlert('ERROU'), 'ERROU');
+});

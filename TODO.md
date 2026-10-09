@@ -1171,8 +1171,9 @@ Tier representa função/força geral e não necessariamente uma obrigação de 
 > principal, opções, seleção, configurações da batalha, cenário, carregamento, vitória, pausa/treino, comandos, online,
 > HUD, chamadas da luta e botões de toque). Os 13 arquivos `src/i18n/locales/*.js` têm as mesmas chaves (teste em
 > `tests/i18n.test.js`). **Ainda em português:** conteúdo dos personagens (golpes, habilidades, descrições, falas),
-> novidades (aviso na tela), nomes/descrições dos cenários, passos do Tutorial, avisos de combate do `notify`
-> (DESVIOU!, SEM ESQUIVAS etc.) e as mensagens de erro da conexão online.
+> novidades (aviso na tela), nomes/descrições dos cenários, passos do Tutorial e os avisos de combate que são nomes de
+> poderes/frases dos personagens. Os avisos do SISTEMA (errou, recarregando, longe demais, bloqueio perfeito…) e as
+> mensagens da partida online já traduzem (`tAlert` em `src/i18n/index.js`).
 
 Criar:
 
@@ -1241,11 +1242,11 @@ Todo texto visível deve passar pelo sistema.
 
 * [ ] Habilidades
 * [ ] Descrições
-* [ ] Alerts
+* [x] Alerts (os do sistema; nomes de poderes ficam como conteúdo)
 * [x] SPECIAL
-* [ ] MISS
-* [ ] DODGED
-* [ ] NO DODGES
+* [x] MISS
+* [x] DODGED
+* [x] NO DODGES
 * [x] DANO
 * [ ] HITS
 * [x] Timer
@@ -1261,8 +1262,8 @@ Todo texto visível deve passar pelo sistema.
 * [ ] Tutorial
 * [ ] Torre
 * [ ] Torneio
-* [ ] LAN
-* [ ] Online
+* [x] LAN
+* [x] Online
 
 ---
 
@@ -2152,20 +2153,20 @@ genérico demais), com o motivo. Nenhum item é de balanceamento.
 
 ## ETAPA 5 — INFRAESTRUTURA
 
-* [ ] Sistema de idiomas
-* [ ] Português BR
-* [ ] Português PT
-* [ ] Inglês
-* [ ] Espanhol
-* [ ] Alemão
-* [ ] Francês
-* [ ] Italiano
-* [ ] Russo
-* [ ] Chinês
-* [ ] Japonês
-* [ ] Coreano
-* [ ] Turco
-* [ ] Polonês
+* [x] Sistema de idiomas (interface; conteúdo dos personagens ainda em português — §37/§40)
+* [x] Português BR
+* [x] Português PT
+* [x] Inglês
+* [x] Espanhol
+* [x] Alemão
+* [x] Francês
+* [x] Italiano
+* [x] Russo
+* [x] Chinês
+* [x] Japonês
+* [x] Coreano
+* [x] Turco
+* [x] Polonês
 * [ ] LAN
 * [ ] Radmin
 * [ ] Mobile

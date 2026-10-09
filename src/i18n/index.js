@@ -103,3 +103,26 @@ export function t(key, params = {}) {
   }
   return text;
 }
+
+// Avisos de combate (Fighter.notify) e mensagens da partida online (netToast, erro da tela ONLINE): o código escreve o texto em pt-BR; os avisos do SISTEMA (errou, recarregando,
+// longe demais…) viram a chave combat.* / alert.* de mesmo texto. Nomes de poderes e frases dos personagens não estão
+// na tabela e ficam como vieram.
+let alertIndex = null;
+export function tAlert(text) {
+  if (currentLang === DEFAULT_LANG || typeof text !== 'string') return text;
+  if (!alertIndex) {
+    alertIndex = new Map();
+    for (const [k, v] of Object.entries(LOCALES[DEFAULT_LANG])) {
+      if (/^(alert|combat|net)\./.test(k) || k === 'lan.code_invalid') { if (!v.includes('{')) alertIndex.set(v, k); }
+    }
+  }
+  const key = alertIndex.get(text);
+  if (key) return t(key);
+  let m = text.match(/^PRECISA DE (\d+)% DE SANIDADE$/);
+  if (m) return t('alert.need_sanity', { n: m[1] });
+  m = text.match(/^Versões diferentes do jogo \((.+) na sala, (.+) aí\)\. Atualizem a página\.$/);
+  if (m) return t('net.version', { a: m[1], b: m[2] });
+  m = text.match(/^(.+): RECARREGANDO$/);
+  if (m) return t('combat.cooldown', { name: m[1] });
+  return text;
+}

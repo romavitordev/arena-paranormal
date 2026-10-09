@@ -19,7 +19,7 @@ import { ARENAS, DEFAULT_ARENA, preloadArenas } from './arena/index.js';
 import { SETTINGS, cycleSetting, TIMER_OPTIONS, timerLabel, LANGUAGE_OPTIONS, languageLabel } from './config/settings.js';
 import { TutorialMode } from './ui/Tutorial.js';
 import { VERSION } from './config/version.js';
-import { t } from './i18n/index.js';
+import { t, tAlert } from './i18n/index.js';
 import { TouchControls, isTouchDevice } from './ui/touchControls.js';
 
 const touchDevice = isTouchDevice();
@@ -454,7 +454,7 @@ function netPump(realDt) {
   if (netBadge) {
     const wait = net.waiting > 0.4;
     netBadge.classList.toggle('wait', wait);
-    netBadge.textContent = wait ? 'ONLINE · AGUARDANDO O OUTRO JOGADOR…' : `ONLINE · ${net.names[0]} × ${net.names[1]} · ${net.ping} ms${net.desyncs ? ' · ressincronizado' : ''}`;
+    netBadge.textContent = wait ? t('net.waiting') : `ONLINE · ${net.names[0]} × ${net.names[1]} · ${net.ping} ms${net.desyncs ? ` · ${t('net.resynced')}` : ''}`;
   }
 }
 
@@ -466,7 +466,7 @@ function netToast(text) {
   if (old) old.remove();
   const t = document.createElement('div');
   t.id = 'net-toast';
-  t.textContent = text;
+  t.textContent = tAlert(text);
   document.body.appendChild(t);
   setTimeout(() => t.remove(), 4500);
 }
@@ -578,7 +578,7 @@ function updateLan() {
       game.lanPending = null;
       if (game.lobby && game.lanRoom) { game.lobby.remove(game.lanRoom); game.lanRoom = null; }
       if (err && err.message === 'cancelado') return;
-      scr.fail((err && err.message) || 'Não foi possível conectar.');
+      scr.fail(tAlert((err && err.message) || 'Não foi possível conectar.'));
     });
   }
 }
