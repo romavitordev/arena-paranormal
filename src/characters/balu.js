@@ -76,6 +76,8 @@ export default {
     returnsProp: 'axe',
     visual: 'baluAxe',
     color: 0xd8d8de,
+    // com o Machado Demônio ativo ele arremessa a MAÇA DE SANGUE que está na mão (antes saía o machado comum)
+    whileBuff: { bloodBlade: { hideProp: 'demonMace', returnsProp: 'demonMace', returnsFallback: { buff: 'bloodBlade', prop: 'axe' }, visual: 'demonMace', color: 0xa01018 } },
     sound: 'knifeThrow',
     hitSound: 'axeHit',
   },

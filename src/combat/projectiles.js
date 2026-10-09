@@ -2,7 +2,7 @@ import { COMBAT } from '../config/combat.js';
 import * as THREE from 'three';
 import { applyHit } from './damage.js';
 import { glowMat } from '../models/rig.js';
-import { knife, mutilatorAxe, baluAxe } from '../models/weapons.js';
+import { knife, mutilatorAxe, baluAxe, demonMace } from '../models/weapons.js';
 import { createMistZone } from './abilities.js';
 import { addBloodPool } from './bloodPools.js';
 
@@ -215,6 +215,17 @@ const VISUALS = {
   },
   // Skate Caótico (Xande): prancha amarela com raios verdes, girando
   // Machado em Giro (Balu): o Machado Lancinante girando de ponta a ponta (volta para a mão)
+  // a maça de sangue do Machado Demônio (Balu) girando no arremesso
+  demonMace() {
+    const g = new THREE.Group();
+    const spin = new THREE.Group();
+    const mace = demonMace();
+    mace.position.y = 0.33;
+    spin.add(mace);
+    g.add(spin);
+    g.userData.tumble = spin;
+    return g;
+  },
   baluAxe() {
     const g = new THREE.Group();
     const spin = new THREE.Group();
@@ -737,7 +748,10 @@ export class Projectiles {
   giveBack(p) {
     const a = p.ability;
     if (a.returnsProp && p.owner && p.owner.rig && !(p.owner.propLock && p.owner.propLock[a.returnsProp]) && !this.list.some((q) => q !== p && q.owner === p.owner && q.ability.returnsProp === a.returnsProp)) {
-      p.owner.rig.showProp(a.returnsProp, true);
+      // a.returnsFallback: o estado acabou no meio do voo (ex.: Machado Demônio) → volta para a mão a arma normal
+      const fb = a.returnsFallback;
+      const prop = fb && !(p.owner.findBuff && p.owner.findBuff(fb.buff)) ? fb.prop : a.returnsProp;
+      p.owner.rig.showProp(prop, true);
     }
   }
 

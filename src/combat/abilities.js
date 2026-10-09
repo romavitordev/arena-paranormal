@@ -2483,7 +2483,8 @@ Object.assign(ABILITY_TYPES, {
             f.armorHits = Math.max(0, (f.armorHits || 0) - (a.armor || 0));
             if (f.propLock) delete f.propLock[a.fromProp || 'axe'];
             f.rig.showProp(a.toProp || 'demonMace', false);
-            const flying = f.world.projectiles.list.some((p) => p.owner === f && p.ability.returnsProp === (a.fromProp || 'axe'));
+            // a arma no ar (o machado ou a maça arremessada) volta sozinha; o machado aparece quando ela voltar
+            const flying = f.world.projectiles.list.some((p) => p.owner === f && (p.ability.returnsProp === (a.fromProp || 'axe') || p.ability.returnsProp === (a.toProp || 'demonMace')));
             if (!flying) f.rig.showProp(a.fromProp || 'axe', true);
           },
         });

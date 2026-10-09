@@ -9,6 +9,11 @@
   `TubeGeometry` no `onBeforeRender`; num modelo recém-criado (antes da primeira pose, juntas no mesmo ponto) a curva
   tinha comprimento zero e o `CatmullRomCurve3` lançava erro DENTRO da renderização — o quadro inteiro ficava preto
   (visto na tela de vitória com O Anfitrião). Agora o cabo degenerado/NaN não é refeito naquele quadro.
+- Balu (pedido do usuário): o Machado em Giro arremessa a arma que está NA MÃO. `ranged.whileBuff` (novo, Fighter):
+  com o buff `bloodBlade` (Machado Demônio) o □ usa a variante `{ hideProp/returnsProp: 'demonMace', visual:
+  'demonMace' }` (visual novo em projectiles.js com a `demonMace()` de weapons.js). `returnsFallback` (novo,
+  `giveBack`): se o buff acabar no meio do voo, volta para a mão o machado. `demonAxe.onEnd` conta a maça no ar.
+  Dano igual. Testado: machado normal vai e volta; com o Demônio a maça vai e volta; buff acabando no ar → machado.
 
 ## (em andamento, sem changelog dos jogadores) — estabilidade, limpeza e mecânicas universais de combate (Dodge e Throw Tech)
 

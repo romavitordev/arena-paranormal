@@ -634,6 +634,8 @@ Referência inicial:
 * [ ] Mortal Speed
 * [ ] Passiva
 * [ ] Conferir controle de espaço
+* [ ] **Cura que cobra sanidade deixa de ser passiva** (pedido do usuário, 2026-10-08): vira uma HABILIDADE que liga a
+  cura do alvo + o roubo de sanidade por alguns segundos; fora dela, o físico do Gal é normal
 
 ---
 
@@ -757,6 +759,8 @@ Vida da forma: 1250 → 1150
 * [ ] Conferir modelo
 * [ ] Conferir animações
 * [ ] Machado
+* [x] **Machado em Giro arremessa a arma que está na mão** (pedido do usuário, 2026-10-08): com o Machado
+  Demônio ativo (machado virou clava/maça de sangue), o □ deve lançar a clava — hoje lança o machado comum
 * [ ] Blood Curse
 * [ ] Demon Axe
 * [ ] Imposing Voice

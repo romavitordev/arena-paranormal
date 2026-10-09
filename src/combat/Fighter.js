@@ -2009,6 +2009,8 @@ export class Fighter {
       this.startBeam(base);
       return;
     }
+    // a arma do □ muda com um estado (ex.: Machado Demônio do Balu: arremessa a maça de sangue, não o machado)
+    if (!variant && base.whileBuff) for (const t in base.whileBuff) if (this.findBuff(t)) { variant = base.whileBuff[t]; break; }
     let r = variant ? { ...base, ...variant } : base;
     if (!this.spendEnergy(r.energyCost || 0)) {
       this.notify('SEM SANIDADE');
