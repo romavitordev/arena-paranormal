@@ -175,7 +175,7 @@ export const PASSIVES = {
   },
   meleeDrain: {
     onMeleeHit({ attacker, victim, strike, dealt, attempted, passive, world }) {
-      // passive.whileBuff: só vale com o estado ligado (Gal: a Sugada Mortal liga a cura que cobra sanidade por alguns s)
+      // passive.whileBuff: só vale com o estado ligado (Gal: Ativar Ereshkigal liga a cura que cobra sanidade por alguns s)
       if (passive.whileBuff && !(attacker.findBuff && attacker.findBuff(passive.whileBuff))) return;
       const { heal, energyRemoved } = computeDrain({
         X: attempted ?? strike.damage,

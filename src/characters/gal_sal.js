@@ -74,20 +74,20 @@ export default {
     color: 0xd4a64a,
     sound: 'chainThrow',
     hitSound: 'chainPull',
-    // trás + □: Sugada Mortal (habilidade com recarga própria; recarregando, sai a Corrente de Captura)
-    variants: { back: { ability: 'sugadaMortal' } },
+    // trás + □: Ativar Ereshkigal (habilidade com recarga própria; recarregando, sai a Corrente de Captura)
+    variants: { back: { ability: 'ativarEreshkigal' } },
   },
 
   abilities: [
     {
-      // cânone: ritual Sugada Mortal — liga por alguns segundos a regra do Gal: o golpe tira X, o inimigo recupera Y e
+      // ATIVAR ERESHKIGAL (nome do usuário: as lâminas Ereshkigal do Gal) — liga por alguns segundos a regra do Gal: o golpe tira X, o inimigo recupera Y e
       // paga com sanidade (Y × 1,5), que vai para o Gal. Fora dela, o físico do Gal é normal.
-      id: 'sugadaMortal',
-      name: 'Sugada Mortal',
+      id: 'ativarEreshkigal',
+      name: 'Ativar Ereshkigal',
       input: 'ranged+back', // trás + □
       type: 'selfBuff',
-      buffType: 'sugada',
-      label: 'SUGADA MORTAL',
+      buffType: 'ereshkigal',
+      label: 'ERESHKIGAL',
       anim: 'charge_dual',
       animTime: 0.4,
       description: 'Por 6 s, cada golpe físico que acerta faz o inimigo recuperar parte da vida e pagar 1,5× isso em sanidade — que vai para o Gal.',
@@ -217,7 +217,7 @@ export default {
 
   passives: [
     { type: 'bulletDodge' }, // Desviar de Balas: esquivar de projéteis não gasta carga
-    // a cura que cobra sanidade NÃO é mais passiva (pedido do usuário): só vale com a Sugada Mortal ligada
-    { type: 'meleeDrain', energyRatio: 1.5, giveEnergyToAttacker: true, whileBuff: 'sugada' },
+    // a cura que cobra sanidade NÃO é mais passiva (pedido do usuário): só vale com a Ereshkigal ativada
+    { type: 'meleeDrain', energyRatio: 1.5, giveEnergyToAttacker: true, whileBuff: 'ereshkigal' },
   ],
 };
