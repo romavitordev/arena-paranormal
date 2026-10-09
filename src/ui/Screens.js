@@ -6,6 +6,7 @@ import { ARENAS, ARENA_ORDER } from '../arena/index.js';
 import { actionLabel, moveLabel } from './labels.js';
 import { moveListHTML, specialSummary } from './moves.js';
 import { VERSION, VERSION_LABEL, CHANGELOG, formatVersion } from '../config/version.js';
+import { t, getLanguage } from '../i18n/index.js';
 
 // Telas fora da luta. Todas recebem as entradas normalizadas dos dois jogadores.
 // Fluxo: Título → Menu principal (P1 VS P2 / P1 VS CPU / Opções) → Personagens →
@@ -56,18 +57,19 @@ function el(root, cls, id, html) {
 // Tela inicial: logo + círculo dos elementos + elenco por origem. Começa em "PRESSIONE START"
 // e, depois do primeiro toque, mostra o menu ali mesmo (B volta para o "pressione start").
 const VS_OPTIONS = (prefix, team) => [
-  { id: `${prefix}:pvp`, label: 'P1 VS P2', desc: team ? 'Dois jogadores, cada um com líder + 2 assistências.' : 'Dois jogadores: dois controles ou teclado dividido.' },
-  { id: `${prefix}:cpu`, label: 'P1 VS CPU', desc: team ? 'Sua equipe contra a equipe do computador.' : 'Lute contra o computador. Você escolhe os dois lutadores.' },
-  { id: `${prefix}:cvc`, label: 'CPU VS CPU', desc: 'Assista: escolha os lutadores, a dificuldade e o cenário.' },
+  { id: `${prefix}:pvp`, label: t('vs.pvp'), desc: t(team ? 'vs.pvp.desc_team' : 'vs.pvp.desc') },
+  { id: `${prefix}:cpu`, label: t('vs.cpu'), desc: t(team ? 'vs.cpu.desc_team' : 'vs.cpu.desc') },
+  { id: `${prefix}:cvc`, label: t('vs.cvc'), desc: t('vs.cvc.desc') },
 ];
-const HOME_OPTIONS = [
-  { id: 'solo', label: 'BATALHA SOLO', desc: '1 contra 1.', sub: VS_OPTIONS('solo', false) },
-  { id: 'team', label: 'BATALHA EM EQUIPE', desc: 'Líder + 2 assistências (L1 / R1).', sub: VS_OPTIONS('team', true) },
-  { id: 'lan', label: 'ONLINE / LAN', desc: 'Contra outra pessoa em outro computador: crie uma sala (pública ou privada, com senha se quiser), veja as salas abertas ou entre com um código.' },
-  { id: 'tutorial', label: 'TUTORIAL', desc: 'Escolha um personagem e aprenda, passo a passo, todos os golpes dele.' },
-  { id: 'training', label: 'TREINAMENTO', desc: 'Pratique combos num alvo parado. A vida dele se recupera.' },
-  { id: 'news', label: 'NOVIDADES', desc: `O que mudou na versão ${VERSION_LABEL}.` },
-  { id: 'options', label: 'OPÇÕES', desc: 'Tempo da luta e modo de movimento.' },
+// textos no idioma atual: montado a cada HomeScreen (trocar o idioma nas OPÇÕES e voltar já mostra traduzido)
+const homeOptions = () => [
+  { id: 'solo', label: t('menu.solo'), desc: t('menu.solo.desc'), sub: VS_OPTIONS('solo', false) },
+  { id: 'team', label: t('menu.team'), desc: t('menu.team.desc'), sub: VS_OPTIONS('team', true) },
+  { id: 'lan', label: t('menu.lan'), desc: t('menu.lan.desc') },
+  { id: 'tutorial', label: t('menu.tutorial'), desc: t('menu.tutorial.desc') },
+  { id: 'training', label: t('menu.training'), desc: t('menu.training.desc') },
+  { id: 'news', label: t('menu.news'), desc: t('menu.news.desc', { v: VERSION_LABEL }) },
+  { id: 'options', label: t('menu.options'), desc: t('menu.options.desc') },
 ];
 
 export class HomeScreen {
@@ -80,22 +82,23 @@ export class HomeScreen {
       <div class="grain"></div>
       <div class="fog"></div>
       <div class="logo">
-        <div class="kicker">UM JOGO DE LUTA PARANORMAL</div>
+        <div class="kicker">${t('menu.subtitle')}</div>
         <div class="t-arena">ARENA</div>
         <h1 data-text="PARANORMAL">PARANORMAL</h1>
         <div class="elements"><i class="ln"></i>${Object.values(ELEMENTS).map((e) => `<b style="--c:${e.color}" title="${e.name}"></b>`).join('')}<i class="ln"></i></div>
         <div class="tag">ORDO REALITAS <i>·</i> ESCRIPTAS <i>·</i> MASCARADOS <i>·</i> OS CINCO</div>
       </div>
-      <div class="press">${touchOnly ? 'TOQUE NA TELA PARA COMEÇAR' : `PRESSIONE <b>START</b>, <b>${OK}</b> OU <kbd>ENTER</kbd>`}</div>
+      <div class="press">${touchOnly ? t('menu.press_touch') : t('menu.press_start', { ok: OK })}</div>
       <div class="menu-home">
         <div class="hlist"></div>
         <div class="hdesc"></div>
       </div>
       <div class="ver">${VERSION_LABEL}</div>
-      <div class="foot">${touchOnly ? '<span>Toque nas opções para escolher · a seta no canto volta</span>' : `<span><b>${OK}</b> confirmar · <b>${BACK}</b> voltar</span><span>Teclado: P1 WASD + losango I J K L · P2 setas + numérico 8 4 6 2</span>`}</div>`);
+      <div class="foot">${touchOnly ? `<span>${t('menu.foot_touch')}</span>` : `<span>${t('menu.foot_confirm', { ok: OK, back: BACK })}</span><span>${t('menu.foot_keys')}</span>`}</div>`);
     this.desc = this.el.querySelector('.hdesc');
     this.listEl = this.el.querySelector('.hlist');
-    this.list = HOME_OPTIONS;
+    this.home = homeOptions();
+    this.list = this.home;
     this.parent = null;
     this.buildList();
     this.el.addEventListener('click', () => { if (!this.menu) this.tapped = true; });
@@ -117,9 +120,9 @@ export class HomeScreen {
   // B: do submenu volta ao menu; do menu volta ao "pressione start"
   goBack() {
     if (this.parent) {
-      const idx = HOME_OPTIONS.indexOf(this.parent);
+      const idx = this.home.indexOf(this.parent);
       this.parent = null;
-      this.list = HOME_OPTIONS;
+      this.list = this.home;
       this.index = Math.max(0, idx);
       this.buildList();
       return 'move';
@@ -199,7 +202,7 @@ export class HomeScreen {
 
 export class TitleScreen {
   constructor(root) {
-    this.el = el(root, 'screen', 'title', `<h1>ARENA<br>PARANORMAL</h1><p>PRESSIONE ENTER, ESPAÇO OU START</p>`);
+    this.el = el(root, 'screen', 'title', `<h1>ARENA<br>PARANORMAL</h1><p>${t('title.press')}</p>`);
   }
   update(input) {
     return input.keyPressedOnce('Enter') || input.players.some((x) => startGo(x, input) || confirm(x));
@@ -268,15 +271,16 @@ export const MODES = {
   pvp: { title: 'P1 VS P2', slots: ['P1', 'P2'], single: false },
   cpu: { title: 'P1 VS CPU', slots: ['P1', 'CPU'], single: true },
   cvc: { title: 'CPU VS CPU', slots: ['CPU 1', 'CPU 2'], single: true },
-  training: { title: 'TREINAMENTO', slots: ['P1', 'ALVO'], single: true },
-  tutorial: { title: 'TUTORIAL', slots: ['P1', 'ALVO'], single: true },
+  get training() { return { title: t('menu.training'), slots: ['P1', t('mode.target')], single: true }; },
+  get tutorial() { return { title: t('menu.tutorial'), slots: ['P1', t('mode.target')], single: true }; },
 };
 
 // Seleção de personagem no estilo Storm 4: a grade do P1 fica à esquerda e a do P2 à direita;
 // no centro, os lutadores em 3D (SelectStage) entram deslizando ao serem olhados e fazem pose ao confirmar.
 const SEL_COLS = 3;
 const SEL_PAGE = 15; // 15 lutadores por página (3 × 5), sem barra de rolagem; LB/RB trocam de página
-const INPUT_NAMES = { 'carga+jump': 'Energia + Pulo', 'carga+ranged': '△ → □', 'carga+physical': '△ → ○', 'block+carga': 'R2 + △', 'block+jump': 'R2 + ×', 'carga+dodge': '△ + L2', 'ranged+forward': '→ + □', 'ranged+back': '← + □', 'ranged+side': 'lado + □' };
+const INPUT_NAMES = { 'carga+ranged': '△ → □', 'carga+physical': '△ → ○', 'block+carga': 'R2 + △', 'block+jump': 'R2 + ×', 'carga+dodge': '△ + L2', 'ranged+forward': '→ + □', 'ranged+back': '← + □' };
+const inputName = (k) => (k === 'carga+jump' ? t('input.carga_jump') : k === 'ranged+side' ? `${t('input.side')} + □` : INPUT_NAMES[k] || k);
 
 export class SelectScreen {
   constructor(root, { portraits, audio, prev, mode = 'pvp', team = false }) {
@@ -301,12 +305,12 @@ export class SelectScreen {
         <div class="det p${p + 1}"></div>
       </div>`;
     this.el = el(root, 'screen', 'select', `
-      <div class="sel-title">${team ? 'MONTE SUA EQUIPE' : 'ESCOLHA SEU LUTADOR'} <small>${this.M.title}${team ? ' · LÍDER + 2 ASSISTÊNCIAS' : ''}</small></div>
+      <div class="sel-title">${t(team ? 'sel.title_team' : 'sel.title')} <small>${this.M.title}${team ? ` · ${t('sel.team_sub')}` : ''}</small></div>
       ${side(0)}
       <div class="sel-center">
         <div class="sel-vs">VS</div>
         <div class="plates"><div class="plate p1"></div><div class="plate p2"></div></div>
-        <div class="startbtn">COMEÇAR <small>${OK} ou Start</small></div>
+        <div class="startbtn">${t('ui.start')} <small>${t('sel.start_hint', { ok: OK })}</small></div>
       </div>
       ${side(1)}
       <div class="hint"></div>`);
@@ -369,17 +373,17 @@ export class SelectScreen {
       // só os 15 da página do cursor aparecem
       const page = Math.floor(this.cursor[p] / SEL_PAGE);
       this.pages[p].classList.toggle('single', this.pageCount < 2);
-      this.pages[p].querySelector('.pg-n').textContent = `PÁGINA ${page + 1} / ${this.pageCount}`;
+      this.pages[p].querySelector('.pg-n').textContent = t('sel.page', { n: page + 1, t: this.pageCount });
       this.cards[p].forEach((card, i) => {
         card.classList.toggle('off', Math.floor(i / SEL_PAGE) !== page);
         card.classList.toggle('on', this.cursor[p] === i);
         card.classList.toggle('picked', this.team && this.picks[p].includes(i));
       });
-      const you = NET_UI.send && p === NET_UI.slot ? 'VOCÊ · ' : ''; // online: qual lado é o seu
-      this.heads[p].textContent = you + (this.ready[p] ? 'PRONTO' : act >= 0 && act !== p ? 'AGUARDANDO' : `ESCOLHENDO${this.team ? ` ${this.picks[p].length + 1}/3` : ''}`);
+      const you = NET_UI.send && p === NET_UI.slot ? `${t('sel.you')} · ` : ''; // online: qual lado é o seu
+      this.heads[p].textContent = you + (this.ready[p] ? t('sel.ready') : act >= 0 && act !== p ? t('sel.waiting') : `${t('sel.choosing')}${this.team ? ` ${this.picks[p].length + 1}/3` : ''}`);
       this.heads[p].classList.toggle('ok', this.ready[p]);
       // placa com o nome no centro
-      const teamLine = this.team ? `<div class="teampicks">${['LÍDER', 'ASSIST. 1', 'ASSIST. 2'].map((lab, k) => {
+      const teamLine = this.team ? `<div class="teampicks">${[t('sel.leader'), t('sel.assist1'), t('sel.assist2')].map((lab, k) => {
         const c2 = this.picks[p][k] !== undefined ? ROSTER[this.picks[p][k]] : null;
         return `<span class="${c2 ? 'on' : ''}"><small>${lab}</small><b style="color:${c2 ? c2.color : 'inherit'}">${c2 ? c2.name : '—'}</b></span>`;
       }).join('')}</div>` : '';
@@ -389,27 +393,25 @@ export class SelectScreen {
         <div class="pt">“${front.info.tagline}”</div>${teamLine}`;
       this.plates[p].classList.toggle('ok', this.ready[p]);
       // ficha resumida embaixo da grade
-      const extras = (c.abilities || []).map((a) => `<span class="abl">${a.name} <i>${INPUT_NAMES[a.input] || a.input}</i></span>`).join('') || '—';
+      const extras = (c.abilities || []).map((a) => `<span class="abl">${a.name} <i>${inputName(a.input)}</i></span>`).join('') || '—';
       const sp = c.special;
       this.dets[p].innerHTML = `
         <dl>
-          <dt>Estilo</dt><dd class="clamp">${c.info.identity || c.info.style}</dd>
-          <dt>Físico ○</dt><dd>${c.melee.name}</dd>
-          <dt>Principal □</dt><dd>${c.ranged ? c.ranged.name : '—'}</dd>
-          <dt>Especial</dt><dd class="clamp">${sp ? `${sp.name} · ${specialSummary(c)}` : '—'}</dd>
-          <dt>Habilidades</dt><dd>${extras}</dd>
+          <dt>${t('sel.style')}</dt><dd class="clamp">${c.info.identity || c.info.style}</dd>
+          <dt>${t('sel.melee')}</dt><dd>${c.melee.name}</dd>
+          <dt>${t('sel.ranged')}</dt><dd>${c.ranged ? c.ranged.name : '—'}</dd>
+          <dt>${t('sel.special')}</dt><dd class="clamp">${sp ? `${sp.name} · ${specialSummary(c)}` : '—'}</dd>
+          <dt>${t('sel.abilities')}</dt><dd>${extras}</dd>
         </dl>`;
       // modelo 3D no centro
       this.stage.show(p, front.id, this.ready[p]);
       if (this.team) this.stage.setBack(p, (this.ready[p] ? this.picks[p].slice(1) : this.picks[p]).map((i) => ROSTER[i].id));
     }
     this.startEl.classList.toggle('on', this.ready[0] && this.ready[1]);
-    this.hint.innerHTML = (this.cpu
-      ? `<b>P1</b> escolhe o próprio lutador (esquerda) e depois o da <b>CPU</b> (direita) · ${moveLabel(0)} mover · <kbd>${actionLabel(0, 'jump')}</kbd>/<kbd>Enter</kbd> confirmar · <kbd>${actionLabel(0, 'physical')}</kbd>/<kbd>Esc</kbd> voltar`
-      : `<b>P1</b> ${moveLabel(0)} mover · <kbd>${actionLabel(0, 'jump')}</kbd> confirmar · <kbd>${actionLabel(0, 'physical')}</kbd> voltar &nbsp;|&nbsp;
-         <b>P2</b> setas · <kbd>${actionLabel(1, 'jump')}</kbd> confirmar · <kbd>${actionLabel(1, 'physical')}</kbd> voltar`)
-      + ` · <b>${OK}</b> confirmar · <b>${RAND}</b> aleatório · <b>${BACK}</b> voltar`
-      + (this.pageCount > 1 ? ` · <b>LB/RB</b> · <kbd>${actionLabel(0, 'pageL')}</kbd>/<kbd>${actionLabel(0, 'pageR')}</kbd> trocar página` : '');
+    const keys = { move: moveLabel(0), jump: actionLabel(0, 'jump'), phys: actionLabel(0, 'physical'), jump2: actionLabel(1, 'jump'), phys2: actionLabel(1, 'physical') };
+    this.hint.innerHTML = t(this.cpu ? 'sel.hint_cpu' : 'sel.hint_pvp', keys)
+      + t('sel.hint_common', { ok: OK, rand: RAND, back: BACK })
+      + (this.pageCount > 1 ? t('sel.hint_page', { l: actionLabel(0, 'pageL'), r: actionLabel(0, 'pageR') }) : '');
   }
 
   // Retorna { p1, p2 } quando os dois estão prontos, ou 'back' para voltar ao menu
@@ -534,15 +536,15 @@ export class BattleConfigScreen {
   constructor(root, { audio, mode }) {
     this.audio = audio;
     this.rows = [
-      { id: 'timer', label: 'TEMPO', value: () => timerLabel(), list: TIMER_OPTIONS },
-      ...(mode === 'pvp' ? [] : [{ id: 'cpuLevel', label: mode === 'training' ? 'DIFICULDADE (ALVO)' : 'DIFICULDADE DA CPU', value: () => cpuLabel(), list: CPU_LEVELS, disabled: mode === 'training' }]),
-      { id: 'rounds', label: 'ROUNDS PARA VENCER', value: () => String(SETTINGS.rounds), list: ROUND_OPTIONS, disabled: mode === 'training' },
-      { id: 'go', label: 'ESCOLHER CENÁRIO ▶' },
+      { id: 'timer', label: t('cfg.time'), value: () => timerLabel(), list: TIMER_OPTIONS },
+      ...(mode === 'pvp' ? [] : [{ id: 'cpuLevel', label: mode === 'training' ? t('cfg.cpu_target') : t('settings.difficulty'), value: () => cpuLabel(), list: CPU_LEVELS, disabled: mode === 'training' }]),
+      { id: 'rounds', label: t('settings.rounds'), value: () => String(SETTINGS.rounds), list: ROUND_OPTIONS, disabled: mode === 'training' },
+      { id: 'go', label: t('cfg.go') },
     ];
     this.index = this.rows.length - 1;
-    this.el = el(root, 'screen', 'config', `<div class="menu"><h2>CONFIGURAÇÕES</h2><p class="sub">${mode === 'training' ? 'Treinamento: sem tempo e sem rounds' : 'Ajuste a batalha antes de escolher o cenário'}</p>
+    this.el = el(root, 'screen', 'config', `<div class="menu"><h2>${t('cfg.title')}</h2><p class="sub">${t(mode === 'training' ? 'cfg.sub_training' : 'cfg.sub')}</p>
       ${this.rows.map(() => '<div class="opt cfg"></div>').join('')}</div>
-      <div class="hint">▲▼ escolher · ◀ ▶ mudar · <b>${OK}</b> confirmar · <b>${BACK}</b> voltar</div>`);
+      <div class="hint">${t('cfg.hint', { ok: OK, back: BACK })}</div>`);
     this.opts = [...this.el.querySelectorAll('.opt')];
     this.opts.forEach((o, i) => onTap(this, o, 1 + i, () => { this.index = i; this.clicked = true; }));
     this.el.classList.add('net-taps');
@@ -596,12 +598,12 @@ export class VictoryScreen {
     this.index = 0;
     this.el = el(root, 'screen', 'victory', `
       <div class="vbg" style="--c:${winner.color}"></div>
-      <div class="vtop"><small>${slot}</small> VENCE</div>
+      <div class="vtop"><small>${slot}</small> ${t('vic.wins')}</div>
       <div class="vteam">${(team || [winner]).map((member) => `<span style="--c:${member.color}">${member.name}</span>`).join('')}</div>
       <div class="vquote">
         <div class="vname" style="--c:${winner.color}">${winner.name}</div>
         <div class="vline">“${line}”</div>
-        <div class="vsub">derrotou ${loser.name}</div>
+        <div class="vsub">${t('vic.defeated', { name: loser.name })}</div>
       </div>
       <div class="vopts">${options.map(() => '<div class="opt"></div>').join('')}</div>`);
     this.opts = [...this.el.querySelectorAll('.vopts .opt')];
@@ -648,17 +650,17 @@ export class StageSelectScreen {
     const prevIdx = prev ? this.list.findIndex((a) => a.id === prev) : -1;
     this.index = prevIdx >= 0 ? prevIdx : Math.max(0, this.list.findIndex((a) => a.available));
     this.el = el(root, 'screen', 'stage', `
-      <h2>ESCOLHA O CENÁRIO</h2>
+      <h2>${t('stage.title')}</h2>
       <div class="stages">${this.list.map((a, i) => `
         <div class="stagecard ${a.available ? '' : 'locked'}" data-i="${i}" style="--sky:${a.colors[0]};--ground:${a.colors[1]};--accent:${a.colors[2]}">
           ${thumbs[a.id] ? `<img src="${thumbs[a.id]}" alt="">` : '<div class="paint"></div>'}
           <div class="sn">${a.name}</div>
-          ${a.available ? '' : '<div class="soon">EM BREVE</div>'}
+          ${a.available ? '' : `<div class="soon">${t('stage.soon')}</div>`}
         </div>`).join('')}
       </div>
       <div class="stageinfo"><div class="sprev"></div><div class="stxt"></div></div>
-      <button class="stage-confirm" type="button">CONFIRMAR CENÁRIO</button>
-      <div class="hint">◀ ▶ escolher · <b>${OK}</b>, <kbd>${actionLabel(0, 'jump')}</kbd> ou <kbd>Enter</kbd> confirmar · <b>${RAND}</b> ou <kbd>${actionLabel(0, 'carga')}</kbd> aleatório · <b>${BACK}</b>, <kbd>${actionLabel(0, 'physical')}</kbd> ou <kbd>Esc</kbd> voltar</div>`);
+      <button class="stage-confirm" type="button">${t('stage.confirm')}</button>
+      <div class="hint">${t('stage.hint', { ok: OK, jump: actionLabel(0, 'jump'), rand: RAND, carga: actionLabel(0, 'carga'), back: BACK, phys: actionLabel(0, 'physical') })}</div>`);
     this.cards = [...this.el.querySelectorAll('.stagecard')];
     this.info = this.el.querySelector('.stageinfo .stxt');
     this.prev = this.el.querySelector('.stageinfo .sprev');
@@ -727,14 +729,7 @@ export class StageSelectScreen {
   dispose() { this.el.remove(); }
 }
 
-const TIPS = [
-  'Segure R2/RT para defender. Defesa + direção = esquiva.',
-  'Habilidades: △ → ○, △ → □ (um toque depois do outro), △ + L2, R2 + △ e R2 + ×. L1 e R1 chamam as assistências na batalha em equipe.',
-  'Segure △/Y para carregar energia. △ → △ → ○ solta o especial.',
-  'Direção + ○ muda o golpe: avanço, recuo, passo lateral ou golpe aéreo.',
-  'Bater na defesa do inimigo deixa você exposto a contra-ataque.',
-  'No menu inicial, o modo TUTORIAL ensina passo a passo os golpes do personagem que você escolher.',
-];
+const TIP_COUNT = 6; // tip.1 … tip.6 nos arquivos de idioma
 
 export class LoadingScreen {
   constructor(root, { p1, p2, arena, cpu, portraits, mode = cpu ? 'cpu' : 'pvp' }) {
@@ -747,7 +742,7 @@ export class LoadingScreen {
       </div>
       <div class="arena-name">${arena.name}</div>
       <div class="bar"><div class="fill"></div></div>
-      <div class="tip">Dica: ${TIPS[Math.floor(Math.random() * TIPS.length)]}</div>`);
+      <div class="tip">${t('load.tip', { tip: t(`tip.${1 + Math.floor(Math.random() * TIP_COUNT)}`) })}</div>`);
     this.fill = this.el.querySelector('.fill');
   }
   progress(k) {
@@ -788,14 +783,14 @@ export class LanScreen {
 
   options() {
     switch (this.view) {
-      case 'menu': return [['create', 'CRIAR SALA'], ['rooms', 'SALAS ABERTAS'], ['join', 'ENTRAR COM CÓDIGO'], ['back', 'VOLTAR']];
-      case 'create': return [['vis', `VISIBILIDADE: ${this.isPublic ? 'PÚBLICA (aparece na lista)' : 'PRIVADA (só com o código)'}`], ['host', 'CRIAR'], ['menu', 'VOLTAR']];
+      case 'menu': return [['create', t('lan.create')], ['rooms', t('lan.rooms')], ['join', t('lan.join')], ['back', t('ui.back')]];
+      case 'create': return [['vis', t('lan.vis', { v: t(this.isPublic ? 'lan.public' : 'lan.private') })], ['host', t('lan.do_create')], ['menu', t('ui.back')]];
       case 'rooms': return [
-        ...this.rooms.map((r, i) => [`room:${i}`, `${r.locked ? '🔒 ' : ''}Sala de ${esc(r.name)} · ${r.code}`]),
-        ['refresh', 'ATUALIZAR'], ['menu', 'VOLTAR'],
+        ...this.rooms.map((r, i) => [`room:${i}`, `${r.locked ? '🔒 ' : ''}${t('lan.room_of', { name: esc(r.name) })} · ${r.code}`]),
+        ['refresh', t('lan.refresh')], ['menu', t('ui.back')],
       ];
-      case 'join': case 'password': return [['go', 'ENTRAR'], [this.view === 'password' ? 'rooms' : 'menu', 'VOLTAR']];
-      default: return [['cancel', 'CANCELAR']];
+      case 'join': case 'password': return [['go', t('lan.enter')], [this.view === 'password' ? 'rooms' : 'menu', t('ui.back')]];
+      default: return [['cancel', t('lan.cancel')]];
     }
   }
 
@@ -806,12 +801,12 @@ export class LanScreen {
     if (this.index >= opts.length) this.index = Math.max(0, opts.length - 1);
     const field = (cls, ph, max = 16, type = 'text') => `<input class="lan-field ${cls}" type="${type}" maxlength="${max}" autocomplete="off" spellcheck="false" placeholder="${ph}">`;
     let body = '';
-    if (V === 'menu') body = `<label class="lan-label">SEU NOME</label>${field('f-name', 'Seu nome de usuário')}<p class="sub">Partida pela internet, na mesma rede ou pelo Radmin. Quem cria a sala é o P1; os dois precisam da mesma versão do jogo.</p>`;
-    else if (V === 'create') body = `<label class="lan-label">SENHA (opcional)</label>${field('f-pass', 'sem senha', 20, 'password')}`;
-    else if (V === 'host') body = `<p class="sub">${this.code ? 'Código da sala:' : 'Criando a sala…'}</p><div class="lan-code">${this.code || '· · · · ·'}</div><p class="sub">${this.isPublic ? 'Sala PÚBLICA (aparece em SALAS ABERTAS)' : 'Sala PRIVADA (passe o código)'}${this.password ? ' · com senha' : ''}</p>`;
-    else if (V === 'rooms') body = `<p class="sub">${this.rooms.length ? 'Salas públicas abertas agora:' : 'Procurando salas… (nenhuma aberta no momento)'}</p>`;
-    else if (V === 'join') body = `<label class="lan-label">CÓDIGO DA SALA</label>${field('f-code lan-input', 'ABCDE', 5)}<label class="lan-label">SENHA (se tiver)</label>${field('f-pass', 'sem senha', 20, 'password')}`;
-    else if (V === 'password') body = `<p class="sub">Sala de ${esc(this.target && this.target.name)} · ${this.target && this.target.code}</p><label class="lan-label">SENHA</label>${field('f-pass', 'senha da sala', 20, 'password')}`;
+    if (V === 'menu') body = `<label class="lan-label">${t('lan.your_name')}</label>${field('f-name', t('lan.name_ph'))}<p class="sub">${t('lan.intro')}</p>`;
+    else if (V === 'create') body = `<label class="lan-label">${t('lan.password_opt')}</label>${field('f-pass', t('lan.no_password'), 20, 'password')}`;
+    else if (V === 'host') body = `<p class="sub">${t(this.code ? 'lan.code' : 'lan.creating')}</p><div class="lan-code">${this.code || '· · · · ·'}</div><p class="sub">${t(this.isPublic ? 'lan.public_room' : 'lan.private_room')}${this.password ? t('lan.with_password') : ''}</p>`;
+    else if (V === 'rooms') body = `<p class="sub">${t(this.rooms.length ? 'lan.open_now' : 'lan.searching')}</p>`;
+    else if (V === 'join') body = `<label class="lan-label">${t('lan.room_code')}</label>${field('f-code lan-input', 'ABCDE', 5)}<label class="lan-label">${t('lan.password_if')}</label>${field('f-pass', t('lan.no_password'), 20, 'password')}`;
+    else if (V === 'password') body = `<p class="sub">${t('lan.room_of', { name: esc(this.target && this.target.name) })} · ${this.target && this.target.code}</p><label class="lan-label">${t('lan.password')}</label>${field('f-pass', t('lan.password_ph'), 20, 'password')}`;
     this.el.innerHTML = `<div class="menu lan"><h2>ONLINE / LAN</h2>${body}<p class="lan-status ${this.statusErr ? 'err' : ''}">${esc(this.status || '')}</p>${opts.map(([, l], i) => `<div class="opt ${i === this.index ? 'on' : ''}" data-i="${i}">${l}</div>`).join('')}</div>`;
     this.el.querySelectorAll('.opt').forEach((o) => o.addEventListener('click', () => { this.clicked = Number(o.dataset.i); }));
     const bindField = (sel, get, set, upper) => {
@@ -850,7 +845,7 @@ export class LanScreen {
 
   showCode(code) {
     this.code = code;
-    this.status = this.isPublic ? 'Aguardando alguém entrar… (a sala está na lista de salas abertas)' : 'Aguardando o amigo entrar com o código…';
+    this.status = t(this.isPublic ? 'lan.waiting_public' : 'lan.waiting_private');
     this.statusErr = false;
     this.render();
   }
@@ -879,7 +874,7 @@ export class LanScreen {
     if (id === 'rooms') return this.go('rooms', 'refresh');
     if (id === 'join') { this.code = ''; this.password = ''; return this.go('join', 'move'); }
     if (id === 'menu') return this.go('menu', 'move');
-    if (id === 'refresh') { this.setStatus('Atualizando…'); return 'refresh'; }
+    if (id === 'refresh') { this.setStatus(t('lan.refreshing')); return 'refresh'; }
     if (id === 'vis') { this.isPublic = !this.isPublic; this.render(); return 'move'; }
     if (id === 'cancel') return this.go(this.from === 'rooms' ? 'rooms' : 'menu', 'cancel');
     if (id === 'host') {
@@ -898,15 +893,15 @@ export class LanScreen {
       if (r.locked) return this.go('password', 'move');
       this.from = 'rooms';
       this.go('wait', null);
-      this.setStatus(`Entrando na sala de ${r.name}…`);
+      this.setStatus(t('lan.joining', { name: r.name }));
       return { act: 'join', code: r.code, password: '' };
     }
     if (id === 'go') {
-      if (!/^[A-Z0-9]{5}$/.test(this.code || '')) { this.setStatus('O código tem 5 letras/números.', true); return null; }
+      if (!/^[A-Z0-9]{5}$/.test(this.code || '')) { this.setStatus(t('lan.code_invalid'), true); return null; }
       this.saveName();
       this.from = this.view === 'password' ? 'rooms' : 'menu';
       this.go('wait', null);
-      this.setStatus('Conectando…');
+      this.setStatus(t('lan.connecting'));
       return { act: 'join', code: this.code, password: this.password };
     }
     return null;
@@ -950,10 +945,10 @@ export class ChangelogScreen {
     this.page = 0;
     this.el = el(root, 'screen clear', 'changelog', `
       <div class="cmdbox news">
-        <div class="news-head"><h3>NOVIDADES</h3><span class="news-ver"></span></div>
-        <div class="news-nav"><button type="button" aria-label="Versão anterior">◀</button><button type="button" aria-label="Próxima versão">▶</button></div>
+        <div class="news-head"><h3>${t('menu.news')}</h3><span class="news-ver"></span></div>
+        <div class="news-nav"><button type="button" aria-label="${t('news.prev')}">◀</button><button type="button" aria-label="${t('news.next')}">▶</button></div>
         <div class="content"></div>
-        <div class="hint">◀ ▶ outras versões · <b>${OK}</b> ou <b>${BACK}</b> fechar</div>
+        <div class="hint">${getLanguage().startsWith('pt') ? '' : `${t('news.note')} · `}${t('news.hint', { ok: OK, back: BACK })}</div>
       </div>`);
     this.content = this.el.querySelector('.content');
     this.verEl = this.el.querySelector('.news-ver');
@@ -969,7 +964,7 @@ export class ChangelogScreen {
   }
   render() {
     const c = CHANGELOG[this.page];
-    this.verEl.textContent = `${formatVersion(c.v)}${c.v === VERSION ? ' · ATUAL' : ''} — ${this.page + 1} / ${CHANGELOG.length}`;
+    this.verEl.textContent = `${formatVersion(c.v)}${c.v === VERSION ? ` · ${t('news.current')}` : ''} — ${this.page + 1} / ${CHANGELOG.length}`;
     this.content.innerHTML = `<div class="news-title">${formatVersion(c.v)} — ${c.title}</div><div class="news-date">${c.date.split('-').reverse().join('/')}</div><ul>${c.items.map((i) => `<li>${i}</li>`).join('')}</ul>`;
   }
   update(input) {
@@ -996,14 +991,14 @@ export class CommandsScreen {
       <div class="cmdbox">
         <div class="tabs"></div>
         <div class="content"></div>
-        <div class="hint">◀ ▶ trocar · ▲ ▼ rolar · <b>${BACK}</b>, <kbd>${actionLabel(0, 'physical')}</kbd> ou <kbd>Esc</kbd> voltar</div>
+        <div class="hint">${t('cmd.hint', { back: BACK, phys: actionLabel(0, 'physical') })}</div>
       </div>`);
     this.tabs = this.el.querySelector('.tabs');
     this.content = this.el.querySelector('.content');
     this.render();
   }
   pages() {
-    return [...this.defs.map((d, i) => ({ title: `P${i + 1}: ${d.name}`, html: moveListHTML(d) })), { title: 'CONTROLES', html: controlsTable() }];
+    return [...this.defs.map((d, i) => ({ title: `P${i + 1}: ${d.name}`, html: moveListHTML(d) })), { title: t('cmd.controls'), html: controlsTable() }];
   }
   render() {
     const pages = this.pages();
@@ -1028,24 +1023,25 @@ export class CommandsScreen {
 }
 
 export function controlsTable() {
+  const wide = (k) => `<tr><td>${t(k)}</td><td colspan="3">${t(`${k}_v`)}</td></tr>`;
   const row = (label, action) => `<tr><td>${label}</td><td><kbd>${actionLabel(0, action)}</kbd></td><td><kbd>${actionLabel(1, action)}</kbd></td><td>${actionLabel(0, action, 'gamepad')}</td></tr>`;
   return `
     <table class="controls-table">
-      <tr><th>Ação</th><th>P1 teclado</th><th>P2 teclado</th><th>Controle</th></tr>
-      <tr><td>Mover</td><td><kbd>${moveLabel(0)}</kbd></td><td><kbd>setas</kbd></td><td>Analógico / D-pad</td></tr>
-      ${row('Ataque físico (+ direção / no ar = variações)', 'physical')}
-      ${row('Ataque/habilidade principal', 'ranged')}
-      ${row('Carga de Poder / Energia', 'carga')}
-      ${row('Pulo', 'jump')}
-      ${row('Defesa (segurar)', 'block')}
-      ${row('Esquiva (+ direção, 4 cargas)', 'dodge')}
-      <tr><td>Defesa + direção</td><td colspan="3">Passos rápidos para os lados / trás, de frente para o rival</td></tr>
-      ${row('Assistência 1 / 2 (equipe)', 'assist1')}
-      <tr><td>Dash</td><td colspan="3">Pulo + Pulo (toque duplo)</td></tr>
-      <tr><td>Dash longo (Joui: teleporte)</td><td colspan="3">Carga + Pulo</td></tr>
-      <tr><td>Agarrão (não defensável)</td><td colspan="3">Defesa + Ataque físico</td></tr>
-      <tr><td>Habilidades</td><td colspan="3">Carga + Físico · Carga + Principal · Carga + Esquiva · Defesa + Carga · Defesa + Pulo</td></tr>
-      <tr><td>Especial</td><td colspan="3">Carga → Carga → Ataque físico</td></tr>
-      <tr><td>Câmera</td><td colspan="3">Sempre travada no adversário</td></tr>
+      <tr><th>${t('ctl.action')}</th><th>${t('ctl.p1kb')}</th><th>${t('ctl.p2kb')}</th><th>${t('ctl.pad')}</th></tr>
+      <tr><td>${t('ctl.move')}</td><td><kbd>${moveLabel(0)}</kbd></td><td><kbd>${t('ctl.arrows')}</kbd></td><td>${t('ctl.stick')}</td></tr>
+      ${row(t('ctl.physical'), 'physical')}
+      ${row(t('ctl.ranged'), 'ranged')}
+      ${row(t('ctl.carga'), 'carga')}
+      ${row(t('ctl.jump'), 'jump')}
+      ${row(t('ctl.block'), 'block')}
+      ${row(t('ctl.dodge'), 'dodge')}
+      ${wide('ctl.block_dir')}
+      ${row(t('ctl.assist'), 'assist1')}
+      ${wide('ctl.dash')}
+      ${wide('ctl.longdash')}
+      ${wide('ctl.grab')}
+      ${wide('ctl.abilities')}
+      ${wide('ctl.special')}
+      ${wide('ctl.camera')}
     </table>`;
 }

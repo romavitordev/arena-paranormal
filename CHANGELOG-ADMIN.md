@@ -1,5 +1,25 @@
 # Registro administrativo de alterações
 
+## (em andamento) — próxima versão
+
+- Arthur: pose de vitória própria `vic_arthur` (a sniper apoiada no ombro do único braço, corpo de lado, olhar baixo)
+  no lugar de `victory_onearm` (era o punho erguido genérico). Campo novo `def.victoryProp`: `World.showVictoryLineup`
+  mostra uma arma que no resto do tempo só aparece em uso (aqui `sniperHand`). A Lírio já tinha pose própria
+  (`victory_hammer`) — a análise da v3.10.1 tinha contado errado.
+- TODO: removida a lista de ferramentas de Treino da §76.5 (pedido do usuário).
+- **Idiomas ligados:** trocar o idioma em OPÇÕES traduz a interface na hora (a tela de opções é remontada no novo
+  idioma sem sair da linha IDIOMA; as outras telas leem o idioma ao serem montadas; os botões de toque escutam o
+  `onLanguageChange`). 222 chaves × 13 idiomas em `src/i18n/locales/` (gerados da mesma tabela; pt-PT tem arquivo
+  próprio). Ligados ao `t()`: Screens.js (início, submenus, título, seleção, configurações, vitória, cenário, dicas do
+  carregamento, online, novidades, comandos/controles), main.js (opções, pausa/treino/tutorial, opções da vitória),
+  HUD.js, Match.js (LUTEM, ROUND n, K.O., TEMPO!, RESET, popups do dreno), settings.js (`timerLabel`, `cpuLabel`) e
+  touchControls.js. Teste novo: todo idioma tem todas as chaves, sem texto vazio e com os mesmos marcadores `{x}`.
+  Fica em português (anotado na §37): conteúdo dos personagens, novidades (com aviso), cenários, Tutorial, `notify`
+  de combate e erros da conexão.
+- **Removida a opção MOVIMENTO "relativo ao inimigo"** (pedido do usuário: ruim de jogar). `moveBasis()` devolve
+  sempre a base da câmera; `moveMode` saiu dos padrões, é apagado das configurações salvas e não vai mais no
+  `settings` da sala online.
+
 ## v3.10.1 — Olhos sempre abertos
 
 - Fita da espada (o usuário viu que continuava preta depois do `baseEmissive` da v3.10.0): a causa real era a largura

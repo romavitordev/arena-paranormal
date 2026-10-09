@@ -1167,9 +1167,12 @@ Tier representa função/força geral e não necessariamente uma obrigação de 
 
 # 37. SISTEMA DE IDIOMAS
 
-> ⚠ **Depende de confirmação do usuário (v3.10.0):** o seletor CONFIGURAÇÕES → IDIOMA já aparece, mas as telas
-> ainda não usam o `t()` de `src/i18n` (trocar o idioma não traduz nada). Decidir: esconder o seletor até ligar os
-> textos, ou deixar visível.
+> ✅ **Interface ligada (próxima versão após a v3.10.1):** OPÇÕES → IDIOMA troca na hora toda a interface (menu
+> principal, opções, seleção, configurações da batalha, cenário, carregamento, vitória, pausa/treino, comandos, online,
+> HUD, chamadas da luta e botões de toque). Os 13 arquivos `src/i18n/locales/*.js` têm as mesmas chaves (teste em
+> `tests/i18n.test.js`). **Ainda em português:** conteúdo dos personagens (golpes, habilidades, descrições, falas),
+> novidades (aviso na tela), nomes/descrições dos cenários, passos do Tutorial, avisos de combate do `notify`
+> (DESVIOU!, SEM ESQUIVAS etc.) e as mensagens de erro da conexão online.
 
 Criar:
 
@@ -1183,19 +1186,21 @@ O jogador deve poder escolher manualmente o idioma do jogo.
 
 ## Primeira camada
 
-* [ ] 🇧🇷 Português — Brasil (`pt-BR`)
-* [ ] 🇵🇹 Português — Portugal (`pt-PT`)
-* [ ] 🇺🇸 Inglês (`en`)
-* [ ] 🇪🇸 Espanhol (`es`)
-* [ ] 🇩🇪 Alemão (`de`)
-* [ ] 🇫🇷 Francês (`fr`)
-* [ ] 🇮🇹 Italiano (`it`)
-* [ ] 🇷🇺 Russo (`ru`)
-* [ ] 🇨🇳 Chinês (`zh`)
-* [ ] 🇯🇵 Japonês (`ja`)
-* [ ] 🇰🇷 Coreano (`ko`)
-* [ ] 🇹🇷 Turco (`tr`)
-* [ ] 🇵🇱 Polonês (`pl`)
+* [x] 🇧🇷 Português — Brasil (`pt-BR`)
+* [x] 🇵🇹 Português — Portugal (`pt-PT`)
+* [x] 🇺🇸 Inglês (`en`)
+* [x] 🇪🇸 Espanhol (`es`)
+* [x] 🇩🇪 Alemão (`de`)
+* [x] 🇫🇷 Francês (`fr`)
+* [x] 🇮🇹 Italiano (`it`)
+* [x] 🇷🇺 Russo (`ru`)
+* [x] 🇨🇳 Chinês (`zh`)
+* [x] 🇯🇵 Japonês (`ja`)
+* [x] 🇰🇷 Coreano (`ko`)
+* [x] 🇹🇷 Turco (`tr`)
+* [x] 🇵🇱 Polonês (`pl`)
+
+(interface traduzida nos 13; o conteúdo segue a §40)
 
 ## Expansão futura
 
@@ -1224,12 +1229,12 @@ Todo texto visível deve passar pelo sistema.
 
 ## Interface
 
-* [ ] Menu
-* [ ] Configurações
-* [ ] Seleção
-* [ ] Loading
-* [ ] Pausa
-* [ ] Vitória
+* [x] Menu
+* [x] Configurações
+* [x] Seleção
+* [x] Loading
+* [x] Pausa
+* [x] Vitória
 * [ ] Derrota
 
 ## Combate
@@ -1237,13 +1242,13 @@ Todo texto visível deve passar pelo sistema.
 * [ ] Habilidades
 * [ ] Descrições
 * [ ] Alerts
-* [ ] SPECIAL
+* [x] SPECIAL
 * [ ] MISS
 * [ ] DODGED
 * [ ] NO DODGES
-* [ ] DANO
+* [x] DANO
 * [ ] HITS
-* [ ] Timer
+* [x] Timer
 * [ ] Assistências
 * [ ] Transformações
 
@@ -1982,17 +1987,10 @@ genérico demais), com o motivo. Nenhum item é de balanceamento.
   em quase todo especial e transformação.
 * [ ] **Falas:** velocidade das legendas e opção de desligar as falas durante a luta.
 
-## Treino (ferramentas que faltam além das do §63)
-
-* [ ] Mostrar o **alcance/área** dos golpes e habilidades (cone/círculo no chão).
-* [ ] **Histórico de comandos** na tela (o que foi apertado e quando).
-* [ ] **Gravar e repetir** uma ação do boneco (ex.: ele faz o combo X ou o especial) para treinar defesa, Perfect
-  Block, esquiva e Substituição.
-* [ ] **Dados dos golpes** na lista de comandos: dano, tempo até acertar e recuperação (já estão nos dados dos kits).
-
 ## Personagens e animação
 
-* [ ] **Pose de vitória própria para Arthur e Lírio** — são os únicos que ainda usam a genérica.
+* [x] **Pose de vitória própria para o Arthur** (`vic_arthur`: a sniper apoiada no ombro; `victoryProp` mostra a arma
+  na vitória). Correção da análise: a Lírio já tinha a dela (`victory_hammer`, a Leonora erguida).
 * [ ] **Idles próprios:** 5 personagens dividem `idle_knife`, 4 `idle_katana` e 3 `idle_fist`; a pose parada é o que
   mais aparece (seleção, introdução, entre golpes) e devia mostrar a personalidade de cada um.
 

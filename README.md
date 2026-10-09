@@ -66,8 +66,9 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
   Fácil/Normal/Difícil/Muito Difícil/Super Difícil, rounds 1–3) → Cenário (com preview) → Carregamento → entrada dos lutadores com
   falas → **LUTEM** → round. ×/Start pula a apresentação; nos rounds seguintes, a chamada mostra o número do round.
 - **Seleção:** Y/△ escolhe personagem ou cenário **aleatório**; B/○ na seleção de personagens (com ninguém confirmado) volta para a tela inicial.
-- **Opções** (menu principal e pausa): Tempo da luta · **Movimento**: direções da tela
-  (padrão) ou relativo ao inimigo (↑ aproxima, ↓ recua, ←/→ orbitam).
+- **Opções** (menu principal e pausa): Tempo da luta · **Idioma** (13 idiomas: troca na hora menus, seleção, pausa,
+  HUD e chamadas da luta; nomes de golpes, descrições, falas e novidades continuam em português). O movimento é sempre
+  pelas direções da tela (a opção "relativo ao inimigo" foi removida).
 - **Especial pode ser interrompido:** ao ativar, o lutador concentra a energia por 0,45 s e fica vulnerável — um projétil
   (ou qualquer golpe) nesse momento cancela o especial (a sanidade gasta se perde; recarga curta de 4 s).
 - **Combo infinito (estilo Storm):** na sequência de ○, antes do finalizador, aperte **△ + ×** depois de acertar: o

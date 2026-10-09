@@ -1,5 +1,6 @@
 import { COMBAT } from '../config/combat.js';
 import { actionLabel } from './labels.js';
+import { t } from '../i18n/index.js';
 import { SETTINGS } from '../config/settings.js';
 import { ELEMENTS } from '../config/elements.js';
 import { hasPassive } from '../combat/passives.js';
@@ -67,7 +68,7 @@ export class HUD {
     this.flashEl.style.opacity = '0';
     this.root.querySelectorAll('.popup').forEach((e) => e.remove());
     for (const p of this.panels) p.innerHTML = '';
-    for (const d of this.dmgEls) { d.classList.remove('on', 'pop'); d.querySelector('b').textContent = ''; }
+    for (const d of this.dmgEls) { d.classList.remove('on', 'pop'); d.querySelector('b').textContent = ''; d.querySelector('small').textContent = t('hud.damage'); }
     this.vignette.classList.remove('on');
     this.npcBar.classList.remove('on');
     this.dmgState = [{ value: 0, hold: 0 }, { value: 0, hold: 0 }];
@@ -96,8 +97,8 @@ export class HUD {
         <div class="bar guard" title="Resistência da defesa"><div class="fill"></div></div>
         ${def.awakening ? `<div class="bar storm" title="Barra de Transformação: enche apanhando; cheia e com a vida baixa, segure ${actionLabel(i, 'carga', f.input.source)} até passar da sanidade cheia"><div class="fill"></div><div class="over"></div><span>${escapeHtml(def.awakening.name.toUpperCase())}</span></div>` : ''}
         <div class="row">
-          <div class="carga" title="Carga de Poder"><span class="lbl">CARGA</span><i class="pip"></i><i class="pip"></i><b class="go">ESPECIAL</b></div>
-          <div class="dodges" title="Esquivas (recuperam conforme toma dano)"><span class="lbl">ESQUIVA</span><i></i><i></i><i></i><i></i></div>
+          <div class="carga" title="Carga de Poder"><span class="lbl">${t('hud.charge')}</span><i class="pip"></i><i class="pip"></i><b class="go">${t('hud.special')}</b></div>
+          <div class="dodges" title="Esquivas (recuperam conforme toma dano)"><span class="lbl">${t('hud.dodge')}</span><i></i><i></i><i></i><i></i></div>
           <div class="state"></div>
         </div>
         <div class="abilities">${abil.map((a) => `
@@ -154,7 +155,7 @@ export class HUD {
       e.guard.style.width = `${(f.guard / f.maxGuard) * 100}%`;
       e.guardBar.classList.toggle('active', f.state === 'block');
       e.guardBar.classList.toggle('low', f.guard < f.maxGuard * 0.3);
-      const stateText = { block: f.guardMoving ? 'DEFESA ABERTA' : 'DEFENDENDO', stun: 'ATORDOADO', pulled: 'PRESO', dodge: (f.def.dodge?.name || 'ESQUIVA').toUpperCase() }[f.state] || '';
+      const stateText = { block: t(f.guardMoving ? 'hud.guard_open' : 'hud.blocking'), stun: t('hud.stunned'), pulled: t('hud.held'), dodge: f.def.dodge?.name ? f.def.dodge.name.toUpperCase() : t('hud.dodge') }[f.state] || '';
       if (e.storm) {
         e.storm.children[0].style.width = `${f.storm}%`;
         e.storm.children[1].style.width = `${(f.overcharge || 0) * 100}%`;
@@ -162,7 +163,7 @@ export class HUD {
         e.storm.classList.toggle('ready', f.canTransform());
       }
       // transformação disponível (barra cheia + vida baixa): avisa para segurar △
-      const awakenHint = f.canTransform && f.canTransform() && (f.state === 'idle' || f.state === 'charging') ? `SEGURE ${actionLabel(i, 'carga', f.input.source)}: TRANSFORMAR` : '';
+      const awakenHint = f.canTransform && f.canTransform() && (f.state === 'idle' || f.state === 'charging') ? t('hud.transform', { btn: actionLabel(i, 'carga', f.input.source) }) : '';
       e.state.textContent = stateText || awakenHint;
       e.state.classList.toggle('awaken', !stateText && !!awakenHint);
       this.updateDamageMarker(i, f, match);
@@ -192,7 +193,7 @@ export class HUD {
       const avail = f.specialAvailable();
       e.go.classList.toggle('ready', armed && avail);
       e.go.classList.toggle('blocked', armed && !avail);
-      e.go.textContent = armed ? (avail ? `${actionLabel(i, 'physical', f.input.source)} → ESPECIAL!` : (f.cooldowns.special > 0 ? 'RECARREGANDO' : 'SEM SANIDADE')) : 'ESPECIAL';
+      e.go.textContent = armed ? (avail ? t('hud.special_ready', { btn: actionLabel(i, 'physical', f.input.source) }) : t(f.cooldowns.special > 0 ? 'hud.recharging' : 'hud.no_sanity')) : t('hud.special');
 
       // ícones de habilidade com cooldown
       const source = f.input.source;
@@ -202,7 +203,7 @@ export class HUD {
         if (a.none) return;
         if (a.key === 'special' && f.specialUsedUp()) {
           el.classList.add('none');
-          el.querySelector('.s').textContent = 'USADO';
+          el.querySelector('.s').textContent = t('hud.used');
           return;
         }
         const cd = f.cooldowns[a.key] || 0;

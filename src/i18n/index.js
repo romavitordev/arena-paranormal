@@ -1,6 +1,18 @@
+// Textos da INTERFACE (menus, HUD, pausa, online). Os 13 arquivos têm exatamente as mesmas chaves (teste em
+// tests/). Conteúdo dos personagens, falas e novidades continuam em português.
 import ptBR from './locales/pt-BR.js';
+import ptPT from './locales/pt-PT.js';
 import en from './locales/en.js';
 import es from './locales/es.js';
+import de from './locales/de.js';
+import fr from './locales/fr.js';
+import it from './locales/it.js';
+import ru from './locales/ru.js';
+import zh from './locales/zh.js';
+import ja from './locales/ja.js';
+import ko from './locales/ko.js';
+import tr from './locales/tr.js';
+import pl from './locales/pl.js';
 
 export const SUPPORTED_LANGUAGES = [
   { id: 'pt-BR', label: 'Português (Brasil)', flag: '🇧🇷' },
@@ -18,12 +30,7 @@ export const SUPPORTED_LANGUAGES = [
   { id: 'pl', label: 'Polski', flag: '🇵🇱' },
 ];
 
-const LOCALES = {
-  'pt-BR': ptBR,
-  'pt-PT': ptBR, // fallback estruturado para variantes
-  en,
-  es,
-};
+export const LOCALES = { 'pt-BR': ptBR, 'pt-PT': ptPT, en, es, de, fr, it, ru, zh, ja, ko, tr, pl };
 
 const DEFAULT_LANG = 'pt-BR';
 let currentLang = DEFAULT_LANG;

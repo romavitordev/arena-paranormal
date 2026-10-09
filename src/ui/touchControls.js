@@ -5,6 +5,8 @@
 //  - Menus: opções e cartões clicáveis; a seta no alto volta para a tela anterior.
 // Aparece sozinho em aparelhos com tela de toque (ou com ?touch=1 na URL para testar no PC).
 
+import { t, onLanguageChange } from '../i18n/index.js';
+
 export function isTouchDevice() {
   const q = new URLSearchParams(location.search);
   if (q.has('touch')) return q.get('touch') !== '0';
@@ -17,8 +19,8 @@ const FIGHT_BUTTONS = [
   ['ranged', '□', 'b-sq'],
   ['physical', '○', 'b-ci'],
   ['jump', '×', 'b-x'],
-  ['block', 'DEF', 'b-r2'],
-  ['dodge', 'ESQ', 'b-l2'],
+  ['block', 'hud.def', 'b-r2'],
+  ['dodge', 'hud.esq', 'b-l2'],
 ];
 
 export class TouchControls {
@@ -33,8 +35,8 @@ export class TouchControls {
     this.root.innerHTML = `
       <div class="t-fight">
         <div class="stick"><div class="knob"></div></div>
-        ${FIGHT_BUTTONS.map(([a, l, c]) => `<button class="tb ${c}" data-a="${a}">${l}</button>`).join('')}
-        <button class="tb b-sp" data-macro="special">ESPECIAL</button>
+        ${FIGHT_BUTTONS.map(([a, l, c]) => `<button class="tb ${c}" data-a="${a}"${l.startsWith('hud.') ? ` data-t="${l}"` : ''}>${l.startsWith('hud.') ? t(l) : l}</button>`).join('')}
+        <button class="tb b-sp" data-macro="special" data-t="hud.special">${t('hud.special')}</button>
         <button class="tb b-a1 team" data-a="assist1">AS1</button>
         <button class="tb b-a2 team" data-a="assist2">AS2</button>
         <button class="tb b-s1 team" data-a="switch1">⇄1</button>
@@ -45,11 +47,13 @@ export class TouchControls {
       <button class="tb t-fullscreen" type="button" aria-label="Entrar em tela cheia" title="Tela cheia">⛶</button>
       <div class="t-status" role="status" aria-live="polite"></div>
       <div class="t-rotate" role="alert" aria-live="assertive">
-        <strong>GIRE O CELULAR</strong>
-        <span>Este jogo funciona somente com a tela na horizontal.</span>
+        <strong data-t="touch.rotate">${t('touch.rotate')}</strong>
+        <span data-t="touch.rotate_sub">${t('touch.rotate_sub')}</span>
       </div>
     `;
     document.body.appendChild(this.root);
+    // trocar o idioma nas OPÇÕES atualiza os rótulos na hora (os botões são criados uma vez só)
+    onLanguageChange(() => this.root.querySelectorAll('[data-t]').forEach((e) => { e.textContent = t(e.dataset.t); }));
     document.body.classList.add('touch-capable');
     document.body.classList.add('touch-ui');
     window.addEventListener('pointerdown', (e) => {

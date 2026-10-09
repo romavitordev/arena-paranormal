@@ -19,6 +19,7 @@ import { ARENAS, DEFAULT_ARENA, preloadArenas } from './arena/index.js';
 import { SETTINGS, cycleSetting, TIMER_OPTIONS, timerLabel, LANGUAGE_OPTIONS, languageLabel } from './config/settings.js';
 import { TutorialMode } from './ui/Tutorial.js';
 import { VERSION } from './config/version.js';
+import { t } from './i18n/index.js';
 import { TouchControls, isTouchDevice } from './ui/touchControls.js';
 
 const touchDevice = isTouchDevice();
@@ -81,9 +82,8 @@ game.isBooted = () => booted;
 game.arenaThumbs = arenaThumbs; // depuração
 game.renderer = renderer;
 
-const timeLabel = () => `TEMPO DA LUTA: ${timerLabel()}`;
-const moveLabel = () => `MOVIMENTO: ${SETTINGS.moveMode === 'enemy' ? 'RELATIVO AO INIMIGO' : 'DIREÇÕES DA TELA'}`;
-const langLabel = () => `IDIOMA: ${languageLabel()}`;
+const timeLabel = () => t('opt.time', { v: timerLabel() });
+const langLabel = () => t('opt.lang', { v: languageLabel() });
 
 function setScreen(state, screen) {
   game.uiSeq = ((game.uiSeq || 0) + 1) & 15; // toques online de uma tela que já saiu são descartados (netTaps)
@@ -109,18 +109,22 @@ function toMainMenu() {
   setScreen('mainmenu', new HomeScreen(screens, { portraits, menu: true, touchOnly: touchDevice }));
 }
 
-function toOptions() {
-  setScreen('options', new MenuScreen(screens, {
-    title: 'OPÇÕES',
+// index: opção já selecionada (ao trocar o idioma a tela é remontada no novo idioma, sem sair da linha IDIOMA)
+function toOptions(index = 0) {
+  const scr = new MenuScreen(screens, {
+    title: t('menu.options'),
     audio,
     clear: false,
     options: [
       { id: 'time', label: timeLabel },
-      { id: 'move', label: moveLabel },
       { id: 'lang', label: langLabel },
-      { id: 'back', label: 'VOLTAR' },
+      { id: 'back', label: () => t('ui.back') },
     ],
-  }));
+  });
+  scr.index = index;
+  scr.render();
+  setScreen('options', scr);
+  if (index) scr.el.classList.remove('screen-enter'); // troca de idioma: sem a animação de entrada
 }
 
 function toSelect() {
@@ -167,10 +171,10 @@ async function startMatch() {
           line: victoryLine(def.id, loser.id, loser.name),
           audio,
           options: [
-            { id: 'rematch', label: 'REVANCHE' },
-            { id: 'select', label: 'SELEÇÃO DE PERSONAGENS' },
-            { id: 'stage', label: 'SELEÇÃO DE CENÁRIO' },
-            { id: 'main', label: 'MENU PRINCIPAL' },
+            { id: 'rematch', label: t('ui.rematch') },
+            { id: 'select', label: t('ui.char_select') },
+            { id: 'stage', label: t('ui.stage_select') },
+            { id: 'main', label: t('ui.main_menu') },
           ],
         }));
         placeVictoryLabels();
@@ -277,26 +281,26 @@ function openPause(by = game.pausedBy) {
   const tr = !tut && game.match && game.match.training ? game.match.trainingOpts : null;
   setOverlay('pause', new MenuScreen(screens, {
     audio,
-    title: tut ? 'TUTORIAL' : tr ? 'TREINAMENTO' : 'PAUSA',
-    subtitle: tr ? 'Ajuste o treino · Select na luta reinicia a posição' : `pausado pelo P${by + 1} — só quem pausou pode continuar`,
+    title: tut ? t('menu.tutorial') : tr ? t('menu.training') : t('pause.title'),
+    subtitle: tr ? t('pause.training_sub') : t('pause.sub', { n: by + 1 }),
     owner: by,
     options: [
-      { id: 'resume', label: 'CONTINUAR' },
+      { id: 'resume', label: t('pause.resume') },
       ...(tut ? [
-        { id: 'tut_skip', label: 'PULAR ESTE PASSO' },
-        { id: 'rematch', label: 'RECOMEÇAR O TUTORIAL' },
+        { id: 'tut_skip', label: t('pause.tut_skip') },
+        { id: 'rematch', label: t('pause.tut_restart') },
       ] : []),
       ...(tr ? [
-        { id: 'tr_life', label: () => `VIDA DO ALVO: ${{ regen: 'REGENERA', infinite: 'INFINITA', normal: 'NORMAL' }[tr.life]}` },
-        { id: 'tr_energy', label: () => `SANIDADE: ${tr.energy ? 'INFINITA' : 'NORMAL'}` },
-        { id: 'tr_cd', label: () => `RECARGAS: ${tr.noCooldown ? 'SEM ESPERA' : 'NORMAIS'}` },
-        { id: 'tr_dummy', label: () => `ALVO: ${{ still: 'PARADO', block: 'DEFENDENDO', cpu: 'CPU' }[tr.dummy]}` },
-        { id: 'tr_reset', label: 'RESETAR POSIÇÃO' },
+        { id: 'tr_life', label: () => t('pause.tr_life', { v: t({ regen: 'pause.regen', infinite: 'pause.infinite', normal: 'pause.normal' }[tr.life]) }) },
+        { id: 'tr_energy', label: () => t('pause.tr_energy', { v: t(tr.energy ? 'pause.infinite' : 'pause.normal') }) },
+        { id: 'tr_cd', label: () => t('pause.tr_cd', { v: t(tr.noCooldown ? 'pause.no_wait' : 'pause.normal_pl') }) },
+        { id: 'tr_dummy', label: () => t('pause.tr_dummy', { v: tr.dummy === 'cpu' ? 'CPU' : t(tr.dummy === 'block' ? 'pause.blocking' : 'pause.still') }) },
+        { id: 'tr_reset', label: t('pause.tr_reset') },
       ] : []),
-      { id: 'commands', label: 'COMANDOS' },
-      ...(tut ? [] : [{ id: 'time', label: timeLabel }, { id: 'rematch', label: 'REINICIAR LUTA' }]),
-      { id: 'select', label: tut ? 'OUTRO PERSONAGEM' : 'SELEÇÃO DE PERSONAGENS' },
-      { id: 'main', label: 'MENU PRINCIPAL' },
+      { id: 'commands', label: t('pause.commands') },
+      ...(tut ? [] : [{ id: 'time', label: timeLabel }, { id: 'rematch', label: t('pause.restart') }]),
+      { id: 'select', label: tut ? t('pause.other_char') : t('ui.char_select') },
+      { id: 'main', label: t('ui.main_menu') },
     ],
   }));
 }
@@ -551,7 +555,7 @@ function updateLan() {
     cancelPending();
     const ticket = {};
     game.lanTicket = ticket;
-    const settings = { timer: SETTINGS.timer, moveMode: SETTINGS.moveMode, rounds: SETTINGS.rounds };
+    const settings = { timer: SETTINGS.timer, rounds: SETTINGS.rounds };
     const onSession = (s) => { game.lanPending = s; };
     const p = c.act === 'host'
       ? NetSession.host({
@@ -634,8 +638,7 @@ function tick(dt) {
     case 'options': {
       const c = game.screen.update(input);
       if (c === 'time') { cycleSetting('timer', TIMER_OPTIONS); audio.play('select'); game.screen.render(); }
-      else if (c === 'move') { cycleSetting('moveMode', ['screen', 'enemy']); audio.play('select'); game.screen.render(); }
-      else if (c === 'lang') { cycleSetting('language', LANGUAGE_OPTIONS); audio.play('select'); game.screen.render(); }
+      else if (c === 'lang') { cycleSetting('language', LANGUAGE_OPTIONS); audio.play('select'); toOptions(game.screen.index); }
       else if (c === 'back') toMainMenu();
       break;
     }

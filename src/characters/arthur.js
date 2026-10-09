@@ -16,7 +16,8 @@ export default {
     tagline: 'Paciente. Um tiro basta.',
   },
   stats: { moveSpeed: 7.2 },
-  anims: { idle: 'idle_onearm', run: 'run', charge: 'charge_onearm', victory: 'victory_onearm', block: 'block_onearm', grab: 'grab_onearm', throw_grab: 'kick_front' },
+  victoryProp: 'sniperHand', // a sniper à mostra na vitória (no resto do tempo só aparece no tiro)
+  anims: { idle: 'idle_onearm', run: 'run', charge: 'charge_onearm', victory: 'vic_arthur', block: 'block_onearm', grab: 'grab_onearm', throw_grab: 'kick_front' },
   chargeFx: { style: 'forearm', color: 0xff2a3d },
   dodge: { style: 'default' },
 

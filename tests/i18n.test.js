@@ -37,3 +37,19 @@ test('i18n sets and retrieves language', () => {
   setLanguage('pt-BR');
   assert.equal(getLanguage(), 'pt-BR');
 });
+
+test('i18n: every language has every interface key (no missing or extra keys, no empty text)', async () => {
+  const { LOCALES } = await import('../src/i18n/index.js');
+  const base = Object.keys(LOCALES['pt-BR']).sort();
+  for (const { id } of SUPPORTED_LANGUAGES) {
+    const dict = LOCALES[id];
+    assert.ok(dict, `Idioma ${id} sem dicionário`);
+    assert.deepEqual(Object.keys(dict).sort(), base, `Chaves diferentes em ${id}`);
+    for (const k of base) {
+      assert.ok(typeof dict[k] === 'string' && dict[k].trim(), `${id}: "${k}" vazio`);
+      // os marcadores {x} precisam ser os mesmos em todos os idiomas
+      const ph = (s) => [...new Set(s.match(/\{\w+\}/g) || [])].sort().join();
+      assert.equal(ph(dict[k]), ph(LOCALES['pt-BR'][k]), `${id}: marcadores diferentes em "${k}"`);
+    }
+  }
+});

@@ -12,7 +12,6 @@ import { SPECIALS } from './specials/index.js';
 import { telegraphFor, startTelegraph, updateTelegraph, stopTelegraph, telegraphMissed, TELEGRAPH } from './specials/telegraph.js';
 import { hasPassive } from './passives.js';
 import { ELEMENTS } from '../config/elements.js';
-import { SETTINGS } from '../config/settings.js';
 import { updateForm, revertForm } from './forms.js';
 import { buildBloodArmor } from '../models/bloodArmor.js';
 import { orbit, twoShot } from '../camera/shots.js';
@@ -1029,23 +1028,9 @@ export class Fighter {
     }
   }
 
-  // Base do analógico: direções da tela (câmera) ou, no modo "relativo ao inimigo",
-  // frente = em direção ao adversário e lados = órbita em volta dele.
+  // Base do analógico: sempre as direções da tela (câmera). O modo "relativo ao inimigo" foi removido.
   moveBasis() {
-    const cam = this.world.cameraBasis;
-    const opp = this.opponent;
-    if (SETTINGS.moveMode !== 'enemy' || !opp || !this.lockOn) return cam;
-    const dx = opp.pos.x - this.pos.x;
-    const dz = opp.pos.z - this.pos.z;
-    const l = Math.hypot(dx, dz);
-    if (l < 0.3) return cam;
-    const forward = this._mbF || (this._mbF = new THREE.Vector3());
-    const right = this._mbR || (this._mbR = new THREE.Vector3());
-    forward.set(dx / l, 0, dz / l);
-    // "direita" do analógico = o lado do adversário que está à direita na tela
-    right.set(-forward.z, 0, forward.x);
-    if (right.dot(cam.right) < 0) right.negate();
-    return { forward, right };
+    return this.world.cameraBasis;
   }
 
   moveInputWorld(out) {

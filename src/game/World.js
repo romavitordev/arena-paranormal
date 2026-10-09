@@ -106,6 +106,8 @@ export class World {
       const rig = buildModel(def.model);
       const anim = new Animator(rig, def.anims);
       const actor = { def, rig, anim, index };
+      // arma que só aparece em uso (ex.: a sniper do Arthur) pode ficar à mostra na pose de vitória
+      if (def.victoryProp && rig.props && rig.props[def.victoryProp]) rig.showProp(def.victoryProp, true);
       this.scene.add(rig.root);
       anim.play('victory', { blend: 0 });
       return actor;

@@ -1,4 +1,4 @@
-import { SUPPORTED_LANGUAGES, initLanguage, setLanguage } from '../i18n/index.js';
+import { SUPPORTED_LANGUAGES, initLanguage, setLanguage, t } from '../i18n/index.js';
 
 // Opções do jogador, salvas no navegador (se o navegador permitir).
 const KEY = 'arena-paranormal:settings';
@@ -7,7 +7,6 @@ const DEFAULTS = {
   timer: 99, // segundos por round; 0 = infinito
   cpuLevel: 'normal', // easy | normal | hard | veryhard | superhard
   rounds: 2, // rounds para vencer
-  moveMode: 'screen', // screen = direções da tela; enemy = ↑ aproxima, ↓ recua, ←/→ orbitam o adversário
   language: 'pt-BR',
 };
 
@@ -29,6 +28,7 @@ function load() {
     const s = raw ? { ...DEFAULTS, ...JSON.parse(raw) } : { ...DEFAULTS };
     // versões antigas guardavam só "infiniteTime"
     if (s.infiniteTime) { s.timer = 0; delete s.infiniteTime; }
+    delete s.moveMode; // opção "relativo ao inimigo" removida: o movimento é sempre pelas direções da tela
     if (!TIMER_OPTIONS.includes(s.timer)) s.timer = DEFAULTS.timer;
     if (!CPU_LEVELS.some((l) => l.id === s.cpuLevel)) s.cpuLevel = DEFAULTS.cpuLevel;
     if (!ROUND_OPTIONS.includes(s.rounds)) s.rounds = DEFAULTS.rounds;
@@ -42,8 +42,8 @@ function load() {
   }
 }
 
-export const timerLabel = (t = SETTINGS.timer) => (t ? `${t}s` : 'INFINITO');
-export const cpuLabel = (id = SETTINGS.cpuLevel) => (CPU_LEVELS.find((l) => l.id === id) || CPU_LEVELS[1]).label;
+export const timerLabel = (v = SETTINGS.timer) => (v ? `${v}s` : t('settings.timer.infinite'));
+export const cpuLabel = (id = SETTINGS.cpuLevel) => t('cpu.' + (CPU_LEVELS.find((l) => l.id === id) || CPU_LEVELS[1]).id);
 export const languageLabel = (id = SETTINGS.language) => {
   const item = LANGUAGE_OPTIONS.find((l) => l.id === id) || LANGUAGE_OPTIONS[0];
   return `${item.flag} ${item.label}`;

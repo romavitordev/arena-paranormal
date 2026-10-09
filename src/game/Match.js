@@ -1,5 +1,6 @@
 import { COMBAT } from '../config/combat.js';
 import { SETTINGS } from '../config/settings.js';
+import { t } from '../i18n/index.js';
 import { World } from './World.js';
 import { battleLines, introLines } from '../config/dialogues.js';
 import { Assist } from '../combat/assists.js';
@@ -45,8 +46,8 @@ export class Match {
     };
     // Injustiça: o inimigo recupera Y de vida e perde sanidade (energia)
     this.world.onDrain = (attacker, victim, heal, removed) => {
-      hud.popup(victim.index, `+${fmt(heal)} VIDA`, '#7dffb0');
-      hud.popup(victim.index, `−${fmt(removed)} SANIDADE`, '#6ad1ff');
+      hud.popup(victim.index, t('combat.heal_popup', { n: fmt(heal) }), '#7dffb0');
+      hud.popup(victim.index, t('combat.sanity_popup', { n: fmt(removed) }), '#6ad1ff');
     };
     this.wins = [0, 0];
     this.round = 0;
@@ -132,7 +133,7 @@ export class Match {
       if (this.phaseTime >= this.entranceReadyAt && !this.entranceReadyShown) {
         this.entranceReadyShown = true;
         this.entranceReadyAt = Math.max(this.entranceReadyAt, this.phaseTime);
-        this.hud.callout('LUTEM', '#ffd84a');
+        this.hud.callout(t('combat.fight'), '#ffd84a');
         this.audio.play('confirm', { volume: 1.2 });
       } else if (this.phaseTime >= this.entranceReadyAt + READY_TIME) {
         this.phase = 'fight';
@@ -175,7 +176,7 @@ export class Match {
       case 'intro': {
         w.update(dt, { simulate: false });
         for (const f of this.fighters) f.anim.play('idle');
-        const steps = [[0.1, `ROUND ${this.round}`, '#ffffff'], [1.0, 'LUTEM', '#ffd84a']];
+        const steps = [[0.1, t('combat.round', { n: this.round }), '#ffffff'], [1.0, t('combat.fight'), '#ffd84a']];
         for (let i = 0; i < steps.length; i++) {
           const [at, text, color] = steps[i];
           if (this.phaseTime >= at && this.countStep <= i) {
@@ -246,7 +247,7 @@ export class Match {
     }
     if (winner >= 0) this.wins[winner]++;
     else { this.wins[0]++; this.wins[1]++; } // empate: ponto para os dois
-    this.hud.callout(reason === 'ko' ? 'K.O.' : 'TEMPO!', reason === 'ko' ? '#ff4a3a' : '#ffd84a');
+    this.hud.callout(t(reason === 'ko' ? 'combat.ko' : 'combat.time_up'), reason === 'ko' ? '#ff4a3a' : '#ffd84a');
     for (const f of this.fighters) {
       f.stopCharging();
       if (f.state !== 'ko') {
@@ -341,7 +342,7 @@ export class Match {
     this.world.resetRound();
     this.regenWait = 0;
     for (const f of this.fighters) f.setState('idle');
-    this.hud.callout('RESET', '#ffd84a');
+    this.hud.callout(t('combat.reset'), '#ffd84a');
   }
 
   dispose() {
