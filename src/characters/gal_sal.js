@@ -74,9 +74,29 @@ export default {
     color: 0xd4a64a,
     sound: 'chainThrow',
     hitSound: 'chainPull',
+    // trás + □: Sugada Mortal (habilidade com recarga própria; recarregando, sai a Corrente de Captura)
+    variants: { back: { ability: 'sugadaMortal' } },
   },
 
   abilities: [
+    {
+      // cânone: ritual Sugada Mortal — liga por alguns segundos a regra do Gal: o golpe tira X, o inimigo recupera Y e
+      // paga com sanidade (Y × 1,5), que vai para o Gal. Fora dela, o físico do Gal é normal.
+      id: 'sugadaMortal',
+      name: 'Sugada Mortal',
+      input: 'ranged+back', // trás + □
+      type: 'selfBuff',
+      buffType: 'sugada',
+      label: 'SUGADA MORTAL',
+      anim: 'charge_dual',
+      animTime: 0.4,
+      description: 'Por 6 s, cada golpe físico que acerta faz o inimigo recuperar parte da vida e pagar 1,5× isso em sanidade — que vai para o Gal.',
+      energyCost: 15,
+      cooldown: 14,
+      duration: 6,
+      ai: { max: 5 },
+      color: 0xd4a64a,
+    },
     {
       id: 'gancho',
       name: 'Corrente Gancho',
@@ -197,6 +217,7 @@ export default {
 
   passives: [
     { type: 'bulletDodge' }, // Desviar de Balas: esquivar de projéteis não gasta carga
-    { type: 'meleeDrain', energyRatio: 1.5, giveEnergyToAttacker: true }, // a sanidade que ele tira do inimigo vai para ele (Gal com 21–29% de vitórias)
+    // a cura que cobra sanidade NÃO é mais passiva (pedido do usuário): só vale com a Sugada Mortal ligada
+    { type: 'meleeDrain', energyRatio: 1.5, giveEnergyToAttacker: true, whileBuff: 'sugada' },
   ],
 };

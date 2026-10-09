@@ -14,6 +14,12 @@
   'demonMace' }` (visual novo em projectiles.js com a `demonMace()` de weapons.js). `returnsFallback` (novo,
   `giveBack`): se o buff acabar no meio do voo, volta para a mão o machado. `demonAxe.onEnd` conta a maça no ar.
   Dano igual. Testado: machado normal vai e volta; com o Demônio a maça vai e volta; buff acabando no ar → machado.
+- Gal (pedido do usuário): a cura que cobra sanidade deixou de ser passiva. `meleeDrain` aceita `whileBuff` (só vale
+  com o buff); habilidade nova **Sugada Mortal** (ritual do cânone do Gal) em trás + □ (`ranged.variants.back.ability`,
+  mesmo mecanismo do Anfitrião — os 5 atalhos △○/△□/△L2/R2△/R2× já estavam ocupados): `selfBuff` `sugada` por 6 s,
+  15 de sanidade, recarga 14 s, dica de IA `max: 5`. Mesmas proporções da passiva antiga (Y dos golpes, ×1,5 de
+  sanidade para o Gal). Testado: sem a Sugada o golpe não cura nem drena; com ela, cura o alvo, drena e dá ao Gal;
+  desliga em 6 s.
 
 ## (em andamento, sem changelog dos jogadores) — estabilidade, limpeza e mecânicas universais de combate (Dodge e Throw Tech)
 

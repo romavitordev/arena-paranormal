@@ -110,7 +110,7 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 | AGHATA | Ordo Realitas | Sangue | Faca Arremessada | □ Amaldiçoar Arma (Sangue) · L2 Facas Amaldiçoadas · R2+× Passagem de Conhecimento · R2+△ Leitura de Rituais (3 em leque) | Descarnar | Colar Banhado em Sangue |
 | DANTE | Ordo Realitas | Morte | Decadenza (fumaça que apodrece) | □ Embaralhar "Trinitá" (3 clones com IA, 50% do dano) · ○ Tentáculos de Lodo · △ Cicatrização "Paradiso" · L2 Poça de Lodo (lentidão) | Invocação: A Marionete (NPC por 18 s, barra preta, pode ser destruída; anda aos trancos, atravessa obstáculos e agarra com a Ironia do Destino) | Concentração Inquebrável (rituais −10% de sanidade) |
 | ERIN PARKER | Ordo Realitas | Energia | Escopeta calibre 12 (leque de chumbo) | □ Granada "Supernova" · × Granada "Nebulosa" (névoa) · ○ Bênção Maldita · △ Black Hole (cura) · L2 Granada de Luz (atordoa) | Supernova (granada de luz que dá para evitar; se cegar: corre, tiro de escopeta e granada) · **Transformação:** Em Nome do Caos (máscara de gás, enlouquece: golpes e granadas mais fortes, sem cura; especial Em Nome do Caos — corre e se explode: 450 de dano, ela morre; se levar o rival junto ganha o round, senão perde) | Amuleto Elétrico (choque em quem bate nela) |
-| GAL SAL | Escriptas | Conhecimento | Corrente de Captura (procura, prende e puxa) | □ Corrente Gancho · × Teletransporte · L2 Corrente Giratória (área) | Injustiça né? | Cura que cobra sanidade · Desviar de Balas · Bloqueio Perfeito |
+| GAL SAL | Escriptas | Conhecimento | Corrente de Captura (procura, prende e puxa) | □ Corrente Gancho · × Teletransporte · L2 Corrente Giratória (área) · trás + □ Sugada Mortal (liga a cura que cobra sanidade por 6 s) | Injustiça né? | Desviar de Balas · Bloqueio Perfeito |
 | KIAN | Escriptas | Conhecimento | Impacto Sigilar | □ Teletransporte · ○ Lâmina do Medo · △ Levitação · × Rejeitar Névoa | Inexistir (2x por partida) | Precognição |
 | LABIRINTO | Mascarados | Energia | Rajada Caótica (raio da Antena) | □ Labirinto Mental · ○ Mapa Sanguíneo · L2 Capturar Momento | O Labirinto é a Resposta · **Transformação:** Capacete do ??? → **???** até o fim do round (□ Tempestade Caótica · Labirinto Abissal · Consumir Momento · Tempestade Caótica em área · Revelação Sanguínea; especial mais forte) | Mente Labiríntica (atordoamentos −40%) |
 | LÍRIO | Os Cinco | Sangue | Canivete de osso (curto e fraco: ele é de perto) | △ Golpe Pesado · ○ Cai Dentro (corre, ombrada, provoca) · □ Amarras de Sangue "Magras" · × Leonora Amaldiçoada · L2 Proteção Pesada | Leonora ("Hoje 'cê vai conhecer a Leonora!") | Sangue de Ferro (+15% de vida) · Casca Grossa (menos recuo e desgaste na defesa) · Mão Pesada (mais impacto) |
@@ -125,8 +125,8 @@ Todos os especiais ofensivos causam 250 de 1000 de vida (`COMBAT.specialDamage`)
 Números de tudo em [HABILIDADES.md](HABILIDADES.md). Banco de outros membros das origens (para novos lutadores):
 [lore/MEMBROS.md](lore/MEMBROS.md) · guia em [lore/NOTAS.md](lore/NOTAS.md).
 
-**Regra do Gal Sal** (golpe físico): o golpe tira X de vida do inimigo, em seguida o **inimigo**
-recupera Y (Y < X) e perde Y × 1,5 de sanidade. O Gal não se cura.
+**Regra do Gal Sal** (golpe físico, só com a **Sugada Mortal** ligada — trás + □, 6 s): o golpe tira X de vida do
+inimigo, em seguida o **inimigo** recupera Y (Y < X) e perde Y × 1,5 de sanidade, que vai para o Gal. O Gal não se cura.
 Exemplo: X=100, Y=60 → o inimigo perde 100, recupera 60 (saldo −40) e perde 90 de sanidade.
 
 ## Mecânicas

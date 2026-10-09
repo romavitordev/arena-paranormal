@@ -634,7 +634,7 @@ Referência inicial:
 * [ ] Mortal Speed
 * [ ] Passiva
 * [ ] Conferir controle de espaço
-* [ ] **Cura que cobra sanidade deixa de ser passiva** (pedido do usuário, 2026-10-08): vira uma HABILIDADE que liga a
+* [x] **Cura que cobra sanidade deixa de ser passiva** (pedido do usuário, 2026-10-08): vira uma HABILIDADE que liga a
   cura do alvo + o roubo de sanidade por alguns segundos; fora dela, o físico do Gal é normal
 
 ---
