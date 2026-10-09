@@ -1,8 +1,8 @@
 import { createGLBArena, preloadArena } from './glbArena.js';
-import { ORFANATO, SUVACO, COLISEU, SANTO_BERCO, RUINAS } from './configs.js';
+import { ORFANATO, SUVACO, COLISEU, SANTO_BERCO, RUINAS, ACAMPAMENTO } from './configs.js';
 
 // cenários do Blender carregados no início do jogo
-const GLB_ARENAS = { orfanato: ORFANATO, suvaco: SUVACO, coliseu: COLISEU, santo_berco: SANTO_BERCO, ruinas: RUINAS };
+const GLB_ARENAS = { orfanato: ORFANATO, suvaco: SUVACO, coliseu: COLISEU, santo_berco: SANTO_BERCO, ruinas: RUINAS, acampamento: ACAMPAMENTO };
 export async function preloadArenas() {
   await Promise.all(Object.values(GLB_ARENAS).map((cfg) => preloadArena(cfg).catch((e) => {
     console.warn('Cenário indisponível:', cfg.id, e);
@@ -56,7 +56,15 @@ export const ARENAS = {
     thumbCamera: { pos: [0, 4.5, 16], look: [0, 3, -30] }, // a praça com o labirinto e as estátuas ao fundo
     create: () => createGLBArena(SANTO_BERCO),
   },
+  acampamento: {
+    name: 'Acampamento Varminho',
+    description: 'Uma clareira no mato à noite, ao lado da estação de TV abandonada de Varminho: fogueira, barracas, a van dos Cinco e um céu cheio de estrelas.',
+    colors: ['#0a1430', '#1e2a1c', '#ff8a3a'],
+    available: true,
+    thumbCamera: { pos: [6, 3.2, 13], look: [-2, 2.5, -20] }, // a fogueira com a van e a torre ao fundo
+    create: () => createGLBArena(ACAMPAMENTO),
+  },
 };
 
-export const ARENA_ORDER = ['orfanato', 'suvaco', 'coliseu', 'santo_berco', 'ruinas'];
+export const ARENA_ORDER = ['orfanato', 'suvaco', 'coliseu', 'santo_berco', 'ruinas', 'acampamento'];
 export const DEFAULT_ARENA = 'ruinas';

@@ -130,3 +130,40 @@ export const COLISEU = {
   particles: { color: 0xf0c890, count: 240, area: 46, height: 7, rise: 0.08, drift: 1.2, size: 0.06, opacity: 0.55 }, // poeira dourada
   camera: { radius: 23, maxY: 16 }, // a muralha começa em ~24 m
 };
+
+// Acampamento Varminho (Sinais do Outro Lado, ep. 2): clareira no mato à noite ao lado da Estação de
+// Transmissão de Varminho — fogueira no centro, barracas, a van dos Cinco e a torre ao fundo, céu estrelado
+export const ACAMPAMENTO = {
+  id: 'acampamento',
+  name: 'Acampamento Varminho',
+  glb: 'arenas/acampamento.glb',
+  bounds: { radius: 20 },
+  spawns: [{ x: 0, z: -6 }, { x: 0, z: 6 }],
+  sky: 0x060a1a,
+  skyGradient: [[0, '#04060f'], [0.55, '#0a1430'], [0.85, '#14264a'], [1, '#1c2e48']],
+  fog: { color: 0x0a1222, density: 0.02 },
+  lights: [
+    { type: 'hemi', sky: 0x6a7ab8, ground: 0x141a14, intensity: 1.0 },
+    { type: 'ambient', color: 0x3a4a6a, intensity: 0.45 },
+    // luar azulado
+    { type: 'dir', color: 0x9ab0ff, intensity: 1.5, pos: [-18, 26, -10], shadow: true, area: 28 },
+    // a fogueira: a luz principal do acampamento
+    { type: 'point', color: 0xff8a3a, intensity: 70, distance: 26, decay: 1.5, pos: [0, 1.6, 0], flicker: true },
+    // varal de lâmpadas, lampiões das barracas e os faróis da van
+    { type: 'point', color: 0xffc070, intensity: 10, distance: 11, pos: [-10.2, 2.8, -7.8], flicker: true },
+    { type: 'point', color: 0xffb060, intensity: 4, distance: 7, pos: [7.5, 0.6, 8.5], flicker: true },
+    { type: 'point', color: 0xffb060, intensity: 4, distance: 7, pos: [-7.8, 0.6, 8.2], flicker: true },
+    { type: 'point', color: 0xe8f0ff, intensity: 14, distance: 14, pos: [-9.2, 1.2, -22.5] },
+    // luz verde fraca na lateral da van (o grafite neon) para ela aparecer no fundo
+    { type: 'point', color: 0x7dff9a, intensity: 9, distance: 9, pos: [-6.6, 2.0, -21.2] },
+    // a luz vermelha no alto da torre
+    { type: 'point', color: 0xff2020, intensity: 8, distance: 12, pos: [18, 29.6, -31], flicker: true },
+  ],
+  fires: [{ pos: [0, 0.15, 0], scale: 0.75 }],
+  stars: { count: 1500, radius: 170, size: 0.85 },
+  particles: [
+    { color: 0xffa040, count: 60, area: 1.8, height: 4.5, rise: 1.4, drift: 0.45, size: 0.07, opacity: 0.85 }, // brasas da fogueira
+    { color: 0xd8ff7a, count: 120, area: 46, height: 3, rise: 0.05, drift: 0.6, size: 0.07, opacity: 0.7 }, // vaga-lumes no mato
+  ],
+  camera: { radius: 24, maxY: 15 },
+};

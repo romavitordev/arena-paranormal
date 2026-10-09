@@ -2136,6 +2136,9 @@ export class Fighter {
 
   // Sniper do Arthur: ajoelha, apoia no joelho e mira enquanto segura □; solta para atirar.
   // Mais tempo mirando = mais dano e impacto; levar um golpe cancela (fica vulnerável o tempo todo).
+  // Dá para desviar: o ponto do laser SEGUE o alvo com atraso (C.track m/s — correndo de lado você sai da mira) e o
+  // tiro vai para onde o laser está, não para onde o alvo está; com a mira cheia o laser TRAVA e pisca vermelho por
+  // C.lockWarn s antes do disparo automático (aviso para esquivar).
   startChargeShot(base) {
     const C = base.chargeShot;
     if (!this.spendEnergy(base.energyCost || 0)) {
@@ -2156,30 +2159,49 @@ export class Fighter {
     let fired = false;
     let k = 0;
     let lastLine = 0;
+    let lockT = -1; // mira cheia: tempo travado antes do disparo automático
+    const aim = new THREE.Vector3();
+    const want = new THREE.Vector3();
+    let aimReady = false;
+    const track = C.track ?? 5;
     this.seq = {
       update(dt) {
         t += dt;
         const opp = self.opponent;
-        if (opp) self.yaw = turnTowards(self.yaw, yawTo(self.pos, opp.pos), dt * 6);
         self.vel.x = 0;
         self.vel.z = 0;
         if (!fired) {
+          // o ponto da mira persegue o alvo devagar (trava de vez quando a mira enche)
+          if (opp) {
+            opp.chestPos(want);
+            if (!aimReady) { aim.copy(want); aimReady = true; }
+            else if (lockT < 0) {
+              const d = want.distanceTo(aim);
+              const step = track * dt;
+              if (d > step) aim.lerp(want, step / d);
+              else aim.copy(want);
+            }
+            self.yaw = turnTowards(self.yaw, yawTo(self.pos, aim), dt * 6);
+          }
           const aiming = t > C.draw;
           k = aiming ? Math.min(1, (t - C.draw) / C.maxAim) : 0;
-          // mira a laser: fica mais grossa e vermelha conforme carrega
-          if (aiming && opp && t - lastLine > 0.05) {
+          if (k >= 1 && lockT < 0) { lockT = 0; self.fullCharge = true; w.audio.play('armed', { volume: 0.6 }); }
+          if (lockT >= 0) lockT += dt;
+          // mira a laser: mais grossa e vermelha conforme carrega; travada, pisca
+          const blink = lockT >= 0 && Math.floor(lockT * 16) % 2 === 1;
+          if (aiming && aimReady && t - lastLine > 0.05 && !blink) {
             lastLine = t;
             const from = self.rig.muzzle ? self.rig.muzzle.getWorldPosition(new THREE.Vector3()) : self.chestPos();
-            w.fx.tracer(from, opp.chestPos(), { color: k >= 1 ? 0xff2020 : 0xff9a60, life: 0.06, width: 0.01 + k * 0.03 });
+            const to = aim.clone().sub(from).multiplyScalar(1.15).add(from); // passa um pouco do ponto: mostra a linha do tiro
+            w.fx.tracer(from, to, { color: lockT >= 0 ? 0xff1010 : k > 0.6 ? 0xff5030 : 0xff9a60, life: 0.06, width: 0.01 + k * 0.03 });
           }
-          if (k >= 1 && !self.fullCharge) { self.fullCharge = true; w.audio.play('armed', { volume: 0.5 }); }
-          const release = aiming && (!self.input.held.ranged || k >= 1);
+          const release = aiming && (!self.input.held.ranged || lockT >= (C.lockWarn ?? 0.35));
           const quick = !aiming && t >= C.draw - 0.01 && !self.input.held.ranged;
           if (release || quick) {
             fired = true;
             self.fullCharge = false;
             const dmg = Math.round(C.minDamage + (C.maxDamage - C.minDamage) * k);
-            self.fireProjectile({ ...base, damage: dmg, knockback: base.knockback * (0.6 + k * 0.8), impactScale: (base.impactScale || 1) * (0.7 + k * 0.8), hitstun: base.hitstun * (0.7 + k * 0.6) });
+            self.fireProjectile({ ...base, damage: dmg, knockback: base.knockback * (0.6 + k * 0.8), impactScale: (base.impactScale || 1) * (0.7 + k * 0.8), hitstun: base.hitstun * (0.7 + k * 0.6), aimAt: aimReady ? aim.clone() : undefined });
             self.anim.play('sniper_fire', { restart: true, duration: C.recovery + 0.1 });
             if (k >= 0.99) self.notify('TIRO CARREGADO!', true);
             t = 0;
@@ -2230,7 +2252,8 @@ export class Fighter {
     } else {
       this.rig.sockets.handR.getWorldPosition(origin);
     }
-    const target = opp ? opp.chestPos(v2) : origin.clone().add(forwardFromYaw(this.yaw, v1).multiplyScalar(10));
+    // r.aimAt: ponto mirado (sniper do Arthur: onde o laser está, que pode ter ficado para trás do alvo)
+    const target = r.aimAt ? v2.copy(r.aimAt) : opp ? opp.chestPos(v2) : origin.clone().add(forwardFromYaw(this.yaw, v1).multiplyScalar(10));
     if (r.visual === 'shockwave' || r.origin === 'ground') target.y = origin.y;
     const dir = target.clone().sub(origin).normalize();
     if (r.spread) {

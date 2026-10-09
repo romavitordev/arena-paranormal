@@ -12,6 +12,7 @@ import { blocksPointGeneric } from '../combat/positioning.js';
 //   SWAY_*      → balança devagar (balanços, estandartes)
 //   HIDE_*      → removido (ajuda de modelagem)
 // Materiais com nome em ARENA_TEXTURES recebem textura pintada em código.
+// Na config: particles (um ou uma lista), stars (céu estrelado), fires (fogueiras animadas), mist (névoa).
 
 const cache = {};
 
@@ -32,8 +33,9 @@ export function createGLBArena(cfg) {
   const flicker = [];
   const sway = []; const spin = [];
   let time = 0;
-  let particles = null;
+  let particles = [];
   let mist = null;
+  let fires = [];
 
   const arena = {
     id: cfg.id,
@@ -168,7 +170,9 @@ export function createGLBArena(cfg) {
         }
         if (light) group.add(light);
       }
-      if (cfg.particles) particles = makeParticles(group, cfg.particles);
+      particles = [].concat(cfg.particles || []).map((o) => makeParticles(group, o));
+      if (cfg.stars) makeStars(group, cfg.stars);
+      fires = (cfg.fires || []).map((o) => makeFire(group, o));
       if (cfg.mist) mist = makeMist(group, cfg.mist);
     },
 
@@ -187,7 +191,8 @@ export function createGLBArena(cfg) {
         s.o.rotation.x = s.rot.x + Math.sin(time * 1.1 + s.seed) * 0.06;
         s.o.rotation.z = s.rot.z + Math.sin(time * 0.8 + s.seed) * 0.03;
       }
-      if (particles) particles.update(dt);
+      for (const pt of particles) pt.update(dt);
+      for (const f of fires) f.update(dt, time);
       if (mist) mist.update(dt);
     },
 
@@ -316,6 +321,71 @@ function makeParticles(group, o) {
         p.setXYZ(i, x, y, z);
       }
       p.needsUpdate = true;
+    },
+  };
+}
+
+// CÉU ESTRELADO: pontos numa cúpula longe (sem névoa), alguns maiores e mais brilhantes
+function makeStars(group, o) {
+  const n = o.count ?? 900;
+  const R = o.radius ?? 160;
+  const pos = new Float32Array(n * 3);
+  const col = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const el = Math.asin(0.08 + Math.random() * 0.92); // só acima do horizonte
+    pos[i * 3] = Math.cos(el) * Math.sin(a) * R;
+    pos[i * 3 + 1] = Math.sin(el) * R;
+    pos[i * 3 + 2] = Math.cos(el) * Math.cos(a) * R;
+    const b = 0.45 + Math.random() * 0.55;
+    const blue = Math.random() < 0.3;
+    col[i * 3] = b * (blue ? 0.75 : 1);
+    col[i * 3 + 1] = b * (blue ? 0.85 : 1);
+    col[i * 3 + 2] = b;
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  const pts = new THREE.Points(g, new THREE.PointsMaterial({ size: o.size ?? 1.6, vertexColors: true, sizeAttenuation: true, fog: false, depthWrite: false, transparent: true }));
+  pts.renderOrder = -1;
+  pts.raycast = () => {};
+  group.add(pts);
+}
+
+// FOGUEIRA animada: línguas de fogo (cones aditivos que dançam), brasa no centro
+function makeFire(group, o) {
+  const s = o.scale ?? 1;
+  const root = new THREE.Group();
+  root.position.set(...o.pos);
+  group.add(root);
+  const tongues = [];
+  const layers = [[0xd8400c, 0.55, 1.5, 6, 0.55], [0xff8a24, 0.4, 1.15, 5, 0.5], [0xffd070, 0.22, 0.75, 3, 0.45]];
+  for (const [color, r, h, count, op] of layers) {
+    const mat = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: op, blending: THREE.AdditiveBlending, depthWrite: false, fog: false });
+    for (let i = 0; i < count; i++) {
+      const m = new THREE.Mesh(new THREE.ConeGeometry(r * s * (0.7 + Math.random() * 0.5), h * s * (0.7 + Math.random() * 0.6), 7, 1, true), mat);
+      const a = (i / count) * Math.PI * 2 + Math.random();
+      const d = r * s * 0.6 * Math.random();
+      m.position.set(Math.cos(a) * d, 0, Math.sin(a) * d);
+      m.geometry.translate(0, (h * s) / 2, 0);
+      m.raycast = () => {};
+      root.add(m);
+      tongues.push({ m, seed: Math.random() * 10, base: m.position.clone() });
+    }
+  }
+  const glow = new THREE.Mesh(new THREE.SphereGeometry(0.45 * s, 10, 8), new THREE.MeshBasicMaterial({ color: 0xff7a20, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending, depthWrite: false }));
+  glow.scale.y = 0.35;
+  root.add(glow);
+  return {
+    update(dt, t) {
+      for (const k of tongues) {
+        const w = Math.sin(t * 9 + k.seed) * 0.5 + Math.sin(t * 15.3 + k.seed * 3) * 0.3;
+        k.m.scale.set(1 + w * 0.12, 0.8 + (w + 0.8) * 0.35, 1 + w * 0.12);
+        k.m.rotation.y = t * 0.6 + k.seed;
+        k.m.position.x = k.base.x + Math.sin(t * 5 + k.seed) * 0.05 * s;
+        k.m.position.z = k.base.z + Math.cos(t * 4 + k.seed) * 0.05 * s;
+      }
+      glow.material.opacity = 0.5 + Math.sin(t * 11) * 0.1;
     },
   };
 }

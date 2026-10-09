@@ -386,6 +386,102 @@ export const ARENA_TEXTURES = {
     g.strokeStyle = 'rgba(120,110,140,0.25)';
     for (let i = 0; i < 20; i++) { g.beginPath(); g.arc(Math.random() * s, Math.random() * s, rnd(4, 18), 0, Math.PI * 2); g.stroke(); }
   }, { roughness: 0.05 }),
+  // ---------------- Acampamento Varminho (Sinais do Outro Lado)
+  // grama escura de mato à noite, com falhas de terra
+  ground_camp: () => tex(256, 4, (g, s) => {
+    g.fillStyle = '#1e2a1c'; g.fillRect(0, 0, s, s);
+    noise(g, s, ['#16201a', '#2a3a24', '#3a3424', '#121812', '#34442a'], 7000, [1, 4], 0.5);
+    g.strokeStyle = 'rgba(60,80,44,0.35)'; g.lineWidth = 1;
+    for (let i = 0; i < 400; i++) { const x = Math.random() * s; const y = Math.random() * s; g.beginPath(); g.moveTo(x, y); g.lineTo(x + rnd(-2, 2), y - rnd(3, 7)); g.stroke(); }
+  }, { roughness: 1 }),
+  // clareira de terra batida em volta da fogueira (decalque redondo, bordas que somem na grama)
+  camp_dirt: () => tex(512, 1, (g, s) => {
+    const grd = g.createRadialGradient(s / 2, s / 2, s * 0.05, s / 2, s / 2, s / 2);
+    grd.addColorStop(0, 'rgba(70,52,36,1)');
+    grd.addColorStop(0.55, 'rgba(62,48,34,0.95)');
+    grd.addColorStop(0.85, 'rgba(52,44,32,0.45)');
+    grd.addColorStop(1, 'rgba(40,40,30,0)');
+    g.fillStyle = grd; g.fillRect(0, 0, s, s);
+    for (let i = 0; i < 2500; i++) {
+      const a = Math.random() * Math.PI * 2; const r = Math.sqrt(Math.random()) * s * 0.45;
+      g.fillStyle = Math.random() < 0.5 ? 'rgba(30,22,16,0.4)' : 'rgba(110,90,64,0.35)';
+      g.fillRect(s / 2 + Math.cos(a) * r, s / 2 + Math.sin(a) * r, rnd(1, 3), rnd(1, 3));
+    }
+    // cinza e carvão perto do fogo
+    const ash = g.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s * 0.16);
+    ash.addColorStop(0, 'rgba(20,16,14,0.9)'); ash.addColorStop(1, 'rgba(40,36,32,0)');
+    g.fillStyle = ash; g.fillRect(0, 0, s, s);
+  }),
+  // lateral da van "Chico Eletrônicos" dos Cinco: grafite verde neon com o alienígena de asas e o nome em letra cursiva
+  van_side: () => tex(1024, 1, (g, s) => {
+    const R = 3.1; // proporção do decalque (4,4 m × 1,42 m)
+    const W = s * R;
+    g.save();
+    g.scale(1 / R, 1);
+    g.clearRect(0, 0, W, s);
+    // linhas de relevo topográfico (a pintura da arte conceitual)
+    g.strokeStyle = 'rgba(80,255,120,0.35)'; g.lineWidth = 7;
+    for (let k = 0; k < 9; k++) {
+      g.beginPath();
+      for (let x = 0; x <= W; x += 40) g.lineTo(x, 120 + k * 100 + Math.sin(x * 0.004 + k) * 50 + Math.sin(x * 0.011 + k * 2) * 20);
+      g.stroke();
+    }
+    // alienígena com asas (a marca da van)
+    const cx = W * 0.62; const cy = s * 0.47;
+    g.fillStyle = 'rgba(60,255,110,0.9)';
+    for (const d of [-1, 1]) {
+      g.beginPath(); g.moveTo(cx + d * 90, cy);
+      g.quadraticCurveTo(cx + d * 420, cy - 260, cx + d * 560, cy - 120);
+      g.quadraticCurveTo(cx + d * 400, cy - 60, cx + d * 470, cy + 40);
+      g.quadraticCurveTo(cx + d * 300, cy + 20, cx + d * 330, cy + 130);
+      g.quadraticCurveTo(cx + d * 200, cy + 60, cx + d * 90, cy + 90);
+      g.fill();
+    }
+    g.beginPath(); g.ellipse(cx, cy - 20, 150, 190, 0, 0, Math.PI * 2); g.fill();
+    g.fillStyle = '#081a0c';
+    for (const d of [-1, 1]) { g.beginPath(); g.ellipse(cx + d * 66, cy - 30, 58, 92, d * -0.5, 0, Math.PI * 2); g.fill(); }
+    g.fillStyle = 'rgba(255,90,200,0.85)';
+    g.beginPath(); g.arc(cx, cy + 120, 14, 0, Math.PI * 2); g.fill();
+    // nome em letra cursiva, com contorno escuro
+    g.font = 'italic bold 230px "Brush Script MT", "Segoe Script", cursive';
+    g.textAlign = 'left'; g.textBaseline = 'middle';
+    g.lineWidth = 18; g.strokeStyle = '#06140a';
+    g.strokeText('Chico', 120, s * 0.36);
+    g.fillStyle = '#ff6ad8'; g.fillText('Chico', 120, s * 0.36);
+    g.font = 'italic bold 150px "Brush Script MT", "Segoe Script", cursive';
+    g.strokeText('Eletrônicos', 160, s * 0.66);
+    g.fillStyle = '#7dff9a'; g.fillText('Eletrônicos', 160, s * 0.66);
+    g.restore();
+  }, { glow: 0.35 }),
+  // placas de papelão escritas à mão dos conspiracionistas
+  sign_vindo: () => cardboard(['ELES', 'ESTÃO', 'VINDO!'], '#b01818'),
+  sign_levem: () => cardboard(['NOS', 'LEVEM', 'JUNTO'], '#141414', true),
+  sign_sinal: () => cardboard(['O SINAL', 'É REAL'], '#1a3aa0'),
+  sign_varminho: () => cardboard(['VARMINHO', '26·07·90', 'NÃO', 'ESQUEÇA'], '#141414'),
+  // chapa ondulada escura da estação abandonada
+  shed_metal: () => tex(256, 1.2, (g, s) => {
+    g.fillStyle = '#26262c'; g.fillRect(0, 0, s, s);
+    for (let x = 0; x < s; x += 16) { g.fillStyle = 'rgba(255,255,255,0.06)'; g.fillRect(x, 0, 6, s); g.fillStyle = 'rgba(0,0,0,0.35)'; g.fillRect(x + 9, 0, 4, s); }
+    noise(g, s, ['#4a2a1a', '#1a1a1e', '#3a3a40'], 1200, [1, 5], 0.4); // ferrugem
+  }),
+  // porta dupla de metal da estação
+  shed_door: () => tex(256, 1, (g, s) => {
+    g.fillStyle = '#5a5e68'; g.fillRect(0, 0, s, s);
+    g.fillStyle = '#3a3e46'; g.fillRect(s / 2 - 3, 0, 6, s);
+    g.strokeStyle = '#2a2c34'; g.lineWidth = 6; g.strokeRect(10, 10, s - 20, s - 20);
+    for (const x of [s / 2 - 30, s / 2 + 18]) { g.fillStyle = '#8a8e98'; g.fillRect(x, s * 0.5, 12, 30); }
+    noise(g, s, ['#6a3a22', '#2a2a30'], 500, [1, 4], 0.35);
+  }),
+  // pichação na parede da estação: o símbolo da emissora (antena com ondas) e "TV VARMINHO"
+  station_tag: () => tex(512, 1, (g, s) => {
+    g.clearRect(0, 0, s, s);
+    g.strokeStyle = 'rgba(230,230,240,0.85)'; g.lineWidth = 16; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(s / 2, s * 0.62); g.lineTo(s / 2, s * 0.28); g.stroke();
+    g.beginPath(); g.moveTo(s * 0.38, s * 0.62); g.lineTo(s / 2, s * 0.4); g.lineTo(s * 0.62, s * 0.62); g.stroke();
+    for (const r of [60, 110, 160]) { g.beginPath(); g.arc(s / 2, s * 0.28, r, -Math.PI * 0.85, -Math.PI * 0.15); g.stroke(); }
+    g.font = 'bold 64px Impact, sans-serif'; g.textAlign = 'center'; g.fillStyle = 'rgba(230,230,240,0.85)';
+    g.fillText('TV VARMINHO', s / 2, s * 0.86);
+  }),
 };
 
 function crate(color) {
@@ -394,5 +490,27 @@ function crate(color) {
     g.fillStyle = 'rgba(0,0,0,0.35)';
     for (let i = 0; i < 3; i++) g.fillRect(14 + i * 38, 30, 22, 50);
     noise(g, s, ['#000', '#fff'], 600, [1, 2], 0.2);
+  });
+}
+
+// placa de papelão escrita à mão (texto em linhas, tinta da cor pedida); torta = letras tremidas
+function cardboard(lines, ink, shaky = false) {
+  return tex(256, 1, (g, s) => {
+    g.fillStyle = '#b08a5a'; g.fillRect(0, 0, s, s);
+    noise(g, s, ['#9a7646', '#c49c6a', '#8a6a40'], 1500, [1, 3], 0.4);
+    g.strokeStyle = 'rgba(80,56,30,0.5)'; g.lineWidth = 3; g.strokeRect(6, 6, s - 12, s - 12);
+    g.fillStyle = ink; g.textAlign = 'center'; g.textBaseline = 'middle';
+    const n = lines.length;
+    const size = Math.min(70, Math.floor((s - 30) / n));
+    lines.forEach((t, i) => {
+      g.save();
+      g.translate(s / 2, 20 + (i + 0.5) * ((s - 40) / n));
+      g.rotate(rnd(-0.06, 0.06) + (shaky ? rnd(-0.06, 0.06) : 0));
+      let sz = size;
+      g.font = `bold ${sz}px "Comic Sans MS", "Segoe Print", sans-serif`;
+      while (g.measureText(t).width > s - 30 && sz > 20) { sz -= 4; g.font = `bold ${sz}px "Comic Sans MS", "Segoe Print", sans-serif`; }
+      g.fillText(t, 0, 0);
+      g.restore();
+    });
   });
 }

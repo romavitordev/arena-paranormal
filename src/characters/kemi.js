@@ -53,7 +53,7 @@ export default {
     interval: 0,
     damage: 100,
     range: 70,
-    speed: 170,
+    speed: 100, // dá para ver a bala e desviar (170 chegava no mesmo quadro)
     radius: 0.3,
     spread: 0,
     knockback: 4.5,

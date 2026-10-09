@@ -2,6 +2,31 @@
 
 ## (em andamento) — próxima versão
 
+- **Novo cenário: ACAMPAMENTO VARMINHO (Sinais do Outro Lado, ep. 2).** Pesquisa na wiki: o acampamento
+  fica ao lado da Estação de Transmissão de Varminho (galpão queimado com o símbolo da emissora pichado, torre de
+  treliça com antenas), gente esperando ser abduzida (Edimeia, Eriberto, Ludismila — que vive olhando as estrelas); a
+  arte da recapitulação mostra a fogueira com toras de banco, o violão e as árvores em volta; a van dos Cinco é a
+  "Chico Eletrônicos" (escura, grafite verde neon com alienígena de asas, parabólica e bagageiro, placa AR0051).
+  `tools/blender/arena_acampamento.py` → `public/arenas/acampamento.glb`: fogueira com colisão, clareira de terra,
+  toras, barracas coloridas viradas para o fogo com lampiões, cadeiras, mesa com rádio, 4 placas de papelão, prato de
+  satélite caseiro de papel-alumínio, varal de lâmpadas, violão, telescópio e manta da Ludismila, a van feita à mão
+  (com faróis e o grafite nas laterais), o galpão e a torre de 26 m com a luz vermelha, ~200 árvores escuras e pinheiros,
+  grama e arbustos. Peças prontas do Nature Kit do Kenney (CC0, já baixado). Texturas novas em `arenaTextures.js`
+  (`ground_camp`, `camp_dirt`, `van_side`, placas `sign_*` via `cardboard()`, `shed_metal`, `shed_door`,
+  `station_tag`). `glbArena.js` ganhou `stars` (cúpula de estrelas), `fires` (fogueira animada com cones aditivos) e
+  `particles` em lista (brasas na fogueira + vaga-lumes). Config `ACAMPAMENTO` (luar azul, luz da fogueira piscando,
+  lâmpadas, faróis, luz verde na van, luz da torre), registrado em `ARENAS`/`ARENA_ORDER`. Testado: carrega sem erros,
+  fogueira bloqueia (não dá para atravessar), limite em 19,5 m, luta com CPU.
+
+- **Sniper do Arthur dava para desviar? Não dava — agora dá (usuário: "o tiro gruda").** Três causas: o laser ficava
+  sempre colado no alvo, a mira cheia disparava sozinha na hora sem aviso e a bala a 170 m/s chegava praticamente no
+  mesmo quadro. `startChargeShot` (Fighter): o ponto do laser persegue o alvo com atraso (`chargeShot.track`, 5 m/s —
+  correndo de lado você sai da mira), o tiro vai para onde o LASER está (`r.aimAt` no `fireProjectile`), e com a mira
+  cheia o laser trava e pisca vermelho por `lockWarn` (0,35 s) antes do disparo automático. Bala do Arthur 170 → 95 e
+  da Kemi 170 → 100 (a Kemi e a Fantasma usam o mesmo tiro carregado e ganham o mesmo comportamento). Testado (alvo a
+  12 m): parado leva 160 (a 25 m também); correndo de lado o tempo todo ou só no fim: erra; esquivando no aviso:
+  erra; toque rápido parado: 70; Kemi parado 150 e de lado erra; CPU do Arthur continua atirando.
+
 - **Modelos antigos apagados (Erin aparecia com o corpo antigo da Aghata).** Quando um `.glb` falhava ao baixar (o
   servidor devolvia HTML no lugar do arquivo), `preloadModels` só avisava no console e `buildModel` montava o modelo
   procedural provisório registrado para aquele id — a Erin caía no `buildAghata`. Apagados `src/models/characters/`

@@ -50,7 +50,7 @@ export default {
     interval: 0,
     damage: 110, // alto dano
     range: 70, // longo alcance
-    speed: 170, // preciso
+    speed: 95, // rápido, mas dá para ver a bala (com 170 chegava no mesmo quadro e não dava para desviar)
     radius: 0.3,
     spread: 0,
     knockback: 5, // grande impacto
@@ -64,7 +64,9 @@ export default {
     impactScale: 1.8,
     // Segurar □: pega o rifle, ajoelha, apoia no joelho e mira. Quanto mais tempo mirando, mais dano —
     // e mais tempo exposto (tomar um golpe cancela o tiro). Toque rápido = disparo rápido e fraco.
-    chargeShot: { draw: 0.32, maxAim: 1.3, minDamage: 70, maxDamage: 160, recovery: 0.45 },
+    // track: velocidade (m/s) com que o laser persegue o alvo — correndo de lado dá para sair da mira;
+    // lockWarn: com a mira cheia o laser trava e pisca antes do disparo automático (tempo para esquivar)
+    chargeShot: { draw: 0.32, maxAim: 1.3, minDamage: 70, maxDamage: 160, recovery: 0.45, track: 5, lockWarn: 0.35 },
   },
 
   abilities: [
