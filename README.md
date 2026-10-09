@@ -208,16 +208,14 @@ O `Fighter` não tem código específico de personagem: tudo vem da definição.
 1. Crie `src/characters/novo.js` copiando um existente e ajuste golpes (`melee.strikes`,
    `forward`, `back`, `side`, `air`), `ranged`, `abilities` (escolha um `type` de `combat/abilities.js`),
    `special` (um `type` de `combat/specials/`), `passives`, `dodge` e `defense`.
-2. Registre o modelo em `src/models/index.js` e adicione na lista `ROSTER`.
+2. Crie o modelo (`tools/blender/char_novo.py`), registre em `BLENDER_MODELS` (`src/models/index.js`) e adicione na lista `ROSTER`.
 3. `npm run check` e `npm run moves`.
 
-### Trocando os modelos (Blender)
-Os modelos atuais são **provisórios**, montados com formas simples por código.
-Para usar um modelo do Blender, exporte em `.glb` e troque a função do personagem em
-`src/models/index.js` por uma que carregue o arquivo (GLTFLoader) e devolva um objeto com a
-mesma interface do rig (`root`, `body`, `joints`, `sockets` como `handR`, `back` e `mouth`, `props`,
-`showProp`, `setTint`). Para animações próprias, substitua o `Animator` por um que use
-`THREE.AnimationMixer`, mantendo os mesmos nomes de clipe. Referências visuais futuras: `Referencias visuais/`.
+### Modelos dos personagens (Blender)
+Cada personagem tem o seu modelo em `public/models/<id>.glb`, gerado por `tools/blender/char_<id>.py`
+(`node tools/blender/build.mjs <id>`) e registrado em `BLENDER_MODELS` (`src/models/index.js`); formas que só trocam
+acessórios ficam em `MODEL_VARIANTS`. Armas e acessórios em código ficam em `src/models/props.js`. Não existem mais
+modelos procedurais provisórios: se um `.glb` não carregar, o jogo tenta de novo e, se ainda falhar, avisa na tela.
 
 ### Cenários (Blender + modelos prontos)
 Os 5 cenários (Ruínas do Ritual, Orfanato, Bar Suvaco Seco, Coliseu e Santo Berço) são montados no Blender por
@@ -231,6 +229,5 @@ Os sons são sintetizados na hora. Para usar arquivos, coloque-os em `public/sou
 em `SOUND_FILES` (`src/audio/AudioManager.js`) com o mesmo nome do som.
 
 ## Limitações conhecidas
-- Modelos, animações e sons são provisórios (serão refeitos com as referências visuais).
 - Suporte a controle usa a Gamepad API do navegador (layout padrão Xbox/PlayStation); não testado com controle físico.
 - Os cenários dependem dos kits do Kenney baixados em `assets_src/` para serem gerados de novo (o `.glb` pronto já está em `public/arenas/`).

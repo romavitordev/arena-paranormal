@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { buildModel, MODEL_BUILDERS, preloadModels } from './models/index.js';
+import { buildModel, MODEL_IDS, preloadModels } from './models/index.js';
 import { Animator } from './anim/Animator.js';
 import { CLIPS } from './anim/clips.js';
 import { ROSTER } from './characters/index.js';
@@ -36,7 +36,7 @@ floor.rotation.x = -Math.PI / 2;
 floor.receiveShadow = true;
 scene.add(floor);
 
-const ids = Object.keys(MODEL_BUILDERS);
+const ids = MODEL_IDS;
 const only = new URLSearchParams(location.search).get('only');
 const shown = only ? ids.filter((id) => only.split(',').includes(id)) : ids;
 await preloadModels();

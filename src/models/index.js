@@ -1,48 +1,11 @@
-import { buildKaiser } from './characters/kaiser.js';
-import { buildArthur } from './characters/arthur.js';
-import { buildJoui } from './characters/joui.js';
 import { addKaiserProps, addArthurProps, addJouiProps, addAghataProps, addGalSalProps, addKianProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps, addFerreiroProps, addJuanProps, addKemiProps, addFantasmaProps, addBaluProps, addErinCaosProps, addLabirintoElmoProps, addAguiarMutiladorProps, addArnaldoProps, addAnfitriaoProps, addVerissimoProps, addJaeProps, addJaeXProps } from './props.js';
-import { buildAghata } from './characters/aghata.js';
-import { buildGalSal } from './characters/gal_sal.js';
-import { buildKian } from './characters/kian.js';
-import { buildDante } from './characters/dante.js';
 import { loadGLB, rigFromGLB } from './glbRig.js';
 import { preloadNpcModels } from './npcRig.js';
 
 // Registro de MODELOS, separado das habilidades.
-// Cada personagem pode ter um modelo do Blender (.glb em public/models, gerado por
-// tools/blender/char_<id>.py). Se o arquivo não existir, usa o modelo procedural.
-export const MODEL_BUILDERS = {
-  kaiser: buildKaiser,
-  arthur: buildArthur,
-  joui: buildJoui,
-  aghata: buildAghata,
-  gal_sal: buildGalSal,
-  kian: buildKian,
-  dante: buildDante,
-  // sem modelo procedural próprio: se o .glb faltar, usa um corpo provisório parecido
-  erin: buildAghata,
-  aguiar: buildJoui,
-  labirinto: buildKian,
-  xande: buildKaiser,
-  lirio: buildArthur,
-  ferreiro: buildArthur,
-  deus_morte: buildArthur,
-  juan: buildAghata,
-  diabo: buildAghata,
-  kemi: buildAghata,
-  fantasma: buildAghata,
-  balu: buildArthur,
-  erin_caos: buildAghata,
-  labirinto_elmo: buildKian,
-  aguiar_mutilador: buildJoui,
-  arnaldo: buildJoui,
-  anfitriao: buildJoui,
-  verissimo: buildArthur,
-  jae: buildAghata,
-  jae_x: buildAghata,
-};
-
+// Todo personagem tem o seu modelo do Blender (.glb em public/models, gerado por tools/blender/char_<id>.py). Os modelos
+// procedurais antigos (corpos provisórios montados em código) foram APAGADOS: quando um .glb falhava ao carregar o jogo
+// mostrava o corpo antigo de outro personagem (ex.: a Erin com a Aghata antiga). Agora o carregamento tenta de novo.
 // Modelos do Blender + armas/acessórios adicionados em código
 const BLENDER_MODELS = {
   kaiser: { url: 'models/kaiser.glb', props: addKaiserProps },
@@ -78,38 +41,54 @@ const MODEL_VARIANTS = {
   jae_x: { base: 'jae', props: addJaeXProps }, // capuz do X
 };
 
-const loaded = {};
+// todos os modelos que o jogo sabe montar (personagens e formas)
+export const MODEL_IDS = [...Object.keys(BLENDER_MODELS), ...Object.keys(MODEL_VARIANTS)];
 
-// Carrega todos os .glb disponíveis (chamado uma vez no início do jogo)
+const loaded = {};
+const RETRIES = 4;
+
+// baixa um .glb tentando de novo (servidor ocupado, rede instável, resposta errada): só desiste depois de RETRIES vezes
+async function loadWithRetry(url) {
+  let last;
+  for (let i = 0; i < RETRIES; i++) {
+    try {
+      return await loadGLB(i ? `${url}?r=${i}` : url);
+    } catch (e) {
+      last = e;
+      await new Promise((r) => setTimeout(r, 400 * (i + 1)));
+    }
+  }
+  throw last;
+}
+
+// Carrega todos os .glb (chamado uma vez no início do jogo). Falhou mesmo tentando de novo → erro (o jogo avisa)
 export async function preloadModels(onProgress) {
   const ids = Object.keys(BLENDER_MODELS);
   let done = 0;
   const npcs = preloadNpcModels(); // invocações (Marionete, Zumbis de Sangue)
+  const failed = [];
   await Promise.all(ids.map(async (id) => {
+    if (loaded[id]) { done++; return; }
     try {
-      loaded[id] = await loadGLB(import.meta.env.BASE_URL + BLENDER_MODELS[id].url);
+      loaded[id] = await loadWithRetry(import.meta.env.BASE_URL + BLENDER_MODELS[id].url);
     } catch (e) {
-      console.warn(`Modelo do Blender indisponível (${id}), usando o provisório.`, e);
+      console.error(`Modelo ${id} não carregou`, e);
+      failed.push(id);
     }
     done++;
     onProgress && onProgress(done / ids.length);
   }));
   await npcs;
+  if (failed.length) throw new Error(`Modelos que não carregaram: ${failed.join(', ')}`);
 }
 
 export function buildModel(id) {
   const variant = MODEL_VARIANTS[id];
-  if (variant && loaded[variant.base]) {
-    const rig = rigFromGLB(loaded[variant.base]);
-    variant.props(rig);
-    return rig.finish();
-  }
-  if (loaded[id]) {
-    const rig = rigFromGLB(loaded[id]);
-    BLENDER_MODELS[id].props && BLENDER_MODELS[id].props(rig);
-    return rig.finish();
-  }
-  const fn = MODEL_BUILDERS[id];
-  if (!fn) throw new Error(`Modelo não registrado: ${id}`);
-  return fn();
+  const base = variant ? variant.base : id;
+  const gltf = loaded[base];
+  if (!gltf) throw new Error(`Modelo não carregado: ${id}`);
+  const rig = rigFromGLB(gltf);
+  const props = variant ? variant.props : BLENDER_MODELS[id] && BLENDER_MODELS[id].props;
+  if (props) props(rig);
+  return rig.finish();
 }

@@ -56,8 +56,23 @@ const arenaThumbs = {}; // previews dos cenários (gerados depois dos retratos)
 let booted = false;
 // aprendizado da CPU (Super Difícil): o que vem com o jogo + o que este navegador já aprendeu
 loadLearned(import.meta.env.BASE_URL).catch(() => {});
+// algum modelo não baixou nem tentando de novo: avisa e oferece recarregar (antes o jogo trocava pelo corpo antigo
+// de outro personagem)
+function loadFailed(e) {
+  console.error(e);
+  const box = document.createElement('div');
+  box.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#0c0a10;color:#eee;font:16px sans-serif;text-align:center;padding:16px';
+  box.innerHTML = '<div>Não foi possível carregar os modelos do jogo.<br>Verifique a conexão e tente de novo.</div>';
+  const btn = document.createElement('button');
+  btn.textContent = 'RECARREGAR';
+  btn.style.cssText = 'padding:10px 28px;font:600 16px sans-serif;background:#c81e2e;color:#fff;border:0;border-radius:6px;cursor:pointer';
+  btn.onclick = () => location.reload();
+  box.appendChild(btn);
+  document.body.appendChild(box);
+  throw e;
+}
 Promise.all([preloadModels(), preloadArenas()])
-  .catch((e) => console.warn(e))
+  .catch(loadFailed)
   .then(() => {
     Object.assign(portraits, renderPortraits([...ROSTER, ...VILLAINS.map(getForm)], renderer)); // + os vilões das TORRES
     booted = true;

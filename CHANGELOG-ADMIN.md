@@ -1,5 +1,17 @@
 # Registro administrativo de alterações
 
+## (em andamento) — próxima versão
+
+- **Modelos antigos apagados (Erin aparecia com o corpo antigo da Aghata).** Quando um `.glb` falhava ao baixar (o
+  servidor devolvia HTML no lugar do arquivo), `preloadModels` só avisava no console e `buildModel` montava o modelo
+  procedural provisório registrado para aquele id — a Erin caía no `buildAghata`. Apagados `src/models/characters/`
+  (kaiser, arthur, joui, aghata, gal_sal, kian, dante), `MODEL_BUILDERS` e o rig humanoide antigo do `rig.js`
+  (`buildHumanoid`, `faceTexture`, `paintEyes`, `paintMouth`); `addJouiProps` foi para `props.js`. Agora:
+  `loadGLB` não guarda a falha no cache, `preloadModels` tenta cada modelo 4 vezes (com espera e `?r=n` para não
+  reaproveitar resposta ruim) e, se ainda falhar, o jogo mostra "Não foi possível carregar os modelos" com
+  RECARREGAR. `MODEL_IDS` (galeria) no lugar de `MODEL_BUILDERS`. Testado: os 27 modelos (personagens e formas)
+  montam do Blender; Erin, Aghata, Joui (com a katana) e Kaiser conferidos na tela; luta Joui × Erin sem erros.
+
 ## v3.13.0 — Torneio e o X
 
 - Versão: `VERSION` 3.12.0 → **3.13.0** (Torneio, Jae, correções da CPU e do Juan).

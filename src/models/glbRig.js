@@ -34,7 +34,8 @@ function keepSkinHue(m) {
 
 export function loadGLB(url) {
   if (!cache.has(url)) {
-    cache.set(url, new Promise((resolve, reject) => loader.load(url, resolve, undefined, reject)));
+    // falhou: sai do cache para a próxima tentativa baixar de novo
+    cache.set(url, new Promise((resolve, reject) => loader.load(url, resolve, undefined, (e) => { cache.delete(url); reject(e); })));
   }
   return cache.get(url);
 }

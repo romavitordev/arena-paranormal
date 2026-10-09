@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { glowMat } from './rig.js';
-import { m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, roundGlasses, neonWraps, pulseEmitter, bandolier } from './weapons.js';
-export { addJouiProps } from './characters/joui.js';
+import { katana, scabbard, m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, roundGlasses, neonWraps, pulseEmitter, bandolier } from './weapons.js';
 
 // Armas e acessórios adicionados em código sobre os modelos do Blender.
 // Usam só `sockets`, `attach()` e `props`, que existem nos dois tipos de rig.
@@ -500,4 +499,19 @@ export function addJaeProps(rig) {
 export function addJaeXProps(rig) {
   addJaeProps(rig);
   for (const [p, v] of [['hoodUp', true], ['hoodX', true], ['hoodDown', false]]) if (rig.props[p]) rig.showProp(p, v);
+}
+
+// JOUI: katana sempre na mão (arma principal) e bainha na cintura; a máscara puxada para o lado começa escondida (o
+// lutador decide qual mostrar)
+export function addJouiProps(rig) {
+  const { sockets, props } = rig;
+  const sheath = scabbard();
+  sheath.rotation.set(0.9, 0, 0.35);
+  sockets.hip.add(sheath);
+  props.scabbard = sheath;
+  const blade = katana();
+  blade.rotation.x = -0.45;
+  sockets.handR.add(blade);
+  props.katana = blade;
+  if (props.maskSide) rig.showProp('maskSide', false);
 }
