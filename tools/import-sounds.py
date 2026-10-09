@@ -5,7 +5,9 @@ sorteada a cada toque, com um pouco de variação de tom. Som sem arquivo contin
 
 Pacotes (créditos e links em assets_src/README.md):
   assets_src/oga/   OpenGameArt — golpes de verdade: "37 hits/punches" (Independent.nu), "Punch" (qubodup),
-                    "20 Sword Sound Effects" (StarNinjas) e "swishes sound pack" (artisticdude)
+                    "20 Sword Sound Effects" (StarNinjas), "swishes sound pack" (artisticdude); tiros: "The Free
+                    Firearm Sound Library"; carne: "8 wet squish, slurp impacts"; "Teleport Spell", "Heartbeat",
+                    "Jump Landing Sound", "Ghost Monster Voice Moaning & Growling"
   assets_src/kenney/ Kenney — explosões, metal, menus (os golpes do Kenney soavam como pancada em saco: trocados)
 
 Todos os arquivos perdem o silêncio do começo (no pacote de golpes chegava a 270 ms: o som saía atrasado) e são
@@ -30,6 +32,12 @@ PUNCH = 'oga/qubodup_punch/qubodupPunch/qubodupPunch{:02d}.flac'
 SWORD = 'oga/sword_attack/sword - StarNinjas/sword.{}.ogg'
 CLASH = 'oga/sword_clash/sword_clash.{}.ogg'
 SWISH = 'oga/swishes/swishes/swish-{}.wav'
+GUN = 'oga/guns/Prepared SFX Library/{}'
+SQUISH = 'oga/squish/impsplat/impactsplat{:02d}.mp3.flac'
+GHOST = 'oga/ghost/qubodup-GhostMoans/wav/qubodup-GhostMoan{:02d}.wav'
+TELEPORT = 'oga/teleport/teleport.wav'
+HEART = 'oga/heartbeat/heartbeat.mp3_.flac'
+LAND = 'oga/jumpland/jumpland.wav'
 K_IMPACT = 'kenney/kenney_impact-sounds/Audio/{}.ogg'
 K_RPG = 'kenney/kenney_rpg-audio/Audio/{}.ogg'
 K_SCIFI = 'kenney/kenney_sci-fi-sounds/Audio/{}.ogg'
@@ -38,6 +46,11 @@ K_UI = 'kenney/kenney_interface-sounds/Audio/{}.ogg'
 
 def many(tpl, ids, **opts):
     return [(tpl.format(i), opts) for i in ids]
+
+
+def shots(file, times, **opts):
+    """cada arquivo da biblioteca de armas tem 2–4 disparos: um por variação (at = início do disparo, em s)"""
+    return [(GUN.format(file), {**opts, 'at': max(0, t - 0.02)}) for t in times]
 
 
 def mix(*layers, **opts):
@@ -71,6 +84,35 @@ MAP = {
     'blockHit': many(CLASH, [2, 4, 5, 7, 8], max=0.25, gain=-3),
     'guardBreak': many(K_IMPACT, [f'impactMetal_heavy_00{i}' for i in range(5)], gain=2),
     'perfectBlock': many(CLASH, [1, 3, 10], max=0.45),
+    # TIROS ("The Free Firearm Sound Library"): cada disparo alto vira uma variação
+    'm4': shots('AR-15/D_32P.wav', [0.70, 5.66], max=0.4) + shots('AR-15/D_24P.wav', [0.55, 3.92], max=0.4),
+    # (as gravações "near" da Nova, CD, 2º tiro da Mossberg e da Savage (fina demais para sniper) eram só o estalo — 20–70 ms acima de −30 dB,
+    # soariam como clique: usadas as de distância média, com o corpo do disparo)
+    'shotgun': (shots('Model 12/K_22P.wav', [0.84, 7.46], max=0.8) + shots('Model 12/K_17P.wav', [0.91, 7.07], max=0.8)
+                + shots('Nova/O_17P.wav', [0.69, 3.71], max=0.8) + shots('Mossberg/N_26P.wav', [0.79, 4.58], max=0.8)),
+    'sniper': (shots('Tikka/W_29P.wav', [0.58, 5.67], max=1.2) + shots('Tikka/W_24P.wav', [0.76, 5.38], max=1.2)
+               + shots('Arisaka/E_25P.wav', [0.52, 4.04], max=1.2) + shots('1917/B_24P.wav', [1.31, 6.75], max=1.2)),
+    # garras e carne
+    'clawHit': (mix((SQUISH.format(6), -3, 0), (HITS.format(17), 0, 0), max=0.4)
+                + mix((SQUISH.format(3), -3, 0), (HITS.format(23), 0, 0), max=0.4)),
+    'bloodClaw': many(SQUISH, [6, 3], max=0.5),
+    'descarnar': many(SQUISH, [2, 5], max=0.8),
+    # correntes e chicote
+    'chainThrow': (mix((SWISH.format(4), 0, 0), (K_RPG.format('handleCoins'), -4, 30), max=0.45)
+                   + mix((SWISH.format(9), 0, 0), (K_RPG.format('handleCoins2'), -4, 30), max=0.45)),
+    'chainPull': (mix((K_RPG.format('handleCoins2'), 0, 0), (K_RPG.format('metalLatch'), -3, 120), max=0.5)
+                  + mix((K_RPG.format('handleCoins'), 0, 0), (K_RPG.format('metalLatch'), -3, 120), max=0.5)),
+    'whip': (mix((SWISH.format(12), 0, 0), (HITS.format(14), -2, 60), max=0.35)
+             + mix((SWISH.format(13), 0, 0), (HITS.format(10), -2, 60), max=0.35)),
+    # paranormal e corpo
+    'teleport': [(TELEPORT, {'max': 0.9})],
+    'blink': [(TELEPORT, {'max': 0.4, 'pitch': 1.25})],
+    'fearGaze': many(GHOST, [5, 1], max=1.6, gain=-4),
+    'heartbeat': [(HEART, {'max': 1.0})],
+    'land': [(LAND, {})],
+    'jump': many(SWISH, [8, 3], gain=-8, pitch=0.8),
+    'ko': (mix((HITS.format(22), 0, 0), (K_SCIFI.format('lowFrequency_explosion_000'), -6, 0), max=1.0)
+           + mix((HITS.format(2), 0, 0), (K_SCIFI.format('lowFrequency_explosion_001'), -6, 0), max=1.0)),
     # armas brancas e travas
     'knifeThrow': many(K_RPG, ['drawKnife1', 'drawKnife2', 'drawKnife3']),
     'trapSnap': many(K_RPG, ['metalLatch']),
@@ -121,8 +163,9 @@ def convert(src, dst, opts):
         chain = ','.join(['amix=inputs=%d:duration=longest:normalize=0' % len(layers)] + tail(opts))
         cmd += ['-filter_complex', ';'.join(parts) + f';{ins}{chain}', tmp]
     else:
+        start = [f"atrim=start={opts['at']}", 'asetpts=PTS-STARTPTS'] if 'at' in opts else []
         cmd = ['ffmpeg', '-v', 'error', '-y', '-i', os.path.join(ASSETS, src), '-ac', '1', '-ar', '44100',
-               '-af', ','.join([TRIM] + tail(opts)), tmp]
+               '-af', ','.join(start + [TRIM] + tail(opts)), tmp]
     subprocess.run(cmd, check=True)
     # mesmo volume de pico (−1 dB) para todos; depois o ganho próprio do som
     gain = -1 - peak_db(tmp) + opts.get('gain', 0)

@@ -195,25 +195,41 @@ export class Effects {
   }
 
   // Arco de corte (katana, faca, lâminas, garra).
+  // Arco de corte: faixa com degradê ao longo do arco (cauda transparente → ponta forte) e borda externa branca
+  // quente; aparece varrendo (a ponta percorre o arco) e some alargando. Por trás, um brilho largo e fraco da cor.
   slash(pos, yaw, o = {}) {
     const { color = 0xffffff, radius = 1.6, arc = 2.4, tilt = 0, life = 0.22, width = 0.35, flip = false, roll = 0 } = o;
-    const geo = new THREE.RingGeometry(radius - width, radius, 28, 1, -arc / 2, arc);
-    const mat = new THREE.MeshBasicMaterial({
-      color, transparent: true, opacity: 0.9, side: THREE.DoubleSide,
-      blending: THREE.AdditiveBlending, depthWrite: false,
-    });
-    const m = new THREE.Mesh(geo, mat);
     const g = new THREE.Group();
     g.position.copy(pos);
     g.rotation.y = yaw;
-    m.rotation.x = -Math.PI / 2 + tilt;
-    m.rotation.z = Math.PI / 2 + roll;
-    if (flip) m.scale.x = -1;
-    g.add(m);
+    const layer = (w, r, opacity, tint) => {
+      const geo = new THREE.RingGeometry(r - w, r, 32, 1, -arc / 2, arc);
+      polarUV(geo, r - w, w, -arc / 2, arc);
+      const map = slashTexture().clone(); // mesma imagem, deslocamento próprio (a varredura)
+      map.needsUpdate = true;
+      const mat = new THREE.MeshBasicMaterial({
+        color: tint, map, transparent: true, opacity, side: THREE.DoubleSide,
+        blending: THREE.AdditiveBlending, depthWrite: false,
+      });
+      const m = new THREE.Mesh(geo, mat);
+      m.rotation.x = -Math.PI / 2 + tilt;
+      m.rotation.z = Math.PI / 2 + roll;
+      if (flip) m.scale.x = -1;
+      g.add(m);
+      return { m, mat, map, opacity };
+    };
+    const glowL = layer(width * 2.2, radius + width * 0.5, 0.35, color);
+    const core = layer(width, radius, 1, color);
+    const layers = [glowL, core];
     return this._addMesh(g, life, (k) => {
-      mat.opacity = 0.9 * k;
-      m.scale.setScalar(1 + (1 - k) * 0.25);
-      if (flip) m.scale.x *= -1;
+      const t = 1 - k;
+      const sweep = Math.min(1, t / 0.35); // a ponta chega ao fim do arco no 1º terço da vida
+      for (const L of layers) {
+        L.map.offset.x = 1 - sweep;
+        L.mat.opacity = L.opacity * (t < 0.35 ? 1 : k / 0.65);
+        L.m.scale.setScalar(1 + t * 0.18);
+        if (flip) L.m.scale.x *= -1;
+      }
     });
   }
 
@@ -517,6 +533,57 @@ function runeTexture() {
   g.stroke();
   _runeTex = new THREE.CanvasTexture(c);
   return _runeTex;
+}
+
+// UV polar num RingGeometry: u = ao longo do arco (0 cauda → 1 ponta), v = de dentro (0) para fora (1)
+function polarUV(geo, inner, width, start, length) {
+  const p = geo.attributes.position;
+  const uv = geo.attributes.uv;
+  for (let i = 0; i < p.count; i++) {
+    const x = p.getX(i);
+    const y = p.getY(i);
+    let a = Math.atan2(y, x) - start;
+    while (a < 0) a += Math.PI * 2;
+    uv.setXY(i, Math.min(1, a / length), (Math.hypot(x, y) - inner) / width);
+  }
+  uv.needsUpdate = true;
+}
+
+// textura do corte: transparente na cauda, forte na ponta; borda externa quase branca, interna some
+let _slashTex = null;
+function slashTexture() {
+  if (_slashTex) return _slashTex;
+  const W = 128;
+  const H = 32;
+  const c = document.createElement('canvas');
+  c.width = W;
+  c.height = H;
+  const g = c.getContext('2d');
+  const img = g.createImageData(W, H);
+  for (let y = 0; y < H; y++) {
+    const v = 1 - y / (H - 1); // canvas: y=0 em cima = v 1 (borda externa)
+    const edge = Math.pow(v, 2.2); // forte na borda externa
+    const core = Math.pow(Math.max(0, (v - 0.72) / 0.28), 3); // filete branco na borda
+    for (let x = 0; x < W; x++) {
+      const u = x / (W - 1);
+      const along = u < 0.92 ? Math.pow(u / 0.92, 1.6) : 1 - (u - 0.92) / 0.08 * 0.6; // cauda → ponta (arredondada)
+      const a = Math.min(1, along * (edge * 0.9 + core * 0.6));
+      const w = Math.min(1, core * along * 1.4); // branco quente
+      const i = (y * W + x) * 4;
+      img.data[i] = 255;
+      img.data[i + 1] = 255;
+      img.data[i + 2] = 255;
+      img.data[i + 3] = Math.round(a * 255);
+      // o branco quente vira cor clara quando misturado com a cor do material (aditivo)
+      if (w > 0) img.data[i + 3] = Math.round(Math.min(1, a + w * 0.4) * 255);
+      // colunas das pontas transparentes: na varredura o trecho "depois da ponta" (clamp) fica invisível
+      if (x === 0 || x === W - 1) img.data[i + 3] = 0;
+    }
+  }
+  g.putImageData(img, 0, 0);
+  _slashTex = new THREE.CanvasTexture(c);
+  _slashTex.wrapS = THREE.ClampToEdgeWrapping;
+  return _slashTex;
 }
 
 let _glowTex = null;

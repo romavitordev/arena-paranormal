@@ -1857,7 +1857,10 @@ Buscar recursos com licença compatível.
 > `tools/import-sounds.py`. O usuário ouviu e reprovou os socos e a espada do Kenney (soavam como pancada em saco) →
 > golpes trocados por pacotes CC0 de combate do OpenGameArt (37 hits/punches, Punch, 20 Sword Sound Effects, swishes):
 > silêncio do começo cortado (chegava a 270 ms), pico normalizado, espada acertando = aço + golpe no corpo, whoosh no
-> ar. 23 sons do jogo com variações sorteadas. **Falta:** tiros (escopeta/sniper/M4), correntes, teleporte e esquiva.
+> ar. Depois (2º pedido): tiros (M4, escopeta, sniper — cada disparo da biblioteca de armas vira uma variação),
+> garras/carne, correntes, chicote, teleporte, batimento, pulo/aterrissagem, medo e K.O. — 39 sons gravados.
+> **Ainda sintetizados:** sons paranormais/de interface (ritual, carga, dreno, renascer, especial, faixa, máscara,
+> fumaça, risada, aplausos) — dá para trocar no mapa de `tools/import-sounds.py`.
 > O foco é efeito sonoro, não música (pedido do usuário).
 
 * [x] Socos
@@ -1886,6 +1889,7 @@ Buscar recursos com licença compatível.
 * [x] Socos
 * [x] Impactos
 * [x] Explosões
+* [x] Cortes (arco com degradê, borda quente e varredura)
 * [ ] Tiros
 * [ ] Projéteis
 * [x] Fumaça

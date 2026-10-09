@@ -47,6 +47,12 @@ pancada em saco e foram trocados. Extraídos em `assets_src/oga/<pasta>/`:
 | `qubodup_punch` | Punch (qubodup) | socos | https://opengameart.org/content/punch |
 | `sword_attack`, `sword_clash` | 20 Sword Sound Effects (StarNinjas — crédito apreciado) | aço da espada, bloqueio | https://opengameart.org/content/20-sword-sound-effects-attacks-and-clashes |
 | `swishes` | swishes sound pack (artisticdude) | whoosh do golpe no ar | https://opengameart.org/content/swishes-sound-pack |
+| `guns` | The Free Firearm Sound Library (194 MB) | tiros: M4 (AR-15), escopetas, sniper (bolt-action) | https://opengameart.org/content/the-free-firearm-sound-library |
+| `squish` | 8 wet squish, slurp impacts (Independent.nu) | garras, carne, descarnar | https://opengameart.org/content/8-wet-squish-slurp-impacts |
+| `teleport` | Teleport Spell | teleporte, piscar | https://opengameart.org/content/teleport-spell |
+| `heartbeat` | Heartbeat (single sound) | batimento | https://opengameart.org/content/heartbeat-single-sound |
+| `jumpland` | Jump Landing Sound | aterrissagem | https://opengameart.org/content/jump-landing-sound |
+| `ghost` | Ghost Monster Voice Moaning & Growling (qubodup) | olhar do medo | https://opengameart.org/content/ghost-monster-voice-moaning-growling |
 
 Depois: `python tools/import-sounds.py` (gera `public/sounds/*.ogg` e `src/audio/soundFiles.js`) e
 `python tools/import-fx.py` (gera `public/fx/*.png`). Os dois precisam do `ffmpeg`. Nos scripts fica qual arquivo

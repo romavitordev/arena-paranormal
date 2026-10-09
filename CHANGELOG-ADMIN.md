@@ -14,6 +14,15 @@
   270 ms de silêncio antes do impacto. O script agora corta o silêncio inicial, normaliza o pico (−1 dB), descarta
   variações com pico tardio (> 90 ms) e monta `bladeHit`/`slashFinal`/`axeHit` misturando aço + golpe no corpo.
   `swing`/`blade` (whoosh) agora gravados. Sem camada sintetizada por cima (tentativa intermediária, removida).
+- **Tiros e o resto dos sons (2º pedido):** biblioteca de armas CC0 (194 MB, fora do git) — cada arquivo tem 2–4
+  disparos; achados por análise de energia e cortados um a um (`shots(..., at=)`). Descartadas as gravações que eram
+  só o estalo (20–70 ms acima de −30 dB). `m4` 4 × AR-15 (0,4 s), `shotgun` 8 (Model 12, Nova, Mossberg), `sniper` 8
+  (Tikka, Arisaka, Springfield 1917). Também: clawHit/bloodClaw/descarnar (carne molhada + golpe), chainThrow/
+  chainPull, whip (whoosh + estalo), teleport/blink, heartbeat, land, jump, fearGaze (gemido fantasma), ko (golpe +
+  estrondo grave). 39 nomes, 884 KB.
+- **VFX de corte e impacto:** `slash()` com UV polar e textura de degradê (cauda transparente → ponta forte, borda
+  externa quase branca), varredura da ponta no 1º terço da vida e camada de brilho largo por trás. `FX_HIT_SMALL`:
+  núcleo branco em estrela + estouro espinhoso da cor crescendo + faíscas mais rápidas e finas.
 - **Texturas de efeitos (CC0, Kenney Particle Pack):** `tools/import-fx.py` → `public/fx/*.png` (7 texturas, ~75 KB).
   `ParticlePool` aceita textura (girada por partícula no shader); a fumaça usa `smoke`; pools novos `debris` e
   `spark`; `fx.flash({ tex, grow })`. Receitas da `library.js`: golpe (estrela), golpe pesado (pedrinhas), bloqueio

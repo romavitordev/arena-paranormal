@@ -14,8 +14,10 @@ export const FX_LIBRARY = {
   // golpe comum: faíscas + clarão + anel vertical
   FX_HIT_SMALL(fx, pos, { color = 0xffffff, scale = 1 }) {
     fx.flash(pos, { color, size: 1.4 * scale, life: 0.1 });
-    fx.flash(pos, { color, size: 1.9 * scale, life: 0.09, tex: 'star' });
-    fx.burst(pos, { count: Math.round(14 * scale), color, speed: 7 * scale, life: 0.35, size: 0.18, gravity: 6 });
+    // núcleo branco em estrela + estouro espinhoso da cor do golpe crescendo
+    fx.flash(pos, { color: 0xffffff, size: 1.5 * scale, life: 0.07, tex: 'star' });
+    fx.flash(pos, { color, size: 1.3 * scale, life: 0.14, tex: 'burst', grow: 0.7 });
+    fx.burst(pos, { count: Math.round(14 * scale), color, speed: 9 * scale, life: 0.28, size: 0.13, gravity: 9, drag: 3 });
     fx.ring(pos, { color, radius: 1.1 * scale, life: 0.2, vertical: true, yaw: Math.random() * Math.PI });
   },
 
