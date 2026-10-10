@@ -20,9 +20,10 @@ export const CHARACTER_NAMES = {
   verissimo: 'Veríssimo',
   jae: 'Jae',
   dalmo: 'Dalmo',
+  guizo: 'Guizo',
 };
 
-export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto', jae_x: 'jae', colosso: 'dalmo' };
+export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto', jae_x: 'jae', colosso: 'dalmo', guizo_et: 'guizo' };
 
 export const INTRO_IDS = Object.keys(CHARACTER_NAMES);
 const INTRO_HOOKS = {
@@ -46,6 +47,7 @@ const INTRO_HOOKS = {
   verissimo: 'a espada do Arnaldo',
   jae: 'o punhal X',
   dalmo: 'esses punhos',
+  guizo: 'uma faca e uma câmera',
 };
 
 const INTRO_OPENERS = {
@@ -69,6 +71,7 @@ const INTRO_OPENERS = {
   verissimo: (other, hook) => `${other}. Vi ${hook} no relatório. Me diga o que veio fazer aqui, sem rodeios.`,
   jae: (other, hook) => `${other}... trouxe ${hook}? Shh. Vamos brincar de esconde-esconde.`,
   dalmo: (other, hook) => `${other}, eu sou grande, mas não sou dois. Vem com ${hook} que eu te mostro a arena.`,
+  guizo: (other, hook) => `Mano, é ${other} de verdade! Tô gravando — vem com ${hook} que isso vai pro site!`,
 };
 
 const INTRO_REPLIES = {
@@ -92,6 +95,7 @@ const INTRO_REPLIES = {
   verissimo: (other, hook) => `Anotado, ${other}. ${hook} não muda o plano. Nunca muda.`,
   jae: (other, hook) => `Que fofo, ${other}. Só ${hook}? Não grita, tá?`,
   dalmo: (other, hook) => `${hook}? Já apanhei de coisa pior na arena, ${other}. Segura aí.`,
+  guizo: (other, hook) => `${hook}? ...Tá, eu tô com um pouco de medo. Mas a câmera tá ligada, ${other}!`,
 };
 
 const INTRO_EXCHANGES = {
@@ -155,7 +159,15 @@ const INTRO_EXCHANGES = {
     { starter: 'xande', line: 'Kaiser, Cinerária? Eu também sei mexer com essa névoa aí.', response: 'kaiser', responseLine: 'Então me conta, Xande: a sua também tem cheiro de lanche queimado?' },
     { starter: 'kaiser', line: 'Xande, ainda mistura skate e ritual como se fosse a coisa mais normal do mundo?', response: 'xande', responseLine: 'É normal pra mim, mano. Você que precisa sair um pouco da névoa.' },
   ],
-  'xande+lirio': [
+  'guizo+xande': [
+    { starter: 'xande', line: 'Gui! O cumprimento antes, né? Senão dá azar.', response: 'guizo', responseLine: 'Óbvio! Depois eu te bato. Com carinho. E gravando.' },
+    { starter: 'guizo', line: 'Xande, depois dessa você me ajuda a editar o vídeo, tá?', response: 'xande', responseLine: 'Só se você me emprestar a câmera por uma semana, idiota.' },
+  ],
+  'guizo+lirio': [
+    { starter: 'lirio', line: 'Ô Chiquinho! Para de me filmar e luta!', response: 'guizo', responseLine: 'Eu consigo fazer os dois, Lírio! É o que eu faço!' },
+    { starter: 'guizo', line: 'Lírio, por que você nunca fica quieto numa missão?', response: 'lirio', responseLine: 'E você, Esquisito da Internet, por que filma TUDO?' },
+  ],
+  'lirio+xande': [
     { starter: 'lirio', line: 'Xande, sai da frente que hoje a Leonora tá com saudade!', response: 'xande', responseLine: 'Lírio, tu vai mesmo bater em mim com essa coisa? Mano...' },
     { starter: 'xande', line: 'Lírio, tu trouxe a Leonora de novo? Ela nunca tira folga?', response: 'lirio', responseLine: 'Ela tira quando quer, Xande. Hoje ela quis vir.' },
   ],
@@ -1714,6 +1726,54 @@ const VICTORY_DALMO = {
 };
 for (const [w, m] of Object.entries(VICTORY_DALMO)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
 
+
+// GUIZO (Os Cinco): falas de vitória dele contra cada um e de cada um contra ele
+const VICTORY_GUIZO = {
+  guizo: {
+    kaiser: ['Névoa paranormal ao vivo! Kaiser, você é conteúdo puro.', 'Desculpa a fumaça no vídeo, galera. Era a Kaiser.'],
+    arthur: ['Um braço de sangue! Arthur, posso filmar mais de perto?', 'Gravado! Ninguém vai acreditar que eu derrubei o Cervero.'],
+    joui: ['Você é rápido, mas a câmera é mais. Pausei no frame certo.', 'Fica parado aí, Joui. Preciso de um close.'],
+    aghata: ['Um grimório de verdade! Posso só ler uma página?', 'Ritual contra ritual. Hoje o meu deu certo, Aghata!'],
+    dante: ['Meu Deus, as espirais! Você também mexe com tempo, Dante?', 'Bravo pro vídeo! Agora fica quietinho aí.'],
+    erin: ['Isso explodiu demais! Eu tô tremendo, mas gravei!', 'Erin, eu tinha certeza que a gente ia voar junto.'],
+    gal_sal: ['Corrente com vida própria? Isso vai pro site hoje.', 'Gal, foi mal. A câmera tava rodando, eu tinha que ganhar.'],
+    kian: ['Você me viu ganhar antes? Então por que não desviou?', 'Eu Já Sabia, Kian. É uma habilidade, sabia?'],
+    aguiar: ['Machado de corda! Mano, que medo... mas que vídeo!', 'Desculpa, delegado. Isso aqui vai virar documentário.'],
+    labirinto: ['O ??? em pessoa! Eu sempre quis filmar um mascarado desses!', 'Achei a saída, Labirinto. Tava na minha câmera.'],
+    xande: ['Desculpa, Xande! Depois a gente faz o cumprimento, tá?', 'Ganhei do meu melhor amigo. Isso é estranho... mas tá gravado!'],
+    lirio: ['Ganhei de você, Lírio! Agora deixa eu filmar a Leonora.', 'Lírio, cadê aquela confiança toda? Tô gravando, fala pra câmera!'],
+    ferreiro: ['Um Luzidio! Orelha pontuda e tudo! Que dia!', 'Desculpa, Ferreiro. Eu filmo e vou embora, juro.'],
+    dalmo: ['Pode vir... ele disse. E eu fui! E ganhei!', 'Mano, ele é ENORME. A galera não vai acreditar no tamanho.'],
+    jae: ['Shh, eu sei. Mas não dá pra ficar quieto, eu ganhei!', 'Te achei no escuro, Jae. A câmera tem visão noturna.'],
+    kemi: ['Desviei de uma sniper! Isso nunca aconteceu antes!', 'Kemi, você treme menos que eu. Mas eu ganhei.'],
+    juan: ['Muito sangue, mano... mas eu tô vivo!', 'Juan, ri pra câmera. Agora é a sua vez de aparecer.'],
+    balu: ['Derrubei o Balu! Agora alguém me ajuda a levantar ele?', 'Desculpa, tio Balu. Te devo um macarrão.'],
+    arnaldo: ['Bravo, Arnaldo! Mas o público aqui é a minha câmera.', 'Teatro paranormal ao vivo. Que espetáculo!'],
+    verissimo: ['O chefe da Ordem! Sr. Veríssimo, uma entrevista?', 'Olhos sempre abertos? Os meus também. Pela lente.'],
+  },
+  kaiser: { guizo: ['Desliga essa câmera, garoto. A névoa não gosta de plateia.', 'Isso não vai pro seu site, Guizo.'] },
+  arthur: { guizo: ['Para de filmar e aprende a esquivar.', 'Um tiro. Nem precisou de mira, Guizo.'] },
+  joui: { guizo: ['Você grava o que vê. Eu não estava onde você via.', 'Muito barulho para um ocultista.'] },
+  aghata: { guizo: ['Ritual bonito. Mal executado.', 'Lê de novo, Guizo. Desta vez com atenção.'] },
+  dante: { guizo: ['Que cena curiosa. O câmera virou a matéria.', 'Decadência por decadência, a minha é mais antiga.'] },
+  erin: { guizo: ['Boom! Você filmou essa? Fala que você filmou essa!', 'Calma, eu fico com a sua câmera um pouquinho!'] },
+  gal_sal: { guizo: ['A corrente não aparece no vídeo. Só a queda.', 'Justiça não precisa de plateia, Guizo.'] },
+  kian: { guizo: ['Eu sabia antes de você sacar a faca.', 'Previsto. E nem foi difícil.'] },
+  aguiar: { guizo: ['Ha ha... grava isso: a caça acabou.', 'Pequeno, rápido e assustado. A presa perfeita.'] },
+  labirinto: { guizo: ['Sua câmera não grava os meus corredores.', 'Você se perdeu, Guizo. Todos se perdem.'] },
+  xande: { guizo: ['Foi mal, Gui! Depois a gente faz o cumprimento.', 'Mano, você piscou no meio do ritual!'] },
+  lirio: { guizo: ['Esquisito da Internet no chão! Que dia lindo!', 'Chiquinho, a Leonora mandou um beijo!'] },
+  ferreiro: { guizo: ['Eu não posso permitir que você filme a minha cidade.', 'Santo Berço não aparece em vídeo, garoto.'] },
+  dalmo: { guizo: ['Pode filmar agora, rapaz. A queda foi bonita.', 'Eu sou grande, mas não sou dois. Você, nem um.'] },
+  jae: { guizo: ['Shh... desliga a câmera. Pronto.', 'Gravou? Não gravou. Shh.'] },
+  kemi: { guizo: ['Eu enxerguei você antes da sua lente.', 'Um tiro. A câmera nem focou.'] },
+  juan: { guizo: ['Ha! Que vídeo bonito vai dar. Vermelho do começo ao fim.', 'Grava isso aqui, ó: você caindo.'] },
+  balu: { guizo: ['Hahaha! Desculpa, menino! Bora comer um macarrão?', 'Ê, rapaz! Bom de faca, ruim de queda.'] },
+  arnaldo: { guizo: ['Que entrada! Mas o protagonista sou eu.', 'Corta! Repete a cena, garoto.'] },
+  verissimo: { guizo: ['Ocultismo de iniciante. A Ordo tem um curso pra isso.', 'Olhos sempre abertos, Guizo. Até para câmeras.'] },
+};
+for (const [w, m] of Object.entries(VICTORY_GUIZO)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
+
 export const VICTORY_FALLBACKS = {
   kaiser: 'A névoa não escolheu por mim. Desta vez, eu fiquei.',
   arthur: 'Acabou. Agora posso garantir que ninguém mais se machuque.',
@@ -1735,6 +1795,7 @@ export const VICTORY_FALLBACKS = {
   verissimo: 'Missão cumprida. Relatório na minha mesa amanhã.',
   jae: 'Shh. Acabou.',
   dalmo: 'Pela Manu. Sempre pela Manu.',
+  guizo: 'Gravado. Isso é real e eu tenho provas!',
 };
 
 export const BATTLE_DIALOGUES = {
@@ -1759,6 +1820,7 @@ export const BATTLE_DIALOGUES = {
     verissimo: 'Já vi situação pior no relatório. Sigo.',
     jae: 'Sangrando? Ótimo. Agora eu tô acordada.',
     dalmo: 'Eu já levantei de coisa pior. A plateia quer mais.',
+    guizo: 'Tá doendo... tá doendo muito... mas não para de gravar!',
     anfitriao: 'Essa dor combina com você. Não sei por quê; combina.',
   },
   special: {
@@ -1782,6 +1844,7 @@ export const BATTLE_DIALOGUES = {
     verissimo: 'Chega de conversa. Vou encerrar a missão.',
     jae: 'Shh. Não grita.',
     dalmo: 'Agora você vai ver por que me chamam de Colosso.',
+    guizo: 'Sorria! Você tá no Registro do Outro Lado!',
     anfitriao: 'Eu ia deixar você sair andando. Aí você me olhou com essa cara.',
   },
   transform: {
@@ -1791,6 +1854,7 @@ export const BATTLE_DIALOGUES = {
     anfitriao: 'Olha só. Eu também ganhei uma fantasia nova. A sua continua sendo essa cara?',
     jae_x: 'Capuz no lugar. Agora você não vê o meu rosto.',
     colosso: 'Aí sim, neném!',
+    guizo_et: 'Eu sou o que eu sempre quis encontrar!',
   },
 };
 
@@ -1816,6 +1880,7 @@ export const BATTLE_REPLIES = {
     verissimo: 'Então continue. Eu ainda não encerrei o caso.',
     jae: 'Shh... só mais um pouquinho.',
     dalmo: 'Aguenta firme. Ainda falta o último round.',
+    guizo: 'Calma, calma... respira e enquadra, Guizo.',
     anfitriao: 'Sua coragem é comovente. Quase tanto quanto essa estratégia.',
   },
   special: {
@@ -1839,6 +1904,7 @@ export const BATTLE_REPLIES = {
     verissimo: 'A missão continua. Só que agora você está no centro da mira.',
     jae: 'Grita mais alto. Eu gosto.',
     dalmo: 'Pode vir. Eu sou grande, mas não sou dois.',
+    guizo: 'Isso foi INCRÍVEL! Você pode fazer de novo? A luz tava ruim.',
     anfitriao: 'Vai, capricha. Quero uma história boa pra contar quando você cair.',
   },
   transform: {
@@ -1862,6 +1928,7 @@ export const BATTLE_REPLIES = {
     verissimo: 'Identifiquei a mudança. Mantenham a posição.',
     jae: 'Fantasia nova? A minha tem capuz.',
     dalmo: 'Bonito. O meu escafandro é maior.',
+    guizo: 'Mano, que transformação! Fica parado, deixa eu focar!',
     anfitriao: 'Isso era pra me assustar? Eu já vi coisa mais convincente no espelho.',
   },
 };

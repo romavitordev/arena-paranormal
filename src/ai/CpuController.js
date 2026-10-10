@@ -12,13 +12,13 @@ import { Episode, stateKey, choose, observePlayer, observePlayerMove, playerMove
 //  - adversário caído → reposiciona/carrega (caído não toma dano);
 //  - adversário defendendo → agarrão.
 export const CPU_LEVELS = {
-  easy: { think: [0.45, 0.8], block: 0.025, dodge: 0.02, perfect: 0, subst: 0.006, mistake: 0.3, combo: [1, 3], ability: 0.06, special: 0.12, vertical: 0, tech: 0.1, ranged: 0.35, tactics: 0, adapt: 0 },
-  normal: { think: [0.25, 0.45], block: 0.06, dodge: 0.05, perfect: 0, subst: 0.015, mistake: 0.15, combo: [2, 4], ability: 0.12, special: 0.22, vertical: 0.25, tech: 0.35, ranged: 0.45, tactics: 0.2, adapt: 0.25 },
-  hard: { think: [0.15, 0.3], block: 0.12, dodge: 0.09, perfect: 0.15, subst: 0.03, mistake: 0.07, combo: [3, 5], ability: 0.16, special: 0.3, vertical: 0.5, tech: 0.6, ranged: 0.5, rush: 0.35, tactics: 0.55, adapt: 0.6 },
-  veryhard: { think: [0.1, 0.2], block: 0.2, dodge: 0.14, perfect: 0.35, subst: 0.05, mistake: 0.03, combo: [4, 6], ability: 0.2, special: 0.35, vertical: 0.7, tech: 0.85, ranged: 0.5, rush: 0.6, tactics: 0.8, adapt: 0.85 },
+  easy: { think: [0.45, 0.8], block: 0.025, dodge: 0.02, perfect: 0, subst: 0.006, mistake: 0.3, combo: [1, 3], ability: 0.08, special: 0.12, vertical: 0, tech: 0.1, ranged: 0.35, tactics: 0, adapt: 0 },
+  normal: { think: [0.25, 0.45], block: 0.06, dodge: 0.05, perfect: 0, subst: 0.015, mistake: 0.15, combo: [2, 4], ability: 0.18, special: 0.22, vertical: 0.25, tech: 0.35, ranged: 0.45, tactics: 0.2, adapt: 0.25 },
+  hard: { think: [0.15, 0.3], block: 0.12, dodge: 0.09, perfect: 0.15, subst: 0.03, mistake: 0.07, combo: [3, 5], ability: 0.24, special: 0.3, vertical: 0.5, tech: 0.6, ranged: 0.5, rush: 0.35, tactics: 0.55, adapt: 0.6 },
+  veryhard: { think: [0.1, 0.2], block: 0.2, dodge: 0.14, perfect: 0.35, subst: 0.05, mistake: 0.03, combo: [4, 6], ability: 0.28, special: 0.35, vertical: 0.7, tech: 0.85, ranged: 0.5, rush: 0.6, tactics: 0.8, adapt: 0.85 },
   // SUPER DIFÍCIL: a IA inteligente no máximo (reage rápido, sem erros de propósito, pune aberturas, lê o jogador) e
   // APRENDE (learner.js): escolhe entre as ações possíveis pelo que já deu certo em situações parecidas.
-  superhard: { think: [0.05, 0.1], block: 0.42, dodge: 0.3, perfect: 0.75, subst: 0.12, mistake: 0, combo: [5, 7], ability: 0.24, special: 0.45, vertical: 0.9, tech: 1, ranged: 0.55, rush: 0.85, smart: true, learn: true, tactics: 1, adapt: 1, edge: { dealt: 1.15, taken: 0.85 } },
+  superhard: { think: [0.05, 0.1], block: 0.42, dodge: 0.3, perfect: 0.75, subst: 0.12, mistake: 0, combo: [5, 7], ability: 0.32, special: 0.45, vertical: 0.9, tech: 1, ranged: 0.55, rush: 0.85, smart: true, learn: true, tactics: 1, adapt: 1, edge: { dealt: 1.15, taken: 0.85 } },
 };
 
 const rnd = (a, b) => a + Math.random() * (b - a);
@@ -29,6 +29,9 @@ const ACTIVE_BUFF_TYPES = {
   demonAxe: ['bloodBlade'],
   heavyProtection: ['heavyProtection'],
   healOverTime: ['healing'],
+  agingHeal: ['healing'], // Guizo: Cicatrização
+  shuffle: ['shuffle'], // Guizo: não refaz o Embaralhar com cópias em campo
+  deadlySpeedTrail: ['deadlySpeed'],
   whisperZone: ['whisperZone'], // Jae: não refaz a Zona dos Sussurros enquanto está dentro de uma
   shadowVeil: ['veil'], // Jae: não some de novo enquanto já está escondida
 };
@@ -48,7 +51,7 @@ export function abilityUsePrior(a, f, opp, { distance, lowHp, opening, threat, l
 
   const knownBuffs = ACTIVE_BUFF_TYPES[a.type] || (a.type === 'selfBuff' ? [a.buffType] : []);
   if (knownBuffs.some((type) => type && f.findBuff(type))) return 0;
-  if (a.type === 'healOverTime' && f.health > f.maxHealth * 0.72) return 0;
+  if ((a.type === 'healOverTime' || a.type === 'agingHeal') && f.health > f.maxHealth * 0.72) return 0;
   if (a.type === 'heavyProtection' && !threat && !lowHp && f.health > f.maxHealth * 0.6) return 0;
   if (a.type === 'demonAxe' && f.health < f.maxHealth * 0.45) return 0;
 
@@ -56,7 +59,8 @@ export function abilityUsePrior(a, f, opp, { distance, lowHp, opening, threat, l
   if (opening && !selfTarget) prior *= 2.5;
   if (opp.state === 'block' && a.guardCrush) prior *= 2;
   if (threat && ['heavyProtection', 'selfBuff'].includes(a.type)) prior *= 2;
-  if (lowHp && a.type === 'healOverTime') prior *= 3;
+  if (lowHp && (a.type === 'healOverTime' || a.type === 'agingHeal')) prior *= 3;
+  if (threat && a.type === 'shuffle') prior *= 2; // Embaralhar: as cópias seguram o golpe que vem
   if (lowHp && a.ai?.when === 'hurt') prior *= 1.5;
   if (distance < 2 && a.range > 4 && !selfTarget) prior *= 0.55;
   return prior;
@@ -148,7 +152,7 @@ function sacrificeOk(f, opp) {
 const isModAbility = (a) => a.input.startsWith('block+') || a.input.startsWith('ranged+') || (a.input.startsWith('carga+') && a.input !== 'carga+jump');
 // tipos que não precisam do adversário perto (buffs, invocações, regras do jogo...)
 const SELF_TYPES = ['weaponState', 'blink', 'mistCloud', 'healOverTime', 'hatredTemple', 'shadowClones', 'heavyProtection', 'noiseScreen', 'selfBuff', 'gameRule',
-  'chaosRule', 'hostTime', 'hostAudience', 'hostButton', 'orphanGame', 'hostClones', 'whisperZone', 'shadowVeil'];
+  'chaosRule', 'hostTime', 'hostAudience', 'hostButton', 'orphanGame', 'hostClones', 'whisperZone', 'shadowVeil', 'shuffle', 'deadlySpeedTrail', 'agingHeal'];
 
 export class CpuController {
   constructor({ level = 'normal' } = {}) {
@@ -176,7 +180,7 @@ export class CpuController {
   // aperta o comando de uma habilidade; □ + direção vira a direção em relação ao adversário
   pressAbility(a, toOpp, side) {
     // ocupado (no meio de um golpe): guarda para o primeiro quadro livre
-    if (this.fighter && !this.fighter.canAct()) { this.pendingAbility = { a, ttl: 0.9 }; return; }
+    if (this.fighter && !this.fighter.canAct()) { this.pendingAbility = { a, ttl: 1.6 }; return; } // apanhando o combo inteiro: 0,9 s perdia quase todas
     this.pressAbilityNow(a, toOpp, side);
   }
 
@@ -523,7 +527,10 @@ export class CpuController {
         mods = mods.filter((item) => item.ability.id !== this.lastAbility);
       }
       // def.ai.abilityRate: personagens que vivem das habilidades (Jae) usam mais
-      if (mods.length && r < L.ability * ((def.ai && def.ai.abilityRate) || 1)) {
+      // sanidade sobrando é sanidade desperdiçada: quanto mais cheia a barra, mais a CPU gasta em habilidades (antes a
+      // chance era fixa e baixa — com a barra cheia ela continuava só socando)
+      const spend = 1 + 2 * Math.max(0, f.energy / f.maxEnergy - 0.35);
+      if (mods.length && r < L.ability * ((def.ai && def.ai.abilityRate) || 1) * spend) {
         const total = mods.reduce((sum, item) => sum + item.prior, 0);
         let roll = Math.random() * total;
         let picked = mods[mods.length - 1];
@@ -566,6 +573,17 @@ export class CpuController {
       if (f.energy < 45 && d > 9 && r < 0.3) {
         this.holdCharge = rnd(0.8, 1.6);
         return out;
+      }
+      // sem sanidade para nenhuma habilidade pronta e com espaço: carrega o que falta. Antes só carregava a mais de 9 m —
+      // nas arenas a luta quase nunca se afasta tanto, então a CPU ficava sem sanidade e só socava (com QUALQUER
+      // personagem; quem tinha um kit que funciona sem sanidade, como o Gal, parecia "mais esperto")
+      const ready = (def.abilities || []).filter((a) => isModAbility(a) && f.cooldowns[a.id] <= 0);
+      if (ready.length && d > 4.5 && !threat && opp.state !== 'dashing') {
+        const cheapest = Math.min(...ready.map((a) => (f.abilityCost ? f.abilityCost(a) : a.energyCost || 0)));
+        if (f.energy < cheapest + 5 && r < 0.55) {
+          this.holdCharge = Math.min(1.4, (cheapest + 12 - f.energy) / COMBAT.chargeRate + 0.15);
+          return out;
+        }
       }
       // contra quem defende: agarrão
       if (d < 1.8 && f.cooldowns.grab <= 0 && (opp.state === 'block' || r < 0.08)) {

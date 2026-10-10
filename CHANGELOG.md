@@ -1,5 +1,19 @@
 # Changelog
 
+## v3.16.0 — 2026-10-10
+
+### Adicionado
+- Lutador GUIZO (Os Cinco) e a forma Disfarce Alienígena (`guizo_et`): modelo, câmera/faca/cabeça de ET em código, kit, falas, agarrão, vitória.
+- `src/combat/holo.js` (cópias que copiam a pose do dono) e `src/combat/guizoAbilities.js` (decadence, doomSpirals, shuffle, deadlySpeedTrail, agingHeal, mindLink).
+- Cena `distort` no maskTransform; `copies`/`outro` no cinematicCombo; visual `mindSigil`; `onHit.label`/`onHit.distort` nos projéteis; `grip.stow`/`grip.bothHands`.
+
+### Alterado
+- Modelo do Ferreiro refeito.
+- CPU: carrega sanidade quando falta para as habilidades, gasta mais com a barra cheia, habilidade guardada por 1,6 s; chance base de habilidade maior em todos os níveis.
+
+### Corrigido
+- Cena de abertura Lírio × Xande (chave 'xande+lirio' → 'lirio+xande').
+
 ## v3.15.1 — 2026-10-10
 
 ### Adicionado

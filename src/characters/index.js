@@ -18,11 +18,12 @@ import arnaldo from './arnaldo.js';
 import verissimo from './verissimo.js';
 import jae from './jae.js';
 import dalmo from './dalmo.js';
+import guizo from './guizo.js';
 
 // Elenco jogável, na ordem da tela de seleção — AGRUPADO POR EQUIPE/TEMPORADA (a grade tem 3 colunas × 5 linhas por
 // página, então cada grupo ocupa linhas inteiras):
 //   página 1: Ordo Realitas — Equipe E / Força D (Arthur, Joui, Kaiser, Dante, Erin, Aghata), Equipe Abutres (Balu) e
-//             Aniquiladores (Arnaldo, Veríssimo) · Escriptas (Kian, Gal) · Os Cinco (Xande, Lírio) e o Luzidio
+//             Aniquiladores (Arnaldo, Veríssimo) · Escriptas (Kian, Gal) · Os Cinco (Xande, Guizo, Lírio) e o Luzidio
 //             de Santo Berço (Ferreiro)
 //   página 2: Mascarados / Assassinos de Hexatombe (Dalmo, Aguiar, Jae, Kemi, Labirinto, Juan) — a seleção quebra a
 //             página por equipe (Screens.js → SEL_PAGES), então o grupo fica junto mesmo se a página 1 não encher
@@ -31,7 +32,7 @@ import dalmo from './dalmo.js';
 export const ROSTER = [
   arthur, joui, kaiser, dante, erin, aghata, balu, arnaldo, verissimo, // Ordo Realitas
   kian, gal_sal, // Escriptas
-  xande, lirio, // Os Cinco (Sinais do Outro Lado)
+  xande, guizo, lirio, // Os Cinco (Sinais do Outro Lado) — o Guizo do lado do melhor amigo
   ferreiro, // Luzidios (O Segredo na Floresta)
   dalmo, aguiar, jae, kemi, labirinto, juan, // Mascarados (Hexatombe) — o Juan talvez vá para os "Sacrifícios" no futuro
 ];

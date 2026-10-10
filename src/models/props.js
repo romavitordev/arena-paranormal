@@ -440,6 +440,152 @@ export function addVerissimoProps(rig) {
 // prop_hoodDown (caído nas costas), prop_hoodUp (posto) e prop_hoodX (o rosto sumido na escuridão com o X vermelho)
 // — o jogo mostra o caído OU o posto.
 // Punhal X (wiki): cabo preto, guarda amarela e lâmina longa com um recorte no alto do dorso (ponta "clip").
+// GUIZO: a faca de detalhes dourados (wiki: arsenal; "Faca de Guizo em Sinais do Outro Lado"): lâmina longa e
+// estreita bronze-escura, guarda dourada com as pontas curvas, cabo trançado preto e pomo dourado. Material com brilho
+// próprio (o Amaldiçoar Arma cobre de Sangue; no disfarce alienígena ela brilha em Conhecimento)
+function guizoKnife() {
+  const g = new THREE.Group();
+  const black = new THREE.MeshToonMaterial({ color: 0x18161a });
+  const gold = new THREE.MeshToonMaterial({ color: 0xd8a830, emissive: 0x2a1c06 });
+  const grip = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.015, 0.12, 8), black);
+  grip.position.y = 0.04;
+  g.add(grip);
+  // trança do cabo
+  for (let i = 0; i < 5; i++) {
+    const r = new THREE.Mesh(new THREE.TorusGeometry(0.016, 0.004, 4, 10), black);
+    r.rotation.set(Math.PI / 2 + (i % 2 ? 0.35 : -0.35), 0, 0);
+    r.position.y = -0.005 + i * 0.022;
+    g.add(r);
+  }
+  const pommel = new THREE.Mesh(new THREE.SphereGeometry(0.019, 8, 6), gold);
+  pommel.position.y = 0.105;
+  g.add(pommel);
+  // guarda dourada: barra com as pontas viradas para a lâmina
+  const guard = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.014, 0.024), gold);
+  guard.position.y = -0.024;
+  g.add(guard);
+  for (const s of [-1, 1]) {
+    const q = new THREE.Mesh(new THREE.ConeGeometry(0.012, 0.045, 6), gold);
+    q.position.set(s * 0.062, -0.04, 0);
+    q.rotation.z = s * 0.5 + Math.PI;
+    g.add(q);
+  }
+  // lâmina de dois gumes, longa e estreita, afinando até a ponta
+  const shape = new THREE.Shape();
+  shape.moveTo(-0.019, 0);
+  shape.lineTo(0.019, 0);
+  shape.quadraticCurveTo(0.018, -0.2, 0, -0.32);
+  shape.quadraticCurveTo(-0.018, -0.2, -0.019, 0);
+  const blade = new THREE.Mesh(new THREE.ExtrudeGeometry(shape, { depth: 0.006, bevelEnabled: true, bevelThickness: 0.003, bevelSize: 0.002, bevelSegments: 1 }), new THREE.MeshToonMaterial({ color: 0xa8968a, emissive: 0x000000 }));
+  blade.position.set(0, -0.03, -0.003);
+  blade.rotation.y = Math.PI / 2;
+  g.add(blade);
+  const fuller = new THREE.Mesh(new THREE.BoxGeometry(0.004, 0.2, 0.006), new THREE.MeshToonMaterial({ color: 0x3a2c24 }));
+  fuller.position.set(0, -0.13, 0);
+  g.add(fuller);
+  return g;
+}
+
+// GUIZO: a filmadora (sempre com ele — "pena que eu não tenho a minha câmera comigo agora"): corpo cinza-escuro, lente
+// grande, visor lateral aberto com a tela azul acesa, alça de mão e a luz vermelha de gravação
+function camcorder() {
+  const g = new THREE.Group();
+  const body = new THREE.MeshToonMaterial({ color: 0x3a3c42 });
+  const dark = new THREE.MeshToonMaterial({ color: 0x18181c });
+  const box = new THREE.Mesh(new THREE.BoxGeometry(0.075, 0.08, 0.17), body);
+  g.add(box);
+  const top = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.025, 0.12), dark);
+  top.position.set(0, 0.05, -0.01);
+  g.add(top);
+  const lens = new THREE.Mesh(new THREE.CylinderGeometry(0.036, 0.04, 0.07, 14), dark);
+  lens.rotation.x = Math.PI / 2;
+  lens.position.set(0, 0.004, 0.11);
+  g.add(lens);
+  const glass = new THREE.Mesh(new THREE.CircleGeometry(0.03, 14), new THREE.MeshBasicMaterial({ color: 0x4a7aa0 }));
+  glass.position.set(0, 0.004, 0.146);
+  g.add(glass);
+  // visor lateral aberto (do lado de fora) com a tela acesa
+  const flip = new THREE.Mesh(new THREE.BoxGeometry(0.008, 0.055, 0.075), dark);
+  flip.position.set(0.058, 0.004, 0.01);
+  flip.rotation.y = 0.5;
+  g.add(flip);
+  const screen = new THREE.Mesh(new THREE.PlaneGeometry(0.065, 0.045), new THREE.MeshBasicMaterial({ color: 0x5ad0e8 }));
+  screen.position.set(0.063, 0.004, 0.012);
+  screen.rotation.y = 0.5 + Math.PI / 2;
+  g.add(screen);
+  const rec = new THREE.Mesh(new THREE.SphereGeometry(0.007, 6, 5), new THREE.MeshBasicMaterial({ color: 0xff2020 }));
+  rec.position.set(0, 0.044, 0.07);
+  g.add(rec);
+  g.userData.rec = rec;
+  return g;
+}
+
+// GUIZO — Distorcer Aparência: o disfarce ALIENÍGENA (referência "Guizo ET" e a miniatura do disfarce): cabeça verde de
+// crânio grande e queixo fino, olhos pretos enormes amendoados e brilhantes
+function etHead() {
+  const g = new THREE.Group();
+  const green = new THREE.MeshToonMaterial({ color: 0x6ab056 });
+  const skull = new THREE.Mesh(new THREE.SphereGeometry(0.15, 20, 16), green);
+  skull.scale.set(1.12, 1.22, 1.15);
+  skull.position.y = 0.2;
+  g.add(skull);
+  const jaw = new THREE.Mesh(new THREE.SphereGeometry(0.085, 14, 10), green);
+  jaw.scale.set(1.15, 1.5, 1.15);
+  jaw.position.set(0, 0.06, 0.05);
+  g.add(jaw);
+  const eyeMat = new THREE.MeshToonMaterial({ color: 0x050506, emissive: 0x0a0a10 });
+  for (const s of [-1, 1]) {
+    const e = new THREE.Mesh(new THREE.SphereGeometry(0.05, 12, 8), eyeMat);
+    e.scale.set(1.25, 0.62, 0.55);
+    e.position.set(s * 0.066, 0.17, 0.15);
+    e.rotation.z = s * -0.45;
+    g.add(e);
+    const shine = new THREE.Mesh(new THREE.SphereGeometry(0.009, 6, 5), new THREE.MeshBasicMaterial({ color: 0xd8f0ff }));
+    shine.position.set(s * 0.056, 0.185, 0.175);
+    g.add(shine);
+  }
+  const mouth = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.004, 0.01), new THREE.MeshBasicMaterial({ color: 0x1c3a18 }));
+  mouth.position.set(0, 0.045, 0.14);
+  g.add(mouth);
+  return g;
+}
+
+export function addGuizoProps(rig) {
+  const { sockets, props } = rig;
+  const k = guizoKnife();
+  k.rotation.x = -0.3;
+  sockets.handR.add(k);
+  props.knife = k;
+  // a câmera na mão esquerda, com a lente para a frente (no ataque ela vai para o quadril: def.grip)
+  const cam = camcorder();
+  cam.position.set(0.0, -0.05, 0.02);
+  cam.rotation.set(-1.25, 0, 0);
+  sockets.handL.add(cam);
+  props.camera = cam;
+  const et = etHead();
+  et.visible = false;
+  sockets.head.add(et);
+  props.etHead = et;
+  if (props.hair) rig.showProp('hair', true);
+}
+
+// GUIZO — disfarce alienígena (Transformação): a cabeça de ET no lugar do cabelo e do rosto
+export function addGuizoETProps(rig) {
+  addGuizoProps(rig);
+  rig.showProp('etHead', true);
+  if (rig.props.hair) rig.showProp('hair', false);
+  // a faca amaldiçoada pelo Conhecimento: a lâmina brilha dourada
+  rig.props.knife.traverse((o) => {
+    if (o.isMesh && o.material && o.material.emissive && o.geometry && o.geometry.type === 'ExtrudeGeometry') {
+      o.material = o.material.clone();
+      o.material.color.set(0xf0d070);
+      o.material.emissive.set(0xc89a20);
+      o.material.emissiveIntensity = 0.9;
+      o.material.userData.keepEmissive = true;
+    }
+  });
+}
+
 function jaeDagger() {
   const g = new THREE.Group();
   const black = new THREE.MeshToonMaterial({ color: 0x141214 });

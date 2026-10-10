@@ -662,6 +662,84 @@ export const MATERIAL_TEXTURES = {
     for (let y = 0; y < 256; y += 6) { g.beginPath(); g.moveTo(0, y); g.lineTo(512, y); g.stroke(); }
   }, { wrap: true }),
 
+  // ---------------- GUIZO (Sinais do Outro Lado): rosto fino, olhos castanho-avermelhados, sobrancelhas escuras
+  // grossas, meio sorriso curioso (referência "Guizo rosto")
+  face_guizo: face((g) => {
+    g.strokeStyle = 'rgba(150,90,70,0.35)'; g.lineWidth = 1.4; // maçãs do rosto marcadas (rosto fino)
+    for (const s of [-1, 1]) { g.beginPath(); g.moveTo(CX + s * 46, 138); g.quadraticCurveTo(CX + s * 50, 160, CX + s * 40, 182); g.stroke(); }
+  }, {
+    skin: '#e2b08c',
+    eye: { iris: '#6a2418', irisLight: '#a8442c', tilt: 0.02 },
+    brow: { angry: 0, thick: 6, color: '#2a1612' },
+    mouth: { mouthW: 13, smile: 3 },
+  }),
+  // camiseta preta da banda AHLEVO ("ovelha" ao contrário): a ovelha de cabeça para baixo, o nome rabiscado em branco,
+  // △ X O espalhados; a gola da camisa listrada aparecendo em volta do pescoço. A frente é o meio (u = 0,5); o pescoço
+  // é a parte de BAIXO da textura (o tubo do tronco vai do quadril ao pescoço)
+  shirt_guizo: () => canvasTex(512, 256, (g) => {
+    g.fillStyle = '#242226'; g.fillRect(0, 0, 512, 256);
+    for (let i = 0; i < 900; i++) { g.fillStyle = 'rgba(255,255,255,0.025)'; g.fillRect(Math.random() * 512, Math.random() * 256, 2, 2); }
+    // gola listrada (camisa de baixo) no topo do tronco = fim da textura
+    for (let k = 0; k < 4; k++) { g.fillStyle = k % 2 ? '#e8e2da' : '#b01c28'; g.fillRect(0, 246 + k * 3, 512, 3); }
+    g.save();
+    g.translate(256, 0); g.scale(1, -1); g.translate(-256, -256); // estampa de cabeça para cima no peito
+    // ovelha de cabeça para baixo: o corpo de lã (nuvem) em cima, as patas para cima, a cabeça preta embaixo
+    g.fillStyle = '#d8d6d4';
+    for (const [x, y, r] of [[256, 128, 30], [228, 124, 20], [284, 124, 20], [240, 108, 18], [272, 108, 18], [256, 100, 16], [236, 140, 16], [276, 140, 16]]) { g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill(); }
+    g.fillStyle = '#d8d6d4';
+    for (const x of [236, 250, 262, 276]) g.fillRect(x - 2, 72, 4, 22); // patas para cima
+    g.fillStyle = '#0c0c0e';
+    g.beginPath(); g.ellipse(256, 168, 16, 20, 0, 0, Math.PI * 2); g.fill(); // cabeça embaixo
+    g.fillStyle = '#d8d6d4'; g.beginPath(); g.arc(250, 172, 2.5, 0, Math.PI * 2); g.arc(262, 172, 2.5, 0, Math.PI * 2); g.fill();
+    // △ X O na barriga da ovelha
+    g.strokeStyle = '#141416'; g.lineWidth = 3;
+    g.beginPath(); g.moveTo(256, 112); g.lineTo(266, 128); g.lineTo(246, 128); g.closePath(); g.stroke();
+    g.beginPath(); g.moveTo(236, 134); g.lineTo(246, 144); g.moveTo(246, 134); g.lineTo(236, 144); g.stroke();
+    g.beginPath(); g.arc(274, 139, 6, 0, Math.PI * 2); g.stroke();
+    // o nome da banda rabiscado
+    g.fillStyle = '#ecebe8'; g.font = 'bold 30px "Comic Sans MS", cursive, sans-serif'; g.textAlign = 'center';
+    g.fillText('AHLEVO', 256, 56);
+    // △ X O nas mangas / lados
+    g.strokeStyle = '#ecebe8'; g.lineWidth = 2.5;
+    for (const cx of [120, 392]) {
+      g.beginPath(); g.moveTo(cx, 60); g.lineTo(cx + 9, 75); g.lineTo(cx - 9, 75); g.closePath(); g.stroke();
+      g.beginPath(); g.moveTo(cx - 14, 92); g.lineTo(cx - 4, 102); g.moveTo(cx - 4, 92); g.lineTo(cx - 14, 102); g.stroke();
+      g.beginPath(); g.arc(cx + 10, 97, 6, 0, Math.PI * 2); g.stroke();
+    }
+    g.restore();
+  }, { wrap: true }),
+  // camisa listrada vermelha e branca (mangas compridas por baixo da camiseta)
+  sleeve_guizo: () => canvasTex(64, 128, (g) => {
+    for (let y = 0; y < 128; y += 16) { g.fillStyle = '#b81c2a'; g.fillRect(0, y, 64, 9); g.fillStyle = '#ebe5dc'; g.fillRect(0, y + 9, 64, 7); }
+    g.fillStyle = 'rgba(0,0,0,0.12)'; for (let x = 0; x < 64; x += 16) g.fillRect(x, 0, 3, 128);
+  }, { wrap: true, repeat: [1, 2] }),
+  // calça cinza-oliva gasta, rasgada no joelho e na canela (a pele aparecendo, fios soltos), barra dobrada embaixo
+  pants_guizo: () => canvasTex(256, 256, (g) => {
+    let seed = 77;
+    const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    g.fillStyle = '#5e5d52'; g.fillRect(0, 0, 256, 256);
+    for (let i = 0; i < 1200; i++) { g.fillStyle = rnd() < 0.5 ? 'rgba(30,30,24,0.2)' : 'rgba(140,138,120,0.14)'; g.fillRect(rnd() * 256, rnd() * 256, 2, 2); }
+    g.strokeStyle = 'rgba(30,30,26,0.5)'; g.lineWidth = 2; g.beginPath(); g.moveTo(64, 0); g.lineTo(64, 256); g.moveTo(192, 0); g.lineTo(192, 256); g.stroke();
+    const rip = (cx, cy, rx, ry) => {
+      g.fillStyle = '#8a5a44';
+      g.beginPath();
+      for (let k = 0; k <= 22; k++) { const a = (k / 22) * Math.PI * 2; const r = 1 + (k % 2 ? 0.3 : -0.1) * rnd(); const x = cx + Math.cos(a) * rx * r; const y = cy + Math.sin(a) * ry * r; if (k) g.lineTo(x, y); else g.moveTo(x, y); }
+      g.closePath(); g.fill();
+      g.strokeStyle = 'rgba(200,196,176,0.85)'; g.lineWidth = 1.2;
+      for (let k = 0; k < 4; k++) { const y = cy - ry * 0.6 + k * ry * 0.4; g.beginPath(); g.moveTo(cx - rx, y); g.quadraticCurveTo(cx, y + 3, cx + rx, y); g.stroke(); }
+    };
+    rip(118, 120, 20, 9); rip(142, 176, 14, 7); rip(100, 205, 12, 6);
+    for (let y = 232; y < 256; y += 7) { g.fillStyle = 'rgba(20,20,16,0.4)'; g.fillRect(0, y, 256, 2); }
+  }, { wrap: true }),
+  // pano xadrez preto e vermelho-escuro preso na pochete
+  plaid_guizo: () => canvasTex(128, 128, (g) => {
+    g.fillStyle = '#6a1018'; g.fillRect(0, 0, 128, 128);
+    g.fillStyle = 'rgba(10,8,10,0.55)';
+    for (let k = 0; k < 128; k += 32) { g.fillRect(k, 0, 12, 128); g.fillRect(0, k, 128, 12); }
+    g.fillStyle = 'rgba(200,160,160,0.25)';
+    for (let k = 20; k < 128; k += 32) { g.fillRect(k, 0, 2, 128); g.fillRect(0, k, 128, 2); }
+  }, { wrap: true, repeat: [2, 2] }),
+
   // ---------------- BALU: rosto largo e sorridente, bigode grosso e cavanhaque curto no meio do queixo, sobrancelhas
   // grossas, e a cicatriz em ESPIRAL no lugar da orelha direita (lado direito = x < 256); polo branca com flores
   // amarelas; antebraços fortes e peludos; jeans azul-claro; fivela do Amuleto (veias vermelhas + Símbolo de Sangue)
@@ -927,14 +1005,29 @@ export const MATERIAL_TEXTURES = {
     brow: { angry: 4, thick: 6, color: '#d8d6d0' },
     mouth: { mouthW: 14, smile: 0 },
   }),
-  arms_luzidio: () => canvasTex(256, 256, (g) => {
-    g.fillStyle = '#8e9096'; g.fillRect(0, 0, 256, 256);
-    // queimaduras do molotov (manchas avermelhadas com bordas mais escuras)
-    for (let i = 0; i < 26; i++) {
-      const x = Math.random() * 256; const y = 90 + Math.random() * 166; const r = 8 + Math.random() * 22;
-      g.fillStyle = Math.random() < 0.5 ? 'rgba(130,70,62,0.55)' : 'rgba(150,96,86,0.45)';
-      g.beginPath(); g.ellipse(x, y, r, r * 0.7, Math.random() * 3, 0, Math.PI * 2); g.fill();
-      g.strokeStyle = 'rgba(60,30,26,0.5)'; g.lineWidth = 1.2; g.stroke();
+  // braços inteiros marcados pelas queimaduras (nas artes: pele cinza toda manchada de placas marrom-avermelhadas
+  // com contorno escuro, como couro rachado), mais densas no antebraço
+  arms_luzidio: () => canvasTex(256, 512, (g) => {
+    let seed = 22;
+    const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    g.fillStyle = '#8e9096'; g.fillRect(0, 0, 256, 512);
+    for (let i = 0; i < 260; i++) {
+      const y = rnd() ** 0.8 * 512;
+      if (rnd() > 0.35 + (y / 512) * 0.65) continue; // ombro com menos marcas
+      const x = rnd() * 256;
+      const r = 5 + rnd() * 14;
+      const tone = rnd();
+      g.fillStyle = tone < 0.4 ? 'rgba(118,84,74,0.85)' : tone < 0.75 ? 'rgba(138,104,92,0.8)' : 'rgba(98,70,64,0.85)';
+      g.beginPath();
+      for (let k = 0; k <= 9; k++) {
+        const a = (k / 9) * Math.PI * 2;
+        const rr = r * (0.75 + rnd() * 0.45);
+        const px = x + Math.cos(a) * rr;
+        const py = y + Math.sin(a) * rr * 0.8;
+        if (k === 0) g.moveTo(px, py); else g.lineTo(px, py);
+      }
+      g.closePath(); g.fill();
+      g.strokeStyle = 'rgba(44,26,24,0.6)'; g.lineWidth = 1.3; g.stroke();
     }
   }, { wrap: true }),
 

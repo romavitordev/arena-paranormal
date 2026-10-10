@@ -24,6 +24,25 @@ const VISUALS = {
     g.userData.spin = ring;
     return g;
   },
+  // Invadir Mente (Guizo): a RAJADA MENTAL — o sigilo de Conhecimento (círculo, triângulo e o olho no meio) girando
+  // em dourado, com um rastro de linhas geométricas
+  mindSigil(color) {
+    const g = new THREE.Group();
+    const spin = new THREE.Group();
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.34, 0.025, 6, 28), glowMat(color, 0.95));
+    spin.add(ring);
+    const tri = new THREE.Mesh(new THREE.TorusGeometry(0.26, 0.02, 3, 3), glowMat(color, 0.9));
+    tri.rotation.z = Math.PI / 2;
+    spin.add(tri);
+    const eye = new THREE.Mesh(new THREE.SphereGeometry(0.07, 10, 8), glowMat(0xffffff, 0.9));
+    eye.scale.set(1.4, 0.7, 0.5);
+    spin.add(eye);
+    const outer = new THREE.Mesh(new THREE.TorusGeometry(0.46, 0.012, 4, 6), glowMat(color, 0.5));
+    spin.add(outer);
+    g.add(spin);
+    g.userData.spin = spin;
+    return g;
+  },
   bullet(color) {
     const m = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.7, 5), glowMat(color, 1));
     m.geometry.rotateX(Math.PI / 2);
@@ -370,6 +389,9 @@ export class Projectiles {
       }
     }
     if (a.onHit.stun) target.stun(a.onHit.stun, a.onHit.stunAnim || 'stagger');
+    // aviso na tela de quem leva (ex.: Invadir Mente do Guizo: "OS CINCO! OS CINCO!" na cabeça do alvo)
+    if (a.onHit.label) target.notify(a.onHit.label, true);
+    if (a.onHit.distort) w.fx.distort(target.chestPos(), { color: a.color, radius: 1.4, life: 0.3 });
     if (a.onHit.impale) {
       // empalado: a lança atravessa e prende os pés no chão por um instante
       const old = target.findBuff('impaled');

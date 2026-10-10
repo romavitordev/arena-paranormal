@@ -9,6 +9,7 @@ import { findSubstitutionSpot, resolveBody } from './positioning.js';
 import { startChargeFx } from './chargeFx.js';
 import { ABILITY_TYPES } from './abilities.js';
 import './hostAbilities.js'; // registra as habilidades do Anfitrião em ABILITY_TYPES
+import './guizoAbilities.js'; // e as do Guizo (Embaralhar, Decadência, Espirais da Perdição...)
 import { SPECIALS } from './specials/index.js';
 import { telegraphFor, startTelegraph, updateTelegraph, stopTelegraph, telegraphMissed, TELEGRAPH } from './specials/telegraph.js';
 import { hasPassive } from './passives.js';
@@ -1208,7 +1209,12 @@ export class Fighter {
     if (!this.gripHome) this.gripHome = { parent: prop.parent, pos: prop.position.clone(), rot: prop.rotation.clone() };
     if (this.gripSlot !== slot) {
       this.gripSlot = slot;
-      if (slot === 'back') {
+      if (slot === 'back' && G.stow === 'hip') {
+        // Guizo: a câmera fica pendurada na alça, no quadril
+        this.rig.sockets.hip.add(prop);
+        prop.position.set(0.03, -0.06, 0.04);
+        prop.rotation.set(0.2, 0, 0.15);
+      } else if (slot === 'back') {
         this.rig.sockets.back.add(prop);
         prop.position.set(0.02, 0.1, -0.06);
         prop.rotation.set(0, 0, 0.5); // atravessado nas costas
@@ -1219,7 +1225,7 @@ export class Fighter {
       }
     }
     // duas mãos no taco: o braço esquerdo acompanha o direito (as mãos se encontram no cabo)
-    this.anim.poseFilter = attacking ? (p) => {
+    this.anim.poseFilter = attacking && G.bothHands !== false ? (p) => {
       const r = p.sR;
       const e = p.eR;
       p.sL = [r[0], r[1] - (G.reach ?? 0.42), -0.05];
@@ -1912,6 +1918,17 @@ export class Fighter {
     const pas = this.def.passives || [];
     const arena = pas.find((p) => p.type === 'arenaBlows');
     const press = pas.find((p) => p.type === 'atmosphericPressure');
+    // LEITURA (Guizo — disfarce alienígena): a faca de Conhecimento marca o alvo
+    const read = pas.find((p) => p.type === 'mindRead');
+    if (read && typeof res === 'number' && opp.state !== 'ko') {
+      const old = opp.findBuff('mindRead');
+      if (old) old.time = read.time;
+      else opp.addBuff({ type: 'mindRead', name: 'LIDO', time: read.time, duration: read.time, takenMult: read.takenMult });
+      if (Math.random() < 0.5) this.world.fx.ring(opp.chestPos(), { color: read.color ?? 0xe8c860, radius: 0.8, life: 0.2, vertical: true, yaw: this.yaw });
+    }
+    // LIGAÇÃO TELEPÁTICA: cada golpe no alvo ligado devolve sanidade
+    const tele = this.findBuff('telepathy');
+    if (tele && typeof res === 'number' && opp.findBuff && opp.findBuff('mindLinked')) this.energy = Math.min(this.maxEnergy, this.energy + (tele.energyPerHit || 0));
     if (press && typeof res === 'number' && opp.state !== 'ko') {
       const c = opp.chestPos();
       this.world.fx.distort(c, { color: press.color ?? 0xffb070, radius: s.finisher ? 2.2 : 1.2, life: 0.25 });
@@ -1953,6 +1970,12 @@ export class Fighter {
       const to = new THREE.Vector3(this.pos.x + F.x * 1.5, opp.pos.y, this.pos.z + F.z * 1.5);
       opp.pullTo(to, { time: 0.22, after: s.onHit.after ?? 0.5 });
       this.combo.pullTarget = opp;
+    }
+    if (s.impactFx === 'spiral') {
+      // Guizo: o corte final solta uma espiral cinza de Morte no alvo
+      const c = opp.chestPos();
+      for (let i = 0; i < 3; i++) this.world.after(i * 0.05, () => this.world.fx.ring(c, { color: 0x8a8494, radius: 0.7 + i * 0.45, life: 0.3, vertical: true, yaw: this.yaw + i * 0.6 }));
+      this.world.fx.burst(c, { count: 16, color: 0x26222c, kind: 'smoke', speed: 1.6, life: 0.5, size: 0.3 });
     }
     if (s.impactFx === 'sigil') {
       this.world.fx.ring(opp.chestPos(), { color: this.def.energyColor, radius: 2.2, life: 0.35, vertical: true, yaw: this.yaw });

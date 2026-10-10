@@ -55,6 +55,9 @@ export function moveListHTML(c) {
     if (p.type === 'resistant') html += row('Passiva', 'Resistente', `-${Math.round((1 - p.mult) * 100)}% de dano físico recebido`);
     if (p.type === 'bloodNecklace') html += row('Passiva', 'Colar Banhado em Sangue', `-${Math.round((1 - p.resist) * 100)}% de dano de Sangue e sangramento ${Math.round((p.bleedMult - 1) * 100)}% mais forte`);
     if (p.type === 'precognition') html += row('Passiva', 'Precognição', 'não é pego desprevenido: sem bônus de costas nem susto de teleporte');
+    if (p.type === 'slowImpact') html += row('Passiva', 'Desacelerar Impacto', `-${Math.round((1 - p.mult) * 100)}% de dano de projéteis`);
+    if (p.type === 'iKnewIt') html += row('Passiva', 'Eu Já Sabia', `resistência mental: -${Math.round((1 - p.mult) * 100)}% de dano de Conhecimento`);
+    if (p.type === 'mindRead') html += row('Passiva', 'Leitura', `cada golpe físico lê o alvo: +${Math.round((p.takenMult - 1) * 100)}% de dano recebido por ${p.time}s`);
     if (p.type === 'bulletDodge') html += row('Passiva', 'Desviar de Balas', 'esquivar de um projétil não gasta carga de esquiva');
   }
   return html + '</table>';

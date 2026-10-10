@@ -589,6 +589,56 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ---
 
+## GUIZO
+
+*O câmera dos Cinco: grava tudo de paranormal — e luta com a faca na outra mão* · arma: Faca de detalhes dourados e a câmera
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Corte curto | 24 | 1.7 m |  |
+| ○ 2 | Corte de volta | 24 | 1.7 m |  |
+| ○ 3 | Cotovelada curta | 22 | 1.4 m |  |
+| ○ 4 | Estocada | 28 | 1.9 m |  |
+| ○ 5 | Corte espiral | 48 | 1.9 m | finalizador: lança |
+| Frente + ○ | Avanço com a faca | 30 | 1.9 m |  |
+| Trás + ○ | Recua e corta | 28 | 1.8 m | invulnerável no começo |
+| Lado + ○ | Chute rápido | 26 | 1.7 m |  |
+| No ar + ○ | Faca do alto | 30 | 1.8 m | desce com impacto |
+| ↑ + ○ (no combo) | Corte ascendente | 34 | 1.8 m | finalizador: undefined |
+| ↓ + ○ (no combo) | Golpe descendente | 40 | 1.8 m | finalizador: derruba |
+
+### Principal (□ / X): Invadir Mente
+
+- Dano 30 · alcance 18 m · cooldown 2.6 s · custo 0
+- Trás + □: **undefined** — undefined
+
+### Habilidades
+
+- **Decadência** — △ + ○ / Y + B · custo 25 · cooldown 9 s · dano 62 · alcance 9 m
+  Estende a mão envolta em espirais: elas surgem em volta do alvo, apertam e ele DEFINHA (dano de Morte e uma decadência curta depois). Dá para esquivar quando as espirais fecham.
+- **Amaldiçoar Arma com Sangue** — △ + □ / Y + X · custo 20 · cooldown 18 s
+  O sangue sobe em espiral até a faca: por 8 s ela fica coberta de Sangue e todo golpe físico abre um sangramento.
+- **Velocidade Mortal** — △ + L2 / Y + LT · custo 25 · cooldown 20 s
+  Distorce o tempo em volta de si: por 6 s fica muito mais rápido, bate mais rápido, recupera as esquivas e deixa rastros dele no ar.
+- **Embaralhar** — R2 + △ / RT + Y · custo 30 · cooldown 22 s
+  Vira um holograma, troca de lugar e deixa 3 cópias realistas em volta que imitam cada movimento dele. Por 7 s, um golpe (não especial) pode acertar uma cópia no lugar dele — a cópia se desfaz.
+- **Espirais da Perdição** — R2 + × / RT + A · custo 25 · cooldown 14 s · dano 12 · alcance 11 m
+  Marca o chão do alvo com um anel de espirais; se ele não sair, elas sobem pelo corpo: por 5 s fica LENTO e os golpes dele perdem força.
+- **Cicatrização** — ranged+back · custo 30 · cooldown 26 s
+  Acelera o tempo nas feridas: recupera vida em instantes — mas envelhece. A cada uso o cabelo fica mais grisalho.
+
+### Especial: Registro do Outro Lado
+
+250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: Distorcer Aparência
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
+
+---
+
 ## LÍRIO
 
 *A parede: aguenta o impacto, chega perto e decide com golpes que derrubam* · arma: Leonora (marreta de madeira com espinhos) e o canivete de osso da avó

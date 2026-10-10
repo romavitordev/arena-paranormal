@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.15.1';
+export const VERSION = '3.16.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,19 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.16.0',
+    date: '2026-10-10',
+    title: 'Os Cinco gravando',
+    items: [
+      'Novo lutador: GUIZO (Guilherme Santos, Os Cinco, Morte) — o câmera dos Cinco em Sinais do Outro Lado. Luta com a faca de detalhes dourados na mão direita e a câmera sempre na esquerda (gravando tudo). Ágil e frágil, com os rituais da ficha dele: Decadência (espirais envolvem o adversário e ele definha), Espirais da Perdição (deixa o adversário lento e mais fraco), Embaralhar (cópias dele que imitam cada movimento — um golpe pode acertar uma cópia no lugar dele), Velocidade Mortal (com rastros no ar), Amaldiçoar Arma com Sangue e Cicatrização (← + □: cura, mas ENVELHECE — o cabelo fica grisalho a cada uso).',
+      'O □ do Guizo é o Invadir Mente: a Rajada Mental, um sigilo dourado de Conhecimento que, na cabeça do adversário, ecoa "OS CINCO! OS CINCO! OS CINCO!". Especial: REGISTRO DO OUTRO LADO — ele grava o adversário pela câmera, cópias surgem em volta e cortam junto, e no fim ele confere a gravação.',
+      'Transformação do Guizo: DISTORCER APARÊNCIA — ele passa a mão no rosto, a imagem chia e ele vira o DISFARCE ALIENÍGENA, com a faca amaldiçoada pelo Conhecimento: cada golpe LÊ o adversário, a Rajada Mental sai em três, o Embaralhar faz quatro cópias e ganha a Ligação Telepática.',
+      'Ferreiro refeito do zero a partir das artes: braços enormes cobertos de queimaduras, peitoral de placas com alças de couro, braceletes, cabelo branco penteado para trás, barba longa e pontuda, orelhas pontudas, pano vermelho com correntes e caneleiras segmentadas.',
+      'CPU mais esperta com todos os lutadores: ela agora carrega a sanidade quando falta para as habilidades e há espaço, gasta mais quando a barra está cheia e não perde a habilidade escolhida enquanto apanha. Antes ela ficava sem sanidade e quase só socava.',
+      'Correção: a conversa de abertura entre Lírio e Xande nunca aparecia.',
+    ],
+  },
   {
     v: '3.15.1',
     date: '2026-10-10',

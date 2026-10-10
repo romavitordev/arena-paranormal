@@ -4,6 +4,7 @@ import { COMBAT } from '../../config/combat.js';
 import { applyHit } from '../damage.js';
 import { splitDamage, specialHitFx, trySpecialBlock } from './common.js';
 import { faceClose, twoShot, overShoulder, lowAngle, pullBack, socketClose } from '../../camera/shots.js';
+import { HoloCopy } from '../holo.js';
 
 // Especial genérico "avança e executa uma sequência de golpes com câmera
 // cinematográfica". Usado por Arthur, Aghata, Injustiça e Kian;
@@ -102,7 +103,10 @@ export const cinematicCombo = {
     let tip = null;
     let pullFrom = null;
     const hitChains = [];
+    let copies = []; // sp.copies: cópias ilusórias em volta do alvo (Guizo — Registro do Outro Lado)
     const cleanup = () => {
+      copies.forEach((c) => c.alive && c.shatter(sp.copies.color ?? sp.color));
+      copies = [];
       emitters.forEach((e) => e.stop());
       emitters = [];
       // a peça some no fim — a não ser que um estado ativo a mantenha (ex.: máscara do Aguiar)
@@ -170,6 +174,28 @@ export const cinematicCombo = {
           if (h.final) world.cameraRig.shake(0.6, 0.35);
         });
       });
+      // sp.copies: as cópias surgem em volta do alvo e IMITAM cada golpe dele (o Embaralhar no especial); somem juntas
+      if (sp.copies) {
+        const C = sp.copies;
+        tl.add(C.at ?? 0.3, () => {
+          // espalhadas no lado do alvo OPOSTO à câmera (uma cópia entre a câmera e a luta tampava a cena)
+          const cam = world.camera ? world.camera.position : f.pos;
+          const away = yawTo(cam, opp.pos);
+          const n = C.count ?? 3;
+          for (let k = 0; k < n; k++) {
+            const ang = away + (n > 1 ? (k / (n - 1) - 0.5) * Math.PI * 1.1 : 0);
+            const pos = new THREE.Vector3(opp.pos.x + Math.sin(ang) * (C.radius ?? 1.2), f.pos.y, opp.pos.z + Math.cos(ang) * (C.radius ?? 1.2));
+            const c = new HoloCopy(f, world, { mode: 'anchor', pos, yaw: yawTo(pos, opp.pos), life: (C.until ?? sp.length) - (C.at ?? 0.3), color: C.color ?? sp.color, opacity: 0.45 });
+            world.addNpc(c);
+            world.fx.burst(new THREE.Vector3(pos.x, 1, pos.z), { count: 16, color: C.color ?? sp.color, speed: 3, life: 0.35, size: 0.12 });
+            copies.push(c);
+          }
+          world.audio.play('blink', { volume: 0.8 });
+        });
+        tl.add(C.until ?? sp.length, () => { copies.forEach((c) => c.alive && c.shatter(C.color ?? sp.color)); copies = []; });
+      }
+      // sp.outro: pose depois do último golpe (ex.: o Guizo confere a câmera)
+      if (sp.outro) tl.add(sp.outro.t, () => f.anim.play(sp.outro.anim, { restart: true, duration: sp.outro.dur ?? 0.8 }));
       tl.add(sp.length, () => {});
       tl.end(sp.length);
     };

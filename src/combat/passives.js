@@ -177,6 +177,21 @@ export const PASSIVES = {
     },
   },
   // Dalmo — Golpes de Arena: o finalizador que entra emenda uma cabeçada (lido em Fighter, no acerto do golpe físico)
+  // Guizo — Desacelerar Impacto: o tempo em volta dele desacelera o que vem voando (projéteis doem menos)
+  slowImpact: {
+    damageTakenMod({ kind, passive }) {
+      return kind === 'ranged' ? passive.mult ?? 0.85 : 1;
+    },
+  },
+  // Guizo — Eu Já Sabia: resistência mental (rituais e golpes de Conhecimento doem menos)
+  iKnewIt: {
+    damageTakenMod({ element, passive, o }) {
+      return element === 'conhecimento' || (o && o.element === 'conhecimento') ? passive.mult ?? 0.85 : 1;
+    },
+  },
+  // Guizo (disfarce alienígena) — Leitura: a faca de Conhecimento LÊ o alvo a cada golpe (recebe mais dano por pouco
+  // tempo); lido no Fighter
+  mindRead: {},
   arenaBlows: {},
   // Colosso — Pressão Atmosférica das Manoplas: onda de pressão em todo soco; finalizador atordoa (lido em Fighter)
   atmosphericPressure: {},

@@ -3,7 +3,7 @@
 import { renderPortraits } from '../ui/portraits.js';
 import { preloadModels } from '../models/index.js';
 
-export async function lineup(models, { full = true, turns = [0.35], w = 260, h = 420, anim = 'idle', animTime = 0.3, zoom = null } = {}) {
+export async function lineup(models, { full = true, turns = [0.35], w = 260, h = 420, anim = 'idle', animTime = 0.3, zoom = null, size = 1 } = {}) {
   await preloadModels();
   const renderer = window.__game.renderer;
   let box = document.getElementById('__lineup');
@@ -16,7 +16,7 @@ export async function lineup(models, { full = true, turns = [0.35], w = 260, h =
   }
   box.innerHTML = '';
   for (const turn of turns) {
-    const defs = models.map((m) => ({ id: m + '_' + turn, model: m, color: '#444444', anims: {} }));
+    const defs = models.map((m) => ({ id: m + '_' + turn, model: m, color: '#444444', anims: {}, stats: { size } }));
     const out = renderPortraits(defs, renderer, { full, turn, w, h, anim, animTime, background: false });
     for (const d of defs) {
       const img = new Image();

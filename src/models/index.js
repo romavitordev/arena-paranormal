@@ -1,4 +1,4 @@
-import { addKaiserProps, addArthurProps, addJouiProps, addAghataProps, addGalSalProps, addKianProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps, addFerreiroProps, addJuanProps, addKemiProps, addFantasmaProps, addBaluProps, addErinCaosProps, addLabirintoElmoProps, addAguiarMutiladorProps, addArnaldoProps, addAnfitriaoProps, addVerissimoProps, addJaeProps, addJaeXProps, addDalmoProps, addColossoProps } from './props.js';
+import { addKaiserProps, addArthurProps, addJouiProps, addAghataProps, addGalSalProps, addKianProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps, addFerreiroProps, addJuanProps, addKemiProps, addFantasmaProps, addBaluProps, addErinCaosProps, addLabirintoElmoProps, addAguiarMutiladorProps, addArnaldoProps, addAnfitriaoProps, addVerissimoProps, addJaeProps, addJaeXProps, addDalmoProps, addColossoProps, addGuizoProps, addGuizoETProps } from './props.js';
 import { loadGLB, rigFromGLB } from './glbRig.js';
 import { preloadNpcModels } from './npcRig.js';
 
@@ -32,6 +32,7 @@ const BLENDER_MODELS = {
   verissimo: { url: 'models/verissimo.glb', props: addVerissimoProps }, // Senhor Veríssimo (Calamidade)
   jae: { url: 'models/jae.glb', props: addJaeProps }, // Park Jae-Yoon (Hexatombe)
   dalmo: { url: 'models/dalmo.glb', props: addDalmoProps }, // Dalmo Magno, o Colosso (Hexatombe)
+  guizo: { url: 'models/guizo.glb', props: addGuizoProps }, // Guilherme "Guizo" Santos (Sinais do Outro Lado)
 };
 
 // Formas que reaproveitam o .glb de outro modelo, só com os acessórios diferentes (máscaras dos Mascarados, Erin)
@@ -41,6 +42,7 @@ const MODEL_VARIANTS = {
   aguiar_mutilador: { base: 'aguiar', props: addAguiarMutiladorProps }, // máscara do Mutilador Noturno
   jae_x: { base: 'jae', props: addJaeXProps }, // capuz do X
   colosso: { base: 'dalmo', props: addColossoProps }, // o escafandro e as Manoplas
+  guizo_et: { base: 'guizo', props: addGuizoETProps }, // Distorcer Aparência: o disfarce alienígena
 };
 
 // todos os modelos que o jogo sabe montar (personagens e formas)

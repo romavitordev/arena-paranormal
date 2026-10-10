@@ -309,7 +309,6 @@ const pageOf = (i) => Math.max(0, SEL_PAGES.findIndex(([a, b]) => i >= a && i < 
 const INPUT_NAMES = { 'carga+ranged': '△ → □', 'carga+physical': '△ → ○', 'block+carga': 'R2 + △', 'block+jump': 'R2 + ×', 'carga+dodge': '△ + L2', 'ranged+forward': '→ + □', 'ranged+back': '← + □' };
 const inputName = (k) => (k === 'carga+jump' ? t('input.carga_jump') : k === 'ranged+side' ? `${t('input.side')} + □` : INPUT_NAMES[k] || k);
 
-// cor da etiqueta de equipe nos cartões da seleção (o elenco vem agrupado por equipe em ROSTER)
 
 export class SelectScreen {
   // heading: título no lugar do padrão (TORNEIO: "VEZ DE: JOGADOR 3")

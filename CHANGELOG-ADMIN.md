@@ -1,5 +1,55 @@
 # Registro administrativo de alterações
 
+## v3.16.0 — Os Cinco gravando
+
+- Versão: `VERSION` 3.15.1 → **3.16.0**.
+
+- **Novo lutador: GUIZO (Guilherme R. Santos, Os Cinco, Morte)** — pedido do usuário com `Referencias visuais/Personagens/
+  Guizo` (+ `guizo.txt`). Pesquisa na wiki (Guilherme_Santos, Alexandre): aparência, 9 rituais, habilidades (Eu Já
+  Sabia...), arsenal (faca/machete de detalhes dourados), galeria (faca, adagas de Sangue e de Conhecimento, 7 disfarces
+  do Distorcer Aparência), relação com o Alexandre (cumprimento secreto — não descrito, então não inventado).
+  - **Modelo** `char_guizo.py`: tronco próprio (`TT`), camiseta AHLEVO (textura `shirt_guizo`: ovelha de cabeça para
+    baixo, △ X O), camisa listrada (`sleeve_guizo`), fone no pescoço, colete de alças com bolsinhas e o rádio "GUIZO",
+    fivela de alienígena dourada, pochete com adesivos e o pano xadrez (`plaid_guizo`), cinto atravessado com frascos,
+    saco e a bainha, bolsas na coxa, calça rasgada (`pants_guizo`), coturnos com cadarço branco, mochila com adesivo de
+    diabo, corrente, antena e lanterna; cabelo espetado vinho com raiz preta (`prop_hair`). Em código (`props.js`):
+    `guizoKnife`, `camcorder` (mão esquerda; no ataque vai para o quadril — `grip.stow: 'hip'`), `etHead`.
+  - **Kit** (`characters/guizo.js`): faca (5 golpes, o último com espiral de Morte — `impactFx: 'spiral'`), □ Invadir Mente
+    (`mindSigil`, Conhecimento, "OS CINCO!" — o que ele fez no Fummu), △→○ Decadência, △→□ Amaldiçoar Arma com Sangue
+    (`curseWeapon`), △+L2 Velocidade Mortal com rastros (`deadlySpeedTrail`, conjunto fixo de 5 rastros; 2 em tela de
+    toque), R2+△ Embaralhar (`shuffle`: cópias `HoloCopy` que copiam a pose; `shuffleDodge` em damage.js), R2+×
+    Espirais da Perdição (`doomSpirals`), ← + □ Cicatrização (`agingHeal`: cura e envelhece o cabelo), passivas
+    Desacelerar Impacto (`slowImpact`) e Eu Já Sabia (`iKnewIt`). Especial Registro do Outro Lado (`cinematicCombo` com
+    `copies` em volta do alvo, do lado oposto à câmera, e `outro`). Clipes `idle_guizo`, `film_cam`, `face_wipe`,
+    `vic_guizo`.
+  - **Transformação** Distorcer Aparência (cena `distort`) → `forms/guizo_et.js`: Conhecimento, faca dourada
+    (`mindRead`), Rajada x3, Embaralhar com 4 cópias, Ligação Telepática (`mindLink`).
+  - Falas (abertura/resposta, cenas com Xande e Lírio — "Chiquinho" e "Esquisito da Internet" são apelidos da wiki,
+    20 vitórias e 20 derrotas, batalha), agarrões `guizo`/`guizo_et`, assistência genérica, `lore/membros.json`,
+    `check-roster`. Seleção: Os Cinco = Xande, Guizo, Lírio (página 1 cheia).
+  - Testado: combo 113, □ 30, Decadência 55 + decadência, Espirais 10 + lento/−25%, Embaralhar (2 golpes do Kaiser
+    em cópias), Velocidade Mortal (rastros), Amaldiçoar (sangramento), Cicatrização 85 + cabelo, especial (3 cópias,
+    sem sobras), transformação completa, Ligação Telepática, CPU × CPU sem NaN, ~7 ms/quadro no pior caso.
+- **CPU (pergunta do usuário: "a inteligência não devia ser a mesma para todos?").** É a mesma lógica, mas ela ficava sem
+  sanidade (só carregava a mais de 9 m) e a chance de habilidade era fixa e baixa — com qualquer personagem quase só
+  socava; kits que funcionam sem sanidade (Gal) pareciam mais espertos. Agora: carrega o que falta quando nenhuma
+  habilidade pronta cabe na sanidade e há espaço (> 4,5 m, sem ameaça); a chance cresce com a barra cheia
+  (`spend`); a habilidade escolhida no meio de um combo vale por 1,6 s (era 0,9); chance base maior em todos os níveis.
+  Tipos do Guizo nas listas da CPU (`SELF_TYPES`, `ACTIVE_BUFF_TYPES`, cura como `healOverTime`).
+- **Correção:** a cena de abertura `'xande+lirio'` nunca aparecia (as chaves são em ordem alfabética) → `'lirio+xande'`.
+
+- **Ferreiro refeito (pedido do usuário).** Referências da galeria da wiki (Portrait_Ferreiro, miniaturas de O Segredo
+  na Floresta, arte dos Luzidios no Livro de Regras, capa do ep. 10, graphic novel) + a descrição da wiki. Modelo novo
+  `tools/blender/char_ferreiro.py`: tronco em V próprio (`TT`, mesmo esquema do Dalmo), braços enormes com bíceps,
+  cotovelo estreito e antebraço de ferreiro, inteiros com as queimaduras (textura `arms_luzidio` refeita: placas
+  marrom-avermelhadas com contorno escuro, mais densas no antebraço); braceletes largos e lisos com bordas; peitoral de
+  placa com decote, vinco e bordas grossas + 3 lâminas na barriga; alças de couro por cima dos ombros (o "avental"),
+  rebites; pano vermelho (faixa na cintura + abas na frente e atrás) com duas correntes penduradas e uma em volta;
+  calça marrom mais grossa, faixas abaixo do joelho, caneleira segmentada, joelheira, meia preta e chinela com tiras;
+  orelhas pontudas longas; cabelo branco penteado para trás com topete (mechas da testa até a nuca); barba longa e
+  pontuda até o peito com mechas e bigode caído (material `fur_white`). Saíram as ombreiras e a saia com tachas.
+- `src/dev/lineup.js`: opção `size` (enquadra personagens grandes).
+
 ## v3.15.1 — Aí sim, neném!
 
 - Versão: `VERSION` 3.15.0 → **3.15.1**.

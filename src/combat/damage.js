@@ -4,6 +4,7 @@ import { COMBAT } from '../config/combat.js';
 import { angleDiff, yawTo, DEG } from '../core/util.js';
 import { elementMultiplier } from '../config/elements.js';
 import { weaknessMult } from './forms.js';
+import { shuffleDodge } from './guizoAbilities.js';
 
 // Pausa no impacto conforme o peso do golpe
 function hitstopFor(o, dealt) {
@@ -57,6 +58,9 @@ export function applyHit(world, attacker, victim, o) {
       return 0;
     }
   }
+
+  // EMBARALHAR (Guizo): o golpe pode acertar uma das cópias ilusórias em vez dele
+  if (shuffleDodge(world, attacker, victim, o)) return 'countered';
 
   // "PODE VIR!" (Dalmo / Colosso): na postura do □, um golpe físico ou habilidade do adversário vindo da frente e de
   // perto é segurado — ele agarra quem bateu e devolve (projéteis e especiais passam)

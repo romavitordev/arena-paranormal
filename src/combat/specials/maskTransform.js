@@ -205,6 +205,31 @@ export const maskTransform = {
       tl.add(1.5, () => world.audio.play('shhh', { volume: 1 }));
       tl.add(2.15, () => maskOn(true));
       total = 3.0;
+    } else if (scene === 'distort') {
+      // GUIZO — DISTORCER APARÊNCIA (o ritual da wiki: muda altura, pele, cabelo, voz...): 1) concentra · 2) passa a
+      // mão na frente do rosto e a imagem dele CHIA como uma fita (distorções em volta da cabeça) · 3) quando a mão
+      // sai, o rosto é o do alienígena (o disfarce de ET das referências) · 4) ergue a câmera e se filma, empolgado
+      f.anim.play('concentrate', { restart: true, duration: 0.5 });
+      lightTo = 3;
+      world.cameraRig.playShots([
+        faceClose(f, { dur: 1.0, from: 2.0, to: 1.6, side: 0.4, height: hy - 0.15, fov: 38 }),
+        faceClose(f, { dur: 1.3, from: 1.5, to: 1.1, side: -0.2, height: hy - 0.04, fov: 34 }),
+        lowAngle(f, { dur: 0.9, dist: 2.8, side: 0.6 }),
+      ]);
+      tl.add(0.25, () => world.showBanner(sp.banner || sp.name, f.def.color));
+      tl.add(0.5, () => {
+        f.anim.play('face_wipe', { restart: true, duration: 0.8 });
+        world.audio.play('blink', { volume: 0.8, pitch: 0.7 });
+      });
+      for (const t of [0.6, 0.72, 0.84, 0.96, 1.08]) {
+        tl.add(t, () => {
+          world.fx.distort(head(), { color: tint, radius: 0.9, life: 0.18 });
+          world.fx.burst(head(), { count: 6, color: tint, speed: 2, life: 0.25, size: 0.08 });
+        });
+      }
+      tl.add(0.95, () => world.screenFlash && world.screenFlash('#0a2a12', 0.12));
+      tl.add(1.15, () => maskOn(true));
+      total = 2.4;
     } else if (scene === 'watch') {
       // RELÍQUIA DE ENERGIA (Arnaldo → O Anfitrião) — uma cutscene de verdade, em nove fases:
       //  1 olha o relógio, que começa a brilhar · 2 o ambiente distorce (som estranho) · 3 a Relíquia se manifesta ·

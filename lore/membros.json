@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-01",
+  "updated": "2026-10-10",
   "origins": {
     "Ordo Realitas": [
       {
@@ -2893,6 +2893,113 @@
           }
         ],
         "arsenal": "Skate Caótico: O skate de Alexandre com sigilos e raios verdes em sua parte inferior. Não se sabe ao certo quando ele foi amaldiçoado, mas existe uma espécie de \"consciência caótica\" dentro dele que fornece +5 de Defesa ao usuário.\nTênis Lépidos: Um par de tênis próprios para andar de skate. Tem partes queimadas e cabos neon passando ao seu redor. Esses sapatos amplificam a mobilidade do usuário, deixando-o mais veloz e mais resistente a quedas.\nVislumbre do Fim: Um par de óculos escuros repleto de símbolos e espirais em sua armação metálica. Quando se olha para uma criatura por suas lentes, revela suas maiores fraquezas e vulnerabilidades."
+      },
+      {
+        "name": "Guilherme Santos (Guizo)",
+        "page": "Guilherme Santos",
+        "url": "https://ordemparanormal.fandom.com/wiki/Guilherme_Santos",
+        "id": "guizo",
+        "origin": "Os Cinco",
+        "element": "morte",
+        "afinidade": "",
+        "classe": "Ocultista",
+        "trilha": "Graduado",
+        "associacao": [
+          "Ocultismo",
+          "Os Cinco",
+          "Tenebris"
+        ],
+        "status": "Em Tenebris",
+        "resumo": "Guilherme \"Guizo\" R. Santos é um dos protagonistas de Sinais do Outro Lado: blogueiro e investigador paranormal, o câmera dos Cinco, que filma tudo de paranormal e posta no próprio site. Melhor amigo de Alexandre (Xande). No fim da missão entra pela Passagem para Tenebris.",
+        "aparencia": "1,72 m, pele clara, rosto fino, olhos avermelhados, cabelo liso bagunçado vermelho-vinho com a raiz preta; camiseta preta \"ahlevo\" (ovelha de cabeça para baixo) sobre a camisa listrada vermelha e branca; calça rasgada com cinto atravessado (frascos, saco e a faca de detalhes dourados); pochete com adesivos e pano xadrez; câmera; mochila com corrente e o adesivo de diabo.",
+        "rituais": [
+          {
+            "nome": "Distorcer Aparência",
+            "descricao": "Modifica a aparência para parecer outra pessoa (altura, peso, pele, cabelo, voz, digitais...).",
+            "tipo": "Rituais",
+            "fase": ""
+          },
+          {
+            "nome": "Decadência",
+            "descricao": "Espirais envolvem a mão e definham o alvo (2d8+2 de Morte).",
+            "tipo": "Rituais",
+            "fase": ""
+          },
+          {
+            "nome": "Amaldiçoar Arma com Sangue",
+            "descricao": "A arma causa +1d6 de dano de Sangue (Discente +2d6).",
+            "tipo": "Rituais",
+            "fase": ""
+          },
+          {
+            "nome": "Velocidade Mortal",
+            "descricao": "Distorce o tempo em volta do alvo, que fica extremamente veloz.",
+            "tipo": "Rituais",
+            "fase": ""
+          },
+          {
+            "nome": "Embaralhar",
+            "descricao": "Cópias ilusórias realistas que imitam as ações do conjurador (bônus na Defesa).",
+            "tipo": "Rituais",
+            "fase": ""
+          },
+          {
+            "nome": "Invadir Mente",
+            "descricao": "Rajada Mental (dano de Conhecimento) ou Ligação Telepática.",
+            "tipo": "Rituais",
+            "fase": ""
+          },
+          {
+            "nome": "Cicatrização",
+            "descricao": "Acelera o tempo nas feridas: recupera 3d8+3 PV e envelhece 1 ano.",
+            "tipo": "Rituais",
+            "fase": ""
+          },
+          {
+            "nome": "Espirais da Perdição",
+            "descricao": "Espirais no corpo do alvo deixam os movimentos lentos (−1d20 em ataques).",
+            "tipo": "Rituais",
+            "fase": ""
+          },
+          {
+            "nome": "Desacelerar Impacto",
+            "descricao": "Desacelera o tempo em volta: quedas e projéteis causam menos dano.",
+            "tipo": "Rituais",
+            "fase": ""
+          }
+        ],
+        "habilidades": [
+          {
+            "nome": "Eu Já Sabia",
+            "descricao": "Resistência mental igual ao Intelecto.",
+            "tipo": "",
+            "fase": ""
+          },
+          {
+            "nome": "Camuflar Ocultismo",
+            "descricao": "Esconde símbolos na pele; conjura sem componentes nem gestos (+2 PE).",
+            "tipo": "",
+            "fase": ""
+          },
+          {
+            "nome": "Saber Ampliado",
+            "descricao": "Rituais adicionais por círculo.",
+            "tipo": "",
+            "fase": ""
+          },
+          {
+            "nome": "Grimório Ritualístico",
+            "descricao": "Grimório com rituais de 1º/2º círculo.",
+            "tipo": "",
+            "fase": ""
+          }
+        ],
+        "arsenal": [
+          "Machete/faca com detalhes dourados",
+          "Câmera",
+          "Dedo Decepado (Morte)",
+          "Faixas da Vidência"
+        ]
       },
       {
         "name": "Dara Alice Venturini",
