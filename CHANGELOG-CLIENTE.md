@@ -2,6 +2,11 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.16.1 — Sombras no P1 vs P2
+- O "Shhh..." da Jae agora funciona no P1 vs P2: quem controla a Jae a vê como uma silhueta com um anel no chão da cor do jogador (antes ela sumia até para quem jogava com ela). Na mesma tela os dois veem a silhueta, e o que vale é o efeito: o adversário não se vira sozinho para ela, e o primeiro golpe dela sai como emboscada.
+- Online, a Jae some de verdade só na tela do adversário. Contra a CPU, ela continua quase invisível e a câmera não entrega mais onde ela está: fica no último lugar em que você a viu.
+- Cego e surdo agora aparecem na tela: névoa escura na cabeça de quem está cego e um chiado cinza em volta de quem está surdo.
+
 ## v3.16.0 — Os Cinco gravando
 - Novo lutador: GUIZO (Guilherme Santos, Os Cinco, Morte) — o câmera dos Cinco em Sinais do Outro Lado. Luta com a faca de detalhes dourados na mão direita e a câmera sempre na esquerda (gravando tudo). Ágil e frágil, com os rituais da ficha dele: Decadência (espirais envolvem o adversário e ele definha), Espirais da Perdição (deixa o adversário lento e mais fraco), Embaralhar (cópias dele que imitam cada movimento — um golpe pode acertar uma cópia no lugar dele), Velocidade Mortal (com rastros no ar), Amaldiçoar Arma com Sangue e Cicatrização (← + □: cura, mas ENVELHECE — o cabelo fica grisalho a cada uso).
 - O □ do Guizo é o Invadir Mente: a Rajada Mental, um sigilo dourado de Conhecimento que, na cabeça do adversário, ecoa "OS CINCO! OS CINCO! OS CINCO!". Especial: REGISTRO DO OUTRO LADO — ele grava o adversário pela câmera, cópias surgem em volta e cortam junto, e no fim ele confere a gravação.

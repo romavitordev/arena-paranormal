@@ -1,5 +1,24 @@
 # Registro administrativo de alterações
 
+## v3.16.1 — Sombras no P1 vs P2
+
+- Versão: `VERSION` 3.16.0 → **3.16.1**.
+
+- **Habilidades que não funcionavam no P1 vs P2 (pedido do usuário: a invisibilidade da Jae).** Levantamento: nenhuma
+  habilidade depende de a vítima ser CPU (cegueira, surdez e "perder o rastro" já valiam para humanos: o lutador para de
+  se virar sozinho). Os clarões de tela são curtos e de cena (iguais para os dois). O problema era VISUAL — quem vê o
+  quê numa tela só:
+  - **Cego e surdo legíveis:** névoa escura na cabeça de quem está CEGO e chiado cinza em volta da cabeça de quem está
+    SURDO, enquanto durarem (antes só o aviso escrito).
+  - **"Shhh..." da Jae por quem olha a tela** (`stealth` no buff; `Fighter.ownerSees/stealthOpacity`): quem controla a
+    Jae a vê como silhueta (38%) com um anel no chão na cor do jogador (P1 azul, P2 vermelho); no P1 vs P2 local os dois
+    veem a silhueta e o que vale é o efeito em jogo (o adversário não se vira sozinho para ela, emboscada, bônus de
+    assassina); contra a CPU continua quase invisível (12%); ONLINE ela some de verdade (6%) só na tela do adversário
+    (`world.viewSlot` = lado deste computador — a transparência é só desenho, não mexe na simulação em lockstep).
+  - **Câmera não entrega a Jae da CPU:** escondida de quem olha, a câmera enquadra o último lugar em que ela foi vista
+    (`Fighter.camPos` → `CameraRig.update`). Só contra a CPU: no online a câmera define a direção do controle e precisa
+    ser igual nos dois computadores; no P1 vs P2 a tela é uma só.
+
 ## v3.16.0 — Os Cinco gravando
 
 - Versão: `VERSION` 3.15.1 → **3.16.0**.

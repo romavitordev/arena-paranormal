@@ -208,7 +208,7 @@ async function startMatch() {
       });
     },
   });
-  if (game.net) match.world.netplay = true;
+  if (game.net) { match.world.netplay = true; match.world.viewSlot = game.net.slot; } // lado deste computador (o que a tela mostra de verdade)
   if (match.ready) await match.ready((k) => loading.progress(0.1 + k * 0.8));
   loading.progress(0.95);
   // compila os shaders antes de mostrar, para não travar no primeiro frame

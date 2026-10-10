@@ -3061,7 +3061,11 @@ export function blindFighter(world, victim, time) {
   if (!victim || victim.state === 'ko' || time <= 0) return;
   const cur = victim.findBuff('blind');
   if (cur) cur.time = Math.max(cur.time, time);
-  else victim.addBuff({ type: 'blind', name: 'CEGO', time, duration: time, noBlock: true });
+  else {
+    // a névoa escura em volta da cabeça enquanto dura: no P1 vs P2 os dois jogadores enxergam quem está cego
+    const smoke = world.fx.emitter({ rate: 40, follow: () => (victim.headPos ? victim.headPos() : victim.chestPos().add(new THREE.Vector3(0, 0.45, 0))), particle: { color: 0x0a0608, kind: 'smoke', speed: 0.3, spread: 0.22, life: 0.55, size: 0.48 } });
+    victim.addBuff({ type: 'blind', name: 'CEGO', time, duration: time, noBlock: true, onEnd() { smoke.stop(); } });
+  }
   if (victim.state === 'block') victim.setState('idle'); // a guarda cai
   if (!hasPassive(victim, 'precognition')) victim.surprised = Math.max(victim.surprised || 0, time);
   victim.notify('CEGO!', true);
@@ -3074,7 +3078,13 @@ export function deafFighter(world, victim, time) {
   if (!victim || victim.state === 'ko' || time <= 0) return;
   const cur = victim.findBuff('deaf');
   if (cur) cur.time = Math.max(cur.time, time);
-  else victim.addBuff({ type: 'deaf', name: 'SURDO', time, duration: time });
+  else {
+    // chiado cinza em volta da cabeça (sem som não dá para mostrar a surdez — o efeito precisa aparecer)
+    const head = () => (victim.headPos ? victim.headPos() : victim.chestPos().add(new THREE.Vector3(0, 0.45, 0)));
+    let ang = 0;
+    const hiss = world.fx.emitter({ rate: 20, follow: () => { ang += 0.9; const c = head(); return c.add(new THREE.Vector3(Math.sin(ang) * 0.32, 0, Math.cos(ang) * 0.32)); }, particle: { color: 0x9a96a4, speed: 0.15, spread: 0.05, life: 0.3, size: 0.07 } });
+    victim.addBuff({ type: 'deaf', name: 'SURDO', time, duration: time, onEnd() { hiss.stop(); } });
+  }
   victim.notify('SURDO!', true);
 }
 
@@ -3086,7 +3096,9 @@ export function veilFighter(world, f, a) {
   const time = a.duration ?? 4;
   const cur = f.findBuff('veil');
   if (cur) { cur.time = Math.max(cur.time, time); return; }
-  const buff = { type: 'veil', name: 'SHHH...', time, duration: time, opacity: a.opacity ?? 0.12, speedMult: a.speedMult ?? 1.15 };
+  // stealth: a transparência depende de QUEM está vendo (Fighter.stealthOpacity) — quem controla a Jae a vê como
+  // silhueta com um anel no chão; o adversário (CPU ou outra tela no online) quase não a vê
+  const buff = { type: 'veil', name: 'SHHH...', time, duration: time, opacity: a.opacity ?? 0.12, stealth: true, speedMult: a.speedMult ?? 1.15 };
   f.addBuff(buff);
   world.fx.shadowDisc(f.pos, { radius: 1.1, life: 0.6 });
   world.fx.burst(f.chestPos(), { count: 22, color: 0x0a0608, kind: 'smoke', speed: 1.6, up: 0.8, life: 0.7, size: 0.7, grow: 1 });

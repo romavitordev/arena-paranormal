@@ -1,5 +1,11 @@
 # Changelog
 
+## v3.16.1 — 2026-10-10
+
+### Alterado
+- Furtividade (`stealth`) desenhada por quem olha a tela: silhueta + anel para o dono, invisível no online para o adversário (`world.viewSlot`); câmera usa a última posição vista contra a CPU (`Fighter.camPos`).
+- Cego e surdo com efeito visual enquanto duram.
+
 ## v3.16.0 — 2026-10-10
 
 ### Adicionado

@@ -784,9 +784,48 @@ export class Fighter {
     }
     // translucidez de buffs (névoa) / esquivas especiais
     let op = 1;
-    for (const b of this.buffs) if (b.opacity && (!b.when || b.when())) op = Math.min(op, b.opacity);
+    let stealth = false;
+    for (const b of this.buffs) {
+      if (!b.opacity || (b.when && !b.when())) continue;
+      if (b.stealth) { stealth = true; op = Math.min(op, this.stealthOpacity(b)); } else op = Math.min(op, b.opacity);
+    }
+    this.updateStealthMark(stealth && this.ownerSees());
+    // escondido de quem olha a tela (só contra a CPU: no online a câmera precisa ser igual nos dois computadores, e no
+    // P1 vs P2 a tela é uma só): a câmera fica no último lugar em que ele foi visto
+    const hideCam = stealth && !this.ownerSees() && !this.world.netplay;
+    if (hideCam) { if (!this.camPos) this.camPos = this.pos.clone(); } else this.camPos = null;
     if (this.state === 'dodge' && this.dodgeCfg.style === 'inexistir') op = Math.min(op, 0.25 + Math.abs(Math.sin(this.stateTime * 60)) * 0.3);
     this.setOpacity(op);
+  }
+
+  // Quem está olhando esta tela controla este lutador? Online: o lado deste computador (world.viewSlot). Local: um
+  // humano no controle (no P1 vs P2 os dois são humanos na MESMA tela — os dois veem a silhueta, e o que vale é o
+  // efeito em jogo: o adversário não se vira sozinho para ela, a emboscada e o bônus de assassina)
+  ownerSees() {
+    const v = this.world.viewSlot;
+    if (v !== undefined && v !== null) return this.index === v;
+    return !(this.input && this.input.cpu);
+  }
+
+  // furtividade (o "Shhh..." da Jae): o dono vê uma silhueta escura; no online o adversário quase não vê nada; contra
+  // a CPU (ou CPU × CPU) fica como antes
+  stealthOpacity(b) {
+    if (this.ownerSees()) return 0.38;
+    return this.world.netplay ? 0.06 : b.opacity;
+  }
+
+  // anel no chão, na cor do jogador, debaixo de quem está furtivo — só na tela de quem o controla
+  updateStealthMark(on) {
+    if (!on && !this._stealthRing) return;
+    if (!this._stealthRing) {
+      const m = new THREE.Mesh(new THREE.RingGeometry(0.5, 0.62, 40), new THREE.MeshBasicMaterial({ color: this.index ? 0xff4a52 : 0x3aa0ff, transparent: true, opacity: 0.55, depthWrite: false }));
+      m.rotation.x = -Math.PI / 2;
+      m.renderOrder = 3;
+      this.world.scene.add(m);
+      this._stealthRing = m;
+    }
+    this._stealthRing.visible = on;
+    if (on) this._stealthRing.position.set(this.pos.x, Math.max(0.03, this.pos.y + 0.03), this.pos.z);
   }
 
   // ------------------------------------------------ buffer de comandos

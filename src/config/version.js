@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.16.0';
+export const VERSION = '3.16.1';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,16 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.16.1',
+    date: '2026-10-10',
+    title: 'Sombras no P1 vs P2',
+    items: [
+      'O "Shhh..." da Jae agora funciona no P1 vs P2: quem controla a Jae a vê como uma silhueta com um anel no chão da cor do jogador (antes ela sumia até para quem jogava com ela). Na mesma tela os dois veem a silhueta, e o que vale é o efeito: o adversário não se vira sozinho para ela, e o primeiro golpe dela sai como emboscada.',
+      'Online, a Jae some de verdade só na tela do adversário. Contra a CPU, ela continua quase invisível e a câmera não entrega mais onde ela está: fica no último lugar em que você a viu.',
+      'Cego e surdo agora aparecem na tela: névoa escura na cabeça de quem está cego e um chiado cinza em volta de quem está surdo.',
+    ],
+  },
   {
     v: '3.16.0',
     date: '2026-10-10',

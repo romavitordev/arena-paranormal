@@ -119,6 +119,9 @@ export class CameraRig {
   }
 
   update(dt, fighters, snap = false) {
+    // lutador escondido da tela (Jae da CPU no "Shhh..."): a câmera enquadra onde ele foi visto por último, senão o
+    // enquadramento entregava a posição dele (Fighter.camPos)
+    fighters = fighters.map((f) => (f.camPos ? { pos: f.camPos, size: f.size } : f));
     const cam = this.camera;
     const C = CAMERA_CFG;
     if (this.shots) {
