@@ -29,7 +29,8 @@ export function moveListHTML(c) {
   html += row('○ ○ ○…', `Sequência: ${c.melee.strikes.map((s) => s.name).join(' → ')}`, `termina com ${FIN[c.melee.strikes.at(-1).finisher] || 'finalizador'}`);
   for (const k of ['forward', 'back', 'side', 'air', 'up', 'down']) if (c.melee[k]) html += row(DIR[k], c.melee[k].name, strike(c.melee[k]));
   const r = c.ranged;
-  html += row('□ / X', r.name, `${r.damage}${r.count > 1 ? ` × ${r.count}` : ''} de dano · recarga ${r.cooldown}s${r.energyCost ? ` · ${r.energyCost} de sanidade` : ''}`);
+  if (r.type === 'counter') html += row('□ / X', r.name, `${r.description} · ${r.damage} de dano · recarga ${r.cooldown}s`);
+  else html += row('□ / X', r.name, `${r.damage}${r.count > 1 ? ` × ${r.count}` : ''} de dano · recarga ${r.cooldown}s${r.energyCost ? ` · ${r.energyCost} de sanidade` : ''}`);
   if (r.variants) for (const [k, v] of Object.entries(r.variants)) if (!v.ability) html += row(DIR[k].replace('○', '□'), v.label.toLowerCase().replace(/^./, (x) => x.toUpperCase()), `${v.damage}${(v.count ?? r.count) > 1 ? ` × ${v.count ?? r.count}` : ''} de dano`);
   for (const a of c.abilities || []) html += row(INPUT[a.input] || a.input, a.name, `${a.description || ''} (${a.energyCost} de sanidade · recarga ${a.cooldown}s)`);
   html += row('△ → △ → ○', `Especial: ${c.special.name}`, specialSummary(c));

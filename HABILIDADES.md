@@ -683,7 +683,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ## DALMO
 
-*Gladiador das arenas clandestinas: pondo o escafandro, vira o Colosso* · arma: Os punhos (e um pneu de ônibus); as Manoplas do Colosso na Transformação
+*Gladiador das arenas clandestinas: pondo o escafandro, vira o Colosso* · arma: Os punhos; as Manoplas do Colosso na Transformação
 
 ### Físico (○ / B)
 
@@ -701,9 +701,10 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 | ↑ + ○ (no combo) | Gancho ascendente | 44 | 1.9 m | finalizador: undefined |
 | ↓ + ○ (no combo) | Pisão | 54 | 1.8 m | finalizador: derruba |
 
-### Principal (□ / X): Pneu Estourado
+### Principal (□ / X): Pode Vir!
 
-- Dano 42 · alcance 15 m · cooldown 3.6 s · custo 0
+- Postura de contra-ataque: Se planta de braços abertos e chama: um golpe físico ou habilidade que chegar de frente é segurado — ele agarra quem bateu, dá uma cabeçada e empurra longe. Não segura projéteis nem especiais; no vazio, fica aberto.
+- Dano 52 · alcance 3.4 m · cooldown 4 s · custo 0
 
 ### Habilidades
 

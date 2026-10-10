@@ -1037,16 +1037,78 @@ export const MATERIAL_TEXTURES = {
       g.beginPath(); g.moveTo(x, y); g.lineTo(x + Math.cos(a) * len, y + Math.sin(a) * len); g.stroke();
     }
   }, { wrap: true }),
-  // calça cargo verde-musgo gasta, rasgada nos joelhos (fiapos claros)
+  // cargo verde-musgo: costuras laterais, vincos de pano largo, o joelho rasgado (fendas desfiadas com a pele aparecendo)
+  // e o pano franzido embaixo, por cima do coturno
   pants_dalmo: () => canvasTex(256, 256, (g) => {
-    g.fillStyle = '#3e4a34'; g.fillRect(0, 0, 256, 256);
-    for (let i = 0; i < 1400; i++) { g.fillStyle = Math.random() < 0.5 ? 'rgba(20,26,16,0.25)' : 'rgba(110,120,90,0.18)'; g.fillRect(Math.random() * 256, Math.random() * 256, 2, 2); }
-    g.strokeStyle = 'rgba(20,24,14,0.5)'; g.lineWidth = 2;
+    let seed = 41;
+    const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    g.fillStyle = '#3f4b35'; g.fillRect(0, 0, 256, 256);
+    for (let i = 0; i < 1400; i++) { g.fillStyle = rnd() < 0.5 ? 'rgba(20,26,16,0.22)' : 'rgba(110,120,90,0.15)'; g.fillRect(rnd() * 256, rnd() * 256, 2, 2); }
+    for (let i = 0; i < 22; i++) {
+      const x = rnd() * 256;
+      const w = 4 + rnd() * 9;
+      const grd = g.createLinearGradient(x - w, 0, x + w, 0);
+      grd.addColorStop(0, 'rgba(18,24,14,0)'); grd.addColorStop(0.5, `rgba(18,24,14,${0.18 + rnd() * 0.2})`); grd.addColorStop(1, 'rgba(18,24,14,0)');
+      g.fillStyle = grd; g.fillRect(x - w, rnd() * 80, w * 2, 256);
+    }
+    g.strokeStyle = 'rgba(20,24,14,0.55)'; g.lineWidth = 2;
     g.beginPath(); g.moveTo(64, 0); g.lineTo(64, 256); g.moveTo(192, 0); g.lineTo(192, 256); g.stroke();
-    for (const x of [128]) {
-      g.fillStyle = 'rgba(22,18,14,0.9)'; g.beginPath(); g.ellipse(x, 150, 26, 12, 0, 0, Math.PI * 2); g.fill();
-      g.strokeStyle = 'rgba(200,190,160,0.8)'; g.lineWidth = 1.5;
-      for (let k = 0; k < 14; k++) { const a = (k / 14) * Math.PI * 2; g.beginPath(); g.moveTo(x + Math.cos(a) * 24, 150 + Math.sin(a) * 11); g.lineTo(x + Math.cos(a) * 30, 150 + Math.sin(a) * 15); g.stroke(); }
+    // joelho rasgado: fendas horizontais irregulares, fios claros soltos
+    {
+      const cx = 128;
+      const cy = 166;
+      g.fillStyle = '#5c3c2a'; // a pele aparecendo pelo rasgo
+      g.beginPath();
+      for (let k = 0; k <= 28; k++) {
+        const a = (k / 28) * Math.PI * 2;
+        const r = 1 + (k % 2 ? 0.28 : -0.08) * rnd();
+        const px = cx + Math.cos(a) * 30 * r;
+        const py = cy + Math.sin(a) * 13 * r;
+        if (k === 0) g.moveTo(px, py); else g.lineTo(px, py);
+      }
+      g.closePath(); g.fill();
+      // fios claros atravessando o buraco e a borda desfiada
+      g.strokeStyle = 'rgba(214,204,176,0.9)'; g.lineWidth = 1.6;
+      for (let k = 0; k < 5; k++) {
+        const y = cy - 8 + k * 4;
+        g.beginPath(); g.moveTo(cx - 30, y + rnd() * 2); g.quadraticCurveTo(cx, y + 3 + rnd() * 3, cx + 30, y + rnd() * 2); g.stroke();
+      }
+      g.lineWidth = 1;
+      for (let k = 0; k < 30; k++) {
+        const a = (k / 30) * Math.PI * 2;
+        const px = cx + Math.cos(a) * 30;
+        const py = cy + Math.sin(a) * 13;
+        g.beginPath(); g.moveTo(px, py); g.lineTo(px + Math.cos(a) * 4, py + Math.sin(a) * 4 + 1); g.stroke();
+      }
+    }
+    // franzido embaixo (o pano dobra em cima do coturno)
+    for (let y = 205; y < 256; y += 9) {
+      g.strokeStyle = 'rgba(16,20,12,0.5)'; g.lineWidth = 2.5;
+      g.beginPath(); g.moveTo(0, y); for (let x = 0; x <= 256; x += 16) g.lineTo(x, y + Math.sin(x * 0.08 + y) * 3); g.stroke();
+    }
+  }, { wrap: true }),
+  // camisa social preta folgada: vincos verticais e repuxados (a camisa esticada na barriga), brilho fraco do tecido
+  shirt_dalmo: () => canvasTex(512, 256, (g) => {
+    let seed = 13;
+    const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    g.fillStyle = '#2d2c31'; g.fillRect(0, 0, 512, 256);
+    for (let i = 0; i < 40; i++) {
+      const x = rnd() * 512;
+      const w = 4 + rnd() * 14;
+      const dark = rnd() < 0.6;
+      const grd = g.createLinearGradient(x - w, 0, x + w, 0);
+      const c = dark ? '10,10,14' : '86,84,94';
+      const a = dark ? 0.3 + rnd() * 0.25 : 0.15 + rnd() * 0.15;
+      grd.addColorStop(0, `rgba(${c},0)`); grd.addColorStop(0.5, `rgba(${c},${a})`); grd.addColorStop(1, `rgba(${c},0)`);
+      g.fillStyle = grd;
+      g.fillRect(x - w, 0, w * 2, 256);
+    }
+    // repuxados diagonais (tecido esticado)
+    g.strokeStyle = 'rgba(12,12,16,0.35)'; g.lineWidth = 2;
+    for (let i = 0; i < 26; i++) {
+      const x = rnd() * 512;
+      const y = rnd() * 256;
+      g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + 10, y + 6, x + 24 + rnd() * 16, y + 4 + rnd() * 8); g.stroke();
     }
   }, { wrap: true }),
   // gola alta preta canelada (listras verticais)

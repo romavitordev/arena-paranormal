@@ -4,7 +4,7 @@ Jogo de luta 3D em arena com temática paranormal. Combate rápido e acessível,
 movimentação livre, ataques direcionais, defesa, esquiva, habilidades por combinação de
 botões e especiais cinematográficos. Feito com **Three.js + Vite**, roda no navegador.
 
-Versão atual do jogo: **v3.14.0**.
+Versão atual do jogo: **v3.15.0**.
 
 A numeração segue **MAJOR.MINOR.PATCH**: microatualizações usam `x.y.z`, atualizações concretas usam `x.y.0` e grandes marcos usam `x.0.0`.
 

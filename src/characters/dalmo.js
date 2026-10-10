@@ -8,7 +8,7 @@
 // soco vem com uma pressão atmosférica demolidora) — no jogo elas vêm com o escafandro, na Transformação.
 // Referências: Referencias visuais/Personagens/Dalmo (+ dossie_dalmo_arena_paranormal.txt) e a wiki.
 // Lutador de curta distância: socos pesados, cabeçadas, agarrões e o chão — ataques com preparação e recuperação
-// visíveis, nada de acrobacia nem magia de longe (o □ é um PNEU de ônibus, lembrança do motorista de Natal Macabro).
+// visíveis, nada de acrobacia nem de arremesso: o □ é o PODE VIR!, a postura de contra-ataque (segura o golpe e devolve).
 // TRANSFORMAÇÃO: põe o escafandro (segura no peito, ergue e encaixa; agacha de braços abertos e a aura vermelha
 // explode — o gif) e vira O COLOSSO até o fim do round (forms/colosso.js).
 const RED = 0xc8281e;
@@ -39,31 +39,36 @@ export const DALMO_KIT = {
     air: { name: 'Martelada no ar', anim: 'meteor_punch', dur: 0.48, active: [0.16, 0.36], damage: 44, range: 1.9, arc: 110, knockback: 4, slam: 20, vertical: 2.4, sound: 'swing', hitSound: 'heavyPunch', impactScale: 1.6 },
   },
 
-  // □: PNEU ESTOURADO — arremessa um pneu de ônibus (o motorista que trocava o pneu na estrada em Natal Macabro); lento,
-  // em arco, derruba quem acerta
+  // □: PODE VIR! — o Dalmo não arremessa nada: se planta de braços abertos e chama o adversário ("eu sou grande, mas
+  // não sou dois"). Se levar um golpe físico ou uma habilidade de frente nessa hora, SEGURA o golpe, agarra quem bateu
+  // pela gola, dá uma cabeçada e empurra longe (o lutador de arena que aguenta o soco para devolver). Projéteis e
+  // especiais passam; se ninguém bater, ele fica aberto na recuperação.
   ranged: {
-    name: 'Pneu Estourado',
-    type: 'projectile',
-    anim: 'throw_r',
-    origin: 'chest',
-    windup: 0.42,
+    name: 'Pode Vir!',
+    type: 'counter',
+    description: 'Se planta de braços abertos e chama: um golpe físico ou habilidade que chegar de frente é segurado — ele agarra quem bateu, dá uma cabeçada e empurra longe. Não segura projéteis nem especiais; no vazio, fica aberto.',
+    window: [0.1, 0.85],
     recovery: 0.4,
-    count: 1,
-    interval: 0,
-    damage: 42,
-    range: 15,
-    speed: 17,
-    radius: 0.75,
-    gravity: 10,
-    spread: 0,
-    knockback: 3.2,
-    hitstun: 0.6,
-    cooldown: 3.6,
+    reach: 3.4,
+    cooldown: 4,
     energyCost: 0,
-    visual: 'tire',
-    color: 0x1a1a1c,
-    sound: 'knifeThrow',
-    hitSound: 'heavyPunch',
+    damage: 52, // cabeçada + empurrão
+    range: 3.4,
+    color: 0xe8b070,
+    label: 'PODE VIR!',
+    riposte: {
+      windup: 0.06,
+      range: 3.4,
+      lunge: 6,
+      hold: 0.55,
+      blows: 1,
+      blowAnims: ['headbutt'],
+      blowDamage: 20,
+      final: 'throw',
+      finalDamage: 32,
+      label: 'GOLPE SEGURADO!',
+      color: 0xe8b070,
+    },
   },
 
   abilities: [
@@ -194,7 +199,7 @@ export default {
   element: 'energia', // as Manoplas do Colosso são amaldiçoadas com Energia
   energyColor: PRESS,
   info: {
-    weapon: 'Os punhos (e um pneu de ônibus); as Manoplas do Colosso na Transformação',
+    weapon: 'Os punhos; as Manoplas do Colosso na Transformação',
     style: 'Gigante de arena: socos pesados, cabeçadas, agarrões e pisões — lento, mas aguenta tudo',
     identity: 'Gladiador das arenas clandestinas: pondo o escafandro, vira o Colosso',
     tagline: 'Eu sou grande, mas não sou dois.',
@@ -212,7 +217,7 @@ export default {
     form: 'colosso',
     formBanner: 'COLOSSO',
     prop: 'helmet',
-    swap: [['colosso', true], ['shirt', false]],
+    swap: [['colosso', true], ['shirt', false], ['laces', false]],
     finalAnim: 'colosso_roar',
     duration: 0, // até o fim do round
     bonusHealth: 120,

@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.14.0';
+export const VERSION = '3.15.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,19 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.15.0',
+    date: '2026-10-10',
+    title: 'O Colosso',
+    items: [
+      'Novo lutador: DALMO MAGNO (Mascarados, Energia) — o motorista de ônibus simpático que, nas arenas clandestinas, é O COLOSSO. Enorme, lento e muito resistente, só luta corpo a corpo: socos pesados, cotovelada, joelhada, cabeçadas e pisões. Golpes de Arena (o fim do combo emenda uma cabeçada sozinho), Pressão Atmosférica (soco com onda de pressão que deixa o adversário ATORDOADO), Agarrão de Arena (agarra pela cabeça, dá cabeçadas e crava no chão), Atropelar (ombrada que quebra a defesa), A Glória Era Viciante (aguenta golpes sem recuar e bate mais forte) e o especial Finalização de Arena, que termina num pisão.',
+      'O □ do Dalmo não arremessa nada: é o PODE VIR! — ele se planta de braços abertos e chama. Se você bater nele (golpe físico ou habilidade, de frente) nessa hora, ele segura o golpe, te agarra pela gola, dá uma cabeçada e empurra longe. Projéteis e especiais passam, e se ninguém bater ele fica aberto por um instante: dá para ler e punir.',
+      'Transformação do Dalmo: ele segura o escafandro de cobre no peito, ergue e encaixa na cabeça; a camisa some, aparece o traje de gladiador, ele agacha de braços abertos e a aura vermelha explode. Vira O COLOSSO até o fim do round — com as Manoplas, todo soco solta uma onda de pressão e o fim do combo atordoa; Pressão Demolidora, Esmagar o Crânio, Pisão do Colosso (onda de choque em volta), o VEM, NENÉM! (o Pode Vir! com as Manoplas: quem bate é agarrado, castigado e cravado no chão) e o especial AÍ SIM, NENÉM!. O Colosso também pode aparecer no topo das Torres.',
+      'Juan voltou para os Mascarados.',
+      'Seleção de personagens organizada por equipe/temporada: Ordo Realitas, Escriptas, Os Cinco e Luzidios na primeira página e os Mascarados juntos na segunda, com uma etiqueta colorida da equipe em cada cartão.',
+      'Correção: com a janela do jogo minimizada, um golpe de lado podia fazer o lutador sumir da arena para sempre.',
+    ],
+  },
   {
     v: '3.14.0',
     date: '2026-10-09',

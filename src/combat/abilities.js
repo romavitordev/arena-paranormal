@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Timeline, yawTo, distXZ, forwardFromYaw, angleDiff, DEG } from '../core/util.js';
+import { Timeline, yawTo, distXZ, forwardFromYaw, angleDiff, turnTowards, DEG } from '../core/util.js';
 import { findSpotBehind, findFreeSpotNear } from './positioning.js';
 import { applyHit } from './damage.js';
 import { splitDamage } from './specials/common.js';
@@ -3359,6 +3359,38 @@ export const DALMO_TYPES = {
       });
       tl.end(a.duration ?? 0.75);
       return seqFrom(tl);
+    },
+  },
+
+  // "PODE VIR!" (o □ do Dalmo / Colosso — ele não arremessa nada): se planta de braços abertos e chama. Na janela
+  // (a.window), um golpe físico ou habilidade do adversário vindo da frente é SEGURADO (damage.js → Fighter.arenaRiposte):
+  // ele agarra quem bateu e devolve (a.riposte, um arenaGrab). Ninguém bateu: fica aberto na recuperação.
+  arenaCounterStance: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      const tl = new Timeline();
+      const [w0, w1] = a.window;
+      const st = (f.counterStance = { active: false, reach: a.reach });
+      f.vel.set(0, 0, 0);
+      if (opp) f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('arena_wall', { restart: true, duration: w1 + a.recovery });
+      world.audio.play('carga', { volume: 0.5, pitch: 0.55 });
+      tl.each((t) => {
+        f.vel.x = 0;
+        f.vel.z = 0;
+        st.active = f.counterStance === st && t >= w0 && t <= w1;
+        if (opp && t < w1) f.yaw = turnTowards(f.yaw, yawTo(f.pos, opp.pos), 0.12);
+        if (st.active && Math.random() < 0.35) world.fx.burst(f.chestPos(), { count: 2, color: a.color, speed: 1.2, life: 0.3, size: 0.14 });
+      });
+      tl.add(w0, () => {
+        if (f.counterStance !== st) return;
+        f.notify(a.taunt || a.label || 'PODE VIR!', true);
+        world.fx.ring(new THREE.Vector3(f.pos.x, 0.06, f.pos.z), { color: a.color, radius: 1.6, life: 0.4 });
+      });
+      tl.add(w1, () => { st.active = false; });
+      tl.end(w1 + a.recovery);
+      const clear = () => { if (f.counterStance === st) f.counterStance = null; };
+      return { update: (dt) => { const done = tl.update(dt); if (done) clear(); return done; }, cancel: clear };
     },
   },
 };

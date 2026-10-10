@@ -1,6 +1,30 @@
 # Registro administrativo de alterações
 
-## (em andamento) — próxima versão
+## v3.15.0 — O Colosso
+
+- Versão: `VERSION` 3.14.0 → **3.15.0** (Dalmo / O Colosso, Juan nos Mascarados, seleção por equipe, câmera NaN).
+
+- **Dalmo refeito (pedido do usuário: o modelo base não estava bom e ele não deve ter arremessável).**
+  - **Modelo** (`char_dalmo.py`): o tronco agora é próprio (`TT`: meia-largura, profundidade da FRENTE e das COSTAS por
+    altura; `lib.torso_part` trocado por `dalmo_torso` antes do `b.body`), com barriga e peitoral para a frente e o
+    trapézio descendo do pescoço largo até o ombro — acabou o "caixote". Braços montados à parte: manga com bíceps cheio,
+    deltoide redondo, antebraço grosso de pele com faixas, punho maior. Camisa folgada (`shirt_pt`): decote aberto, fralda
+    para fora mais comprida na frente e atrás, vincos; gola social grande (faixa + duas abas pontudas); textura nova
+    `shirt_dalmo`. Calça cargo larga com quadril próprio, bolsos laterais, faixa abaixo do joelho e o pano franzido por
+    cima do coturno; textura `pants_dalmo` com o joelho rasgado desfiado (antes era um círculo escuro). Coturno de cano
+    alto com biqueira e sola escuras; o cadarço virou `prop_laces` (some no Colosso, por baixo da bota de cobre — `swap`
+    e `addColossoProps`). Dreads (84) seguem o crânio e caem por gravidade: testa até a sobrancelha, lados até a
+    mandíbula, nuca. Peças do Colosso reajustadas ao corpo novo (cinturão, caneleiras, botas, bolsos, braçadeiras, luvas).
+  - **□ PODE VIR!** no lugar do Pneu Estourado (visual `tire` removido): `ranged.type = 'counter'` →
+    `ABILITY_TYPES.arenaCounterStance` (clipe novo `arena_wall`). Na janela (0,10–0,85 s), golpe físico ou habilidade do
+    ADVERSÁRIO vindo da frente e a até 3,4 m é anulado em `damage.js` (`'countered'`) → `Fighter.arenaRiposte` → um
+    `arenaGrab` (`ranged.riposte`: cabeçada + empurrão, 52). Projéteis e especiais passam; no vazio, 0,4 s de
+    recuperação. Colosso: **VEM, NENÉM!** (janela até 1,0 s; soco + cabeçada com pressão e crava no chão, 74). CPU: usa
+    a postura quando o golpe vem chegando (`threat`), nunca de longe nem para interromper especial. Lista de golpes,
+    tutorial e HABILIDADES.md mostram a descrição; assistência própria do Dalmo (sem tiro). `check-roster`: Dalmo e
+    Colosso sem arremesso.
+  - Testado: contra-ataque Dalmo 44 / Colosso 70 de dano (com escala de combo); no vazio volta ao normal em ~1,2 s;
+    projétil da Kemi acerta normalmente durante a postura; CPU × CPU 90 s: 6 posturas, 2 contra-ataques, sem NaN.
 
 - **Juan de volta aos Mascarados** (pedido do usuário; no futuro talvez vá para os "Sacrifícios"). A seleção agora quebra
   a página POR EQUIPE (`SEL_PAGES` em `Screens.js`): uma equipe que não cabe inteira no resto da página começa a

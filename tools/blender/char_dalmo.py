@@ -2,10 +2,13 @@
 DALMO MAGNO — "O COLOSSO" (Natal Macabro / Hexatombe) — public/models/dalmo.glb.
 Referências: Referencias visuais/Personagens/Dalmo ("Dalmo corpo intiero", "dalmo cintura pra cima", "Dalmo rosto",
 "Dalmo rosto 2", "Colosso corpo inteiro", "Dalmo colocando mascara", "Dalmo se tornando Colosso", o gif e o dossiê) e a
-wiki: 1,85 m, pele escura, porte enorme (ombros, braços e barriga), dreads curtos bem cuidados, cicatrizes pelo corpo.
-  DALMO (base): camisa social escura de gola, mangas arregaçadas até o antebraço, fralda para fora; antebraços
-    enfaixados; pulseira com o PINGENTE DE AXOLOTE rosa (a filha, Manu); calça cargo verde rasgada nos joelhos com
-    faixa enrolada embaixo do joelho; coturnos marrom-claros de cadarço.
+wiki: 1,85 m, pele escura, porte ENORME — peitoral e barriga grandes, ombros redondos, braços muito grossos, pescoço
+largo; dreads que caem pela testa e pelos lados; cicatrizes pelo corpo.
+  DALMO (base): camisa social escura, folgada, de gola grande e pontuda, o botão de cima aberto (o peito aparece no
+    decote), mangas arregaçadas até o antebraço e a FRALDA PARA FORA (abre por cima da calça); antebraços enfaixados;
+    pulseira com o PINGENTE DE AXOLOTE rosa (a filha, Manu); calça cargo verde larga, rasgada nos joelhos, com bolsos
+    na lateral, faixa enrolada embaixo do joelho e franzida por cima dos coturnos; coturnos marrom-claros de cano alto,
+    cadarço cruzado, biqueira e sola escuras.
   COLOSSO (prop_colosso, ligado na Transformação): o tronco quase todo exposto (cicatrizes); gola de cobre rebitada do
     escafandro com espinhos; retalhos de pano cru caindo do ombro esquerdo e na frente; mangueiras vermelhas; arnês de
     tiras de couro com espinhos cruzando o peito e a barriga; o cinturão redondo cheio de espinhos; as MANOPLAS: braçadeiras
@@ -16,6 +19,7 @@ Coordenadas do tronco ANTES da escala do Builder (x × k_tx, y × k_ty); espessu
 """
 import sys, os, math, random
 sys.path.insert(0, os.path.dirname(__file__))
+import lib
 from lib import *
 from mathutils import Vector
 
@@ -29,10 +33,11 @@ hz = sk['hips'].z
 top = 1.55 * H
 
 skin = material('skin_dalmo', '#5a3a2a', 0.7)
-shirt = material('shirt_dalmo', '#2e2d32', 0.85)
+shirt = material('shirt_dalmo', '#ffffff', 0.85)         # camisa escura com vincos (textura)
 pants = material('pants_dalmo', '#ffffff', 0.9)          # cargo verde rasgado (textura)
-bandage = material('bandage_dalmo', '#d8d0c0', 0.9)
-boots = material('boots_dalmo', '#8a7052', 0.75)
+bandage = material('bandage_dalmo', '#c4b8a2', 0.9)
+boots = material('boots_dalmo', '#9a7c5a', 0.75)
+toecap = material('toecap_dalmo', '#4a3a2c', 0.7)
 sole = material('sole_dalmo', '#2a221a', 0.8)
 lace = material('lace_dalmo', '#1a1612', 0.8)
 hairm = material('hair_dalmo', '#141012', 0.6)
@@ -53,13 +58,8 @@ M = {
     'skin': skin,
     'face': material('face_dalmo', '#ffffff', 0.75),
     'torso': material('torso_dalmo', '#ffffff', 0.75),  # pele com cicatrizes (textura) — à mostra no Colosso
-    'arm': shirt,          # mangas da camisa escura (no Colosso, o que sobrou da camisa rasgada)
     'hand': skin,
-    'legs': pants,
-    'feet': boots,
 }
-PROF = [(-0.12, 0.205), (0.0, 0.225), (0.12, 0.27), (0.24, 0.29), (0.36, 0.285), (0.46, 0.285), (0.54, 0.25), (0.6, 0.15), (0.66, 0.09)]  # barriga e peitoral enormes
-hc = b.body(M, PROF, arm_r=(0.11, 0.095, 0.074), leg_r=(0.112, 0.088, 0.07), head_r=(0.148, 0.158, 0.168), neck_r=0.084)
 
 
 # ---------------------------------------------------------------- utilidades
@@ -125,10 +125,46 @@ def grid(fn, nu, nv, flip=False):
     return verts, faces, uvs
 
 
+# ---------------------------------------------------------------- TRONCO: barriga e peitoral enormes, ombros caídos
+# (z relativo ao quadril, meia-largura, profundidade da FRENTE, profundidade das COSTAS) — em frações de H
+TT = [
+    (-0.16, 0.205, 0.15, 0.15),
+    (-0.06, 0.225, 0.18, 0.16),
+    (0.04, 0.255, 0.225, 0.165),   # a barriga começa
+    (0.14, 0.28, 0.255, 0.17),     # barriga
+    (0.24, 0.29, 0.255, 0.172),
+    (0.33, 0.292, 0.235, 0.178),   # embaixo do peito
+    (0.42, 0.292, 0.225, 0.182),   # peitoral
+    (0.5, 0.286, 0.2, 0.184),
+    (0.56, 0.27, 0.17, 0.176),
+    (0.6, 0.235, 0.14, 0.158),     # trapézio: desce do pescoço largo até o ombro
+    (0.64, 0.19, 0.118, 0.135),
+    (0.675, 0.135, 0.098, 0.108),
+    (0.71, 0.105, 0.088, 0.092),
+]
+
+
 def torso_pt(a, z, out=1.0, extra=0.0):
     """ponto na superfície do tronco (antes da escala), a = ângulo (0 = frente), z relativo ao quadril em H."""
-    w = lerp_table(PROF, z)[0]
-    return Vector((math.sin(a) * (w + extra) * out * H, -math.cos(a) * (w * 0.62 + extra) * out * H, hz + z * H))
+    w, f, bk = lerp_table(TT, z)
+    c = math.cos(a)
+    dep = f if c > 0 else bk
+    return Vector((math.sin(a) * (w + extra) * out * H, -c * (dep + extra) * out * H, hz + z * H))
+
+
+def dalmo_torso(sk_, profile, seg=18, depth=0.62):
+    rings = [(0, 0, hz + z * H, w * H, 1.0) for z, w, f, bk in TT]
+    v, f, u = tube(rings, 32)
+    out = []
+    for x, y, z in v:
+        w_, fd, bd = lerp_table(TT, (z - hz) / H)
+        out.append((x, y * (fd if y < 0 else bd) * H, z))
+    return out, f, u
+
+
+lib.torso_part = dalmo_torso  # o b.body usa este tronco (barriga para a frente) no lugar do tubo simétrico
+
+hc = b.body(M, [], arms=(), legs=False, head_r=(0.15, 0.158, 0.168), neck_r=0.108)
 
 
 def spikes_on(pts_normals, ln=0.035, r=0.012):
@@ -140,95 +176,164 @@ def outward(p):
     return v.normalized() if v.length > 1e-6 else Vector((0, 1, 0))
 
 
-# ---------------------------------------------------------------- CAMISA (prop_shirt: some no Colosso)
-def shirt_pt(u, v, out=1.0):
-    a = (u - 0.5) * TAU + math.pi  # costura nas costas
-    z = 0.6 - v * 0.74            # da gola até abaixo da cintura (fralda para fora)
-    p = torso_pt(a, max(z, -0.12), 1.0, 0.018 + 0.012 * v)
-    if z < -0.12:
-        p.z = hz + z * H
-    # fralda solta: abre um pouco embaixo
-    p.x *= 1 + max(0.0, -z - 0.05) * 0.25
-    p.y *= 1 + max(0.0, -z - 0.05) * 0.25
-    return p * 1.0
-
-
-b.add('prop_shirt_body', grid(lambda u, v: shirt_pt(u, v), 36, 14), shirt, region='torso', subdiv=0)
-# gola de camisa social (duas pontas viradas na frente) e a carcela com botões
-collar = []
-for s in (1, -1):
-    pts = [torso_pt(s * 0.15, 0.62, 1.02, 0.02), torso_pt(s * 0.5, 0.6, 1.04, 0.025), torso_pt(s * 0.32, 0.5, 1.05, 0.03)]
-    collar.append(rod(pts, [0.03 * H, 0.03 * H, 0.012 * H], 5, flat=(outward, 0.3)))
-ring = [torso_pt(k / 16 * TAU, 0.625, 1.02, 0.02) for k in range(17)]
-collar.append(rod(ring, [0.022 * H] * 17, 5))
-b.add('prop_shirt_collar', merge(*collar), shirt, region='torso', subdiv=0)
-btn = [ellipsoid(tuple(torso_pt(0, z, 1.0, 0.032)), (0.01 * H, 0.006 * H, 0.01 * H), 6, 4) for z in (0.48, 0.36, 0.24, 0.12, 0.0)]
-b.add('prop_shirt_buttons', merge(*btn), button, region='torso', subdiv=0)
-b.add('prop_shirt_placket', rod([torso_pt(0, 0.58, 1.0, 0.026), torso_pt(0, -0.18, 1.0, 0.05)], [0.016 * H, 0.016 * H], 4, flat=(outward, 0.25)), shirt, region='torso', subdiv=0)
-# mangas arregaçadas (dobra grossa no antebraço) e antebraço de pele com faixas
+# ---------------------------------------------------------------- BRAÇOS: ombro redondo, bíceps enorme, antebraço grosso
 for side in ('L', 'R'):
-    e, h = sk['e' + side], sk['hand' + side]
-    b.add('prop_shirt_cuff' + side, tube(limb_rings(e.lerp(h, 0.05), e.lerp(h, 0.22), 0.108, 0.104, n=2), 14), shirt, region='e' + side, subdiv=0)
-b.group('prop_shirt')
-
-for side in ('L', 'R'):
-    e, h = sk['e' + side], sk['hand' + side]
-    b.add('forearm' + side, tube(limb_rings(e.lerp(h, 0.08), e.lerp(h, 0.92), 0.096, 0.076, n=4), 14), skin, region='e' + side, subdiv=0)
-    # faixas enroladas no antebraço (as duas mãos de lutador)
-    wraps = [tube(limb_rings(e.lerp(h, t), e.lerp(h, t + 0.07), 0.098 - t * 0.02, 0.097 - t * 0.02, n=1), 14) for t in (0.55, 0.66, 0.77)]
+    s, e, h = sk['s' + side], sk['e' + side], sk['hand' + side]
+    sx = 1 if side == 'L' else -1
+    shtop = s + Vector((-sx * 0.025 * H, 0, 0.0))
+    cuff = e.lerp(h, 0.2)
+    # manga (camisa) do ombro até logo abaixo do cotovelo: bíceps bem cheio
+    rings = []
+    for i in range(9):
+        t = i / 8
+        p = shtop.lerp(e, t)
+        r = 0.108 + 0.018 * math.sin(t * math.pi * 0.9) - 0.006 * t
+        rings.append((p.x, p.y, p.z, r, r * 1.04))
+    for i in range(1, 4):
+        p = e.lerp(cuff, i / 3)
+        rings.append((p.x, p.y, p.z, 0.106, 0.106))
+    b.add('sleeve' + side, tube(rings, 16), shirt, region='arm' + side, subdiv=0)
+    # deltoide: a cabeça do ombro arredondada (some o "ombro quadrado")
+    b.add('delt' + side, ellipsoid((s.x - sx * 0.005 * H, s.y, s.z - 0.03 * H), (0.1 * H, 0.112 * H, 0.09 * H), 16, 12), shirt, region='arm' + side, subdiv=0)
+    # antebraço de pele, grosso perto do cotovelo
+    fr = []
+    for i in range(7):
+        t = 0.08 + i / 6 * 0.86
+        p = e.lerp(h, t)
+        r = 0.1 - 0.024 * t + 0.008 * math.sin(t * math.pi)
+        fr.append((p.x, p.y, p.z, r, r * 0.92))
+    b.add('forearm' + side, tube(fr, 14), skin, region='e' + side, subdiv=0)
+    b.add('hand' + side, hand_part(sk, side, 0.09), skin, region='e' + side)
+    # faixas enroladas no antebraço (as mãos de lutador): mais no direito
+    ts = (0.5, 0.6, 0.7, 0.8) if side == 'R' else (0.62, 0.72)
+    wraps = [tube(limb_rings(e.lerp(h, t), e.lerp(h, t + 0.075), 0.1 - t * 0.024 + 0.006, 0.1 - t * 0.024 + 0.005, n=1), 14) for t in ts]
     b.add('wraps' + side, merge(*wraps), bandage, region='e' + side, subdiv=0)
+
 # pulseira com o axolote rosa no pulso esquerdo
 eL, hL = sk['eL'], sk['handL']
-b.add('bracelet', tube(limb_rings(eL.lerp(hL, 0.88), eL.lerp(hL, 0.93), 0.074, 0.074, n=1), 12), band, region='eL', subdiv=0)
-wp = eL.lerp(hL, 0.9)
-ax = [ellipsoid((wp.x + 0.075 * 1.34, wp.y - 0.02, wp.z - 0.03), (0.018, 0.012, 0.03), 8, 6)]
-for s in (-1, 1):
-    ax.append(ellipsoid((wp.x + 0.075 * 1.34, wp.y - 0.02 + s * 0.018, wp.z - 0.012), (0.006, 0.012, 0.008), 5, 4))
+b.add('bracelet', tube(limb_rings(eL.lerp(hL, 0.86), eL.lerp(hL, 0.91), 0.08, 0.08, n=1), 12), band, region='eL', subdiv=0)
+wp = eL.lerp(hL, 0.89)
+ax = [ellipsoid((wp.x + 0.082 * 1.34, wp.y - 0.02, wp.z - 0.03), (0.02, 0.014, 0.032), 8, 6)]
+for s_ in (-1, 1):
+    ax.append(ellipsoid((wp.x + 0.082 * 1.34, wp.y - 0.02 + s_ * 0.02, wp.z - 0.01), (0.007, 0.013, 0.009), 5, 4))
 b.add('axolotl_charm', merge(*ax), pink, region='eL', subdiv=0)
 
-# ---------------------------------------------------------------- calça: faixa abaixo do joelho, coturnos de cadarço
+
+# ---------------------------------------------------------------- CAMISA (prop_shirt: some no Colosso)
+def shirt_pt(u, v):
+    z_top = 0.655
+    z_lin = z_top - v * 0.82
+    g = 0.2 * smoothstep(0.46, 0.63, z_lin)          # decote: o botão de cima aberto
+    a = g + u * (TAU - 2 * g)                        # a costura do decote fica na frente
+    hem = -0.13 - 0.075 * abs(math.cos(a)) + 0.02 * math.cos(2 * a) ** 2  # fralda: mais comprida na frente e atrás
+    z = z_top - v * (z_top - hem)
+    folds = 0.006 * math.sin(a * 9 + v * 2.5) * smoothstep(0.15, 0.8, v)
+    extra = 0.02 + 0.008 * v + folds + max(0.0, 0.02 - z) * 0.45  # abre por cima da calça
+    # sobre a barriga a camisa fica esticada; nos lados, sobra pano
+    p = torso_pt(a, max(z, -0.16), 1.0, extra)
+    p.z = hz + z * H
+    return p
+
+
+b.add('prop_shirt_body', grid(shirt_pt, 40, 16), shirt, region='torso', subdiv=0)
+# gola social grande: a faixa em volta do pescoço e as duas abas pontudas viradas para baixo
+collar = []
+ring = [torso_pt(0.24 + k / 20 * (TAU - 0.48), 0.66, 1.0, 0.03) + Vector((0, 0, 0.012 * H)) for k in range(21)]
+collar.append(rod(ring, [0.02 * H] * 21, 5))
+b.add('prop_shirt_band', merge(*collar), shirt, region='torso', subdiv=0)
+flaps = []
+for s_ in (1, -1):
+    def flap(u, v, s_=s_):
+        a = s_ * (math.pi - u * (math.pi - 0.26))
+        base = torso_pt(a, 0.672, 1.0, 0.04)
+        ln = 0.05 + 0.09 * u ** 3
+        tip = torso_pt(a + s_ * 0.2 * u ** 2, 0.665 - ln, 1.0, 0.052 + 0.02 * u)
+        p = base.lerp(tip, v)
+        return p + outward(p) * 0.012 * H * math.sin(v * math.pi)
+    flaps.append(grid(flap, 14, 3, flip=(s_ > 0)))
+b.add('prop_shirt_collar', merge(*flaps), shirt, region='torso', subdiv=0)
+btn = [ellipsoid(tuple(torso_pt(0, z, 1.0, 0.034)), (0.011 * H, 0.006 * H, 0.011 * H), 6, 4) for z in (0.44, 0.33, 0.22, 0.11, 0.0, -0.11)]
+b.add('prop_shirt_buttons', merge(*btn), button, region='torso', subdiv=0)
+b.add('prop_shirt_placket', rod([torso_pt(0, z, 1.0, 0.03) for z in (0.47, 0.3, 0.12, -0.05, -0.2)], [0.018 * H] * 5, 4, flat=(outward, 0.25)), shirt, region='torso', subdiv=0)
+# dobra grossa da manga arregaçada
+for side in ('L', 'R'):
+    e, h = sk['e' + side], sk['hand' + side]
+    b.add('prop_shirt_cuff' + side, tube(limb_rings(e.lerp(h, 0.1), e.lerp(h, 0.24), 0.116, 0.112, n=2, bulge=0.05), 16), shirt, region='e' + side, subdiv=0)
+b.group('prop_shirt')
+
+# ---------------------------------------------------------------- CALÇA CARGO larga e COTURNOS
+# o quadril da calça (embaixo da fralda; aparece no Colosso)
+b.add('pants_hip', grid(lambda u, v: torso_pt((u - 0.5) * TAU, 0.05 - v * 0.27, 1.0, 0.012), 32, 4), pants, region='torso', subdiv=0)
 for side in ('L', 'R'):
     l, k, f = sk['l' + side], sk['k' + side], sk['foot' + side]
-    b.add('knee_wrap' + side, tube(limb_rings(k.lerp(f, 0.06), k.lerp(f, 0.2), 0.084, 0.082, n=2), 14), bandage, region='k' + side, subdiv=0)
-    b.add('boot_shaft' + side, tube(limb_rings(k.lerp(f, 0.62), k.lerp(f, 1.0), 0.072, 0.07, n=3), 14), boots, region='k' + side, subdiv=0)
-    b.add('boot_toe' + side, ellipsoid((f.x, f.y - 0.1 * H, f.z + 0.035 * H), (0.06 * H, 0.085 * H, 0.045 * H), 12, 8, theta_max=math.pi * 0.55), boots, region='foot' + side, subdiv=0)
-    b.add('sole' + side, box((f.x, f.y - 0.05 * H, f.z - 0.012 * H), (0.125 * H, 0.29 * H, 0.035 * H), bevel=0.006), sole, region='foot' + side, subdiv=0)
+    sx = 1 if side == 'L' else -1
+    topp = Vector((l.x, l.y, l.z + 0.07 * H))
+    rings = []
+    for t, r in ((0.0, 0.122), (0.25, 0.124), (0.55, 0.118), (0.85, 0.108), (1.0, 0.104)):
+        p = topp.lerp(k, t)
+        rings.append((p.x, p.y, p.z, r, r))
+    # abaixo do joelho: a faixa e o pano franzido por cima do cano do coturno
+    for t, r in ((0.15, 0.1), (0.27, 0.098), (0.36, 0.104), (0.43, 0.106), (0.48, 0.098)):
+        p = k.lerp(f, t)
+        rings.append((p.x, p.y, p.z, r, r))
+    b.add('pants' + side, tube(rings, 16), pants, region='leg' + side, subdiv=0)
+    # bolsos cargo na lateral da coxa
+    pc = topp.lerp(k, 0.55)
+    b.add('cargo' + side, box((pc.x + sx * 0.112 * H, pc.y, pc.z), (0.03 * H, 0.1 * H, 0.12 * H), bevel=0.01), pants, region='leg' + side, subdiv=0)
+    b.add('knee_wrap' + side, tube(limb_rings(k.lerp(f, 0.1), k.lerp(f, 0.24), 0.104, 0.102, n=2), 16), bandage, region='k' + side, subdiv=0)
+    # coturno: cano alto (entra embaixo da calça), biqueira escura, sola grossa e cadarço cruzado
+    b.add('boot_shaft' + side, tube(limb_rings(k.lerp(f, 0.4), k.lerp(f, 0.97), 0.09, 0.085, n=3), 16), boots, region='k' + side, subdiv=0)
+    b.add('boot_foot' + side, ellipsoid((f.x, f.y - 0.07 * H, f.z + 0.045 * H), (0.068 * H, 0.15 * H, 0.06 * H), 14, 10, theta_max=math.pi * 0.56), boots, region='foot' + side, subdiv=0)
+    b.add('boot_toe' + side, ellipsoid((f.x, f.y - 0.15 * H, f.z + 0.032 * H), (0.064 * H, 0.08 * H, 0.05 * H), 12, 8, theta_max=math.pi * 0.56), toecap, region='foot' + side, subdiv=0)
+    b.add('sole' + side, box((f.x, f.y - 0.07 * H, f.z - 0.008 * H), (0.145 * H, 0.33 * H, 0.04 * H), bevel=0.008), sole, region='foot' + side, subdiv=0)
     xs = []
     for j in range(5):
-        t0 = 0.66 + j * 0.065
-        p0, p1 = k.lerp(f, t0), k.lerp(f, t0 + 0.05)
-        for s in (-1, 1):
-            xs.append(rod([(p0.x + s * 0.04, p0.y - 0.075, p0.z), (p1.x - s * 0.04, p1.y - 0.075, p1.z)], [0.005, 0.005], 4))
-    b.add('laces' + side, merge(*xs), lace, region='k' + side, subdiv=0)
+        t0 = 0.52 + j * 0.08
+        p0, p1 = k.lerp(f, t0), k.lerp(f, t0 + 0.055)
+        for s_ in (-1, 1):
+            xs.append(rod([(p0.x + s_ * 0.045, p0.y - 0.088 * 1.3, p0.z), (p1.x - s_ * 0.045, p1.y - 0.088 * 1.3, p1.z)], [0.006, 0.006], 4))
+    b.add('prop_laces' + side, merge(*xs), lace, region='k' + side, subdiv=0)  # some no Colosso (bota de cobre)
+b.group('prop_laces')
 
-# ---------------------------------------------------------------- CABELO: dreads curtos e bem cuidados
-HR = (0.153 * H, 0.163 * H, 0.172 * H)
-HC = Vector((hc.x, hc.y + 0.004, hc.z + 0.01))
+# ---------------------------------------------------------------- CABELO: dreads que caem pela testa e pelos lados
+HR = (0.156 * H, 0.164 * H, 0.172 * H)
+HC = Vector((hc.x, hc.y + 0.004, hc.z + 0.012))
 
 
 def hp(phi, th, r=1.0):
     return HC + Vector((math.sin(th) * math.sin(phi) * HR[0] * r, -math.sin(th) * math.cos(phi) * HR[1] * r, math.cos(th) * HR[2] * r))
 
 
-b.add('hair_cap', hair_cap((HC.x, HC.y, HC.z), (HR[0] * 0.98, HR[1] * 0.98, HR[2] * 0.98), front=0.22, side=0.5, back=0.62), hairm, region='head')
+b.add('hair_cap', hair_cap((HC.x, HC.y, HC.z), (HR[0] * 0.98, HR[1] * 0.98, HR[2] * 0.98), front=0.2, side=0.52, back=0.66), hairm, region='head')
 dreads = []
-for i in range(64):
-    phi = random.uniform(-math.pi, math.pi)
-    th0 = random.uniform(0.15, 0.6)
-    front = math.cos(phi) > 0.6
-    ln = random.uniform(0.2, 0.32) * H * (0.75 if front else 1.0)
-    p0 = hp(phi, th0, 1.0)
-    out = (p0 - HC).normalized()
-    p1 = p0 + out * 0.025 * H + Vector((0, 0, -0.02 * H))
-    # caem para baixo e um pouco para fora; na frente caem sobre a testa
-    drop = Vector((out.x * 0.35, out.y * 0.35 - (0.05 if front else 0), -1)).normalized()
-    p2 = p1 + drop * ln * 0.5
-    p3 = p1 + drop * ln + Vector((random.uniform(-0.01, 0.01), random.uniform(-0.01, 0.01), 0))
-    # não atravessar o rosto: as da frente param na altura das sobrancelhas
-    if front:
-        p3.z = max(p3.z, HC.z + 0.02 * H)
-        p2.z = max(p2.z, HC.z + 0.06 * H)
-    dreads.append(rod([p0, p1, p2, p3], [0.021 * H, 0.022 * H, 0.02 * H, 0.016 * H], 6))
+N = 84
+for i in range(N):
+    phi = (i / N) * TAU - math.pi + random.uniform(-0.05, 0.05)
+    front = math.cos(phi)               # 1 = testa, -1 = nuca
+    th0 = random.uniform(0.12, 0.42)
+    # comprimento: na testa caem até a sobrancelha / olho; nos lados até a mandíbula; atrás até a nuca
+    if front > 0.55:
+        end_z = HC.z + random.uniform(0.035, 0.08) * H
+    elif front > -0.2:
+        end_z = HC.z - random.uniform(0.06, 0.12) * H
+    else:
+        end_z = HC.z - random.uniform(0.14, 0.2) * H
+    pts = [hp(phi, th0, 1.0)]
+    th = th0
+    # acompanha o crânio até a "aba", depois cai por gravidade, um pouco afastado do rosto
+    while th < 1.25 and pts[-1].z > end_z + 0.04 * H:
+        th += 0.22
+        pts.append(hp(phi + random.uniform(-0.04, 0.04), th, 1.07 + 0.03 * (th - th0)))
+    last = pts[-1]
+    lean = Vector((math.sin(phi) * 0.02 * H, -math.cos(phi) * 0.02 * H, 0)) if front > 0.55 else Vector((math.sin(phi) * 0.012 * H, -math.cos(phi) * 0.012 * H, 0))
+    while last.z > end_z:
+        last = last + Vector((0, 0, -0.045 * H)) + lean * 0.4
+        pts.append(last)
+    pts[-1].z = max(pts[-1].z, end_z)
+    if len(pts) < 3:
+        pts.insert(1, pts[0].lerp(pts[-1], 0.5))
+    rad = [0.021 * H] * (len(pts) - 1) + [0.016 * H]
+    dreads.append(rod(pts, rad, 6))
 b.add('dreads', merge(*dreads[0::2]), hairm, region='head', subdiv=0)
 b.add('dreads_hi', merge(*dreads[1::2]), hairhi, region='head', subdiv=0)
 
@@ -306,39 +411,40 @@ for p in belt_pts[:-1]:
     ssp.append((p + outward(p) * 0.018 * H, outward(p)))
 b.add('prop_colosso_harness', merge(*straps), leather, region='torso', subdiv=0)
 b.add('prop_colosso_harness_spikes', merge(*spikes_on(ssp, 0.04, 0.012)), spike, region='torso', subdiv=0)
-b.add('prop_colosso_belt_ring', tube([(0, -0.17 * H * 1.0 - 0.02, hz + 0.03 * H, 0.05 * H, 0.012), (0, -0.17 * H - 0.025, hz + 0.031 * H, 0.05 * H, 0.012)], 14), brass, region='torso', subdiv=0)
+_fp = torso_pt(0, 0.03, 1.0, 0.085)
+b.add('prop_colosso_belt_ring', tube([(0, _fp.y, _fp.z, 0.05 * H, 0.012), (0, _fp.y - 0.006, _fp.z + 0.001 * H, 0.05 * H, 0.012)], 14), brass, region='torso', subdiv=0)
 # MANOPLAS: braçadeira de cobre no antebraço com faixas de latão e espinhos; luva de couro sem dedos
 for side in ('L', 'R'):
     e, h = sk['e' + side], sk['hand' + side]
     sx = 1 if side == 'L' else -1
-    b.add('prop_colosso_bracer' + side, tube(limb_rings(e.lerp(h, 0.12), e.lerp(h, 0.88), 0.1, 0.09, n=4, bulge=0.04), 16), copper, region='e' + side, subdiv=0)
-    bands = [tube(limb_rings(e.lerp(h, t), e.lerp(h, t + 0.06), 0.105 - t * 0.012, 0.104 - t * 0.012, n=1), 16) for t in (0.18, 0.5, 0.78)]
+    b.add('prop_colosso_bracer' + side, tube(limb_rings(e.lerp(h, 0.12), e.lerp(h, 0.88), 0.108, 0.096, n=4, bulge=0.04), 16), copper, region='e' + side, subdiv=0)
+    bands = [tube(limb_rings(e.lerp(h, t), e.lerp(h, t + 0.06), 0.114 - t * 0.012, 0.113 - t * 0.012, n=1), 16) for t in (0.18, 0.5, 0.78)]
     b.add('prop_colosso_bracer_bands' + side, merge(*bands), brass, region='e' + side, subdiv=0)
     gsp = []
     for t in (0.3, 0.62):
         c = e.lerp(h, t)
         for ang in (-1.2, 0.0, 1.2, 2.6):
             n = Vector((math.cos(ang) * sx, -math.sin(ang), 0.0)).normalized()
-            gsp.append(cone(tuple(c + n * 0.095), tuple(c + n * 0.15), 0.014, 5))
+            gsp.append(cone(tuple(c + n * 0.1), tuple(c + n * 0.16), 0.014, 5))
     b.add('prop_colosso_bracer_spikes' + side, merge(*gsp), spike, region='e' + side, subdiv=0)
     hc2 = h + Vector((0, 0, -0.04 * H))
-    b.add('prop_colosso_glove' + side, ellipsoid((hc2.x, hc2.y, hc2.z + 0.015), (0.06, 0.075, 0.07), 10, 8), glove, region='e' + side, subdiv=0)
+    b.add('prop_colosso_glove' + side, ellipsoid((hc2.x, hc2.y, hc2.z + 0.015), (0.068, 0.084, 0.078), 10, 8), glove, region='e' + side, subdiv=0)
 # bolsas na coxa direita e caneleiras/botas de cobre com espinhos
 l, k = sk['lR'], sk['kR']
 pc = l.lerp(k, 0.5)
-b.add('prop_colosso_pouches', merge(box((pc.x - 0.04, pc.y - 0.11, pc.z), (0.07, 0.05, 0.1), bevel=0.01), box((pc.x + 0.05, pc.y - 0.11, pc.z), (0.07, 0.05, 0.1), bevel=0.01)), leather, region='legR', subdiv=0)
+b.add('prop_colosso_pouches', merge(box((pc.x - 0.035, pc.y - 0.158, pc.z), (0.075, 0.055, 0.11), bevel=0.01), box((pc.x + 0.05, pc.y - 0.15, pc.z), (0.075, 0.055, 0.11), bevel=0.01)), leather, region='legR', subdiv=0)
 for side in ('L', 'R'):
     k, f = sk['k' + side], sk['foot' + side]
-    b.add('prop_colosso_greave' + side, tube(limb_rings(k.lerp(f, 0.45), k.lerp(f, 1.0), 0.085, 0.082, n=3), 16), copper, region='k' + side, subdiv=0)
-    b.add('prop_colosso_boot' + side, ellipsoid((f.x, f.y - 0.1 * H, f.z + 0.045 * H), (0.068 * H, 0.095 * H, 0.055 * H), 12, 8, theta_max=math.pi * 0.55), copper, region='foot' + side, subdiv=0)
+    b.add('prop_colosso_greave' + side, tube(limb_rings(k.lerp(f, 0.42), k.lerp(f, 1.0), 0.116, 0.1, n=3), 16), copper, region='k' + side, subdiv=0)
+    b.add('prop_colosso_boot' + side, ellipsoid((f.x, f.y - 0.075 * H, f.z + 0.05 * H), (0.076 * H, 0.162 * H, 0.068 * H), 12, 8, theta_max=math.pi * 0.55), copper, region='foot' + side, subdiv=0)
     gs = []
     for t in (0.55, 0.8):
         c = k.lerp(f, t)
         for ang in (-0.9, 0.9, math.pi):
             n = Vector((math.sin(ang), -math.cos(ang), 0))
-            gs.append(cone(tuple(c + n * 0.08), tuple(c + n * 0.14), 0.016, 5))
+            gs.append(cone(tuple(c + n * 0.1), tuple(c + n * 0.16), 0.016, 5))
     for dx in (-0.03, 0.0, 0.03):
-        gs.append(cone((f.x + dx * H, f.y - 0.17 * H, f.z + 0.02 * H), (f.x + dx * H, f.y - 0.23 * H, f.z + 0.01 * H), 0.012 * H, 5))
+        gs.append(cone((f.x + dx * H, f.y - 0.22 * H, f.z + 0.03 * H), (f.x + dx * H, f.y - 0.28 * H, f.z + 0.02 * H), 0.012 * H, 5))
     b.add('prop_colosso_greave_spikes' + side, merge(*gs), spike, region='k' + side, subdiv=0)
 b.group('prop_colosso')
 

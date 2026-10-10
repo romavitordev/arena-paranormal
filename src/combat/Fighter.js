@@ -1982,6 +1982,21 @@ export class Fighter {
     this.stateTime = Math.max(this.stateTime, s.dur - 0.3);
   }
 
+  // "PODE VIR!" (Dalmo / Colosso): o golpe entrou na postura — segura, agarra quem bateu e devolve (damage.js)
+  arenaRiposte(attacker) {
+    const r = this.def.ranged;
+    if (this.seq && this.seq.cancel) this.seq.cancel();
+    this.counterStance = null;
+    this.invuln = Math.max(this.invuln, 0.2);
+    this.yaw = yawTo(this.pos, attacker.pos);
+    this.world.hitstop(0.12);
+    this.world.audio.play('perfectBlock');
+    this.world.fx.flash(this.chestPos(), { color: r.color ?? 0xffffff, size: 3, life: 0.18 });
+    this.notify(r.label || 'PODE VIR!', true);
+    this.setState('ability');
+    this.seq = ABILITY_TYPES.arenaGrab.start(this, r.riposte, this.world);
+  }
+
   spawnTrail(s) {
     const tr = s.trail;
     if (!tr) return;
@@ -2024,6 +2039,15 @@ export class Fighter {
     }
     if (base.chargeShot) {
       this.startChargeShot(base);
+      return;
+    }
+    // POSTURA DE CONTRA (Dalmo / Colosso: "Pode Vir!"): o □ não arremessa nada — ele se planta e espera o golpe
+    if (base.type === 'counter') {
+      if (!this.spendEnergy(base.energyCost || 0)) { this.notify('SEM SANIDADE'); return; }
+      this.cooldowns.ranged = base.cooldown;
+      this.cooldownMax.ranged = base.cooldown;
+      this.setState('ranged');
+      this.seq = ABILITY_TYPES.arenaCounterStance.start(this, base, this.world);
       return;
     }
     if (base.type === 'beam') {

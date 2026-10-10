@@ -606,6 +606,7 @@ export function addDalmoProps(rig) {
   props.helmet = helm;
   if (props.colosso) rig.showProp('colosso', false);
   if (props.shirt) rig.showProp('shirt', true);
+  if (props.laces) rig.showProp('laces', true);
 }
 
 // COLOSSO: o escafandro posto, sem a camisa, com as Manoplas e o resto do traje
@@ -614,4 +615,5 @@ export function addColossoProps(rig) {
   rig.showProp('helmet', true);
   if (rig.props.colosso) rig.showProp('colosso', true);
   if (rig.props.shirt) rig.showProp('shirt', false);
+  if (rig.props.laces) rig.showProp('laces', false);
 }

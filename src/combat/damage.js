@@ -58,6 +58,16 @@ export function applyHit(world, attacker, victim, o) {
     }
   }
 
+  // "PODE VIR!" (Dalmo / Colosso): na postura do □, um golpe físico ou habilidade do adversário vindo da frente e de
+  // perto é segurado — ele agarra quem bateu e devolve (projéteis e especiais passam)
+  const cs = victim.counterStance;
+  if (cs && cs.active && victim.state === 'ranged' && (o.kind === 'melee' || o.kind === 'ability') && attacker === victim.opponent
+    && Math.hypot(attacker.pos.x - victim.pos.x, attacker.pos.z - victim.pos.z) <= (cs.reach ?? 3.4)
+    && Math.abs(angleDiff(victim.yaw, yawTo(victim.pos, attacker.pos))) <= 100 * DEG) {
+    victim.arenaRiposte(attacker);
+    return 'countered';
+  }
+
   // Postura de contra-ataque (ex.: Joui): anula o golpe físico e revida
   if (o.kind === 'melee' && victim.state === 'attack' && victim.combo.strike && victim.combo.strike.counter && !victim.combo.counterUsed) {
     const w = victim.combo.strike.counter.window;

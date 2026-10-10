@@ -259,6 +259,11 @@ const ACTIONS = {
     moving: (c) => buffOwner(c, 'point', { type: 'strategicOrder', name: 'ORDEM! (VERÍSSIMO)', time: 6, extraHit: { damage: 10, delay: 0.1, color: 0x6ab0e0 } }, 0x6ab0e0, 'INTELIGÊNCIA ESTRATÉGICA'),
     still: (c) => rushStrike(c, 'slash_v', [[0.4, 64]], 'slashFinal', { knockback: 4 }),
   },
+  // DALMO / COLOSSO: andando → Atropelar (ombrada que atravessa); parado → cabeçada e o soco de arena (nada de arremesso)
+  dalmo: {
+    moving: (c) => rushStrike(c, 'shoulder_charge', [[0.38, 62]], 'heavyPunch', { knockback: 5 }),
+    still: (c) => rushStrike(c, 'headbutt', [[0.3, 28], [0.62, 44]], 'heavyPunch', { knockback: 4 }),
+  },
   // KEMI: andando → Perita (o inimigo fica analisado e recebe mais dano); parado → um tiro da Sniper Fantasma
   kemi: {
     moving: (c) => debuffOpp(c, 'turn_look', { type: 'analyzed', name: 'ANALISADO (KEMI)', time: 6, takenMult: 1.12 }, 0xe8c070, 'PERITA'),

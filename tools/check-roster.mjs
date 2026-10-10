@@ -83,6 +83,7 @@ const dalmo = get('dalmo');
 const colosso = getForm('colosso');
 ok(dalmo && dalmo.origin === 'Mascarados' && dalmo.awakening.form === 'colosso' && dalmo.awakening.scene === 'helmet' && dalmo.passives.some((p) => p.type === 'arenaBlows') && ['heavyBlow', 'arenaGrab', 'dashStrike', 'selfBuff'].every((t) => dalmo.abilities.some((a) => a.type === t)) && dalmo.abilities.find((a) => a.type === 'heavyBlow').stun > 0, 'Dalmo: Mascarado, Golpes de Arena, Pressão Atmosférica (atordoa), Agarrão de Arena, Atropelar, A Glória Era Viciante e o escafandro');
 ok(colosso && colosso.passives.some((p) => p.type === 'atmosphericPressure') && colosso.abilities.some((a) => a.type === 'stompQuake') && colosso.abilities.some((a) => a.id === 'esmagarCranio') && colosso.maxHealth !== 0 && colosso.stats.maxHealth > dalmo.stats.maxHealth, 'Colosso: Manoplas com Pressão Atmosférica, Esmagar o Crânio, Pisão do Colosso, mais vida');
+ok([dalmo, colosso].every((c) => c.ranged.type === 'counter' && !c.ranged.visual && c.ranged.riposte), 'Dalmo / Colosso: corpo a corpo puro — o □ é a postura Pode Vir! (segura o golpe e devolve), sem arremesso');
 ok(get('juan').origin === 'Mascarados', 'Juan com os Mascarados');
 const jaeX = getForm('jae_x');
 ok(jaeX && jaeX.abilities.some((a) => a.type === 'shadowTrap' && a.blind > 0 && a.deaf > 0) && jaeX.abilities.some((a) => a.id === 'assassinatoCruel' && a.strike.damage > jae.abilities.find((b) => b.id === 'assassinatoFurtivo').strike.damage), 'X: Zona das Sombras (cego e surdo) e Assassinato Cruel no lugar do Furtivo');

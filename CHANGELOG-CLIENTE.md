@@ -2,6 +2,14 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.15.0 — O Colosso
+- Novo lutador: DALMO MAGNO (Mascarados, Energia) — o motorista de ônibus simpático que, nas arenas clandestinas, é O COLOSSO. Enorme, lento e muito resistente, só luta corpo a corpo: socos pesados, cotovelada, joelhada, cabeçadas e pisões. Golpes de Arena (o fim do combo emenda uma cabeçada sozinho), Pressão Atmosférica (soco com onda de pressão que deixa o adversário ATORDOADO), Agarrão de Arena (agarra pela cabeça, dá cabeçadas e crava no chão), Atropelar (ombrada que quebra a defesa), A Glória Era Viciante (aguenta golpes sem recuar e bate mais forte) e o especial Finalização de Arena, que termina num pisão.
+- O □ do Dalmo não arremessa nada: é o PODE VIR! — ele se planta de braços abertos e chama. Se você bater nele (golpe físico ou habilidade, de frente) nessa hora, ele segura o golpe, te agarra pela gola, dá uma cabeçada e empurra longe. Projéteis e especiais passam, e se ninguém bater ele fica aberto por um instante: dá para ler e punir.
+- Transformação do Dalmo: ele segura o escafandro de cobre no peito, ergue e encaixa na cabeça; a camisa some, aparece o traje de gladiador, ele agacha de braços abertos e a aura vermelha explode. Vira O COLOSSO até o fim do round — com as Manoplas, todo soco solta uma onda de pressão e o fim do combo atordoa; Pressão Demolidora, Esmagar o Crânio, Pisão do Colosso (onda de choque em volta), o VEM, NENÉM! (o Pode Vir! com as Manoplas: quem bate é agarrado, castigado e cravado no chão) e o especial AÍ SIM, NENÉM!. O Colosso também pode aparecer no topo das Torres.
+- Juan voltou para os Mascarados.
+- Seleção de personagens organizada por equipe/temporada: Ordo Realitas, Escriptas, Os Cinco e Luzidios na primeira página e os Mascarados juntos na segunda, com uma etiqueta colorida da equipe em cada cartão.
+- Correção: com a janela do jogo minimizada, um golpe de lado podia fazer o lutador sumir da arena para sempre.
+
 ## v3.14.0 — Acampamento Varminho
 - Novo cenário: ACAMPAMENTO VARMINHO (Sinais do Outro Lado) — a clareira no mato onde os conspiracionistas esperam os alienígenas, ao lado da estação de TV abandonada de Varminho. Fogueira acesa no centro (não dá para atravessar), barracas, placas escritas à mão ("ELES ESTÃO VINDO!"), o violão do Eriberto, o telescópio da Ludismila, a van "Chico Eletrônicos" dos Cinco e a torre de transmissão ao fundo, debaixo de um céu cheio de estrelas e com vaga-lumes no mato.
 - Sniper do Arthur (e da Kemi e da Fantasma): agora dá para desviar. O laser segue você com atraso — correndo de lado você sai da mira —, o tiro vai para onde o laser está, e com a mira cheia o laser trava e pisca vermelho antes do disparo: é a hora de esquivar. A bala ficou um pouco mais lenta, dá para vê-la.

@@ -350,7 +350,7 @@ export class CpuController {
     // adversário preparando o especial: um tiro pode interromper (quanto mais difícil, mais a CPU tenta)
     if (opp.state === 'specialStart' && !this.triedInterrupt && (f.state === 'idle' || f.state === 'charging')) {
       this.triedInterrupt = true;
-      if (f.cooldowns.ranged <= 0 && Math.random() < 1 - this.L.mistake * 2.5) { this.tap('ranged'); return out; }
+      if (f.cooldowns.ranged <= 0 && f.def.ranged && f.def.ranged.type !== 'counter' && Math.random() < 1 - this.L.mistake * 2.5) { this.tap('ranged'); return out; }
     }
     if (opp.state !== 'specialStart') this.triedInterrupt = false;
     // granada de luz da Supernova (Erin) caindo perto: sai de baixo esquivando, ou cobre os olhos defendendo
@@ -419,6 +419,12 @@ export class CpuController {
       const adapt = Math.min(0.75, Math.max((repeated - 1) * 0.18, playerMoveRate(activeMove) * 1.5)) * L.adapt;
       const read = (L.smart ? 0.6 + playerTendency(d, 'atk') * 1.6 : 1) + adapt;
       if (threat) {
+        // "PODE VIR!" (Dalmo / Colosso): o golpe vem chegando — se planta para segurar e devolver
+        const ctr = f.def.ranged;
+        if (ctr && ctr.type === 'counter' && f.cooldowns.ranged <= 0 && Math.random() < Math.min(0.85, (L.block + L.perfect + 0.05) * 2.2 * read * k)) {
+          this.tap('ranged');
+          return out;
+        }
         // perfect block: aperta a defesa bem perto do impacto
         const nearImpact = opp.state === 'attack' && opp.combo && opp.combo.windows && opp.stateTime > opp.combo.windows[0][0] - 0.08 && opp.stateTime < opp.combo.windows[0][0];
         if (nearImpact && Math.random() < Math.min(0.9, L.perfect * read)) {
@@ -544,7 +550,7 @@ export class CpuController {
         return out;
       }
       // à distância: principal (sniper do Arthur: segura para carregar — quanto mais longe, mais tempo)
-      if (def.ranged && f.cooldowns.ranged <= 0 && d > 5 && d < (def.ranged.range ?? 99) + 0.5 && r < L.ranged * (lowHp ? 1.4 : 1) && f.energy >= (def.ranged.energyCost || 0)) {
+      if (def.ranged && def.ranged.type !== 'counter' && f.cooldowns.ranged <= 0 && d > 5 && d < (def.ranged.range ?? 99) + 0.5 && r < L.ranged * (lowHp ? 1.4 : 1) && f.energy >= (def.ranged.energyCost || 0)) {
         if (def.ranged.chargeShot) {
           this.queue.push({ t: 0.06, held: { ranged: true } });
           this.aimHold = Math.min(1.6, 0.2 + d / 14);
@@ -640,7 +646,7 @@ export class CpuController {
     if (d > 3.5 && d < 8 && f.cooldowns.dash <= 0) add('dashIn', lowHp ? 0.2 : open ? 1.4 : 0.6, () => this.queue.push({ t: 0.05, held: { jump: true } }, { t: 0.05, held: {} }, { t: 0.05, held: { jump: true } }, { t: 0.05, held: {} }));
     // à distância
     const r = def.ranged;
-    if (r && f.cooldowns.ranged <= 0 && d > 3 && d < (r.range ?? 99) + 0.5 && f.energy >= (r.energyCost || 0)) {
+    if (r && r.type !== 'counter' && f.cooldowns.ranged <= 0 && d > 3 && d < (r.range ?? 99) + 0.5 && f.energy >= (r.energyCost || 0)) {
       add('ranged', d > 5 ? 1.4 : 0.5, () => {
         if (r.chargeShot) { this.queue.push({ t: 0.06, held: { ranged: true } }); this.aimHold = Math.min(1.6, 0.2 + d / 14); } else this.tap('ranged');
       });

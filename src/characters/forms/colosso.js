@@ -4,8 +4,8 @@
 // o tronco cheio de cicatrizes à mostra, retalhos de pano cru, mangueiras, arnês e cinturão de espinhos, as MANOPLAS de
 // cobre e as botas com espinhos (referência "Colosso corpo inteiro").
 // Poderes com o escafandro — as MANOPLAS DO COLOSSO (Energia: "cada soco é acompanhado por uma pressão atmosférica
-// demolidora"): todo soco solta uma onda de pressão (dano extra de Energia) e os finalizadores ATORDOAM; o □ vira uma
-// onda de choque curta; Pressão Demolidora, Esmagar o Crânio (a lenda das arenas), Atropelar e o Pisão do Colosso
+// demolidora"): todo soco solta uma onda de pressão (dano extra de Energia) e os finalizadores ATORDOAM; o □ vira o
+// VEM, NENÉM! (a postura de contra com as Manoplas); Pressão Demolidora, Esmagar o Crânio (a lenda das arenas), Atropelar e o Pisão do Colosso
 // (a finalização do Mosto). Especial "AÍ SIM, NENÉM!" (a frase do Tuco testando as Manoplas). Mais forte, aguenta mais
 // e quase não é empurrado — mas continua lento.
 import base from '../dalmo.js';
@@ -45,30 +45,29 @@ export default {
     side: heavier(M.side),
     air: heavier(M.air),
   },
-  // □: ONDA DE CHOQUE — o soco no ar empurra uma pressão que viaja pouco (adaptação: não é magia de longe)
+  // □: VEM, NENÉM! — a postura do Pode Vir! com as Manoplas: janela maior, e quem bate é agarrado pela cabeça,
+  // leva soco e cabeçada (cada um solta a pressão) e é cravado no chão
   ranged: {
-    name: 'Onda de Choque',
-    type: 'projectile',
-    anim: 'wave_punch',
-    origin: 'fist',
-    windup: 0.3,
-    recovery: 0.38,
-    count: 1,
-    interval: 0,
-    damage: 36,
-    range: 9,
-    speed: 22,
-    radius: 0.95,
-    spread: 0,
-    knockback: 3,
-    hitstun: 0.5,
-    cooldown: 3.2,
-    energyCost: 0,
-    visual: 'shockwave',
+    ...base.ranged,
+    name: 'Vem, Neném!',
+    description: 'A postura do Pode Vir! com as Manoplas: um golpe físico ou habilidade que chegar de frente é segurado — ele agarra quem bateu pela cabeça, castiga com soco e cabeçada (cada um solta a pressão) e crava no chão.',
+    window: [0.1, 1.0],
+    damage: 74,
     color: PRESS,
-    element: 'energia',
-    sound: 'shockwave',
-    hitSound: 'heavyPunch',
+    label: 'VEM, NENÉM!',
+    riposte: {
+      ...base.ranged.riposte,
+      hold: 0.8,
+      blows: 2,
+      blowAnims: ['hook_r', 'headbutt'],
+      blowDamage: 18,
+      final: 'slam',
+      finalDamage: 38,
+      pressure: true,
+      element: 'energia',
+      label: 'GOLPE SEGURADO!',
+      color: PRESS,
+    },
   },
   abilities: [
     {

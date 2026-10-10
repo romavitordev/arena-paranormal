@@ -57,7 +57,8 @@ for (const c of ROSTER) {
   c.melee.strikes.forEach((s, i) => { md += strikeRow(`○ ${i + 1}`, s) + '\n'; });
   for (const k of ['forward', 'back', 'side', 'air', 'up', 'down']) if (c.melee[k]) md += strikeRow(DIR[k], c.melee[k]) + '\n';
   md += `\n### Principal (□ / X): ${r.name}\n\n`;
-  md += `- Dano ${r.damage}${r.count > 1 ? ` × ${r.count}` : ''} · alcance ${r.range} m · cooldown ${r.cooldown} s · custo ${r.energyCost || 0}\n`;
+  if (r.type === 'counter') md += `- Postura de contra-ataque: ${r.description}\n- Dano ${r.damage} · alcance ${r.range} m · cooldown ${r.cooldown} s · custo ${r.energyCost || 0}\n`;
+  else md += `- Dano ${r.damage}${r.count > 1 ? ` × ${r.count}` : ''} · alcance ${r.range} m · cooldown ${r.cooldown} s · custo ${r.energyCost || 0}\n`;
   if (r.onHit && r.onHit.pull) md += `- Prende e puxa o inimigo para ${r.onHit.pull.distance} m, abrindo ${r.onHit.pull.after} s para combar\n`;
   if (r.onHit && r.onHit.stun) md += `- Prende o inimigo por ${r.onHit.stun} s\n`;
   if (r.variants) {

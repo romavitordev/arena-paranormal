@@ -155,7 +155,7 @@ function buildSteps(def) {
   if (m.air) steps.push({ title: m.air.name.toUpperCase(), cmd: ['@jump', '→', '@physical'], text: 'Pule e aperte o físico ainda no ar.', needs: ['strike:air'] });
   if (def.ranged) {
     const r = def.ranged;
-    steps.push({ title: r.name.toUpperCase(), cmd: ['@ranged'], text: r.chargeShot ? 'Ataque principal. SEGURE para mirar (mais tempo = mais dano) e solte para atirar.' : 'Ataque principal (à distância).', needs: ['ranged'] });
+    steps.push({ title: r.name.toUpperCase(), cmd: ['@ranged'], text: r.chargeShot ? 'Ataque principal. SEGURE para mirar (mais tempo = mais dano) e solte para atirar.' : r.type === 'counter' ? `Postura de contra-ataque: ${r.description}` : 'Ataque principal (à distância).', needs: ['ranged'] });
   }
   steps.push(
     { title: 'DEFESA', cmd: ['@block'], text: 'Segure a defesa por 1 segundo. Parado defende tudo; com a direção, dá passos rápidos para os lados.', needs: ['block'] },

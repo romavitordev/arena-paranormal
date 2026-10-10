@@ -1,5 +1,19 @@
 # Changelog
 
+## v3.15.0 — 2026-10-10
+
+### Adicionado
+- Lutador DALMO MAGNO / O COLOSSO (Mascarados, Energia): modelo, kit, transformação `helmet` com troca de roupa (`sp.swap`, `sp.finalAnim`), forma Colosso, falas, agarrões, vitórias e vilão das Torres.
+- Tipos de habilidade `arenaGrab`, `stompQuake` e `arenaCounterStance`; □ do tipo `counter` (postura que segura o golpe e devolve com um `arenaGrab`); `heavyBlow` com `stun` e `pressure`.
+- Assistência própria do Dalmo (Atropelar / cabeçada + soco).
+
+### Alterado
+- Modelo do Dalmo refeito: tronco com barriga e peito, ombros redondos, braços grossos, camisa folgada com gola grande e fralda para fora, calça cargo larga, coturnos de cano alto, dreads caindo pela testa.
+- Juan de volta aos Mascarados; seleção com quebra de página por equipe e etiqueta de equipe.
+
+### Corrigido
+- Câmera com aspecto NaN (tela de tamanho zero) levava lutadores para posição NaN.
+
 ## v3.14.0 — 2026-10-09
 
 ### Adicionado
