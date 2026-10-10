@@ -1,3 +1,4 @@
+import { TEAM_COLORS, TEAM_SHORT } from '../config/teams.js';
 import { ROSTER } from '../characters/index.js';
 import { SelectStage } from './selectStage.js';
 import { ELEMENTS } from '../config/elements.js';
@@ -309,8 +310,6 @@ const INPUT_NAMES = { 'carga+ranged': '△ → □', 'carga+physical': '△ → 
 const inputName = (k) => (k === 'carga+jump' ? t('input.carga_jump') : k === 'ranged+side' ? `${t('input.side')} + □` : INPUT_NAMES[k] || k);
 
 // cor da etiqueta de equipe nos cartões da seleção (o elenco vem agrupado por equipe em ROSTER)
-const TEAM_SHORT = { 'Ordo Realitas': 'Ordo' }; // cabe no cartão pequeno
-const TEAM_COLORS = { 'Ordo Realitas': '#e0b84a', Escriptas: '#9a7aff', 'Os Cinco': '#4ad88a', Luzidios: '#e8e0b8', Mascarados: '#ff4a52' };
 
 export class SelectScreen {
   // heading: título no lugar do padrão (TORNEIO: "VEZ DE: JOGADOR 3")
@@ -741,8 +740,11 @@ export class StageSelectScreen {
     }
     for (const p of input.players) {
       const n = this.list.length;
-      if (p.menu.left || p.menu.up) { this.index = (this.index + n - 1) % n; this.audio.play('select'); this.render(); }
-      if (p.menu.right || p.menu.down) { this.index = (this.index + 1) % n; this.audio.play('select'); this.render(); }
+      if (p.menu.left) this.move(this.index % this.cols() === 0 ? Math.min(n - 1, this.index + this.cols() - 1) : this.index - 1);
+      if (p.menu.right) this.move(this.index % this.cols() === this.cols() - 1 || this.index === n - 1 ? this.index - (this.index % this.cols()) : this.index + 1);
+      // cima / baixo trocam de LINHA (mesma coluna); passando da borda, volta pelo outro lado
+      if (p.menu.up) this.move(this.index - this.cols() >= 0 ? this.index - this.cols() : this.lastInColumn(this.index % this.cols()));
+      if (p.menu.down) this.move(this.index + this.cols() < n ? this.index + this.cols() : this.index % this.cols());
       if (confirm(p)) return this.choose();
       if (random(p)) {
         this.index = pickRandom(this.list.length, this.index, (i) => this.list[i].available);
@@ -755,6 +757,23 @@ export class StageSelectScreen {
     if (input.keyPressedOnce('Enter')) return this.choose();
     if (input.keyPressedOnce('Escape')) return 'back';
     return null;
+  }
+  // colunas da grade como estão na tela (muda no celular): cartões na mesma altura do primeiro
+  cols() {
+    const top = this.cards[0].offsetTop;
+    return Math.max(1, this.cards.filter((c) => c.offsetTop === top).length);
+  }
+  lastInColumn(col) {
+    const c = this.cols();
+    let i = col;
+    while (i + c < this.list.length) i += c;
+    return i;
+  }
+  move(i) {
+    if (i === this.index) return;
+    this.index = i;
+    this.audio.play('select');
+    this.render();
   }
   choose() {
     const a = this.list[this.index];

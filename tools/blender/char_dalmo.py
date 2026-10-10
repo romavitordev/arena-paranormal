@@ -12,7 +12,7 @@ largo; dreads que caem pela testa e pelos lados; cicatrizes pelo corpo.
   COLOSSO (prop_colosso, ligado na Transformação): o tronco quase todo exposto (cicatrizes); gola de cobre rebitada do
     escafandro com espinhos; retalhos de pano cru caindo do ombro esquerdo e na frente; mangueiras vermelhas; arnês de
     tiras de couro com espinhos cruzando o peito e a barriga; o cinturão redondo cheio de espinhos; as MANOPLAS: braçadeiras
-    de cobre com faixas e espinhos; bolsas na coxa; botas/caneleiras de cobre com espinhos.
+    de cobre com faixas e espinhos e o punho todo de metal (ferro e cobre, espinhos nos nós dos dedos); bolsas na coxa; botas/caneleiras de cobre com espinhos.
   O ESCAFANDRO (capacete com os três visores vermelhos rachados e o axolote pendurado na frente) é montado em código
   (src/models/props.js → colossoHelmet), para a cena da Transformação poder levá-lo do peito à cabeça.
 Coordenadas do tronco ANTES da escala do Builder (x × k_tx, y × k_ty); espessuras em frações de H.
@@ -52,7 +52,7 @@ spike = material('spike_steel', '#c8c8cc', 0.3, metal=0.8)
 leather = material('leather_colosso', '#4a3020', 0.7)
 cloth = material('cloth_colosso', '#c8a868', 0.95)       # pano cru dos retalhos
 hose = material('hose_red', '#8a2a24', 0.6)
-glove = material('glove_colosso', '#3a2a20', 0.75)
+iron = material('iron_colosso', '#6c6460', 0.35, metal=0.85)  # o ferro escuro das Manoplas
 
 M = {
     'skin': skin,
@@ -413,7 +413,7 @@ b.add('prop_colosso_harness', merge(*straps), leather, region='torso', subdiv=0)
 b.add('prop_colosso_harness_spikes', merge(*spikes_on(ssp, 0.04, 0.012)), spike, region='torso', subdiv=0)
 _fp = torso_pt(0, 0.03, 1.0, 0.085)
 b.add('prop_colosso_belt_ring', tube([(0, _fp.y, _fp.z, 0.05 * H, 0.012), (0, _fp.y - 0.006, _fp.z + 0.001 * H, 0.05 * H, 0.012)], 14), brass, region='torso', subdiv=0)
-# MANOPLAS: braçadeira de cobre no antebraço com faixas de latão e espinhos; luva de couro sem dedos
+# MANOPLAS: braçadeira de cobre no antebraço com faixas de latão e espinhos; a manopla de metal fechando o punho
 for side in ('L', 'R'):
     e, h = sk['e' + side], sk['hand' + side]
     sx = 1 if side == 'L' else -1
@@ -427,8 +427,25 @@ for side in ('L', 'R'):
             n = Vector((math.cos(ang) * sx, -math.sin(ang), 0.0)).normalized()
             gsp.append(cone(tuple(c + n * 0.1), tuple(c + n * 0.16), 0.014, 5))
     b.add('prop_colosso_bracer_spikes' + side, merge(*gsp), spike, region='e' + side, subdiv=0)
-    hc2 = h + Vector((0, 0, -0.04 * H))
-    b.add('prop_colosso_glove' + side, ellipsoid((hc2.x, hc2.y, hc2.z + 0.015), (0.068, 0.084, 0.078), 10, 8), glove, region='e' + side, subdiv=0)
+    # a MANOPLA de metal (wiki: "manoplas com espinhos feitas de metal"): cobre o punho inteiro — casca de ferro,
+    # placa de cobre nas costas da mão, barra grossa nos nós dos dedos com 4 espinhos para a frente do soco e o
+    # punho rebitado que encaixa na braçadeira
+    c = h + Vector((0, 0, -0.04 * H))
+    r = 0.09
+    out_x = sx  # costas da mão para fora do corpo
+    b.add('prop_colosso_gauntlet' + side, merge(
+        ellipsoid((c.x + out_x * 0.006, c.y, c.z + 0.006), (r * 0.98, r * 1.14, r * 1.22), 14, 10),
+        tube(limb_rings(c + Vector((0, 0, r * 0.95)), c + Vector((0, 0, r * 1.5)), r * 1.02, r * 1.08, n=1), 14),
+    ), iron, region='e' + side, subdiv=0)
+    b.add('prop_colosso_gauntlet_plate' + side, merge(
+        ellipsoid((c.x + out_x * r * 0.72, c.y, c.z + r * 0.1), (r * 0.32, r * 0.98, r * 1.0), 10, 8),
+        tube(limb_rings(c + Vector((0, 0, r * 1.2)), c + Vector((0, 0, r * 1.32)), r * 1.1, r * 1.1, n=1), 14),
+    ), copper, region='e' + side, subdiv=0)
+    kb = rod([(c.x, c.y - r * 0.9, c.z - r * 1.02), (c.x, c.y + r * 0.9, c.z - r * 1.02)], [r * 0.32, r * 0.32], 8)
+    ks = [cone((c.x, c.y + (i - 1.5) * r * 0.5, c.z - r * 1.25), (c.x, c.y + (i - 1.5) * r * 0.5, c.z - r * 1.25 - 0.05), 0.016, 6) for i in range(4)]
+    ks += [cone((c.x + out_x * r * 0.95, c.y + dy * r, c.z + r * 0.15), (c.x + out_x * (r * 0.95 + 0.04), c.y + dy * r, c.z + r * 0.15), 0.013, 5) for dy in (-0.5, 0.5)]
+    b.add('prop_colosso_gauntlet_knuckles' + side, kb, iron, region='e' + side, subdiv=0)
+    b.add('prop_colosso_gauntlet_spikes' + side, merge(*ks), spike, region='e' + side, subdiv=0)
 # bolsas na coxa direita e caneleiras/botas de cobre com espinhos
 l, k = sk['lR'], sk['kR']
 pc = l.lerp(k, 0.5)

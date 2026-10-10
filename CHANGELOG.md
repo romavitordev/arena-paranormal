@@ -1,5 +1,16 @@
 # Changelog
 
+## v3.15.1 — 2026-10-10
+
+### Adicionado
+- Clipe `fist_clang`; `cinematicCombo` com `prepare.beats` e golpes de cena `noHit`.
+- Sons sintetizados `metalPunch` e `fistClang`.
+- `src/config/teams.js`: cor por equipe no fundo dos retratos.
+
+### Alterado
+- Colosso: manoplas de metal no modelo, especial com o choque dos punhos, `hitSound` de manopla em golpes e habilidades.
+- Escolha de cenário em grade 3 × 2 com ▲ ▼ por linha.
+
 ## v3.15.0 — 2026-10-10
 
 ### Adicionado

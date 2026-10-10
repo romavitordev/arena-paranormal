@@ -494,14 +494,12 @@ Todo especial de grande impacto deve possuir leitura clara.
 
 # 20. KIAN — TRANSCENDÊNCIA
 
-* [ ] Custo de 35 PE
-* [ ] Não regenerar PE durante a forma
-* [ ] Drenar 15 PE ao final
-* [ ] Conferir duração
-* [ ] Conferir Levitação
-* [ ] Conferir Toque da Morte
-* [ ] Conferir Precognição
-* [ ] Evitar esquiva automática injusta
+> Obsoleto (conferido em 2026-10-10): o kit atual do Kian não tem mais a Transcendência como habilidade — a
+> Transformação dele é o Invólucro do Conhecimento (`awakenMode`). O tipo `transcend` continua em `abilities.js`
+> (sem custo de regeneração e com dreno no fim), mas nenhum lutador usa.
+
+* [x] Conferir Precognição (passiva `precognition`: não é pego desprevenido)
+* [x] Evitar esquiva automática injusta (a Precognição não esquiva sozinha)
 
 ---
 
@@ -542,9 +540,9 @@ SANGUE
 
 * [ ] Conferir rituais
 * [ ] Conferir cores
-* [ ] Conferir seleção
+* [x] Conferir seleção (elemento aparece na seleção e na lista de golpes)
 * [ ] Conferir nomenclatura
-* [ ] Não aplicar dano elemental universal
+* [x] Não aplicar dano elemental universal
 
 ---
 
@@ -574,38 +572,38 @@ Não criar barra separada de Exposição Paranormal sem nova decisão.
 * [ ] Avaliar Acácia
 * [ ] Avaliar Dissipar Espíritos
 * [ ] Revisar Resistência
-* [ ] Desert Eagle
-* [ ] Karambit
-* [ ] Balas amaldiçoadas
-* [ ] Nebulosa
+* [x] Desert Eagle
+* [x] Karambit
+* [x] Balas amaldiçoadas
+* [x] Nebulosa
 * [ ] Conferir visual
 
 ---
 
 ## ARTHUR
 
-* [ ] Conferir braço esquerdo
+* [x] Conferir braço esquerdo
 * [ ] Revisar Arma de Sangue
-* [ ] Arma de Sangue deve consumir vida
+* [x] Arma de Sangue deve consumir vida (passiva `bloodPrice`: sem sanidade, paga com vida)
 * [ ] Revisar Rebirth
 * [ ] Revisar crânios
 * [ ] Revisar raios
 * [ ] Revisar Dystopia
 * [ ] Revisar Templo do Ódio
-* [ ] Revisar sniper carregado
+* [x] Revisar sniper carregado (v3.14.0: laser com atraso e aviso — dá para desviar)
 * [ ] Conferir risco/recompensa
 
 ---
 
 ## JOUI
 
-* [ ] Teleporte das Sombras
-* [ ] Olhar do Desespero
-* [ ] Shi no Kage
-* [ ] Máscara das Pessoas nas Sombras
-* [ ] Coincidência Forçada
-* [ ] Decepar
-* [ ] +30% finisher abaixo de 20%
+* [x] Teleporte das Sombras
+* [x] Olhar do Desespero
+* [x] Shi no Kage
+* [ ] Máscara das Pessoas nas Sombras (ainda NÃO existe no kit)
+* [x] Coincidência Forçada
+* [x] Decepar
+* [x] +30% finisher abaixo de 20%
 * [ ] Conferir alcance
 * [ ] Conferir combos
 * [ ] Evitar pressão excessiva

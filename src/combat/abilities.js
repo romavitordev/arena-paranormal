@@ -1951,7 +1951,7 @@ Object.assign(ABILITY_TYPES, {
           // a.stun (Pressão Atmosférica do Dalmo): o alvo fica ATORDOADO no lugar em vez de ser lançado
           const res = applyHit(world, f, opp, {
             damage: a.damage, kind: 'ability', element: a.element, knockback: a.knockback, hitstun: 1.0,
-            launch: !a.stun, lowLaunch: !a.stun, stun: a.stun, guardCrush: a.guardCrush, sound: 'heavyPunch', scale: 2.2, hitstop: 0.14,
+            launch: !a.stun, lowLaunch: !a.stun, stun: a.stun, guardCrush: a.guardCrush, sound: a.hitSound || 'heavyPunch', scale: 2.2, hitstop: 0.14,
             dir: F.clone(), strike: { impactFx: 'smash' },
           });
           if (a.stun && typeof res === 'number' && opp.state !== 'ko') opp.stun(a.stun);
@@ -3301,7 +3301,7 @@ export const DALMO_TYPES = {
         tl.add(at, () => { if (caught && opp.state !== 'ko') f.anim.play(anim, { restart: true, duration: 0.32 }); });
         tl.add(at + 0.14, () => {
           if (!caught || opp.state === 'ko') return;
-          applyHit(world, f, opp, { damage: a.blowDamage, kind: 'ability', element: a.element, reaction: false, ignoreInvuln: true, unblockable: true, sound: 'heavyPunch', color: a.color, scale: 1.4, hitstop: 0.08 });
+          applyHit(world, f, opp, { damage: a.blowDamage, kind: 'ability', element: a.element, reaction: false, ignoreInvuln: true, unblockable: true, sound: a.hitSound || 'heavyPunch', color: a.color, scale: 1.4, hitstop: 0.08 });
           world.fx.play('FX_HIT_HEAVY', opp.chestPos().add(new THREE.Vector3(0, 0.3, 0)), { color: 0xf0e0c0, scale: 1.2 });
           if (a.pressure) world.fx.distort(opp.chestPos(), { color: a.color, radius: 1.6, life: 0.3 });
           world.cameraRig.shake(0.25, 0.15);
@@ -3318,7 +3318,7 @@ export const DALMO_TYPES = {
         opp.pos.set(f.pos.x + d.x * 1.3, f.pos.y, f.pos.z + d.z * 1.3);
         applyHit(world, f, opp, {
           damage: a.finalDamage, kind: 'ability', element: a.element, ignoreInvuln: true, unblockable: true, knockback: a.final === 'throw' ? 7 : 1.5, hitstun: 0.8,
-          launch: a.final === 'throw', lowLaunch: a.final === 'throw', spike: a.final !== 'throw', sound: 'heavyPunch', color: a.color, scale: 2, hitstop: 0.14, dir: d,
+          launch: a.final === 'throw', lowLaunch: a.final === 'throw', spike: a.final !== 'throw', sound: a.hitSound || 'heavyPunch', color: a.color, scale: 2, hitstop: 0.14, dir: d,
         });
         world.fx.play('FX_GROUND_SMASH', opp.pos.clone().setY(0), { scale: 1.3 });
         world.cameraRig.shake(0.55, 0.3);
@@ -3350,11 +3350,13 @@ export const DALMO_TYPES = {
         for (let i = 0; i < 3; i++) world.after(i * 0.08, () => world.fx.ring(c, { color: a.color, radius: a.radius * (0.5 + i * 0.3), life: 0.45 }));
         world.fx.distort(new THREE.Vector3(f.pos.x, 0.8, f.pos.z), { color: a.color, radius: a.radius, life: 0.4 });
         world.cameraRig.shake(0.8, 0.4);
-        world.audio.play('explosion', { volume: 0.8, pitch: 0.6 });
+        // a bota de cobre cravando no chão: pancada seca e grave, não explosão
+        world.audio.play('heavyPunch', { volume: 1.2, pitch: 0.55 });
+        world.audio.play('impact', { volume: 0.9, pitch: 0.7 });
         if (!opp || opp.state === 'ko' || opp.isInvulnerable()) return;
         const d = distXZ(f.pos, opp.pos) - opp.radius;
         if (d <= a.radius && opp.pos.y < 0.6) {
-          applyHit(world, f, opp, { damage: a.damage, kind: 'ability', element: a.element, knockback: 4, hitstun: 0.8, launch: true, lowLaunch: true, guardCrush: true, sound: 'heavyPunch', color: a.color, scale: 1.8, dir: new THREE.Vector3().subVectors(opp.pos, f.pos).setY(0).normalize() });
+          applyHit(world, f, opp, { damage: a.damage, kind: 'ability', element: a.element, knockback: 4, hitstun: 0.8, launch: true, lowLaunch: true, guardCrush: true, sound: a.hitSound || 'heavyPunch', color: a.color, scale: 1.8, dir: new THREE.Vector3().subVectors(opp.pos, f.pos).setY(0).normalize() });
         }
       });
       tl.end(a.duration ?? 0.75);

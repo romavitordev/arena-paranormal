@@ -89,7 +89,7 @@ export default {
   "stage.title": "WÄHLE DIE ARENA",
   "stage.soon": "DEMNÄCHST",
   "stage.confirm": "ARENA BESTÄTIGEN",
-  "stage.hint": "◀ ▶ wählen · <b>{ok}</b>, <kbd>{jump}</kbd> oder <kbd>Enter</kbd> bestätigen · <b>{rand}</b> oder <kbd>{carga}</kbd> zufällig · <b>{back}</b>, <kbd>{phys}</kbd> oder <kbd>Esc</kbd> zurück",
+  "stage.hint": "◀ ▶ ▲ ▼ wählen · <b>{ok}</b>, <kbd>{jump}</kbd> oder <kbd>Enter</kbd> bestätigen · <b>{rand}</b> oder <kbd>{carga}</kbd> zufällig · <b>{back}</b>, <kbd>{phys}</kbd> oder <kbd>Esc</kbd> zurück",
   "load.tip": "Tipp: {tip}",
   "tip.1": "Halte R2/RT zum Blocken. Block + Richtung = Ausweichschritt.",
   "tip.2": "Fähigkeiten: △ → ○, △ → □ (nacheinander antippen), △ + L2, R2 + △ und R2 + ×. L1 und R1 rufen im Teamkampf die Unterstützer.",

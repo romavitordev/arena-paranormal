@@ -27,7 +27,7 @@ export const DALMO_KIT = {
       { name: 'Direto pesado', anim: 'cross', dur: 0.3, active: [0.09, 0.17], damage: 30, range: 1.9, arc: 100, knockback: 1.0, lunge: 1.0, sound: 'swing', hitSound: 'heavyPunch', hand: 'R' },
       { name: 'Cruzado', anim: 'hook_l', dur: 0.34, active: [0.11, 0.19], damage: 32, range: 1.9, arc: 140, knockback: 1.1, lunge: 0.9, sound: 'swing', hitSound: 'heavyPunch', hand: 'L' },
       { name: 'Cotovelada', anim: 'sway_elbow', dur: 0.32, active: [0.1, 0.18], damage: 30, range: 1.6, arc: 110, knockback: 0.9, lunge: 0.8, sound: 'swing', hitSound: 'heavyPunch' },
-      { name: 'Joelhada', anim: 'knee', dur: 0.34, active: [0.12, 0.2], damage: 32, range: 1.5, arc: 100, knockback: 1.0, lunge: 0.9, sound: 'swing', hitSound: 'kick' },
+      { name: 'Joelhada', anim: 'knee', dur: 0.34, active: [0.12, 0.2], damage: 32, range: 1.5, arc: 100, knockback: 1.0, lunge: 0.9, sound: 'swing', hitSound: 'heavyPunch' },
       // o fim do combo: o Golpes de Arena emenda uma cabeçada sozinho quando entra
       { name: 'Soco de arena', anim: 'heavy_punch', dur: 0.5, active: [0.2, 0.29], damage: 58, range: 2.0, arc: 100, lunge: 1.6, finisher: 'launch', hitstop: 0.1, sound: 'swing', hitSound: 'heavyPunch', hand: 'R', impactScale: 1.9 },
     ],

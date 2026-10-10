@@ -89,7 +89,7 @@ export default {
   "stage.title": "ELIGE EL ESCENARIO",
   "stage.soon": "PRÓXIMAMENTE",
   "stage.confirm": "CONFIRMAR ESCENARIO",
-  "stage.hint": "◀ ▶ elegir · <b>{ok}</b>, <kbd>{jump}</kbd> o <kbd>Enter</kbd> confirmar · <b>{rand}</b> o <kbd>{carga}</kbd> aleatorio · <b>{back}</b>, <kbd>{phys}</kbd> o <kbd>Esc</kbd> volver",
+  "stage.hint": "◀ ▶ ▲ ▼ elegir · <b>{ok}</b>, <kbd>{jump}</kbd> o <kbd>Enter</kbd> confirmar · <b>{rand}</b> o <kbd>{carga}</kbd> aleatorio · <b>{back}</b>, <kbd>{phys}</kbd> o <kbd>Esc</kbd> volver",
   "load.tip": "Consejo: {tip}",
   "tip.1": "Mantén R2/RT para defender. Defensa + dirección = esquiva.",
   "tip.2": "Habilidades: △ → ○, △ → □ (un toque tras otro), △ + L2, R2 + △ y R2 + ×. L1 y R1 llaman a las asistencias en batalla por equipos.",

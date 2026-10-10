@@ -89,7 +89,7 @@ export default {
   "stage.title": "SCEGLI L'ARENA",
   "stage.soon": "PROSSIMAMENTE",
   "stage.confirm": "CONFERMA ARENA",
-  "stage.hint": "◀ ▶ scegli · <b>{ok}</b>, <kbd>{jump}</kbd> o <kbd>Invio</kbd> conferma · <b>{rand}</b> o <kbd>{carga}</kbd> casuale · <b>{back}</b>, <kbd>{phys}</kbd> o <kbd>Esc</kbd> indietro",
+  "stage.hint": "◀ ▶ ▲ ▼ scegli · <b>{ok}</b>, <kbd>{jump}</kbd> o <kbd>Invio</kbd> conferma · <b>{rand}</b> o <kbd>{carga}</kbd> casuale · <b>{back}</b>, <kbd>{phys}</kbd> o <kbd>Esc</kbd> indietro",
   "load.tip": "Suggerimento: {tip}",
   "tip.1": "Tieni premuto R2/RT per parare. Parata + direzione = schivata.",
   "tip.2": "Abilità: △ → ○, △ → □ (un tocco dopo l’altro), △ + L2, R2 + △ e R2 + ×. L1 e R1 chiamano le assistenze nella battaglia a squadre.",

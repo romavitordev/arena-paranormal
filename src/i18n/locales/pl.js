@@ -89,7 +89,7 @@ export default {
   "stage.title": "WYBIERZ ARENĘ",
   "stage.soon": "WKRÓTCE",
   "stage.confirm": "POTWIERDŹ ARENĘ",
-  "stage.hint": "◀ ▶ wybierz · <b>{ok}</b>, <kbd>{jump}</kbd> lub <kbd>Enter</kbd> potwierdź · <b>{rand}</b> lub <kbd>{carga}</kbd> losowo · <b>{back}</b>, <kbd>{phys}</kbd> lub <kbd>Esc</kbd> wstecz",
+  "stage.hint": "◀ ▶ ▲ ▼ wybierz · <b>{ok}</b>, <kbd>{jump}</kbd> lub <kbd>Enter</kbd> potwierdź · <b>{rand}</b> lub <kbd>{carga}</kbd> losowo · <b>{back}</b>, <kbd>{phys}</kbd> lub <kbd>Esc</kbd> wstecz",
   "load.tip": "Wskazówka: {tip}",
   "tip.1": "Przytrzymaj R2/RT, by blokować. Blok + kierunek = unik.",
   "tip.2": "Umiejętności: △ → ○, △ → □ (jeden po drugim), △ + L2, R2 + △ i R2 + ×. L1 i R1 wzywają wsparcie w walce drużynowej.",

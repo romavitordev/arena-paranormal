@@ -89,7 +89,7 @@ export default {
   "stage.title": "ステージを選べ",
   "stage.soon": "近日公開",
   "stage.confirm": "ステージ決定",
-  "stage.hint": "◀ ▶ 選択 · <b>{ok}</b>・<kbd>{jump}</kbd>・<kbd>Enter</kbd> 決定 · <b>{rand}</b>・<kbd>{carga}</kbd> ランダム · <b>{back}</b>・<kbd>{phys}</kbd>・<kbd>Esc</kbd> 戻る",
+  "stage.hint": "◀ ▶ ▲ ▼ 選択 · <b>{ok}</b>・<kbd>{jump}</kbd>・<kbd>Enter</kbd> 決定 · <b>{rand}</b>・<kbd>{carga}</kbd> ランダム · <b>{back}</b>・<kbd>{phys}</kbd>・<kbd>Esc</kbd> 戻る",
   "load.tip": "ヒント：{tip}",
   "tip.1": "R2/RTを押し続けてガード。ガード＋方向でステップ。",
   "tip.2": "スキル：△→○、△→□（順に押す）、△＋L2、R2＋△、R2＋×。チーム戦ではL1・R1でアシスト。",

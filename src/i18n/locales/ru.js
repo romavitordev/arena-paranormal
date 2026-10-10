@@ -89,7 +89,7 @@ export default {
   "stage.title": "ВЫБЕРИТЕ АРЕНУ",
   "stage.soon": "СКОРО",
   "stage.confirm": "ПОДТВЕРДИТЬ АРЕНУ",
-  "stage.hint": "◀ ▶ выбор · <b>{ok}</b>, <kbd>{jump}</kbd> или <kbd>Enter</kbd> подтвердить · <b>{rand}</b> или <kbd>{carga}</kbd> случайно · <b>{back}</b>, <kbd>{phys}</kbd> или <kbd>Esc</kbd> назад",
+  "stage.hint": "◀ ▶ ▲ ▼ выбор · <b>{ok}</b>, <kbd>{jump}</kbd> или <kbd>Enter</kbd> подтвердить · <b>{rand}</b> или <kbd>{carga}</kbd> случайно · <b>{back}</b>, <kbd>{phys}</kbd> или <kbd>Esc</kbd> назад",
   "load.tip": "Совет: {tip}",
   "tip.1": "Удерживайте R2/RT для блока. Блок + направление = уклон.",
   "tip.2": "Умения: △ → ○, △ → □ (одно нажатие за другим), △ + L2, R2 + △ и R2 + ×. L1 и R1 вызывают помощников в командном бою.",

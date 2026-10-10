@@ -1925,7 +1925,7 @@ export class Fighter {
         this.anim.play('headbutt', { restart: true, duration: 0.3 });
         this.world.after(0.1, () => {
           if (opp.state === 'ko') return;
-          applyHit(this.world, this, opp, { damage: arena.damage ?? 14, kind: 'melee', reaction: false, strike: { damage: arena.damage ?? 14, noPassive: true }, sound: 'heavyPunch', scale: 1.1, hitstop: 0.06 });
+          applyHit(this.world, this, opp, { damage: arena.damage ?? 14, kind: 'melee', reaction: false, strike: { damage: arena.damage ?? 14, noPassive: true }, sound: arena.sound || 'heavyPunch', scale: 1.1, hitstop: 0.06 });
           this.world.fx.play('FX_HIT_HEAVY', opp.chestPos().add(new THREE.Vector3(0, 0.35, 0)), { color: 0xf0e0c0, scale: 1 });
         });
       });

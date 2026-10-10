@@ -63,6 +63,20 @@ function buildShots(kind, f, opp, sp) {
   return shots;
 }
 
+// uma batida de cena: o som (ex.: fistClang) e, se for o choque dos punhos, faíscas, clarão e a onda de pressão entre
+// as duas mãos
+function beatFx(f, world, o, sp) {
+  world.audio.play(o.beatSound || 'fistClang');
+  const a = f.rig.sockets.handL.getWorldPosition(new THREE.Vector3());
+  const b = f.rig.sockets.handR.getWorldPosition(new THREE.Vector3());
+  const p = a.add(b).multiplyScalar(0.5);
+  world.fx.flash(p, { color: 0xfff0d0, size: 2.2, life: 0.12 });
+  world.fx.burst(p, { count: 26, color: 0xffc070, speed: 6, life: 0.35, size: 0.12, gravity: 6 });
+  world.fx.ring(p, { color: sp.color, radius: 1.6, life: 0.3, vertical: true, yaw: f.yaw + Math.PI / 2 });
+  world.fx.distort(p, { color: sp.color, radius: 1.4, life: 0.25 });
+  world.cameraRig.shake(0.25, 0.12);
+}
+
 export const cinematicCombo = {
   canStart: () => true,
   start(f, sp, world) {
@@ -118,6 +132,12 @@ export const cinematicCombo = {
       tl = new Timeline();
       tl.add(sp.bannerAt ?? 0.1, () => world.showBanner(sp.banner || f.def.name, f.def.color));
       sp.hits.forEach((h, i) => {
+        // momento de cena sem dano (ex.: o Colosso batendo um punho no outro antes da sequência)
+        if (h.noHit) {
+          tl.add(h.t, () => f.anim.play(h.anim, { restart: true, duration: h.dur, blend: 0.04 }));
+          for (const b of h.beats || []) tl.add(h.t + b, () => beatFx(f, world, h, sp));
+          return;
+        }
         tl.add(h.t, () => {
           f.anim.play(h.anim, { restart: true, duration: h.dur, blend: 0.04 });
           world.audio.play('swing', { volume: 0.7 });
@@ -159,6 +179,8 @@ export const cinematicCombo = {
         t += dt;
         if (phase === 'prepare') {
           opp = f.opponent;
+          // batidas da preparação (prep.beats: segundos) — ex.: o CLANG das Manoplas
+          for (const b of prep.beats || []) if (t - dt < b && t >= b) beatFx(f, world, prep, sp);
           if (opp) f.yaw = yawTo(f.pos, opp.pos);
           if (prep.showProp && !propShown && t >= prep.time * 0.55) {
             propShown = true;

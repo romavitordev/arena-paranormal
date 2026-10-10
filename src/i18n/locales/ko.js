@@ -89,7 +89,7 @@ export default {
   "stage.title": "경기장을 선택하세요",
   "stage.soon": "출시 예정",
   "stage.confirm": "경기장 확인",
-  "stage.hint": "◀ ▶ 선택 · <b>{ok}</b>, <kbd>{jump}</kbd> 또는 <kbd>Enter</kbd> 확인 · <b>{rand}</b> 또는 <kbd>{carga}</kbd> 무작위 · <b>{back}</b>, <kbd>{phys}</kbd> 또는 <kbd>Esc</kbd> 뒤로",
+  "stage.hint": "◀ ▶ ▲ ▼ 선택 · <b>{ok}</b>, <kbd>{jump}</kbd> 또는 <kbd>Enter</kbd> 확인 · <b>{rand}</b> 또는 <kbd>{carga}</kbd> 무작위 · <b>{back}</b>, <kbd>{phys}</kbd> 또는 <kbd>Esc</kbd> 뒤로",
   "load.tip": "팁: {tip}",
   "tip.1": "R2/RT를 누르고 있으면 방어. 방어 + 방향 = 회피.",
   "tip.2": "스킬: △ → ○, △ → □(차례로 누르기), △ + L2, R2 + △, R2 + ×. 팀 배틀에서 L1과 R1로 어시스트 호출.",

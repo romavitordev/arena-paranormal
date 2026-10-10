@@ -89,7 +89,7 @@ export default {
   "stage.title": "ARENAYI SEÇ",
   "stage.soon": "YAKINDA",
   "stage.confirm": "ARENAYI ONAYLA",
-  "stage.hint": "◀ ▶ seç · <b>{ok}</b>, <kbd>{jump}</kbd> veya <kbd>Enter</kbd> onayla · <b>{rand}</b> veya <kbd>{carga}</kbd> rastgele · <b>{back}</b>, <kbd>{phys}</kbd> veya <kbd>Esc</kbd> geri",
+  "stage.hint": "◀ ▶ ▲ ▼ seç · <b>{ok}</b>, <kbd>{jump}</kbd> veya <kbd>Enter</kbd> onayla · <b>{rand}</b> veya <kbd>{carga}</kbd> rastgele · <b>{back}</b>, <kbd>{phys}</kbd> veya <kbd>Esc</kbd> geri",
   "load.tip": "İpucu: {tip}",
   "tip.1": "Savunmak için R2/RT’yi basılı tut. Savunma + yön = kaçınma.",
   "tip.2": "Yetenekler: △ → ○, △ → □ (art arda), △ + L2, R2 + △ ve R2 + ×. Takım savaşında L1 ve R1 destekleri çağırır.",

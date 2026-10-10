@@ -89,7 +89,7 @@ export default {
   "stage.title": "CHOOSE THE ARENA",
   "stage.soon": "COMING SOON",
   "stage.confirm": "CONFIRM ARENA",
-  "stage.hint": "◀ ▶ select · <b>{ok}</b>, <kbd>{jump}</kbd> or <kbd>Enter</kbd> confirm · <b>{rand}</b> or <kbd>{carga}</kbd> random · <b>{back}</b>, <kbd>{phys}</kbd> or <kbd>Esc</kbd> back",
+  "stage.hint": "◀ ▶ ▲ ▼ select · <b>{ok}</b>, <kbd>{jump}</kbd> or <kbd>Enter</kbd> confirm · <b>{rand}</b> or <kbd>{carga}</kbd> random · <b>{back}</b>, <kbd>{phys}</kbd> or <kbd>Esc</kbd> back",
   "load.tip": "Tip: {tip}",
   "tip.1": "Hold R2/RT to block. Block + direction = sidestep.",
   "tip.2": "Abilities: △ → ○, △ → □ (one tap after the other), △ + L2, R2 + △ and R2 + ×. L1 and R1 call assists in team battles.",

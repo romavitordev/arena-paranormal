@@ -183,6 +183,21 @@ const SYNTHS = {
     a.tone(t, 0.28, { vol: 0.9 * v, freq: 110, freqEnd: 30 });
     a.noise(t, 0.2, { vol: 0.7 * v, freq: 2500, freqEnd: 150 });
   },
+  // MANOPLAS DO COLOSSO: o soco pesado gravado + o tinido do metal batendo
+  metalPunch: (a, t, v) => {
+    a.play('heavyPunch', { volume: v });
+    a.tone(t, 0.32, { vol: 0.16 * v, freq: 1240, freqEnd: 1190, type: 'triangle' });
+    a.tone(t, 0.26, { vol: 0.1 * v, freq: 1870, freqEnd: 1820, type: 'sine' });
+    a.noise(t, 0.06, { vol: 0.3 * v, type: 'highpass', freq: 3500 });
+  },
+  // um punho de metal batendo no outro ("Aí sim, neném!"): CLANG grave com o metal ressoando
+  fistClang: (a, t, v) => {
+    a.play('heavyPunch', { volume: 0.8 * v, pitch: 0.8 });
+    a.noise(t, 0.08, { vol: 0.5 * v, type: 'highpass', freq: 2800 });
+    for (const [f, d, k] of [[520, 0.9, 0.22], [784, 0.75, 0.16], [1310, 0.6, 0.12], [2090, 0.45, 0.07]]) {
+      a.tone(t, d, { vol: k * v, freq: f, freqEnd: f * 0.985, type: 'triangle' });
+    }
+  },
   impact: (a, t, v) => {
     a.tone(t, 0.2, { vol: 0.6 * v, freq: 90, freqEnd: 35 });
     a.noise(t, 0.15, { vol: 0.5 * v, freq: 3000, freqEnd: 400 });

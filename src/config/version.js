@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.15.0';
+export const VERSION = '3.15.1';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,18 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.15.1',
+    date: '2026-10-10',
+    title: 'Aí sim, neném!',
+    items: [
+      'O Colosso agora BATE UM PUNHO NO OUTRO no "Aí Sim, Neném!": ao preparar o especial e de novo cara a cara com o adversário — CLANG, faíscas e a onda de pressão vermelha estourando entre as Manoplas — antes de descer a sequência.',
+      'As Manoplas do Colosso agora são de METAL de verdade: fecham o punho inteiro, com placa de cobre e espinhos nos nós dos dedos.',
+      'Sons de porrada: os golpes do Colosso soam como soco de manopla de metal, e o Pisão do Colosso é uma pancada seca no chão (não mais uma explosão). A joelhada do Dalmo também ganhou som de pancada.',
+      'Seleção de personagens: o fundo de cada retrato tem a cor da equipe — Ordo Realitas amarelo, Mascarados vermelho, Os Cinco verde, Escriptas roxo e Luzidios azul.',
+      'Escolha de cenário: os cenários agora ficam em 2 linhas de 3, e ▲ ▼ trocam de linha (antes andavam só um cartão, igual a ◀ ▶).',
+    ],
+  },
   {
     v: '3.15.0',
     date: '2026-10-10',

@@ -89,7 +89,7 @@ export default {
   "stage.title": "CHOISIS L'ARÈNE",
   "stage.soon": "BIENTÔT",
   "stage.confirm": "VALIDER L'ARÈNE",
-  "stage.hint": "◀ ▶ choisir · <b>{ok}</b>, <kbd>{jump}</kbd> ou <kbd>Entrée</kbd> valider · <b>{rand}</b> ou <kbd>{carga}</kbd> aléatoire · <b>{back}</b>, <kbd>{phys}</kbd> ou <kbd>Échap</kbd> retour",
+  "stage.hint": "◀ ▶ ▲ ▼ choisir · <b>{ok}</b>, <kbd>{jump}</kbd> ou <kbd>Entrée</kbd> valider · <b>{rand}</b> ou <kbd>{carga}</kbd> aléatoire · <b>{back}</b>, <kbd>{phys}</kbd> ou <kbd>Échap</kbd> retour",
   "load.tip": "Astuce : {tip}",
   "tip.1": "Maintiens R2/RT pour bloquer. Garde + direction = esquive.",
   "tip.2": "Capacités : △ → ○, △ → □ (une touche après l’autre), △ + L2, R2 + △ et R2 + ×. L1 et R1 appellent les assistances en équipe.",

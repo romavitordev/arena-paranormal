@@ -12,7 +12,8 @@ import base from '../dalmo.js';
 
 const RED = 0xff2a1e;
 const PRESS = 0xffb070;
-const heavier = (s) => ({ ...s, damage: Math.round(s.damage * 1.15), element: 'energia' });
+// as Manoplas são de METAL: todo golpe soa como soco de manopla (pancada + tinido)
+const heavier = (s) => ({ ...s, damage: Math.round(s.damage * 1.15), element: 'energia', hitSound: 'metalPunch' });
 const M = base.melee;
 const byId = Object.fromEntries(base.abilities.map((a) => [a.id, a]));
 
@@ -65,6 +66,7 @@ export default {
       finalDamage: 38,
       pressure: true,
       element: 'energia',
+      hitSound: 'metalPunch',
       label: 'GOLPE SEGURADO!',
       color: PRESS,
     },
@@ -81,6 +83,7 @@ export default {
       damage: 74,
       stun: 1.4,
       pressure: 3.4,
+      hitSound: 'metalPunch',
     },
     {
       ...byId.agarraoArena,
@@ -94,10 +97,11 @@ export default {
       blowDamage: 20,
       finalDamage: 56,
       pressure: true,
+      hitSound: 'metalPunch',
       label: 'O CRÂNIO!',
       color: PRESS,
     },
-    { ...byId.investida, damage: 54, cooldown: 7, color: RED },
+    { ...byId.investida, damage: 54, cooldown: 7, color: RED, hitSound: 'metalPunch' },
     {
       id: 'pisaoColosso',
       name: 'Pisão do Colosso',
@@ -112,11 +116,13 @@ export default {
       range: 4, // a CPU só pisa com o adversário perto
       damage: 52,
       element: 'energia',
+      hitSound: 'metalPunch',
       color: PRESS,
     },
   ],
-  // "AÍ SIM, NENÉM!": avança, rajada de socos com as Manoplas, o duplo impacto (as duas de uma vez, a pressão explode),
-  // gancho que levanta e o soco que crava no chão
+  // "AÍ SIM, NENÉM!" (a frase do Tuco testando as Manoplas): BATE um punho de metal no outro — CLANG, faíscas e a
+  // pressão estourando entre as mãos —, avança e, cara a cara, bate os punhos de novo antes de descer a sequência:
+  // rajada com as Manoplas, o duplo impacto, gancho que levanta e o soco que crava no chão
   special: {
     name: 'Aí Sim, Neném!',
     banner: 'Aí Sim, Neném!',
@@ -126,20 +132,21 @@ export default {
     color: RED,
     sound: 'specialStart',
     damage: 310,
-    prepare: { anim: 'colosso_roar', time: 0.5, fx: 'fistGlow' },
+    prepare: { anim: 'fist_clang', time: 0.8, fx: 'fistGlow', beats: [0.32, 0.56] },
     dash: { speed: 20, maxTime: 0.5, contact: 1.9 },
     hits: [
-      { t: 0.6, anim: 'dash_punch', dur: 0.3, share: 0.1, fx: { kind: 'punch', paranormal: true }, sound: 'heavyPunch' },
-      { t: 0.95, anim: 'flurry', dur: 0.5, share: 0.16, fx: { kind: 'punch', paranormal: true }, sound: 'heavyPunch' },
-      { t: 1.5, anim: 'wave_punch', dur: 0.42, share: 0.18, fx: { kind: 'punch', paranormal: true, big: true }, sound: 'shockwave' },
-      { t: 2.0, anim: 'uppercut', dur: 0.4, share: 0.14, fx: { kind: 'punch', up: true, paranormal: true }, sound: 'heavyPunch' },
-      { t: 2.6, anim: 'meteor_punch', dur: 0.55, share: 0.42, fx: { kind: 'smash', big: true }, sound: 'heavyPunch', final: true },
+      { t: 0.15, anim: 'fist_clang', dur: 0.8, share: 0, noHit: true, beats: [0.32, 0.56] },
+      { t: 1.1, anim: 'dash_punch', dur: 0.3, share: 0.1, fx: { kind: 'punch', paranormal: true }, sound: 'metalPunch' },
+      { t: 1.45, anim: 'flurry', dur: 0.5, share: 0.16, fx: { kind: 'punch', paranormal: true }, sound: 'metalPunch' },
+      { t: 2.0, anim: 'wave_punch', dur: 0.42, share: 0.18, fx: { kind: 'punch', paranormal: true, big: true }, sound: 'metalPunch' },
+      { t: 2.5, anim: 'uppercut', dur: 0.4, share: 0.14, fx: { kind: 'punch', up: true, paranormal: true }, sound: 'metalPunch' },
+      { t: 3.1, anim: 'meteor_punch', dur: 0.55, share: 0.42, fx: { kind: 'smash', big: true }, sound: 'metalPunch', final: true },
     ],
-    bannerAt: 0.25,
-    length: 3.6,
+    bannerAt: 0.75, // o letreiro entra junto com o segundo CLANG
+    length: 4.1,
   },
   passives: [
-    { type: 'arenaBlows', damage: 18, delay: 0.16 },
+    { type: 'arenaBlows', damage: 18, delay: 0.16, sound: 'metalPunch' }, // a cabeçada com o escafandro de cobre
     { type: 'atmosphericPressure', damage: 7, stun: 0.7, color: PRESS },
     { type: 'thickSkin', knockback: 0.6, chip: 0.7, guard: 0.8 }, // o escafandro e o tamanho: quase não é empurrado
   ],

@@ -1,5 +1,32 @@
 # Registro administrativo de alterações
 
+## v3.15.1 — Aí sim, neném!
+
+- Versão: `VERSION` 3.15.0 → **3.15.1**.
+
+- **"Aí Sim, Neném!" com o choque dos punhos (pedido do usuário).** Clipe novo `fist_clang` (abre os braços e bate um
+  punho no outro na frente do peito, duas vezes). O especial do Colosso bate os punhos na preparação e de novo cara a
+  cara, antes da sequência; o letreiro entra no segundo CLANG. `cinematicCombo` ganhou `prepare.beats` e golpes de cena
+  `noHit` (sem dano) com `beats` → `beatFx` (som `fistClang`, faíscas, clarão, anel e distorção entre as mãos).
+- **Manoplas de metal** (wiki: "manoplas com espinhos feitas de metal"): no Colosso a luva de couro virou manopla de
+  ferro (`iron_colosso`) fechando o punho, placa de cobre nas costas da mão, punho rebitado, barra nos nós dos dedos
+  com 4 espinhos para a frente e 2 nas costas.
+- **Sons de porrada:** sons novos sintetizados `metalPunch` (soco gravado + tinido de metal) e `fistClang`. Colosso:
+  todo golpe, habilidade, agarrão, contra-ataque e o especial soam `metalPunch` (`hitSound` em `heavyBlow`, `arenaGrab`,
+  `stompQuake` e na passiva `arenaBlows`). Dalmo: joelhada com `heavyPunch` (era `kick`); o Pisão do Colosso não
+  toca mais explosão — pancada grave + impacto.
+- **Cor da equipe no fundo dos retratos** (`src/config/teams.js`, usado por `portraits.js` e `Screens.js`): Ordo
+  amarelo, Mascarados vermelho, Os Cinco verde, Escriptas roxo, Luzidios azul-claro; quem não tem equipe usa a cor
+  própria.
+- **Menu de cenários:** grade 3 × 2 (antes 5 colunas com um cartão sozinho na 2ª linha); ◀ ▶ andam na linha e ▲ ▼
+  trocam de linha na mesma coluna, dando a volta nas bordas (`cols()` lê a grade da tela, então vale no celular). Dica
+  atualizada nos 13 idiomas.
+- **TODO:** seção da Transcendência do Kian marcada como obsoleta (não está mais no kit); marcados como feitos os
+  itens que já existem no código (Arma de Sangue consome vida, sniper carregado, Decepar +30%, habilidades do Joui e
+  do Kaiser, elementos só nos rituais). Falta de verdade: Máscara das Pessoas nas Sombras (Joui).
+- Testado: especial 263 de dano (igual a antes), 4 CLANGs e 5 socos de manopla; navegação dos cenários;
+  check-roster 0 ✘, 41 testes, build.
+
 ## v3.15.0 — O Colosso
 
 - Versão: `VERSION` 3.14.0 → **3.15.0** (Dalmo / O Colosso, Juan nos Mascarados, seleção por equipe, câmera NaN).

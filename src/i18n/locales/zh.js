@@ -89,7 +89,7 @@ export default {
   "stage.title": "选择场地",
   "stage.soon": "即将推出",
   "stage.confirm": "确认场地",
-  "stage.hint": "◀ ▶ 选择 · <b>{ok}</b>、<kbd>{jump}</kbd> 或 <kbd>Enter</kbd> 确认 · <b>{rand}</b> 或 <kbd>{carga}</kbd> 随机 · <b>{back}</b>、<kbd>{phys}</kbd> 或 <kbd>Esc</kbd> 返回",
+  "stage.hint": "◀ ▶ ▲ ▼ 选择 · <b>{ok}</b>、<kbd>{jump}</kbd> 或 <kbd>Enter</kbd> 确认 · <b>{rand}</b> 或 <kbd>{carga}</kbd> 随机 · <b>{back}</b>、<kbd>{phys}</kbd> 或 <kbd>Esc</kbd> 返回",
   "load.tip": "提示：{tip}",
   "tip.1": "按住 R2/RT 防御。防御 + 方向 = 闪避。",
   "tip.2": "技能：△ → ○、△ → □（依次按下）、△ + L2、R2 + △ 和 R2 + ×。团队战中 L1 和 R1 呼叫援护。",
