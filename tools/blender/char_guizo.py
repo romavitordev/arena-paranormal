@@ -27,7 +27,7 @@ sk = b.sk
 H = sk.h
 hz = sk['hips'].z
 
-skin = material('skin_guizo', '#e2b08c', 0.75)
+skin = material('skin_guizo', '#c98d64', 0.75)  # pele bronzeada (a arte)
 shirt = material('shirt_guizo', '#ffffff', 0.85)        # camiseta preta "ahlevo" (textura)
 sleeve = material('sleeve_guizo', '#ffffff', 0.85)      # camisa listrada vermelha e branca (textura)
 black = material('tee_black', '#232126', 0.85)
@@ -185,12 +185,14 @@ for side in ('L', 'R'):
     b.add('hand' + side, hand_part(sk, side, 0.05), skin, region='e' + side)
     # manga curta da camiseta preta (folgada, quase até o cotovelo)
     tee = []
-    for i in range(4):
-        t = 0.06 + i / 3 * 0.52
+    for i in range(5):
+        t = 0.06 + i / 4 * 0.54
         p = top.lerp(e, t)
-        r = 0.07 - 0.004 * t
+        r = 0.068 + 0.012 * (i / 4) ** 2  # folgada: abre na barra
         tee.append((p.x, p.y, p.z, r, r))
     b.add('tee_sleeve' + side, tube(tee, 14), black, region='arm' + side, subdiv=0)
+    # ombro arredondado da camiseta (antes o ombro ficava "quadrado")
+    b.add('tee_shoulder' + side, ellipsoid((s.x - sx * 0.012 * H, s.y, s.z - 0.006 * H), (0.07 * H, 0.074 * H, 0.06 * H), 14, 10), black, region='arm' + side, subdiv=0)
 # munhequeiras: na esquerda a pulseira preta "ahlevo" e uma de couro; na direita o relógio
 eL, hL, eR, hR = sk['eL'], sk['handL'], sk['eR'], sk['handR']
 b.add('wristbands', merge(tube(limb_rings(eL.lerp(hL, 0.8), eL.lerp(hL, 0.9), 0.05, 0.05, n=1), 12), tube(limb_rings(eL.lerp(hL, 0.91), eL.lerp(hL, 0.95), 0.046, 0.046, n=1), 12)), black, region='eL', subdiv=0)
@@ -200,6 +202,9 @@ wp = eR.lerp(hR, 0.87)
 b.add('watch_face', ellipsoid((wp.x - 0.047 * 1.34, wp.y - 0.004, wp.z), (0.008, 0.02, 0.02), 8, 6), grey, region='eR', subdiv=0)
 
 # ---------------------------------------------------------------- PESCOÇO: fone de ouvido e colar de cordão
+# gola: a da camiseta preta e, aparecendo por dentro, a gola listrada da camisa de baixo
+b.add('tee_collar', rod([torso_pt(a, 0.645, 1.0, 0.012) for a in [(k / 24 - 0.5) * TAU for k in range(25)]], [0.011 * H] * 25, 5), black, region='torso', subdiv=0)
+b.add('stripe_collar', rod([torso_pt(a, 0.66, 0.93, 0.01) + Vector((0, 0, 0.006 * H)) for a in [(k / 24 - 0.5) * TAU for k in range(25)]], [0.012 * H] * 25, 5), sleeve, region='torso', subdiv=0)
 neck_z = hz + 0.64 * H
 phones = [rod([Vector((math.sin(a) * 0.07 * H, -math.cos(a) * 0.066 * H, neck_z + 0.012 * H - 0.02 * H * math.cos(a))) for a in [(k / 20 - 0.5) * TAU * 0.9 for k in range(21)]], [0.009 * H] * 21, 6)]
 b.add('headphone_band', merge(*phones), grey, region='torso', subdiv=0)
@@ -274,6 +279,8 @@ for side in ('L', 'R'):
         p = k.lerp(f, t)
         rings.append((p.x, p.y, p.z, r, r))
     b.add('pants' + side, tube(rings, 14), pants, region='leg' + side, subdiv=0)
+    # barra dobrada em cima do coturno
+    b.add('pants_cuff' + side, tube(limb_rings(k.lerp(f, 0.66), k.lerp(f, 0.74), 0.076, 0.074, n=1), 14), pants, region='k' + side, subdiv=0)
     b.add('boot_shaft' + side, tube(limb_rings(k.lerp(f, 0.62), k.lerp(f, 0.98), 0.058, 0.056, n=3), 14), boot, region='k' + side, subdiv=0)
     b.add('boot_foot' + side, ellipsoid((f.x, f.y - 0.065 * H, f.z + 0.04 * H), (0.056 * H, 0.13 * H, 0.05 * H), 12, 8, theta_max=math.pi * 0.56), boot, region='foot' + side, subdiv=0)
     b.add('sole' + side, box((f.x, f.y - 0.065 * H, f.z - 0.006 * H), (0.12 * H, 0.27 * H, 0.03 * H), bevel=0.006), sole, region='foot' + side, subdiv=0)
@@ -351,32 +358,38 @@ def hp(phi, th, r=1.0):
 
 b.add('prop_hair_cap', hair_cap((HC.x, HC.y, HC.z), (HR[0] * 0.99, HR[1] * 0.99, HR[2] * 0.99), front=0.24, side=0.5, back=0.64), hair_root, region='head')
 roots, spikes = [], []
+# referência "Guizo rosto": mechas compridas e CAÍDAS, achatadas contra a cabeça, que só soltam na ponta — franja em
+# pontas sobre a testa até a sobrancelha, os lados por cima das orelhas, a nuca coberta; raiz PRETA no alto e o resto
+# vinho. Cada mecha nasce perto do topo, desce acompanhando o crânio e termina numa ponta que levanta um pouco.
 for i in range(120):
-    # distribuição pela cabeça toda (topo, lados e nuca), mais densa em cima
     phi = random.uniform(-math.pi, math.pi)
     front = math.cos(phi)
-    th = math.acos(1 - random.random() * (1.25 if front < 0.3 else 0.85)) if front > -0.6 else math.acos(1 - random.random() * 1.45)
-    if front > 0.55 and th > 0.95:
-        continue  # nada na testa abaixo da linha do cabelo
-    p0 = hp(phi, th, 0.97)
-    n = (p0 - HC).normalized()
-    if front > 0.45 and th > 0.38:
-        # franja: mechas pontudas caindo sobre a testa, para a frente e para baixo, abrindo para os lados
-        d = (n * 0.45 + Vector((math.sin(phi) * 0.4, -0.55, -0.6))).normalized()
-        ln = random.uniform(0.06, 0.1) * H
-    elif th > 0.85:
-        # lados e nuca: caem para baixo e para fora, curtas
-        d = (n * 0.7 + Vector((0, 0.15, -0.55))).normalized()
-        ln = random.uniform(0.05, 0.085) * H
-    else:
-        # topo: espetadas para cima e para trás, bagunçadas
-        d = (n * 0.8 + Vector((random.uniform(-0.25, 0.25), 0.3, 0.35))).normalized()
-        ln = random.uniform(0.08, 0.13) * H
-    mid = p0 + n * 0.018 * H
-    tip = mid + d * ln
-    bend = mid.lerp(tip, 0.55) + n * 0.01 * H
-    roots.append(rod([p0, mid], [0.022 * H, 0.02 * H], 6))
-    spikes.append(rod([mid, bend, tip], [0.021 * H, 0.013 * H, 0.002 * H], 6))
+    th0 = random.uniform(0.02, 0.45)
+    lift = random.uniform(0.35, 1.0) * (0.55 if front > 0.55 else 1.0)
+    th1 = (1.02 if front > 0.55 else 1.35 if front > -0.35 else 1.55) + random.uniform(-0.18, 0.08)  # comprimentos desiguais
+    n = 6
+    pts, rad = [], []
+    for k in range(n + 1):
+        t = k / n
+        th = th0 + (th1 - th0) * t
+        ph = phi + 0.12 * math.sin(i) * t                    # a mecha torce um pouco
+        r = 1.1 + 0.1 * math.sin(t * math.pi) + 0.42 * t ** 2 * lift  # volume e a ponta que espeta para fora
+        pts.append(hp(ph, th, r))
+        rad.append((0.03 - 0.028 * t ** 1.2) * H)
+    # na testa a franja passa por cima do rosto: puxa as pontas para a frente
+    if front > 0.55:
+        for k in range(3, n + 1):
+            pts[k] = pts[k] + Vector((0, -0.018 * H * (k - 2) / 4, 0))
+    cut = 2
+    roots.append(rod(pts[:cut + 1], rad[:cut + 1], 6, flat=(lambda p: (p - HC).normalized(), 0.65)))
+    spikes.append(rod(pts[cut:], rad[cut:], 6, flat=(lambda p: (p - HC).normalized(), 0.65)))
+# espetadas curtas no alto, para trás (o topo bagunçado)
+for i in range(46):
+    phi = random.uniform(-math.pi, math.pi)
+    p0 = hp(phi, random.uniform(0.0, 0.62), 1.05)
+    nn = (p0 - HC).normalized()
+    tip = p0 + (nn * 0.9 + Vector((random.uniform(-0.35, 0.35), 0.3, 0.5))).normalized() * random.uniform(0.07, 0.12) * H
+    spikes.append(rod([p0, p0.lerp(tip, 0.5), tip], [0.026 * H, 0.016 * H, 0.002 * H], 6))
 b.add('prop_hair_roots', merge(*roots), hair_root, region='head', subdiv=0)
 b.add('prop_hair_spikes', merge(*spikes), hair_red, region='head', subdiv=0)
 b.group('prop_hair')

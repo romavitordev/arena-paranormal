@@ -205,6 +205,33 @@ export const maskTransform = {
       tl.add(1.5, () => world.audio.play('shhh', { volume: 1 }));
       tl.add(2.15, () => maskOn(true));
       total = 3.0;
+    } else if (scene === 'calamity') {
+      // KIAN — de Desconjuração a CALAMIDADE: 1) concentra, a escrita do corpo acende · 2) a BARBA CRESCE em duas etapas
+      // (rala → média → cheia), com um clarão dourado a cada uma · 3) as faixas se enrolam nos antebraços · 4) a luz
+      // dourada explode e ele se ergue mais forte
+      f.anim.play('concentrate', { restart: true, duration: 1.2 });
+      lightTo = 4;
+      world.cameraRig.playShots([
+        faceClose(f, { dur: 1.3, from: 1.7, to: 1.2, side: 0.3, height: hy - 0.1, fov: 36 }),
+        faceClose(f, { dur: 0.8, from: 1.4, to: 1.0, side: -0.25, height: hy - 0.05, fov: 34 }),
+        lowAngle(f, { dur: 1.0, dist: 3.0, side: 0.7 }),
+      ]);
+      tl.add(0.25, () => world.showBanner(sp.banner || sp.name, f.def.color));
+      const glow = (big) => {
+        world.fx.flash(head(), { color: tint, size: big ? 1.6 : 1.1, life: 0.15 });
+        world.fx.burst(head(), { count: big ? 26 : 14, color: tint, speed: 2.2, life: 0.4, size: 0.12 });
+        world.audio.play('ritual', { volume: 0.5, pitch: big ? 0.9 : 1.2 });
+      };
+      tl.add(0.6, () => { world.fx.distort(f.chestPos(), { color: tint, radius: 1.8, life: 0.3 }); world.fx.burst(f.chestPos(), { count: 40, color: tint, speed: 3, life: 0.6, size: 0.14 }); });
+      tl.add(0.9, () => { f.rig.showProp('beard_m', true); glow(false); }); // da barba rala (pintada) para a média
+      tl.add(1.35, () => { f.rig.showProp('beard_m', false); f.rig.showProp('beard_f', true); glow(true); });
+      tl.add(1.7, () => {
+        f.rig.showProp('wraps', true);
+        for (const s of ['handL', 'handR']) world.fx.burst(f.rig.sockets[s].getWorldPosition(new THREE.Vector3()), { count: 18, color: 0xf0e8d8, speed: 2.5, life: 0.4, size: 0.12 });
+        world.audio.play('swing', { volume: 0.6, pitch: 0.8 });
+      });
+      tl.add(2.0, () => maskOn(true));
+      total = 3.0;
     } else if (scene === 'distort') {
       // GUIZO — DISTORCER APARÊNCIA (o ritual da wiki: muda altura, pele, cabelo, voz...): 1) concentra · 2) passa a
       // mão na frente do rosto e a imagem dele CHIA como uma fita (distorções em volta da cabeça) · 3) quando a mão

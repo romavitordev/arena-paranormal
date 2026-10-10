@@ -668,7 +668,7 @@ export const MATERIAL_TEXTURES = {
     g.strokeStyle = 'rgba(150,90,70,0.35)'; g.lineWidth = 1.4; // maçãs do rosto marcadas (rosto fino)
     for (const s of [-1, 1]) { g.beginPath(); g.moveTo(CX + s * 46, 138); g.quadraticCurveTo(CX + s * 50, 160, CX + s * 40, 182); g.stroke(); }
   }, {
-    skin: '#e2b08c',
+    skin: '#c98d64',
     eye: { iris: '#6a2418', irisLight: '#a8442c', tilt: 0.02 },
     brow: { angry: 0, thick: 6, color: '#2a1612' },
     mouth: { mouthW: 13, smile: 3 },
@@ -1473,21 +1473,98 @@ export const MATERIAL_TEXTURES = {
   // ---------------- KIAN: sigilo na testa (lado direito), linha do olho, 3 riscos pretos
   face_desconjurado: () => {
     const map = face((g) => {
-      // riscos pretos (marca de garra) no lado esquerdo do rosto
-      g.strokeStyle = 'rgba(15,8,6,0.85)'; g.lineWidth = 5; g.lineCap = 'round';
-      for (let i = 0; i < 3; i++) { g.beginPath(); g.moveTo(CX + 30 + i * 11, 96); g.lineTo(CX + 22 + i * 11, 168); g.stroke(); }
+      // três riscos escuros na diagonal, do lado esquerdo do rosto (sob o olho, descendo para a bochecha)
+      g.strokeStyle = 'rgba(14,8,6,0.85)'; g.lineCap = 'round';
+      for (let i = 0; i < 3; i++) {
+        g.lineWidth = 6 - i;
+        g.beginPath(); g.moveTo(CX + 26 + i * 12, 104 + i * 2); g.quadraticCurveTo(CX + 30 + i * 13, 140, CX + 24 + i * 14, 176 - i * 6); g.stroke();
+      }
       paintKianSigils(g, '#f2e2b0');
     }, {
-      skin: '#5e4234',
+      skin: '#4e3426',
       eye: { iris: '#b8761a', irisLight: '#ffcf5a', tilt: 0.06 },
-      brow: { angry: 6, thick: 6.5, color: '#120c0a' },
-      mouth: { mouthW: 14, smile: -1, lipLine: '#2a1612', lip: 'rgba(90,40,30,0.4)' },
-      after: (g) => beardPaint(g, '#1e1612'),
+      brow: { angry: 5, thick: 7, color: '#120c0a' },
+      mouth: { mouthW: 16, smile: -1, lipLine: '#1e100c', lip: 'rgba(70,30,24,0.55)' },
+      // sem barba (Desconjuração); a barba de Calamidade é malha e cresce na Transformação
     })();
     const emissiveMap = canvasTex(W, HT, (g) => {
       g.fillStyle = '#000'; g.fillRect(0, 0, W, HT);
       paintKianSigils(g, '#ffd27a');
     }, { wrap: true });
+    return { map, emissiveMap, emissive: 0xffd27a };
+  },
+  // tronco do Kian (miniaturas de Desconjuração/Calamidade): pele escura com o peito e o abdômen marcados, as LINHAS
+  // DOURADAS que descem dos lados do pescoço, passam pelos ombros (setas), cruzam o peito em V até o esterno, uma faixa
+  // sob o peitoral e a linha que desce pelo abdômen; colunas de escrita escura entre elas. O pescoço é o fim da textura
+  // (o tubo do tronco vai do quadril ao pescoço): desenha de cabeça para baixo
+  torso_kian: () => {
+    // referências "desconjurado" / "desconjurado sério" / miniaturas: duas linhas paralelas de cada lado do pescoço que
+    // descem até a clavícula e correm por cima dela até o ombro (seta na ponta); do ombro, a diagonal que cruza o
+    // peitoral até o ESTERNO (o V, no meio do peito); a faixa sob o peitoral (setas nas pontas); as diagonais de baixo que
+    // fecham o losango no umbigo; a linha do esterno até a cintura. Escrita escura: colunas dos dois lados da linha do
+    // meio e fileiras ao longo das clavículas. Coordenadas "em pé": y = 0 no pescoço (≈ 588 px por unidade de altura).
+    const paint = (g, glow) => {
+      g.fillStyle = glow ? '#000' : '#4e3426'; g.fillRect(0, 0, 512, 512);
+      g.save();
+      g.translate(0, 512); g.scale(1, -1);
+      if (!glow) {
+        // volume: peitoral, serrátil e os gomos do abdômen
+        g.fillStyle = 'rgba(20,10,6,0.28)';
+        for (const s2 of [-1, 1]) { g.beginPath(); g.ellipse(256 + s2 * 58, 192, 56, 26, s2 * 0.18, 0, Math.PI); g.fill(); }
+        for (let r = 0; r < 3; r++) for (const s2 of [-1, 1]) g.fillRect(256 + (s2 < 0 ? -50 : 8), 262 + r * 50, 42, 4);
+        g.fillStyle = 'rgba(255,220,180,0.05)';
+        for (const s2 of [-1, 1]) { g.beginPath(); g.ellipse(256 + s2 * 58, 150, 50, 34, 0, 0, Math.PI * 2); g.fill(); }
+        // escrita escura: colunas dos dois lados da linha do meio, nas laterais e nas costas; fileiras nas clavículas
+        for (const x of [222, 270]) glyphs(g, x, 160, 22, 300, 'rgba(14,8,4,0.82)', 14, 0.9);
+        for (const x of [130, 362]) glyphs(g, x, 250, 24, 200, 'rgba(14,8,4,0.7)', 13, 0.7);
+        for (const x of [10, 470]) glyphs(g, x, 60, 30, 400, 'rgba(14,8,4,0.75)', 13, 0.8);
+        for (const s2 of [-1, 1]) glyphs(g, s2 < 0 ? 150 : 290, 76, 72, 14, 'rgba(14,8,4,0.8)', 12, 0.9);
+      }
+      // cada linha: um halo largo e o traço brilhante por cima
+      const line = (pts, w = 1) => {
+        for (const [lw, st] of glow ? [[14 * w, 'rgba(255,190,90,0.35)'], [6 * w, '#ffd27a']] : [[9 * w, 'rgba(255,214,150,0.35)'], [4 * w, '#fff1c8']]) {
+          g.strokeStyle = st; g.lineWidth = lw; g.lineCap = 'round'; g.lineJoin = 'round';
+          g.beginPath(); pts.forEach(([x, y], i) => (i ? g.lineTo(x, y) : g.moveTo(x, y))); g.stroke();
+        }
+      };
+      const arrow = (x, y, dx, dy) => {
+        const l = Math.hypot(dx, dy); const ux = dx / l; const uy = dy / l;
+        line([[x - ux * 16 - uy * 9, y - uy * 16 + ux * 9], [x, y], [x - ux * 16 + uy * 9, y - uy * 16 - ux * 9]]);
+      };
+      for (const s2 of [-1, 1]) {
+        const X = (dx) => 256 + s2 * dx;
+        // pescoço → clavícula → ombro (duas paralelas), seta no ombro
+        line([[X(40), 0], [X(44), 42], [X(150), 56]]); arrow(X(150), 56, s2, 0.13);
+        line([[X(60), 0], [X(64), 30], [X(118), 38]]);
+        // do ombro ao esterno: o V no meio do peito
+        line([[X(124), 72], [256, 150]]);
+        // diagonais de baixo: das costelas ao umbigo (fecham o losango)
+        line([[X(130), 232], [256, 345]], 0.85);
+        // costas: o V entre as escápulas e a linha da coluna
+        const bx = s2 < 0 ? 0 : 512;
+        line([[bx - s2 * 110, 70], [bx, 190]]);
+      }
+      // faixa sob o peitoral, com setas, e a linha do esterno até a cintura
+      line([[118, 230], [394, 230]]); arrow(394, 230, 1, 0); arrow(118, 230, -1, 0);
+      line([[256, 150], [256, 480]]);
+      line([[0, 190], [0, 470]]); line([[512, 190], [512, 470]]);
+      g.restore();
+    };
+    const map = canvasTex(512, 512, (g) => paint(g, false), { wrap: true });
+    const emissiveMap = canvasTex(512, 512, (g) => paint(g, true), { wrap: true });
+    return { map, emissiveMap, emissive: 0xffd27a };
+  },
+  // braços, mãos e pés do Kian: fileiras de escrita que brilha, cobrindo tudo (a referência "desconjurado pose")
+  arms_kian: () => {
+    const paint = (g, glow) => {
+      g.fillStyle = glow ? '#000' : '#3c271b'; g.fillRect(0, 0, 256, 512);
+      for (let y = 6; y < 512; y += 24) glyphs(g, 0, y, 256, 17, glow ? 'rgba(255,214,130,0.95)' : 'rgba(255,244,214,0.95)', 16, 0.5);
+      // anéis dourados contínuos em volta do braço, de tempos em tempos (como nas artes)
+      g.strokeStyle = glow ? '#ffd27a' : '#fff1c8'; g.lineWidth = glow ? 4 : 3;
+      for (const y of [120, 300]) { g.beginPath(); g.moveTo(0, y); g.lineTo(256, y); g.stroke(); }
+    };
+    const map = canvasTex(256, 512, (g) => paint(g, false), { wrap: true });
+    const emissiveMap = canvasTex(256, 512, (g) => paint(g, true), { wrap: true });
     return { map, emissiveMap, emissive: 0xffd27a };
   },
   skin_desconjurado: () => {
@@ -1595,26 +1672,18 @@ export const MATERIAL_TEXTURES = {
 };
 
 function paintKianSigils(g, color) {
-  // glifos "KI" e "AN" na bochecha direita (x < 256), em traços retos de runa
-  g.save();
-  g.strokeStyle = color; g.lineWidth = 2.6; g.lineCap = 'round';
-  const gx = CX - 66, gy = 150;
-  const seg = (a, b2, c, d) => { g.beginPath(); g.moveTo(gx + a, gy + b2); g.lineTo(gx + c, gy + d); g.stroke(); };
-  seg(0, 0, 0, 18); seg(0, 9, 9, 0); seg(0, 9, 9, 18); // K
-  seg(14, 0, 14, 18); // I
-  seg(2, 26, 7, 44); seg(7, 26, 2, 44); seg(3, 37, 6, 37); // A (anguloso)
-  seg(13, 44, 13, 26); seg(13, 26, 22, 44); seg(22, 44, 22, 26); // N
-  g.restore();
+  // referências "desconjurado" / "desconjurado sério": o sigilo anguloso no alto da testa (lado direito dele = x < 256)
+  // e o traço luminoso que desce do olho direito pela bochecha, com um gancho no fim
   g.strokeStyle = color;
   g.lineWidth = 3.4;
   g.lineCap = 'round';
-  // sigilo na testa (lado direito do personagem = x < 256)
-  const x = CX - 40, y = 62;
+  g.lineJoin = 'round';
+  const x = CX - 36, y = 80;
   g.beginPath();
-  g.moveTo(x - 12, y - 10); g.lineTo(x + 6, y - 14); g.lineTo(x + 14, y); g.lineTo(x, y + 12); g.lineTo(x - 14, y + 2); g.closePath();
-  g.moveTo(x + 6, y - 14); g.lineTo(x + 12, y - 22);
-  g.moveTo(x + 14, y); g.lineTo(x + 22, y - 4);
+  g.moveTo(x - 11, y - 7); g.lineTo(x + 4, y - 11); g.lineTo(x + 11, y + 1); g.lineTo(x, y + 10); g.lineTo(x - 12, y + 2); g.closePath();
+  g.moveTo(x + 4, y - 11); g.lineTo(x + 9, y - 18);
+  g.moveTo(x + 11, y + 1); g.lineTo(x + 18, y - 3);
+  g.moveTo(x - 4, y - 2); g.lineTo(x + 3, y + 3);
   g.stroke();
-  // linha luminosa descendo do olho direito pela bochecha
-  g.beginPath(); g.moveTo(CX - 32, EYE_Y + 8); g.lineTo(CX - 34, 160); g.moveTo(CX - 40, 140); g.lineTo(CX - 26, 140); g.stroke();
+  g.beginPath(); g.moveTo(CX - 31, EYE_Y + 9); g.quadraticCurveTo(CX - 34, 145, CX - 36, 168); g.lineTo(CX - 45, 174); g.stroke();
 }

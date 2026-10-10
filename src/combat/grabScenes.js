@@ -191,3 +191,4 @@ export const GRAB_SCENES = {
   fantasma: scene({ ...S('knife_1'), fx: { kind: 'slash' }, sound: 'bladeHit' }, { ...S('shoulder_bash'), fx: { kind: 'punch' }, sound: 'punch' }, { anim: 'thrust', fx: 'bands', sound: 'sniper' }),
   deus_morte: scene({ ...S('dm_slap', 0.34), fx: { kind: 'smash' }, sound: 'heavyPunch' }, { ...S('dm_hook', 0.34), fx: { kind: 'smash' }, sound: 'heavyPunch' }, { anim: 'dm_smash', fx: 'crush', sound: 'heavyPunch' }),
 };
+GRAB_SCENES.kian_calamidade = GRAB_SCENES.kian; // a forma de Calamidade agarra igual (só mais forte)

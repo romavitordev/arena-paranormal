@@ -1,4 +1,4 @@
-import { addKaiserProps, addArthurProps, addJouiProps, addAghataProps, addGalSalProps, addKianProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps, addFerreiroProps, addJuanProps, addKemiProps, addFantasmaProps, addBaluProps, addErinCaosProps, addLabirintoElmoProps, addAguiarMutiladorProps, addArnaldoProps, addAnfitriaoProps, addVerissimoProps, addJaeProps, addJaeXProps, addDalmoProps, addColossoProps, addGuizoProps, addGuizoETProps } from './props.js';
+import { addKaiserProps, addArthurProps, addJouiProps, addAghataProps, addGalSalProps, addKianProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps, addFerreiroProps, addJuanProps, addKemiProps, addFantasmaProps, addBaluProps, addErinCaosProps, addLabirintoElmoProps, addAguiarMutiladorProps, addArnaldoProps, addAnfitriaoProps, addVerissimoProps, addJaeProps, addJaeXProps, addDalmoProps, addColossoProps, addGuizoProps, addGuizoETProps, addKianCalamidadeProps } from './props.js';
 import { loadGLB, rigFromGLB } from './glbRig.js';
 import { preloadNpcModels } from './npcRig.js';
 
@@ -42,7 +42,8 @@ const MODEL_VARIANTS = {
   aguiar_mutilador: { base: 'aguiar', props: addAguiarMutiladorProps }, // máscara do Mutilador Noturno
   jae_x: { base: 'jae', props: addJaeXProps }, // capuz do X
   colosso: { base: 'dalmo', props: addColossoProps }, // o escafandro e as Manoplas
-  guizo_et: { base: 'guizo', props: addGuizoETProps }, // Distorcer Aparência: o disfarce alienígena
+  guizo_et: { base: 'guizo', props: addGuizoETProps },
+  kian_calamidade: { base: 'kian', props: addKianCalamidadeProps }, // a barba cheia e as faixas // Distorcer Aparência: o disfarce alienígena
 };
 
 // todos os modelos que o jogo sabe montar (personagens e formas)

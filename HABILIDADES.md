@@ -481,9 +481,9 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 Corpo a corpo, 2x por partida, não pode ser defendido: o alvo vira pó. Escapa esquivando no contato; com a sanidade cheia resiste levando 450 de dano (nunca morre por isso). Custo 50.
 
-### Transformação: Invólucro do Conhecimento
+### Transformação: Kian de Calamidade
 
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +15% de dano, golpes físicos atravessam a defesa, cura 10% na hora.
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
 
 ---
 

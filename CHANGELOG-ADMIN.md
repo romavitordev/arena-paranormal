@@ -1,5 +1,32 @@
 # Registro administrativo de alterações
 
+## v3.16.2 — Calamidade
+
+- Versão: `VERSION` 3.16.1 → **3.16.2**.
+- **Tatuagens do peito do Kian refeitas** (`torso_kian`): duas linhas paralelas de cada lado do pescoço até a clavícula e
+  por cima dela até o ombro (seta), o V do ombro ao ESTERNO no meio do peito (antes cruzava baixo demais), a faixa sob o
+  peitoral com setas, as diagonais de baixo que fecham o losango no umbigo, a linha do esterno; cada linha com halo de
+  brilho; escrita escura em colunas dos dois lados da linha do meio e em fileiras nas clavículas.
+
+- **Kian refeito (pedido do usuário; referências da pasta + miniaturas da wiki "Kian marcado em Desconjuração" e "Kian
+  em Calamidade").** `char_kian.py` novo: tronco forte próprio (`TT`), braços com bíceps e antebraço, cabelo curto RENTE
+  (como nas referências da pasta), calça cinza-escura, pés descalços com dedos. Texturas novas com brilho (`emissiveMap`):
+  `torso_kian` (as linhas douradas dos lados do pescoço, por cima dos ombros com setas, o V até o esterno, a faixa sob o
+  peitoral e a linha do abdômen; colunas de escrita escura; peito e gomos sombreados) e `arms_kian` (fileiras de escrita
+  clara cobrindo braços, mãos e pés, com anéis dourados). Rosto refeito (`face_desconjurado`): SEM barba fora da Transformação, o sigilo anguloso na testa abaixo do cabelo, o
+  traço dourado descendo do olho com o gancho e os três riscos escuros na diagonal (saíram o "KI AN" e a cruz), pele no
+  tom do corpo, lábios mais cheios.
+- **Transformação do Kian = Desconjuração → CALAMIDADE (pedido do usuário: "a barba cresce e ele fica mais
+  poderoso").** Era o despertar Invólucro do Conhecimento (`awakenMode`); agora é `maskTransform` cena `calamity`: concentra, a
+  escrita acende, a barba CRESCE (nenhuma → `prop_beard_m` → `prop_beard_f`:
+  malha que contorna a mandíbula das costeletas ao queixo, abaixo do lábio, com bigode — a boca continua à mostra), as faixas se enrolam nos
+  antebraços (`prop_wraps` com pontas soltas) e a luz dourada explode → forma `forms/kian_calamidade.js` (modelo
+  `kian_calamidade`): físico +20% e impossível de defender (`unblockableMelee`, o Invólucro do Conhecimento continua),
+  Impacto Sigilar 85, rituais +20%, mais rápido, Inexistir mais pesado, +100 de vida. Agarrão e fala de transformação.
+- **Guizo:** pele bronzeada (`#c98d64`, era clara e rosada), cabelo refeito (mechas com volume que descem do topo e
+  soltam as pontas, franja em pontas na testa, lados por cima das orelhas, espetos no alto inteiro, raiz preta); ombros arredondados da camiseta (antes quadrados) e manga que abre na barra, gola da camiseta e a gola
+  listrada da camisa de baixo aparecendo, barra da calça dobrada em cima do coturno.
+
 ## v3.16.1 — Sombras no P1 vs P2
 
 - Versão: `VERSION` 3.16.0 → **3.16.1**.

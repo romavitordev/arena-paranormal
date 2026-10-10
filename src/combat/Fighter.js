@@ -1928,7 +1928,7 @@ export class Fighter {
       otg: !!s.otg,
       high: fin && fin.high,
       spike: fin && fin.spike,
-      unblockable: !!this.findBuff('transcend') || this.buffs.some((b) => b.unblockable),
+      unblockable: !!this.findBuff('transcend') || !!this.def.unblockableMelee || this.buffs.some((b) => b.unblockable),
       dir, strike: s, sound: s.hitSound,
       color: s.impactFx === 'sigil' ? 0xffffff : undefined,
       scale: s.impactScale,

@@ -23,7 +23,7 @@ export const CHARACTER_NAMES = {
   guizo: 'Guizo',
 };
 
-export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto', jae_x: 'jae', colosso: 'dalmo', guizo_et: 'guizo' };
+export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto', jae_x: 'jae', colosso: 'dalmo', guizo_et: 'guizo', kian_calamidade: 'kian' };
 
 export const INTRO_IDS = Object.keys(CHARACTER_NAMES);
 const INTRO_HOOKS = {
@@ -1855,6 +1855,7 @@ export const BATTLE_DIALOGUES = {
     jae_x: 'Capuz no lugar. Agora você não vê o meu rosto.',
     colosso: 'Aí sim, neném!',
     guizo_et: 'Eu sou o que eu sempre quis encontrar!',
+    kian_calamidade: 'Eu fui Kushim. Eu sou Kian. Eu sou a Calamidade.',
   },
 };
 

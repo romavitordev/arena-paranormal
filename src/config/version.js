@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.16.1';
+export const VERSION = '3.16.2';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,16 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.16.2',
+    date: '2026-10-10',
+    title: 'Calamidade',
+    items: [
+      'Kian refeito a partir das artes: corpo forte, cabelo curto e rente, rosto novo sem barba (o sigilo brilhando na testa, o traço dourado descendo do olho e os três riscos na outra bochecha), braços, mãos e pés cobertos de escrita clara e as tatuagens luminosas do peito — as linhas que descem do pescoço pelas clavículas, o V até o esterno, a faixa sob o peitoral, as setas e as colunas de escrita.',
+      'Nova Transformação do Kian: de Desconjuração a CALAMIDADE — a escrita do corpo acende, a barba cresce, as faixas se enrolam nos antebraços e ele fica mais forte até o fim do round: golpes físicos mais fortes e impossíveis de defender, rituais e o Impacto Sigilar mais fortes, mais velocidade e mais vida.',
+      'Guizo com a pele bronzeada e o cabelo refeito como nas artes: espetado e bagunçado, vinho com a raiz preta, franja em pontas na testa. A camiseta ganhou ombros arredondados e a gola listrada aparecendo, e a calça a barra dobrada em cima do coturno.',
+    ],
+  },
   {
     v: '3.16.1',
     date: '2026-10-10',

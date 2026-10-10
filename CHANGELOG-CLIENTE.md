@@ -2,6 +2,11 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.16.2 — Calamidade
+- Kian refeito a partir das artes: corpo forte, cabelo curto e rente, rosto novo sem barba (o sigilo brilhando na testa, o traço dourado descendo do olho e os três riscos na outra bochecha), braços, mãos e pés cobertos de escrita clara e as tatuagens luminosas do peito — as linhas que descem do pescoço pelas clavículas, o V até o esterno, a faixa sob o peitoral, as setas e as colunas de escrita.
+- Nova Transformação do Kian: de Desconjuração a CALAMIDADE — a escrita do corpo acende, a barba cresce, as faixas se enrolam nos antebraços e ele fica mais forte até o fim do round: golpes físicos mais fortes e impossíveis de defender, rituais e o Impacto Sigilar mais fortes, mais velocidade e mais vida.
+- Guizo com a pele bronzeada e o cabelo refeito como nas artes: espetado e bagunçado, vinho com a raiz preta, franja em pontas na testa. A camiseta ganhou ombros arredondados e a gola listrada aparecendo, e a calça a barra dobrada em cima do coturno.
+
 ## v3.16.1 — Sombras no P1 vs P2
 - O "Shhh..." da Jae agora funciona no P1 vs P2: quem controla a Jae a vê como uma silhueta com um anel no chão da cor do jogador (antes ela sumia até para quem jogava com ela). Na mesma tela os dois veem a silhueta, e o que vale é o efeito: o adversário não se vira sozinho para ela, e o primeiro golpe dela sai como emboscada.
 - Online, a Jae some de verdade só na tela do adversário. Contra a CPU, ela continua quase invisível e a câmera não entrega mais onde ela está: fica no último lugar em que você a viu.

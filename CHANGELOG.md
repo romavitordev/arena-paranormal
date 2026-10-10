@@ -1,5 +1,15 @@
 # Changelog
 
+## v3.16.2 — 2026-10-10
+
+### Adicionado
+- Forma `kian_calamidade` (Transformação do Kian, cena `calamity` no maskTransform; `unblockableMelee` no Fighter).
+- Texturas `torso_kian` e `arms_kian` (com brilho).
+
+### Alterado
+- Modelo do Kian refeito (`char_kian.py`), rosto `face_desconjurado` refeito.
+- Guizo: pele, cabelo, ombros, gola e barra da calça.
+
 ## v3.16.1 — 2026-10-10
 
 ### Alterado

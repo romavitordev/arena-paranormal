@@ -170,12 +170,23 @@ export default {
     color: 0xffd88a,
   },
 
-  // DESPERTAR (Barra de Transformação cheia + vida baixa, segurando △) — cânone: o Invólucro do Conhecimento (textos pela pele, olhos amarelos) — o primeiro a transcender: os golpes atravessam a defesa. Até o fim do round.
+  // TRANSFORMAÇÃO (Barra cheia + vida baixa, segurando △): de Desconjuração a CALAMIDADE — a escrita do corpo acende, a
+  // BARBA CRESCE (rala → cheia), as faixas aparecem nos antebraços e ele vira o Kian de Calamidade até o fim do round
+  // (forms/kian_calamidade.js: golpes físicos atravessam a defesa — o Invólucro do Conhecimento — e tudo mais forte)
   awakening: {
-    name: 'Invólucro do Conhecimento',
-    banner: 'Invólucro do Conhecimento',
-    type: 'awakenMode',
-    mult: 1.15, unblockable: true, aura: 'sigil', color: 0xffd88a, heal: 0.1,
+    name: 'Kian de Calamidade',
+    banner: 'Calamidade',
+    type: 'maskTransform',
+    scene: 'calamity',
+    form: 'kian_calamidade',
+    formBanner: 'CALAMIDADE',
+    swap: [['beard_s', false], ['beard_m', false], ['beard_f', true], ['wraps', true]],
+    finalAnim: 'powerup',
+    tint: 0xffd27a,
+    sound: 'powerUp',
+    duration: 0, // até o fim do round
+    bonusHealth: 100,
+    color: 0xffd88a,
   },
 
   passives: [

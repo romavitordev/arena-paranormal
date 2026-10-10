@@ -257,6 +257,14 @@ export function addKianProps(rig) {
   blade.visible = false;
   rig.sockets.handR.add(blade);
   rig.props.fearBlade = blade;
+  // Desconjuração: barba rala, sem as faixas (elas e a barba cheia são da Transformação — Calamidade)
+  for (const [p, v] of [['beard_s', false], ['beard_m', false], ['beard_f', false], ['wraps', false]]) if (rig.props[p]) rig.showProp(p, v); // a barba rala é só pintada no rosto
+}
+
+// KIAN DE CALAMIDADE (Transformação): a barba cheia e as faixas nos antebraços
+export function addKianCalamidadeProps(rig) {
+  addKianProps(rig);
+  for (const [p, v] of [['beard_s', false], ['beard_m', false], ['beard_f', true], ['wraps', true]]) if (rig.props[p]) rig.showProp(p, v);
 }
 
 // KEMI / A FANTASMA: faca na mão direita, a Sniper Fantasma pendurada nas costas (vai para a mão no tiro) e o
