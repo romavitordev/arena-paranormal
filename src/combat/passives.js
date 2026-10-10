@@ -192,6 +192,8 @@ export const PASSIVES = {
   // Guizo (disfarce alienígena) — Leitura: a faca de Conhecimento LÊ o alvo a cada golpe (recebe mais dano por pouco
   // tempo); lido no Fighter
   mindRead: {},
+  // Kian — A Escrita (kianPowers.js): lido no Fighter e nos projéteis/rituais dele
+  kianScript: {},
   arenaBlows: {},
   // Colosso — Pressão Atmosférica das Manoplas: onda de pressão em todo soco; finalizador atordoa (lido em Fighter)
   atmosphericPressure: {},

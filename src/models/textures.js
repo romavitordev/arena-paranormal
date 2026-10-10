@@ -930,6 +930,8 @@ export const MATERIAL_TEXTURES = {
   }),
   shirt_lirio: () => canvasTex(512, 256, (g) => {
     g.fillStyle = '#2c4f8a'; g.fillRect(0, 0, 512, 256);
+    // o tubo do tronco vai do quadril ao pescoço: desenha "em pé" (y = 0 no pescoço)
+    g.translate(0, 256); g.scale(1, -1);
     // emblema branco no peito (frente = meio da textura): triângulo vazado com a "cabeça" dos Cinco
     g.fillStyle = '#e8eef4';
     g.beginPath(); g.moveTo(256, 54); g.lineTo(296, 128); g.lineTo(216, 128); g.closePath(); g.fill();
@@ -1109,7 +1111,7 @@ export const MATERIAL_TEXTURES = {
     mouth: { mouthW: 17, lip: 'rgba(70,36,30,0.75)' },
   }),
   // tronco do Dalmo: pele escura cheia de cicatrizes das arenas (aparece no Colosso, sem a camisa)
-  torso_dalmo: () => canvasTex(512, 256, (g) => {
+  skin_torso_dalmo: () => canvasTex(512, 256, (g) => {
     g.fillStyle = '#5a3a2a'; g.fillRect(0, 0, 512, 256);
     const sh = g.createLinearGradient(0, 0, 0, 256);
     sh.addColorStop(0, 'rgba(255,220,190,0.06)'); sh.addColorStop(1, 'rgba(0,0,0,0.25)');
@@ -1497,7 +1499,7 @@ export const MATERIAL_TEXTURES = {
   // DOURADAS que descem dos lados do pescoço, passam pelos ombros (setas), cruzam o peito em V até o esterno, uma faixa
   // sob o peitoral e a linha que desce pelo abdômen; colunas de escrita escura entre elas. O pescoço é o fim da textura
   // (o tubo do tronco vai do quadril ao pescoço): desenha de cabeça para baixo
-  torso_kian: () => {
+  skin_torso_kian: () => {
     // referências "desconjurado" / "desconjurado sério" / miniaturas: duas linhas paralelas de cada lado do pescoço que
     // descem até a clavícula e correm por cima dela até o ombro (seta na ponta); do ombro, a diagonal que cruza o
     // peitoral até o ESTERNO (o V, no meio do peito); a faixa sob o peitoral (setas nas pontas); as diagonais de baixo que

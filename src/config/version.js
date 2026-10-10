@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.16.2';
+export const VERSION = '3.16.3';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,16 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.16.3',
+    date: '2026-10-10',
+    title: 'A Escrita',
+    items: [
+      'Lírio refeito a partir das artes: cabelo loiro comprido jogado para trás com a mecha laranja, barba com costeletas, camisa azul de mangas rasgadas, o sobretudo azul-escuro aberto com pelo branco na gola, nas bordas e na barra, ombreiras e alças de couro, cinto de bolsinhas, a pata dourada, o rádio, o colar "Voytek", a luva com pelo, o pano laranja na mão, joelheiras e caneleiras de couro.',
+      'Kian ganhou A ESCRITA: cada golpe dele escreve no corpo do adversário e, com 5 marcas, a escrita detona — dano de Conhecimento que não dá para defender e um atordoamento curto (com 4 marcas e mais forte no Kian de Calamidade). O Impacto Sigilar virou uma onda de escrita dourada que deixa 2 marcas, o Teletransporte sem direção surge do lado do adversário já socando e cada pedra da Levitação deixa uma marca.',
+      'Correção: o peito nu do Kian e do Colosso ficava rosado sob a luz colorida das arenas.',
+    ],
+  },
   {
     v: '3.16.2',
     date: '2026-10-10',

@@ -20,6 +20,7 @@ import { orbit, twoShot } from '../camera/shots.js';
 import { splitDamage, specialHitFx } from './specials/common.js';
 import { GRAB_SCENES, FINISHERS } from './grabScenes.js';
 import { rollChaosShot, tickHostQuirks } from './chaos.js';
+import { inscribe } from './kianPowers.js';
 
 // estados em que o alvo continua "dentro do combo" (contadores de escala não zeram)
 const COMBO_STATES = new Set(['hitstun', 'stun', 'pulled', 'grabbed', 'ko', 'downed']);
@@ -1957,6 +1958,8 @@ export class Fighter {
     const pas = this.def.passives || [];
     const arena = pas.find((p) => p.type === 'arenaBlows');
     const press = pas.find((p) => p.type === 'atmosphericPressure');
+    // A ESCRITA (Kian): cada golpe físico deixa uma marca; no limite ela detona (kianPowers.js)
+    if (typeof res === 'number' && opp.state !== 'ko' && pas.some((p) => p.type === 'kianScript')) inscribe(this.world, this, opp, 1);
     // LEITURA (Guizo — disfarce alienígena): a faca de Conhecimento marca o alvo
     const read = pas.find((p) => p.type === 'mindRead');
     if (read && typeof res === 'number' && opp.state !== 'ko') {

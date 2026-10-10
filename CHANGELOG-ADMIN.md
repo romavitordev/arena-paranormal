@@ -1,5 +1,26 @@
 # Registro administrativo de alterações
 
+## v3.16.3 — A Escrita
+
+- Versão: `VERSION` 3.16.2 → **3.16.3**.
+
+- **Lírio refeito (referências da wiki: arte de Sinais do Outro Lado, miniatura, arte conceitual).** `char_lirio.py` novo:
+  tronco robusto próprio, mangas azuis RASGADAS no cotovelo (farrapos), antebraços com cicatrizes e ataduras, luva com
+  pelo e pata dourada (direita) e o pano laranja amarrado com as pontas (esquerda); sobretudo azul-escuro ABERTO e sem
+  mangas até a canela, com pelo contínuo na barra, nas bordas, na gola e nas cavas (antes eram "cordas" de pelo);
+  ombreiras de couro em camadas nos dois ombros, alças cruzando o peito, cinto com seis bolsinhas e fivela dourada, pata
+  dourada, rádio e o colar "Voytek"; joelheiras e caneleiras de couro com tiras, sapatos marrons; cabelo longo jogado
+  para trás com volume (mechas que descem da testa até a nuca e caem no ombro, mechas mais escuras, espetos no alto,
+  mechas na testa) e a mecha LARANJA; barba rente com costeletas e bigode. `shirt_lirio` desenhada "em pé" (o emblema e a
+  gola em V ficavam de cabeça para baixo).
+- **Poderes do Kian — A ESCRITA** (`src/combat/kianPowers.js`, passiva `kianScript`): cada golpe físico escreve uma
+  marca no adversário (a escrita brilha mais a cada marca); com 5 a escrita DETONA (45 de Conhecimento, não dá para
+  defender, atordoa 0,5 s); as marcas somem com 5 s sem marcar. O Impacto Sigilar virou uma ONDA DE ESCRITA (visual
+  `scriptWave`, deixa 2 marcas), o Teletransporte sem direção surge do lado dele já socando (34, 1 marca —
+  `blink.strike`) e cada pedra da Levitação marca. Calamidade: detona com 4 marcas (60, atordoa 0,7 s).
+- **Correção:** o tronco nu do Kian e do Colosso ficava roxo/rosa sob a luz das arenas (o material não era de pele) →
+  `skin_torso_kian` / `skin_torso_dalmo`.
+
 ## v3.16.2 — Calamidade
 
 - Versão: `VERSION` 3.16.1 → **3.16.2**.

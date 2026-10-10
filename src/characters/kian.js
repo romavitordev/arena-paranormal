@@ -62,7 +62,8 @@ export default {
     hitstun: 0.4,
     cooldown: 3.5,
     energyCost: 20,
-    visual: 'shockwave', // onda de energia gerada pelo corpo, não um objeto
+    visual: 'scriptWave', // uma ONDA DE ESCRITA: glifos dourados que avançam
+    onHit: { script: 2 }, // deixa duas marcas da Escrita
     color: 0xffd88a,
     sound: 'shockwave',
     hitSound: 'heavyPunch',
@@ -83,6 +84,7 @@ export default {
       vanishTime: 0.16,
       color: 0xffd88a,
       residue: 'sigil', // deixa sigilos dourados onde estava
+      strike: { range: 2.6, damage: 34, script: 1, anim: 'dash_punch' }, // sem direção: surge do lado dele já socando
     },
     {
       // cânone: "Kian consegue levitar e mover pequenos objetos apenas erguendo a sua mão" (substitui a
@@ -101,6 +103,7 @@ export default {
       speed: 24,
       range: 18,
       damage: 16, // por pedra (80 se todas acertarem)
+      script: 1, // cada pedra que acerta deixa uma marca da Escrita
       color: 0xffd88a,
     },
     {
@@ -191,5 +194,8 @@ export default {
 
   passives: [
     { type: 'precognition' }, // Precognição: não é pego desprevenido (sem bônus de costas nem "surpreso")
+    // A ESCRITA: o Conhecimento escreve no corpo de quem ele marca (os "Marcados"); cada golpe deixa uma marca e, com 5,
+    // a escrita detona — dano de Conhecimento que não dá para defender e um atordoamento curto (kianPowers.js)
+    { type: 'kianScript', max: 5, burst: 45, stun: 0.5, time: 5 },
   ],
 };

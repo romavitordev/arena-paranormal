@@ -25,7 +25,7 @@ sk = b.sk
 H = sk.h
 hz = sk['hips'].z
 
-torso_m = material('torso_kian', '#ffffff', 0.75)       # pele com as linhas douradas (textura + brilho)
+torso_m = material('skin_torso_kian', '#ffffff', 0.75)  # 'skin_': mantém o tom de pele sob a luz colorida das arenas       # pele com as linhas douradas (textura + brilho)
 arms_m = material('arms_kian', '#ffffff', 0.75)         # pele coberta de escrita que brilha
 skin = material('skin_kian', '#4e3426', 0.75)
 pants = material('pants_desc', '#3a3836', 0.9)

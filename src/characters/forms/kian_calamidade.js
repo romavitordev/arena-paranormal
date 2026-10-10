@@ -40,5 +40,7 @@ export default {
   ranged: { ...base.ranged, name: 'Impacto Sigilar de Calamidade', damage: 85, radius: 1.3, cooldown: 3 },
   abilities: base.abilities.map((a) => (a.damage ? { ...a, damage: Math.round(a.damage * 1.2) } : a)),
   special: { ...base.special, resistDamage: 520 },
+  // a Escrita de Calamidade: detona com 4 marcas e bem mais forte
+  passives: base.passives.map((p) => (p.type === 'kianScript' ? { ...p, max: 4, burst: 60, stun: 0.7 } : p)),
   awakening: undefined,
 };

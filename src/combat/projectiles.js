@@ -5,6 +5,7 @@ import { glowMat } from '../models/rig.js';
 import { knife, mutilatorAxe, baluAxe, demonMace } from '../models/weapons.js';
 import { createMistZone } from './abilities.js';
 import { addBloodPool } from './bloodPools.js';
+import { inscribe } from './kianPowers.js';
 
 const UP = new THREE.Vector3(0, 1, 0);
 
@@ -22,6 +23,26 @@ const VISUALS = {
     const ring = new THREE.Mesh(new THREE.TorusGeometry(0.5, 0.03, 6, 24), glowMat(0x9a94ae, 0.6));
     g.add(ring);
     g.userData.spin = ring;
+    return g;
+  },
+  // Impacto Sigilar (Kian): uma ONDA DE ESCRITA — fileiras de glifos dourados num arco que avança
+  scriptWave(color) {
+    const g = new THREE.Group();
+    const c = document.createElement('canvas');
+    c.width = 512; c.height = 128;
+    const x = c.getContext('2d');
+    const set = 'ᚠᚢᚦᚨᚱᚲᚷᚹᚺᚾᛁᛃᛇᛈᛉᛊᛏᛒᛖᛗᛚᛜᛞᛟ';
+    x.fillStyle = '#ffe6a8'; x.font = 'bold 40px serif';
+    for (let row = 0; row < 2; row++) for (let i = 0; i < 14; i++) x.fillText(set[(i * 7 + row * 3) % set.length], 8 + i * 36, 52 + row * 54);
+    const tex = new THREE.CanvasTexture(c);
+    const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide, color });
+    const text = new THREE.Mesh(new THREE.CylinderGeometry(0.95, 0.95, 0.55, 24, 1, true, -1.1, 2.2), mat);
+    text.rotation.x = Math.PI / 2;
+    text.rotation.z = Math.PI;
+    g.add(text);
+    const arc = new THREE.Mesh(new THREE.TorusGeometry(0.95, 0.05, 6, 24, Math.PI * 0.75), glowMat(color, 0.8));
+    arc.rotation.z = Math.PI * 0.125;
+    g.add(arc);
     return g;
   },
   // Invadir Mente (Guizo): a RAJADA MENTAL — o sigilo de Conhecimento (círculo, triângulo e o olho no meio) girando
@@ -391,6 +412,7 @@ export class Projectiles {
     if (a.onHit.stun) target.stun(a.onHit.stun, a.onHit.stunAnim || 'stagger');
     // aviso na tela de quem leva (ex.: Invadir Mente do Guizo: "OS CINCO! OS CINCO!" na cabeça do alvo)
     if (a.onHit.label) target.notify(a.onHit.label, true);
+    if (a.onHit.script) inscribe(w, p.owner, target, a.onHit.script); // Impacto Sigilar (Kian): marcas da Escrita
     if (a.onHit.distort) w.fx.distort(target.chestPos(), { color: a.color, radius: 1.4, life: 0.3 });
     if (a.onHit.impale) {
       // empalado: a lança atravessa e prende os pés no chão por um instante

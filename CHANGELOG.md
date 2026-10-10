@@ -1,5 +1,16 @@
 # Changelog
 
+## v3.16.3 — 2026-10-10
+
+### Adicionado
+- Passiva `kianScript` (A Escrita, `src/combat/kianPowers.js`), visual `scriptWave`, `blink.strike`, `onHit.script`, marcas na Levitação.
+
+### Alterado
+- Modelo do Lírio refeito (`char_lirio.py`); `shirt_lirio` desenhada na orientação certa.
+
+### Corrigido
+- Tronco nu do Kian/Colosso com material de pele (`skin_torso_*`): não fica mais tingido pela luz das arenas.
+
 ## v3.16.2 — 2026-10-10
 
 ### Adicionado

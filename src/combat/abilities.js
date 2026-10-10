@@ -8,6 +8,7 @@ import { DanteClone, CLONE, BloodZombie } from './npcs.js';
 import { buildHuntingDog } from '../models/dog.js';
 import { bloodCoat } from '../models/weapons.js';
 import { addBloodPool, poolsOf, splatGeo } from './bloodPools.js';
+import { inscribe } from './kianPowers.js';
 
 // Paga um custo em vida (rituais de Sangue) sem nunca se matar
 function payHealth(f, n) {
@@ -597,8 +598,18 @@ export const ABILITY_TYPES = {
         world.fx.ring(new THREE.Vector3(f.pos.x, 0.06, f.pos.z), { color: a.color, radius: 2.2, life: 0.35 });
         world.fx.burst(f.chestPos(), { count: 20, color: a.color, speed: 5, life: 0.35, size: 0.2 });
         f.anim.play('idle', { restart: true, blend: 0.05 });
+        // a.strike (Kian): surge do lado do adversário já socando
+        if (a.strike && opp && opp.state !== 'ko' && distXZ(f.pos, opp.pos) - opp.radius <= a.strike.range) {
+          f.anim.play(a.strike.anim || 'dash_punch', { restart: true, duration: 0.3 });
+          world.audio.play('swing');
+          world.after(0.12, () => {
+            if (opp.state === 'ko' || opp.isInvulnerable() || distXZ(f.pos, opp.pos) - opp.radius > a.strike.range + 0.4) return;
+            const r = applyHit(world, f, opp, { damage: a.strike.damage, kind: 'ability', element: f.def.element, knockback: 1.6, hitstun: 0.45, sound: 'heavyPunch', color: a.color, scale: 1.2, dir: new THREE.Vector3().subVectors(opp.pos, f.pos).setY(0).normalize() });
+            if (typeof r === 'number' && a.strike.script) inscribe(world, f, opp, a.strike.script);
+          });
+        }
       });
-      tl.end(a.vanishTime + 0.15);
+      tl.end(a.vanishTime + (a.strike ? 0.45 : 0.15));
       return seqFrom(tl, { cancel: () => f.setVisible(true), cancelable: () => tl.time > a.vanishTime + 0.02 });
     },
   },
@@ -648,7 +659,8 @@ export const ABILITY_TYPES = {
             if (Math.random() < 0.5) world.fx.burst(m.position, { count: 1, color: col, speed: 0.2, life: 0.25, size: 0.08 });
             const c = opp.chestPos();
             if (opp.state !== 'ko' && !opp.isInvulnerable() && m.position.distanceTo(c) < 0.75) {
-              applyHit(world, f, opp, { damage: a.damage, kind: 'ability', element: f.def.element, knockback: 0.8, hitstun: 0.28, sound: 'impact', color: col, scale: 0.8, dir: u.vel.clone().setY(0).normalize() });
+              const hitRes = applyHit(world, f, opp, { damage: a.damage, kind: 'ability', element: f.def.element, knockback: 0.8, hitstun: 0.28, sound: 'impact', color: col, scale: 0.8, dir: u.vel.clone().setY(0).normalize() });
+              if (typeof hitRes === 'number' && a.script) inscribe(world, f, opp, a.script); // cada pedra deixa uma marca da Escrita
               u.done = true;
             } else if (u.life <= 0 || m.position.y < 0.05) u.done = true;
             if (u.done) {

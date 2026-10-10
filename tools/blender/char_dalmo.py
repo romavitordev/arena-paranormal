@@ -57,7 +57,7 @@ iron = material('iron_colosso', '#6c6460', 0.35, metal=0.85)  # o ferro escuro d
 M = {
     'skin': skin,
     'face': material('face_dalmo', '#ffffff', 0.75),
-    'torso': material('torso_dalmo', '#ffffff', 0.75),  # pele com cicatrizes (textura) — à mostra no Colosso
+    'torso': material('skin_torso_dalmo', '#ffffff', 0.75),  # pele com cicatrizes (textura) — à mostra no Colosso
     'hand': skin,
 }
 

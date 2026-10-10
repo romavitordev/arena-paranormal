@@ -2,6 +2,11 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.16.3 — A Escrita
+- Lírio refeito a partir das artes: cabelo loiro comprido jogado para trás com a mecha laranja, barba com costeletas, camisa azul de mangas rasgadas, o sobretudo azul-escuro aberto com pelo branco na gola, nas bordas e na barra, ombreiras e alças de couro, cinto de bolsinhas, a pata dourada, o rádio, o colar "Voytek", a luva com pelo, o pano laranja na mão, joelheiras e caneleiras de couro.
+- Kian ganhou A ESCRITA: cada golpe dele escreve no corpo do adversário e, com 5 marcas, a escrita detona — dano de Conhecimento que não dá para defender e um atordoamento curto (com 4 marcas e mais forte no Kian de Calamidade). O Impacto Sigilar virou uma onda de escrita dourada que deixa 2 marcas, o Teletransporte sem direção surge do lado do adversário já socando e cada pedra da Levitação deixa uma marca.
+- Correção: o peito nu do Kian e do Colosso ficava rosado sob a luz colorida das arenas.
+
 ## v3.16.2 — Calamidade
 - Kian refeito a partir das artes: corpo forte, cabelo curto e rente, rosto novo sem barba (o sigilo brilhando na testa, o traço dourado descendo do olho e os três riscos na outra bochecha), braços, mãos e pés cobertos de escrita clara e as tatuagens luminosas do peito — as linhas que descem do pescoço pelas clavículas, o V até o esterno, a faixa sob o peitoral, as setas e as colunas de escrita.
 - Nova Transformação do Kian: de Desconjuração a CALAMIDADE — a escrita do corpo acende, a barba cresce, as faixas se enrolam nos antebraços e ele fica mais forte até o fim do round: golpes físicos mais fortes e impossíveis de defender, rituais e o Impacto Sigilar mais fortes, mais velocidade e mais vida.
