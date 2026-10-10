@@ -2,8 +2,7 @@
 LÍRIO TELLINI — public/models/lirio.glb
 Referências (wiki Lírio_Tellini): a arte de Sinais do Outro Lado, a miniatura, a arte conceitual e as miniaturas de
 combate com a Leonora. Os Cinco, "a parede". 1,85 m, alto e robusto, pele clara.
-Cabelo loiro LONGO até o ombro, o alto jogado para trás com volume, uma mecha LARANJA; barba aparada com a costeleta
-maior. Camisa azul de gola em V amarrada, mangas rasgadas na altura do cotovelo; antebraços com cicatrizes e ataduras.
+Cabelo loiro LONGO até o ombro, o alto jogado para trás com volume, uma mecha LARANJA; barba RALA (só pintada no rosto). Camisa azul de gola em V amarrada, mangas rasgadas na altura do cotovelo; antebraços com cicatrizes e ataduras.
 Sobretudo azul-escuro comprido, ABERTO, sem mangas, com pelo branco na gola, nas cavas, nas bordas da frente e na barra.
 Por cima: ombreiras de couro em camadas nos dois ombros, alças de couro cruzando o peito, o cinto cheio de bolsinhas,
 a pata dourada, o rádio com o nome dele e o colar militar "Voytek". Luva marrom com faixa azul, pelo e a pata dourada na
@@ -43,7 +42,6 @@ silver = material('dogtag_silver', '#b8b8c0', 0.3, metal=0.9)
 hairm = material('hair_lirio', '#b88f3e', 0.55)
 hair_dk = material('hair_lirio_dk', '#8a6a2a', 0.6)
 streak = material('hair_orange', '#d0702a', 0.55)
-beardm = material('beard_lirio', '#9a7634', 0.7)
 wrap = material('bandage', '#e0d6c0', 0.9)
 radio = material('radio_black', '#232326', 0.5)
 
@@ -345,21 +343,6 @@ for gam in (0.42, 0.5, 0.58):
 b.add('hair_streak', merge(*st), streak, region='head', subdiv=0)
 
 
-# barba aparada rente com as COSTELETAS maiores (contorna a mandíbula, abaixo do lábio)
-def beard_pt(u, v):
-    a = (u - 0.5) * math.pi * 1.3
-    side = abs(math.sin(a))
-    top_z = hc.z - 0.1 * H + side ** 1.3 * 0.11 * H
-    bot_z = hc.z - 0.16 * H + side * 0.05 * H
-    z = top_z + (bot_z - top_z) * v
-    k = max(0.25, 1 - ((hc.z - z) / (0.17 * H)) ** 2) ** 0.5
-    rx = HR[0] * (0.8 + 0.18 * k) + 0.006 * H
-    ry = HR[1] * (0.74 + 0.2 * k) + 0.006 * H
-    return Vector((hc.x + math.sin(a) * rx, hc.y - math.cos(a) * ry, z))
-
-
-b.add('beard', grid(beard_pt, 28, 5), beardm, region='head', subdiv=0)
-mus = [rod([Vector((s_ * 0.004 * H, hc.y - 0.147 * H, hc.z - 0.058 * H)), Vector((s_ * 0.034 * H, hc.y - 0.138 * H, hc.z - 0.068 * H))], [0.007 * H, 0.006 * H], 5) for s_ in (1, -1)]
-b.add('mustache', merge(*mus), beardm, region='head', subdiv=0)
+# sem barba de malha: só a barba RALA pintada no rosto (face_lirio)
 
 b.export(OUT)

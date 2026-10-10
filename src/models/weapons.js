@@ -534,8 +534,9 @@ export function barbedBat() {
 }
 
 // LEONORA (Lírio): marreta de madeira enorme. Cabeça em forma de tambor (eixo em Z: as faces batem para a
-// frente/trás do golpe), cintas de ferro, duas fileiras de espinhos de madeira em volta e a PATA dourada nas
-// duas faces (como na arte). Cabo comprido com empunhadura de couro e colar de ferro. Feita para parecer pesada.
+// frente/trás do golpe) feita de tábuas, cintas de ferro com espinhos curtos de METAL cravados, a PATA dourada nas
+// duas faces e um tufo de pelo branco no encaixe (a arte da wiki). Cabo comprido com faixa preta enrolada,
+// empunhadura de couro e colar de ferro. Feita para parecer pesada.
 export function leonora() {
   const g = new THREE.Group();
   const woodDark = 0x6a4224;
@@ -554,6 +555,13 @@ export function leonora() {
     wrapRing.position.y = -0.1 + i * 0.05;
     g.add(wrapRing);
   }
+  // faixa preta enrolada no meio do cabo (a arte)
+  for (let i = 0; i < 8; i++) {
+    const w2 = part(new THREE.TorusGeometry(0.035, 0.007, 4, 10), 0x141214, { outline: false });
+    w2.rotation.x = Math.PI / 2 + (i % 2 ? 0.3 : -0.3);
+    w2.position.y = -0.42 + i * 0.035;
+    g.add(w2);
+  }
   const pommel = part(new THREE.CylinderGeometry(0.045, 0.04, 0.05, 10), iron);
   pommel.position.y = 0.2;
   g.add(pommel);
@@ -564,8 +572,8 @@ export function leonora() {
   const head = new THREE.Group();
   head.position.y = -0.88;
   g.add(head);
-  const R = 0.19;
-  const L = 0.42;
+  const R = 0.17;
+  const L = 0.46;
   const drum = part(new THREE.CylinderGeometry(R, R, L, 18), woodHead);
   drum.rotation.x = Math.PI / 2; // eixo do tambor em Z
   head.add(drum);
@@ -588,18 +596,29 @@ export function leonora() {
     band.position.z = z;
     head.add(band);
   }
-  // espinhos de madeira em volta (duas fileiras alternadas)
-  for (let row = 0; row < 2; row++) {
-    const z = row ? 0.07 : -0.07;
+  // tábuas do barril (frisos escuros ao longo do comprimento)
+  for (let i = 0; i < 14; i++) {
+    const a = (i / 14) * Math.PI * 2;
+    const plank = part(new THREE.BoxGeometry(0.006, 0.006, L - 0.07), 0x4a2c14, { outline: false });
+    plank.position.set(Math.cos(a) * (R + 0.001), Math.sin(a) * (R + 0.001), 0);
+    head.add(plank);
+  }
+  // espinhos CURTOS de metal cravados nas duas cintas (a arte da wiki)
+  for (const z of [L / 2 - 0.03, -L / 2 + 0.03]) {
     for (let i = 0; i < 12; i++) {
-      const a = (i / 12) * Math.PI * 2 + (row ? Math.PI / 12 : 0);
-      const len = 0.12 + ((i * 7 + row * 3) % 5) * 0.012;
-      const spike = part(new THREE.ConeGeometry(0.016, len, 5), 0xd2b07a);
-      spike.position.set(Math.cos(a) * (R + len / 2 - 0.01), Math.sin(a) * (R + len / 2 - 0.01), z);
+      const a = (i / 12) * Math.PI * 2;
+      const len = 0.055;
+      const spike = part(new THREE.ConeGeometry(0.013, len, 5), 0xc8c8cc, { mat: toon(0xc8c8cc, { emissive: 0x18181c }) });
+      spike.position.set(Math.cos(a) * (R + 0.012 + len / 2), Math.sin(a) * (R + 0.012 + len / 2), z);
       spike.rotation.z = a - Math.PI / 2;
       head.add(spike);
     }
   }
+  // tufo de pelo branco no encaixe do cabo
+  const tuft = part(new THREE.SphereGeometry(0.055, 10, 8), 0xe8e4dc);
+  tuft.scale.set(1.1, 0.7, 1.1);
+  tuft.position.y = R + 0.02;
+  head.add(tuft);
   // PATA dourada nas duas faces: almofada + 4 dedos
   for (const sz of [1, -1]) {
     const paw = new THREE.Group();

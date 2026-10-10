@@ -2,6 +2,10 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.16.4 — A Marreta Leonora
+- Lírio sem barba cheia: agora só a barba rala, como nas artes.
+- Leonora refeita a partir da arte da wiki: cabeça de barril de tábuas com cintas de ferro, espinhos curtos de metal cravados nas cintas, a pata dourada nas duas faces, tufo de pelo branco no encaixe e o cabo com faixa preta enrolada.
+
 ## v3.16.3 — A Escrita
 - Lírio refeito a partir das artes: cabelo loiro comprido jogado para trás com a mecha laranja, barba com costeletas, camisa azul de mangas rasgadas, o sobretudo azul-escuro aberto com pelo branco na gola, nas bordas e na barra, ombreiras e alças de couro, cinto de bolsinhas, a pata dourada, o rádio, o colar "Voytek", a luva com pelo, o pano laranja na mão, joelheiras e caneleiras de couro.
 - Kian ganhou A ESCRITA: cada golpe dele escreve no corpo do adversário e, com 5 marcas, a escrita detona — dano de Conhecimento que não dá para defender e um atordoamento curto (com 4 marcas e mais forte no Kian de Calamidade). O Impacto Sigilar virou uma onda de escrita dourada que deixa 2 marcas, o Teletransporte sem direção surge do lado do adversário já socando e cada pedra da Levitação deixa uma marca.

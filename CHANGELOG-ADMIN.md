@@ -1,5 +1,16 @@
 # Registro administrativo de alterações
 
+## v3.16.4 — A Marreta Leonora
+
+- Versão: `VERSION` 3.16.3 → **3.16.4**.
+
+- **Lírio sem barba cheia** (pedido: "só uma barba rala"): `char_lirio.py` perdeu a malha de barba, o bigode e o
+  material `beardm`; fica só a barba rala pintada em `face_lirio`. `lirio.glb` reconstruído.
+- **Leonora refeita** (`leonora()` em `src/models/weapons.js`, arte da wiki "Marreta de Lírio"): cabeça um pouco mais
+  comprida e estreita (R 0.19 → 0.17, L 0.42 → 0.46) com frisos de tábuas; as duas fileiras de espinhos de MADEIRA viraram
+  espinhos curtos de METAL cravados nas cintas de ferro; tufo de pelo branco no encaixe do cabo; faixa preta enrolada no
+  meio do cabo. Pata dourada e `userData.head` mantidos (só visual, sem mudança de alcance ou dano).
+
 ## v3.16.3 — A Escrita
 
 - Versão: `VERSION` 3.16.2 → **3.16.3**.

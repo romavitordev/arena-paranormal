@@ -1,5 +1,11 @@
 # Changelog
 
+## v3.16.4 — 2026-10-10
+
+### Alterado
+- `char_lirio.py`: sem a malha de barba/bigode (só a barba rala pintada em `face_lirio`).
+- `leonora()` (`src/models/weapons.js`): barril de tábuas, espinhos de metal nas cintas, tufo de pelo, faixa preta no cabo.
+
 ## v3.16.3 — 2026-10-10
 
 ### Adicionado

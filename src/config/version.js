@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.16.3';
+export const VERSION = '3.16.4';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,15 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.16.4',
+    date: '2026-10-10',
+    title: 'A Marreta Leonora',
+    items: [
+      'Lírio sem barba cheia: agora só a barba rala, como nas artes.',
+      'Leonora refeita a partir da arte da wiki: cabeça de barril de tábuas com cintas de ferro, espinhos curtos de metal cravados nas cintas, a pata dourada nas duas faces, tufo de pelo branco no encaixe e o cabo com faixa preta enrolada.',
+    ],
+  },
   {
     v: '3.16.3',
     date: '2026-10-10',
