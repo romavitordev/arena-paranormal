@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.17.0';
+export const VERSION = '3.17.1';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,17 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.17.1',
+    date: '2026-10-10',
+    title: 'Retoques no elenco II',
+    items: [
+      'Juan: cabelo castanho LONGO e bagunçado até os ombros, com a franja desfiada caindo sobre o olho perdido, o meio rabo preso atrás e o lado esquerdo raspado; manto vermelho com a barra e as bordas esfiapadas e a manga direita comprida até o punho.',
+      'Juan e o Diabo: a pele do tronco não fica mais desbotada pela luz colorida das arenas (agora tem o mesmo tom dos braços).',
+      'Dante: o xale cinza agora envolve os ombros e cai pela frente como um poncho, e as tatuagens dos braços e do pescoço ficaram densas como nas artes (manchas e espirais).',
+      'Erin: o cabelo ruivo virou mechas onduladas até os ombros, com fios mais claros e as pontas virando para fora.',
+    ],
+  },
   {
     v: '3.17.0',
     date: '2026-10-10',

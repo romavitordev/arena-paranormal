@@ -97,14 +97,33 @@ b.add('watch', merge(tube([(wl.x, wl.y, wl.z, 0.05, 0.05), (wl.x, wl.y, wl.z + 0
 
 # ---------------- cabelo ruivo até os ombros, com mechas mais claras
 b.add('hair_cap', hair_cap((hc.x, hc.y + 0.006, hc.z + 0.012), (0.146 * H, 0.156 * H, 0.168 * H), front=0.26, side=0.5, back=0.66), hairm, region='head')
-hr = [(hc.z + 0.06, 0.15 * H, 0.16 * H), (hc.z - 0.04, 0.158 * H, 0.164 * H), (hc.z - 0.14, 0.168 * H, 0.16 * H), (hc.z - 0.24, 0.17 * H, 0.15 * H)]
-b.add('hair_back', open_tube(hr, gap=0.2, seg=24, cy=0.02), hairm, region='head')
+# mechas onduladas do alto da cabeça até os ombros, pelos lados e por trás (o rosto fica livre), com as pontas virando
+# para fora e algumas mechas mais claras
+HC = Vector((hc.x, hc.y + 0.006, hc.z + 0.012))
+HR = (0.146 * H, 0.156 * H, 0.168 * H)
+
+
 random.seed(11)
-for i in range(14):
-    a = math.pi * 0.25 + (i / 13) * math.pi * 1.5  # dos lados e de trás (rosto livre)
-    root = Vector((hc.x + math.sin(a) * 0.15 * H, hc.y - math.cos(a) * 0.155 * H, hc.z - 0.17))
-    tip = root + Vector((math.sin(a) * 0.03, -math.cos(a) * 0.03, -0.08 - random.random() * 0.05))
-    b.add(f'ends{i}', cone(tuple(root), tuple(tip), 0.04, 6), hair_hi if i % 3 == 0 else hairm, region='head', subdiv=0)
+locks, lights = [], []
+for i in range(24):
+    u = i / 23
+    # lados e costas: a = ângulo em volta da cabeça (0 = frente); pula a frente do rosto
+    a = math.pi * 0.32 + u * math.pi * 1.36
+    top = HC + Vector((math.sin(a) * HR[0] * 0.55, -math.cos(a) * HR[1] * 0.55, HR[2] * 0.95))
+    mid = HC + Vector((math.sin(a) * HR[0] * 1.08, -math.cos(a) * HR[1] * 1.08, 0.0))
+    o = Vector((math.sin(a), -math.cos(a), 0))
+    ln = random.uniform(0.27, 0.33) * H
+    pts, rad = [], []
+    for k in range(9):
+        t = k / 8
+        q = top.lerp(mid, min(1.0, t * 2.2)) if t < 0.45 else mid + Vector((0, 0, -ln * (t - 0.45) / 0.55))
+        wave = math.sin(t * math.pi * 3 + i) * 0.012 * H * t
+        q = q + o * (wave + max(0.0, t - 0.8) * 0.18 * H)  # as pontas viram para fora
+        pts.append(q)
+        rad.append((0.03 - 0.022 * t ** 1.5) * H)
+    (lights if i % 4 == 1 else locks).append(tube([(q.x, q.y, q.z, r, r) for q, r in zip(pts, rad)], 6))
+b.add('hair_locks', merge(*locks), hairm, region='head', subdiv=0)
+b.add('hair_light', merge(*lights), hair_hi, region='head', subdiv=0)
 # franja repartida de lado, caindo pela testa e emoldurando o rosto
 for i in range(5):
     x = 0.08 - i * 0.03

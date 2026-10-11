@@ -1276,7 +1276,7 @@ export const MATERIAL_TEXTURES = {
     brow: { angry: 3, thick: 4.5, color: '#3a2412' },
     mouth: { mouthW: 17, smile: 5, smirk: 3, lip: 'rgba(150,60,60,0.4)' },
   }),
-  torso_juan: () => canvasTex(512, 256, (g) => {
+  skin_torso_juan: () => canvasTex(512, 256, (g) => {
     g.fillStyle = '#d8a888'; g.fillRect(0, 0, 512, 256);
     // frases sombrias tatuadas (como as dos Escriptas), menos no peito esquerdo (x entre 256 e 330 na frente)
     g.fillStyle = 'rgba(25,20,24,0.8)'; g.font = '10px serif';
@@ -1326,7 +1326,7 @@ export const MATERIAL_TEXTURES = {
     brow: { angry: 9, thick: 6, color: '#3a0606' },
     mouth: { mouthW: 0, smile: 0 },
   }),
-  torso_diabo: () => {
+  skin_torso_diabo: () => {
     const sigils = (g, color) => {
       g.fillStyle = color; g.font = '15px serif';
       // sorteio com semente: a cor (map) e o brilho (emissiveMap) caem exatamente nos mesmos lugares
@@ -1653,14 +1653,19 @@ export const MATERIAL_TEXTURES = {
     const ink = 'rgba(22,16,18,0.85)';
     // pontilhado denso (como nas artes) com espirais e rosas de linhas
     g.fillStyle = ink;
-    for (let i = 0; i < 5200; i++) {
+    // manchas GRAÚDAS e irregulares (de longe a arte lê como pele de onça), com o pontilhado fino entre elas
+    for (let i = 0; i < 1500; i++) {
       const x = Math.random() * 512, y = Math.random() * 512;
-      if ((Math.sin(x * 0.05) + Math.cos(y * 0.04)) < -0.3) continue; // deixa respiros de pele
-      g.beginPath(); g.arc(x, y, 0.8 + Math.random() * 1.6, 0, Math.PI * 2); g.fill();
+      if ((Math.sin(x * 0.05) + Math.cos(y * 0.04)) < -0.6) continue; // deixa respiros de pele
+      g.beginPath(); g.ellipse(x, y, 2.5 + Math.random() * 4, 1.8 + Math.random() * 3, Math.random() * Math.PI, 0, Math.PI * 2); g.fill();
     }
-    g.strokeStyle = ink; g.lineWidth = 2.2;
-    for (let k = 0; k < 16; k++) {
-      const cx = 30 + Math.random() * 452, cy = 30 + Math.random() * 452, sc = 1 + Math.random() * 1.6;
+    for (let i = 0; i < 2600; i++) {
+      const x = Math.random() * 512, y = Math.random() * 512;
+      g.beginPath(); g.arc(x, y, 0.7 + Math.random() * 1.1, 0, Math.PI * 2); g.fill();
+    }
+    g.strokeStyle = ink; g.lineWidth = 3;
+    for (let k = 0; k < 18; k++) {
+      const cx = 30 + Math.random() * 452, cy = 30 + Math.random() * 452, sc = 1.8 + Math.random() * 1.6;
       g.beginPath();
       for (let t = 0; t < 16; t += 0.15) g.lineTo(cx + Math.cos(t) * t * sc, cy + Math.sin(t) * t * sc);
       g.stroke();

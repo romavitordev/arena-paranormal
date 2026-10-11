@@ -1,5 +1,27 @@
 # Registro administrativo de alterações
 
+## v3.17.1 — Retoques no elenco II
+
+- Versão: `VERSION` 3.17.0 → **3.17.1**.
+
+- Continuação da análise da v3.17.0 (pedido: "pode seguir com as upds"), agora com Dante, Juan, Erin e Xande.
+- **Juan** (`char_juan.py`, arte "juan normal"): o cabelo era uma calota com um rabo em tubo e uma "placa" de franja.
+  Agora: 26 mechas da testa até a nuca caindo nas costas (o lado esquerdo pulado), mechas da têmpora direita até o
+  ombro, franja desfiada mais comprida sobre o olho esquerdo, meio rabo preso no alto de trás com a amarra vermelha e o
+  raspado escuro atrás da orelha esquerda (`on_skull` cola a peça no crânio). Manto: manga direita inteira até o punho
+  (abrindo), tiras esfiapadas na barra (`TEAR`) e nas bordas da abertura.
+- **Pele do tronco** do Juan e do Diabo: `torso_juan`/`torso_diabo` caíam na categoria CLOTH (sem "skin" no nome) e
+  eram tingidas pela luz da arena — ficavam rosadas/desbotadas ao lado dos braços. Renomeadas para `skin_torso_*`
+  (texturas e materiais), como já tinha sido feito com o Kian e o Colosso. O `maskTransform` continua achando os
+  materiais pelo sufixo `_juan`.
+- **Dante** (`char_dante.py`, "dante corpo inteiro desenho"): o xale ficava quase todo atrás; `GAP` 0.13 → 0.075 e
+  `cloak_len` com a frente bem mais curta (cobre o peito e para na barriga, os braços saem por baixo). `skin_dante`:
+  manchas graúdas irregulares + pontilhado + espirais maiores (de longe lia como pontinhos soltos).
+- **Erin** (`char_erin.py`): `hair_back` (tubo aberto) + 14 cones trocados por 24 mechas onduladas do alto da cabeça
+  até os ombros, pontas virando para fora, uma em cada quatro no ruivo claro.
+- **Xande**: o modelo já segue a descrição da wiki (não há imagens dele na pasta); o cabelo loiro-escuro fica rosado só
+  sob a luz roxa do Cemitério. **Kaiser**: já fiel às referências. Sem mudanças nos dois.
+
 ## v3.17.0 — Retoques no elenco
 
 - Versão: `VERSION` 3.16.4 → **3.17.0**.

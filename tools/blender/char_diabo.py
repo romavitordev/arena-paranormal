@@ -7,7 +7,7 @@ Referência: wiki (Juan / O Diabo / Trono do Diabo) e a arte do trono. O que pre
   - QUATRO braços com garras (o par de baixo sai das costelas, bem visível);
   - pernas de BODE (coxa de pelo, jarrete dobrado para trás, canela fina, casco fendido) com bocas dentadas na tíbia;
   - rosto do Juan com o sorriso enorme, piercings e o olho faltando; capuz vermelho rasgado e correntes no torso;
-  - BOCA VERTICAL em relevo do peito ao ventre (malha); símbolo de Sangue e Sigilos dourados na textura torso_diabo.
+  - BOCA VERTICAL em relevo do peito ao ventre (malha); símbolo de Sangue e Sigilos dourados na textura skin_torso_diabo.
 Todas as espessuras em frações de H (o construtor NÃO escala arm_r/leg_r sozinho).
 """
 import sys, os, math, random
@@ -26,7 +26,7 @@ skin = material('skin_diabo', '#a01818', 0.7)
 M = {
     'skin': skin,
     'face': material('face_diabo', '#ffffff', 0.7),
-    'torso': material('torso_diabo', '#ffffff', 0.7),  # símbolo de Sangue, boca vertical, sigilos dourados
+    'torso': material('skin_torso_diabo', '#ffffff', 0.7),  # símbolo de Sangue, boca vertical, sigilos dourados
     'arm': skin,
     'armR': material('arms_diabo', '#ffffff', 0.7),  # Sigilos de Conhecimento dourados (onde o Juan tinha tatuagens)
     'legs': material('goat_fur', '#3a1210', 0.95),

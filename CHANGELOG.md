@@ -1,5 +1,15 @@
 # Changelog
 
+## v3.17.1 — 2026-10-10
+
+### Alterado
+- `char_juan.py`: cabelo em mechas (`hair_pt`/`strand`), franja sobre o olho esquerdo, meio rabo, raspado (`undercut` projetado no crânio); manga direita até o punho; tiras esfiapadas na barra e nas bordas do manto.
+- `char_dante.py`: xale com abertura menor (`GAP` 0.13 → 0.075) e frente curta (poncho); `skin_dante` com manchas graúdas e espirais maiores.
+- `char_erin.py`: cabelo de trás em mechas onduladas no lugar do tubo + cones.
+
+### Corrigido
+- Troncos do Juan e do Diabo com material de pele (`skin_torso_juan`, `skin_torso_diabo`): não ficam mais tingidos pela luz das arenas.
+
 ## v3.17.0 — 2026-10-10
 
 ### Alterado

@@ -2,6 +2,12 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.17.1 — Retoques no elenco II
+- Juan: cabelo castanho LONGO e bagunçado até os ombros, com a franja desfiada caindo sobre o olho perdido, o meio rabo preso atrás e o lado esquerdo raspado; manto vermelho com a barra e as bordas esfiapadas e a manga direita comprida até o punho.
+- Juan e o Diabo: a pele do tronco não fica mais desbotada pela luz colorida das arenas (agora tem o mesmo tom dos braços).
+- Dante: o xale cinza agora envolve os ombros e cai pela frente como um poncho, e as tatuagens dos braços e do pescoço ficaram densas como nas artes (manchas e espirais).
+- Erin: o cabelo ruivo virou mechas onduladas até os ombros, com fios mais claros e as pontas virando para fora.
+
 ## v3.17.0 — Retoques no elenco
 - Katana do Joui refeita a partir das artes: lâmina curva com o hamon claro e ondulado e a ponta kissaki, tsuba vermelha octogonal, habaki dourado e cabo branco com o trançado vermelho em losangos. A bainha ganhou laca preta curva, ponteira de metal e o cordão vermelho enrolado.
 - Joui: o capuz caído nas costas agora aparece de verdade, grande e com a borda vermelha.

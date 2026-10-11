@@ -55,13 +55,15 @@ b.add('shawl_roll', tube([(0, 0.0, top - 0.04 * H, 0.13 * H, 0.12 * H), (0, -0.0
                           (0, 0.0, top + 0.05 * H, 0.122 * H, 0.112 * H), (0, 0.004, top + 0.075 * H, 0.098 * H, 0.09 * H)], 24), shawl, region='torso')
 # MANTO: o xale grande que cobre ombros e braços e cai até os joelhos (aberto na frente), com dobras
 K_TX, K_TY = b.k_tx, b.k_ty
-GAP = 0.13  # abertura da frente (fração da volta)
+GAP = 0.075  # abertura da frente (fração da volta) — o xale envolve os ombros e cai pela frente como um poncho
 SEG, ROWS = 56, 16
 
 
 def cloak_len(a):
     # mais comprido atrás e nos lados; as pontas da frente um pouco mais curtas
-    return (0.88 - 0.16 * max(0.0, math.cos(a)) ** 2) * H
+    # comprido atrás e nos lados (até o joelho); na frente as pontas cobrem o peito e param na barriga, deixando os
+    # braços saírem por baixo (a arte de corpo inteiro)
+    return (0.88 - 0.5 * max(0.0, math.cos(a)) ** 1.5) * H
 
 
 def cloak_pt(a, v, out=1.0):
