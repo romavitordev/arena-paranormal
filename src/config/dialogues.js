@@ -21,9 +21,11 @@ export const CHARACTER_NAMES = {
   jae: 'Jae',
   dalmo: 'Dalmo',
   guizo: 'Guizo',
+  o_diabo: 'O Diabo',
+  magistrada: 'A Magistrada',
 };
 
-export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto', jae_x: 'jae', colosso: 'dalmo', guizo_et: 'guizo', kian_calamidade: 'kian' };
+export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto', jae_x: 'jae', colosso: 'dalmo', guizo_et: 'guizo', kian_calamidade: 'kian', juan_odio: 'juan' };
 
 export const INTRO_IDS = Object.keys(CHARACTER_NAMES);
 const INTRO_HOOKS = {
@@ -48,6 +50,8 @@ const INTRO_HOOKS = {
   jae: 'o punhal X',
   dalmo: 'esses punhos',
   guizo: 'uma faca e uma câmera',
+  o_diabo: 'um pacto',
+  magistrada: 'a Máscara do Desespero',
 };
 
 const INTRO_OPENERS = {
@@ -72,6 +76,8 @@ const INTRO_OPENERS = {
   jae: (other, hook) => `${other}... trouxe ${hook}? Shh. Vamos brincar de esconde-esconde.`,
   dalmo: (other, hook) => `${other}, eu sou grande, mas não sou dois. Vem com ${hook} que eu te mostro a arena.`,
   guizo: (other, hook) => `Mano, é ${other} de verdade! Tô gravando — vem com ${hook} que isso vai pro site!`,
+  o_diabo: (other, hook) => `${other}... eu sei o que você quer. Vim te oferecer ${hook}. O preço a gente discute depois.`,
+  magistrada: (other, hook) => `${other}. Eu já sei por que você veio. ${hook[0].toUpperCase() + hook.slice(1)} lembra de tudo.`,
 };
 
 const INTRO_REPLIES = {
@@ -96,6 +102,8 @@ const INTRO_REPLIES = {
   jae: (other, hook) => `Que fofo, ${other}. Só ${hook}? Não grita, tá?`,
   dalmo: (other, hook) => `${hook}? Já apanhei de coisa pior na arena, ${other}. Segura aí.`,
   guizo: (other, hook) => `${hook}? ...Tá, eu tô com um pouco de medo. Mas a câmera tá ligada, ${other}!`,
+  o_diabo: (other, hook) => `${hook}? Que gracinha, ${other}. Todo mundo traz alguma coisa. Ninguém traz o suficiente.`,
+  magistrada: (other, hook) => `${hook}... Saber tudo tem um preço, ${other}. Você ainda não pagou o seu.`,
 };
 
 const INTRO_EXCHANGES = {
@@ -158,6 +166,22 @@ const INTRO_EXCHANGES = {
   'kaiser+xande': [
     { starter: 'xande', line: 'Kaiser, Cinerária? Eu também sei mexer com essa névoa aí.', response: 'kaiser', responseLine: 'Então me conta, Xande: a sua também tem cheiro de lanche queimado?' },
     { starter: 'kaiser', line: 'Xande, ainda mistura skate e ritual como se fosse a coisa mais normal do mundo?', response: 'xande', responseLine: 'É normal pra mim, mano. Você que precisa sair um pouco da névoa.' },
+  ],
+  'kian+magistrada': [
+    { starter: 'magistrada', line: 'Kian. O Equilíbrio já te conteve uma vez.', response: 'kian', responseLine: 'E eu já sei como essa contenção termina, Magistrada.' },
+    { starter: 'kian', line: 'A Máscara sabe tudo. Então sabe o que eu vou fazer.', response: 'magistrada', responseLine: 'Sei. Por isso eu vim.' },
+  ],
+  'joui+magistrada': [
+    { starter: 'magistrada', line: 'Joui Jouki. Você prendeu um dos nossos.', response: 'joui', responseLine: 'E você selou a minha espada. Estamos quites?' },
+    { starter: 'joui', line: 'As sombras de vocês já me ensinaram muito.', response: 'magistrada', responseLine: 'As sombras não ensinam. Elas lembram.' },
+  ],
+  'arnaldo+magistrada': [
+    { starter: 'arnaldo', line: 'A senhora de novo! Da última vez, me deu uma visão e um relógio que não para.', response: 'magistrada', responseLine: 'Eu te disse que a Relíquia já tinha te encontrado, Arnaldo.' },
+    { starter: 'magistrada', line: 'Arnaldo. A Energia ainda vibra no seu bolso.', response: 'arnaldo', responseLine: 'E a plateia adora um bom suspense, minha cara.' },
+  ],
+  'juan+o_diabo': [
+    { starter: 'o_diabo', line: 'Juan. Você ainda carrega o meu trono nas costas.', response: 'juan', responseLine: 'Eu carrego o que eu quiser. Hoje eu vim ver de perto quem me ofereceu o começo.' },
+    { starter: 'juan', line: 'Você me deu um novo começo. Agora quero saber o preço inteiro.', response: 'o_diabo', responseLine: 'O preço é você, Juan. Sempre foi.' },
   ],
   'guizo+xande': [
     { starter: 'xande', line: 'Gui! O cumprimento antes, né? Senão dá azar.', response: 'guizo', responseLine: 'Óbvio! Depois eu te bato. Com carinho. E gravando.' },
@@ -1774,6 +1798,106 @@ const VICTORY_GUIZO = {
 };
 for (const [w, m] of Object.entries(VICTORY_GUIZO)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
 
+// O DIABO (Portadores das Relíquias): falas de vitória dele contra cada um e de cada um contra ele
+const VICTORY_DIABO = {
+  o_diabo: {
+    kaiser: ['A névoa esconde tudo. Menos o que você deseja, Kaiser.', 'Cinzas e flores. Eu prefiro sangue.'],
+    arthur: ['Um braço de sangue, Cervero? Eu tenho quatro.', 'Você paga rituais com a própria vida. Que cliente fiel.'],
+    joui: ['Rápido. Mas ninguém é mais rápido que um desejo.', 'A katana corta. O pacto amarra.'],
+    aghata: ['Sangue de vampira tem gosto de promessa, Aghata.', 'Você leu sobre mim. Ler não protege ninguém.'],
+    dante: ['A Morte é paciente. Eu não preciso ser.', 'Lodo e espirais... e mesmo assim você sangra.'],
+    erin: ['Explosões, que barulho. O sangue é mais silencioso.', 'Caos é divertido. Até ele assinar comigo.'],
+    gal_sal: ['Justiça? Eu só faço negócios, Gal.', 'Correntes eu tenho dentro das veias.'],
+    kian: ['Você previu isso? Então aceitou o pacto.', 'Conhecimento não é proteção, Kian. É preço.'],
+    aguiar: ['A caçada acabou. O caçador virou cliente.', 'Machado bonito. Meu sangue é mais afiado.'],
+    labirinto: ['Labirintos têm saída. Pactos, não.', 'Todo corredor leva até mim.'],
+    xande: ['Gladiador? Eu já tive arenas inteiras de joelhos.', 'Lealdade é uma moeda ótima, Xande.'],
+    lirio: ['A parede caiu, Lírio. A Leonora também.', 'Força bruta. Eu prefiro força de vontade quebrada.'],
+    ferreiro: ['Outro Portador. A Morte devia escolher melhor.', 'Santo Berço fica longe daqui, Ferreiro.'],
+    dalmo: ['Pela Manu, você disse. Eu ouvi. Eu sempre ouço.', 'Grande, forte... e com um desejo tão simples.'],
+    jae: ['Shh. Eu também sei fazer silêncio.', 'Seu X não esconde o que você quer, Jae.'],
+    kemi: ['Contratos são minha especialidade, Kemi.', 'Uma bala só. Meu pacto dura para sempre.'],
+    juan: ['Você voltou para o trono, Juan. Todos voltam.', 'Um novo começo? Eu te dei. Agora cobro.'],
+    balu: ['Que fome, Balu. Eu também tenho.', 'O tio Balu aguenta tudo. Menos um bom acordo.'],
+    arnaldo: ['Bravo, Arnaldo. Mas o meu espetáculo tem plateia eterna.', 'Relíquia contra Relíquia. O sangue sempre ganha a cena.'],
+    verissimo: ['Olhos abertos, Veríssimo. Eu gosto de ser visto.', 'Escreve no relatório: ele aceitou.'],
+    guizo: ['Grava isso, garoto: o pacto ao vivo.', 'Uma faca e uma câmera. Que oferta modesta.'],
+  },
+  kaiser: { o_diabo: ['Nenhum pacto passa pela névoa.', 'Fica com as suas ofertas. Eu fico com a minha vida.'] },
+  arthur: { o_diabo: ['Já paguei com sangue demais. Você não leva mais nada.', 'O Diabo também sangra. Bom saber.'] },
+  joui: { o_diabo: ['Eu não tenho nada para negociar.', 'Recusado. Com a katana.'] },
+  aghata: { o_diabo: ['Eu li o seu contrato inteiro. Tinha letra miúda.', 'Sangue contra Sangue. O meu é mais teimoso.'] },
+  dante: { o_diabo: ['A Morte manda lembranças, Diabo.', 'Que peça curta. O Diabo saiu antes do fim.'] },
+  erin: { o_diabo: ['Boom! Pacto cancelado!', 'Diabo, você explodiu lindo.'] },
+  gal_sal: { o_diabo: ['Sentença dada. Nenhum pacto a anula.', 'Justiça não aceita propina.'] },
+  kian: { o_diabo: ['Eu sabia que você ia oferecer. E sabia a resposta.', 'Previsto. Recusado.'] },
+  aguiar: { o_diabo: ['Ha ha... até o Diabo vira presa.', 'Peguei um chifrudo. Que troféu.'] },
+  labirinto: { o_diabo: ['Você se perdeu nos corredores, Diabo.', 'Nem o Diabo acha a saída.'] },
+  xande: { o_diabo: ['Por eles. Nenhum pacto vale mais.', 'Gladiador um, Diabo zero!'] },
+  lirio: { o_diabo: ['Leonora, tu viu? A gente bateu no Diabo!', 'Que asa estranha. Caiu igual a todo mundo.'] },
+  ferreiro: { o_diabo: ['Uma Relíquia a menos para o Santo Berço temer.', 'A Morte pesa mais que o Sangue.'] },
+  dalmo: { o_diabo: ['Aí sim, neném! Derrubei o Diabo!', 'Grande você. Maior eu.'] },
+  jae: { o_diabo: ['Shh. Até o Diabo cala.', 'Seu pacto não tem a minha assinatura.'] },
+  kemi: { o_diabo: ['Contrato fechado. Alvo: o Diabo.', 'Uma bala. Nenhum acordo.'] },
+  juan: { o_diabo: ['Eu não preciso mais de você.', 'O começo agora é meu, Diabo.'] },
+  balu: { o_diabo: ['Hahaha! Diabo nenhum segura o tio Balu!', 'Deu ruim pro capeta, hein!'] },
+  arnaldo: { o_diabo: ['E o Diabo sai de cena! Aplausos!', 'Relíquia por Relíquia, a minha é mais divertida.'] },
+  verissimo: { o_diabo: ['Entidade de Sangue neutralizada. Relatório amanhã.', 'Olhos abertos. Pacto recusado.'] },
+  guizo: { o_diabo: ['EU DERRUBEI O DIABO! Isso tá gravado!', 'Mano... era o Diabo. E eu ganhei!'] },
+};
+for (const [w, m] of Object.entries(VICTORY_DIABO)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
+
+// A MAGISTRADA (Portadores das Relíquias): falas de vitória dela contra cada um e de cada um contra ela
+const VICTORY_MAGISTRADA = {
+  magistrada: {
+    kaiser: ['A névoa esconde de você. Não de mim.', 'Eu sabia onde você estaria, Kaiser. Sempre soube.'],
+    arthur: ['O sangue cobra, Cervero. O Equilíbrio também.', 'Um braço, uma escolha. As duas eu já conhecia.'],
+    joui: ['As sombras eram minhas antes de serem suas.', 'Você nunca esteve fora da vista da Máscara, Joui.'],
+    aghata: ['Seu grimório tem as perguntas. Eu tenho as respostas.', 'Ler não é saber, menina.'],
+    dante: ['A Morte é previsível. O tempo também.', 'Eu lembro de como essa peça acaba, Dante.'],
+    erin: ['O Caos é a única coisa que eu não leio. Você não é o Caos.', 'Barulho não muda o que já foi escrito.'],
+    gal_sal: ['Justiça e Equilíbrio não são a mesma coisa, Gal.', 'Suas correntes eram previsíveis.'],
+    kian: ['Desta vez, a contenção se manteve.', 'Você previu. Eu sabia. Saber vence.'],
+    aguiar: ['A presa sempre soube do caçador, Aguiar.', 'O seu desejo é barulhento demais.'],
+    labirinto: ['Eu conheço todos os corredores. Desde o começo.', 'Não há labirinto para quem lembra do caminho.'],
+    xande: ['Coragem é bonita. Também é previsível.', 'Os Cinco ainda têm muito a perder.'],
+    lirio: ['A parede caiu, como eu lembrava.', 'Força sem saber é só peso.'],
+    ferreiro: ['A Morte devia escolher melhor os seus receptáculos.', 'Santo Berço continua em pé. Por enquanto.'],
+    dalmo: ['Pela Manu. Eu sei. Eu sempre soube.', 'O tamanho não pesa na balança.'],
+    jae: ['Shh. Eu também ouço o silêncio.', 'Você se esconde nas sombras. Elas me obedecem.'],
+    kemi: ['Eu sei de onde vem cada bala, Kemi.', 'Um contrato é só uma promessa. Eu sou a Arauta delas.'],
+    juan: ['O Equilíbrio não se negocia, Juan.', 'Seu novo começo eu já tinha visto.'],
+    balu: ['Calma, senhor Balu. Era só o Equilíbrio.', 'A sua força é real. O meu saber também.'],
+    arnaldo: ['O espetáculo acabou, Arnaldo. Como eu disse que acabaria.', 'Senhorita Dicionário venceu, viu?'],
+    verissimo: ['Olhos abertos não bastam, Veríssimo.', 'A Ordo esquece. A Máscara lembra.'],
+    guizo: ['Pode gravar. Eu apago depois.', 'Ninguém vai lembrar desse vídeo, Guizo.'],
+    o_diabo: ['Pactos também têm regras. Eu sou a Executora delas.', 'O Sangue se curva ao Conhecimento.'],
+  },
+  kaiser: { magistrada: ['Nem a Máscara viu a névoa chegar.', 'Saber tudo e mesmo assim cair.'] },
+  arthur: { magistrada: ['A senhora sabia o final? Então devia ter desviado.', 'Equilíbrio restaurado. Do meu jeito.'] },
+  joui: { magistrada: ['Eu aprendi com as sombras de vocês.', 'Agora estamos quites, Magistrada.'] },
+  aghata: { magistrada: ['Uma página que você não leu.', 'Eu encontrei a resposta antes de você.'] },
+  dante: { magistrada: ['Nem quem lembra de tudo escapa do relógio.', 'Que peça. A Máscara caiu no fim.'] },
+  erin: { magistrada: ['Caos, Magistrada! Isso você não leu, né?', 'Boom! Equilíbrio desequilibrado!'] },
+  gal_sal: { magistrada: ['Sentença dada. Até para quem sabe tudo.', 'Justiça também alcança as Máscaras.'] },
+  kian: { magistrada: ['De novo, Magistrada. Como da outra vez.', 'Eu sabia que você ia tentar me conter.'] },
+  aguiar: { magistrada: ['Ha ha... a Máscara mais bonita da minha coleção.', 'Até quem sabe tudo vira presa.'] },
+  labirinto: { magistrada: ['Você lembrava do caminho. Eu sou o caminho.', 'Perdida entre os meus corredores.'] },
+  xande: { magistrada: ['Por eles! Nem a Relíquia passa por cima disso.', 'Saber não é tudo, moça.'] },
+  lirio: { magistrada: ['A parede ficou de pé, Magistrada!', 'Leonora não lê o futuro. Ela só bate.'] },
+  ferreiro: { magistrada: ['A Morte pesa mais que o saber.', 'Santo Berço não precisa de Máscaras.'] },
+  dalmo: { magistrada: ['Aí sim! Derrubei quem sabe tudo!', 'Grande você não é. Eu sou.'] },
+  jae: { magistrada: ['Shh. Nem a Máscara ouviu eu chegar.', 'As sombras gostam mais de mim.'] },
+  kemi: { magistrada: ['Um tiro. Ela sabia, e não adiantou.', 'Contrato fechado. Máscara no chão.'] },
+  juan: { magistrada: ['Ha! O Equilíbrio sangra, viu?', 'Nem o Conhecimento segura um novo começo.'] },
+  balu: { magistrada: ['Desculpa, senhora! Mas a briga era justa!', 'Ê! Nem a Máscara aguenta o tio Balu!'] },
+  arnaldo: { magistrada: ['Senhorita Dicionário, fim de ato!', 'Uma reviravolta que nem a senhora previu!'] },
+  verissimo: { magistrada: ['Relíquia de Conhecimento contida. Relatório amanhã.', 'Olhos abertos, Magistrada. Inclusive os seus.'] },
+  guizo: { magistrada: ['EU DERRUBEI A MAGISTRADA! E tá gravado!', 'Mano... a Seita das Máscaras inteira vai me caçar.'] },
+  o_diabo: { magistrada: ['Regras são feitas para pactos, Magistrada.', 'O Conhecimento também tem um preço.'] },
+};
+for (const [w, m] of Object.entries(VICTORY_MAGISTRADA)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
+
 export const VICTORY_FALLBACKS = {
   kaiser: 'A névoa não escolheu por mim. Desta vez, eu fiquei.',
   arthur: 'Acabou. Agora posso garantir que ninguém mais se machuque.',
@@ -1796,6 +1920,8 @@ export const VICTORY_FALLBACKS = {
   jae: 'Shh. Acabou.',
   dalmo: 'Pela Manu. Sempre pela Manu.',
   guizo: 'Gravado. Isso é real e eu tenho provas!',
+  o_diabo: 'Assinado. Ninguém lê as letras miúdas.',
+  magistrada: 'O Equilíbrio foi mantido. Tá tudo tão quieto agora.',
 };
 
 export const BATTLE_DIALOGUES = {
@@ -1821,6 +1947,8 @@ export const BATTLE_DIALOGUES = {
     jae: 'Sangrando? Ótimo. Agora eu tô acordada.',
     dalmo: 'Eu já levantei de coisa pior. A plateia quer mais.',
     guizo: 'Tá doendo... tá doendo muito... mas não para de gravar!',
+    o_diabo: 'Sangue derramado é sangue que eu bebo. Continue.',
+    magistrada: 'Eu já vi este momento. Ele não termina aqui.',
     anfitriao: 'Essa dor combina com você. Não sei por quê; combina.',
   },
   special: {
@@ -1845,6 +1973,8 @@ export const BATTLE_DIALOGUES = {
     jae: 'Shh. Não grita.',
     dalmo: 'Agora você vai ver por que me chamam de Colosso.',
     guizo: 'Sorria! Você tá no Registro do Outro Lado!',
+    o_diabo: 'Eu vim te oferecer um pacto.',
+    magistrada: 'Venha. Aqui ficam só nós dois.',
     anfitriao: 'Eu ia deixar você sair andando. Aí você me olhou com essa cara.',
   },
   transform: {
@@ -1856,6 +1986,7 @@ export const BATTLE_DIALOGUES = {
     colosso: 'Aí sim, neném!',
     guizo_et: 'Eu sou o que eu sempre quis encontrar!',
     kian_calamidade: 'Eu fui Kushim. Eu sou Kian. Eu sou a Calamidade.',
+    juan_odio: 'Eu não quero morrer... eu quero um novo começo.',
   },
 };
 
@@ -1882,6 +2013,8 @@ export const BATTLE_REPLIES = {
     jae: 'Shh... só mais um pouquinho.',
     dalmo: 'Aguenta firme. Ainda falta o último round.',
     guizo: 'Calma, calma... respira e enquadra, Guizo.',
+    o_diabo: 'Ferido, eu fico com mais fome.',
+    magistrada: 'Isso também estava escrito.',
     anfitriao: 'Sua coragem é comovente. Quase tanto quanto essa estratégia.',
   },
   special: {
@@ -1906,6 +2039,8 @@ export const BATTLE_REPLIES = {
     jae: 'Grita mais alto. Eu gosto.',
     dalmo: 'Pode vir. Eu sou grande, mas não sou dois.',
     guizo: 'Isso foi INCRÍVEL! Você pode fazer de novo? A luz tava ruim.',
+    o_diabo: 'Que oferta generosa. Eu aceito... e cobro depois.',
+    magistrada: 'As sombras não prendem quem as conhece.',
     anfitriao: 'Vai, capricha. Quero uma história boa pra contar quando você cair.',
   },
   transform: {
@@ -1930,11 +2065,13 @@ export const BATTLE_REPLIES = {
     jae: 'Fantasia nova? A minha tem capuz.',
     dalmo: 'Bonito. O meu escafandro é maior.',
     guizo: 'Mano, que transformação! Fica parado, deixa eu focar!',
+    o_diabo: 'Mudou de pele. O desejo é o mesmo.',
+    magistrada: 'Uma nova forma. O Equilíbrio é o mesmo.',
     anfitriao: 'Isso era pra me assustar? Eu já vi coisa mais convincente no espelho.',
   },
 };
 
-const DIALOGUE_BASE_IDS = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi' };
+const DIALOGUE_BASE_IDS = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', juan_odio: 'juan' };
 
 export function battleLines(speakerId, opponentId, event) {
   const lines = BATTLE_DIALOGUES[event];

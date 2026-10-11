@@ -219,8 +219,10 @@ export class Fighter {
     const dealt = Math.min(cap, Math.max(0, n));
     this.health -= dealt;
     this.dmgTaken = (this.dmgTaken || 0) + dealt; // total da partida (a IA que aprende mede o resultado das ações por ele)
-    // Barra de Transformação: enche com o dano recebido (só na forma base de quem transforma)
-    if (this.def.awakening && !this.baseForm) this.storm = Math.min(100, this.storm + (dealt / this.maxHealth) * 100 * COMBAT.storm.fillPerHealth);
+    // Barra de Transformação: enche com o dano recebido (na forma base de quem transforma, ou numa forma com SEGUNDO
+    // estágio — awakening.chain, ex.: Juan no Ódio do Diabo → Portador do Trono; awakening.fill acelera)
+    const aw = this.def.awakening;
+    if (aw && (!this.baseForm || aw.chain)) this.storm = Math.min(100, this.storm + (dealt / this.maxHealth) * 100 * COMBAT.storm.fillPerHealth * (this.baseForm ? aw.fill ?? 1 : 1));
     // a barra de esquivas recupera conforme toma dano
     // (zerou as esquivas há pouco: o dano não conta até passar COMBAT.dodge.emptyLockout)
     if (this.dodgeLockout <= 0) this.dodgeDmgAcc += dealt;
@@ -2861,7 +2863,7 @@ export class Fighter {
   // transformação (mesmos tipos de especial: devilPact, ghostBands, santoPact) e ela só fica disponível assim.
   canTransform() {
     const aw = this.def.awakening;
-    if (!aw || this.baseForm || this.health <= 0) return false;
+    if (!aw || (this.baseForm && !aw.chain) || this.health <= 0) return false;
     return this.storm >= 100 && (this.health <= this.maxHealth * COMBAT.storm.healthRatio || this.trainingAwaken);
   }
 

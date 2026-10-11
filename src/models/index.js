@@ -1,4 +1,4 @@
-import { addKaiserProps, addArthurProps, addJouiProps, addAghataProps, addGalSalProps, addKianProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps, addFerreiroProps, addJuanProps, addKemiProps, addFantasmaProps, addBaluProps, addErinCaosProps, addLabirintoElmoProps, addAguiarMutiladorProps, addArnaldoProps, addAnfitriaoProps, addVerissimoProps, addJaeProps, addJaeXProps, addDalmoProps, addColossoProps, addGuizoProps, addGuizoETProps, addKianCalamidadeProps } from './props.js';
+import { addKaiserProps, addArthurProps, addJouiProps, addAghataProps, addGalSalProps, addKianProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps, addFerreiroProps, addJuanProps, addKemiProps, addFantasmaProps, addBaluProps, addErinCaosProps, addLabirintoElmoProps, addAguiarMutiladorProps, addArnaldoProps, addAnfitriaoProps, addVerissimoProps, addJaeProps, addJaeXProps, addDalmoProps, addColossoProps, addGuizoProps, addGuizoETProps, addKianCalamidadeProps, addJuanOdioProps, addMagistradaProps } from './props.js';
 import { loadGLB, rigFromGLB } from './glbRig.js';
 import { preloadNpcModels } from './npcRig.js';
 
@@ -24,6 +24,7 @@ const BLENDER_MODELS = {
   deus_morte: { url: 'models/deus_morte.glb', props: null }, // forma de chefe (sem armas)
   juan: { url: 'models/juan.glb', props: addJuanProps },
   diabo: { url: 'models/diabo.glb', props: null }, // Portador do Trono (garras)
+  magistrada: { url: 'models/magistrada.glb', props: addMagistradaProps }, // A Magistrada (Relíquia de Conhecimento) e a bengala
   kemi: { url: 'models/kemi.glb', props: addKemiProps },
   fantasma: { url: 'models/fantasma.glb', props: addFantasmaProps }, // forma das Faixas
   balu: { url: 'models/balu.glb', props: addBaluProps }, // Antônio "Balu" Pontevedra (Machado Lancinante)
@@ -43,6 +44,7 @@ const MODEL_VARIANTS = {
   jae_x: { base: 'jae', props: addJaeXProps }, // capuz do X
   colosso: { base: 'dalmo', props: addColossoProps }, // o escafandro e as Manoplas
   guizo_et: { base: 'guizo', props: addGuizoETProps },
+  juan_odio: { base: 'juan', props: addJuanOdioProps }, // Ódio do Diabo: garras de sangue, capuz e o olho vermelho
   kian_calamidade: { base: 'kian', props: addKianCalamidadeProps }, // a barba cheia e as faixas // Distorcer Aparência: o disfarce alienígena
 };
 

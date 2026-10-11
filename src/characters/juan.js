@@ -1,8 +1,10 @@
 // JUAN (Henri) (id: juan) — Escripta da Desconjuração que, em Hexatombe, fez um pacto com o Diabo para virar Marcado e
 // ser "livre". Agitado, sorriso perturbador, obcecado por sangue, masoquista. Afinidade com Sangue.
 // Kit do cânone: Faca Predadora (absorve sangue e cura), Descarnar Discente, Perturbação Discente, Vínculo de Sangue e
-// Armadura de Sangue Diabólica. Especial: RENASCIMENTO — como no fim de Hexatombe, sobe no Trono do Diabo e vira O PORTADOR DO TRONO
-// até o fim do round (uma vez por partida).
+// Armadura de Sangue Diabólica. DUAS transformações (pedido do usuário): 1) ÓDIO DO DIABO — corta o braço, o sangue
+// vira garras, puxa o capuz e o olho acende (forma juan_odio); 2) dentro dela, RENASCIMENTO — como no fim de
+// Hexatombe, sobe no Trono do Diabo e vira O PORTADOR DO TRONO até o fim do round. O Diabo também é lutador separado
+// (o_diabo, Portadores das Relíquias).
 export default {
   id: 'juan',
   name: 'JUAN',
@@ -13,8 +15,8 @@ export default {
   energyColor: 0xc01828,
   info: {
     weapon: 'Faca Predadora (lâmina ondulada que absorve sangue)',
-    style: 'Cortes rápidos que curam, rituais de Sangue e o pacto que o transforma no Diabo',
-    identity: 'Masoquista e imprevisível: quanto mais apanha, mais sanidade; quase morto, senta no Trono e vira o Diabo',
+    style: 'Cortes rápidos que curam, rituais de Sangue e duas transformações: o Ódio do Diabo e o Trono',
+    identity: 'Masoquista e imprevisível: quanto mais apanha, mais sanidade; quase morto, o ódio vira garras — e depois o Trono',
     tagline: 'Eu não quero morrer... eu quero um novo começo.',
   },
   stats: { moveSpeed: 7.6, attackSpeed: 0.92 }, // estava rápido demais (64%+ de vitórias): mais lento e combos mais cadenciados,
@@ -152,21 +154,27 @@ export default {
     length: 3.0,
   },
 
-  // TRANSFORMAÇÃO (Barra de Transformação cheia + vida baixa, segurando △): o Trono do Diabo sobe do chão, o Juan
-  // senta e vira O DIABO até o fim do round (+150 de vida)
+  // TRANSFORMAÇÃO 1 (Barra de Transformação cheia + vida baixa, segurando △): ÓDIO DO DIABO — corta o próprio braço,
+  // o sangue sobe e vira garras, puxa o capuz e o olho acende (+80 de vida). Dentro dessa forma a Barra volta a encher
+  // para a TRANSFORMAÇÃO 2, o Renascimento no Trono (forms/juan_odio.js → forms/diabo.js).
   awakening: {
-    name: 'Renascimento',
-    banner: 'Renascimento',
-    type: 'devilPact',
-    form: 'diabo',
-    duration: 0,
-    bonusHealth: 150,
+    name: 'Ódio do Diabo',
+    banner: 'Ódio do Diabo',
+    type: 'maskTransform',
+    scene: 'hate',
+    form: 'juan_odio',
+    formBanner: 'ÓDIO',
+    swap: [['bloodHand', true], ['knife', false], ['hoodUp', true], ['hateEye', true]],
+    tint: 0xff1a30,
+    sound: 'powerUp',
+    duration: 0, // até o fim do round
+    bonusHealth: 80,
     color: 0xc01828,
   },
 
   passives: [
     { type: 'lifesteal', ratio: 0.1 }, // Faca Predadora: cura 10% do dano dos cortes (era 15%)
-    { type: 'masochist', ratio: 0.08 }, // Masoquista: apanhar devolve sanidade (0,12 → 0,08: chegava rápido demais ao Renascimento)
+    { type: 'masochist', ratio: 0.08 }, // Masoquista: apanhar devolve sanidade (0,12 → 0,08: chegava rápido demais à transformação)
     { type: 'bloodHardens', threshold: 400, ability: 'armaduraSangueDiabolica' }, // a cada 400 de dano recebido, a armadura nasce sozinha (60% do tempo, gasta a recarga)
   ],
 };

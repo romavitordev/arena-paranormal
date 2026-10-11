@@ -19,6 +19,7 @@ import { MATERIAL_TEXTURES } from '../../models/textures.js';
 //             'gasmask' (Erin, que NÃO é Mascarada: ajoelha rindo com a mão no rosto, ergue-se levando a máscara de gás
 //             ao rosto; verde no lugar do vermelho — referências do usuário)
 //             'hood' (Jae → X: puxa o capuz, sorri e o rosto some com o X; sp.swap troca as peças do capuz)
+//             'hate' (Juan → Ódio do Diabo: corta o braço, o sangue vira garras, puxa o capuz e o olho acende)
 //             'watch' (Arnaldo → O Anfitrião: tira o relógio de bolso, abre a tampa, a Relíquia de Energia brilha lá
 //             dentro e ele ergue o relógio; a Energia toma o corpo em roxo, rosa e azul)
 //             omitido: concentra e o acessório aparece
@@ -205,6 +206,43 @@ export const maskTransform = {
       tl.add(1.5, () => world.audio.play('shhh', { volume: 1 }));
       tl.add(2.15, () => maskOn(true));
       total = 3.0;
+    } else if (scene === 'hate') {
+      // JUAN — ÓDIO DO DIABO (a arte "pose ultimate"): 1) ri baixo e corta o próprio antebraço com a Faca Predadora ·
+      // 2) o sangue jorra e SOBE pelo braço, endurecendo nas garras (a faca cai e some no sangue) · 3) puxa o capuz
+      // vermelho sobre a cabeça · 4) o olho que restou acende em vermelho e o ódio toma a cena
+      const hand = () => f.rig.sockets.handR.getWorldPosition(new THREE.Vector3());
+      f.anim.play('knife_1', { restart: true, duration: 0.5 });
+      lightTo = 3;
+      world.cameraRig.playShots([
+        socketClose(f, hand, { dur: 1.0, dist: 1.3, side: 0.4 }),
+        faceClose(f, { dur: 1.0, from: 1.5, to: 1.1, side: -0.2, height: hy - 0.08, fov: 34 }),
+        lowAngle(f, { dur: 1.0, dist: 2.8, side: 0.7 }),
+      ]);
+      tl.add(0.2, () => world.showBanner(sp.banner || sp.name, f.def.color));
+      tl.add(0.3, () => {
+        world.audio.play('bladeHit', { volume: 0.9, pitch: 0.8 });
+        world.fx.burst(hand(), { count: 40, color: 0xb00018, speed: 3.5, life: 0.6, size: 0.16, gravity: 6 });
+      });
+      let veins = null;
+      tl.add(0.55, () => {
+        f.anim.play('concentrate', { restart: true, duration: 0.6 });
+        veins = world.fx.emitter({ rate: 70, follow: () => hand().lerp(f.rig.joints.eR.getWorldPosition(new THREE.Vector3()), Math.random()), particle: { color: 0xc01020, speed: 0.6, up: 0.4, spread: 0.2, life: 0.4, size: 0.13 } });
+        scrap.push(() => veins && veins.stop());
+      });
+      tl.add(1.05, () => {
+        for (const [p, v] of sp.swap || []) if (['bloodHand', 'knife'].includes(p) && f.rig.props[p]) f.rig.showProp(p, v);
+        world.fx.flash(hand(), { color: 0xff1a30, size: 1.4, life: 0.18 });
+        world.fx.burst(hand(), { count: 30, color: 0x9a0010, speed: 4, life: 0.5, size: 0.18 });
+        world.audio.play('clawHit', { volume: 0.8, pitch: 0.7 });
+        veins && veins.stop();
+      });
+      tl.add(1.35, () => {
+        f.anim.play('hood_pull', { restart: true, duration: 0.6 });
+        world.audio.play('swing', { volume: 0.5, pitch: 0.7 });
+      });
+      tl.add(1.7, () => { if (f.rig.props.hoodUp) f.rig.showProp('hoodUp', true); });
+      tl.add(2.0, () => maskOn(true));
+      total = 2.9;
     } else if (scene === 'calamity') {
       // KIAN — de Desconjuração a CALAMIDADE: 1) concentra, a escrita do corpo acende · 2) a BARBA CRESCE em duas etapas
       // (rala → média → cheia), com um clarão dourado a cada uma · 3) as faixas se enrolam nos antebraços · 4) a luz

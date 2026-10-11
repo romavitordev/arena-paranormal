@@ -1,5 +1,19 @@
 # Changelog
 
+## v3.18.0 — 2026-10-10
+
+### Adicionado
+- Equipe `Portadores das Relíquias` (`src/config/teams.js`, curta "Portadores"): `o_diabo`, `magistrada`, `arnaldo`, `ferreiro`.
+- Lutadora `magistrada` (`src/characters/magistrada.js`, `tools/blender/char_magistrada.py`, `face_magistrada`, `bengala()`, `vic_magistrada`, agarrão do Arnaldo, falas completas e pares com Kian, Joui e Arnaldo).
+- Lutador `o_diabo` (`src/characters/o_diabo.js`): kit da forma `diabo` + golpes frente/trás/lado; despertar `awakenMode` "Coroa de Espinhos"; agarrão, falas de introdução, vitória e batalha.
+- Forma `juan_odio` (`src/characters/forms/juan_odio.js`) + variante de modelo `juan_odio` (`addJuanOdioProps`: `bloodHand`, `hoodUp`, `hateEye`); cena `maskTransform` `'hate'`.
+- Transformação em dois estágios: `awakening.chain` (a Barra enche dentro da forma; `awakening.fill` acelera) — Juan → `juan_odio` → `diabo`.
+
+### Alterado
+- `juan.awakening`: `devilPact` → `maskTransform` (`scene: 'hate'`, `form: 'juan_odio'`); o `devilPact` virou o 2º estágio.
+- `devilPact.canStart` aceita `sp.chain`; o trono afunda pelo flag `transformed` (não mais por `!f.baseForm`).
+- Ordem do `ROSTER`: Arnaldo e Ferreiro saem da Ordo / Luzidios para os Portadores; título com "PORTADORES".
+
 ## v3.17.1 — 2026-10-10
 
 ### Alterado

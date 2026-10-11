@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { glowMat } from './rig.js';
-import { katana, scabbard, m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, roundGlasses, neonWraps, pulseEmitter, bandolier } from './weapons.js';
+import { glowMat, toon } from './rig.js';
+import { katana, scabbard, m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, roundGlasses, neonWraps, pulseEmitter, bandolier, bengala } from './weapons.js';
 
 // Armas e acessórios adicionados em código sobre os modelos do Blender.
 // Usam só `sockets`, `attach()` e `props`, que existem nos dois tipos de rig.
@@ -203,6 +203,59 @@ export function addJuanProps(rig) {
   k.rotation.x = -0.3;
   sockets.handR.add(k);
   props.knife = k;
+  // ÓDIO DO DIABO (1ª transformação, a arte "pose ultimate"): escondidos até a cena — o antebraço direito vira sangue
+  // com garras (o mesmo braço de sangue do Arthur, só a parte do antebraço), o capuz vermelho sobe e o olho que restou
+  // acende em vermelho
+  const wp = (j) => rig.joints[j].getWorldPosition(new THREE.Vector3());
+  const upperLen = wp('sR').distanceTo(wp('eR'));
+  const fore = bloodArm(upperLen, upperLen * 0.95).fore;
+  fore.scale.setScalar(0.9);
+  rig.attach('eR', fore);
+  fore.visible = false;
+  props.bloodHand = fore;
+  props.hoodUp = juanHood();
+  props.hoodUp.visible = false;
+  sockets.head.add(props.hoodUp);
+  const eye = new THREE.Group();
+  const e = new THREE.Mesh(new THREE.SphereGeometry(0.018, 8, 6), glowMat(0xff2030, 1));
+  const halo = new THREE.Mesh(new THREE.SphereGeometry(0.045, 8, 6), glowMat(0xff1020, 0.35));
+  e.position.set(-0.05, 0.17, 0.135); // o olho DIREITO (o esquerdo é o perdido, costurado)
+  halo.position.copy(e.position);
+  eye.add(e, halo);
+  eye.visible = false;
+  sockets.head.add(eye);
+  props.hateEye = eye;
+}
+
+// capuz vermelho erguido (o manto rasgado do Juan cobrindo a cabeça): casca aberta na frente, ponta caída atrás e a
+// borda esfiapada em volta do rosto
+function juanHood() {
+  const g = new THREE.Group();
+  const mat = toon(0x6e1216, { side: THREE.DoubleSide });
+  const dark = toon(0x380608, { side: THREE.DoubleSide });
+  const shell = new THREE.Mesh(new THREE.SphereGeometry(0.2, 20, 14, Math.PI / 2 + 0.75, Math.PI * 2 - 1.5, 0, 2.2), mat);
+  shell.scale.set(1.0, 1.08, 1.12);
+  shell.position.set(0, 0.17, -0.01);
+  shell.userData.outline = true;
+  g.add(shell);
+  const tip = new THREE.Mesh(new THREE.ConeGeometry(0.08, 0.2, 10), mat);
+  tip.position.set(0, 0.28, -0.17);
+  tip.rotation.x = -2.2;
+  g.add(tip);
+  for (let i = 0; i < 9; i++) {
+    const a = -1.1 + (i / 8) * 2.2;
+    const rag = new THREE.Mesh(new THREE.ConeGeometry(0.018, 0.07 + (i % 3) * 0.025, 4), dark);
+    rag.position.set(Math.sin(a) * 0.17, 0.27 - Math.abs(Math.sin(a)) * 0.12, 0.13 + Math.cos(a) * 0.04);
+    rag.rotation.x = Math.PI;
+    g.add(rag);
+  }
+  return g;
+}
+
+// JUAN no ÓDIO DO DIABO: as peças da transformação à mostra; a faca dá lugar às garras de sangue
+export function addJuanOdioProps(rig) {
+  addJuanProps(rig);
+  for (const [p, v] of [['bloodHand', true], ['hoodUp', true], ['hateEye', true], ['knife', false]]) rig.showProp(p, v);
 }
 
 // XANDE: taco com arame farpado na mão direita, Skate Caótico na esquerda
@@ -770,4 +823,13 @@ export function addColossoProps(rig) {
   if (rig.props.colosso) rig.showProp('colosso', true);
   if (rig.props.shirt) rig.showProp('shirt', false);
   if (rig.props.laces) rig.showProp('laces', false);
+}
+
+// A MAGISTRADA: a bengala na mão direita (como na arte), empunhada como espada
+export function addMagistradaProps(rig) {
+  const { sockets, props } = rig;
+  const cane = bengala();
+  cane.rotation.x = -0.3;
+  sockets.handR.add(cane);
+  props.cane = cane;
 }

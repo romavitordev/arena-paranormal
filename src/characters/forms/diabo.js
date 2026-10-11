@@ -1,5 +1,6 @@
-// O DIABO — O PORTADOR DO TRONO (Juan, fim de Hexatombe). Não aparece na seleção: com o especial RENASCIMENTO o Juan
-// sobe no Trono do Diabo (Relíquia de Sangue) e vira esta forma até o fim do round. Quatro braços com garras, asas de
+// O DIABO — O PORTADOR DO TRONO (Juan, fim de Hexatombe). Não aparece na seleção: é a SEGUNDA transformação do Juan —
+// já no Ódio do Diabo (forms/juan_odio.js), o RENASCIMENTO o leva ao Trono do Diabo (Relíquia de Sangue) e ele vira
+// esta forma até o fim do round. O Diabo também é lutador próprio (characters/o_diabo.js). Quatro braços com garras, asas de
 // braços vermelhos, Coroa de Espinhos dourada, chifres em foice, pernas de bode.
 // Poderes do Portador (wiki): Ódio do Diabo, Sangue nos Arredores, Transportar pelo Sangue, Veias de Sangue,
 // Regeneração, Amaldiçoar Arma (toda garra faz sangrar), Senhor do Sangue e o Pacto.

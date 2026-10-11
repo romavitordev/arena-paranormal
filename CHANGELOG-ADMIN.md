@@ -1,5 +1,51 @@
 # Registro administrativo de alterações
 
+## v3.18.0 — Portadores das Relíquias
+
+- Versão: `VERSION` 3.17.1 → **3.18.0**.
+
+- **Decisão do usuário**: separar o Diabo do Juan num grupo próprio, "Portadores das Relíquias", com Arnaldo e
+  Ferreiro (que MANTÊM as transformações — Anfitrião e Deus da Morte) e, no futuro, a Magistrada, o Estrangeiro e o
+  Amigo Imaginário (anotados no TODO). O Juan fica nos Mascarados com DUAS transformações: primeiro o Ódio do Diabo,
+  depois, dentro dela, o Portador do Trono (a forma `diabo` de sempre). O Diabo também existe como lutador separado.
+- **Equipe**: `TEAM_COLORS['Portadores das Relíquias'] = '#d8cfb8'` (branco-osso: não confunde com o amarelo da Ordo
+  nem o vermelho dos Mascarados), `TEAM_SHORT` "Portadores". `ROSTER` termina em `oDiabo, arnaldo, ferreiro`; a seleção
+  quebra a página por equipe (página 2: Mascarados + Portadores). Título: "... OS CINCO · MASCARADOS · PORTADORES".
+- **O Diabo** (`o_diabo`): reaproveita o kit de `forms/diabo.js` (sem `form`/`baseId`). Como joga a luta inteira (a
+  forma entra no fim do round, já ferida): vida padrão (1000, a forma tem 1150) e regeneração menor
+  (`every` 6 → 8, `amount` 22 → 16; ferido 3,5 s/34 → 5 s/24). Golpes novos: Bote do Diabo (frente), Recua e Rasga
+  (trás, dois acertos, invulnerável no recuo), Garra em Giro (lado) — todos fazem sangrar. Transformação
+  `awakenMode` "Coroa de Espinhos": +15% de dano, −12% de dano recebido, todo golpe sangra, 3 de vida/s, cura 12%.
+  `GRAB_SCENES.o_diabo = diabo`; diálogos: nome, gancho "um pacto", abertura/resposta, `VICTORY_DIABO` (21 × 2),
+  fallback, vida baixa/especial/reação à transformação e o par especial `'juan+o_diabo'` na introdução.
+  ⚠ Balanceamento não testado em partidas: valores de partida escolhidos por segurança; ajustar se o usuário pedir.
+- **Juan — Ódio do Diabo** (`juan.awakening`: `maskTransform`, `scene: 'hate'`, `form: 'juan_odio'`, +80 de vida):
+  cena nova em `maskTransform.js` — close na mão, corta o antebraço (sangue), o sangue sobe pelo braço (emissor),
+  aparece `bloodHand` (o `bloodArm(...).fore` do Arthur preso em `eR`) e a faca some, `hood_pull` + `hoodUp` (capuz
+  vermelho em código, `juanHood()`), `maskOn` acende o `hateEye` e a cena fica vermelha. Forma `juan_odio`: golpes
+  físicos ×1,18, +0,3 de alcance, todos sangram, som de garra, roubo de vida 10% → 14%, velocidade 7,6 → 8,1, ritmo
+  normal (attackSpeed 1,0), pinga sangue da mão direita.
+- **Dois estágios** (`awakening.chain`): `Fighter.takeDamage` enche a Barra dentro de uma forma se o `awakening` dela
+  tiver `chain` (com `fill` multiplicando — 3 no Ódio: ~240 de dano enchem); `canTransform` aceita forma com `chain`;
+  `devilPact.canStart(f, sp)` aceita `sp.chain`. O `transform()` mantém o `baseForm` original (Juan), então o fim do
+  round volta para o Juan. O trono afunda pelo flag `transformed` em vez de `!f.baseForm` (que agora já existe no 2º
+  estágio). Testado: Juan → `juan_odio` (330/1000) → `diabo` (380/1150), `baseForm` = juan.
+- **A Magistrada** (pedido "siga com o todo": o próximo Portador do TODO). Pesquisa na wiki ("A Magistrada",
+  "Relíquias da Calamidade"): existem só QUATRO Relíquias — Sangue (Diabo), Conhecimento (Magistrada), Energia
+  (Anfitrião) e Morte (Deus da Morte). ⚠ O Estrangeiro e o Amigo Imaginário NÃO são portadores no cânone (perguntar ao
+  usuário se entram no grupo mesmo assim). Visual da última Magistrada (arte do Livro de Regras): `char_magistrada.py`
+  com tronco próprio esguio, camisa branca, luvas pretas e pulseiras douradas, calça cinza-clara, capa marrom até os
+  pés com franja e borda dourada, GOLA alta espetada atrás da cabeça (a face de dentro afastada — as duas na mesma
+  superfície piscavam em xadrez), tecido branco do pescoço aos joelhos, corda de forca com o nó enrolado, corda na
+  cintura, três correntes douradas, tranças. O rosto é a Máscara do Desespero pintada em `face_magistrada` (oval
+  branca, três sulcos em folha, fenda de coração invertido, o Símbolo na testa). `bengala()` em `weapons.js` (haste,
+  cabo em L dourado, corrente). Kit (Conhecimento): esgrima com a bengala nas animações do Arnaldo, □ `mindSigil`,
+  `teleportBehind`, `fearGaze`, `mindControl` (2,5 s), `heavyProtection` (metade do dano por 5 s), `levitation`;
+  especial `cinematicCombo` Prisão das Sombras (250); despertar `awakenMode` "Saber Tudo é Perder Tudo"; passiva
+  `precognition` (Onipresença). Falas: abertura/resposta, `VICTORY_MAGISTRADA`, pares `kian+magistrada`,
+  `joui+magistrada`, `arnaldo+magistrada`. Testado em luta: todas as habilidades rodam sem erro, especial 244 de dano.
+- `check-roster`: ordem do elenco nova e o Juan conferindo os dois estágios.
+
 ## v3.17.1 — Retoques no elenco II
 
 - Versão: `VERSION` 3.17.0 → **3.17.1**.

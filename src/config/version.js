@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.17.1';
+export const VERSION = '3.18.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,18 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.18.0',
+    date: '2026-10-10',
+    title: 'Portadores das Relíquias',
+    items: [
+      'Novo grupo na seleção: PORTADORES DAS RELÍQUIAS (cor branco-osso), com O Diabo, A Magistrada, Arnaldo Fritz e o Ferreiro — os portadores das quatro Relíquias da Calamidade (Sangue, Conhecimento, Energia e Morte). Arnaldo e Ferreiro continuam virando O Anfitrião e o Deus da Morte.',
+      'Novo lutador: O DIABO, o Portador da Relíquia de Sangue, jogável desde o começo da luta — as garras, a Lança de Sangue, Veias de Sangue, Ódio do Diabo, Transportar pelo Sangue, Senhor do Sangue, Sangue nos Arredores e o Pacto, agora com golpes para frente, para trás e de lado. Transformação: COROA DE ESPINHOS.',
+      'Nova lutadora: A MAGISTRADA, a Portadora da Relíquia de Conhecimento — a Máscara do Desespero, as tranças, a capa com a gola dourada, a corda de forca e a bengala. Esgrima calma com a bengala, Sigilo do Conhecimento (□), Dimensão das Sombras, Olhar do Desespero, Controle Mental, Dispersão de Dano e Levitação. Especial: PRISÃO DAS SOMBRAS. Transformação: SABER TUDO É PERDER TUDO.',
+      'Juan agora tem DUAS transformações: primeiro o ÓDIO DO DIABO — ele corta o próprio braço, o sangue vira garras, puxa o capuz vermelho e o olho acende (garras que fazem sangrar, mais alcance, mais rápido). Já transformado, a Barra volta a encher mais depressa e libera o RENASCIMENTO: o Trono sobe e ele vira O Portador do Trono.',
+      'O Diabo e o Juan têm um encontro especial na introdução, e o Diabo ganhou falas contra todo o elenco.',
+    ],
+  },
   {
     v: '3.17.1',
     date: '2026-10-10',

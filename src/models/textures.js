@@ -1475,6 +1475,60 @@ export const MATERIAL_TEXTURES = {
   }),
 
   // ---------------- KIAN: sigilo na testa (lado direito), linha do olho, 3 riscos pretos
+  // A MAGISTRADA: o rosto inteiro é a MÁSCARA DO DESESPERO (wiki) — oval branca encardida, três sulcos escuros em
+  // forma de folha descendo dos olhos e da boca até a borda, a fenda de coração invertido no nariz (como uma caveira) e
+  // o Símbolo da Relíquia de Conhecimento na testa. Em volta, a pele escura (as laterais e a nuca são cobertas pelas
+  // tranças). Inspirada em "O Grito".
+  face_magistrada: () => canvasTex(W, HT, (g) => {
+    g.fillStyle = '#4a2e22'; g.fillRect(0, 0, W, HT);
+    // a máscara
+    const my = 132, rx = 74, ry = 104;
+    const grd = g.createRadialGradient(CX - 10, my - 30, 10, CX, my, ry);
+    grd.addColorStop(0, '#f2efe8'); grd.addColorStop(0.7, '#dedad0'); grd.addColorStop(1, '#a8a296');
+    g.fillStyle = grd;
+    g.beginPath(); g.ellipse(CX, my, rx, ry, 0, 0, Math.PI * 2); g.fill();
+    g.strokeStyle = '#2a2224'; g.lineWidth = 3; g.stroke();
+    // manchas de uso
+    g.fillStyle = 'rgba(120,100,90,0.18)';
+    for (let i = 0; i < 26; i++) { g.beginPath(); g.arc(CX + (Math.random() - 0.5) * rx * 1.5, my + (Math.random() - 0.5) * ry * 1.5, 2 + Math.random() * 6, 0, Math.PI * 2); g.fill(); }
+    // três sulcos: dos dois olhos e da boca até a borda de baixo (folhas escuras com o veio claro no meio)
+    const groove = (x0, y0, x1, y1, w) => {
+      g.fillStyle = '#231c20';
+      g.beginPath(); g.moveTo(x0, y0);
+      g.quadraticCurveTo(x0 + w, (y0 + y1) / 2, x1, y1);
+      g.quadraticCurveTo(x0 - w, (y0 + y1) / 2, x0, y0);
+      g.fill();
+      g.strokeStyle = 'rgba(200,190,180,0.5)'; g.lineWidth = 1.4;
+      for (let k = 1; k <= 3; k++) {
+        const t = k / 4;
+        g.beginPath(); g.moveTo(x0 + (x1 - x0) * t - w * 0.5, y0 + (y1 - y0) * t); g.lineTo(x0 + (x1 - x0) * t + w * 0.5, y0 + (y1 - y0) * t - 6); g.stroke();
+      }
+    };
+    groove(CX - 30, EYE_Y - 6, CX - 40, my + ry - 8, 16);
+    groove(CX + 30, EYE_Y - 6, CX + 40, my + ry - 8, 16);
+    groove(CX, MOUTH_Y - 8, CX, my + ry - 2, 13);
+    // olhos: fendas fundas no alto de cada sulco
+    g.fillStyle = '#0c0a0c';
+    for (const sx of [-1, 1]) { g.beginPath(); g.ellipse(CX + sx * 30, EYE_Y - 2, 13, 7, sx * -0.25, 0, Math.PI * 2); g.fill(); }
+    // nariz: fenda de coração invertido
+    g.beginPath(); g.moveTo(CX, NOSE_Y + 10);
+    g.bezierCurveTo(CX - 12, NOSE_Y, CX - 10, NOSE_Y - 12, CX - 3, NOSE_Y - 8);
+    g.lineTo(CX, NOSE_Y - 4); g.lineTo(CX + 3, NOSE_Y - 8);
+    g.bezierCurveTo(CX + 10, NOSE_Y - 12, CX + 12, NOSE_Y, CX, NOSE_Y + 10);
+    g.fill();
+    // o Símbolo da Relíquia de Conhecimento na testa (círculo, triângulos entrelaçados e o olho no centro)
+    const sy = 70, sr = 22;
+    g.strokeStyle = '#3a1c22'; g.lineWidth = 2;
+    g.beginPath(); g.arc(CX, sy, sr, 0, Math.PI * 2); g.stroke();
+    for (const rot of [0, Math.PI]) {
+      g.beginPath();
+      for (let k = 0; k < 3; k++) { const a = rot + (k / 3) * Math.PI * 2 - Math.PI / 2; g[k ? 'lineTo' : 'moveTo'](CX + Math.cos(a) * sr * 0.95, sy + Math.sin(a) * sr * 0.95); }
+      g.closePath(); g.stroke();
+    }
+    g.beginPath(); g.arc(CX, sy, 5, 0, Math.PI * 2); g.fillStyle = '#3a1c22'; g.fill();
+    g.strokeStyle = 'rgba(120,40,50,0.35)'; g.lineWidth = 6;
+    g.beginPath(); g.arc(CX, sy, sr + 6, 0, Math.PI * 2); g.stroke(); // a mancha avermelhada em volta do símbolo
+  }),
   face_desconjurado: () => {
     const map = face((g) => {
       // três riscos escuros na diagonal, do lado esquerdo do rosto (sob o olho, descendo para a bochecha)

@@ -8,7 +8,7 @@ import { transform } from '../forms.js';
 // PORTADOR DO TRONO de forma definitiva — O DIABO (sp.form) até o fim do round (sp.duration 0 = sem tempo) com
 // sp.bonusHealth de vida a mais. Uma vez por partida (usesPerMatch).
 export const devilPact = {
-  canStart: (f) => !f.baseForm,
+  canStart: (f, sp) => !f.baseForm || sp.chain, // segundo estágio (Ódio do Diabo → Trono) vem de dentro de uma forma
   blockMsg: 'JÁ TRANSFORMADO',
   start(f, sp, world) {
     const tl = new Timeline();
@@ -64,9 +64,11 @@ export const devilPact = {
       transform(f, sp.form, { duration: sp.duration || 0, health: f.health + sp.bonusHealth, bonusHealth: sp.bonusHealth, banner: 'O Portador do Trono' });
       f.invuln = Math.max(f.invuln, 1.0);
       f.energy = Math.max(f.energy, 50);
+      transformed = true;
       sinkThrone();
     });
     tl.end(1.9);
+    let transformed = false;
     let sunk = false;
     return {
       update: (dt) => {
@@ -80,7 +82,7 @@ export const devilPact = {
       cancel: () => {
         blood.stop();
         world.endCinematic();
-        if (!sunk) { sunk = true; if (!f.baseForm) sinkThrone(); }
+        if (!sunk) { sunk = true; if (!transformed) sinkThrone(); }
       },
     };
   },

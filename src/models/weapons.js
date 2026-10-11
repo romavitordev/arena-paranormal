@@ -183,6 +183,38 @@ export function scabbard() {
   return g;
 }
 
+// BENGALA da Magistrada (a arte do Livro de Regras): haste escura e fina até o chão, cabo dourado em L e a corrente
+// dourada pendurada do cabo. Empunhada como espada de esgrima (a ponta vai para -Y).
+export function bengala() {
+  const g = new THREE.Group();
+  const goldM = toon(0xc8a048, { emissive: 0x2a1e06 });
+  const shaft = part(new THREE.CylinderGeometry(0.014, 0.011, 0.92, 8), 0x1e1612);
+  shaft.position.y = -0.44;
+  g.add(shaft);
+  const tip = part(new THREE.CylinderGeometry(0.013, 0.016, 0.04, 8), 0, { mat: goldM });
+  tip.position.y = -0.9;
+  g.add(tip);
+  const collar = part(new THREE.CylinderGeometry(0.02, 0.018, 0.04, 10), 0, { mat: goldM });
+  collar.position.y = 0.02;
+  g.add(collar);
+  // cabo em L para a frente (+Z)
+  const handle = part(new THREE.BoxGeometry(0.028, 0.03, 0.13), 0, { mat: goldM });
+  handle.position.set(0, 0.05, 0.05);
+  g.add(handle);
+  const knob = part(new THREE.SphereGeometry(0.02, 8, 6), 0, { mat: goldM });
+  knob.position.set(0, 0.05, 0.12);
+  g.add(knob);
+  // corrente fina caindo do cabo em laço
+  const pts = [];
+  for (let i = 0; i <= 12; i++) {
+    const t = i / 12;
+    pts.push(new THREE.Vector3(0.01, 0.04 - Math.sin(t * Math.PI) * 0.32, 0.11 - t * 0.1));
+  }
+  g.add(part(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 20, 0.004, 4, false), 0, { mat: goldM, outline: false }));
+  g.userData.tipLength = 0.9;
+  return g;
+}
+
 // Karambit vermelha do Kaiser: lâmina curva em garra e anel no cabo
 export function karambit() {
   const g = new THREE.Group();

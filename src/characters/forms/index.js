@@ -1,5 +1,5 @@
 // FORMAS: definições completas de personagem que NÃO aparecem na seleção — o lutador vira uma delas no meio da luta
-// (ver combat/forms.js). Ex.: Ferreiro → Deus da Morte; Juan → Diabo; Kemi → Fantasma.
+// (ver combat/forms.js). Ex.: Ferreiro → Deus da Morte; Juan → Ódio do Diabo → Diabo (dois estágios); Kemi → Fantasma.
 import deusMorte from './deus_morte.js';
 import diabo from './diabo.js';
 import fantasma from './fantasma.js';
@@ -11,6 +11,7 @@ import jaeX from './jae_x.js';
 import colosso from './colosso.js';
 import guizoEt from './guizo_et.js';
 import kianCalamidade from './kian_calamidade.js';
+import juanOdio from './juan_odio.js';
 
 export const FORMS = {};
 
@@ -23,4 +24,4 @@ export function getForm(id) {
   return FORMS[id];
 }
 
-[deusMorte, diabo, fantasma, labirintoElmo, aguiarMutilador, erinCaos, anfitriao, jaeX, colosso, guizoEt, kianCalamidade].forEach(registerForm);
+[deusMorte, diabo, fantasma, labirintoElmo, aguiarMutilador, erinCaos, anfitriao, jaeX, colosso, guizoEt, kianCalamidade, juanOdio].forEach(registerForm);
