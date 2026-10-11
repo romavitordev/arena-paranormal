@@ -84,6 +84,21 @@ export default {
       color: 0xd01830,
     },
     {
+      // cânone (Desconjuração): segurando as cinzas perto do coração, recita o nome de Mateo e as solta sobre a ferida —
+      // o ritual de Morte acelera o tempo só ali e a ferida fecha
+      id: 'mateo',
+      name: 'Envelhecimento Localizado "Mateo"',
+      input: 'block+carga', // R2 + △
+      type: 'healOverTime',
+      description: 'Recita o nome de Mateo e solta as cinzas sobre a ferida: o tempo corre só ali e ele recupera vida em instantes.',
+      energyCost: 30,
+      cooldown: 26,
+      heal: 80,
+      duration: 2.4,
+      style: 'mist',
+      color: 0x8a8090,
+    },
+    {
       id: 'olhar',
       name: 'Olhar do Desespero',
       input: 'carga+physical', // △ + ○ / Y + B

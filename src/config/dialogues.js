@@ -23,9 +23,10 @@ export const CHARACTER_NAMES = {
   guizo: 'Guizo',
   o_diabo: 'O Diabo',
   magistrada: 'A Magistrada',
+  estrangeiro: 'O Estrangeiro',
 };
 
-export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto', jae_x: 'jae', colosso: 'dalmo', guizo_et: 'guizo', kian_calamidade: 'kian', juan_odio: 'juan' };
+export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto', jae_x: 'jae', colosso: 'dalmo', guizo_et: 'guizo', kian_calamidade: 'kian', juan_odio: 'juan', guizo_bombado: 'guizo', guizo_velho: 'guizo' };
 
 export const INTRO_IDS = Object.keys(CHARACTER_NAMES);
 const INTRO_HOOKS = {
@@ -52,6 +53,7 @@ const INTRO_HOOKS = {
   guizo: 'uma faca e uma câmera',
   o_diabo: 'um pacto',
   magistrada: 'a Máscara do Desespero',
+  estrangeiro: 'o sinal',
 };
 
 const INTRO_OPENERS = {
@@ -78,6 +80,7 @@ const INTRO_OPENERS = {
   guizo: (other, hook) => `Mano, é ${other} de verdade! Tô gravando — vem com ${hook} que isso vai pro site!`,
   o_diabo: (other, hook) => `${other}... eu sei o que você quer. Vim te oferecer ${hook}. O preço a gente discute depois.`,
   magistrada: (other, hook) => `${other}. Eu já sei por que você veio. ${hook[0].toUpperCase() + hook.slice(1)} lembra de tudo.`,
+  estrangeiro: (other, hook) => `${other}... você ouviu ${hook}. Agora não consegue mais deixar de ouvir.`,
 };
 
 const INTRO_REPLIES = {
@@ -104,6 +107,7 @@ const INTRO_REPLIES = {
   guizo: (other, hook) => `${hook}? ...Tá, eu tô com um pouco de medo. Mas a câmera tá ligada, ${other}!`,
   o_diabo: (other, hook) => `${hook}? Que gracinha, ${other}. Todo mundo traz alguma coisa. Ninguém traz o suficiente.`,
   magistrada: (other, hook) => `${hook}... Saber tudo tem um preço, ${other}. Você ainda não pagou o seu.`,
+  estrangeiro: (other, hook) => `${hook}. Interessante, ${other}. Amanhã você não vai lembrar desta conversa.`,
 };
 
 const INTRO_EXCHANGES = {
@@ -166,6 +170,18 @@ const INTRO_EXCHANGES = {
   'kaiser+xande': [
     { starter: 'xande', line: 'Kaiser, Cinerária? Eu também sei mexer com essa névoa aí.', response: 'kaiser', responseLine: 'Então me conta, Xande: a sua também tem cheiro de lanche queimado?' },
     { starter: 'kaiser', line: 'Xande, ainda mistura skate e ritual como se fosse a coisa mais normal do mundo?', response: 'xande', responseLine: 'É normal pra mim, mano. Você que precisa sair um pouco da névoa.' },
+  ],
+  'estrangeiro+xande': [
+    { starter: 'estrangeiro', line: 'Alexandre. As cápsulas ainda esperam por vocês.', response: 'xande', responseLine: 'Desta vez ninguém entra em cápsula nenhuma. Os Cinco ficam juntos.' },
+    { starter: 'xande', line: 'Eu lembro de você. Mesmo que você não queira.', response: 'estrangeiro', responseLine: 'Lembrar é um defeito que eu corrijo.' },
+  ],
+  'estrangeiro+lirio': [
+    { starter: 'lirio', line: 'Tu é o bicho alto que ninguém lembra? A Leonora lembra.', response: 'estrangeiro', responseLine: 'Uma marreta não guarda memórias, Lírio.' },
+    { starter: 'estrangeiro', line: 'A parede. Você protege os outros com o corpo. Previsível.', response: 'lirio', responseLine: 'Previsível e de pé. Vem.' },
+  ],
+  'estrangeiro+guizo': [
+    { starter: 'guizo', line: 'Mano... é ELE. Câmera, câmera, CÂMERA!', response: 'estrangeiro', responseLine: 'Sua câmera grava ruído, menino. Só ruído.' },
+    { starter: 'estrangeiro', line: 'A torre da TV ainda transmite o meu sinal.', response: 'guizo', responseLine: 'E eu vou transmitir você caindo. Ao vivo.' },
   ],
   'kian+magistrada': [
     { starter: 'magistrada', line: 'Kian. O Equilíbrio já te conteve uma vez.', response: 'kian', responseLine: 'E eu já sei como essa contenção termina, Magistrada.' },
@@ -1898,6 +1914,59 @@ const VICTORY_MAGISTRADA = {
 };
 for (const [w, m] of Object.entries(VICTORY_MAGISTRADA)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
 
+// O ESTRANGEIRO (Portadores das Relíquias): falas de vitória dele contra cada um e de cada um contra ele
+const VICTORY_ESTRANGEIRO = {
+  estrangeiro: {
+    kaiser: ['A névoa não esconde nada de quem está fora dela.', 'Você vai esquecer esta luta, Kaiser. Já está esquecendo.'],
+    arthur: ['Sangue. Tão primitivo.', 'Um braço a menos, uma memória a menos.'],
+    joui: ['Rápido. Para a sua espécie.', 'Suas sombras não alcançam o meu sinal.'],
+    aghata: ['Seu grimório não tem o meu nome. Ninguém tem.', 'Rituais. Brinquedos de uma civilização inferior.'],
+    dante: ['O tempo de vocês é curto. O meu, não.', 'Decadência. Interessante. Irrelevante.'],
+    erin: ['Barulho. Apenas barulho.', 'Você explode. Eu observo.'],
+    gal_sal: ['Justiça é um conceito local.', 'Suas correntes prendem corpos. Eu prendo mentes.'],
+    kian: ['Você também é estrangeiro aqui, Kian.', 'Conhecimento antigo. Ainda assim, pequeno.'],
+    aguiar: ['O caçador vira espécime.', 'Sua máscara não esconde o seu medo de mim.'],
+    labirinto: ['Corredores. Eu atravesso paredes de memória.', 'Você se perdeu antes de começar.'],
+    xande: ['Os Cinco. Quatro, agora. Logo, nenhum.', 'Lealdade. Fácil de apagar.'],
+    lirio: ['A parede caiu. As paredes sempre caem.', 'A Leonora não vai lembrar de você.'],
+    ferreiro: ['A Morte também é um sinal. Mais fraco que o meu.', 'Santo Berço fica fora do alcance? Não.'],
+    dalmo: ['Grande. Para a sua espécie.', 'Pela Manu. Eu vou lembrar disso por você.'],
+    jae: ['Silêncio. Eu gosto de silêncio.', 'Você se esconde. Eu esqueço que você existiu.'],
+    kemi: ['Uma bala contra um sinal. Inútil.', 'Eu sei onde você estava antes de mirar.'],
+    juan: ['Desejo. Que coisa barulhenta.', 'Seu novo começo terminou.'],
+    balu: ['Força física. Tão limitada.', 'Durma, criatura grande.'],
+    arnaldo: ['Fim do espetáculo. Ninguém vai lembrar dele.', 'O Caos me diverte. Você, não.'],
+    verissimo: ['Escreva no relatório. Depois esqueça.', 'Olhos abertos. Mente aberta. Exposta.'],
+    guizo: ['Pode gravar. O vídeo vai estar vazio.', 'O seu site nunca vai saber de mim.'],
+    o_diabo: ['Pactos. Contratos de uma espécie que precisa de regras.', 'O Sangue ferve. Depois esfria.'],
+    magistrada: ['A Máscara lembra de tudo. Menos de mim.', 'Equilíbrio é um conceito local, Magistrada.'],
+  },
+  kaiser: { estrangeiro: ['A névoa lembra de você, mesmo que ninguém mais lembre.', 'Não sei o que você é. Mas caiu.'] },
+  arthur: { estrangeiro: ['Alto, magro e no chão. Pronto.', 'Seja lá de onde veio, volta pra lá.'] },
+  joui: { estrangeiro: ['Até as criaturas de outro mundo sangram.', 'Eu não esqueci. Ainda.'] },
+  aghata: { estrangeiro: ['Agora o meu grimório tem o seu nome.', 'Criatura anotada. Página nova.'] },
+  dante: { estrangeiro: ['Até o estrangeiro termina a peça no chão.', 'Que figura. Pena que caiu.'] },
+  erin: { estrangeiro: ['Boom! E aí, alienígena, lembra dessa?', 'Explodi um ET! Anota aí!'] },
+  gal_sal: { estrangeiro: ['Sentença dada. Até para quem vem de fora.', 'Justiça também alcança as estrelas.'] },
+  kian: { estrangeiro: ['Eu previ a sua queda. Desde antes de você chegar.', 'Estrangeiro aqui sou eu também. E fiquei.'] },
+  aguiar: { estrangeiro: ['Ha ha... um troféu de outro mundo!', 'A presa mais alta que eu já peguei.'] },
+  labirinto: { estrangeiro: ['Nem um sinal acha a saída do meu labirinto.', 'Perdido. Como todos.'] },
+  xande: { estrangeiro: ['Desta vez a gente lembra! OS CINCO!', 'Por eles. Sempre por eles.'] },
+  lirio: { estrangeiro: ['A parede ficou de pé, bicho alto!', 'Leonora mandou lembranças. E ela lembra de tudo.'] },
+  ferreiro: { estrangeiro: ['A Morte pesa mais que qualquer sinal.', 'Santo Berço não aceita visitas.'] },
+  dalmo: { estrangeiro: ['Aí sim, neném! Derrubei o grandão de outro planeta!', 'Grande você. Maior eu.'] },
+  jae: { estrangeiro: ['Shh. Nem você me ouviu chegar.', 'Esqueceu de mim? Eu não esqueci de você.'] },
+  kemi: { estrangeiro: ['Alvo alto, mira fácil.', 'Contrato fechado. Origem: desconhecida.'] },
+  juan: { estrangeiro: ['Ha! Até ET sangra vermelho!', 'Um novo começo pra mim. Um fim pra você.'] },
+  balu: { estrangeiro: ['Hahaha! Que bicho estranho! Bora comer um macarrão?', 'Ê, rapaz! Caiu igualzinho!'] },
+  arnaldo: { estrangeiro: ['Que figurino! Mas o protagonista sou eu.', 'Uma visita de outro mundo, e a plateia aplaude!'] },
+  verissimo: { estrangeiro: ['Entidade de Transmissão neutralizada. Relatório amanhã.', 'Olhos abertos. Inclusive para o que ninguém lembra.'] },
+  guizo: { estrangeiro: ['EU DERRUBEI O ESTRANGEIRO! E TÁ GRAVADO!', 'Ninguém vai acreditar... mas eu tenho o vídeo!'] },
+  o_diabo: { estrangeiro: ['Até o que vem de fora quer alguma coisa.', 'Que desejo estranho você tem. Mas tem.'] },
+  magistrada: { estrangeiro: ['A Máscara lembra de você, Estrangeiro.', 'O Equilíbrio também vale para quem vem de fora.'] },
+};
+for (const [w, m] of Object.entries(VICTORY_ESTRANGEIRO)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
+
 export const VICTORY_FALLBACKS = {
   kaiser: 'A névoa não escolheu por mim. Desta vez, eu fiquei.',
   arthur: 'Acabou. Agora posso garantir que ninguém mais se machuque.',
@@ -1922,6 +1991,7 @@ export const VICTORY_FALLBACKS = {
   guizo: 'Gravado. Isso é real e eu tenho provas!',
   o_diabo: 'Assinado. Ninguém lê as letras miúdas.',
   magistrada: 'O Equilíbrio foi mantido. Tá tudo tão quieto agora.',
+  estrangeiro: 'Ninguém vai lembrar disto.',
 };
 
 export const BATTLE_DIALOGUES = {
@@ -1949,6 +2019,7 @@ export const BATTLE_DIALOGUES = {
     guizo: 'Tá doendo... tá doendo muito... mas não para de gravar!',
     o_diabo: 'Sangue derramado é sangue que eu bebo. Continue.',
     magistrada: 'Eu já vi este momento. Ele não termina aqui.',
+    estrangeiro: 'Dor. Um conceito tão local.',
     anfitriao: 'Essa dor combina com você. Não sei por quê; combina.',
   },
   special: {
@@ -1975,6 +2046,7 @@ export const BATTLE_DIALOGUES = {
     guizo: 'Sorria! Você tá no Registro do Outro Lado!',
     o_diabo: 'Eu vim te oferecer um pacto.',
     magistrada: 'Venha. Aqui ficam só nós dois.',
+    estrangeiro: 'O que é pior do que a Dor e a Morte?',
     anfitriao: 'Eu ia deixar você sair andando. Aí você me olhou com essa cara.',
   },
   transform: {
@@ -1987,6 +2059,8 @@ export const BATTLE_DIALOGUES = {
     guizo_et: 'Eu sou o que eu sempre quis encontrar!',
     kian_calamidade: 'Eu fui Kushim. Eu sou Kian. Eu sou a Calamidade.',
     juan_odio: 'Eu não quero morrer... eu quero um novo começo.',
+    guizo_bombado: 'Eu sou o mais forte! Grava isso!',
+    guizo_velho: 'Na minha época, a gente gravava em fita, rapaz.',
   },
 };
 
@@ -2015,6 +2089,7 @@ export const BATTLE_REPLIES = {
     guizo: 'Calma, calma... respira e enquadra, Guizo.',
     o_diabo: 'Ferido, eu fico com mais fome.',
     magistrada: 'Isso também estava escrito.',
+    estrangeiro: 'Persistente. Para a sua espécie.',
     anfitriao: 'Sua coragem é comovente. Quase tanto quanto essa estratégia.',
   },
   special: {
@@ -2041,6 +2116,7 @@ export const BATTLE_REPLIES = {
     guizo: 'Isso foi INCRÍVEL! Você pode fazer de novo? A luz tava ruim.',
     o_diabo: 'Que oferta generosa. Eu aceito... e cobro depois.',
     magistrada: 'As sombras não prendem quem as conhece.',
+    estrangeiro: 'Interessante. Repita.',
     anfitriao: 'Vai, capricha. Quero uma história boa pra contar quando você cair.',
   },
   transform: {
@@ -2067,11 +2143,12 @@ export const BATTLE_REPLIES = {
     guizo: 'Mano, que transformação! Fica parado, deixa eu focar!',
     o_diabo: 'Mudou de pele. O desejo é o mesmo.',
     magistrada: 'Uma nova forma. O Equilíbrio é o mesmo.',
+    estrangeiro: 'Mudou de forma. A mente continua aberta.',
     anfitriao: 'Isso era pra me assustar? Eu já vi coisa mais convincente no espelho.',
   },
 };
 
-const DIALOGUE_BASE_IDS = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', juan_odio: 'juan' };
+const DIALOGUE_BASE_IDS = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', juan_odio: 'juan', guizo_bombado: 'guizo', guizo_velho: 'guizo' };
 
 export function battleLines(speakerId, opponentId, event) {
   const lines = BATTLE_DIALOGUES[event];

@@ -104,7 +104,9 @@ export const cinematicCombo = {
     let pullFrom = null;
     const hitChains = [];
     let copies = []; // sp.copies: cópias ilusórias em volta do alvo (Guizo — Registro do Outro Lado)
+    let sphere = null; // sp.sphere: esfera que prende os dois durante a cena (Magistrada — Prisão das Sombras)
     const cleanup = () => {
+      if (sphere) { world.scene.remove(sphere.group); sphere = null; }
       copies.forEach((c) => c.alive && c.shatter(sp.copies.color ?? sp.color));
       copies = [];
       emitters.forEach((e) => e.stop());
@@ -132,6 +134,7 @@ export const cinematicCombo = {
       f.anim.play('idle', { restart: true, blend: 0.05 });
       opp.anim.play('hit', { restart: true });
       world.cameraRig.playShots(buildShots(sp.shots, f, opp, sp));
+      if (sp.sphere) sphere = shadowSphere(world, f, opp, sp.sphere);
 
       tl = new Timeline();
       tl.add(sp.bannerAt ?? 0.1, () => world.showBanner(sp.banner || f.def.name, f.def.color));
@@ -202,6 +205,7 @@ export const cinematicCombo = {
 
     return {
       update(dt) {
+        if (sphere) sphere.update(dt);
         t += dt;
         if (phase === 'prepare') {
           opp = f.opponent;
@@ -327,3 +331,50 @@ export const cinematicCombo = {
     };
   },
 };
+
+// PRISÃO DAS SOMBRAS (Magistrada): uma esfera de sombra em volta dos dois — por fora quase preta, por dentro os Sigilos
+// dourados girando (a "esfera de Conhecimento" da wiki onde ficam só os dois se enfrentando). Cresce no começo e gira
+// com a cena (atualizada por um ticker até ser removida).
+function shadowSphere(world, f, opp, o = {}) {
+  const group = new THREE.Group();
+  const c = f.pos.clone().lerp(opp.pos, 0.5);
+  group.position.set(c.x, 0, c.z);
+  const R = o.radius ?? 3.2;
+  const shell = new THREE.Mesh(new THREE.SphereGeometry(R, 32, 20), new THREE.MeshBasicMaterial({ color: o.color ?? 0x0c0812, transparent: true, opacity: 0.0, side: THREE.BackSide, depthWrite: false }));
+  shell.position.y = R * 0.55;
+  group.add(shell);
+  const gold = new THREE.MeshBasicMaterial({ color: o.sigil ?? 0xe0b84a, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide });
+  const rings = [];
+  for (let i = 0; i < 3; i++) {
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(R * (0.92 - i * 0.04), 0.03, 6, 64), gold);
+    ring.position.y = R * 0.55;
+    ring.rotation.set(Math.PI / 2 + i * 0.6, i * 1.1, 0);
+    group.add(ring);
+    rings.push(ring);
+  }
+  const glyphs = [];
+  for (let i = 0; i < 14; i++) {
+    const g = new THREE.Mesh(new THREE.RingGeometry(0.12, 0.2, 3), gold);
+    const a = (i / 14) * Math.PI * 2;
+    g.position.set(Math.cos(a) * R * 0.85, R * 0.55 + Math.sin(i * 1.7) * R * 0.4, Math.sin(a) * R * 0.85);
+    g.lookAt(0, R * 0.55, 0);
+    group.add(g);
+    glyphs.push(g);
+  }
+  world.scene.add(group);
+  world.fx.distort(new THREE.Vector3(c.x, 1.2, c.z), { color: o.sigil ?? 0xe0b84a, radius: R, life: 0.5 });
+  // animada pelo próprio especial (os tickers do mundo param durante a cinemática)
+  const state = {
+    group,
+    t: 0,
+    update(dt) {
+      state.t += dt;
+      const k = Math.min(1, state.t / 0.5);
+      shell.material.opacity = 0.82 * k;
+      gold.opacity = 0.75 * k;
+      rings.forEach((r, i) => { r.rotation.z += dt * (0.6 + i * 0.35) * (i % 2 ? -1 : 1); });
+      glyphs.forEach((g, i) => { g.rotation.z += dt * 2; g.position.y += Math.sin(state.t * 2 + i) * dt * 0.2; });
+    },
+  };
+  return state;
+}

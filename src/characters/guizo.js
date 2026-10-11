@@ -229,6 +229,12 @@ export default {
     form: 'guizo_et',
     formBanner: 'DISFARCE ALIENÍGENA',
     swap: [['etHead', true], ['hair', false]],
+    // pedido do usuário: a aparência é SORTEADA a cada transformação, e cada versão luta diferente
+    randomForms: [
+      { form: 'guizo_et', formBanner: 'DISFARCE ALIENÍGENA', swap: [['etHead', true], ['hair', false]], tint: 0x6aff7a },
+      { form: 'guizo_bombado', formBanner: 'GUIZO BOMBADO', swap: [], tint: 0xff8a3a },
+      { form: 'guizo_velho', formBanner: 'GUIZO VELHO', swap: [], tint: 0xd8d8c8 },
+    ],
     finalAnim: 'film_cam',
     tint: 0x6aff7a,
     sound: 'teleport',

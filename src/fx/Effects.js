@@ -361,14 +361,14 @@ export class Effects {
     return m;
   }
 
-  // Poço de sombra no chão (Joui)
+  // Poço de sombra no chão (Joui; o.rim muda a cor da borda — dourada na Magistrada, verde no Estrangeiro)
   shadowDisc(pos, o = {}) {
-    const { radius = 1.1, life = 0.6, grow = true } = o;
+    const { radius = 1.1, life = 0.6, grow = true, rim: rimColor = 0xd01830 } = o;
     const mat = new THREE.MeshBasicMaterial({ color: 0x050307, transparent: true, opacity: 0.85, depthWrite: false });
     const m = new THREE.Mesh(new THREE.CircleGeometry(1, 32), mat);
     m.rotation.x = -Math.PI / 2;
     m.position.set(pos.x, 0.03, pos.z);
-    const rim = new THREE.Mesh(new THREE.RingGeometry(0.85, 1, 32), new THREE.MeshBasicMaterial({ color: 0xd01830, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending, depthWrite: false }));
+    const rim = new THREE.Mesh(new THREE.RingGeometry(0.85, 1, 32), new THREE.MeshBasicMaterial({ color: rimColor, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending, depthWrite: false }));
     m.add(rim);
     return this._addMesh(m, life, (k) => {
       const s = radius * (grow ? Math.min(1, (1 - k) * 4) : 1) * (k < 0.25 ? k * 4 : 1);

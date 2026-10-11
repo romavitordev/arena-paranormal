@@ -14,7 +14,7 @@ const INPUT = {
   'block+jump': 'R2 + × / RT + A',
   'carga+dodge': '△ + L2 / Y + LT',
 };
-const FIN = { launch: 'lança', knockdown: 'derruba', push: 'afasta', stun: 'atordoa' };
+const FIN = { launch: 'lança', launchHigh: 'lança alto (combo aéreo)', knockdown: 'derruba', push: 'afasta', stun: 'atordoa' };
 const DIR = { forward: 'Frente + ○', back: 'Trás + ○', side: 'Lado + ○', air: 'No ar + ○', up: '↑ + ○ (no combo)', down: '↓ + ○ (no combo)' };
 
 const strikeRow = (label, s) => {
@@ -63,7 +63,9 @@ for (const c of ROSTER) {
   if (r.onHit && r.onHit.stun) md += `- Prende o inimigo por ${r.onHit.stun} s\n`;
   if (r.variants) {
     for (const [k, v] of Object.entries(r.variants)) {
-      md += `- ${DIR[k].replace('○', '□')}: **${v.label}** — ${v.damage}${(v.count ?? r.count) > 1 ? ` × ${v.count ?? r.count}` : ''}\n`;
+      // variação que dispara uma habilidade (ex.: Gal — Ativar Ereshkigal, Guizo — Cicatrização)
+      if (v.ability) { const ab = (c.abilities || []).find((a) => a.id === v.ability); md += `- ${DIR[k].replace('○', '□')}: **${ab ? ab.name : v.ability}** (habilidade)\n`; continue; }
+      md +=`- ${DIR[k].replace('○', '□')}: **${v.label}** — ${v.damage}${(v.count ?? r.count) > 1 ? ` × ${v.count ?? r.count}` : ''}\n`;
     }
   }
   md += `\n### Habilidades\n\n`;

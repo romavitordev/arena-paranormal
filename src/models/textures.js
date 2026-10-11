@@ -1529,6 +1529,82 @@ export const MATERIAL_TEXTURES = {
     g.strokeStyle = 'rgba(120,40,50,0.35)'; g.lineWidth = 6;
     g.beginPath(); g.arc(CX, sy, sr + 6, 0, Math.PI * 2); g.stroke(); // a mancha avermelhada em volta do símbolo
   }),
+  // O ESTRANGEIRO: a máscara cinza "em forma de cabeça humana" (os olhos verdes e a divisão do meio são malha; aqui só o
+  // relevo: maçãs e testa marcadas, arranhões e o cinza frio) — a cabeça inteira é a máscara
+  // O DIABO (o de Ordem Paranormal, a miniatura do usuário): pele vermelha, olhos amarelos estreitos e maldosos sob a
+  // testa franzida, nariz enrugado e o SORRISO enorme de orelha a orelha cheio de dentes finos e pontudos
+  face_o_diabo: () => canvasTex(W, HT, (g) => {
+    g.fillStyle = '#a8262a'; g.fillRect(0, 0, W, HT);
+    const shade = g.createRadialGradient(CX, 130, 20, CX, 130, 200);
+    shade.addColorStop(0, 'rgba(255,120,100,0.18)'); shade.addColorStop(1, 'rgba(40,0,0,0.35)');
+    g.fillStyle = shade; g.fillRect(0, 0, W, HT);
+    // rugas da testa franzida
+    g.strokeStyle = 'rgba(60,6,10,0.7)'; g.lineWidth = 2.4;
+    for (const dy of [0, 10, 20]) { g.beginPath(); g.moveTo(CX - 40, 70 + dy); g.quadraticCurveTo(CX, 82 + dy, CX + 40, 70 + dy); g.stroke(); }
+    for (const sx of [-1, 1]) {
+      // sobrancelha em V (cara de deboche)
+      g.lineWidth = 5; g.beginPath(); g.moveTo(CX + sx * 12, EYE_Y - 4); g.lineTo(CX + sx * 56, EYE_Y - 20); g.stroke();
+      // olho amarelo estreito com a pupila em fenda
+      g.fillStyle = '#ffd23a'; g.beginPath(); g.ellipse(CX + sx * 32, EYE_Y + 4, 16, 6, sx * -0.3, 0, Math.PI * 2); g.fill();
+      g.fillStyle = '#1a0a04'; g.fillRect(CX + sx * 32 - 1.5, EYE_Y - 2, 3, 12);
+      // maçãs do rosto puxadas pelo sorriso
+      g.lineWidth = 2.4; g.beginPath(); g.moveTo(CX + sx * 22, NOSE_Y + 6); g.quadraticCurveTo(CX + sx * 54, NOSE_Y + 2, CX + sx * 74, NOSE_Y + 26); g.stroke();
+    }
+    // nariz enrugado
+    g.beginPath(); g.moveTo(CX - 8, NOSE_Y + 4); g.quadraticCurveTo(CX, NOSE_Y + 10, CX + 8, NOSE_Y + 4); g.stroke();
+    // o sorriso: boca larga escura e duas fileiras de dentes finos
+    const y0 = MOUTH_Y + 2, wq = 78;
+    g.fillStyle = '#2a0406';
+    g.beginPath(); g.moveTo(CX - wq, y0 - 10); g.quadraticCurveTo(CX, y0 + 40, CX + wq, y0 - 10); g.quadraticCurveTo(CX, y0 + 14, CX - wq, y0 - 10); g.fill();
+    g.fillStyle = '#f2ead8';
+    for (let i = -10; i <= 10; i++) {
+      const x = CX + i * (wq / 11);
+      const top = y0 - 10 + (1 - (i / 11) ** 2) * 12;
+      const bot = y0 - 10 + (1 - (i / 11) ** 2) * 36;
+      g.beginPath(); g.moveTo(x - 3, top); g.lineTo(x + 3, top); g.lineTo(x, top + 9); g.fill();
+      g.beginPath(); g.moveTo(x - 3, bot); g.lineTo(x + 3, bot); g.lineTo(x, bot - 9); g.fill();
+    }
+  }),
+  // MÁSCARAS DA SEITA (as invocações da Magistrada): cada membro tem a sua (wiki "Seita das Máscaras") — o Símbolo da
+  // Máscara do Desespero fica do lado de dentro. A do NATHANIEL: branca, o coração dourado invertido no alto, estrelas
+  // de quatro pontas em volta dos olhos e lágrimas pretas caindo. As outras: branca riscada de vermelho e a preta.
+  ...Object.fromEntries([['nathaniel', '#eeebe4', '#2a2228'], ['riscos', '#e4e0d8', '#2a2228'], ['negra', '#1c1a1e', '#d8d4cc']].map(([k, base, ink]) => [`mask_seita_${k}`, () => canvasTex(W, HT, (g) => {
+    g.fillStyle = '#4a2e22'; g.fillRect(0, 0, W, HT); // pele em volta (as laterais ficam sob o capuz/tranças)
+    g.fillStyle = base; g.beginPath(); g.ellipse(CX, 130, 76, 106, 0, 0, Math.PI * 2); g.fill();
+    g.strokeStyle = '#141214'; g.lineWidth = 3; g.stroke();
+    g.fillStyle = '#0c0a0c';
+    for (const sx of [-1, 1]) { g.beginPath(); g.ellipse(CX + sx * 30, EYE_Y, 12, 7, 0, 0, Math.PI * 2); g.fill(); }
+    if (k === 'nathaniel') {
+      g.fillStyle = '#d0a040'; // coração dourado invertido
+      g.beginPath(); g.moveTo(CX, 46); g.bezierCurveTo(CX - 26, 62, CX - 22, 86, CX - 8, 84); g.lineTo(CX, 78); g.lineTo(CX + 8, 84); g.bezierCurveTo(CX + 22, 86, CX + 26, 62, CX, 46); g.fill();
+      g.strokeStyle = ink; g.lineWidth = 2;
+      for (const sx of [-1, 1]) {
+        const ex = CX + sx * 30;
+        g.beginPath(); for (let i = 0; i < 8; i++) { const a = (i / 8) * Math.PI * 2; const r = i % 2 ? 9 : 22; g[i ? 'lineTo' : 'moveTo'](ex + Math.cos(a) * r, EYE_Y + Math.sin(a) * r); } g.closePath(); g.stroke();
+        g.fillStyle = ink; g.beginPath(); g.moveTo(ex - 3, EYE_Y + 22); g.quadraticCurveTo(ex, EYE_Y + 48, ex + 3, EYE_Y + 22); g.fill(); // a lágrima preta
+      }
+    } else {
+      g.strokeStyle = k === 'riscos' ? '#a01820' : ink; g.lineWidth = 3;
+      for (let i = 0; i < 5; i++) { const x = CX - 50 + i * 25; g.beginPath(); g.moveTo(x, 50 + (i % 2) * 20); g.lineTo(x + 10, 200 - (i % 3) * 20); g.stroke(); }
+    }
+  })])),
+  face_estrangeiro: () => canvasTex(W, HT, (g) => {
+    g.fillStyle = '#8a8c88'; g.fillRect(0, 0, W, HT);
+    const grd = g.createRadialGradient(CX, 110, 10, CX, 120, 150);
+    grd.addColorStop(0, '#b4b6b0'); grd.addColorStop(1, '#6a6c68');
+    g.fillStyle = grd; g.fillRect(CX - 160, 0, 320, HT);
+    // relevo: sobrancelhas fundas sobre os olhos, maçãs e o queixo
+    g.strokeStyle = 'rgba(40,42,40,0.55)'; g.lineWidth = 3;
+    for (const sx of [-1, 1]) {
+      g.beginPath(); g.moveTo(CX + sx * 18, EYE_Y - 18); g.quadraticCurveTo(CX + sx * 48, EYE_Y - 30, CX + sx * 72, EYE_Y - 8); g.stroke();
+      g.beginPath(); g.moveTo(CX + sx * 30, NOSE_Y + 8); g.quadraticCurveTo(CX + sx * 56, NOSE_Y + 4, CX + sx * 70, NOSE_Y - 24); g.stroke();
+      g.beginPath(); g.ellipse(CX + sx * 46, EYE_Y, 34, 18, sx * -0.35, 0, Math.PI * 2); g.fillStyle = 'rgba(20,24,20,0.6)'; g.fill(); // órbita escura em volta do olho
+    }
+    g.beginPath(); g.moveTo(CX - 26, MOUTH_Y + 18); g.quadraticCurveTo(CX, MOUTH_Y + 30, CX + 26, MOUTH_Y + 18); g.stroke();
+    // arranhões e manchas
+    g.strokeStyle = 'rgba(30,30,30,0.3)'; g.lineWidth = 1;
+    for (let i = 0; i < 40; i++) { const x = CX - 140 + Math.random() * 280, y = Math.random() * HT; g.beginPath(); g.moveTo(x, y); g.lineTo(x + (Math.random() - 0.5) * 18, y + Math.random() * 12); g.stroke(); }
+  }),
   face_desconjurado: () => {
     const map = face((g) => {
       // três riscos escuros na diagonal, do lado esquerdo do rosto (sob o olho, descendo para a bochecha)

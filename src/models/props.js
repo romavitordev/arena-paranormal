@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { glowMat, toon } from './rig.js';
-import { katana, scabbard, m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, roundGlasses, neonWraps, pulseEmitter, bandolier, bengala } from './weapons.js';
+import { katana, scabbard, m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, roundGlasses, neonWraps, pulseEmitter, bandolier, bengala, mustache } from './weapons.js';
 
 // Armas e acessórios adicionados em código sobre os modelos do Blender.
 // Usam só `sockets`, `attach()` e `props`, que existem nos dois tipos de rig.
@@ -832,4 +832,28 @@ export function addMagistradaProps(rig) {
   cane.rotation.x = -0.3;
   sockets.handR.add(cane);
   props.cane = cane;
+}
+
+// GUIZO BOMBADO (Distorcer Aparência, uma das versões sorteadas): o mesmo Guizo, só que INFLADO — ombros e peito largos,
+// um pouco mais alto
+export function addGuizoBombadoProps(rig) {
+  addGuizoProps(rig);
+  rig.showProp('knife', false); // luta no soco
+  rig.body.scale.set(1.24, 1.07, 1.22);
+}
+
+// GUIZO VELHO (outra versão, a referência "Guizo velho"): cabelo grisalho e o bigode farto
+export function addGuizoVelhoProps(rig) {
+  addGuizoProps(rig);
+  rig.root.traverse((o) => {
+    if (!o.isMesh || !o.material || !o.material.name || !/hair_guizo/.test(o.material.name)) return;
+    o.material = o.material.clone();
+    o.material.color.set(0x9a9a96);
+    if (o.material.map) o.material.map = null;
+  });
+  const m = mustache(0x6a6a66);
+  m.scale.setScalar(1.6);
+  m.position.set(0, -0.005, 0.0);
+  rig.sockets.mouth.add(m);
+  rig.props.oldStache = m;
 }

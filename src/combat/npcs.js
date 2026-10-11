@@ -32,16 +32,19 @@ export const CLONE = {
   speed: 6.5,
 };
 
+// o.restyle(mesh) troca o visual (no lugar da sombra translúcida do Dante), o.setup(rig) ajusta peças, o.strikes / o.hp /
+// o.damageMult trocam o ataque e a vida, o.rise faz subir da sombra (as Máscaras da Magistrada usam tudo isso)
 export class DanteClone {
-  constructor(owner, world, idx, duration) {
+  constructor(owner, world, idx, duration, o = {}) {
+    this.o = o;
     this.owner = owner;
     this.world = world;
     this.idx = idx;
     this.isClone = true;
     this.radius = 0.45;
     this.height = 1.8;
-    this.hp = CLONE.hp;
-    this.maxHp = CLONE.hp;
+    this.hp = o.hp ?? CLONE.hp;
+    this.maxHp = this.hp;
     this.alive = true;
     this.t = 0;
     this.life = duration;
@@ -50,15 +53,18 @@ export class DanteClone {
     this.attack = null;
     this.cd = 0.5 + idx * 0.45;
     this.strikeIdx = idx;
-    this.rig = buildModel(owner.def.model);
-    this.rig.root.traverse((o) => {
-      if (!o.isMesh || !o.material) return;
-      o.material = o.material.clone();
-      o.material.transparent = true;
-      o.material.opacity = o.userData.isOutline ? 0.3 : 0.55;
-      if (o.material.color && !o.userData.isOutline) o.material.color.multiplyScalar(0.4);
-      o.castShadow = false;
+    this.rig = buildModel(o.model || owner.def.model);
+    this.rig.root.traverse((m) => {
+      if (!m.isMesh || !m.material) return;
+      m.material = m.material.clone();
+      if (o.restyle) { o.restyle(m); return; }
+      m.material.transparent = true;
+      m.material.opacity = m.userData.isOutline ? 0.3 : 0.55;
+      if (m.material.color && !m.userData.isOutline) m.material.color.multiplyScalar(0.4);
+      m.castShadow = false;
     });
+    if (o.setup) o.setup(this.rig);
+    this.riseT = o.rise ? 0.45 : 0;
     this.anim = new Animator(this.rig, owner.def.anims);
     this.anim.play('idle', { blend: 0 });
     world.scene.add(this.rig.root);
@@ -76,6 +82,8 @@ export class DanteClone {
     this.t += dt;
     const w = this.world;
     const target = this.owner.opponent;
+    // sobe da sombra (Máscaras)
+    if (this.riseT > 0) { this.riseT = Math.max(0, this.riseT - dt); this.rig.body.position.y = -1.8 * (this.riseT / 0.45); }
     if (this.t >= this.life || this.owner.state === 'ko' || !target) { this.kill(); return; }
     if (this.flash > 0) this.flash -= dt;
     // cerca o alvo: cada clone num ângulo, girando devagar
@@ -98,7 +106,7 @@ export class DanteClone {
           a.hit = true;
           target.cloneHitLock = w.time + CLONE.targetLock; // vários clones não acertam juntos
           applyHit(w, this.owner, target, {
-            damage: Math.round(a.damage * CLONE.damageMult), kind: 'melee', knockback: 1.2, hitstun: 0.28,
+            damage: Math.round(a.damage * (this.o.damageMult ?? CLONE.damageMult)), kind: 'melee', element: this.o.element, knockback: 1.2, hitstun: 0.28,
             dir: forwardFromYaw(this.yaw, new THREE.Vector3()), sound: 'punch', color: 0x9a94ae, scale: 0.8, strike: { damage: a.damage, noPassive: true },
           });
         }
@@ -113,8 +121,8 @@ export class DanteClone {
       } else if (this.anim.currentName !== 'idle_fist') this.anim.play('idle', { blend: 0.15 });
       this.cd -= dt;
       if (this.cd <= 0 && dTarget < 2.4 && target.state !== 'downed' && target.state !== 'ko') {
-        const strikes = this.owner.def.melee.strikes;
-        const s = strikes[this.strikeIdx++ % Math.min(3, strikes.length)];
+        const strikes = this.o.strikes || this.owner.def.melee.strikes;
+        const s = strikes[this.strikeIdx++ % (this.o.strikes ? strikes.length : Math.min(3, strikes.length))];
         this.attack = { t: 0, dur: s.dur, active: s.active, range: s.range + 0.2, damage: s.damage, hit: false };
         this.anim.play(s.anim, { restart: true, duration: s.dur });
         w.audio.play('swing', { volume: 0.4 });

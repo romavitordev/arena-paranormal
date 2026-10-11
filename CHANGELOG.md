@@ -1,5 +1,21 @@
 # Changelog
 
+## v3.19.0 — 2026-10-11
+
+### Adicionado
+- Lutador `estrangeiro` (`src/characters/estrangeiro.js`, `char_estrangeiro.py`, `face_estrangeiro`, `vic_estrangeiro`).
+- Modelo `o_diabo.glb` (`char_o_diabo.py`, `face_o_diabo`): o Diabo canônico; `o_diabo.awakening` = `devilPact` → forma `diabo`.
+- Habilidade `summonMasks` (Magistrada — Chamar as Máscaras): `DanteClone` parametrizado (`restyle`, `setup`, `strikes`, `hp`, `rise`); texturas `mask_seita_*`.
+- `cinematicCombo`: `sp.sphere` (esfera da Prisão das Sombras, animada pelo próprio especial).
+- `maskTransform`: `sp.randomForms` (sorteio da forma); formas `guizo_bombado` e `guizo_velho` (variantes de modelo).
+- `teleportBehind`: `a.vanishFx` ('sigil' / 'signal') e a borda do poço na cor da habilidade (`shadowDisc` `rim`).
+- Joui: `Envelhecimento Localizado "Mateo"` (`healOverTime`).
+
+### Alterado
+- Magistrada: físico novo (bengala + Mão das Sombras, `impactFx: 'sigil'`), especial com a esfera.
+- Gal: Velocidade Mortal → `deadlySpeedTrail`. Dante: `pocaLodo` → `rotura` (`decadence`).
+- `gen-moves`: `launchHigh` e variações do □ que disparam habilidades; `HABILIDADES.md` regenerado.
+
 ## v3.18.0 — 2026-10-10
 
 ### Adicionado

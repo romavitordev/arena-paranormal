@@ -6,7 +6,7 @@ export const TEAM_COLORS = {
   'Os Cinco': '#3ec878',
   Luzidios: '#6ac8f0',
   Mascarados: '#e83a42',
-  // quem carrega uma Relíquia (Diabo / Sangue, Magistrada / Conhecimento, Arnaldo / Energia, Ferreiro / Morte): branco-osso, para não confundir com o amarelo da Ordo nem o vermelho dos Mascarados
+  // quem carrega uma Relíquia (Diabo / Sangue, Magistrada / Conhecimento, Arnaldo / Energia, Ferreiro / Morte) e, por pedido do usuário, o Estrangeiro: branco-osso, para não confundir com o amarelo da Ordo nem o vermelho dos Mascarados
   'Portadores das Relíquias': '#d8cfb8',
 };
 

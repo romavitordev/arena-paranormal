@@ -12,6 +12,8 @@ import colosso from './colosso.js';
 import guizoEt from './guizo_et.js';
 import kianCalamidade from './kian_calamidade.js';
 import juanOdio from './juan_odio.js';
+import guizoBombado from './guizo_bombado.js';
+import guizoVelho from './guizo_velho.js';
 
 export const FORMS = {};
 
@@ -24,4 +26,4 @@ export function getForm(id) {
   return FORMS[id];
 }
 
-[deusMorte, diabo, fantasma, labirintoElmo, aguiarMutilador, erinCaos, anfitriao, jaeX, colosso, guizoEt, kianCalamidade, juanOdio].forEach(registerForm);
+[deusMorte, diabo, fantasma, labirintoElmo, aguiarMutilador, erinCaos, anfitriao, jaeX, colosso, guizoEt, kianCalamidade, juanOdio, guizoBombado, guizoVelho].forEach(registerForm);

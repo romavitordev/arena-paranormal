@@ -78,6 +78,9 @@ export const maskTransform = {
   canStart: (f) => !f.baseForm,
   blockMsg: 'JÁ TRANSFORMADO',
   start(f, sp, world) {
+    // sp.randomForms: a transformação sorteia uma versão (Guizo — Distorcer Aparência: ET, bombado, velho...); cada uma
+    // traz form / formBanner / swap / tint próprios. Math.random é o sorteio com semente durante a partida em rede.
+    if (sp.randomForms && sp.randomForms.length) sp = { ...sp, ...sp.randomForms[Math.floor(Math.random() * sp.randomForms.length)] };
     const tl = new Timeline();
     const col = sp.color ?? f.def.energyColor ?? 0xffffff;
     const scene = sp.scene || null;

@@ -31,21 +31,24 @@ export default {
   dodge: { style: 'default', distance: 4.6 },
 
   melee: {
-    name: 'Bengala da Magistrada',
-    // a bengala como espada de esgrima: precisa, sem pressa, cada golpe no lugar certo
+    name: 'Bengala e Mão das Sombras',
+    // não é esgrima de palco: a bengala corta curto e firme, e a MÃO LIVRE empurra as sombras (Conhecimento) —
+    // cada acerto deixa o Sigilo dourado e distorce a realidade em volta do alvo
     strikes: [
-      { name: 'Advertência', anim: 'arn_open', dur: 0.32, active: [0.1, 0.19], damage: 26, range: 2.15, arc: 140, knockback: 1.1, lunge: 1.1, sound: 'swing', hitSound: 'heavyPunch', trail: { color: GOLD, tilt: 0.05 } },
-      { name: 'Ponta da Bengala', anim: 'arn_lunge', dur: 0.36, active: [0.13, 0.22], damage: 28, range: 2.5, arc: 50, knockback: 1.4, lunge: 1.6, sound: 'swing', hitSound: 'heavyPunch' },
-      { name: 'Revés', anim: 'arn_bowcut', dur: 0.42, active: [0.12, 0.2], damage: 28, range: 2.15, arc: 140, knockback: 1.2, lunge: 1.0, sound: 'swing', hitSound: 'heavyPunch', trail: { color: GOLD, flip: true } },
-      { name: 'Sentença Dupla', anim: 'arn_flourish', dur: 0.42, actives: [[0.12, 0.2], [0.26, 0.34]], damage: 34, range: 2.2, arc: 160, knockback: 1.4, lunge: 1.0, sound: 'swing', hitSound: 'heavyPunch', trail: { color: SHADOW, roll: 0.9 } },
-      { name: 'Executora das Regras', anim: 'arn_final', dur: 0.62, active: [0.3, 0.4], damage: 60, range: 2.5, arc: 110, lunge: 1.8, finisher: 'launch', hitstop: 0.12, sound: 'slashFinal', hitSound: 'heavyPunch', impactFx: 'sigil', impactScale: 1.9, trail: { color: GOLD, roll: 1.5, big: true } },
+      { name: 'Advertência', anim: 'slash_h', dur: 0.32, active: [0.1, 0.19], damage: 26, range: 2.2, arc: 130, knockback: 1.0, lunge: 1.0, sound: 'swing', hitSound: 'heavyPunch', impactFx: 'sigil', trail: { color: GOLD, tilt: 0.05 } },
+      { name: 'Revés', anim: 'slash_h_back', dur: 0.32, active: [0.1, 0.19], damage: 26, range: 2.2, arc: 130, knockback: 1.0, lunge: 0.9, sound: 'swing', hitSound: 'heavyPunch', impactFx: 'sigil', trail: { color: GOLD, flip: true } },
+      // a mão livre empurra uma onda de sombra: alcança longe (as sombras são dela)
+      { name: 'Mão das Sombras', anim: 'wave_punch', dur: 0.4, active: [0.14, 0.24], damage: 30, range: 3.4, arc: 60, knockback: 2.2, lunge: 0.4, element: 'conhecimento', sound: 'fearGaze', hitSound: 'impact', impactFx: 'sigil', impactScale: 1.4, trail: { color: SHADOW, wide: true } },
+      { name: 'Sentença', anim: 'slash_d', dur: 0.4, active: [0.13, 0.22], damage: 32, range: 2.3, arc: 120, knockback: 1.3, lunge: 1.0, sound: 'swing', hitSound: 'heavyPunch', impactFx: 'sigil', trail: { color: GOLD, roll: 0.9 } },
+      { name: 'Executora das Regras', anim: 'slash_finisher', dur: 0.62, active: [0.3, 0.4], damage: 60, range: 2.6, arc: 120, lunge: 1.4, finisher: 'launch', hitstop: 0.12, element: 'conhecimento', sound: 'slashFinal', hitSound: 'heavyPunch', impactFx: 'sigil', impactScale: 2.0, trail: { color: GOLD, roll: 1.5, big: true } },
     ],
-    up: { name: 'Erguer pela Bengala', anim: 'slash_up', dur: 0.44, active: [0.15, 0.27], damage: 38, range: 2.2, arc: 120, lunge: 0.9, finisher: 'launchHigh', launcher: true, sound: 'swing', hitSound: 'heavyPunch', trail: { color: GOLD, tilt: -1.3 } },
-    down: { name: 'Golpe do Juízo', anim: 'slash_v', dur: 0.5, active: [0.19, 0.3], damage: 46, range: 2.2, arc: 110, lunge: 1, finisher: 'knockdown', sound: 'swing', hitSound: 'heavyPunch', impactScale: 1.4, trail: { color: GOLD, roll: 1.5 } },
-    forward: { name: 'Passo das Sombras', anim: 'dash_slash', dur: 0.42, active: [0.12, 0.24], damage: 36, range: 2.2, arc: 130, knockback: 2.4, motion: [{ t: [0, 0.22], fwd: 4.8, stopClose: true }], sound: 'swing', hitSound: 'heavyPunch', trail: { color: SHADOW, tilt: 0.1, wide: true } },
-    back: { name: 'Recuo e Estocada', anim: 'arn_lunge', dur: 0.55, active: [0.32, 0.42], damage: 40, range: 2.5, arc: 60, knockback: 2.4, iframes: [0, 0.24], motion: [{ t: [0, 0.18], back: 2.2 }, { t: [0.24, 0.38], fwd: 2.8, stopClose: true }], sound: 'swing', hitSound: 'heavyPunch' },
-    side: { name: 'Giro da Capa', anim: 'arn_spin', dur: 0.5, active: [0.12, 0.36], damage: 32, range: 2.3, arc: 360, knockback: 1.8, motion: [{ t: [0, 0.25], side: 2.4 }], sound: 'swing', hitSound: 'heavyPunch', trail: { color: SHADOW, wide: true } },
-    air: { name: 'Queda da Sentença', anim: 'air_slash', dur: 0.42, active: [0.15, 0.32], damage: 36, range: 2.2, arc: 100, knockback: 3.2, slam: 16, vertical: 2.4, sound: 'swing', hitSound: 'heavyPunch', trail: { color: GOLD, roll: 1.5 } },
+    up: { name: 'Erguer pelas Sombras', anim: 'slash_up', dur: 0.44, active: [0.15, 0.27], damage: 38, range: 2.3, arc: 120, lunge: 0.8, finisher: 'launchHigh', launcher: true, sound: 'swing', hitSound: 'heavyPunch', impactFx: 'sigil', trail: { color: GOLD, tilt: -1.3 } },
+    down: { name: 'Golpe do Juízo', anim: 'slash_v', dur: 0.5, active: [0.19, 0.3], damage: 46, range: 2.3, arc: 110, lunge: 0.9, finisher: 'knockdown', sound: 'swing', hitSound: 'heavyPunch', impactFx: 'sigil', impactScale: 1.4, trail: { color: GOLD, roll: 1.5 } },
+    forward: { name: 'Passo das Sombras', anim: 'dash_slash', dur: 0.42, active: [0.12, 0.24], damage: 36, range: 2.3, arc: 130, knockback: 2.4, motion: [{ t: [0, 0.22], fwd: 5.2, stopClose: true }], sound: 'swing', hitSound: 'heavyPunch', impactFx: 'sigil', trail: { color: SHADOW, tilt: 0.1, wide: true } },
+    // recua sem pressa e devolve com a mão das sombras de longe
+    back: { name: 'Recuo e Empurrão', anim: 'wave_punch', dur: 0.55, active: [0.32, 0.42], damage: 36, range: 3.4, arc: 60, knockback: 3, iframes: [0, 0.24], motion: [{ t: [0, 0.2], back: 2.6 }], element: 'conhecimento', sound: 'fearGaze', hitSound: 'impact', impactFx: 'sigil', impactScale: 1.4 },
+    side: { name: 'Giro da Capa', anim: 'slash_h', dur: 0.46, active: [0.12, 0.3], damage: 32, range: 2.4, arc: 300, knockback: 1.8, motion: [{ t: [0, 0.25], side: 2.6 }], sound: 'swing', hitSound: 'heavyPunch', impactFx: 'sigil', trail: { color: SHADOW, wide: true } },
+    air: { name: 'Queda da Sentença', anim: 'air_slash', dur: 0.42, active: [0.15, 0.32], damage: 36, range: 2.3, arc: 100, knockback: 3.2, slam: 16, vertical: 2.4, sound: 'swing', hitSound: 'heavyPunch', impactFx: 'sigil', trail: { color: GOLD, roll: 1.5 } },
   },
 
   // □: SIGILO DO CONHECIMENTO — o Símbolo da Máscara voa até o alvo e mostra a ele o que não queria saber
@@ -77,6 +80,25 @@ export default {
 
   abilities: [
     {
+      // a Seita das Máscaras: os membros dividem a mente com a Magistrada e surgem das sombras quando ela chama
+      id: 'chamarMascaras',
+      name: 'Chamar as Máscaras',
+      input: 'carga+ranged', // △ → □
+      type: 'summonMasks',
+      description: 'Três membros da Seita das Máscaras (o Nathaniel entre eles) sobem das sombras em volta do adversário e lutam por ela por 10 s — socos e empurrões de sombra. Somem quando apanham demais.',
+      energyCost: 35,
+      cooldown: 24,
+      count: 3,
+      duration: 10,
+      hp: 70,
+      strikes: [
+        { anim: 'jab', dur: 0.3, active: [0.1, 0.18], range: 1.6, damage: 12 },
+        { anim: 'hook_r', dur: 0.34, active: [0.12, 0.2], range: 1.6, damage: 14 },
+        { anim: 'wave_punch', dur: 0.42, active: [0.14, 0.24], range: 2.6, damage: 18 },
+      ],
+      color: GOLD,
+    },
+    {
       id: 'dimensaoSombras',
       name: 'Dimensão das Sombras',
       input: 'carga+jump', // △ + ×
@@ -88,7 +110,8 @@ export default {
       cooldown: 6,
       distance: 1.5,
       vanishTime: 0.18,
-      color: SHADOW,
+      vanishFx: 'sigil', // a realidade distorce com os Sigilos dourados (não o poço vermelho do Joui)
+      color: GOLD,
     },
     {
       id: 'olharDesespero',
@@ -167,12 +190,13 @@ export default {
     applyMeleePassives: false,
     prepare: { anim: 'charge', time: 0.35, fx: 'bladeGlow' },
     dash: { speed: 24, maxTime: 0.45, contact: 1.8 },
+    sphere: { radius: 3.2, color: 0x0c0812, sigil: GOLD }, // a esfera de sombras se fecha em volta dos dois
     hits: [
-      { t: 0.7, anim: 'arn_open', dur: 0.3, share: 0.14, fx: { kind: 'slash', tilt: 0.1 }, sound: 'heavyPunch' },
-      { t: 0.98, anim: 'arn_bowcut', dur: 0.36, share: 0.14, fx: { kind: 'slash', tilt: -0.2, flip: true }, sound: 'heavyPunch' },
-      { t: 1.3, anim: 'arn_lunge', dur: 0.34, share: 0.16, fx: { kind: 'stab' }, sound: 'heavyPunch' },
-      { t: 1.65, anim: 'arn_spin', dur: 0.45, share: 0.2, fx: { kind: 'slash', wide: true }, sound: 'heavyPunch' },
-      { t: 2.15, anim: 'arn_final', dur: 0.55, share: 0.36, fx: { kind: 'cross', big: true }, sound: 'slashFinal', final: true },
+      { t: 0.75, anim: 'slash_h', dur: 0.3, share: 0.14, fx: { kind: 'slash', tilt: 0.1 }, sound: 'heavyPunch' },
+      { t: 1.02, anim: 'slash_h_back', dur: 0.3, share: 0.14, fx: { kind: 'slash', tilt: -0.2, flip: true }, sound: 'heavyPunch' },
+      { t: 1.32, anim: 'wave_punch', dur: 0.38, share: 0.16, fx: { kind: 'smash' }, sound: 'fearGaze' },
+      { t: 1.7, anim: 'slash_d', dur: 0.4, share: 0.2, fx: { kind: 'slash', wide: true }, sound: 'heavyPunch' },
+      { t: 2.2, anim: 'slash_finisher', dur: 0.55, share: 0.36, fx: { kind: 'cross', big: true }, sound: 'slashFinal', final: true },
     ],
     bannerAt: 0.15,
     length: 3.0,

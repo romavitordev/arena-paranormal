@@ -33,7 +33,7 @@ especial = Carga → Carga → ○ (custa 50, ofensivos causam 250, nunca hitkil
 | Trás + ○ | Esquiva corporal | 44 | 1.6 m | invulnerável no começo |
 | Lado + ○ | Chute lateral | 40 | 1.9 m |  |
 | No ar + ○ | Pisão aéreo | 40 | 1.9 m | desce com impacto |
-| ↑ + ○ (no combo) | Chute alto | 40 | 1.9 m | finalizador: undefined |
+| ↑ + ○ (no combo) | Chute alto | 40 | 1.9 m | finalizador: lança alto (combo aéreo) |
 | ↓ + ○ (no combo) | Rasteira | 44 | 1.9 m | finalizador: derruba |
 
 ### Principal (□ / X): Sniper
@@ -79,7 +79,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 | Trás + ○ | Coincidência Forçada "Rodolfo" | 0 | 0 m | contra-ataque (revida 55) |
 | Lado + ○ | Corte lateral | 30 | 2.2 m |  |
 | No ar + ○ | Golpe aéreo | 38 | 2.2 m | desce com impacto |
-| ↑ + ○ (no combo) | Corte ascendente | 40 | 2.3 m | finalizador: undefined |
+| ↑ + ○ (no combo) | Corte ascendente | 40 | 2.3 m | finalizador: lança alto (combo aéreo) |
 | ↓ + ○ (no combo) | Corte descendente | 48 | 2.3 m | finalizador: derruba |
 
 ### Principal (□ / X): Sombra Rasteira
@@ -91,6 +91,8 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 - **Teleporte das Sombras** — Energia + Pulo (△+× / Y+A) · custo 22 · cooldown 5 s
   Afunda na própria sombra e emerge atrás do adversário, já podendo atacar. Não causa dano.
+- **Envelhecimento Localizado "Mateo"** — R2 + △ / RT + Y · custo 30 · cooldown 26 s
+  Recita o nome de Mateo e solta as cinzas sobre a ferida: o tempo corre só ali e ele recupera vida em instantes.
 - **Olhar do Desespero** — △ + ○ / Y + B · custo 25 · cooldown 12 s · alcance 8 m
   Encara o adversário e libera uma manifestação de medo: quem estiver à frente fica paralisado por um instante, vulnerável a combo.
 - **Corte das Sombras** — △ + L2 / Y + LT · custo 20 · cooldown 10 s · dano 70 · alcance 1.4 m
@@ -126,7 +128,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 | Trás + ○ | Rasteira de recuo | 34 | 2.4 m | finalizador: derruba, invulnerável no começo |
 | Lado + ○ | Chute lateral | 38 | 1.9 m |  |
 | No ar + ○ | Voadora | 40 | 1.9 m | desce com impacto |
-| ↑ + ○ (no combo) | Chute ascendente | 38 | 1.9 m | finalizador: undefined |
+| ↑ + ○ (no combo) | Chute ascendente | 38 | 1.9 m | finalizador: lança alto (combo aéreo) |
 | ↓ + ○ (no combo) | Coronhada | 46 | 1.9 m | finalizador: derruba |
 
 ### Principal (□ / X): M4
@@ -177,7 +179,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 | Trás + ○ | Passo da Morte | 42 | 1.8 m | invulnerável no começo |
 | Lado + ○ | Chute lateral | 38 | 1.9 m |  |
 | No ar + ○ | Pisão espiral | 38 | 1.9 m | desce com impacto |
-| ↑ + ○ (no combo) | Espiral ascendente | 38 | 1.9 m | finalizador: undefined |
+| ↑ + ○ (no combo) | Espiral ascendente | 38 | 1.9 m | finalizador: lança alto (combo aéreo) |
 | ↓ + ○ (no combo) | Palma esmagadora | 46 | 1.9 m | finalizador: derruba |
 
 ### Principal (□ / X): Decadenza
@@ -192,8 +194,8 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
   Põe a mão no chão: tentáculos de Lodo Preto brotam embaixo do inimigo, prendem e comprimem.
 - **Cicatrização "Paradiso"** — R2 + △ / RT + Y · custo 30 · cooldown 26 s
   Assopra uma névoa preta em espiral que envelhece as próprias feridas até cicatrizarem. Parado, cicatriza 25% mais.
-- **Poça de Lodo** — △ + L2 / Y + LT · custo 20 · cooldown 15 s
-  Arremessa uma bola de Lodo Preto que se espalha no chão: o inimigo dentro anda devagar e não recupera energia.
+- **Destruição Temporal "Rotura"** — △ + L2 / Y + LT · custo 25 · cooldown 14 s · dano 58 · alcance 9 m
+  Concentra-se no Símbolo: espirais de Morte surgem em volta do alvo, apertam e ele APODRECE (dano de Morte e uma decomposição que continua). Dá para esquivar quando as espirais fecham.
 
 ### Especial: Invocação: A Marionete
 
@@ -222,7 +224,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 | Trás + ○ | Recuo com corte | 36 | 1.7 m | invulnerável no começo |
 | Lado + ○ | Giro das adagas | 30 | 1.8 m |  |
 | No ar + ○ | Adagas aéreas | 34 | 1.7 m | desce com impacto |
-| ↑ + ○ (no combo) | Adaga ascendente | 34 | 1.7 m | finalizador: undefined |
+| ↑ + ○ (no combo) | Adaga ascendente | 34 | 1.7 m | finalizador: lança alto (combo aéreo) |
 | ↓ + ○ (no combo) | Adagas para baixo | 42 | 1.8 m | finalizador: derruba |
 
 ### Principal (□ / X): Escopeta calibre 12
@@ -269,7 +271,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 | Trás + ○ | Esquiva com contra-ataque | 40 | 1.7 m | invulnerável no começo |
 | Lado + ○ | Corte circular | 26 | 1.6 m |  |
 | No ar + ○ | Corte aéreo | 34 | 1.7 m | desce com impacto |
-| ↑ + ○ (no combo) | Facada ascendente | 34 | 1.7 m | finalizador: undefined |
+| ↑ + ○ (no combo) | Facada ascendente | 34 | 1.7 m | finalizador: lança alto (combo aéreo) |
 | ↓ + ○ (no combo) | Facada descendente | 42 | 1.8 m | finalizador: derruba |
 
 ### Principal (□ / X): Faca Arremessada
@@ -314,7 +316,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 | Trás + ○ | Recua e machada | 34 | 2.3 m |  |
 | Lado + ○ | Machadada em movimento | 32 | 2.3 m |  |
 | No ar + ○ | Machado aéreo | 40 | 2.3 m | desce com impacto |
-| ↑ + ○ (no combo) | Machado de baixo para cima | 40 | 2.3 m | finalizador: undefined |
+| ↑ + ○ (no combo) | Machado de baixo para cima | 40 | 2.3 m | finalizador: lança alto (combo aéreo) |
 | ↓ + ○ (no combo) | Machado no chão | 48 | 2.3 m | finalizador: derruba |
 
 ### Principal (□ / X): Machado em Giro
@@ -344,55 +346,6 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ---
 
-## ARNALDO FRITZ
-
-*Aniquilador da Ordo Realitas: na Transformação, o relógio de bolso guarda a Relíquia e ele vira O Anfitrião* · arma: Espada da fita vermelha e o Emissor de Pulsos Paranormais
-
-### Físico (○ / B)
-
-| Comando | Golpe | Dano | Alcance | Observações |
-|---|---|---|---|---|
-| ○ 1 | Abertura de Cena | 26 | 2.15 m |  |
-| ○ 2 | Estocada de Palco | 28 | 2.6 m |  |
-| ○ 3 | Corte em Reverência | 28 | 2.15 m |  |
-| ○ 4 | Floreio | 34 (2 acertos) | 2.2 m |  |
-| ○ 5 | Ato Final | 60 | 2.5 m | finalizador: lança |
-| Frente + ○ | Entrada Triunfal | 36 | 2.2 m |  |
-| Trás + ○ | Mesura e Estocada | 40 | 2.5 m | invulnerável no começo |
-| Lado + ○ | Rodopio | 32 | 2.3 m |  |
-| No ar + ○ | Corte Aéreo | 36 | 2.2 m | desce com impacto |
-| ↑ + ○ (no combo) | Corte Ascendente | 38 | 2.2 m | finalizador: undefined |
-| ↓ + ○ (no combo) | Golpe de Cena | 46 | 2.2 m | finalizador: derruba |
-
-### Principal (□ / X): Emissor de Pulsos Paranormais
-
-- Dano 18 · alcance 14 m · cooldown 3.2 s · custo 0
-- Prende e puxa o inimigo para 1.9 m, abrindo 0.5 s para combar
-- Trás + □: **AFASTAR!** — 26
-
-### Habilidades
-
-- **Finta Teatral** — △ + ○ / Y + B · custo 20 · cooldown 10 s · dano 55 · alcance 2.2 m
-  Provoca com a mão livre, avança e, quando o adversário reage, o corte de verdade entra pela guarda — quebra a defesa.
-- **Pulso Paranormal** — △ + □ / Y + X · custo 25 · cooldown 12 s · alcance 11 m
-  O Emissor de Pulsos no máximo: o alvo LONGE é atraído e recebe a estocada assim que chega; o alvo PERTO é jogado longe e cai.
-- **Rodopio da Fita** — R2 + × / RT + A · custo 20 · cooldown 11 s · dano 60
-  Gira com a espada aberta — a fita vermelha acompanha o giro: dois cortes em área, o último joga longe.
-- **Aniquilador** — △ + L2 / Y + LT · custo 25 · cooldown 20 s
-  O veterano dos Aniquiladores aparece: por 7 s a postura fica agressiva, os golpes físicos saem 15% mais rápidos e 15% mais fortes, e ele recupera uma esquiva.
-- **Ensaio Geral** — R2 + △ / RT + Y · custo 20 · cooldown 18 s
-  Já ensaiou essa cena: por 6 s recebe 20% menos dano, é empurrado bem menos e aguenta 2 golpes sem recuar.
-
-### Especial: Ato Final
-
-250 de dano · custo 50 · cooldown 14 s.
-
-### Transformação: A Relíquia do Relógio
-
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
-
----
-
 ## SENHOR VERÍSSIMO
 
 *Líder da Ordo Realitas: Inteligência Estratégica e o Segredo de Veríssimo* · arma: A espada do Arnaldo e uma escopeta curta
@@ -409,7 +362,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 | Trás + ○ | Olhos Sempre Abertos! | 0 | 0 m | contra-ataque (revida 55) |
 | Lado + ○ | Flanco da Ordem | 30 | 2.1 m |  |
 | No ar + ○ | Salto do Veterano | 36 | 2.2 m | desce com impacto |
-| ↑ + ○ (no combo) | Ergam-se, Agentes | 38 | 2.2 m | finalizador: undefined |
+| ↑ + ○ (no combo) | Ergam-se, Agentes | 38 | 2.2 m | finalizador: lança alto (combo aéreo) |
 | ↓ + ○ (no combo) | Fim da Varredura | 46 | 2.2 m | finalizador: derruba |
 
 ### Principal (□ / X): Escopeta de Varredura
@@ -456,7 +409,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 | Trás + ○ | Agarrão e empurrão | 32 | 1.5 m | finalizador: afasta |
 | Lado + ○ | Gancho em movimento | 30 | 1.8 m |  |
 | No ar + ○ | Soco meteoro aéreo | 40 | 1.9 m | desce com impacto |
-| ↑ + ○ (no combo) | Gancho ascendente | 42 | 1.9 m | finalizador: undefined |
+| ↑ + ○ (no combo) | Gancho ascendente | 42 | 1.9 m | finalizador: lança alto (combo aéreo) |
 | ↓ + ○ (no combo) | Soco meteoro | 52 | 1.9 m | finalizador: derruba |
 
 ### Principal (□ / X): Impacto Sigilar
@@ -504,14 +457,14 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 | Trás + ○ | Puxão da lâmina | 26 | 4.6 m | usa corrente, puxa o inimigo, Y = 5 |
 | Lado + ○ | Corte lateral alternado | 30 | 2 m | Y = 5 |
 | No ar + ○ | Cruz aérea | 36 | 2.1 m | Y = 6, desce com impacto |
-| ↑ + ○ (no combo) | Lâminas para cima | 40 | 2.1 m | finalizador: undefined, Y = 7 |
+| ↑ + ○ (no combo) | Lâminas para cima | 40 | 2.1 m | finalizador: lança alto (combo aéreo), Y = 7 |
 | ↓ + ○ (no combo) | Cruz das lâminas | 46 | 2.1 m | finalizador: derruba, Y = 8 |
 
 ### Principal (□ / X): Corrente de Captura
 
 - Dano 25 · alcance 15 m · cooldown 5 s · custo 15
 - Prende e puxa o inimigo para 1.4 m, abrindo 0.7 s para combar
-- Trás + □: **undefined** — undefined
+- Trás + □: **Ativar Ereshkigal** (habilidade)
 
 ### Habilidades
 
@@ -526,7 +479,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 - **Corrente Giratória** — △ + L2 / Y + LT · custo 25 · cooldown 11 s · dano 75
   Gira as duas lâminas presas às correntes em volta do corpo: três cortes em área, o último lança — o 1º giro laça e arrasta quem estiver perto.
 - **Velocidade Mortal** — R2 + △ / RT + Y · custo 25 · cooldown 20 s
-  O ritual do Leque da Fatalidade distorce o tempo em volta dele: fica muito mais rápido e recupera todas as esquivas.
+  O ritual do Leque da Fatalidade distorce o tempo em volta dele: por 6 s fica muito mais rápido, bate mais rápido, recupera as esquivas e deixa rastros dele no ar.
 - **Bloqueio Perfeito** — defender no instante exato (0.15 s) anula o dano e atordoa o atacante por 0.7 s
 - **Passiva — Desviar de Balas:** esquivar de um projétil não gasta carga
 - **Passiva:** o físico tira X de vida; o INIMIGO recupera Y (Y < X) e perde Y × 1.5 de sanidade (energia). O Injustiça não se cura.
@@ -558,7 +511,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 | Trás + ○ | Recua e rebate | 34 | 2 m | invulnerável no começo |
 | Lado + ○ | Tacada em movimento | 30 | 2 m |  |
 | No ar + ○ | Tacada aérea | 36 | 2 m | desce com impacto |
-| ↑ + ○ (no combo) | Tacada para cima | 40 | 2 m | finalizador: undefined |
+| ↑ + ○ (no combo) | Tacada para cima | 40 | 2 m | finalizador: lança alto (combo aéreo) |
 | ↓ + ○ (no combo) | Tacada no chão | 46 | 2 m | finalizador: derruba |
 
 ### Principal (□ / X): Skate Caótico
@@ -606,13 +559,13 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 | Trás + ○ | Recua e corta | 28 | 1.8 m | invulnerável no começo |
 | Lado + ○ | Chute rápido | 26 | 1.7 m |  |
 | No ar + ○ | Faca do alto | 30 | 1.8 m | desce com impacto |
-| ↑ + ○ (no combo) | Corte ascendente | 34 | 1.8 m | finalizador: undefined |
+| ↑ + ○ (no combo) | Corte ascendente | 34 | 1.8 m | finalizador: lança alto (combo aéreo) |
 | ↓ + ○ (no combo) | Golpe descendente | 40 | 1.8 m | finalizador: derruba |
 
 ### Principal (□ / X): Invadir Mente
 
 - Dano 30 · alcance 18 m · cooldown 2.6 s · custo 0
-- Trás + □: **undefined** — undefined
+- Trás + □: **Cicatrização** (habilidade)
 
 ### Habilidades
 
@@ -655,7 +608,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 | Trás + ○ | Recua e rebate | 34 | 2.2 m |  |
 | Lado + ○ | Marretada em movimento | 32 | 2.2 m |  |
 | No ar + ○ | Marretada aérea | 40 | 2.2 m | desce com impacto |
-| ↑ + ○ (no combo) | Leonora para cima | 42 | 2.2 m | finalizador: undefined |
+| ↑ + ○ (no combo) | Leonora para cima | 42 | 2.2 m | finalizador: lança alto (combo aéreo) |
 | ↓ + ○ (no combo) | Marretada descendente | 50 | 2.2 m | finalizador: derruba |
 
 ### Principal (□ / X): Canivete de osso
@@ -685,52 +638,6 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ---
 
-## FERREIRO
-
-*Guardião de Santo Berço: quase morto, o Pacto do Santo o transforma no Deus da Morte* · arma: Espada Consumidora
-
-### Físico (○ / B)
-
-| Comando | Golpe | Dano | Alcance | Observações |
-|---|---|---|---|---|
-| ○ 1 | Corte largo | 32 | 2.3 m |  |
-| ○ 2 | Corte de volta | 32 | 2.3 m |  |
-| ○ 3 | Corte diagonal | 38 | 2.3 m |  |
-| ○ 4 | Golpe do Ferreiro | 44 | 2.4 m |  |
-| ○ 5 | Consumir | 66 | 2.4 m | finalizador: lança |
-| Frente + ○ | Investida do Ferreiro | 40 | 2.4 m |  |
-| Trás + ○ | Recua e consome | 36 | 2.4 m | invulnerável no começo |
-| Lado + ○ | Corte em arco | 34 | 2.4 m |  |
-| No ar + ○ | Corte aéreo | 40 | 2.5 m | desce com impacto |
-| ↑ + ○ (no combo) | Corte ascendente | 44 | 2.5 m | finalizador: undefined |
-| ↓ + ○ (no combo) | Espada no chão | 52 | 2.5 m | finalizador: derruba |
-
-### Principal (□ / X): Lodo arremessado
-
-- Dano 34 · alcance 18 m · cooldown 2.4 s · custo 0
-
-### Habilidades
-
-- **Hipnose Espiral** — △ + ○ / Y + B · custo 25 · cooldown 22 s · alcance 10 m
-  A espiral do Parasita de Dimensões: o Lodo desenha uma espiral no chão e o alvo anda em círculos até o centro (perto do Ferreiro), sem conseguir defender; lá fica parado, hipnotizado.
-- **Espada Consumidora** — R2 + × / RT + A · custo 20 · cooldown 16 s
-  Desperta a espada amaldiçoada: por alguns segundos cada corte abre um ferimento que consome o alvo.
-- **Conforto de Santo Berço** — R2 + △ / RT + Y · custo 25 · cooldown 24 s
-  A ilusão da tarde perfeita de Santo Berço conforta o Luzidio: recupera bastante vida devagar — mas a ilusão se quebra se ele apanhar.
-- **Armadura do Ferreiro** — △ + L2 / Y + LT · custo 25 · cooldown 22 s
-  Fecha o peitoral de metal: por 6 s recebe 25% menos dano e aguenta 2 golpes sem recuar, mas anda um pouco mais devagar.
-- **Passiva — Resistente:** −8% de dano físico recebido
-
-### Especial: Espada Consumidora
-
-250 de dano · custo 50 · cooldown 14 s.
-
-### Transformação: Pacto do Santo
-
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → o Lodo toma o corpo: transforma no Deus da Morte (chefe com vida própria) até o fim do round.
-
----
-
 ## DALMO
 
 *Gladiador das arenas clandestinas: pondo o escafandro, vira o Colosso* · arma: Os punhos; as Manoplas do Colosso na Transformação
@@ -748,7 +655,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 | Trás + ○ | Cabeçada | 40 | 1.5 m |  |
 | Lado + ○ | Gancho de lado | 34 | 1.9 m |  |
 | No ar + ○ | Martelada no ar | 44 | 1.9 m | desce com impacto |
-| ↑ + ○ (no combo) | Gancho ascendente | 44 | 1.9 m | finalizador: undefined |
+| ↑ + ○ (no combo) | Gancho ascendente | 44 | 1.9 m | finalizador: lança alto (combo aéreo) |
 | ↓ + ○ (no combo) | Pisão | 54 | 1.8 m | finalizador: derruba |
 
 ### Principal (□ / X): Pode Vir!
@@ -794,7 +701,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 | Trás + ○ | Recua e revida | 38 | 1.6 m | invulnerável no começo |
 | Lado + ○ | Machadada lateral | 30 | 2 m |  |
 | No ar + ○ | Machado do alto | 38 | 2 m | desce com impacto |
-| ↑ + ○ (no combo) | Machado para cima | 40 | 2.1 m | finalizador: undefined |
+| ↑ + ○ (no combo) | Machado para cima | 40 | 2.1 m | finalizador: lança alto (combo aéreo) |
 | ↓ + ○ (no combo) | Machado no chão | 48 | 2.1 m | finalizador: derruba |
 
 ### Principal (□ / X): Machado na Corda
@@ -840,7 +747,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 | Trás + ○ | Some e volta | 28 | 1.8 m | invulnerável no começo |
 | Lado + ○ | Flanco | 28 | 1.8 m |  |
 | No ar + ○ | Punhal do alto | 30 | 1.8 m | desce com impacto |
-| ↑ + ○ (no combo) | Corte ascendente | 36 | 1.8 m | finalizador: undefined |
+| ↑ + ○ (no combo) | Corte ascendente | 36 | 1.8 m | finalizador: lança alto (combo aéreo) |
 | ↓ + ○ (no combo) | Rasteira | 40 | 1.8 m | finalizador: derruba |
 
 ### Principal (□ / X): Punhais Arremessados
@@ -886,7 +793,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 | Trás + ○ | Recua e corta | 30 | 1.8 m | invulnerável no começo |
 | Lado + ○ | Corte rodando | 28 | 1.8 m |  |
 | No ar + ○ | Faca aérea | 32 | 1.8 m | desce com impacto |
-| ↑ + ○ (no combo) | Corte para cima | 38 | 1.8 m | finalizador: undefined |
+| ↑ + ○ (no combo) | Corte para cima | 38 | 1.8 m | finalizador: lança alto (combo aéreo) |
 | ↓ + ○ (no combo) | Rasteira e faca | 42 | 1.8 m | finalizador: derruba |
 
 ### Principal (□ / X): Sniper Fantasma
@@ -931,7 +838,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 | Trás + ○ | Recua e estoca | 34 | 2.4 m | invulnerável no começo |
 | Lado + ○ | Varrida lateral | 30 | 2.5 m |  |
 | No ar + ○ | Antena do alto | 36 | 2.4 m | desce com impacto |
-| ↑ + ○ (no combo) | Antena para cima | 40 | 2.4 m | finalizador: undefined |
+| ↑ + ○ (no combo) | Antena para cima | 40 | 2.4 m | finalizador: lança alto (combo aéreo) |
 | ↓ + ○ (no combo) | Antena no chão | 46 | 2.4 m | finalizador: derruba |
 
 ### Principal (□ / X): Rajada Caótica
@@ -959,7 +866,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ## JUAN
 
-*Masoquista e imprevisível: quanto mais apanha, mais sanidade; quase morto, senta no Trono e vira o Diabo* · arma: Faca Predadora (lâmina ondulada que absorve sangue)
+*Masoquista e imprevisível: quanto mais apanha, mais sanidade; quase morto, o ódio vira garras — e depois o Trono* · arma: Faca Predadora (lâmina ondulada que absorve sangue)
 
 ### Físico (○ / B)
 
@@ -974,7 +881,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 | Trás + ○ | Recua e corta | 30 | 1.8 m | invulnerável no começo |
 | Lado + ○ | Corte em movimento | 28 | 1.8 m |  |
 | No ar + ○ | Faca aérea | 32 | 1.8 m | desce com impacto |
-| ↑ + ○ (no combo) | Corte para cima | 38 | 1.8 m | finalizador: undefined |
+| ↑ + ○ (no combo) | Corte para cima | 38 | 1.8 m | finalizador: lança alto (combo aéreo) |
 | ↓ + ○ (no combo) | Faca no chão | 44 | 1.8 m | finalizador: derruba |
 
 ### Principal (□ / X): Lâmina de Sangue
@@ -996,6 +903,244 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 250 de dano · custo 50 · cooldown 14 s.
 
+### Transformação: Ódio do Diabo
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
+
+---
+
+## O DIABO
+
+*O Portador da Relíquia de Sangue: regenera, bebe o sangue derramado e oferece pactos* · arma: Quatro braços com garras
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Garra direita | 32 | 2.2 m |  |
+| ○ 2 | Garra esquerda | 32 | 2.2 m |  |
+| ○ 3 | Quatro garras | 48 (2 acertos) | 2.2 m |  |
+| ○ 4 | Rasgar | 70 | 2.3 m | finalizador: lança |
+| Frente + ○ | Bote do Diabo | 38 | 2.3 m |  |
+| Trás + ○ | Recua e rasga | 34 (2 acertos) | 2.2 m | invulnerável no começo |
+| Lado + ○ | Garra em giro | 32 | 2.2 m |  |
+| No ar + ○ | Mergulho do Diabo | 40 | 2.2 m | desce com impacto |
+| ↑ + ○ (no combo) | Garra ascendente | 44 | 2.2 m | finalizador: lança alto (combo aéreo) |
+| ↓ + ○ (no combo) | Cravar as garras | 50 | 2.2 m | finalizador: derruba |
+
+### Principal (□ / X): Lança de Sangue
+
+- Dano 30 · alcance 22 m · cooldown 1.9 s · custo 0
+- Frente + □: **LANÇA CRAVADA** — 46
+- Lado + □: **QUATRO LANÇAS** — 13 × 4
+- Trás + □: **LANÇA E RECUO** — 24
+
+### Habilidades
+
+- **Veias de Sangue** — △ + □ / Y + X · custo 25 · cooldown 13 s · dano 36 · alcance 12 m
+  O sangue rompe as veias do alvo e vira correntes que saem do peito dele e se cravam no chão: fica preso por um instante.
+- **Ódio do Diabo** — R2 + △ / RT + Y · custo 25 · cooldown 18 s · alcance 11 m
+  Enche o adversário de um ódio paranormal por 6 s: ele bate 10% mais forte, mas não defende, não usa rituais e leva 20% a mais de dano. O Diabo se alimenta do ódio: +15% de dano e mais velocidade enquanto durar.
+- **Transportar pelo Sangue** — R2 + × / RT + A · custo 20 · cooldown 8 s
+  Afunda no sangue e sai pela poça mais perto do adversário (ou por uma fenda atrás dele). Se o adversário estiver colado, é ARRASTADO junto e cuspido no chão de outra poça.
+- **Senhor do Sangue** — △ + ○ / Y + B · custo 30 · cooldown 22 s
+  Abre poças de sangue perto do adversário e delas sobe uma horda que luta pelo Diabo por 12 s: 1 a 3 Zumbis de Sangue fracos, ou 2 fracos e 1 forte.
+- **Sangue nos Arredores** — △ + L2 / Y + LT · custo 30 · cooldown 16 s · dano 24
+  O chão em volta jorra sangue em 4 ondas: dano, lentidão, e o Diabo bebe 50% do sangue derramado. Deixa poças de sangue em volta.
+
+### Especial: Pacto
+
+O alvo fica transtornado por 9 s: não defende e recebe mais dano; o Diabo se cura · custo 50 · cooldown 20 s.
+
 ### Transformação: Renascimento
 
 Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → transforma no Diabo até o fim do round (+150 de vida).
+
+---
+
+## A MAGISTRADA
+
+*A Portadora da Relíquia de Conhecimento: sabe tudo, lembra de tudo e só age quando o Equilíbrio cai* · arma: A bengala e a Máscara do Desespero
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Advertência | 26 | 2.2 m |  |
+| ○ 2 | Revés | 26 | 2.2 m |  |
+| ○ 3 | Mão das Sombras | 30 | 3.4 m |  |
+| ○ 4 | Sentença | 32 | 2.3 m |  |
+| ○ 5 | Executora das Regras | 60 | 2.6 m | finalizador: lança |
+| Frente + ○ | Passo das Sombras | 36 | 2.3 m |  |
+| Trás + ○ | Recuo e Empurrão | 36 | 3.4 m | invulnerável no começo |
+| Lado + ○ | Giro da Capa | 32 | 2.4 m |  |
+| No ar + ○ | Queda da Sentença | 36 | 2.3 m | desce com impacto |
+| ↑ + ○ (no combo) | Erguer pelas Sombras | 38 | 2.3 m | finalizador: lança alto (combo aéreo) |
+| ↓ + ○ (no combo) | Golpe do Juízo | 46 | 2.3 m | finalizador: derruba |
+
+### Principal (□ / X): Sigilo do Conhecimento
+
+- Dano 30 · alcance 18 m · cooldown 2.6 s · custo 0
+
+### Habilidades
+
+- **Chamar as Máscaras** — △ + □ / Y + X · custo 35 · cooldown 24 s
+  Três membros da Seita das Máscaras (o Nathaniel entre eles) sobem das sombras em volta do adversário e lutam por ela por 10 s — socos e empurrões de sombra. Somem quando apanham demais.
+- **Dimensão das Sombras** — Energia + Pulo (△+× / Y+A) · custo 22 · cooldown 6 s
+  Some na própria sombra (a Onipresença da Máscara) e surge atrás do adversário, já podendo atacar.
+- **Olhar do Desespero** — △ + ○ / Y + B · custo 25 · cooldown 12 s · alcance 8 m
+  A Máscara encara o adversário: quem estiver à frente fica paralisado por um instante, vulnerável a combo.
+- **Controle Mental** — R2 + × / RT + A · custo 35 · cooldown 18 s · alcance 10 m
+  A Magistrada fala pelo corpo do alvo: por alguns segundos ele anda sozinho até ela e não consegue defender.
+- **Dispersão de Dano** — △ + L2 / Y + LT · custo 30 · cooldown 22 s
+  A aura dourada se abre e os Sigilos giram em volta: por 5 s ela recebe METADE do dano e aguenta 1 golpe sem recuar.
+- **Levitação** — R2 + △ / RT + Y · custo 30 · cooldown 15 s · dano 16 · alcance 18 m
+  Ergue a mão livre e as pedras do chão flutuam em volta dela; depois voam uma a uma contra o alvo (dá para defender ou sair da frente).
+- **Passiva — Precognição:** não é pego desprevenido (sem bônus de costas nem susto de teleporte)
+
+### Especial: Prisão das Sombras
+
+250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: Saber Tudo é Perder Tudo
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +20% de dano (habilidades, especial, distância), −10% de dano recebido, recargas 40% mais rápidas, sanidade regenera +50%, cura 10% na hora.
+
+---
+
+## ARNALDO FRITZ
+
+*Aniquilador da Ordo Realitas: na Transformação, o relógio de bolso guarda a Relíquia e ele vira O Anfitrião* · arma: Espada da fita vermelha e o Emissor de Pulsos Paranormais
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Abertura de Cena | 26 | 2.15 m |  |
+| ○ 2 | Estocada de Palco | 28 | 2.6 m |  |
+| ○ 3 | Corte em Reverência | 28 | 2.15 m |  |
+| ○ 4 | Floreio | 34 (2 acertos) | 2.2 m |  |
+| ○ 5 | Ato Final | 60 | 2.5 m | finalizador: lança |
+| Frente + ○ | Entrada Triunfal | 36 | 2.2 m |  |
+| Trás + ○ | Mesura e Estocada | 40 | 2.5 m | invulnerável no começo |
+| Lado + ○ | Rodopio | 32 | 2.3 m |  |
+| No ar + ○ | Corte Aéreo | 36 | 2.2 m | desce com impacto |
+| ↑ + ○ (no combo) | Corte Ascendente | 38 | 2.2 m | finalizador: lança alto (combo aéreo) |
+| ↓ + ○ (no combo) | Golpe de Cena | 46 | 2.2 m | finalizador: derruba |
+
+### Principal (□ / X): Emissor de Pulsos Paranormais
+
+- Dano 18 · alcance 14 m · cooldown 3.2 s · custo 0
+- Prende e puxa o inimigo para 1.9 m, abrindo 0.5 s para combar
+- Trás + □: **AFASTAR!** — 26
+
+### Habilidades
+
+- **Finta Teatral** — △ + ○ / Y + B · custo 20 · cooldown 10 s · dano 55 · alcance 2.2 m
+  Provoca com a mão livre, avança e, quando o adversário reage, o corte de verdade entra pela guarda — quebra a defesa.
+- **Pulso Paranormal** — △ + □ / Y + X · custo 25 · cooldown 12 s · alcance 11 m
+  O Emissor de Pulsos no máximo: o alvo LONGE é atraído e recebe a estocada assim que chega; o alvo PERTO é jogado longe e cai.
+- **Rodopio da Fita** — R2 + × / RT + A · custo 20 · cooldown 11 s · dano 60
+  Gira com a espada aberta — a fita vermelha acompanha o giro: dois cortes em área, o último joga longe.
+- **Aniquilador** — △ + L2 / Y + LT · custo 25 · cooldown 20 s
+  O veterano dos Aniquiladores aparece: por 7 s a postura fica agressiva, os golpes físicos saem 15% mais rápidos e 15% mais fortes, e ele recupera uma esquiva.
+- **Ensaio Geral** — R2 + △ / RT + Y · custo 20 · cooldown 18 s
+  Já ensaiou essa cena: por 6 s recebe 20% menos dano, é empurrado bem menos e aguenta 2 golpes sem recuar.
+
+### Especial: Ato Final
+
+250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: A Relíquia do Relógio
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
+
+---
+
+## FERREIRO
+
+*Guardião de Santo Berço: quase morto, o Pacto do Santo o transforma no Deus da Morte* · arma: Espada Consumidora
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Corte largo | 32 | 2.3 m |  |
+| ○ 2 | Corte de volta | 32 | 2.3 m |  |
+| ○ 3 | Corte diagonal | 38 | 2.3 m |  |
+| ○ 4 | Golpe do Ferreiro | 44 | 2.4 m |  |
+| ○ 5 | Consumir | 66 | 2.4 m | finalizador: lança |
+| Frente + ○ | Investida do Ferreiro | 40 | 2.4 m |  |
+| Trás + ○ | Recua e consome | 36 | 2.4 m | invulnerável no começo |
+| Lado + ○ | Corte em arco | 34 | 2.4 m |  |
+| No ar + ○ | Corte aéreo | 40 | 2.5 m | desce com impacto |
+| ↑ + ○ (no combo) | Corte ascendente | 44 | 2.5 m | finalizador: lança alto (combo aéreo) |
+| ↓ + ○ (no combo) | Espada no chão | 52 | 2.5 m | finalizador: derruba |
+
+### Principal (□ / X): Lodo arremessado
+
+- Dano 34 · alcance 18 m · cooldown 2.4 s · custo 0
+
+### Habilidades
+
+- **Hipnose Espiral** — △ + ○ / Y + B · custo 25 · cooldown 22 s · alcance 10 m
+  A espiral do Parasita de Dimensões: o Lodo desenha uma espiral no chão e o alvo anda em círculos até o centro (perto do Ferreiro), sem conseguir defender; lá fica parado, hipnotizado.
+- **Espada Consumidora** — R2 + × / RT + A · custo 20 · cooldown 16 s
+  Desperta a espada amaldiçoada: por alguns segundos cada corte abre um ferimento que consome o alvo.
+- **Conforto de Santo Berço** — R2 + △ / RT + Y · custo 25 · cooldown 24 s
+  A ilusão da tarde perfeita de Santo Berço conforta o Luzidio: recupera bastante vida devagar — mas a ilusão se quebra se ele apanhar.
+- **Armadura do Ferreiro** — △ + L2 / Y + LT · custo 25 · cooldown 22 s
+  Fecha o peitoral de metal: por 6 s recebe 25% menos dano e aguenta 2 golpes sem recuar, mas anda um pouco mais devagar.
+- **Passiva — Resistente:** −8% de dano físico recebido
+
+### Especial: Espada Consumidora
+
+250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: Pacto do Santo
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → o Lodo toma o corpo: transforma no Deus da Morte (chefe com vida própria) até o fim do round.
+
+---
+
+## O ESTRANGEIRO
+
+*A criatura de Transmissão: ninguém lembra de tê-lo visto — até ser tarde* · arma: Cinco garras enormes em cada mão
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Garra longa | 26 | 2.5 m |  |
+| ○ 2 | Garra de volta | 26 | 2.5 m |  |
+| ○ 3 | Dez garras | 40 (2 acertos) | 2.5 m |  |
+| ○ 4 | Rasgar a mente | 62 | 2.6 m | finalizador: lança |
+| Frente + ○ | Flutuar até a vítima | 36 | 2.5 m |  |
+| Trás + ○ | Recuar flutuando | 32 (2 acertos) | 2.4 m | invulnerável no começo |
+| Lado + ○ | Garra em arco | 30 | 2.5 m |  |
+| No ar + ○ | Descida das garras | 36 | 2.4 m | desce com impacto |
+| ↑ + ○ (no combo) | Erguer pela garganta | 40 | 2.4 m | finalizador: lança alto (combo aéreo) |
+| ↓ + ○ (no combo) | Cravar as garras | 46 | 2.4 m | finalizador: derruba |
+
+### Principal (□ / X): Rajada Psíquica
+
+- Dano 32 · alcance 22 m · cooldown 2.8 s · custo 0
+
+### Habilidades
+
+- **Comandar** — △ + ○ / Y + B · custo 35 · cooldown 18 s · alcance 11 m
+  Entra na mente do alvo: por alguns segundos ele anda sozinho até o Estrangeiro e não consegue se defender.
+- **Oblívio** — △ + □ / Y + X · custo 22 · cooldown 14 s
+  O alvo ESQUECE que ele está ali (4 s): quase invisível e mais rápido. O primeiro ataque pega o alvo desprevenido. Tomar dano o revela.
+- **Aparição** — Energia + Pulo (△+× / Y+A) · custo 22 · cooldown 7 s
+  Some numa interferência de sinal e reaparece atrás do alvo, como nas abduções.
+- **Toque Sutil** — △ + L2 / Y + LT · custo 35 · cooldown 30 s · dano 40 · alcance 1.6 m
+  Um toque de um dedo: o sangue do alvo borbulha e ele derrete por dentro — dano contínuo, lento e mais fraco por alguns segundos. Curtíssimo alcance; dá para esquivar.
+
+### Especial: Abdução
+
+250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: Incubar
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +15% de dano, −12% de dano recebido, +10% de velocidade, recargas 30% mais rápidas, cura 10% na hora.

@@ -111,20 +111,23 @@ export default {
       color: 0x2a2632,
     },
     {
-      id: 'pocaLodo',
-      name: 'Poça de Lodo',
+      // cânone (Desconjuração, depois de transcender): concentrando-se no Símbolo, o alvo APODRECE e se desintegra —
+      // "tal como a Decadência e a Cicatrização" (a mecânica das espirais que apertam). Substitui a antiga "Poça de
+      // Lodo", que não existia na wiki.
+      id: 'rotura',
+      name: 'Destruição Temporal "Rotura"',
       input: 'carga+dodge', // △ + L2 / Y + LT
-      type: 'throwProjectile',
-      description: 'Arremessa uma bola de Lodo Preto que se espalha no chão: o inimigo dentro anda devagar e não recupera energia.',
-      energyCost: 20,
-      cooldown: 15,
-      anim: 'throw_r',
-      windup: 0.3,
-      recovery: 0.3,
-      projectile: {
-        visual: 'decay', color: 0x2a2632, speed: 15, range: 16, radius: 0.4, gravity: 18, damage: 0, lobTo: 'feet', kind: 'ability', element: 'morte',
-        explode: { radius: 2.2, damage: 35, knockback: 1, color: 0x3a3442, mist: { radius: 3.2, duration: 7, slow: 0.55, enemyRegen: 0, color: 0x1a1620, pool: { color: 0x07060a, glow: 0x08201c } } },
-      },
+      type: 'decadence',
+      description: 'Concentra-se no Símbolo: espirais de Morte surgem em volta do alvo, apertam e ele APODRECE (dano de Morte e uma decomposição que continua). Dá para esquivar quando as espirais fecham.',
+      energyCost: 25,
+      cooldown: 14,
+      cast: 0.62,
+      range: 9,
+      damage: 58,
+      decay: { dps: 5, duration: 3 },
+      element: 'morte',
+      color: 0x2a2632,
+      ai: { max: 8.5 },
     },
   ],
 

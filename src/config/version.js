@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.18.0';
+export const VERSION = '3.19.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,19 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.19.0',
+    date: '2026-10-11',
+    title: 'O Diabo, o Estrangeiro e as Máscaras',
+    items: [
+      'O DIABO agora é o Diabo de Ordem Paranormal: pele vermelha, chifres anelados, sorriso de dentes finos, manto preto de capuz com frisos vermelhos e garras. A TRANSFORMAÇÃO dele é o Renascimento: o Trono sobe e ele vira O Portador do Trono (a fusão com o Henri). O Juan continua com as duas transformações: Ódio do Diabo e, depois, o Portador do Trono.',
+      'Novo lutador nos Portadores das Relíquias: O ESTRANGEIRO, a criatura de Transmissão de Sinais do Outro Lado — 2,5 m, máscara cinza de olhos verdes com os fios ligados ao corpo, capa esverdeada até o chão e garras enormes. Rajada Psíquica, Comandar, Oblívio (o alvo esquece que ele está ali), Aparição e Toque Sutil. Especial: ABDUÇÃO. Transformação: INCUBAR.',
+      'A MAGISTRADA agora CHAMA AS MÁSCARAS: três membros da Seita das Máscaras (o Nathaniel entre eles) sobem das sombras em volta do adversário e lutam por ela. Golpes novos: a bengala corta curto e firme e a mão livre empurra as sombras de longe, cada acerto deixa o Sigilo dourado. A Prisão das Sombras agora fecha uma esfera de sombra com os Sigilos girando. O teleporte dela deixou de ser o poço vermelho do Joui: agora a realidade distorce em dourado.',
+      'GUIZO: o Distorcer Aparência é SORTEADO a cada transformação — o disfarce ET, o GUIZO BOMBADO (inflado, luta no soco, aguenta muito) ou o GUIZO VELHO (grisalho e de bigode, mais lento, mas os rituais batem mais forte e voltam mais rápido).',
+      'Gal: a Velocidade Mortal agora é a mesma do Guizo — mais rápido, golpes mais rápidos, esquivas de volta e os rastros no ar.',
+      'Revisão dos golpes pela wiki: o Dante troca a Poça de Lodo (que não existia) pelo ritual DESTRUIÇÃO TEMPORAL "ROTURA", e o Joui ganha o ritual ENVELHECIMENTO LOCALIZADO "MATEO" (R2 + △, cura).',
+    ],
+  },
   {
     v: '3.18.0',
     date: '2026-10-10',

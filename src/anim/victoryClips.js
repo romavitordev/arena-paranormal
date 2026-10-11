@@ -53,6 +53,8 @@ export function addVictoryClips(CLIPS, k) {
     vic_arthur: pose({ hip: [0, -0.25, 0], sp: [0, 0.2, 0], hd: [0.12, 0.25, 0.05], sR: [-2.1, 0.35, -0.55], eR: [-2.2, 0, 0], sL: [0, 0, 0.1], eL: [0, 0, 0], lL: [-0.12, 0, 0.12], kL: [0.15, 0, 0], lR: [0.1, 0, -0.14] }),
     // Arnaldo: o ator agradece a plateia — reverência teatral, a espada aberta para o lado e a mão livre no peito
     // A Magistrada: ereta, a bengala firme na direita, a esquerda aberta para baixo e a cabeça inclinada — a Máscara olha
+    // O Estrangeiro: ereto, os braços longos abertos para baixo com as garras à mostra e a cabeça levemente inclinada
+    vic_estrangeiro: pose({ sp: [-0.08, 0, 0], hd: [0.25, 0, -0.2], sR: [-0.25, 0, -0.55], eR: [-0.25, 0, 0], sL: [-0.25, 0, 0.55], eL: [-0.25, 0, 0] }),
     vic_magistrada: pose({ sp: [-0.05, 0, 0], hd: [0.18, 0.1, 0.18], sR: [-0.42, 0, -0.18], eR: [-0.5, 0, 0], sL: [-0.12, 0, 0.42], eL: [-0.35, 0, 0], lR: [0.04, 0, -0.05], lL: [-0.04, 0, 0.05] }),
     vic_arnaldo: pose({ sp: [0.5, 0, 0], hd: [-0.25, 0, 0], sR: [-0.4, 0, -1.2], eR: [-0.15, 0, 0], sL: [-1.0, 0.8, 0.1], eL: [-2.1, 0, 0], lR: [0.35, 0, -0.08], kR: [0.3, 0, 0], lL: [-0.12, 0, 0.1] }),
     // Veríssimo: o comandante — a espada do Arnaldo de ponta para baixo à frente, as duas mãos no punho, queixo erguido

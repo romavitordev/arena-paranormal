@@ -1,5 +1,58 @@
 # Registro administrativo de alterações
 
+## v3.19.0 — O Diabo, o Estrangeiro e as Máscaras
+
+- Versão: `VERSION` 3.18.0 → **3.19.0**.
+
+- **O Estrangeiro** (decisão do usuário: o Estrangeiro e o Amigo Imaginário entram nos Portadores mesmo sem portar
+  Relíquia). Wiki "Estrangeiro" (arte do Livro de Regras): 2,5 m, máscara cinza de olhos verdes com a divisão, fios
+  da máscara ao corpo, capa verde até o chão com ombreiras, roupa metálica esverdeada com detalhes pretos, manto que
+  cobre as pernas, braços longos de pele cinza com braceletes e cinco garras. `char_estrangeiro.py` (Builder altura
+  1,2; olhos e as formas do peito em material emissivo). Kit (Conhecimento — a ficha antes de Tenebris): garras nas
+  animações do Diabo (`db_*`), □ `mindSigil` verde "Rajada Psíquica", Comandar (`mindControl`), Oblívio
+  (`shadowVeil`), Aparição (`teleportBehind` `vanishFx: 'signal'`), Toque Sutil (`deathTouch`), especial Abdução
+  (`cinematicCombo`), despertar Incubar (`awakenMode`), passiva `mindRead`. Falas completas e pares com Xande, Lírio
+  e Guizo.
+- **O Diabo canônico** (pedido: "o diabo não parece o diabo de Ordem Paranormal e sim a fusão dele com o Henri"):
+  modelo novo `o_diabo.glb` pela miniatura que o usuário mandou (pele vermelha, chifres anelados curvados para trás,
+  orelhas pontudas, sorriso de dentes finos, manto preto de capuz com frisos vermelhos, mangas largas, garras,
+  pés de garras; o manto com abas sobrepostas para não mostrar as pernas). `o_diabo.awakening`: `awakenMode` Coroa de
+  Espinhos → `devilPact` (Renascimento) para a forma `diabo` (o Portador do Trono, +150). O tamanho volta ao padrão.
+  O Juan mantém Ódio do Diabo → Portador do Trono.
+- **Magistrada**:
+  - "Chamar as Máscaras" (pedido: "deve chamar as máscaras... pesquise sobre Nathaniel"; wiki "Seita das
+    Máscaras" / "Nathaniel": túnicas brancas com partes pretas, corda de forca, cada máscara diferente — a do
+    Nathaniel branca com o coração dourado invertido, estrelas de quatro pontas e lágrimas pretas). Habilidade
+    `summonMasks` (△ → □, 35 de custo, recarga 24 s): 3 `DanteClone` com o modelo da Magistrada repintado
+    (`restyle`), sem a bengala, subindo da sombra (`rise`), 70 de vida cada, socos e empurrões de sombra, 10 s.
+    `DanteClone` ganhou `o` (`restyle`, `setup`, `strikes`, `hp`, `damageMult`, `element`, `rise`, `model`).
+  - Físico refeito (pedido: os ataques "podem ser melhores"): no lugar da esgrima teatral do Arnaldo, a bengala
+    (`slash_h` / `slash_h_back` / `slash_d` / `slash_finisher`) e a Mão das Sombras (`wave_punch`, 3,4 m); todo acerto
+    com `impactFx: 'sigil'`.
+  - Prisão das Sombras com `sp.sphere` (nova opção do `cinematicCombo`: esfera escura com anéis e Sigilos dourados
+    girando; animada pelo update do especial, porque os tickers do mundo param na cinemática).
+  - Teleporte (pedido: "está igual ao do Joui em vermelho"): `shadowDisc` aceita `rim` (a borda era vermelha fixa) e
+    `teleportBehind` usa `a.color` + `a.vanishFx` ('sigil': distorção + anel dourado; 'signal': raios verdes).
+- **Guizo** (pedido: "transformação aleatória... versão ET, versão bombado e outras"): `maskTransform` aceita
+  `sp.randomForms` (sorteia `form`/`formBanner`/`swap`/`tint`; durante a partida em rede o `Math.random` é o sorteio
+  com semente). Formas `guizo_bombado` (variante `addGuizoBombadoProps`: corpo ×1,24 de largura, sem a faca; socos do
+  Kian ×1,25 de dano e ×1,3 de empurrão, 1100 de vida, `thickSkin`) e `guizo_velho` (referência "Guizo velho":
+  cabelo grisalho e bigode; mais lento, □ ×1,35, rituais ×1,25 e recargas ×0,75). Testado: 0,1 → ET, 0,5 → bombado,
+  0,9 → velho.
+- **Gal** (pedido: "velocidade mortal de gal deve ser igual a do guizo"): `selfBuff` → `deadlySpeedTrail` com os
+  mesmos números do Guizo (1,35 de velocidade, 1,25 de ritmo, esquivas de volta, rastros). ⚠ O Xande ainda usa a
+  versão simples.
+- **Elementos** (pedido: "dalmo é de sangue... pesquise"): a wiki diz Energia para as Manoplas do Colosso (Pressão
+  Atmosférica) — o usuário mandou manter Energia. Os Assassinos fazem rituais de sacrifício de Sangue, mas cada um tem
+  o seu: Kemi Morte (o rifle é amaldiçoado com Morte), Labirinto Energia, Aguiar/Jae/Juan Sangue. Nada mudou.
+- **Revisão dos golpes pela wiki** (pedido: "verifique a documentação de todos os golpes"): script comparando o kit
+  de cada um com os rituais/habilidades do `lore/MEMBROS.md`. Quase tudo bate; o que não está na wiki são itens do
+  arsenal (granadas, correntes, revólver). Corrigido: Dante "Poça de Lodo" (inventada) → Destruição Temporal "Rotura"
+  (`decadence`, cânone); Joui ganha Envelhecimento Localizado "Mateo" (R2 + △, `healOverTime` 80). O Xande está como
+  Conhecimento por uma correção antiga; o `MEMBROS.md` diz Sangue, mas a wiki não define elemento para ele (rituais de
+  Sangue, Conhecimento e Energia) — mantido. `gen-moves`: `launchHigh` mostrava "undefined" e as variações do □ que
+  disparam habilidade também; `HABILIDADES.md` regenerado (agora com O Diabo, a Magistrada e o Estrangeiro).
+
 ## v3.18.0 — Portadores das Relíquias
 
 - Versão: `VERSION` 3.17.1 → **3.18.0**.

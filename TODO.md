@@ -96,8 +96,8 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
 ## 🟢 P3 — Conteúdo futuro
 
 23. Novas formas
-24. Novos personagens — **Portadores das Relíquias**: o cânone tem só 4 Relíquias (todas no jogo agora). Decidir com o
-    usuário se o **Estrangeiro** e o **Amigo Imaginário** (que não são portadores) entram no grupo ou em outro
+24. Novos personagens — **Portadores das Relíquias**: falta o **Amigo Imaginário** (decisão do usuário: entra no grupo
+    mesmo sem ser portador; pesquisar na wiki — provavelmente o Tirigan da Mansão Endiabrada — antes de modelar)
 25. Novos cenários
 26. Novos modos
 

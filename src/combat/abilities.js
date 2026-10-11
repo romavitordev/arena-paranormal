@@ -5,6 +5,7 @@ import { applyHit } from './damage.js';
 import { splitDamage } from './specials/common.js';
 import { hasPassive } from './passives.js';
 import { DanteClone, CLONE, BloodZombie } from './npcs.js';
+import { MATERIAL_TEXTURES } from '../models/textures.js';
 import { buildHuntingDog } from '../models/dog.js';
 import { bloodCoat } from '../models/weapons.js';
 import { addBloodPool, poolsOf, splatGeo } from './bloodPools.js';
@@ -200,7 +201,17 @@ export const ABILITY_TYPES = {
       const sink = a.vanishTime;
       f.vel.set(0, 0, 0);
       f.anim.play('vanish', { restart: true, duration: sink });
-      world.fx.shadowDisc(f.pos, { radius: 1.1, life: sink + 0.35 });
+      world.fx.shadowDisc(f.pos, { radius: 1.1, life: sink + 0.35, rim: a.color });
+      // a.vanishFx: 'sigil' (Magistrada — a Dimensão das Sombras distorce a realidade com os Sigilos dourados) ·
+      // 'signal' (Estrangeiro — some numa interferência de sinal)
+      const vanishFx = (p) => {
+        if (!a.vanishFx) return;
+        const c = new THREE.Vector3(p.x, 1.1, p.z);
+        world.fx.distort(c, { color: a.color, radius: 1.6, life: 0.4 });
+        if (a.vanishFx === 'sigil') world.fx.ring(new THREE.Vector3(p.x, 0.05, p.z), { color: a.color, radius: 1.6, life: 0.5 });
+        if (a.vanishFx === 'signal') for (let i = 0; i < 4; i++) world.fx.lightning(c.clone().add(new THREE.Vector3((Math.random() - 0.5) * 1.2, (Math.random() - 0.5) * 1.6, (Math.random() - 0.5) * 1.2)), c.clone().add(new THREE.Vector3((Math.random() - 0.5) * 1.2, (Math.random() - 0.5) * 1.6, (Math.random() - 0.5) * 1.2)), { color: a.color, life: 0.18 });
+      };
+      vanishFx(f.pos);
       world.audio.play('teleport');
       f.invuln = sink + 0.05;
       tl.each((time) => {
@@ -215,7 +226,8 @@ export const ABILITY_TYPES = {
         const spot = findSpotBehind(world.arena, target(), { distance: a.distance, radius: f.radius }) || first;
         f.pos.set(spot.x, Math.max(0, opp.pos.y), spot.z);
         f.yaw = yawTo(f.pos, opp.pos);
-        world.fx.shadowDisc(f.pos, { radius: 1.1, life: 0.45 });
+        world.fx.shadowDisc(f.pos, { radius: 1.1, life: 0.45, rim: a.color });
+        vanishFx(f.pos);
         f.rig.body.position.y = -1.6;
         f.setVisible(true);
         f.invuln = 0.12;
@@ -2415,6 +2427,59 @@ Object.assign(ABILITY_TYPES, {
   // ------------------------------------------------------------------ O DIABO (Portador do Trono)
   // SENHOR DO SANGUE: abre poças de sangue perto do adversário e delas sobem Zumbis de Sangue que lutam pelo Diabo.
   // A horda é sorteada: 1, 2 ou 3 zumbis FRACOS, ou 2 fracos + 1 FORTE (a.hordes). Uma horda por vez.
+  // CHAMAR AS MÁSCARAS (Magistrada): membros da Seita das Máscaras sobem das sombras em volta do adversário e lutam por
+  // ela — túnica branca com partes pretas, a corda de forca, cada um com a sua máscara (um deles é o NATHANIEL). Socos e
+  // empurrões de sombra; somem nas sombras no fim do tempo ou quando apanham demais.
+  summonMasks: {
+    start(f, a, world) {
+      if (world.npcs.some((n) => n.alive && n.owner === f && n.isSeita)) { f.notify('AS MÁSCARAS JÁ ESTÃO AQUI'); return null; }
+      const opp = f.opponent;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.anim.play('cast_up', { restart: true, duration: 0.7 });
+      world.audio.play('fearGaze', { volume: 0.7, pitch: 0.6 });
+      const masks = ['mask_seita_nathaniel', 'mask_seita_riscos', 'mask_seita_negra'];
+      const tex = {};
+      const maskTex = (k) => {
+        if (!tex[k]) { const t = MATERIAL_TEXTURES[k](); tex[k] = t.isTexture ? t : t.map; tex[k].flipY = false; tex[k].needsUpdate = true; }
+        return tex[k];
+      };
+      tl.add(0.4, () => {
+        const base = opp ? opp.pos : f.pos;
+        const back = Math.atan2(f.pos.x - base.x, f.pos.z - base.z);
+        const taken = [{ x: base.x, z: base.z, r: 0.8 }, { x: f.pos.x, z: f.pos.z, r: 0.7 }];
+        for (let i = 0; i < a.count; i++) {
+          const ang = back + Math.PI + (i - (a.count - 1) / 2) * 1.2; // do outro lado do alvo: cercam
+          const want = { x: base.x + Math.sin(ang) * 2.2, z: base.z + Math.cos(ang) * 2.2 };
+          const spot = findFreeSpotNear(world.arena, want.x, want.z, { radius: 0.5, others: taken }) || want;
+          taken.push({ x: spot.x, z: spot.z, r: 0.5 });
+          world.fx.shadowDisc(new THREE.Vector3(spot.x, 0, spot.z), { radius: 1.0, life: 0.9, rim: a.color });
+          world.fx.distort(new THREE.Vector3(spot.x, 1.1, spot.z), { color: a.color, radius: 1.4, life: 0.4 });
+          const mask = masks[i % masks.length];
+          const npc = new DanteClone(f, world, i, a.duration, {
+            hp: a.hp, damageMult: 1, element: 'conhecimento', rise: true, strikes: a.strikes,
+            restyle(m) {
+              const mat = m.material;
+              const n = mat.name || '';
+              if (n.includes('cape_magistrada_in')) mat.color.set(0x141214);
+              else if (n.includes('cape_magistrada')) mat.color.set(0xe8e4dc); // a túnica branca
+              else if (n.includes('scarf_magistrada')) mat.color.set(0x1a181c); // o tecido preto por cima
+              else if (n.includes('gold_magistrada')) mat.color.set(0x2a2628);
+              else if (n.includes('face_magistrada')) { mat.map = maskTex(mask); mat.needsUpdate = true; }
+            },
+            setup(rig) { if (rig.props.cane) rig.showProp('cane', false); },
+          });
+          npc.isSeita = true;
+          npc.pos.set(spot.x, 0, spot.z);
+          world.addNpc(npc);
+        }
+        f.notify(`AS MÁSCARAS ×${a.count} — NATHANIEL ENTRE ELAS`, true);
+      });
+      tl.end(0.7);
+      return seqFrom(tl);
+    },
+  },
+
   summonBlood: {
     start(f, a, world) {
       if (world.npcs.some((n) => n.alive && n.owner === f && n instanceof BloodZombie)) { f.notify('A HORDA JÁ ESTÁ EM CAMPO'); return null; }

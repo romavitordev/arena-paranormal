@@ -193,5 +193,8 @@ export const GRAB_SCENES = {
 };
 GRAB_SCENES.kian_calamidade = GRAB_SCENES.kian; // a forma de Calamidade agarra igual (só mais forte)
 GRAB_SCENES.magistrada = GRAB_SCENES.arnaldo; // a bengala em esgrima, como a espada do Arnaldo
-GRAB_SCENES.o_diabo = GRAB_SCENES.diabo; // o Diabo dos Portadores agarra como a forma do Juan
+GRAB_SCENES.o_diabo = GRAB_SCENES.diabo;
+GRAB_SCENES.guizo_velho = GRAB_SCENES.guizo; // o Guizo velho agarra igual
+GRAB_SCENES.guizo_bombado = GRAB_SCENES.kian; // o bombado agarra no soco
+GRAB_SCENES.estrangeiro = GRAB_SCENES.diabo; // as garras, como as do Diabo // o Diabo dos Portadores agarra como a forma do Juan
 GRAB_SCENES.juan_odio = GRAB_SCENES.juan; // o Ódio do Diabo agarra como o Juan (as garras no lugar da faca)
