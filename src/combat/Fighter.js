@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { inkTentacle, inkSplash } from '../fx/inkFx.js';
 import { tAlert } from '../i18n/index.js';
 import { COMBAT } from '../config/combat.js';
 import { buildModel } from '../models/index.js';
@@ -714,6 +715,51 @@ export class Fighter {
     this.world.fx.burst(s.getWorldPosition(v1), { count: 1, color: D.color ?? 0xa01018, speed: 0.2, up: -0.5, life: 0.5, size: 0.07, gravity: 9 });
   }
 
+  // o JORRO de TINTA do Amigo Imaginário (def.inkStream): um fio grosso e ondulante que escorre sem parar do buraco do
+  // rosto até o chão e forma uma poça embaixo (a arte da wiki). Fica preso ao rig (some junto com ele).
+  updateInkStream() {
+    const D = this.def.inkStream;
+    const r = this.rig;
+    if (!D || !r.sockets) return;
+    const s = r.sockets[D.socket || 'mouth'];
+    if (!s) return;
+    let ink = r.inkStream;
+    if (!ink) {
+      const mat = new THREE.MeshToonMaterial({ color: D.color ?? 0x4a1a0c, emissive: 0x1a0603, emissiveIntensity: 0.5 });
+      const geo = new THREE.CylinderGeometry(1, 0.6, 1, 7, 6, true);
+      geo.translate(0, -0.5, 0); // o alto no 0, o fim em -1
+      const col = new THREE.Mesh(geo, mat);
+      const thin = new THREE.Mesh(geo, mat);
+      const pool = new THREE.Mesh(new THREE.CircleGeometry(1, 18), mat);
+      pool.rotation.x = -Math.PI / 2;
+      for (const m of [col, thin, pool]) { m.frustumCulled = false; r.root.add(m); }
+      ink = r.inkStream = { col, thin, pool, base: geo.attributes.position.array.slice() };
+    }
+    const on = this.visible && this.state !== 'ko' && this.state !== 'downed';
+    ink.col.visible = ink.thin.visible = on;
+    if (!on) { ink.pool.visible = false; return; }
+    r.root.updateMatrixWorld(true);
+    const top = s.getWorldPosition(v1);
+    const max = D.max ?? 2.2;
+    const len = Math.min(max, Math.max(0.05, top.y - 0.02));
+    const local = r.root.worldToLocal(top.clone());
+    const sc = 1 / (r.root.scale.x || 1);
+    const t = this.world.time;
+    const w = (D.width ?? 0.05) * sc;
+    ink.col.position.copy(local);
+    ink.col.scale.set(w * (1 + Math.sin(t * 11) * 0.12), len * sc, w * (1 + Math.cos(t * 9) * 0.12));
+    ink.thin.position.set(local.x + 0.035 * sc, local.y - 0.02, local.z + 0.01 * sc);
+    ink.thin.scale.set(w * 0.45, len * sc * (0.75 + Math.sin(t * 3.1) * 0.2), w * 0.45);
+    // a poça só quando o jorro alcança o chão
+    const reach = top.y - 0.02 <= max;
+    ink.pool.visible = reach;
+    if (reach) {
+      const floor = r.root.worldToLocal(v2.set(top.x, 0.03, top.z));
+      ink.pool.position.copy(floor);
+      ink.pool.scale.setScalar((D.pool ?? 0.32) * sc * (1 + Math.sin(t * 2.3) * 0.06));
+    }
+  }
+
   // ARMADURA DE SANGUE (Juan e a assistência dele): carne de sangue porosa crescendo no lado esquerdo do corpo
   // enquanto durar. Quem conjura (b.bloodArmSide) também tem o braço da faca virando arma de sangue.
   updateBloodShell(dt) {
@@ -767,6 +813,7 @@ export class Fighter {
     // pés presos ao chão só com o lutador apoiado (no ar, sendo lançado ou caído, a pose manda)
     this.rig.groundLock = this.onGround && !['launched', 'ko', 'downed', 'grabbed', 'pulled', 'special'].includes(this.state);
     this.anim.update(dt);
+    if (this.def.inkStream) this.updateInkStream();
     this.glowClock = (this.glowClock || 0) + dt;
     if (this.flash > 0) {
       this.flash -= dt;
@@ -1776,6 +1823,7 @@ export class Fighter {
           this.world.cameraRig.shake(s.groundFx === 'smash' ? 0.3 : 0.15, 0.18);
         }
         if (s.chain) this.startStrikeChain(s, w);
+        if (s.tentacle) this.spawnStrikeTentacle(s);
       }
       if (!c.hits[i] && t >= w[0] && t <= w[1]) this.checkMeleeHit(s, i);
       else if (c.hits[i] && t >= w[0] && t <= w[1]) this.checkNpcHits(s, i);
@@ -2022,10 +2070,27 @@ export class Fighter {
       for (let i = 0; i < 3; i++) this.world.after(i * 0.05, () => this.world.fx.ring(c, { color: 0x8a8494, radius: 0.7 + i * 0.45, life: 0.3, vertical: true, yaw: this.yaw + i * 0.6 }));
       this.world.fx.burst(c, { count: 16, color: 0x26222c, kind: 'smoke', speed: 1.6, life: 0.5, size: 0.3 });
     }
+    if (s.impactFx === 'ink') {
+      // Amigo Imaginário: a tinta espirra de onde a garra/o tentáculo acertou
+      inkSplash(this.world, opp.chestPos(), { size: s.finisher ? 1 : 0.55, puddle: !!s.finisher });
+    }
     if (s.impactFx === 'sigil') {
       this.world.fx.ring(opp.chestPos(), { color: this.def.energyColor, radius: 2.2, life: 0.35, vertical: true, yaw: this.yaw });
       this.world.fx.distort(opp.chestPos(), { color: this.def.energyColor, radius: 1.6, life: 0.3 });
     }
+  }
+
+  // chicote de TENTÁCULO (Amigo Imaginário, s.tentacle): um tentáculo negro sai do chão, ao lado da criatura, e
+  // chicoteia até o alcance do golpe (ou até o alvo, se ele estiver ali)
+  spawnStrikeTentacle(s) {
+    const F = forwardFromYaw(this.yaw, new THREE.Vector3());
+    const side = s.tentacle === 'left' ? 1 : -1;
+    const R = new THREE.Vector3(F.z, 0, -F.x).multiplyScalar(side);
+    const base = new THREE.Vector3(this.pos.x + F.x * 0.4 + R.x * 0.45, 0.02, this.pos.z + F.z * 0.4 + R.z * 0.45);
+    const opp = this.opponent;
+    const reach = opp && opp.state !== 'ko' && distXZ(this.pos, opp.pos) <= s.range + 0.4;
+    const end = reach ? () => opp.chestPos() : new THREE.Vector3(this.pos.x + F.x * s.range, 1.0, this.pos.z + F.z * s.range);
+    inkTentacle(this.world, base, end, { grow: 0.07, hold: 0.08, retract: 0.16, radius: 0.075, arc: 0.4, wiggle: 0.2 });
   }
 
   // Contra-ataque (postura de contra do Joui): acionado por damage.js

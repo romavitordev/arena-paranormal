@@ -166,6 +166,20 @@ export class AudioManager {
 
 // Biblioteca de sons sintetizados. Nome → função.
 const SYNTHS = {
+  // O SINO do Amigo Imaginário: sino de igreja grave (parciais de sino: hum, prime, terça menor, quinta, nominal)
+  bellToll: (a, t, v, o = {}) => {
+    const f0 = 196 * (o.pitch ?? 1);
+    a.noise(t, 0.05, { vol: 0.35 * v, type: 'bandpass', freq: 2400, q: 2 });
+    for (const [k, d, g] of [[0.5, 3.2, 0.32], [1, 2.6, 0.3], [1.19, 2.0, 0.2], [1.5, 1.6, 0.14], [2, 1.3, 0.16], [2.66, 0.9, 0.08], [3.01, 0.7, 0.06]]) {
+      a.tone(t, d, { vol: g * v, freq: f0 * k, freqEnd: f0 * k * 0.997, type: 'sine', attack: 0.004 });
+    }
+  },
+  // a tinta despejando / derretendo: gorgolejo grave e úmido
+  inkPour: (a, t, v, o = {}) => {
+    const p = o.pitch ?? 1;
+    a.noise(t, 0.9, { vol: 0.45 * v, type: 'bandpass', freq: 420 * p, freqEnd: 180 * p, q: 3, attack: 0.05 });
+    for (let i = 0; i < 6; i++) a.tone(t + i * 0.12 + Math.random() * 0.05, 0.09, { vol: 0.12 * v, freq: (260 + Math.random() * 200) * p, freqEnd: 90 * p, type: 'sine' });
+  },
   // "Shhh..." da Jae: sopro sibilado (ruído agudo filtrado, entra devagar e some)
   shhh: (a, t, v) => {
     a.noise(t, 0.85, { vol: 0.42 * v, type: 'bandpass', freq: 4300, freqEnd: 3100, q: 1.1, attack: 0.18 });

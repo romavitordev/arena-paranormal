@@ -1,5 +1,54 @@
 # Registro administrativo de alterações
 
+## v3.21.0 — Quando o Sino Tocar
+
+- Versão: `VERSION` 3.20.0 → **3.21.0**.
+
+- **Amigo Imaginário: modelo, animações e golpes únicos** (pedido: "melhore o modelo do amigo imaginário, crie os golpes únicos
+  dele, animações").
+  - Modelo (`char_amigo.py`, referências: miniatura de perfil e a arte de frente da wiki). O capuz deixou de ser um tubo
+    reto: virou um bulbo que cai em visor sobre o rosto, com bico pontudo e pregas, e se funde aos ombros caídos. A borda do
+    rosto tem dentes de pano pendurados, inclusive na testa. Os espinhos de cone viraram BARBATANAS de pano: 5 no capuz e
+    5 nas costas, diminuindo, e 3 de cada lado do capuz. O manto ganhou pregas e uma cauda que arrasta para trás, além de
+    9 fitas que escorrem das costas até o chão. Na frente aparece o lado de baixo fibroso (tendões verticais e costelas
+    em `sinew_amigo`). São 12 tentáculos, com as pontas enroladas, mangas rasgadas no cotovelo e garras longas e curvas.
+    As mãos mudaram para o material das garras, porque com `skin` ficavam claras demais.
+  - O JORRO de tinta (`def.inkStream`, `Fighter.updateInkStream`): dois cilindros ondulantes, presos ao `rig.root`, vão do
+    socket `mouth` até o chão, com uma poça quando alcançam o chão. Somem em KO, derrubado ou invisível.
+  - Animações `ai_*` (`charClips.js`): desliza em vez de correr, garras altas em diagonal (espelhadas por `mir`), chicote
+    de corpo inteiro, dez garras, rasgar o quadro (cruza alto e rasga para fora), erguer, esmagar, desabar, arremesso do
+    tentáculo, apontar, derramar (curva o capuz sobre a vítima), o sino (braços abertos, tremendo a cada badalada),
+    dissolver, defesa de braços cruzados, carga e frenesi. O `anims` do Amigo remapeia point, gaze e breath para elas.
+  - Golpes:
+    - os chicotes (○ 3, ↑, trás, lado) fazem um `inkTentacle` sair do chão até o alvo (`s.tentacle`), e todo acerto
+      espirra tinta (`impactFx: 'ink'`; os finalizadores também deixam poça);
+    - □ com corda de tentáculo (`rope` + `ropeColor`/`ropeThick`) e a ponta `inkClaw`;
+    - agarrão próprio: garras + `ai_tear`, com o finalizador `ink`.
+  - Habilidades (`amigoPowers.js`):
+    - **Derreter** (`inkMelt`): investida curta e agarrão de frente (110°), a tinta escorre por 0,9 s em 4 pulsos
+      (44, sem defesa) e solta com `meltedFace` (5 s, 6/s, lento 0,85, fraco 0,9);
+    - **Tentáculos que Prendem** (`inkTentacles`): poça de aviso debaixo do alvo (0,55 s), depois 4 tentáculos que se
+      enrolam; preso por 1,3 s (32);
+    - **O Sino** (`bellToll`): sino fantasma (`ghostBell`), 3 badaladas com ondas de 6 m (6 + 6 + 14, sem defesa); na
+      última, atordoa (0,9 s) e aplica `bellDazed`, vulnerável ×1,2 por 4 s;
+    - **Dissolver** (`inkDissolve`): o `rig.root` achata numa poça, invulnerável por 1,45 s, cura 90 e se refaz com um
+      respingo (24 em 2,2 m).
+  - Especial **Todo Mundo Vai Morrer** (`inkRequiem`):
+    - aviso 0,6 s;
+    - badalada, e 5 tentáculos erguem a vítima a 0,85 m;
+    - desliza e dá 3 garras;
+    - derrama tinta em 2 pulsos;
+    - última badalada e o tentáculo bate a vítima no chão: `launch` + `lowLaunch`, com `meltedFace` de 4 s.
+  - Testado:
+    - Derreter 39 no Xande, com `meltedFace`;
+    - Tentáculos 32, preso;
+    - O Sino 25, com `bellDazed`;
+    - Dissolver curou 88 e a escala voltou a 1;
+    - especial 212, vítima derrubada;
+    - combo com o tentáculo saindo do chão;
+    - □ puxa.
+  - CPU × CPU (10 lutas contra 5 do elenco): sem erros, com todos os golpes usados.
+
 ## v3.20.0 — O Amigo Imaginário
 
 - Versão: `VERSION` 3.19.1 → **3.20.0**.

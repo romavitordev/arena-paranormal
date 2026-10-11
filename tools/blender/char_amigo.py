@@ -11,7 +11,7 @@ import sys, os, math, random
 sys.path.insert(0, os.path.dirname(__file__))
 import lib
 from lib import *
-from mathutils import Vector
+from mathutils import Vector, Matrix
 
 OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'amigo.glb'
 random.seed(13)
@@ -26,7 +26,8 @@ robe_in = material('robe_amigo_in', '#140c08', 0.9)
 tent = material('tentacle_amigo', '#1c1412', 0.6)
 ink = material('ink_amigo', '#5a1e10', 0.3)
 hole = material('hole_amigo', '#050304', 0.9)
-claw_m = material('claw_amigo', '#3a2e2a', 0.5)
+claw_m = material('claw_amigo', '#1c1412', 0.5)
+sinew_m = material('sinew_amigo', '#2a1410', 0.7)  # o lado de baixo fibroso
 
 M = {'skin': skin, 'face': material('face_amigo', '#070405', 0.9), 'torso': robe_in, 'hand': skin}  # o rosto: só o escuro do buraco
 
@@ -136,58 +137,107 @@ lib.torso_part = ai_torso
 hc = b.body(M, [], arms=(), legs=False, head_r=(0.12, 0.13, 0.15), neck_r=0.05)
 HC = Vector((hc.x, hc.y, hc.z))
 
-# ---------------------------------------------------------------- CAPUZ alto e pontudo, projetado para a frente como um
-# bico, fundido ao manto; a FILEIRA DE ESPINHOS desce do alto do capuz pelas costas
+# ---------------------------------------------------------------- CAPUZ (perfil e frente da wiki): um bulbo de pano que
+# CAI para a frente como um visor por cima do buraco do rosto, com um bico pontudo no alto, pregas, e embaixo se FUNDE
+# aos ombros caídos (sem fresta). A fileira de BARBATANAS de pano desce do alto do capuz pelas costas.
 def hood_pt(u, v, out=1.0):
-    # u: volta (0 = lado esquerdo do rosto, passando por trás, até 1 = lado direito); v: do alto (0) até os ombros (1)
-    a = (u - 0.5) * 1.8 * math.pi + math.pi
-    beta = 1.55 - v * 2.1
-    r = (1.25 + 0.35 * (1 - v)) * out
-    # a ponta sobe alta e vai para a frente (o bico do capuz)
-    tip = max(0.0, math.sin(beta)) ** 3
-    p = HC + Vector((math.sin(a) * math.cos(beta) * 0.13 * H * r, -math.cos(a) * math.cos(beta) * 0.14 * H * r - tip * 0.06 * H, math.sin(beta) * 0.16 * H * r + tip * 0.14 * H))
-    # embaixo o capuz se FUNDE aos ombros (desce e abre até a largura do manto, sem deixar fresta)
-    k = smoothstep(0.5, 1.0, v)
+    # u: 0 = borda esquerda do rosto → por trás → 1 = borda direita; v: 0 = alto → 1 = ombros
+    a = (u - 0.5) * 1.68 * math.pi + math.pi  # a fresta do rosto na frente (~0,32 π)
+    beta = 1.5 - v * 2.05
+    fold = 1 + 0.03 * math.sin(u * 41.0) * (0.2 + v)  # pregas do pano
+    r = (1.12 + 0.42 * smoothstep(0.75, 0.15, v)) * out * fold
+    sa, ca = math.sin(a), -math.cos(a)  # ca: +1 = costas, -1 = frente
+    front = max(0.0, -ca)
+    p = HC + Vector((sa * math.cos(beta) * 0.135 * H * r, ca * math.cos(beta) * 0.145 * H * r, math.sin(beta) * 0.15 * H * r))
+    # o alto avança e a borda da frente desce sobre o rosto (o visor)
+    top = smoothstep(-0.3, 1.1, beta)
+    p.y -= top * 0.075 * H
+    p.z -= front * top * 0.035 * H
+    # o bico pontudo no alto, puxado um pouco para trás
+    peak = max(0.0, math.sin(beta)) ** 5
+    p.z += peak * 0.06 * H
+    p.y += peak * 0.035 * H
+    # embaixo o capuz se FUNDE aos ombros caídos
+    k = smoothstep(0.55, 1.0, v)
     if k > 0:
-        sh = torso_pt(a, 0.56, 1.0, 0.07) * out
+        sh = torso_pt(a, 0.55, 1.0, 0.045) * out
         p = p.lerp(sh, k)
     return p
 
 
-b.add('hood', grid(hood_pt, 30, 14), robe, region='head', subdiv=0)
-b.add('hood_in', grid(lambda u, v: hood_pt(u, v, 0.97), 30, 14, flip=True), robe_in, region='head', subdiv=0)
-# o buraco do rosto: um disco escuro fundo dentro do capuz
-b.add('face_hole', ellipsoid((hc.x, hc.y - 0.1 * H, hc.z - 0.01 * H), (0.075 * H, 0.03 * H, 0.1 * H), 14, 10), hole, region='head', subdiv=0)
-# a borda do capuz em volta do rosto, irregular (dentes de pano)
-rim = []
-for k in range(16):
-    t = k / 15
-    a = (t - 0.5) * 2.6
-    p = HC + Vector((math.sin(a) * 0.11 * H, -0.14 * H - (1 - abs(t - 0.5) * 2) * 0.03 * H, math.cos(a) * 0.12 * H - 0.02 * H))
-    rim.append(cone(tuple(p), tuple(p + Vector((0, -0.01 * H, -0.035 * H - (k % 3) * 0.012 * H))), 0.012 * H, 3))
-b.add('hood_teeth', merge(*rim), robe_in, region='head', subdiv=0)
-# a fileira de espinhos: do alto do capuz, descendo pelas costas
-spikes = []
-for k in range(9):
-    t = k / 8
-    if t < 0.35:
-        base = hood_pt(0.5, 0.3 + t / 0.35 * 0.45, 0.98)
-    else:
-        base = torso_pt(math.pi, 0.62 - (t - 0.35) / 0.65 * 0.6, 1.0, 0.07)
-    up = (base - Vector((0, 0, hz))).normalized() * 0.2 + Vector((0, 0.9, 0.5))
-    spikes.append(cone(tuple(base - up.normalized() * 0.015 * H), tuple(base + up.normalized() * (0.08 - 0.035 * t) * H), (0.04 - 0.015 * t) * H, 5))
-b.add('spikes', merge(*spikes), robe, region='torso', subdiv=0)
+b.add('hood', grid(hood_pt, 34, 16), robe, region='head', subdiv=0)
+b.add('hood_in', grid(lambda u, v: hood_pt(u, v, 0.965), 34, 16, flip=True), robe_in, region='head', subdiv=0)
+# o buraco do rosto: um vazio escuro fundo dentro do capuz
+b.add('face_hole', ellipsoid((hc.x, hc.y - 0.09 * H, hc.z - 0.005 * H), (0.085 * H, 0.04 * H, 0.11 * H), 14, 10), hole, region='head', subdiv=0)
 
-# FIOS DE TINTA escorrendo do buraco do rosto (o resto do jorro é feito em código: def.drips)
-ink_strands = []
+
+def fin(base, nrm, tan, h, w, th=0.006):
+    """Barbatana de pano: placa triangular fina, a ponta varrida para trás (tan)."""
+    nrm = nrm.normalized()
+    tan = (tan - nrm * tan.dot(nrm)).normalized()
+    side = nrm.cross(tan).normalized() * th * H
+    pts = [base - tan * w * 0.5, base + tan * w * 0.5, base + nrm * h + tan * w * 0.55]
+    verts = [tuple(q + side) for q in pts] + [tuple(q - side) for q in pts]
+    faces = [(0, 1, 2), (5, 4, 3), (0, 3, 4, 1), (1, 4, 5, 2), (2, 5, 3, 0)]
+    return verts, faces, [(0, 0), (1, 0), (0.5, 1)] * 2
+
+
+# a borda do rosto em DENTES de pano pendurados (a franja rasgada da miniatura da wiki)
+teeth = []
+for side_u in (0.0, 1.0):
+    for k in range(9):
+        v = 0.08 + k * 0.06
+        p = hood_pt(side_u, v)
+        ln = (0.05 + 0.035 * ((k * 7) % 3)) * H
+        inward = (HC - p)
+        inward.z = 0
+        inward = inward.normalized() * 0.012 * H
+        teeth.append(cone(tuple(p + inward), tuple(p + inward + Vector((0, -0.006 * H, -ln))), 0.011 * H, 4))
+# e na testa, por baixo do visor
 for k in range(7):
-    x = (k - 3) * 0.018 * H
-    top = Vector((hc.x + x, hc.y - 0.12 * H, hc.z - 0.06 * H))
-    ln = (0.22 + 0.12 * ((k * 37) % 5) / 5) * H
-    ink_strands.append(rod([top, top + Vector((0, -0.01 * H, -ln * 0.5)), top + Vector((0, -0.012 * H, -ln))], [0.008 * H, 0.006 * H, 0.002 * H], 5))
+    t = (k - 3) / 3
+    p = hood_pt(0.0, 0.05).lerp(hood_pt(1.0, 0.05), 0.5) + Vector((t * 0.07 * H, 0.0, -0.035 * H))
+    teeth.append(cone(tuple(p), tuple(p + Vector((0, -0.004 * H, -(0.04 + 0.03 * (k % 2)) * H))), 0.01 * H, 4))
+b.add('hood_teeth', merge(*teeth), robe_in, region='head', subdiv=0)
+
+# BARBATANAS: do alto do capuz, descendo pelas costas, cada vez menores
+spine = [hood_pt(0.5, v) for v in (0.2, 0.32, 0.44, 0.56, 0.68)]
+spine += [torso_pt(math.pi, z, 1.0, 0.05) for z in (0.48, 0.36, 0.24, 0.12, 0.0)]
+fins_h, fins_t = [], []
+for i, p in enumerate(spine):
+    prv, nxt = spine[max(i - 1, 0)], spine[min(i + 1, len(spine) - 1)]
+    tan = prv - nxt  # aponta para cima/trás ao longo da coluna
+    if i < 5:
+        nrm = p - HC
+    else:
+        nrm = Vector((p.x, p.y, 0.0)) + Vector((0, 0, 0.25 * p.y))
+    t = i / (len(spine) - 1)
+    f_ = fin(p - nrm.normalized() * 0.015 * H, nrm, -tan, (0.16 - 0.09 * t) * H, (0.13 - 0.06 * t) * H)
+    (fins_h if i < 5 else fins_t).append(f_)
+b.add('fins_head', merge(*fins_h), robe, region='head', subdiv=0)
+b.add('fins_back', merge(*fins_t), robe, region='torso', subdiv=0)
+# espinhos menores nas laterais do capuz (a moldura pontuda da arte de frente)
+side_fins = []
+for side_u in (0.08, 0.92):
+    for k in range(3):
+        v = 0.3 + k * 0.14
+        p = hood_pt(side_u, v)
+        nrm = p - HC
+        nrm.y *= 0.3
+        side_fins.append(fin(p - nrm.normalized() * 0.01 * H, nrm, Vector((0, 0.3, 1)), (0.06 - 0.012 * k) * H, 0.05 * H))
+b.add('fins_side', merge(*side_fins), robe, region='head', subdiv=0)
+
+# FIOS DE TINTA saindo do buraco do rosto (o jorro grosso até o chão é feito em código: def.inkStream)
+ink_strands = []
+for k in range(9):
+    x = (k - 4) * 0.014 * H
+    top = Vector((hc.x + x, hc.y - 0.1 * H, hc.z - 0.05 * H + abs(k - 4) * 0.006 * H))
+    ln = (0.1 + 0.1 * ((k * 37) % 5) / 5) * H
+    ink_strands.append(rod([top, top + Vector((0, -0.008 * H, -ln * 0.5)), top + Vector((0, -0.01 * H, -ln))], [0.009 * H, 0.006 * H, 0.002 * H], 5))
 b.add('ink', merge(*ink_strands), ink, region='head', subdiv=0)
 
-# ---------------------------------------------------------------- MANTO até o chão, que se abre em tiras rasgadas
+# ---------------------------------------------------------------- MANTO até o chão: pregas, a CAUDA que arrasta para
+# trás (perfil da wiki) e a barra rasgada
 Z_TOP, Z_BOT = 0.64, -0.95
 
 
@@ -195,13 +245,18 @@ def robe_pt(u, v, out=1.0):
     a = (u - 0.5) * TAU + math.pi
     z = Z_TOP - v * (Z_TOP - Z_BOT)
     zc = min(max(z, -0.16), 0.62)
-    flare = 0.05 + max(0.0, 0.4 - z) * 0.1
+    flare = 0.04 + max(0.0, 0.4 - z) * 0.1
     p = torso_pt(a, zc, 1.0, flare)
     p.z = hz + z * H
     if z < -0.16:
-        p.x *= 1 + (-0.16 - z) * 0.5
-        p.y *= 1 + (-0.16 - z) * 0.55
-    # a barra RASGADA em pontas de comprimentos diferentes
+        p.x *= 1 + (-0.16 - z) * 0.55
+        p.y *= 1 + (-0.16 - z) * 0.6
+    fold = 1 + 0.045 * math.sin(u * TAU * 11) * smoothstep(0.45, -0.5, z)
+    p.x *= fold
+    p.y *= fold
+    # a cauda: as costas se alongam para trás perto do chão
+    back = max(0.0, -math.cos(a)) ** 2
+    p.y += back * smoothstep(-0.25, -0.95, z) * 0.32 * H
     if v > 0.9:
         cut = (0.5 + 0.5 * math.sin(u * 47.0)) * (0.5 + 0.5 * math.sin(u * 13.0 + 1.3))
         p.z += cut * 0.12 * H * (v - 0.9) / 0.1
@@ -215,15 +270,15 @@ def robe_weights(p):
     return {'chest': max(0.0, 1 - w_leg - w_hip), 'hips': w_hip, 'l' + side: w_leg}
 
 
-b.add('robe', grid(lambda u, v: robe_pt(u, v), 48, 22), robe, region='torso', weight_fn=robe_weights, subdiv=0)
-b.add('robe_in', grid(lambda u, v: robe_pt(u, v, 0.985), 48, 22, flip=True), robe_in, region='torso', weight_fn=robe_weights, subdiv=0)
+b.add('robe', grid(lambda u, v: robe_pt(u, v), 64, 24), robe, region='torso', weight_fn=robe_weights, subdiv=0)
+b.add('robe_in', grid(lambda u, v: robe_pt(u, v, 0.985), 64, 24, flip=True), robe_in, region='torso', weight_fn=robe_weights, subdiv=0)
 # a barra em TIRAS rasgadas que serpenteiam pelo chão
 rags = []
-for i in range(40):
-    u = i / 40 + 0.01
+for i in range(44):
+    u = i / 44 + 0.01
     p = robe_pt(u, 1.0, 1.0)
     o = outward(p)
-    ln = random.uniform(0.12, 0.32) * H
+    ln = random.uniform(0.12, 0.34) * H
     w = random.uniform(0.02, 0.04) * H
     pts = []
     for k in range(5):
@@ -231,36 +286,81 @@ for i in range(40):
         side = Vector((-o.y, o.x, 0)) * math.sin(t * 6 + i) * 0.03 * H
         pts.append(p + o * ln * t + side + Vector((0, 0, -0.02 * H * t)))
     rags.append(rod(pts, [w, w * 0.8, w * 0.6, w * 0.4, 0.003 * H], 4, flat=(lambda q: Vector((0, 0, 1)), 0.25)))
-b.add('robe_rags', merge(*rags), robe, region='torso', weight_fn=robe_weights, subdiv=0)
-# TENTÁCULOS negros saindo de baixo do manto
-tents = []
+# FITAS onduladas que se soltam das costas e escorrem para trás até o chão (as tiras ao vento da miniatura)
 for i in range(9):
-    a = (i / 9) * TAU + 0.3
-    base = Vector((math.sin(a) * 0.16 * H, -math.cos(a) * 0.14 * H, hz - 0.75 * H))
-    o = Vector((math.sin(a), -math.cos(a), 0))
+    u = 0.34 + 0.32 * i / 8
+    v = 0.55 + 0.35 * ((i * 5) % 9) / 9
+    p = robe_pt(u, v, 1.0)
+    o = outward(p)
+    sv = Vector((-o.y, o.x, 0)).normalized()
+    ln = random.uniform(0.3, 0.46) * H
+    drop = p.z - (hz - 0.93 * H)
+    w = random.uniform(0.03, 0.045) * H
     pts = []
-    for k in range(7):
-        t = k / 6
-        pts.append(base + o * (0.1 + t * 0.42) * H + Vector((-o.y, o.x, 0)) * math.sin(t * 5 + i) * 0.06 * H + Vector((0, 0, -0.2 * H * t + 0.05 * H * math.sin(t * math.pi))))
-    tents.append(rod(pts, [0.04 * H * (1 - 0.8 * k / 6) + 0.004 * H for k in range(7)], 6))
+    for k in range(8):
+        t = k / 7
+        pts.append(p + o * (ln * t) + Vector((0, 0, -drop * smoothstep(0.0, 0.8, t) + math.sin(t * 7.5 + i) * 0.025 * H * t)) + sv * math.sin(t * 4 + i * 1.7) * 0.04 * H * t)
+    rags.append(rod(pts, [w * (1 - 0.8 * k / 7) + 0.002 * H for k in range(8)], 4, flat=(lambda q, s=sv: s, 0.15)))
+b.add('robe_rags', merge(*rags), robe, region='torso', weight_fn=robe_weights, subdiv=0)
+
+# o LADO DE BAIXO fibroso e escuro, à mostra na frente: tendões verticais e costelas de pano (a arte de frente)
+sinew = []
+for i in range(9):
+    u0 = (i - 4) * 0.018
+    pts = [robe_pt(u0 + 0.008 * math.sin(v * 13 + i), v, 1.012) for v in (0.12, 0.3, 0.48, 0.66, 0.84, 0.97)]
+    sinew.append(rod(pts, [0.008 * H, 0.011 * H, 0.012 * H, 0.013 * H, 0.012 * H, 0.009 * H], 5))
+for k in range(5):
+    v = 0.1 + k * 0.07
+    pts = [robe_pt(u, v, 1.02) for u in (-0.09, -0.045, 0.0, 0.045, 0.09)]
+    sinew.append(rod(pts, [0.005 * H, 0.008 * H, 0.009 * H, 0.008 * H, 0.005 * H], 5))
+b.add('sinew', merge(*sinew), sinew_m, region='torso', weight_fn=robe_weights, subdiv=0)
+
+# TENTÁCULOS negros saindo de baixo do manto, as pontas enroladas
+tents = []
+for i in range(12):
+    a = (i / 12) * TAU + 0.2
+    base = Vector((math.sin(a) * 0.16 * H, -math.cos(a) * 0.14 * H, hz - 0.72 * H))
+    o = Vector((math.sin(a), -math.cos(a), 0))
+    sv = Vector((-o.y, o.x, 0))
+    ln = (0.4 + 0.18 * ((i * 7) % 4) / 4) * H
+    pts = []
+    for k in range(10):
+        t = k / 9
+        curl = smoothstep(0.65, 1.0, t)
+        pts.append(base + o * (0.08 * H + t * ln - curl * 0.06 * H) + sv * (math.sin(t * 5 + i) * 0.06 * H + curl * 0.05 * H * (1 if i % 2 else -1))
+                   + Vector((0, 0, -0.22 * H * min(t, 0.6) + 0.04 * H * math.sin(t * math.pi) + curl * 0.09 * H)))
+    tents.append(rod(pts, [0.048 * H * (1 - 0.85 * k / 9) + 0.004 * H for k in range(10)], 6))
 b.add('tentacles', merge(*tents), tent, region='torso', weight_fn=robe_weights, subdiv=0)
 
-# ---------------------------------------------------------------- BRAÇOS secos e escuros (saem pela frente do manto) e
-# as GARRAS
+# ---------------------------------------------------------------- BRAÇOS secos e escuros (saem das mangas rasgadas) e
+# as GARRAS longas e curvas
 for side in ('L', 'R'):
     s, e, h = sk['s' + side], sk['e' + side], sk['hand' + side]
     sx = 1 if side == 'L' else -1
-    up = [(q.x, q.y, q.z, r, r) for q, r in ((s.lerp(e, t), 0.075 - 0.01 * t) for t in (0.0, 0.5, 1.0))]
+    up = [(q.x, q.y, q.z, r, r) for q, r in ((s.lerp(e, t), 0.06 - 0.008 * t) for t in (0.0, 0.5, 1.0))]
     b.add('sleeve' + side, tube(up, 12), robe, region='arm' + side, subdiv=0)
-    lo = [(q.x, q.y, q.z, r, r) for q, r in ((e.lerp(h, t), 0.034 - 0.008 * t) for t in (0.0, 0.5, 0.95))]
+    # a manga rasgada em pontas no cotovelo
+    ax0 = (e - s).normalized()
+    cuff = []
+    for k in range(6):
+        ang = k / 6 * TAU
+        q = ax0.orthogonal().normalized()
+        rr = Matrix.Rotation(ang, 3, ax0) @ q
+        base = e + rr * 0.055 * H * 0.9 - ax0 * 0.02 * H
+        cuff.append(cone(tuple(base), tuple(base + ax0 * (0.05 + 0.03 * (k % 2)) * H + rr * 0.008 * H), 0.016 * H, 3))
+    b.add('cuff' + side, merge(*cuff), robe, region='arm' + side, subdiv=0)
+    lo = [(q.x, q.y, q.z, r, r) for q, r in ((e.lerp(h, t), 0.032 - 0.01 * t) for t in (0.0, 0.5, 0.95))]
     b.add('fore' + side, tube(lo, 10), skin, region='e' + side, subdiv=0)
-    b.add('hand' + side, hand_part(sk, side, 0.04), skin, region='e' + side)
+    b.add('hand' + side, hand_part(sk, side, 0.04), claw_m, region='e' + side)
     ax = (h - e).normalized()
     claws = []
     for k in range(5):
-        off = Vector((sx * (k - 2) * 0.01 * H, (k - 2) * 0.004 * H, 0))
-        base = h + ax * 0.045 * H + off
-        claws.append(cone(tuple(base), tuple(base + ax * 0.13 * H + Vector((0, -0.03 * H, 0)) + off * 0.5), 0.008 * H, 5))
+        off = Vector((sx * (k - 2) * 0.011 * H, (k - 2) * 0.004 * H, 0))
+        base = h + ax * 0.04 * H + off
+        ln = (0.16 - 0.02 * abs(k - 2)) * H
+        mid = base + ax * ln * 0.55 + off * 0.3
+        tip = base + ax * ln + Vector((0, -0.05 * H, 0)) + off * 0.6
+        claws.append(rod([base, mid, tip], [0.009 * H, 0.006 * H, 0.0015 * H], 5))
     b.add('claws' + side, merge(*claws), claw_m, region='e' + side, subdiv=0)
 
 b.export(OUT)

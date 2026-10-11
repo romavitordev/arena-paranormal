@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { forwardFromYaw } from '../core/util.js';
 import { faceClose, twoShot } from '../camera/shots.js';
+import { inkSplash } from '../fx/inkFx.js';
 
 // CENAS DE AGARRÃO (Defesa + ○): cada personagem agarra do seu jeito e fecha com um golpe dos SEUS poderes.
 // Passada a janela de escape (Fighter.tryGrab), a cena roda: dois golpes (`beats`, com as animações do próprio kit) e
@@ -132,6 +133,12 @@ export const FINISHERS = {
     w.fx.play('FX_GROUND_SMASH', ground(b), { color: 0x9a0010, scale: 1 });
     w.fx.burst(b.chestPos(), { count: 40, color: 0x9a0010, speed: 5, life: 0.6, size: 0.16, gravity: 8 });
   },
+  // Amigo Imaginário — a tinta do rosto despeja e espirra marrom por todo lado
+  ink(w, a, b) {
+    inkSplash(w, b.chestPos(), { size: 1.4 });
+    w.fx.slash(b.chestPos(), a.yaw, { color: 0x5a2410, radius: 2, roll: 0.9, life: 0.4, width: 0.6 });
+    w.fx.slash(b.chestPos(), a.yaw, { color: 0x5a2410, radius: 2, roll: -0.9, flip: true, life: 0.4, width: 0.6 });
+  },
   // Fantasma — as faixas enrolam e a sniper dispara colada
   bands(w, a, b, col) {
     w.fx.burst(b.chestPos(), { count: 34, color: 0x0a0810, kind: 'smoke', speed: 2, life: 0.9, size: 0.6, grow: 1 });
@@ -197,5 +204,6 @@ GRAB_SCENES.o_diabo = GRAB_SCENES.diabo;
 GRAB_SCENES.guizo_velho = GRAB_SCENES.guizo; // o Guizo velho agarra igual
 GRAB_SCENES.guizo_bombado = GRAB_SCENES.kian; // o bombado agarra no soco
 GRAB_SCENES.estrangeiro = GRAB_SCENES.diabo;
-GRAB_SCENES.amigo = GRAB_SCENES.diabo; // garras, como as do Diabo // as garras, como as do Diabo // o Diabo dos Portadores agarra como a forma do Juan
+// Amigo Imaginário: duas garras secas e o capuz se curva sobre o rosto da vítima — a tinta escorre (Derreter)
+GRAB_SCENES.amigo = scene({ ...S('ai_claw_r', 0.34), fx: { kind: 'claw' }, sound: 'clawHit' }, { ...S('ai_claw_l', 0.34), fx: { kind: 'claw', flip: true }, sound: 'clawHit' }, { anim: 'ai_tear', fx: 'ink', sound: 'drain', slow: { mult: 0.8, time: 2 } });
 GRAB_SCENES.juan_odio = GRAB_SCENES.juan; // o Ódio do Diabo agarra como o Juan (as garras no lugar da faca)

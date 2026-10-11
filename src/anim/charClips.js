@@ -1,4 +1,4 @@
-// Animações próprias do ARNALDO FRITZ, do ANFITRIÃO e do SENHOR VERÍSSIMO (UPD de 2026-10-06).
+// Animações próprias do ARNALDO FRITZ, do ANFITRIÃO, do SENHOR VERÍSSIMO (UPD de 2026-10-06) e do AMIGO IMAGINÁRIO.
 // Chamado no fim de clips.js (recebe CLIPS e o ajudante k para não criar import circular).
 //   arn_*: ARNALDO — ator + espadachim experiente: guarda de esgrima de lado, mão livre atrás das costas, floreios,
 //          reverências e estocadas em afundo; teatral, mas preciso (não é dança).
@@ -139,6 +139,128 @@ export function addCharClips(CLIPS, k) {
       k(0.35, { ...HLEGS, sp: [-0.2, -0.2, 0.15], hd: [-0.35, -0.1, 0.35], sL: [-2.9, 0, 0.3], eL: [-0.2, 0, 0], sR: [-0.3, 0, -1.2], eR: [-0.3, 0, 0] }),
       k(0.8, { ...HLEGS, sp: [-0.22, -0.2, 0.18], hd: [-0.38, -0.1, 0.45], sL: [-2.95, 0, 0.32], eL: [-0.15, 0, 0], sR: [-0.3, 0, -1.25], eR: [-0.3, 0, 0] }),
       k(1, HOST),
+    ] },
+  });
+
+  // ======================= AMIGO IMAGINÁRIO =======================
+  // ai_*: a criatura curvada de O Segredo na Ilha — não anda, DESLIZA (o manto arrasta pelo chão), o capuz pende para a
+  // frente e os braços secos e compridos pendem soltos; ataca em arcos largos e lentos de garra, chicoteia com o corpo
+  // (os tentáculos vêm junto) e se curva sobre a vítima para despejar a tinta do rosto.
+  const AI = { h: -0.06, hip: [0, 0, 0], sp: [0.55, 0, 0], hd: [0.2, 0, 0], sL: [-0.55, 0, 0.18], eL: [-0.5, 0, 0], sR: [-0.55, 0, -0.18], eR: [-0.5, 0, 0], lL: [0, 0, 0], kL: [0.2, 0, 0], lR: [0, 0, 0], kR: [0.2, 0, 0] };
+  const neg = (a) => a && [a[0], -a[1], -a[2]];
+  const mir = (p) => {
+    const o = { ...p };
+    for (const [a, b] of [['sL', 'sR'], ['eL', 'eR'], ['lL', 'lR'], ['kL', 'kR']]) { o[a] = neg(p[b]); o[b] = neg(p[a]); }
+    for (const j of ['sp', 'hd', 'hip']) if (p[j]) o[j] = neg(p[j]);
+    return o;
+  };
+  const both = (x, z, e) => ({ sL: [x, 0, z], eL: [e, 0, 0], sR: [x, 0, -z], eR: [e, 0, 0] });
+  // garra: o braço sobe aberto bem alto e rasga em diagonal por cima, o corpo inteiro gira junto
+  const clawWind = { ...AI, h: -0.02, sp: [0.35, -0.55, 0.08], hd: [0.05, 0.3, 0], sR: [-2.7, -0.2, -0.75], eR: [-0.5, 0, 0], sL: [-0.4, 0, 0.35], eL: [-0.4, 0, 0] };
+  const clawHit = { ...AI, h: -0.14, sp: [0.85, 0.6, -0.05], hd: [0.4, -0.15, 0], sR: [-0.8, 0.95, -0.05], eR: [-0.1, 0, 0], sL: [-0.2, 0, 0.5], eL: [-0.6, 0, 0] };
+  // chicote: o corpo enrola para trás e desenrola de uma vez (o manto e os tentáculos varrem)
+  const lashWind = { ...AI, sp: [0.3, -0.85, 0.12], hd: [0.1, 0.45, 0], hip: [0, -0.4, 0], sR: [-1.1, -0.9, -1.0], eR: [-1.3, 0, 0], sL: [-0.3, 0.3, 0.6], eL: [-0.3, 0, 0] };
+  const lashHit = { ...AI, h: -0.1, sp: [0.7, 0.85, -0.12], hd: [0.3, -0.4, 0], hip: [0, 0.5, 0], sR: [-1.55, 1.15, -0.2], eR: [0, 0, 0], sL: [-0.2, 0, 0.9], eL: [-0.2, 0, 0] };
+  const pourReach = { ...AI, h: -0.08, sp: [0.85, 0, 0], hd: [0.35, 0, 0], sL: [-1.45, -0.25, 0.25], eL: [-0.5, 0, 0], sR: [-1.45, 0.25, -0.25], eR: [-0.5, 0, 0] };
+  const pourHold = { ...AI, h: -0.12, sp: [1.05, 0, 0], hd: [0.7, 0, 0], sL: [-1.25, -0.55, 0.1], eL: [-1.25, 0, 0], sR: [-1.25, 0.55, -0.1], eR: [-1.25, 0, 0] };
+  const bellOpen = { ...AI, h: 0.02, sp: [-0.12, 0, 0], hd: [-0.55, 0, 0], ...both(-0.5, 1.45, -0.25) };
+  const guard = { ...AI, h: -0.12, sp: [0.75, 0, 0], hd: [0.5, 0, 0], sL: [-1.75, -0.75, 0.1], eL: [-1.6, 0, 0], sR: [-1.75, 0.75, -0.1], eR: [-1.6, 0, 0] };
+  const glide = (lean, arms, sway) => ({ ...AI, h: -0.08, sp: [lean, 0, sway], hd: [-0.15, 0, -sway], sL: [arms, 0, 0.45], eL: [-0.35, 0, 0], sR: [arms, 0, -0.45], eR: [-0.35, 0, 0], kL: [0.3, 0, 0], kR: [0.3, 0, 0] });
+  const side = (y) => ({ ...AI, sp: [0.6, y, y * 0.5], hd: [0.2, -y * 1.2, 0] });
+  const back = { ...AI, sp: [0.4, 0, 0], hd: [0.3, 0, 0], ...both(-0.9, 0.3, -0.8) };
+  Object.assign(CLIPS, {
+    // deslizando: curvado, braços arrastando para trás, o corpo balança de um lado para o outro
+    ai_run: { dur: 0.8, loop: true, keys: [k(0, glide(0.85, 0.7, 0.08)), k(0.5, { ...glide(0.9, 0.8, -0.08), h: -0.12 }), k(1, glide(0.85, 0.7, 0.08))] },
+    ai_walk: { dur: 1.2, loop: true, keys: [k(0, glide(0.65, 0.2, 0.06)), k(0.5, { ...glide(0.7, 0.3, -0.06), h: -0.1 }), k(1, glide(0.65, 0.2, 0.06))] },
+    ai_strafe_L: { dur: 1.0, loop: true, keys: [k(0, side(0.25)), k(0.5, { ...side(0.3), h: -0.1 }), k(1, side(0.25))] },
+    ai_strafe_R: { dur: 1.0, loop: true, keys: [k(0, side(-0.25)), k(0.5, { ...side(-0.3), h: -0.1 }), k(1, side(-0.25))] },
+    ai_walk_back: { dur: 1.2, loop: true, keys: [k(0, back), k(0.5, { ...back, h: -0.1, sp: [0.42, 0, 0] }), k(1, back)] },
+    ai_dash: { dur: 0.4, loop: true, keys: [k(0, glide(1.05, 1.0, 0)), k(1, { ...glide(1.1, 1.1, 0), h: -0.14 })] },
+    // garras secas (direita / esquerda)
+    ai_claw_r: { dur: 0.36, keys: [k(0, AI), k(0.3, clawWind), k(0.55, clawHit), k(1, AI)] },
+    ai_claw_l: { dur: 0.36, keys: [k(0, AI), k(0.3, mir(clawWind)), k(0.55, mir(clawHit)), k(1, AI)] },
+    // chicote de tentáculo (para os dois lados)
+    ai_lash: { dur: 0.44, keys: [k(0, AI), k(0.35, lashWind), k(0.55, lashHit), k(0.75, lashHit), k(1, AI)] },
+    ai_lash_l: { dur: 0.44, keys: [k(0, AI), k(0.35, mir(lashWind)), k(0.55, mir(lashHit)), k(0.75, mir(lashHit)), k(1, AI)] },
+    // dez garras: as duas mãos sobem e rasgam em sequência, direita e esquerda
+    ai_rake: { dur: 0.48, keys: [
+      k(0, AI),
+      k(0.18, { ...AI, h: 0, sp: [0.2, 0, 0], hd: [-0.1, 0, 0], ...both(-2.7, 0.6, -0.4) }),
+      k(0.4, { ...AI, h: -0.12, sp: [0.8, 0.35, 0], hd: [0.35, 0, 0], sR: [-0.7, 0.7, -0.1], eR: [-0.1, 0, 0], sL: [-2.6, 0, 0.6], eL: [-0.4, 0, 0] }),
+      k(0.68, { ...AI, h: -0.14, sp: [0.9, -0.35, 0], hd: [0.4, 0, 0], sR: [-0.6, 0.5, -0.2], eR: [-0.1, 0, 0], sL: [-0.7, -0.7, 0.1], eL: [-0.1, 0, 0] }),
+      k(1, AI),
+    ] },
+    // RASGAR O QUADRO: cruza os braços bem alto e rasga para fora e para baixo, como quem rasga uma tela
+    ai_tear: { dur: 0.64, keys: [
+      k(0, AI),
+      k(0.35, { ...AI, h: 0.04, sp: [-0.05, 0, 0], hd: [-0.35, 0, 0], sL: [-2.9, -0.45, 0.05], eL: [-0.6, 0, 0], sR: [-2.9, 0.45, -0.05], eR: [-0.6, 0, 0] }),
+      k(0.58, { ...AI, h: -0.2, sp: [0.95, 0, 0], hd: [0.55, 0, 0], ...both(-0.9, 1.25, -0.05) }),
+      k(0.8, { ...AI, h: -0.22, sp: [1.0, 0, 0], hd: [0.6, 0, 0], ...both(-0.7, 1.35, -0.05) }),
+      k(1, AI),
+    ] },
+    // ERGUER PELOS TENTÁCULOS: afunda e arranca para cima com as duas garras
+    ai_up: { dur: 0.46, keys: [k(0, AI), k(0.3, { ...AI, h: -0.3, sp: [1.0, 0, 0], hd: [0.4, 0, 0], ...both(-0.35, 0.3, -0.2) }), k(0.6, { ...AI, h: 0.06, sp: [-0.1, 0, 0], hd: [-0.4, 0, 0], ...both(-2.85, 0.4, -0.3) }), k(1, AI)] },
+    // ESMAGAR: se ergue alto e desaba com o capuz e as garras no chão
+    ai_down: { dur: 0.5, keys: [
+      k(0, AI),
+      k(0.35, { ...AI, h: 0.06, sp: [-0.15, 0, 0], hd: [-0.4, 0, 0], ...both(-2.9, 0.5, -0.6) }),
+      k(0.58, { ...AI, h: -0.38, sp: [1.2, 0, 0], hd: [0.55, 0, 0], ...both(-1.05, 0.3, -0.1) }),
+      k(0.8, { ...AI, h: -0.38, sp: [1.2, 0, 0], hd: [0.55, 0, 0], ...both(-1.0, 0.3, -0.1) }),
+      k(1, AI),
+    ] },
+    // DESABAR (no ar): mergulha com o capuz à frente e as garras abertas
+    ai_air: { dur: 0.46, keys: [k(0, { ...AI, sp: [0.2, 0, 0], hd: [-0.2, 0, 0], ...both(-2.6, 0.8, -0.6) }), k(0.4, { ...AI, sp: [1.1, 0, 0], hd: [0.4, 0, 0], ...both(-1.1, 0.35, -0.1) }), k(1, { ...AI, sp: [1.0, 0, 0], hd: [0.3, 0, 0], ...both(-0.9, 0.3, -0.2) })] },
+    // TENTÁCULO (□): arremessa o braço à frente e o tentáculo sai junto
+    ai_fling: { dur: 0.56, keys: [
+      k(0, AI),
+      k(0.35, { ...AI, sp: [0.4, -0.5, 0], hd: [0.1, 0.4, 0], sR: [-2.3, -0.4, -0.8], eR: [-0.9, 0, 0] }),
+      k(0.55, { ...AI, h: -0.1, sp: [0.8, 0.35, 0], hd: [0.3, -0.2, 0], sR: [-1.55, 0.1, -0.1], eR: [0, 0, 0], sL: [-0.2, 0, 0.6], eL: [-0.3, 0, 0] }),
+      k(1, { ...AI, sp: [0.75, 0.3, 0], hd: [0.3, -0.2, 0], sR: [-1.5, 0.1, -0.1], eR: [0, 0, 0] }),
+    ] },
+    // aponta a garra (Tentáculos que Prendem)
+    ai_point: { dur: 0.5, keys: [
+      k(0, AI),
+      k(0.5, { ...AI, sp: [0.6, 0.35, 0], hd: [0.15, -0.3, 0], sR: [-1.6, 0.1, -0.1], eR: [-0.15, 0, 0], sL: [-0.3, 0, 0.45], eL: [-0.5, 0, 0] }),
+      k(1, { ...AI, sp: [0.62, 0.38, 0], hd: [0.15, -0.32, 0], sR: [-1.62, 0.1, -0.1], eR: [-0.1, 0, 0], sL: [-0.3, 0, 0.45], eL: [-0.5, 0, 0] }),
+    ] },
+    // DERRETER: agarra a cabeça da vítima e curva o capuz sobre o rosto dela — a tinta despeja
+    ai_pour: { dur: 1.2, keys: [
+      k(0, AI), k(0.2, pourReach), k(0.32, pourHold),
+      k(0.45, { ...pourHold, sp: [1.1, 0.06, 0.04] }), k(0.6, { ...pourHold, sp: [1.08, -0.06, -0.04] }), k(0.75, { ...pourHold, sp: [1.1, 0.04, 0.03] }),
+      k(0.86, pourHold), k(1, AI),
+    ] },
+    // O SINO: abre os braços, joga o capuz para trás e o corpo inteiro treme a cada badalada
+    ai_bell: { dur: 1.2, keys: [
+      k(0, AI), k(0.18, bellOpen),
+      k(0.26, { ...bellOpen, sp: [-0.18, 0, 0.1], hd: [-0.6, 0, 0.12] }), k(0.34, bellOpen),
+      k(0.5, { ...bellOpen, sp: [-0.18, 0, -0.1], hd: [-0.6, 0, -0.12] }), k(0.58, bellOpen),
+      k(0.74, { ...bellOpen, h: 0.05, sp: [-0.22, 0, 0.12], hd: [-0.66, 0, 0.14] }), k(0.85, bellOpen),
+      k(1, AI),
+    ] },
+    // DISSOLVER: se encolhe e afunda na própria tinta
+    ai_dissolve: { dur: 0.9, keys: [
+      k(0, AI),
+      k(0.3, { ...AI, h: -0.45, sp: [1.25, 0, 0], hd: [0.6, 0, 0], sL: [-0.9, -0.8, 0.1], eL: [-2.0, 0, 0], sR: [-0.9, 0.8, -0.1], eR: [-2.0, 0, 0] }),
+      k(0.75, { ...AI, h: -0.5, sp: [1.3, 0, 0], hd: [0.65, 0, 0], sL: [-0.9, -0.8, 0.1], eL: [-2.1, 0, 0], sR: [-0.9, 0.8, -0.1], eR: [-2.1, 0, 0] }),
+      k(1, AI),
+    ] },
+    // braços cruzados na frente do capuz
+    ai_block: { dur: 0.3, keys: [k(0, AI), k(0.6, guard), k(1, guard)] },
+    ai_block_hit: { dur: 0.25, keys: [k(0, { ...guard, h: -0.16, sp: [0.55, 0, 0], hd: [0.3, 0, 0] }), k(1, guard)] },
+    // carga: curvado, braços abertos, a tinta escorrendo mais forte
+    ai_charge: { dur: 0.9, loop: true, keys: [
+      k(0, { ...AI, h: -0.12, sp: [0.8, 0, 0], hd: [0.45, 0, 0], ...both(-0.5, 0.85, -0.7) }),
+      k(0.5, { ...AI, h: -0.15, sp: [0.85, 0, 0.05], hd: [0.5, 0, 0.06], ...both(-0.55, 0.9, -0.75) }),
+      k(1, { ...AI, h: -0.12, sp: [0.8, 0, 0], hd: [0.45, 0, 0], ...both(-0.5, 0.85, -0.7) }),
+    ] },
+    // FRENESI DE SANGUE: se ergue, abre tudo e o corpo convulsiona
+    ai_frenzy: { dur: 0.9, keys: [
+      k(0, AI),
+      k(0.25, { ...AI, h: 0.06, sp: [-0.3, 0, 0], hd: [-0.7, 0, 0], ...both(-2.4, 1.0, -0.4) }),
+      k(0.4, { ...AI, h: 0.04, sp: [-0.25, 0.15, 0.1], hd: [-0.6, 0.2, 0.15], ...both(-2.5, 1.05, -0.3) }),
+      k(0.55, { ...AI, h: 0.06, sp: [-0.3, -0.15, -0.1], hd: [-0.7, -0.2, -0.15], ...both(-2.4, 1.0, -0.4) }),
+      k(0.8, { ...AI, h: -0.15, sp: [0.9, 0, 0], hd: [0.4, 0, 0], ...both(-0.8, 0.9, -0.6) }),
+      k(1, AI),
     ] },
   });
 }

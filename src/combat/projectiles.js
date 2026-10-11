@@ -217,6 +217,21 @@ const VISUALS = {
     g.add(glow);
     return g;
   },
+  // Amigo Imaginário: a ponta do tentáculo — três garras negras pingando tinta
+  inkClaw(color) {
+    const g = new THREE.Group();
+    const mat = new THREE.MeshToonMaterial({ color: 0x1a100c, emissive: 0x1a0804 });
+    for (let i = 0; i < 3; i++) {
+      const c = new THREE.Mesh(new THREE.ConeGeometry(0.05, 0.38, 5), mat);
+      c.rotation.x = Math.PI / 2;
+      c.position.set((i - 1) * 0.08, 0, 0.05);
+      c.rotation.y = (i - 1) * -0.3;
+      g.add(c);
+    }
+    g.add(new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 6), mat));
+    g.add(new THREE.Mesh(new THREE.SphereGeometry(0.17, 8, 6), glowMat(color, 0.35)));
+    return g;
+  },
   // granada (Erin): corpo arredondado com faixa colorida e alavanca; gira no ar
   grenade(color) {
     const g = new THREE.Group();
@@ -369,7 +384,7 @@ export class Projectiles {
     // corrente ligando a mão ao projétil (Injustiça)
     if (ability.chain) {
       const hand = owner.rig.sockets.handR;
-      p.chainFx = this.world.fx.chain(() => hand.getWorldPosition(new THREE.Vector3()), () => p.pos.clone(), { links: 30, sag: 0.1, rope: !!ability.rope });
+      p.chainFx = this.world.fx.chain(() => hand.getWorldPosition(new THREE.Vector3()), () => p.pos.clone(), { links: 30, sag: 0.1, rope: !!ability.rope, ...(ability.ropeColor ? { color: ability.ropeColor, glow: 0x0a0402, thick: ability.ropeThick } : {}) });
     }
     this.list.push(p);
   }

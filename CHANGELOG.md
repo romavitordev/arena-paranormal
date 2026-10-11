@@ -1,5 +1,18 @@
 # Changelog
 
+## v3.21.0 — 2026-10-11
+
+### Adicionado
+- `src/combat/amigoPowers.js` (`AMIGO_TYPES`, registrado em `abilities.js`): `inkMelt` (Derreter), `inkTentacles` (Tentáculos que Prendem), `bellToll` (O Sino), `inkDissolve` (Dissolver) e `meltFace` (o debuff `meltedFace`).
+- `src/combat/specials/inkRequiem.js`: especial Todo Mundo Vai Morrer (tentáculos erguem, garras, derreter, última badalada).
+- `src/fx/inkFx.js`: `inkTentacle`, `inkSplash`, `ghostBell`, `bellWave`.
+- `Fighter.updateInkStream` (`def.inkStream`: jorro de tinta do socket da boca até o chão com poça), golpes com `tentacle` (`spawnStrikeTentacle`) e `impactFx: 'ink'`.
+- Clipes `ai_*` em `anim/charClips.js` (run/walk/strafe/dash, claw_r/l, lash/lash_l, rake, tear, up, down, air, fling, point, pour, bell, dissolve, block, charge, frenzy).
+- Projétil `inkClaw` e `ropeColor`/`ropeThick` para a corda do `chain`; sons sintetizados `bellToll` e `inkPour`; cena de agarrão própria do `amigo` com o finalizador `ink`.
+
+### Alterado
+- `char_amigo.py`: capuz em visor com dentes, barbatanas nas costas e no capuz, cauda do manto, fitas, tendões na frente, 12 tentáculos enrolados, mangas rasgadas e garras curvas.
+
 ## v3.20.0 — 2026-10-11
 
 ### Adicionado

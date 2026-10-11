@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.20.0';
+export const VERSION = '3.21.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,18 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.21.0',
+    date: '2026-10-11',
+    title: 'Quando o Sino Tocar',
+    items: [
+      'AMIGO IMAGINÁRIO com modelo novo, refeito pelas artes da wiki: o capuz pende como um visor sobre o buraco do rosto, com a franja rasgada em dentes; barbatanas de pano descem pelas costas; o manto arrasta uma cauda para trás com fitas onduladas; o lado de baixo fibroso aparece na frente; mais tentáculos, enrolados nas pontas; garras longas e curvas. E agora a TINTA JORRA do rosto até o chão sem parar, formando uma poça embaixo dele.',
+      'Animações próprias do Amigo: ele DESLIZA curvado em vez de correr, rasga com garras em arcos largos, chicoteia com o corpo inteiro, se ergue e desaba, abre os braços quando o Sino toca, se curva sobre a vítima para despejar a tinta e convulsiona no Frenesi de Sangue.',
+      'Golpes únicos: os chicotes fazem um TENTÁCULO sair do chão até o alvo e a tinta espirra onde as garras acertam. O □ Tentáculo agora é um tentáculo negro de verdade com a ponta em garras. O agarrão dele termina com o capuz derramando tinta.',
+      'DERRETER: agarra a cabeça da vítima e despeja a tinta direto no rosto dela; solta com o ROSTO DERRETENDO (dano contínuo, lento e mais fraco). TENTÁCULOS QUE PRENDEM: uma poça de tinta se abre debaixo do alvo (dá para sair) e os tentáculos brotam e o prendem. O SINO: um sino fantasma toca três vezes sobre a criatura; quem ainda estiver perto na última badalada fica paralisado e VULNERÁVEL. DISSOLVER: derrete numa poça (intocável), recupera vida e se refaz espirrando tinta em volta.',
+      'Novo especial TODO MUNDO VAI MORRER: o Sino toca, os tentáculos brotam da poça e ERGUEM a vítima, a criatura desliza e rasga com as garras, curva o capuz e derrete o rosto dela com a tinta, e a última badalada a bate no chão.',
+    ],
+  },
   {
     v: '3.20.0',
     date: '2026-10-11',

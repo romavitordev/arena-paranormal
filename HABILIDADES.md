@@ -1158,17 +1158,17 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 | Comando | Golpe | Dano | Alcance | Observações |
 |---|---|---|---|---|
-| ○ 1 | Garra seca | 30 | 2.4 m |  |
-| ○ 2 | Garra seca | 30 | 2.4 m |  |
+| ○ 1 | Garra seca | 30 | 2.5 m |  |
+| ○ 2 | Garra seca | 30 | 2.5 m |  |
 | ○ 3 | Chicote de tentáculo | 34 | 3.8 m |  |
-| ○ 4 | Dez garras | 42 (2 acertos) | 2.5 m |  |
-| ○ 5 | Rasgar o quadro | 64 | 2.6 m | finalizador: lança |
+| ○ 4 | Dez garras | 42 (2 acertos) | 2.6 m |  |
+| ○ 5 | Rasgar o quadro | 64 | 2.7 m | finalizador: lança |
 | Frente + ○ | Avanço da criatura | 38 | 2.6 m |  |
 | Trás + ○ | Recua e chicoteia | 34 | 3.8 m | invulnerável no começo |
 | Lado + ○ | Varredura de tentáculos | 32 | 3 m |  |
 | No ar + ○ | Desabar | 38 | 2.5 m | desce com impacto |
-| ↑ + ○ (no combo) | Erguer pelos tentáculos | 42 | 2.6 m | finalizador: lança alto (combo aéreo) |
-| ↓ + ○ (no combo) | Esmagar | 48 | 2.5 m | finalizador: derruba |
+| ↑ + ○ (no combo) | Erguer pelos tentáculos | 42 | 2.7 m | finalizador: lança alto (combo aéreo) |
+| ↓ + ○ (no combo) | Esmagar | 48 | 2.6 m | finalizador: derruba |
 
 ### Principal (□ / X): Tentáculo
 
@@ -1177,14 +1177,14 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ### Habilidades
 
-- **Derreter** — △ + ○ / Y + B · custo 35 · cooldown 22 s · dano 44 · alcance 1.8 m
-  Aproxima o buraco do rosto e DESPEJA a tinta na cara da vítima: o rosto derrete — dano contínuo, lentidão e o alvo fica mais fraco por alguns segundos. Curto alcance; dá para esquivar.
+- **Derreter** — △ + ○ / Y + B · custo 35 · cooldown 22 s · dano 44 · alcance 1.9 m
+  Avança, AGARRA a cabeça da vítima e curva o capuz sobre o rosto dela: a tinta escorre direto na cara (dano em pulsos, sem defesa). Solta com o ROSTO DERRETENDO — dano contínuo, lentidão e mais fraco por alguns segundos. Curto alcance; dá para esquivar.
 - **Tentáculos que Prendem** — △ + □ / Y + X · custo 25 · cooldown 13 s · dano 32 · alcance 12 m
-  Os tentáculos saem do chão debaixo do alvo e o prendem por um instante.
-- **O Sino** — R2 + △ / RT + Y · custo 25 · cooldown 16 s · alcance 6 m
-  O SINO toca dentro da criatura: quem estiver por perto, em qualquer direção, sente a mente falhar e fica paralisado por um instante.
-- **Dissolver** — △ + L2 / Y + LT · custo 30 · cooldown 24 s
-  Absorve a tinta derramada em volta e se recompõe: recupera vida em instantes.
+  Aponta a garra e uma POÇA de tinta se abre debaixo do alvo (o aviso: dá para sair dela). Os tentáculos brotam, se enrolam em quem ficou em cima e o PRENDEM.
+- **O Sino** — R2 + △ / RT + Y · custo 25 · cooldown 16 s · dano 14 · alcance 6 m
+  O SINO toca dentro da criatura: três badaladas, cada uma uma onda de som em volta (qualquer direção) que machuca um pouco. Quem ainda estiver perto na ÚLTIMA fica paralisado e VULNERÁVEL (leva mais dano) por alguns segundos.
+- **Dissolver** — △ + L2 / Y + LT · custo 30 · cooldown 24 s · dano 24
+  DERRETE numa poça da própria tinta (intocável enquanto isso), absorve e recupera vida, e se refaz de uma vez: a tinta espirra em volta e machuca quem estiver em cima da poça.
 
 ### Especial: Todo Mundo Vai Morrer
 

@@ -10,6 +10,7 @@ import { buildHuntingDog } from '../models/dog.js';
 import { bloodCoat } from '../models/weapons.js';
 import { addBloodPool, poolsOf, splatGeo } from './bloodPools.js';
 import { inscribe } from './kianPowers.js';
+import { AMIGO_TYPES } from './amigoPowers.js';
 
 // Paga um custo em vida (rituais de Sangue) sem nunca se matar
 function payHealth(f, n) {
@@ -3538,3 +3539,4 @@ export const DALMO_TYPES = {
   },
 };
 Object.assign(ABILITY_TYPES, DALMO_TYPES);
+Object.assign(ABILITY_TYPES, AMIGO_TYPES);
