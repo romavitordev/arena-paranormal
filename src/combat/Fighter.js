@@ -313,13 +313,14 @@ export class Fighter {
     return (!!opp.findBuff('veil') && distXZ(this.pos, opp.pos) > 1.6) || !!this.findBuff('deaf');
   }
 
-  // Translucidez (névoa da Kaiser, Inexistir do Kian)
+  // Translucidez (névoa da Kaiser, Inexistir do Kian). O contorno só volta se a malha dele estiver à mostra: antes, o
+  // contorno de peças escondidas (elmo do Labirinto, máscaras) reaparecia sozinho como uma silhueta preta.
   setOpacity(a) {
     if (this._opacity === a) return;
     this._opacity = a;
     this.rig.root.traverse((o) => {
       if (!o.isMesh || !o.material) return;
-      if (o.userData.isOutline) { o.visible = a > 0.95; return; }
+      if (o.userData.isOutline) { o.visible = a > 0.95 && shownInRig(o.userData.source, this.rig.root); return; }
       const m = o.material;
       if (m.userData.baseTransparent === undefined) {
         m.userData.baseTransparent = m.transparent;
@@ -2940,4 +2941,10 @@ export class Fighter {
       }
     }
   }
+}
+
+// a malha (e todos os pais até a raiz do rig) está visível?
+function shownInRig(o, root) {
+  for (let p = o; p && p !== root; p = p.parent) if (!p.visible) return false;
+  return true;
 }

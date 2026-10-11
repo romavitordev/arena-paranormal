@@ -31,7 +31,7 @@ button = material('buttons', '#8a8a90', 0.4, metal=0.6)
 brooch = material('brooch', '#b8a878', 0.35, metal=0.8)
 hairm = material('hair_brown', '#3e3028', 0.6)
 gray = material('hair_gray', '#c8c4bc', 0.6)
-beard = material('beard_gray', '#8e8780', 0.85)
+beard = material('beard_gray', '#57504a', 0.85)
 stache = material('mustache', '#4a3626', 0.8)
 metal = material('earring', '#c8c8cc', 0.3, metal=0.9)
 
@@ -63,9 +63,14 @@ for s in (1, -1):
     b.add(f'vestpoint{s}', cone((s * 0.06, -0.135, hz - 0.03), (s * 0.03, -0.14, hz - 0.1), 0.05, 4), vest, region='torso', subdiv=0)
 b.add('brooch', merge(ellipsoid((0.11, -0.158, hz + 0.4), (0.022, 0.008, 0.02), 8, 6),
                       xform(box((0.11, -0.16, hz + 0.41), (0.07, 0.005, 0.02)), lambda p: p)), brooch, region='torso', subdiv=0)
-# gola aberta da camisa
+# gola GRANDE da camisa, aberta e deitada por cima do colete (as pontas descem sobre as lapelas — as artes)
 for s in (1, -1):
-    b.add(f'collar{s}', xform(box((s * 0.05, -0.1, 1.6), (0.06, 0.06, 0.012)), lambda p, s=s: Vector((p.x, p.y, p.z + abs(p.x) * 0.3))), M['torso'], region='torso', subdiv=0)
+    b.add(f'collar{s}', tube([(s * 0.05, -0.1, 1.585, 0.022, 0.012), (s * 0.075, -0.14, 1.55, 0.027, 0.007), (s * 0.095, -0.158, 1.5, 0.022, 0.006), (s * 0.105, -0.16, 1.465, 0.005, 0.004)], 8), M['torso'], region='torso', subdiv=0)
+# suspensórios soltos, pendurados do cós até a coxa (a arte de corpo inteiro)
+susp = material('suspenders', '#16161a', 0.7)
+for s, side in ((1, 'L'), (-1, 'R')):
+    l = sk['l' + side]
+    b.add('suspender' + side, tube([(s * 0.12, -0.11, hz + 0.03, 0.014, 0.006), (s * 0.13, -0.115, hz - 0.12, 0.014, 0.006), (s * 0.14, -0.1, hz - 0.28, 0.014, 0.006), (s * 0.15, -0.06, hz - 0.36, 0.012, 0.006)], 6), susp, region='leg' + side, subdiv=0)
 # cinto e bolsos da calça
 b.add('belt', tube([(0, 0, hz + 0.02, 0.178, 0.125), (0, 0, hz + 0.07, 0.18, 0.127)], 18), material('belt_abutre', '#241c16', 0.7), region='torso', subdiv=0)
 for s in (1, -1):
@@ -75,22 +80,73 @@ for side in ('L', 'R'):
     k, f = sk['k' + side], sk['foot' + side]
     b.add('bootshaft' + side, tube(limb_rings(k.lerp(f, 0.62), f + Vector((0, 0, 0.06)), 0.06, 0.058, n=3), 12), M['feet'], region='k' + side)
 
-# cabelo castanho penteado para trás com mecha grisalha e coque
-b.add('hair_cap', hair_cap((hc.x, hc.y + 0.01, hc.z + 0.012), (0.146, 0.156, 0.168), front=0.3, side=0.42, back=0.62), hairm, region='head')
-b.add('hair_back', ellipsoid((hc.x, hc.y + 0.045, hc.z - 0.02), (0.142, 0.12, 0.14), 16, 10, theta_max=math.pi * 0.72, phi=(0.62, 1.38)), hairm, region='head')
-b.add('hair_streak', xform(box((-0.04, -0.02, hc.z + 0.16), (0.045, 0.3, 0.03)), lambda p: Vector((p.x, p.y, p.z - (p.y ** 2) * 2.2))), gray, region='head', subdiv=1)
-b.add('bun', merge(ellipsoid((0, 0.06, hc.z + 0.19), (0.045, 0.045, 0.04), 10, 8), tube([(0, 0.06, hc.z + 0.15, 0.02, 0.02), (0, 0.06, hc.z + 0.17, 0.022, 0.022)], 8)), hairm, region='head')
-# barba grisalha + bigode castanho
-# barba: só o volume do queixo/mandíbula, colado ao rosto (o resto é pintado na textura)
-beard_shell = ellipsoid((hc.x, hc.y - 0.002, hc.z), (0.143, 0.153, 0.168), 24, 16, phi=(0.17, 0.83))
+# cabelo castanho PUXADO PARA TRÁS em mechas até o COQUE no alto da cabeça, com as mechas grisalhas do lado direito
+# dele; nas laterais o cabelo fica solto, passa por trás da orelha e cai até a nuca; uma mecha solta cai na testa
+import random
+random.seed(7)
+HC = Vector((hc.x, hc.y + 0.01, hc.z + 0.012))
+HR = (0.146, 0.156, 0.168)
+b.add('hair_cap', hair_cap((HC.x, HC.y, HC.z), (HR[0] * 0.99, HR[1] * 0.99, HR[2] * 0.99), front=0.24, side=0.46, back=0.64), hairm, region='head')
+BUN = Vector((0, 0.035, hc.z + 0.2))
+
+
+def hair_pt(gam, beta, r):
+    return HC + Vector((math.sin(gam) * HR[0] * r, -math.cos(beta) * math.cos(gam) * HR[1] * r, math.sin(beta) * math.cos(gam) * HR[2] * r))
+
+
+def strand(pts, radii, seg=6):
+    rings = [(q.x, q.y, q.z, r, r) for q, r in zip(pts, radii)]
+    return tube(rings, seg)
+
+
+browns, grays = [], []
+for i in range(22):
+    gam = -1.2 + 2.4 * i / 21 + random.uniform(-0.03, 0.03)
+    b0 = 0.78 + 0.3 * abs(gam) ** 1.5
+    pts = []
+    for k in range(7):
+        t = k / 6
+        beta = b0 + (1.45 - b0) * t
+        q = hair_pt(gam * (1 - 0.75 * t), beta, 1.05 + 0.05 * math.sin(t * math.pi))
+        pts.append(q.lerp(BUN, smoothstep(0.55, 1.0, t) * 0.85))
+    rad = [0.02 - 0.006 * k / 6 for k in range(7)]
+    (grays if -0.5 < gam < -0.1 or i == 15 else browns).append(strand(pts, rad))
+# laterais soltas: da têmpora, por trás da orelha, até a nuca
+for s_ in (1, -1):
+    for j in range(5):
+        p0 = hair_pt(s_ * (1.05 + j * 0.08), 0.75 + j * 0.12, 1.04)
+        pts = [p0, p0 + Vector((s_ * 0.012, 0.03, -0.05)), p0 + Vector((s_ * 0.014, 0.05, -0.1)), p0 + Vector((s_ * 0.01, 0.06, -0.13 - j * 0.008))]
+        browns.append(strand(pts, [0.02, 0.018, 0.012, 0.004]))
+# nuca
+for j in range(7):
+    gam = -0.9 + j * 0.3
+    p0 = hair_pt(gam, 2.4, 1.03)
+    browns.append(strand([p0, p0 + Vector((0, 0.02, -0.07)), p0 + Vector((0, 0.025, -0.12))], [0.024, 0.018, 0.005]))
+# mecha solta caindo na testa (lado direito dele, grisalha)
+p0 = hair_pt(-0.3, 0.8, 1.06)
+grays.append(strand([p0, p0 + Vector((-0.012, -0.02, -0.05)), p0 + Vector((-0.022, -0.026, -0.09))], [0.008, 0.007, 0.002], 5))
+b.add('hair_locks', merge(*browns), hairm, region='head', subdiv=0)
+b.add('hair_streak', merge(*grays), gray, region='head', subdiv=0)
+# coque no alto, com a faixa grisalha enrolada
+b.add('bun', merge(ellipsoid(tuple(BUN + Vector((0, 0.005, 0.03))), (0.05, 0.045, 0.042), 10, 8), tube([(BUN.x, BUN.y, BUN.z - 0.01, 0.03, 0.028), (BUN.x, BUN.y, BUN.z + 0.02, 0.032, 0.03)], 8)), hairm, region='head')
+b.add('bun_gray', ellipsoid(tuple(BUN + Vector((0.012, -0.012, 0.05))), (0.024, 0.02, 0.018), 8, 6), gray, region='head', subdiv=0)
+
+# BARBA cheia grisalha colada no rosto (sobe pela mandíbula até a costeleta) terminando em PONTA abaixo do queixo;
+# bigode CASTANHO que desce pelos cantos da boca até o cavanhaque castanho no meio da barba — como nas artes
+beard_shell = ellipsoid((hc.x, hc.y - 0.002, hc.z), (0.145, 0.156, 0.17), 56, 20, phi=(0.17, 0.83))
 def jaw(p):
-    # sobe pelas laterais do rosto (costeleta) e fica abaixo da boca no meio
     zmax = hc.z - 0.105 + smoothstep(0.03, 0.11, abs(p.x)) * 0.075
-    return Vector((p.x, p.y, min(p.z, zmax)))
+    zmax += 0.007 * math.sin(p.x * 260)  # borda de cima em fios (não fica com cara de máscara)
+    q = Vector((p.x, p.y, min(p.z, zmax)))
+    # o queixo desce em ponta
+    d = max(0.0, (hc.z - 0.13) - q.z)
+    q.z -= d * 0.9 * math.exp(-(q.x / 0.05) ** 2)
+    q.y += d * 0.25
+    return q
 b.add('beard', xform(beard_shell, jaw), beard, region='head')
-b.add('goatee', ellipsoid((0, -0.118, hc.z - 0.168), (0.038, 0.026, 0.05), 12, 8), beard, region='head')
 for s2 in (1, -1):
-    b.add(f'mustache{s2}', tube([(s2 * 0.004, -0.152, hc.z - 0.066, 0.012, 0.01), (s2 * 0.03, -0.148, hc.z - 0.074, 0.013, 0.011), (s2 * 0.055, -0.135, hc.z - 0.095, 0.009, 0.008)], 8), stache, region='head', subdiv=0)
+    b.add(f'mustache{s2}', tube([(s2 * 0.004, -0.153, hc.z - 0.066, 0.012, 0.009), (s2 * 0.03, -0.149, hc.z - 0.074, 0.013, 0.01), (s2 * 0.048, -0.14, hc.z - 0.1, 0.011, 0.009), (s2 * 0.04, -0.138, hc.z - 0.14, 0.01, 0.008), (s2 * 0.014, -0.135, hc.z - 0.17, 0.009, 0.008)], 8), stache, region='head', subdiv=0)
+b.add('goatee', tube([(0, -0.156, hc.z - 0.115, 0.01, 0.005), (0, -0.152, hc.z - 0.15, 0.013, 0.006), (0, -0.14, hc.z - 0.19, 0.008, 0.005), (0, -0.13, hc.z - 0.215, 0.002, 0.002)], 8), stache, region='head', subdiv=0)
 # brincos na orelha esquerda
 for i in range(2):
     b.add(f'earring{i}', ellipsoid((0.142, 0.01 + i * 0.012, hc.z - 0.03 - i * 0.012), (0.006, 0.006, 0.006), 6, 4), metal, region='head', subdiv=0)

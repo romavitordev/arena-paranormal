@@ -530,19 +530,20 @@ export const MATERIAL_TEXTURES = {
 
   // ---------------- LABIRINTO: pele pálida coberta de cicatrizes geométricas (escarificação em labirinto)
   skin_labirinto: () => canvasTex(512, 512, (g) => {
-    g.fillStyle = '#e2d2c6'; g.fillRect(0, 0, 512, 512);
-    mazeLines(g, 0, 0, 512, 512, 16, 'rgba(150,80,72,0.75)', 2.2);
-    mazeLines(g, 4, 4, 512, 512, 16, 'rgba(250,225,215,0.5)', 0.8); // brilho da cicatriz
+    // pele pálida ACINZENTADA (as artes) com as cicatrizes finas e escuras do labirinto e o relevo claro ao lado
+    g.fillStyle = '#a99f95'; g.fillRect(0, 0, 512, 512);
+    mazeLines(g, 0, 0, 512, 512, 18, 'rgba(82,66,60,0.62)', 1.6);
+    mazeLines(g, 2, 2, 512, 512, 18, 'rgba(250,244,236,0.45)', 0.8); // brilho da cicatriz
   }, { wrap: true }),
   face_labirinto: face((g) => {
     // cabeça raspada: o labirinto sobe pela testa e pelo crânio, contornando os olhos
     g.save();
     g.beginPath(); g.rect(0, 0, W, HT); g.ellipse(CX - 32, EYE_Y, 26, 16, 0, 0, Math.PI * 2); g.ellipse(CX + 32, EYE_Y, 26, 16, 0, 0, Math.PI * 2); g.ellipse(CX, 175, 30, 18, 0, 0, Math.PI * 2);
     g.clip('evenodd');
-    mazeLines(g, 0, 0, W, HT, 14, 'rgba(150,80,72,0.7)', 2);
+    mazeLines(g, 0, 0, W, HT, 15, 'rgba(82,66,60,0.6)', 1.5);
     g.restore();
   }, {
-    skin: '#e2d2c6',
+    skin: '#a99f95',
     eye: { iris: '#8a9098', irisLight: '#c0c8d0', tilt: 0, bags: true },
     brow: { angry: 0, thick: 2, color: '#b8a89a' },
     mouth: { mouthW: 12, smile: -1, lip: 'rgba(160,110,110,0.35)' },
@@ -1404,7 +1405,7 @@ export const MATERIAL_TEXTURES = {
     for (let i = 0; i < 9; i++) {
       const x = 20 + Math.random() * 216;
       const y = 20 + Math.random() * 216;
-      const r = 8 + Math.random() * 14;
+      const r = 5 + Math.random() * 8; // sigilos menores e mais finos (a arte)
       g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.stroke();
       g.beginPath(); g.moveTo(x - r, y); g.lineTo(x + r, y); g.moveTo(x, y - r); g.lineTo(x, y + r * 1.6); g.stroke();
     }
@@ -1416,12 +1417,13 @@ export const MATERIAL_TEXTURES = {
     g.strokeStyle = 'rgba(170,90,80,0.7)'; g.lineWidth = 1.5;
     for (let i = 0; i < 4; i++) { g.beginPath(); g.moveTo(100 + i * 9, 170); g.lineTo(108 + i * 9, 196); g.stroke(); }
   }, { wrap: true }),
+  // camisa de flanela CÁQUI amarrada na cintura (a arte de corpo inteiro): fundo mostarda e o xadrez marrom fino
   plaid: () => canvasTex(128, 128, (g) => {
-    g.fillStyle = '#8a8070'; g.fillRect(0, 0, 128, 128);
-    g.fillStyle = 'rgba(40,40,46,0.6)';
-    for (let i = 0; i < 128; i += 32) { g.fillRect(i, 0, 12, 128); g.fillRect(0, i, 128, 12); }
-    g.fillStyle = 'rgba(160,40,40,0.5)';
-    for (let i = 16; i < 128; i += 32) { g.fillRect(i, 0, 3, 128); g.fillRect(0, i, 128, 3); }
+    g.fillStyle = '#a88e58'; g.fillRect(0, 0, 128, 128);
+    g.fillStyle = 'rgba(90,64,32,0.35)';
+    for (let i = 0; i < 128; i += 32) { g.fillRect(i, 0, 10, 128); g.fillRect(0, i, 128, 10); }
+    g.fillStyle = 'rgba(60,40,20,0.7)';
+    for (let i = 14; i < 128; i += 32) { g.fillRect(i, 0, 2, 128); g.fillRect(0, i, 128, 2); }
   }, { wrap: true, repeat: [3, 1] }),
 
   // ---------------- INJUSTIÇA: venda cobre os olhos (geometria); sorriso largo; texto pela pele

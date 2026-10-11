@@ -2,6 +2,14 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.17.0 — Retoques no elenco
+- Katana do Joui refeita a partir das artes: lâmina curva com o hamon claro e ondulado e a ponta kissaki, tsuba vermelha octogonal, habaki dourado e cabo branco com o trançado vermelho em losangos. A bainha ganhou laca preta curva, ponteira de metal e o cordão vermelho enrolado.
+- Joui: o capuz caído nas costas agora aparece de verdade, grande e com a borda vermelha.
+- Labirinto refeito: magro e alto, robe verde TRANSPASSADO com decote em V rasgado e farrapos nos ombros, mangas largas até o punho, a corda atravessando o peito e dando duas voltas na cintura, saia de retalhos por baixo, pés descalços e as orelhas à mostra. A pele ficou pálida e acinzentada, com as cicatrizes finas do labirinto.
+- Arthur: cabelo puxado para trás até o coque no alto, com as mechas grisalhas e as laterais soltas; barba cheia grisalha em ponta com o bigode e o cavanhaque castanhos; gola grande aberta por cima do colete e os suspensórios soltos.
+- Aghata vestida como na arte de corpo inteiro: jaqueta de couro curta de gola alta com os bolsos forrados de vermelho, blusa vermelha de gola alta, correntes no pescoço, luvas vermelhas, a camisa xadrez cáqui amarrada na cintura caindo de um lado, jeans rasgado e coturnos vermelhos de cadarço.
+- Correção: peças escondidas (como o elmo do Labirinto ou a máscara puxada para o lado do Joui) deixavam uma silhueta preta no lugar delas.
+
 ## v3.16.4 — A Marreta Leonora
 - Lírio sem barba cheia: agora só a barba rala, como nas artes.
 - Leonora refeita a partir da arte da wiki: cabeça de barril de tábuas com cintas de ferro, espinhos curtos de metal cravados nas cintas, a pata dourada nas duas faces, tufo de pelo branco no encaixe e o cabo com faixa preta enrolada.

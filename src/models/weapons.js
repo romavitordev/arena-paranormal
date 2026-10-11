@@ -19,29 +19,167 @@ function extrude(shape, depth = 0.012) {
   return g;
 }
 
+// Perfil de uma lâmina CURVA de katana no plano XY (empunhadura em y=0, ponta em y=-len, curvatura para +X).
+// side: 'ji' = corpo (do dorso até a linha do hamon), 'ha' = fio (do hamon até o gume), 'all' = inteira.
+function katanaShape(len, width, sori, side = 'all') {
+  const N = 28;
+  const spine = (t) => sori * t * t; // dorso (mune)
+  const w = (t) => width * (1 - 0.22 * t); // estreita um pouco até a ponta
+  const kis = 0.9; // começo do kissaki
+  const edgeAt = (t) => {
+    if (t <= kis) return spine(t) - w(t);
+    const u = (t - kis) / (1 - kis); // o gume sobe em curva até encontrar o dorso na ponta
+    return spine(t) - w(t) * Math.cos((u * Math.PI) / 2) ** 0.8;
+  };
+  // linha do hamon: ondulada, a ~40% da largura a partir do gume
+  const hamonAt = (t) => {
+    const e = edgeAt(t);
+    const span = spine(t) - e;
+    return e + span * (0.42 + 0.1 * Math.sin(t * 46) * Math.min(1, t * 8));
+  };
+  const top = side === 'ha' ? hamonAt : spine;
+  const bot = side === 'ji' ? hamonAt : edgeAt;
+  const sh = new THREE.Shape();
+  sh.moveTo(top(0), 0);
+  for (let i = 1; i <= N; i++) {
+    const t = i / N;
+    sh.lineTo(top(t), -len * t);
+  }
+  for (let i = N; i >= 0; i--) {
+    const t = i / N;
+    sh.lineTo(bot(t), -len * t);
+  }
+  return sh;
+}
+
+// KATANA do Joui (arte "mascarado especial"/"corpo inteiro"): lâmina CURVA de aço com o HAMON claro e ondulado no
+// fio e a ponta kissaki; habaki dourado; TSUBA vermelha octogonal com aro escuro; cabo de pele de raia branca com o
+// trançado VERMELHO em losangos (ito), menuki dourado, fuchi e kashira pretos e a borla de corda vermelha.
 export function katana() {
   const g = new THREE.Group();
-  const grip = part(new THREE.CylinderGeometry(0.018, 0.018, 0.26, 8), 0x7a1010);
-  grip.position.y = 0.06;
-  g.add(grip);
-  const tsuba = part(new THREE.CylinderGeometry(0.05, 0.05, 0.012, 14), 0x222222);
-  tsuba.position.y = -0.08;
+  const LEN = 0.84;
+  const W = 0.036;
+  const SORI = 0.05;
+  // cabo: núcleo branco (samegawa) + losangos vermelhos do trançado nos dois lados
+  const tsukaLen = 0.25;
+  const core = part(new THREE.CylinderGeometry(0.0185, 0.0175, tsukaLen, 10), 0xe6e0d2);
+  core.scale.z = 0.82;
+  core.position.y = -0.078 + tsukaLen / 2 + 0.006;
+  g.add(core);
+  const ito = toon(0xa0141c);
+  const n = 7;
+  for (let i = 0; i < n; i++) {
+    const y = -0.06 + (i + 0.5) * (tsukaLen / n);
+    // fitas cruzadas em X na frente e atrás do cabo: os vãos mostram o branco em losango
+    for (const d of [1, -1]) {
+      for (const zs of [1, -1]) {
+        const band = new THREE.Mesh(new THREE.BoxGeometry(0.044, 0.011, 0.004), ito);
+        band.position.set(0, y, zs * 0.0152);
+        band.rotation.z = d * 0.62;
+        g.add(band);
+      }
+    }
+  }
+  // menuki dourado (enfeite sob o trançado, um de cada lado)
+  for (const zs of [1, -1]) {
+    const menuki = part(new THREE.SphereGeometry(0.009, 6, 4), 0xd2a84a, { outline: false });
+    menuki.scale.set(0.8, 2.2, 0.5);
+    menuki.position.set(0, 0.06, zs * 0.016);
+    g.add(menuki);
+  }
+  const black = 0x161416;
+  const fuchi = part(new THREE.CylinderGeometry(0.021, 0.021, 0.018, 10), black);
+  fuchi.scale.z = 0.85;
+  fuchi.position.y = -0.066;
+  g.add(fuchi);
+  const kashira = part(new THREE.CylinderGeometry(0.017, 0.021, 0.022, 10), black);
+  kashira.scale.z = 0.85;
+  kashira.position.y = 0.19;
+  g.add(kashira);
+  // borla de corda vermelha pendurada no pomo
+  const tassel = part(new THREE.CylinderGeometry(0.004, 0.006, 0.09, 5), 0xa0141c, { outline: false });
+  tassel.position.set(0.012, 0.225, 0);
+  tassel.rotation.z = -0.5;
+  g.add(tassel);
+  // tsuba vermelha OCTOGONAL com aro escuro + seppa
+  const tsuba = part(new THREE.CylinderGeometry(0.05, 0.05, 0.012, 8), 0x9a1018, { mat: toon(0x9a1018, { emissive: 0x200204 }) });
+  tsuba.rotation.y = Math.PI / 8;
+  tsuba.scale.z = 0.86;
+  tsuba.position.y = -0.081;
   g.add(tsuba);
-  const blade = part(extrude(bladeShape(0.82, 0.035, 0.03, 0.6), 0.008), 0xdfe4ea, { mat: toon(0xdfe4ea, { emissive: 0x202830 }) });
-  blade.position.y = -0.085;
-  blade.rotation.y = Math.PI / 2;
+  const rim = part(new THREE.TorusGeometry(0.047, 0.004, 4, 8), 0x2a0a0c, { outline: false });
+  rim.rotation.set(Math.PI / 2, 0, Math.PI / 8);
+  rim.scale.y = 0.86;
+  rim.position.y = -0.081;
+  g.add(rim);
+  for (const dy of [-0.0075, 0.0075]) {
+    const seppa = part(new THREE.CylinderGeometry(0.026, 0.026, 0.003, 10), 0xc9a24a, { outline: false });
+    seppa.scale.z = 0.7;
+    seppa.position.y = -0.081 + dy;
+    g.add(seppa);
+  }
+  // habaki dourado
+  const habaki = part(new THREE.BoxGeometry(0.008, 0.03, 0.04), 0xd2a84a, { mat: toon(0xd2a84a, { emissive: 0x2a1e06 }) });
+  habaki.position.set(0, -0.103, -0.002);
+  g.add(habaki);
+  // lâmina: corpo de aço + fio claro (hamon), curvando para o dorso (+Z = "topo" da arma)
+  const blade = new THREE.Group();
+  const ji = part(extrude(katanaShape(LEN, W, SORI, 'ji'), 0.007), 0, { mat: toon(0x76808e, { emissive: 0x0c1016 }) });
+  const ha = part(extrude(katanaShape(LEN, W, SORI, 'ha'), 0.005), 0, { mat: toon(0xf6f9ff, { emissive: 0x3a4250 }), outline: false });
+  blade.add(ji, ha);
+  blade.position.set(0, -0.09, 0);
+  blade.rotation.y = -Math.PI / 2; // X da forma → +Z do grupo: o dorso fica para cima
+  // centraliza: o dorso começa em x=0, então desloca meia largura para o gume ficar embaixo
+  ji.position.x = W / 2;
+  ha.position.x = W / 2;
   g.add(blade);
-  g.userData.tipLength = 0.92;
+  g.userData.tipLength = 0.93;
   return g;
 }
 
+// BAINHA (saya) do Joui: laca preta levemente curva, boca de chifre, ponteira de metal escuro e o SAGEO (cordão
+// vermelho) enrolado perto da boca com a laçada pendurada.
 export function scabbard() {
   const g = new THREE.Group();
-  const s = part(new THREE.CylinderGeometry(0.025, 0.02, 0.85, 8), 0x141012);
-  s.position.y = -0.42;
-  g.add(s);
-  const ring = part(new THREE.CylinderGeometry(0.03, 0.03, 0.03, 8), 0x7a1010);
-  g.add(ring);
+  const LEN = 0.86;
+  const curve = new THREE.QuadraticBezierCurve3(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, -LEN * 0.5, 0.012), new THREE.Vector3(0, -LEN, 0.05));
+  const body = part(new THREE.TubeGeometry(curve, 20, 0.024, 8, false), 0x141012, { mat: toon(0x141012, { emissive: 0x060406 }) });
+  body.scale.x = 0.62;
+  g.add(body);
+  const mouth = part(new THREE.CylinderGeometry(0.027, 0.027, 0.03, 10), 0x2a2224);
+  mouth.scale.x = 0.66;
+  mouth.position.y = -0.012;
+  g.add(mouth);
+  const tip = part(new THREE.CylinderGeometry(0.026, 0.02, 0.05, 10), 0x5a5a60);
+  tip.scale.x = 0.66;
+  tip.position.set(0, -LEN + 0.022, 0.048);
+  tip.rotation.x = -0.1;
+  g.add(tip);
+  const cap = part(new THREE.SphereGeometry(0.02, 10, 6), 0x5a5a60);
+  cap.scale.set(0.66, 0.5, 1);
+  cap.position.set(0, -LEN - 0.002, 0.05);
+  g.add(cap);
+  // kurigata (argola lateral) + sageo enrolado
+  const red = 0xa0141c;
+  const kuri = part(new THREE.TorusGeometry(0.012, 0.004, 4, 8), 0x2a2224, { outline: false });
+  kuri.position.set(0, -0.09, -0.026);
+  kuri.rotation.y = Math.PI / 2;
+  g.add(kuri);
+  for (let i = 0; i < 4; i++) {
+    const w = part(new THREE.TorusGeometry(0.025, 0.0045, 4, 12), red, { outline: false });
+    w.scale.set(0.66, 1, 1);
+    w.rotation.x = Math.PI / 2 + (i % 2 ? 0.25 : -0.25);
+    w.position.y = -0.07 - i * 0.016;
+    g.add(w);
+  }
+  const loopCurve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(0, -0.1, -0.03),
+    new THREE.Vector3(0.01, -0.2, -0.05),
+    new THREE.Vector3(0.0, -0.28, -0.035),
+    new THREE.Vector3(-0.01, -0.2, -0.028),
+    new THREE.Vector3(0, -0.12, -0.026),
+  ]);
+  g.add(part(new THREE.TubeGeometry(loopCurve, 18, 0.004, 4, false), red, { outline: false }));
   return g;
 }
 

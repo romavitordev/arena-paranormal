@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.16.4';
+export const VERSION = '3.17.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,19 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.17.0',
+    date: '2026-10-10',
+    title: 'Retoques no elenco',
+    items: [
+      'Katana do Joui refeita a partir das artes: lâmina curva com o hamon claro e ondulado e a ponta kissaki, tsuba vermelha octogonal, habaki dourado e cabo branco com o trançado vermelho em losangos. A bainha ganhou laca preta curva, ponteira de metal e o cordão vermelho enrolado.',
+      'Joui: o capuz caído nas costas agora aparece de verdade, grande e com a borda vermelha.',
+      'Labirinto refeito: magro e alto, robe verde TRANSPASSADO com decote em V rasgado e farrapos nos ombros, mangas largas até o punho, a corda atravessando o peito e dando duas voltas na cintura, saia de retalhos por baixo, pés descalços e as orelhas à mostra. A pele ficou pálida e acinzentada, com as cicatrizes finas do labirinto.',
+      'Arthur: cabelo puxado para trás até o coque no alto, com as mechas grisalhas e as laterais soltas; barba cheia grisalha em ponta com o bigode e o cavanhaque castanhos; gola grande aberta por cima do colete e os suspensórios soltos.',
+      'Aghata vestida como na arte de corpo inteiro: jaqueta de couro curta de gola alta com os bolsos forrados de vermelho, blusa vermelha de gola alta, correntes no pescoço, luvas vermelhas, a camisa xadrez cáqui amarrada na cintura caindo de um lado, jeans rasgado e coturnos vermelhos de cadarço.',
+      'Correção: peças escondidas (como o elmo do Labirinto ou a máscara puxada para o lado do Joui) deixavam uma silhueta preta no lugar delas.',
+    ],
+  },
   {
     v: '3.16.4',
     date: '2026-10-10',

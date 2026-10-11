@@ -77,10 +77,13 @@ for side in ('L', 'R'):
     sh, e = sk['s' + side], sk['e' + side]
     b.add('coat_sleeve' + side, tube(limb_rings(sh + Vector((0, 0, 0.03)), sh.lerp(e, 1.0), 0.08, 0.088, n=4), 14), coat, region='arm' + side)
     b.add('coat_cuff' + side, tube(limb_rings(sh.lerp(e, 0.94), sh.lerp(e, 1.03), 0.09, 0.091, n=1), 14), red, region='arm' + side, subdiv=0)
-# capuz caído com borda vermelha
-hood = ellipsoid((0, 0.1, 1.6), (0.17, 0.11, 0.13), 16, 10, theta_max=math.pi * 0.62)
-b.add('hood', xform(hood, lambda p: Vector((p.x, p.y + max(0, (1.66 - p.z)) * 0.3, p.z))), coat, region='torso')
-b.add('hood_trim', tube([(0, 0.035, 1.64, 0.15, 0.1), (0, 0.04, 1.665, 0.152, 0.102)], 18), red, region='torso', subdiv=0)
+# capuz GRANDE caído nas costas (a arte: cobre a nuca e desce até o meio das costas), com a borda vermelha na boca
+hood_rings = [(0, 0.13, 1.63, 0.15, 0.05), (0, 0.185, 1.55, 0.168, 0.062), (0, 0.215, 1.45, 0.145, 0.058),
+              (0, 0.218, 1.37, 0.085, 0.042), (0, 0.208, 1.3, 0.012, 0.01)]
+b.add('hood', tube(hood_rings, 18), coat, region='torso')
+b.add('hood_trim', tube([(0, 0.13, 1.622, 0.153, 0.053), (0, 0.13, 1.65, 0.152, 0.052)], 18), red, region='torso', subdiv=0)
+# costura central do capuz (vinco escuro)
+b.add('hood_seam', tube([(0, 0.186 + 0.062, 1.55, 0.006, 0.006), (0, 0.215 + 0.058, 1.45, 0.006, 0.006), (0, 0.218 + 0.042, 1.37, 0.005, 0.005)], 5), wrapm, region='torso', subdiv=0)
 # corda no pescoço com nó e pontas
 b.add('neck_rope', tube([(0, -0.005, 1.585, 0.088, 0.075), (0, -0.005, 1.615, 0.088, 0.075)], 16), rope, region='torso', subdiv=0)
 b.add('rope_knot', merge(ellipsoid((0, -0.088, 1.53), (0.03, 0.022, 0.035), 8, 6),

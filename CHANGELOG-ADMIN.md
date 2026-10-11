@@ -1,5 +1,36 @@
 # Registro administrativo de alterações
 
+## v3.17.0 — Retoques no elenco
+
+- Versão: `VERSION` 3.16.4 → **3.17.0**.
+
+- **Análise dos modelos** (pedido: "analise os modelos que precisam de update, como o da espada do joui"): os scripts
+  mais antigos e simples eram Arthur, Aghata, Labirinto, Joui, Xande, Kaiser, Erin, Juan e Dante (90–180 linhas contra
+  340–600 dos refeitos). Comparados com a pasta "Referencias visuais": Labirinto, Arthur, Aghata e a katana do Joui eram
+  os mais distantes da arte; Kaiser já segue as referências; Xande não tem referência na pasta.
+- **Katana do Joui** (`katana()`): `katanaShape(len, width, sori, side)` gera o perfil curvo em duas partes (`ji` aço
+  escuro / `ha` fio claro com o hamon ondulado) e a ponta kissaki; tsuba vermelha octogonal com aro e seppa, habaki
+  dourado, cabo branco com o ito vermelho em losangos, menuki, fuchi/kashira pretos e borla. `tipLength` 0.92 → 0.93.
+  **Bainha** (`scabbard()`): `TubeGeometry` curva achatada, boca, kojiri com tampa, kurigata e o sageo enrolado com a
+  laçada. Só visual.
+- **Joui** (`char_joui.py`): o capuz caído virou um tubo grande nas costas com a borda vermelha e a costura.
+- **Labirinto** (`char_labirinto.py` reescrito, mesmo esquema do Lírio): tronco `TT` magro, robe em `grid` com abertura
+  `robe_gap(z)` — V fundo no peito e abas SOBREPOSTAS abaixo (gap negativo + `lap` empurrando a aba de cima para fora),
+  dobra do transpasse, farrapos no decote e nos ombros, tiras na barra, saia de retalhos por baixo, mangas de robe que
+  alargam até o punho com a barra esfiapada, corda diagonal dando a volta pelas costas + duas voltas na cintura com o
+  nó, pernas e pés descalços, orelhas de abano. O elmo `prop_helmetOn` (+ papéis) continua igual. Textura da pele
+  `#e2d2c6` com linhas avermelhadas → `#a99f95` com linhas finas escuras.
+- **Arthur** (`char_arthur.py`): cabelo em mechas (`hair_pt`) que vão da testa até o COQUE no alto, grisalhas do lado
+  direito, laterais soltas até a nuca, mecha na testa; barba `beard_shell` com borda em fios e o queixo em ponta, bigode
+  castanho descendo até o cavanhaque; gola grande sobre o colete; suspensórios soltos nas coxas.
+- **Aghata** (`char_aghata.py`): saem o colete com capuz e o lenço; entram a jaqueta curta (`leather_jacket`) de gola
+  alta com bolsos e mangas até o meio do antebraço, a blusa de gola alta, correntes, luvas (`glove_red`), a flanela
+  cáqui (`plaid` redesenhada) com a aba comprida na perna esquerda, jeans azul-petróleo e coturnos com cadarço e sola.
+- **Correção dos contornos**: `Fighter.setOpacity` fazia `outline.visible = a > 0.95` em TODOS os contornos, inclusive
+  os de props escondidos (`showProp(..., false)`) — o elmo do Labirinto, a `maskSide` do Joui etc. apareciam como
+  silhuetas pretas. `rigFromGLB` grava `ol.userData.source` e `setOpacity` só mostra o contorno se a malha de origem e
+  todos os pais estiverem visíveis (`shownInRig`).
+
 ## v3.16.4 — A Marreta Leonora
 
 - Versão: `VERSION` 3.16.3 → **3.16.4**.

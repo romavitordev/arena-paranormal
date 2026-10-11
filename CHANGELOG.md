@@ -1,5 +1,15 @@
 # Changelog
 
+## v3.17.0 — 2026-10-10
+
+### Alterado
+- `katana()` / `scabbard()` (`src/models/weapons.js`): lâmina curva (`katanaShape`, corpo + hamon), tsuba octogonal, ito em losangos, saya curva com sageo.
+- `char_joui.py`: capuz caído grande; `char_labirinto.py` reescrito com tronco próprio (robe transpassado); `char_arthur.py`: cabelo em mechas até o coque, barba em ponta, gola e suspensórios; `char_aghata.py`: jaqueta curta, gola alta, luvas, coturnos.
+- Texturas `skin_labirinto` / `face_labirinto` (pele acinzentada), `plaid` (flanela cáqui), `arms_vampira` (sigilos menores).
+
+### Corrigido
+- `Fighter.setOpacity` religava o contorno de peças escondidas; o contorno agora guarda a malha de origem (`userData.source`) e só aparece com ela.
+
 ## v3.16.4 — 2026-10-10
 
 ### Alterado

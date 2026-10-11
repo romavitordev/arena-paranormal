@@ -153,6 +153,7 @@ export function rigFromGLB(gltf, { scale = 1, outline = 0.012 } = {}) {
     ol.bind(o.skeleton, o.bindMatrix);
     ol.frustumCulled = false;
     ol.userData.isOutline = true;
+    ol.userData.source = o; // o contorno de uma peça escondida (prop) continua escondido (Fighter.setOpacity)
     ol.userData.sharedGeometry = true;
     ol.raycast = () => {};
     o.parent.add(ol);
