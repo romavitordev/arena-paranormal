@@ -5,12 +5,13 @@ import { Animator } from '../anim/Animator.js';
 // Fundo 3D da tela inicial e dos menus: alguns lutadores do elenco em pose parada, contra a luz (silhueta escura com
 // contorno na cor do poder de cada um), neblina, o círculo ritual brilhando no chão, cinzas subindo e a câmera se
 // aproximando devagar. Os modelos só são montados depois que os .glb carregam (ready()).
+// um lutador de cada equipe (pedido do usuário): Os Cinco, Escriptas, Ordo Realitas no centro, Mascarados e Portadores
 const LINEUP = [
-  { id: 'aghata', x: -3.3, z: -1.6, yaw: 0.55 },
-  { id: 'kaiser', x: -1.7, z: -0.6, yaw: 0.3 },
-  { id: 'arthur', x: 0, z: 0, yaw: 0 },
-  { id: 'joui', x: 1.7, z: -0.6, yaw: -0.3 },
-  { id: 'gal_sal', x: 3.3, z: -1.6, yaw: -0.55 },
+  { id: 'xande', x: -3.3, z: -1.6, yaw: 0.55 }, // Os Cinco
+  { id: 'kian', x: -1.7, z: -0.6, yaw: 0.3 }, // Escriptas
+  { id: 'arthur', x: 0, z: 0, yaw: 0 }, // Ordo Realitas
+  { id: 'jae', x: 1.7, z: -0.6, yaw: -0.3 }, // Mascarados
+  { id: 'o_diabo', x: 3.3, z: -1.6, yaw: -0.55 }, // Portadores das Relíquias
 ];
 
 export class TitleStage {

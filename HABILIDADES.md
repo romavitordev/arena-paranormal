@@ -1113,8 +1113,9 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 |---|---|---|---|---|
 | ○ 1 | Garra longa | 26 | 2.5 m |  |
 | ○ 2 | Garra de volta | 26 | 2.5 m |  |
-| ○ 3 | Dez garras | 40 (2 acertos) | 2.5 m |  |
-| ○ 4 | Rasgar a mente | 62 | 2.6 m | finalizador: lança |
+| ○ 3 | Pulso de Sinal | 32 | 3.6 m |  |
+| ○ 4 | Dez garras | 40 (2 acertos) | 2.5 m |  |
+| ○ 5 | Rasgar a mente | 62 | 2.6 m | finalizador: lança |
 | Frente + ○ | Flutuar até a vítima | 36 | 2.5 m |  |
 | Trás + ○ | Recuar flutuando | 32 (2 acertos) | 2.4 m | invulnerável no começo |
 | Lado + ○ | Garra em arco | 30 | 2.5 m |  |
@@ -1134,12 +1135,14 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
   O alvo ESQUECE que ele está ali (4 s): quase invisível e mais rápido. O primeiro ataque pega o alvo desprevenido. Tomar dano o revela.
 - **Aparição** — Energia + Pulo (△+× / Y+A) · custo 22 · cooldown 7 s
   Some numa interferência de sinal e reaparece atrás do alvo, como nas abduções.
+- **Abdução** — R2 + △ / RT + Y · custo 25 · cooldown 14 s · dano 40 · alcance 14 m
+  Um círculo verde marca o chão debaixo do adversário: se ele não sair a tempo, a luz o ERGUE no ar e logo depois o crava de volta no chão. Pouco dano, mas abre para o combo.
 - **Toque Sutil** — △ + L2 / Y + LT · custo 35 · cooldown 30 s · dano 40 · alcance 1.6 m
   Um toque de um dedo: o sangue do alvo borbulha e ele derrete por dentro — dano contínuo, lento e mais fraco por alguns segundos. Curtíssimo alcance; dá para esquivar.
 
-### Especial: Abdução
+### Especial: Tortura Mental
 
-250 de dano · custo 50 · cooldown 14 s.
+250 de dano · custo 50 · cooldown 16 s.
 
 ### Transformação: Incubar
 

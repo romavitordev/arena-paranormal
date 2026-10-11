@@ -96,8 +96,13 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
 ## 🟢 P3 — Conteúdo futuro
 
 23. Novas formas
-24. Novos personagens — **Portadores das Relíquias**: falta o **Amigo Imaginário** (decisão do usuário: entra no grupo
-    mesmo sem ser portador; pesquisar na wiki — provavelmente o Tirigan da Mansão Endiabrada — antes de modelar)
+24. Novos personagens — **Portadores das Relíquias**: falta o **Amigo Imaginário** — o CHEFE de O Segredo na Ilha (não
+    é o Tirigan; NÃO FAZER AINDA — o usuário avisa). Elemento no jogo: TINTA (marrom, já em `elements.js`). Wiki
+    "Amigo Imaginário": Morte + Sangue + Medo, "A Obra de Arte Perfeita"; 2 m, curvado, coluna
+    retorcida com espinhos nas costas, capuz enorme até o chão fundido ao corpo e rasgado nas pontas, tentáculos negros
+    por baixo, dois braços secos e escuros com garras, SEM ROSTO — um buraco de onde escorre a tinta marrom. Kit da
+    wiki: Tentáculos (golpe à distância), Agarrão (puxa e arremessa), Derreter (a tinta no rosto), Garras, Dissolver
+    (absorve e recupera vida), O Sino (atordoa / prende quem ouve), Frenesi de Sangue (ferido: mais rápido e agressivo).
 25. Novos cenários
 26. Novos modos
 

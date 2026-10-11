@@ -1,5 +1,17 @@
 # Changelog
 
+## v3.19.1 — 2026-10-11
+
+### Adicionado
+- Elementos `transmissao` (#5aff6a) e `tinta` (#8a5a2a) em `src/config/elements.js` (neutros: fora do `BEATS`).
+- Especial `mindTorture` (`src/combat/specials/mindTorture.js`): aviso com sigilo, paralisia com fios de sinal, 3 autogolpes com os golpes do próprio alvo, `forced_kneel`, apagar memória (recargas no máximo, `sp.forget`, sanidade 0) e o toque final.
+- Habilidade `abductBeam` (Estrangeiro — Abdução, R2 + △): círculo de aviso, ergue (`launch` alto) e crava (`spike`).
+- Clip `forced_kneel`.
+
+### Alterado
+- `estrangeiro`: elemento `transmissao`, especial `mindTorture`, golpe novo "Pulso de Sinal" (`wave_punch`, 3,6 m).
+- `titleStage` LINEUP: um lutador de cada equipe (Xande, Kian, Arthur, Jae, O Diabo).
+
 ## v3.19.0 — 2026-10-11
 
 ### Adicionado

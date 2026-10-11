@@ -2,10 +2,10 @@
 // portador no cânone). A criatura de Transmissão de Sinais do Outro Lado (wiki "Estrangeiro"): 2,5 m, a máscara cinza
 // de olhos verdes com os fios ligados ao corpo, a capa esverdeada até o chão, braços longos de garras enormes. Abduz,
 // apaga memórias, comanda as vítimas e "derrete" com um toque. Ligado a um dos Sinos de Tenebris; "O que é pior do
-// que a Dor e a Morte?". Antes de Tenebris a ficha dele era de Conhecimento (com Energia e Medo) — no jogo,
-// Conhecimento. Fala pouco: indiferente, superior.
+// que a Dor e a Morte?". Elemento: TRANSMISSÃO (verde — o do Sino de Tenebris ligado a ele; pedido do usuário). Fala
+// pouco: indiferente, superior.
 // Kit (Habilidades da wiki): Rajada Psíquica (□), Comandar, Oblívio (some da mente do alvo), aparece do nada atrás da
-// vítima, Toque Sutil (derrete). Especial: ABDUÇÃO. Transformação: INCUBAR (a larva — o alvo fica exposto à mente dele).
+// vítima, Toque Sutil (derrete). Especial: TORTURA MENTAL; a ABDUÇÃO é um ritual comum (R2 + △). Transformação: INCUBAR (a larva — o alvo fica exposto à mente dele).
 // Modelo próprio do Blender (public/models/estrangeiro.glb, tools/blender/char_estrangeiro.py).
 const GREEN = 0x8aff4a;
 const PALE = 0xd8d6c8;
@@ -16,7 +16,7 @@ export default {
   model: 'estrangeiro',
   color: '#8acf4a',
   origin: 'Portadores das Relíquias',
-  element: 'conhecimento',
+  element: 'transmissao',
   energyColor: GREEN,
   info: {
     weapon: 'Cinco garras enormes em cada mão',
@@ -35,6 +35,8 @@ export default {
     strikes: [
       { name: 'Garra longa', anim: 'db_claw_r', dur: 0.32, active: [0.1, 0.18], damage: 26, range: 2.5, arc: 120, knockback: 1.0, lunge: 1.1, sound: 'blade', hitSound: 'clawHit', trail: { color: PALE, tilt: 0.05 } },
       { name: 'Garra de volta', anim: 'db_claw_l', dur: 0.32, active: [0.1, 0.18], damage: 26, range: 2.5, arc: 120, knockback: 1.0, lunge: 1.0, sound: 'blade', hitSound: 'clawHit', trail: { color: PALE, flip: true } },
+      // a mão aberta solta um pulso de Transmissão: empurra de longe sem encostar
+      { name: 'Pulso de Sinal', anim: 'wave_punch', dur: 0.42, active: [0.15, 0.25], damage: 32, range: 3.6, arc: 60, knockback: 2.4, lunge: 0.3, element: 'transmissao', sound: 'fearGaze', hitSound: 'impact', impactFx: 'sigil', impactScale: 1.3, trail: { color: GREEN, wide: true } },
       { name: 'Dez garras', anim: 'db_cross', dur: 0.44, actives: [[0.12, 0.19], [0.24, 0.32]], damage: 40, range: 2.5, arc: 130, knockback: 1.2, lunge: 1.0, sound: 'blade', hitSound: 'clawHit', trail: { color: GREEN, roll: 0.8 } },
       { name: 'Rasgar a mente', anim: 'db_rend', dur: 0.6, active: [0.24, 0.36], damage: 62, range: 2.6, arc: 140, lunge: 1.6, finisher: 'launch', hitstop: 0.1, sound: 'slashFinal', hitSound: 'clawHit', impactFx: 'sigil', impactScale: 1.7, trail: { color: GREEN, roll: 1.4, big: true } },
     ],
@@ -67,7 +69,7 @@ export default {
     energyCost: 0,
     visual: 'mindSigil',
     color: GREEN,
-    element: 'conhecimento',
+    element: 'transmissao',
     sound: 'fearGaze',
     hitSound: 'impact',
     onHit: { label: 'SINAL PERDIDO', distort: true },
@@ -121,6 +123,22 @@ export default {
       color: GREEN,
     },
     {
+      // a abdução das histórias (wiki: "suas aparições são sempre relatadas como abduções") — aqui um ritual comum, fraco
+      id: 'abducao_luz',
+      name: 'Abdução',
+      input: 'block+carga', // R2 + △
+      type: 'abductBeam',
+      description: 'Um círculo verde marca o chão debaixo do adversário: se ele não sair a tempo, a luz o ERGUE no ar e logo depois o crava de volta no chão. Pouco dano, mas abre para o combo.',
+      energyCost: 25,
+      cooldown: 14,
+      windup: 0.7,
+      range: 14,
+      radius: 1.4,
+      damage: 40,
+      element: 'transmissao',
+      color: GREEN,
+    },
+    {
       id: 'toqueSutil',
       name: 'Toque Sutil',
       input: 'carga+dodge', // △ + L2
@@ -139,28 +157,21 @@ export default {
     },
   ],
 
-  // ABDUÇÃO: a luz verde desce, as garras prendem e rasgam, e a vítima volta ao chão sem lembrar de nada
+  // TORTURA MENTAL — a cena do fim de Sinais do Outro Lado (o Xande se sacrifica pelos Cinco): o Estrangeiro entra
+  // na mente dele, o PARALISA, CONTROLA os movimentos e o faz se BATER três vezes, o força a AJOELHAR, APAGA as memórias
+  // (o alvo esquece os rituais — recargas no máximo — e perde a sanidade) e o derrete com o TOQUE SUTIL
+  // (specials/mindTorture.js)
   special: {
-    name: 'Abdução',
+    name: 'Tortura Mental',
     banner: 'O que é pior do que a Dor e a Morte?',
-    type: 'cinematicCombo',
+    type: 'mindTorture',
     energyCost: 50,
-    cooldown: 14,
+    cooldown: 16,
+    range: 14,
+    forget: 1, // fração da recarga máxima que cada ritual do alvo recebe ao esquecer
     color: GREEN,
-    sound: 'specialStart',
-    applyMeleePassives: false,
-    prepare: { anim: 'charge', time: 0.35, fx: 'bladeGlow' },
-    dash: { speed: 22, maxTime: 0.5, contact: 2.0 },
-    hits: [
-      { t: 0.7, anim: 'db_claw_r', dur: 0.3, share: 0.14, fx: { kind: 'claw' }, sound: 'clawHit' },
-      { t: 0.98, anim: 'db_claw_l', dur: 0.3, share: 0.14, fx: { kind: 'claw', flip: true }, sound: 'clawHit' },
-      { t: 1.3, anim: 'db_cross', dur: 0.42, share: 0.18, fx: { kind: 'claw' }, sound: 'clawHit' },
-      { t: 1.75, anim: 'db_up', dur: 0.42, share: 0.18, fx: { kind: 'slash', big: true }, sound: 'clawHit' },
-      { t: 2.25, anim: 'db_rend', dur: 0.55, share: 0.36, fx: { kind: 'cross', big: true }, sound: 'slashFinal', final: true },
-    ],
-    bannerAt: 0.15,
-    length: 3.1,
   },
+
 
   // TRANSFORMAÇÃO (Barra cheia + vida baixa, segurando △): INCUBAR — a larva entra na mente: tudo o que ele faz
   // bate mais, as recargas correm e as garras drenam a sanidade da vítima até o fim do round

@@ -1,5 +1,36 @@
 # Registro administrativo de alterações
 
+## v3.19.1 — Transmissão e Tortura Mental
+
+- Versão: `VERSION` 3.19.0 → **3.19.1**.
+
+- **Elementos** (pedido: "Estrangeiro é do elemento de Transmissão (verde) e o Amigo Imaginário é de Tinta
+  (marrom)"): `ELEMENTS.transmissao` e `ELEMENTS.tinta`. Fora do ciclo `BEATS` (Sangue > Conhecimento > Energia >
+  Morte), então `elementMultiplier` devolve 1 contra eles. Todos os lugares que leem `ELEMENTS[...]` (HUD, seleção,
+  lista de golpes, assistências, a cor do Fighter) já tinham reserva. O título mostra 7 losangos agora.
+- **Estrangeiro** (pedidos: "rever os ataques do estrangeiro, melhorar a ultimate dele assim como ele faz com Xande no
+  final de SDOL" e, corrigindo a primeira versão, "ele não abduz o Xande, ele o tortura fazendo se bater, o paralisa,
+  controla seus movimentos"; "a abdução pode ser só mais um ataque, menos forte"). Wiki "Alexandre": "torturado pelo
+  Estrangeiro e derretido pelo ser, perdendo todas as suas memórias".
+  - Especial `mindTorture` "Tortura Mental" (`specials/mindTorture.js`): aviso de 0,75 s (sigilo verde debaixo do
+    alvo; esquiva desvia; de frente defendendo → `trySpecialBlock`), o alvo TRAVA no chão (`stagger`) com fios de
+    sinal (raios) da mão dele até cabeça/cotovelos/joelhos, três AUTOGOLPES com os próprios golpes do alvo
+    (`melee.strikes[0..2]`, 15% cada, impacto na cabeça), `forced_kneel` (clip novo), APAGAR MEMÓRIA (recargas das
+    habilidades no máximo × `sp.forget`, sanidade 0) e, depois de flutuar até a vítima, o TOQUE SUTIL (55%, lança
+    baixo). 250 no total. Testado contra o Xande: 37/37/33 + 111 = 218, todas as recargas cheias, sanidade 1.
+  - Habilidade `abductBeam` "Abdução" (R2 + △, 25 de custo, recarga 14 s, 40 de dano): círculo de aviso de 0,7 s; quem
+    ficou dentro é ERGUIDO (`launch` alto, 16 de dano) e, 0,65 s depois, CRAVADO no chão (`spike`, 24). Testado: sobe
+    2,3 m e cai derrubado.
+  - Elemento `transmissao` em tudo; golpe novo "Pulso de Sinal" (3º da sequência, `wave_punch`, 3,6 m).
+- **Menu** (pedido: "um personagem de cada equipe no lugar dos que estão no menu"): `titleStage` LINEUP era Aghata,
+  Kaiser, Arthur, Joui e Gal (4 da Ordo + 1 Escripta) → Xande (Os Cinco), Kian (Escriptas), Arthur (Ordo, no centro),
+  Jae (Mascarados) e O Diabo (Portadores).
+- **Amigo Imaginário**: não fazer ainda (o usuário avisa); anotado no TODO com o elemento Tinta e o kit da wiki.
+- **Conferência dos pedidos anteriores** (pedido: "conferir o que te pedi"): Dalmo Energia; Mascarados (Aguiar, Jae,
+  Juan Sangue; Kemi Morte; Labirinto Energia); Diabo canônico com a transformação no Portador do Trono; Juan Ódio do
+  Diabo → Portador do Trono; Magistrada (Máscaras, golpes novos, teleporte dourado, esfera); Guizo sorteando ET /
+  bombado / velho; Gal e Guizo com a mesma Velocidade Mortal; Estrangeiro nos Portadores — tudo conferido no código.
+
 ## v3.19.0 — O Diabo, o Estrangeiro e as Máscaras
 
 - Versão: `VERSION` 3.18.0 → **3.19.0**.

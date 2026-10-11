@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.19.0';
+export const VERSION = '3.19.1';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,18 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.19.1',
+    date: '2026-10-11',
+    title: 'Transmissão e Tortura Mental',
+    items: [
+      'Novos elementos dos Sinos de Tenebris: TRANSMISSÃO (verde) e TINTA (marrom). Ficam fora do ciclo de vantagens.',
+      'O ESTRANGEIRO agora é de TRANSMISSÃO, e a ultimate virou a TORTURA MENTAL — a cena do fim de Sinais do Outro Lado com o Xande: ele PARALISA o adversário, CONTROLA os movimentos dele e o faz se BATER três vezes, o força a AJOELHAR, APAGA AS MEMÓRIAS (esquece os rituais — todas as recargas voltam ao máximo — e perde a sanidade) e o derrete com o TOQUE SUTIL. Dá para esquivar no aviso.',
+      'Estrangeiro: novo golpe na sequência, o PULSO DE SINAL — a mão aberta empurra o adversário de longe, sem encostar.',
+      'Estrangeiro: a ABDUÇÃO virou um ritual comum e mais fraco (R2 + △): um círculo verde marca o chão debaixo do adversário e, se ele não sair, a luz o ergue no ar e o crava de volta no chão.',
+      'Menu inicial: o desfile agora tem um lutador de cada equipe — Xande (Os Cinco), Kian (Escriptas), Arthur (Ordo Realitas), Jae (Mascarados) e O Diabo (Portadores das Relíquias).',
+    ],
+  },
   {
     v: '3.19.0',
     date: '2026-10-11',

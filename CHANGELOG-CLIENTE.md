@@ -2,6 +2,13 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.19.1 — Transmissão e Tortura Mental
+- Novos elementos dos Sinos de Tenebris: TRANSMISSÃO (verde) e TINTA (marrom). Ficam fora do ciclo de vantagens.
+- O ESTRANGEIRO agora é de TRANSMISSÃO, e a ultimate virou a TORTURA MENTAL — a cena do fim de Sinais do Outro Lado com o Xande: ele PARALISA o adversário, CONTROLA os movimentos dele e o faz se BATER três vezes, o força a AJOELHAR, APAGA AS MEMÓRIAS (esquece os rituais — todas as recargas voltam ao máximo — e perde a sanidade) e o derrete com o TOQUE SUTIL. Dá para esquivar no aviso.
+- Estrangeiro: novo golpe na sequência, o PULSO DE SINAL — a mão aberta empurra o adversário de longe, sem encostar.
+- Estrangeiro: a ABDUÇÃO virou um ritual comum e mais fraco (R2 + △): um círculo verde marca o chão debaixo do adversário e, se ele não sair, a luz o ergue no ar e o crava de volta no chão.
+- Menu inicial: o desfile agora tem um lutador de cada equipe — Xande (Os Cinco), Kian (Escriptas), Arthur (Ordo Realitas), Jae (Mascarados) e O Diabo (Portadores das Relíquias).
+
 ## v3.19.0 — O Diabo, o Estrangeiro e as Máscaras
 - O DIABO agora é o Diabo de Ordem Paranormal: pele vermelha, chifres anelados, sorriso de dentes finos, manto preto de capuz com frisos vermelhos e garras. A TRANSFORMAÇÃO dele é o Renascimento: o Trono sobe e ele vira O Portador do Trono (a fusão com o Henri). O Juan continua com as duas transformações: Ódio do Diabo e, depois, o Portador do Trono.
 - Novo lutador nos Portadores das Relíquias: O ESTRANGEIRO, a criatura de Transmissão de Sinais do Outro Lado — 2,5 m, máscara cinza de olhos verdes com os fios ligados ao corpo, capa esverdeada até o chão e garras enormes. Rajada Psíquica, Comandar, Oblívio (o alvo esquece que ele está ali), Aparição e Toque Sutil. Especial: ABDUÇÃO. Transformação: INCUBAR.

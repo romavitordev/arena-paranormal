@@ -2427,6 +2427,58 @@ Object.assign(ABILITY_TYPES, {
   // ------------------------------------------------------------------ O DIABO (Portador do Trono)
   // SENHOR DO SANGUE: abre poças de sangue perto do adversário e delas sobem Zumbis de Sangue que lutam pelo Diabo.
   // A horda é sorteada: 1, 2 ou 3 zumbis FRACOS, ou 2 fracos + 1 FORTE (a.hordes). Uma horda por vez.
+  // ABDUÇÃO (Estrangeiro): um ritual comum, mais fraco que a ultimate. O círculo verde marca o chão debaixo do
+  // adversário (dá para sair dele ou esquivar); a luz desce e o ERGUE no ar, e logo depois o CRAVA de volta no chão.
+  // Pouco dano, mas abre para o combo.
+  abductBeam: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      if (!opp || opp.state === 'ko') return null;
+      if (distXZ(f.pos, opp.pos) > (a.range ?? 14)) { f.notify('LONGE DEMAIS'); return null; }
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('point', { restart: true, duration: a.windup + 0.2 });
+      world.audio.play('fearGaze', { volume: 0.7, pitch: 0.8 });
+      const spot = new THREE.Vector3(opp.pos.x, 0, opp.pos.z);
+      const R = a.radius ?? 1.4;
+      const beam = new THREE.Mesh(
+        new THREE.CylinderGeometry(R * 0.55, R, 9, 24, 1, true),
+        new THREE.MeshBasicMaterial({ color: a.color, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide }),
+      );
+      beam.position.set(spot.x, 4.5, spot.z);
+      world.scene.add(beam);
+      let life = 0;
+      world.addTicker({
+        update(dt) {
+          life += dt;
+          const total = a.windup + 1.1;
+          beam.material.opacity = life < a.windup ? 0.08 + 0.12 * (life / a.windup) : 0.22 * Math.max(0, 1 - (life - a.windup) / 1.1);
+          if (life >= total) { world.scene.remove(beam); beam.geometry.dispose(); beam.material.dispose(); return true; }
+          return false;
+        },
+      });
+      // o círculo pulsando no chão (o aviso)
+      for (let i = 0; i < 4; i++) tl.add(i * (a.windup / 4), () => world.fx.ring(new THREE.Vector3(spot.x, 0.07, spot.z), { color: a.color, radius: R, life: 0.25, inner: 0.82 }));
+      tl.add(a.windup, () => {
+        const inside = distXZ(opp.pos, spot) <= R + opp.radius * 0.5;
+        if (!inside || opp.state === 'ko' || opp.state === 'dodge' || opp.isInvulnerable()) { f.notify('ESCAPOU DA LUZ', true); return; }
+        world.fx.distort(opp.chestPos(), { color: a.color, radius: 1.6, life: 0.35 });
+        world.audio.play('teleport', { volume: 0.7, pitch: 0.6 });
+        opp.notify('ABDUZIDO', true);
+        applyHit(world, f, opp, { damage: Math.round(a.damage * 0.4), kind: 'ability', element: a.element, launch: true, high: true, hitstun: a.lift ?? 0.9, knockback: 0.2, unblockable: true, color: a.color, sound: 'impact', scale: 1.1, dir: forwardFromYaw(f.yaw) });
+        // e cospe de volta no chão
+        world.after(a.drop ?? 0.65, () => {
+          if (opp.state === 'ko' || opp.pos.y < 0.3) return;
+          world.fx.burst(opp.chestPos(), { count: 24, color: a.color, speed: 3, life: 0.4, size: 0.16 });
+          applyHit(world, f, opp, { damage: Math.round(a.damage * 0.6), kind: 'ability', element: a.element, launch: true, spike: true, juggle: true, knockback: 1, hitstun: 0.6, unblockable: true, ignoreInvuln: true, color: a.color, sound: 'heavyPunch', scale: 1.4, dir: forwardFromYaw(f.yaw) });
+        });
+      });
+      tl.end(a.windup + 0.25);
+      return seqFrom(tl);
+    },
+  },
+
   // CHAMAR AS MÁSCARAS (Magistrada): membros da Seita das Máscaras sobem das sombras em volta do adversário e lutam por
   // ela — túnica branca com partes pretas, a corda de forca, cada um com a sua máscara (um deles é o NATHANIEL). Socos e
   // empurrões de sombra; somem nas sombras no fim do tempo ou quando apanham demais.
