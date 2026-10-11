@@ -6,6 +6,156 @@
 
 ---
 
+# REGRA PRIORITÁRIA — RECUPERAÇÃO DA UPDATE, AUDITORIA E REVISÃO DO ELENCO
+
+## 1. PRIMEIRA PRIORIDADE: RECUPERAR A ATUALIZAÇÃO INTERROMPIDA
+
+A última atualização foi interrompida no meio do trabalho do Claude, mas as alterações realizadas foram commitadas e enviadas ao GitHub. Portanto, não presuma que o último trabalho foi concluído corretamente nem que está perdido.
+
+Antes de iniciar qualquer outra tarefa:
+
+1. Leia integralmente `README.md`, `TODO.md`, `CHANGELOG-ADMIN.md` e `CHANGELOG-CLIENTE.md`.
+2. Confira `git status`, os commits recentes, o último commit enviado ao GitHub e as diferenças entre os commits relevantes.
+3. Identifique exatamente quais alterações entraram no último commit, quais partes da implementação ficaram incompletas e quais tarefas estavam em andamento.
+4. Examine o código alterado, incluindo modelos, habilidades, invocações, animações, efeitos, configurações dos personagens e integrações com os sistemas existentes.
+5. Verifique se existem implementações pela metade, referências quebradas, arquivos esquecidos, comportamentos provisórios ou divergências entre código, TODO e changelogs.
+6. Recupere o trabalho a partir do estado atual do repositório. Não reverta o commit simplesmente porque a atualização foi interrompida e não refaça tudo do zero.
+7. Corrija primeiro os problemas deixados pela interrupção e conclua as partes iniciadas que pertençam ao escopo atual.
+
+Preserve todo o trabalho válido já enviado. Não faça reset destrutivo, não descarte alterações existentes e não reescreva o histórico do Git sem necessidade.
+
+## 2. SEGUNDA PRIORIDADE: AUDITORIA COMPLETA DOS PERSONAGENS
+
+Recentemente, muitos personagens foram adicionados ao jogo, mas nem todos passaram por uma revisão cuidadosa dos modelos, poderes, invocações, animações e efeitos. Os personagens antigos também precisam de melhorias.
+
+Por isso, antes de considerar o elenco concluído, faça uma auditoria individual de TODOS os personagens selecionáveis existentes no código atual, incluindo personagens recentes, antigos, formas alternativas, transformações e personagens que utilizem invocações.
+
+Não se limite aos personagens destacados nas tarefas antigas do TODO. A auditoria deve considerar o elenco real encontrado no projeto.
+
+Para cada personagem, examine separadamente:
+
+### A. Modelo visual
+
+- Fidelidade ao personagem de referência.
+- Silhueta, proporções, rosto, cabelo, roupas, acessórios, armas e elementos característicos.
+- Qualidade e coerência dos materiais, texturas, cores e detalhes.
+- Animação em repouso, poses de combate, ataques, dano, vitória e transformação.
+- Clipping, deformações, partes atravessando o corpo, acessórios flutuantes e problemas de posicionamento.
+- Escala, orientação, ponto de origem e compatibilidade com a câmera.
+- Qualidade do modelo em combate, e não apenas na tela de seleção.
+- Uso excessivo de modelos genéricos, peças reaproveitadas ou soluções provisórias que prejudiquem a identidade visual.
+
+Não refaça automaticamente todos os modelos. Identifique os problemas concretos, preserve o que já está bom e implemente melhorias proporcionais à necessidade.
+
+### B. Poderes, golpes e habilidades
+
+- Fidelidade aos poderes, feitos e estilo de luta do personagem.
+- Variedade real entre ataques básicos, habilidades, especiais, passivas e transformações, quando aplicáveis.
+- Animações correspondentes ao golpe executado.
+- Hitboxes, alcance, trajetória, tempo de execução, recuperação e interação com o adversário.
+- Efeitos visuais e sonoros coerentes com o poder representado.
+- Avisos visuais claros para ataques que possam ser esquivados ou interrompidos.
+- Integração com energia, sanidade, cooldowns, combos, defesa e demais sistemas existentes.
+- Ausência de ataques genéricos que poderiam pertencer a qualquer outro personagem, salvo quando houver justificativa.
+- Ausência de habilidades provisórias, placeholders ou efeitos que não correspondam à ação executada.
+
+Não iniciar um balanceamento geral nesta etapa. Corrija habilidades quebradas, incoerentes ou incompletas e registre eventuais questões de equilíbrio para uma fase posterior.
+
+### C. Invocações, criaturas e entidades
+
+Para todo personagem que invoque criaturas, entidades, marionetes, aliados, armas autônomas ou outras manifestações, faça uma revisão específica:
+
+- Verifique se a entidade correta é invocada e se corresponde à referência do personagem.
+- Revise modelo, escala, materiais, animações, posição e orientação.
+- Confira a animação de entrada, permanência em campo, ataque, dano, desaparecimento e encerramento.
+- Garanta que a invocação apareça no momento correto e não surja abruptamente ou sem contexto visual.
+- Verifique se ataca o alvo correto, respeita o alcance previsto e interage adequadamente com colisões, câmera e cenário.
+- Confira se a entidade desaparece corretamente e se não permanece presa, invisível ou duplicada.
+- Revise efeitos, partículas, sons e telegraphs.
+- Verifique desempenho e consumo de recursos, especialmente quando várias entidades aparecem simultaneamente.
+- Confira a integração com IA, multiplayer ou batalha em equipe quando esses sistemas forem aplicáveis.
+
+Não considere uma invocação concluída apenas porque o comando de ativação funciona. A apresentação visual e o comportamento durante toda a execução também precisam ser revisados.
+
+### D. Identidade e integração no jogo
+
+- Verifique se o personagem possui identidade própria de combate.
+- Revise introduções, falas, poses de vitória e transformações.
+- Confira o funcionamento da CPU e o uso adequado das habilidades.
+- Verifique seleção, HUD, retratos, nomes, formas alternativas e integração com equipes e assistências, quando aplicáveis.
+- Identifique animações compartilhadas que não combinem com o personagem.
+- Preserve as particularidades já implementadas e evite substituir mecânicas próprias por soluções genéricas.
+
+## 3. TERCEIRA PRIORIDADE: EXECUTAR AS MELHORIAS IDENTIFICADAS
+
+Depois da auditoria, organize os resultados por prioridade:
+
+**P0 — Correções críticas:** funcionalidades quebradas, modelos ausentes, invocações que não funcionam, erros que impedem jogar, referências inválidas e regressões introduzidas pela atualização interrompida.
+
+**P1 — Revisão de qualidade:** modelos visualmente inadequados, poderes incompletos, invocações sem apresentação apropriada, animações genéricas, efeitos incoerentes e falta de identidade mecânica.
+
+**P2 — Polimento:** melhorias adicionais de poses, materiais, efeitos, sons, animações secundárias e apresentação cinematográfica.
+
+**P3 — Futuro:** personagens novos, grandes expansões de conteúdo, novos modos e melhorias que não sejam necessárias para concluir a versão estável atual.
+
+Não comece várias revisões simultaneamente. Trabalhe por personagem ou conjunto de sistemas relacionados, conclua cada etapa e teste o resultado antes de avançar.
+
+Priorize as correções P0, depois os problemas P1 que comprometam significativamente a qualidade do elenco. Os itens P2 e P3 podem continuar no TODO para etapas futuras.
+
+## 4. REFERÊNCIAS E FIDELIDADE
+
+Quando a revisão depender de fidelidade a uma obra ou personagem, consulte referências confiáveis, como episódios, cenas, wikis e materiais disponíveis.
+
+Diferencie informações canônicas de adaptações criadas para o jogo. Não invente poderes, feitos, falas ou características como se fossem oficiais.
+
+Quando houver informações insuficientes, implemente apenas o que estiver fundamentado e registre a dúvida ou a necessidade de pesquisa.
+
+## 5. TESTES OBRIGATÓRIOS
+
+Após cada revisão significativa:
+
+- Execute as verificações técnicas disponíveis no projeto.
+- Execute o build de produção quando apropriado.
+- Teste o personagem em combate real, não apenas na seleção.
+- Teste habilidades, especiais, invocações, transformações e animações alteradas.
+- Verifique a CPU, colisões, hitboxes, câmera e efeitos.
+- Confira se outros personagens e sistemas não foram afetados.
+- Teste em mobile quando a mudança puder afetar desempenho, interface ou controles.
+- Registre falhas que não puderem ser reproduzidas ou verificadas no ambiente disponível.
+
+Não declare uma revisão concluída se apenas inspecionou o código e não verificou o comportamento necessário.
+
+## 6. DOCUMENTAÇÃO, COMMITS E CONTINUIDADE
+
+- Atualize o TODO conforme o estado real do código, removendo tarefas concluídas e mantendo as pendências verdadeiras.
+- Registre as alterações técnicas no `CHANGELOG-ADMIN.md`.
+- Registre no `CHANGELOG-CLIENTE.md` somente as novidades relevantes para os jogadores.
+- Faça commits claros após marcos significativos e envie-os ao GitHub quando possível.
+- Nunca presuma que o changelog ou o TODO está atualizado só porque o código foi commitado.
+- Atualize a versão do cliente e finalize a documentação de lançamento somente quando a próxima versão estável estiver realmente pronta.
+
+## 7. RESTRIÇÕES DE ESCOPO
+
+- Não iniciar o balanceamento geral nesta etapa.
+- Não adicionar novos personagens em massa antes de revisar o elenco existente.
+- Não recriar o jogo, sistemas completos ou modelos que já estejam adequados.
+- Não substituir mecânicas próprias por golpes genéricos apenas para acelerar o desenvolvimento.
+- Não iniciar a migração para executável ou software instalável.
+- Não interromper o trabalho para pedir confirmação sobre decisões técnicas reversíveis e de baixo risco. Se uma decisão depender realmente do usuário, documente o bloqueio e continue com tarefas independentes.
+
+## ORDEM FINAL DE EXECUÇÃO
+
+1. Recuperar e concluir o trabalho interrompido.
+2. Auditar o TODO e a documentação contra o código atual.
+3. Corrigir regressões e implementações incompletas da última atualização.
+4. Auditar todos os personagens, incluindo modelos, poderes, invocações, animações e integração.
+5. Corrigir os problemas críticos e executar melhorias prioritárias de qualidade.
+6. Validar estabilidade, build, combate, IA e mobile crítico.
+7. Atualizar TODO e changelogs.
+8. Finalizar a próxima versão estável e atualizar a versão do cliente apenas no encerramento.
+
+**A prioridade é recuperar o estado real do projeto, concluir o que ficou incompleto e elevar a qualidade do elenco inteiro antes de expandi-lo ainda mais.**
+
 # 0. REGRA DESTE TODO
 
 Este documento contém apenas:
