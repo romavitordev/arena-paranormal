@@ -20,7 +20,7 @@ export default {
     identity: 'Distorcer Aparência (até o fim do round)',
     tagline: 'Na minha época, a gente gravava em fita.',
   },
-  stats: { ...base.stats, moveSpeed: 6.9, attackSpeed: 0.88 },
+  stats: { ...base.stats, moveSpeed: 6.9, attackSpeed: 0.88, maxHealth: 1580 }, // cabe a vida extra da transformação
   ranged: { ...base.ranged, damage: Math.round(base.ranged.damage * 1.35) },
   abilities: base.abilities.map((a) => ({ ...a, ...(a.damage ? { damage: Math.round(a.damage * 1.25) } : {}), cooldown: Math.round(a.cooldown * 0.75) })),
   awakening: undefined,

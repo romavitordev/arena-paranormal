@@ -1,4 +1,5 @@
 import { COMBAT } from '../config/combat.js';
+import { isBullet } from './beasts.js';
 import * as THREE from 'three';
 import { applyHit } from './damage.js';
 import { glowMat } from '../models/rig.js';
@@ -488,7 +489,7 @@ export class Projectiles {
       if (a.curve) {
         const tg = w.opponentOf(p.owner);
         if (tg && !p.lost && tg.state === 'dodge' && tg.pos.distanceTo(p.pos) < 7) p.lost = true;
-        const alive = tg && tg.state !== 'ko' && tg.visible && !p.lost;
+        const alive = tg && tg.state !== 'ko' && tg.visible && !p.lost && !(tg.untrackable && tg.untrackable());
         let goal = null;
         if (alive) {
           const aim = tg.chestPos();
@@ -528,7 +529,7 @@ export class Projectiles {
       // projétil que procura o alvo (ex.: Corrente de Captura): gira devagar na direção dele
       if (a.homing && !a.curve) {
         const tg = w.opponentOf(p.owner);
-        if (tg && tg.state !== 'ko' && tg.visible) {
+        if (tg && tg.state !== 'ko' && tg.visible && !(tg.untrackable && tg.untrackable())) {
           const want = tg.chestPos().sub(p.pos).normalize();
           const ang = p.dir.angleTo(want);
           if (ang > 1e-3) p.dir.lerp(want, Math.min(1, (a.homing * dt) / ang)).normalize();
@@ -585,7 +586,7 @@ export class Projectiles {
         if (a.visual === 'shadow') p.pos.y = 0.12;
         const npc = w.npcs.find((n) => n.alive && n.owner !== p.owner && n.hitTest(p.pos, p.r ?? a.radius));
         if (npc) {
-          npc.hitBy(p.owner, a.damage, { kind: 'ranged' });
+          npc.hitBy(p.owner, a.damage, { kind: 'ranged', bullet: isBullet(a) }); // bullet: o Carniçal é imune a tiros
           w.fx.impact(p.pos.clone(), a.color ?? 0xffffff, 0.8);
           dead = true;
           break;

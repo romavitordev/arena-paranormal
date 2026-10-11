@@ -3,7 +3,7 @@
 // a maioria desses valores no próprio arquivo de definição.
 
 export const COMBAT = {
-  maxHealth: 1000,
+  maxHealth: 1500, // igual para todos (os Portadores aguentam mais); o número não aparece na tela
   maxEnergy: 100,
   startEnergy: 30,
   energyRegen: 2.5, // por segundo, passivo
@@ -41,7 +41,7 @@ export const COMBAT = {
   launchHitstun: 0.85,
   hitstop: 0.055, // congelamento rápido no impacto
 
-  roundTime: 99,
+  roundTime: 150, // cabe a vida de 1500 (1,5× os 99 s de quando a vida era 1000)
   roundsToWin: 2,
 
   // ---- V2: defesa ----

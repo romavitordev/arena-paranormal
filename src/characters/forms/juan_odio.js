@@ -32,7 +32,7 @@ export default {
     identity: 'Juan tomado pelo Ódio do Diabo: garras que fazem sangrar — e o Trono ainda chama',
     tagline: 'Eu não quero morrer... eu quero um novo começo.',
   },
-  stats: { ...base.stats, moveSpeed: 8.1, attackSpeed: 1.0 },
+  stats: { ...base.stats, moveSpeed: 8.1, attackSpeed: 1.0, maxHealth: 1580 }, // cabe a vida extra da transformação
   drips: { sockets: ['handR'], color: 0xa01018, every: 0.12 },
   melee: {
     ...M,

@@ -13,6 +13,7 @@ export default {
   color: '#a01818',
   origin: 'Relíquia de Sangue',
   element: 'sangue',
+  hpBar: { style: 'blood' }, // barra de vida de Portador (Sangue), sem número
   energyColor: 0xff2a3d,
   info: {
     weapon: 'Quatro braços com garras',
@@ -20,7 +21,7 @@ export default {
     identity: 'O Portador do Trono: fica assim até o fim do round',
     tagline: 'Um novo começo.',
   },
-  stats: { moveSpeed: 8.0, size: 1.35, maxHealth: 1150 }, // 1250 → 1150 na v2.2 (82–86% de vitórias como Diabo)
+  stats: { moveSpeed: 8.0, size: 1.35, maxHealth: 2100 }, // Portador transformado: aguenta mais que o elenco (o número não aparece na tela)
   // Regeneração (cânone: "quando fraco ou ferido"): mais rápida abaixo de 40% de vida e o dobro em cima das poças dele
   regen: { every: 6, amount: 22, color: 0x7a0010, low: { below: 0.4, every: 3.5, amount: 34 }, onPool: 2 },
   // animações próprias (anim/formClips.js); os nomes genéricos usados pelas habilidades também são trocados
@@ -134,12 +135,13 @@ export default {
       name: 'Senhor do Sangue',
       input: 'carga+physical', // △ + ○ / Y + B
       type: 'summonBlood',
-      description: 'Abre poças de sangue perto do adversário e delas sobe uma horda que luta pelo Diabo por 12 s: 1 a 3 Zumbis de Sangue fracos, ou 2 fracos e 1 forte.',
+      description: 'Abre poças de sangue perto do adversário e delas sobe uma horda que luta pelo Portador do Trono por 12 s: sempre o ZUMBI GRANDE (forte, derruba) com 1 ou 2 zumbis pequenos.',
       energyCost: 30,
       cooldown: 22,
       duration: 12,
       // hordas possíveis (sorteadas): fraco = 90 de vida, garra e mordida; forte = 260, pancada que derruba (ver npcs.js BLOOD_ZOMBIE)
-      hordes: [['weak'], ['weak', 'weak'], ['weak', 'weak', 'weak'], ['weak', 'strong', 'weak']],
+      // o Portador do Trono (transformado) chama o GRANDE junto com os pequenos; O Diabo comum só os pequenos (o_diabo.js)
+      hordes: [['weak', 'strong'], ['weak', 'strong', 'weak']],
     },
     {
       id: 'sangueArredores',

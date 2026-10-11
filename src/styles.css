@@ -36,6 +36,49 @@ canvas#game { display: block; position: fixed; inset: 0; width: 100%; height: 10
 .bar.health .trail { background: #ff8f6a; transition: width .5s ease .25s; }
 .bar.health .fill { background: linear-gradient(180deg, #ffe98a, var(--health)); }
 .bar.health.low .fill { background: linear-gradient(180deg, #ff8a6a, var(--health-low)); }
+/* BARRAS DOS PORTADORES (def.hpBar.style): cores e efeito da Relíquia, sem número; a vida baixa pulsa */
+.bar.health .fx { position: absolute; inset: 0; pointer-events: none; display: none; }
+.bar.health.custom .fx { display: block; }
+.bar.health.custom.low { animation: hbLow .5s ease-in-out infinite alternate; }
+@keyframes hbLow { from { filter: brightness(.85); } to { filter: brightness(1.35); } }
+/* Sangue (O Diabo e o Portador do Trono): vermelho vivo, veias escuras correndo e brilho de brasa */
+.bar.health.hb-blood { box-shadow: 0 0 0 1px #6a0010, 0 0 10px rgba(220,20,40,.55); }
+.bar.health.hb-blood .fill { background: linear-gradient(180deg, #ff5a4a, #b00018 55%, #5a0008); }
+.bar.health.hb-blood .trail { background: #ffb08a; }
+.bar.health.hb-blood .fx { background: repeating-linear-gradient(100deg, transparent 0 18px, rgba(60,0,8,.55) 18px 21px, transparent 21px 44px); background-size: 88px 100%; animation: hbFlow 1.6s linear infinite; mix-blend-mode: multiply; }
+/* Conhecimento (A Magistrada): dourado com o brilho de um sigilo varrendo a barra */
+.bar.health.hb-knowledge { box-shadow: 0 0 0 1px #6a5410, 0 0 10px rgba(255,214,90,.5); }
+.bar.health.hb-knowledge .fill { background: repeating-linear-gradient(45deg, rgba(90,60,0,.28) 0 2px, transparent 2px 9px), repeating-linear-gradient(-45deg, rgba(90,60,0,.28) 0 2px, transparent 2px 9px), linear-gradient(180deg, #ffe7a0, #c8860e 55%, #4a2e04); }
+.bar.health.hb-knowledge .trail { background: #fffbe0; }
+.bar.health.hb-knowledge .fx { background: linear-gradient(100deg, transparent 35%, rgba(255,255,255,.75) 48%, transparent 60%); background-size: 260% 100%; animation: hbSweep 2.2s ease-in-out infinite; mix-blend-mode: screen; }
+/* Transmissão (O Estrangeiro): verde de sinal, linhas de varredura e chiado */
+.bar.health.hb-signal { box-shadow: 0 0 0 1px #0e5a1a, 0 0 10px rgba(90,255,106,.5); }
+.bar.health.hb-signal .fill { background: linear-gradient(180deg, #c8ffc8, #3adf5a 55%, #0a6a1e); animation: hbFlicker 2.8s steps(1) infinite; }
+.bar.health.hb-signal .trail { background: #eaffea; }
+.bar.health.hb-signal .fx { background: repeating-linear-gradient(0deg, rgba(0,0,0,.35) 0 1px, transparent 1px 3px), repeating-linear-gradient(90deg, transparent 0 30px, rgba(200,255,200,.35) 30px 32px); background-size: 100% 100%, 64px 100%; animation: hbScan .9s linear infinite; }
+/* Tinta (O Amigo Imaginário): marrom, com a tinta escorrendo */
+.bar.health.hb-ink { box-shadow: 0 0 0 1px #3a1a08, 0 0 9px rgba(160,96,42,.5); }
+.bar.health.hb-ink .fill { background: linear-gradient(180deg, #d8955a, #8a4a22 55%, #3a1a0a); }
+.bar.health.hb-ink .trail { background: #e8c8a0; }
+.bar.health.hb-ink .fx { background: radial-gradient(ellipse 3px 7px at 20% 30%, rgba(40,14,4,.85) 60%, transparent 62%), radial-gradient(ellipse 2px 6px at 55% 10%, rgba(40,14,4,.8) 60%, transparent 62%), radial-gradient(ellipse 3px 8px at 82% 50%, rgba(40,14,4,.85) 60%, transparent 62%); background-size: 46px 100%; animation: hbDrip 1.8s linear infinite; }
+/* Morte (O Deus da Morte): cinza pálido que escurece, com as cinzas subindo */
+.bar.health.hb-death { box-shadow: 0 0 0 1px #2a2632, 0 0 10px rgba(200,196,210,.45); }
+.bar.health.hb-death .fill { background: linear-gradient(180deg, #f0eef4, #8a8494 55%, #2a2632); }
+.bar.health.hb-death .trail { background: #ffffff; }
+.bar.health.hb-death .fx { background: radial-gradient(circle at 10% 80%, rgba(20,16,24,.8) 1px, transparent 2px), radial-gradient(circle at 40% 40%, rgba(20,16,24,.7) 1px, transparent 2px), radial-gradient(circle at 70% 70%, rgba(20,16,24,.8) 1.5px, transparent 2.5px), radial-gradient(circle at 90% 20%, rgba(20,16,24,.7) 1px, transparent 2px); background-size: 34px 100%; animation: hbAsh 2.4s linear infinite; }
+/* Energia (O Anfitrião): violeta que troca de cor sozinho, com falhas de imagem */
+.bar.health.hb-energy { box-shadow: 0 0 0 1px #3a0a5a, 0 0 10px rgba(176,74,255,.55); }
+.bar.health.hb-energy .fill { background: linear-gradient(90deg, #b04aff, #ff4ad8, #4ad8ff, #b04aff); background-size: 300% 100%; animation: hbChaos 2.5s linear infinite; }
+.bar.health.hb-energy .trail { background: #f0d8ff; }
+.bar.health.hb-energy .fx { background: linear-gradient(90deg, transparent 0 40%, rgba(255,255,255,.5) 40% 42%, transparent 42% 71%, rgba(0,0,0,.4) 71% 74%, transparent 74%); animation: hbGlitch 1.3s steps(2) infinite; }
+@keyframes hbFlow { from { background-position: 0 0; } to { background-position: 88px 0; } }
+@keyframes hbScan { from { background-position: 0 0, 0 0; } to { background-position: 0 3px, 64px 0; } }
+@keyframes hbSweep { from { background-position: 130% 0; } to { background-position: -130% 0; } }
+@keyframes hbFlicker { 0%, 100% { opacity: 1; } 92% { opacity: .65; } 94% { opacity: 1; } 96% { opacity: .75; } }
+@keyframes hbDrip { from { background-position: 0 -20px; } to { background-position: 0 20px; } }
+@keyframes hbAsh { from { background-position: 0 6px; } to { background-position: 0 -14px; } }
+@keyframes hbChaos { from { background-position: 0 0; } to { background-position: 300% 0; } }
+@keyframes hbGlitch { 0% { transform: translateX(0); } 50% { transform: translateX(14%); } 100% { transform: translateX(-9%); } }
 .bar.energy { height: 11px; width: 78%; }
 .panel.p2 .bar.energy { margin-left: auto; }
 .bar.energy .fill { background: linear-gradient(180deg, #b5ecff, var(--energy)); }
@@ -66,8 +109,6 @@ canvas#game { display: block; position: fixed; inset: 0; width: 100%; height: 10
 .panel.p2 .dodges { flex-direction: row-reverse; }
 .ab .s { white-space: nowrap; }
 .state { font-size: 11px; font-weight: 800; letter-spacing: .06em; color: #bfe6ff; text-shadow: 1px 1px 0 #000; }
-.bar .num { position: absolute; inset: 0; font-size: 11px; font-weight: 800; display: flex; align-items: center; padding: 0 8px; color: #000; mix-blend-mode: hard-light; }
-.panel.p2 .bar .num { justify-content: flex-end; }
 
 .row { display: flex; gap: 10px; margin-top: 8px; align-items: center; }
 .panel.p2 .row { flex-direction: row-reverse; }

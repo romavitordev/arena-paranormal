@@ -115,7 +115,7 @@ export const PASSIVES = {
       }
     },
   },
-  // Lírio — Sangue de Ferro: mais vitalidade (a vida extra está em stats.maxHealth; aqui só identifica a passiva)
+  // Lírio — Sangue de Ferro: marca do cânone (sem vida extra: a vida é a mesma para todo o elenco)
   ironBlood: {},
   // Lírio — Casca Grossa: aguenta melhor os impactos — é empurrado menos (lançamentos ainda lançam) e, defendendo,
   // a defesa gasta menos e passa menos dano

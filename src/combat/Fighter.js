@@ -28,6 +28,8 @@ const COMBO_STATES = new Set(['hitstun', 'stun', 'pulled', 'grabbed', 'ko', 'dow
 // comandos que o buffer guarda
 const BUFFER_ACTIONS = ['physical', 'ranged', 'carga', 'dodge'];
 
+// especiais que GRUDAM no alvo (prendem o adversário numa cena): erram contra quem está sem rastro (Fighter.untrackable)
+const STICKY_SPECIALS = new Set(['abyssMaze', 'ageGrab', 'cinematicCombo', 'devilDeal', 'erase', 'hostGame', 'inkRequiem', 'kamikaze', 'mindTorture', 'ritual', 'spiralSnipe', 'supernova', 'teleportStrike']);
 const v1 = new THREE.Vector3();
 const v2 = new THREE.Vector3();
 const v3 = new THREE.Vector3();
@@ -314,6 +316,12 @@ export class Fighter {
   lostTrack(opp) {
     if (!opp || !opp.findBuff) return false;
     return (!!opp.findBuff('veil') && distXZ(this.pos, opp.pos) > 1.6) || !!this.findBuff('deaf');
+  }
+
+  // SEM RASTRO (o "Shhh..." da Jae, buff veil com noLock): os especiais que GRUDAM no alvo (os que o prendem numa cena)
+  // não conectam e os projéteis teleguiados não a seguem — é o que justifica a invisibilidade
+  untrackable() {
+    return this.buffs.some((b) => b.type === 'veil' && b.noLock && b.time > 0);
   }
 
   // Translucidez (névoa da Kaiser, Inexistir do Kian). O contorno só volta se a malha dele estiver à mostra: antes, o
@@ -2766,6 +2774,11 @@ export class Fighter {
         return;
       }
     }
+    // o alvo sumiu nas sombras (Shhh... da Jae): o especial que gruda nele não acha ninguém
+    if (STICKY_SPECIALS.has(p.sp.type) && this.opponent && this.opponent.untrackable()) {
+      this.whiffSpecial('hidden');
+      return;
+    }
     this.pendingSpecial = null;
     this.setState('special');
     this.seq = p.impl.start(this, p.sp, this.world);
@@ -2775,8 +2788,9 @@ export class Fighter {
   whiffSpecial(reason) {
     const opp = this.opponent;
     this.pendingSpecial = null;
-    this.notify('ERROU', true);
+    this.notify(reason === 'hidden' ? 'PERDEU O RASTRO' : 'ERROU', true);
     if (opp && reason === 'evaded') opp.notify('DESVIOU!', true);
+    if (opp && reason === 'hidden') opp.notify('SHHH...', true);
     this.world.fx.burst(this.chestPos(), { count: 18, color: 0x8a8090, kind: 'smoke', speed: 2, life: 0.5, size: 0.35 });
     this.stun(TELEGRAPH.missRecovery, 'breath');
     this.whiffRecovery = true; // errar o especial não se cancela com a Substituição

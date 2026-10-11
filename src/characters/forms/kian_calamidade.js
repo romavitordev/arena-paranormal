@@ -25,7 +25,7 @@ export default {
     identity: 'Kian de Calamidade: barba cheia, faixas nos braços, os textos tomam o corpo (até o fim do round)',
     tagline: 'O conhecimento não se defende. Se aceita.',
   },
-  stats: { ...base.stats, moveSpeed: 8.3, attackSpeed: 1.22, maxHealth: 1100 }, // cabe a vida extra (+100)
+  stats: { ...base.stats, moveSpeed: 8.3, attackSpeed: 1.22, maxHealth: 1600 }, // cabe a vida extra da transformação
   melee: {
     ...M,
     name: 'Punhos de Calamidade',

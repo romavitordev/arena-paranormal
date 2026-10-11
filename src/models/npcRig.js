@@ -10,6 +10,9 @@ export const NPC_MODELS = {
   marionette: 'npcs/marionette.glb',
   zumbi_sangue: 'npcs/zumbi_sangue.glb',
   zumbi_sangue_forte: 'npcs/zumbi_sangue_forte.glb',
+  carnical: 'npcs/carnical.glb', // o Carniçal Preto da Morte (invocação do Deus da Morte)
+  javali_tinta: 'npcs/javali_tinta.glb', // os animais infectados pela Tinta (invocação do Amigo Imaginário)
+  cao_tinta: 'npcs/cao_tinta.glb',
 };
 const loaded = {};
 

@@ -18,6 +18,7 @@ export default {
   color: '#e0b84a',
   origin: 'Portadores das Relíquias', // Relíquia de Conhecimento
   element: 'conhecimento',
+  hpBar: { style: 'knowledge' }, // barra de vida de Portador (Conhecimento), sem número
   energyColor: GOLD,
   info: {
     weapon: 'A bengala e a Máscara do Desespero',
@@ -25,7 +26,7 @@ export default {
     identity: 'A Portadora da Relíquia de Conhecimento: sabe tudo, lembra de tudo e só age quando o Equilíbrio cai',
     tagline: 'Eu tô apenas protegendo o Equilíbrio.',
   },
-  stats: { moveSpeed: 7.6, attackSpeed: 1.0, maxHealth: 1000 },
+  stats: { moveSpeed: 7.6, attackSpeed: 1.0, maxHealth: 1800 }, // Portador das Relíquias: aguenta mais que o elenco (o número não aparece na tela)
   anims: { idle: 'idle_arnaldo', run: 'run', charge: 'charge', victory: 'vic_magistrada', block: 'block_weapon' },
   chargeFx: { style: 'default', color: GOLD },
   dodge: { style: 'default', distance: 4.6 },

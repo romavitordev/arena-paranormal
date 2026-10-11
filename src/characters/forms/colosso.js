@@ -32,7 +32,7 @@ export default {
     identity: 'Forma do Colosso (até o fim do round)',
     tagline: 'Aí sim, neném!',
   },
-  stats: { moveSpeed: 6.95, maxHealth: 1420 }, // cabe a vida extra do escafandro (+120)
+  stats: { moveSpeed: 6.95, maxHealth: 1620 }, // cabe a vida extra da transformação
   anims: { ...base.anims, victory: 'vic_colosso' },
   chargeFx: { style: 'fists', color: RED },
   melee: {

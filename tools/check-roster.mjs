@@ -82,7 +82,7 @@ ok(jae && jae.origin === 'Mascarados' && jae.element === 'sangue' && jae.awakeni
 const dalmo = get('dalmo');
 const colosso = getForm('colosso');
 ok(dalmo && dalmo.origin === 'Mascarados' && dalmo.awakening.form === 'colosso' && dalmo.awakening.scene === 'helmet' && dalmo.passives.some((p) => p.type === 'arenaBlows') && ['heavyBlow', 'arenaGrab', 'dashStrike', 'selfBuff'].every((t) => dalmo.abilities.some((a) => a.type === t)) && dalmo.abilities.find((a) => a.type === 'heavyBlow').stun > 0, 'Dalmo: Mascarado, Golpes de Arena, Pressão Atmosférica (atordoa), Agarrão de Arena, Atropelar, A Glória Era Viciante e o escafandro');
-ok(colosso && colosso.passives.some((p) => p.type === 'atmosphericPressure') && colosso.abilities.some((a) => a.type === 'stompQuake') && colosso.abilities.some((a) => a.id === 'esmagarCranio') && colosso.maxHealth !== 0 && colosso.stats.maxHealth > dalmo.stats.maxHealth, 'Colosso: Manoplas com Pressão Atmosférica, Esmagar o Crânio, Pisão do Colosso, mais vida');
+ok(colosso && colosso.passives.some((p) => p.type === 'atmosphericPressure') && colosso.abilities.some((a) => a.type === 'stompQuake') && colosso.abilities.some((a) => a.id === 'esmagarCranio') && colosso.stats.maxHealth > COMBAT.maxHealth, 'Colosso: Manoplas com Pressão Atmosférica, Esmagar o Crânio, Pisão do Colosso, mais vida (cabe a vida extra)');
 ok([dalmo, colosso].every((c) => c.ranged.type === 'counter' && !c.ranged.visual && c.ranged.riposte), 'Dalmo / Colosso: corpo a corpo puro — o □ é a postura Pode Vir! (segura o golpe e devolve), sem arremesso');
 const guizo = get('guizo');
 const guizoEt = getForm('guizo_et');
@@ -92,10 +92,20 @@ ok(get('juan').origin === 'Mascarados', 'Juan com os Mascarados');
 const jaeX = getForm('jae_x');
 ok(jaeX && jaeX.abilities.some((a) => a.type === 'shadowTrap' && a.blind > 0 && a.deaf > 0) && jaeX.abilities.some((a) => a.id === 'assassinatoCruel' && a.strike.damage > jae.abilities.find((b) => b.id === 'assassinatoFurtivo').strike.damage), 'X: Zona das Sombras (cego e surdo) e Assassinato Cruel no lugar do Furtivo');
 const bal = get('balu');
-ok(bal && bal.origin === 'Ordo Realitas' && bal.stats.maxHealth >= 1250 && ['curseWeapon', 'demonAxe', 'caiDentro', 'selfBuff', 'heavyProtection'].every((t) => bal.abilities.some((a) => a.type === t)) && bal.ranged.boomerang && bal.ranged.returnsProp === 'axe' && bal.melee.ground && bal.melee.ground.otg && bal.grip.twoHand, 'Balu: pesado da Ordo Realitas, Amaldiçoar Arma, Machado Demônio (vida), Fala Imponente, 110%, Colete, machado que volta e Derrubar e Atacar');
+ok(bal && bal.origin === 'Ordo Realitas' && ['curseWeapon', 'demonAxe', 'caiDentro', 'selfBuff', 'heavyProtection'].every((t) => bal.abilities.some((a) => a.type === t)) && bal.ranged.boomerang && bal.ranged.returnsProp === 'axe' && bal.melee.ground && bal.melee.ground.otg && bal.grip.twoHand, 'Balu: pesado da Ordo Realitas, Amaldiçoar Arma, Machado Demônio (vida), Fala Imponente, 110%, Colete, machado que volta e Derrubar e Atacar');
 const banners = Object.fromEntries(ROSTER.map((c) => [c.id, c.special.banner]));
 ok(banners.gal_sal === 'Injustiça né?' && banners.kaiser === 'Cinerária!' && banners.joui === 'Shi no Kage!' && banners.aghata === 'Descarnar!' && banners.arthur === 'Arma de Sangue!' && banners.kian === 'Inexistir', 'textos dos especiais na tela');
-ok(COMBAT.maxHealth === 1000 && COMBAT.maxEnergy === 100, 'vida 1000 e energia 100');
+ok(COMBAT.maxHealth === 1500 && COMBAT.maxEnergy === 100, 'vida 1500 e energia 100');
+// VIDA IGUAL PARA TODOS (1500, sem número na tela); os PORTADORES aguentam mais — Ferreiro e Arnaldo só transformados
+{
+  const PORT = ['o_diabo', 'magistrada', 'estrangeiro', 'amigo'];
+  const base = ROSTER.filter((c) => !PORT.includes(c.id));
+  ok(base.every((c) => (c.stats.maxHealth ?? COMBAT.maxHealth) === COMBAT.maxHealth), 'vida: todo o elenco com a mesma vida (fora os Portadores)');
+  ok(PORT.every((id) => ROSTER.find((c) => c.id === id).stats.maxHealth > COMBAT.maxHealth), 'vida: Diabo, Magistrada, Estrangeiro e Amigo (Portadores) aguentam mais');
+  ok(['deus_morte', 'anfitriao', 'diabo'].every((id) => getForm(id).stats.maxHealth > COMBAT.maxHealth), 'vida: Ferreiro e Arnaldo aguentam mais só transformados (Deus da Morte, Anfitrião); o Portador do Trono também');
+  ok(['o_diabo', 'magistrada', 'estrangeiro', 'amigo'].every((id) => ROSTER.find((c) => c.id === id).hpBar) && ['deus_morte', 'anfitriao', 'diabo'].every((id) => getForm(id).hpBar) && !ROSTER.find((c) => c.id === 'ferreiro').hpBar && !ROSTER.find((c) => c.id === 'arnaldo').hpBar, 'barra de vida própria dos Portadores (Ferreiro e Arnaldo só transformados); sem barra de chefe no centro');
+  ok(![...ROSTER].some((c) => c.boss) && !getForm('deus_morte').boss, 'nenhum lutador com barra de chefe no centro');
+}
 ok(COMBAT.startEnergy === 30 && COMBAT.energyRegen === 2.5 && COMBAT.chargeRate === 32, 'energia: início 30, regen 2,5/s, carga 32/s');
 
 // ---------------- controles V2 ----------------
@@ -299,7 +309,7 @@ ok(fer && fer.special.type === 'cinematicCombo' && fer.awakening.type === 'santo
   const { getForm } = await import('../src/characters/forms/index.js');
   const deus = getForm('deus_morte');
   ok(!getForm('miguel_luzidio') && getForm('deus_morte').baseId === 'ferreiro', 'sem a forma humana do Miguel: Ferreiro → Deus da Morte');
-  ok(deus && deus.boss && deus.stats.size === 2 && deus.weakTo.fire > 1 && deus.weakTo.energia > 1 && deus.regen && deus.poise, 'Deus da Morte: chefe, 2x maior, fraco contra fogo e Energia, regenera e não fica preso em combo');
+  ok(deus && deus.hpBar && deus.stats.size === 2 && deus.weakTo.fire > 1 && deus.weakTo.energia > 1 && deus.regen && deus.poise, 'Deus da Morte: barra de Portador, 2x maior, fraco contra fogo e Energia, regenera e não fica preso em combo');
   ok(deus && ['timelockGrab', 'deadHands', 'timeWarp'].every((t) => deus.abilities.some((a) => a.type === t)), 'Deus da Morte: Espiral Descendente, Controlar Mortos, Senhor do Tempo');
 }
 const jua = get('juan');
@@ -311,7 +321,7 @@ ok(jua && jua.element === 'sangue' && ['ritualCuts', 'command', 'bloodLink', 'he
   ok(dia && dia.ranged.visual === 'bloodSpear' && dia.ranged.pool && dia.ranged.onHit.impale && ['forward', 'side', 'back'].every((k) => dia.ranged.variants[k]), 'Diabo: Lança de Sangue empala, deixa poça e tem 3 variações (frente, lados, trás)');
 }
 const lir = get('lirio');
-ok(lir && lir.origin === 'Os Cinco' && lir.melee.name === 'Leonora' && lir.stats.maxHealth > 1000 && lir.stats.moveSpeed < Math.min(...ROSTER.filter((c) => c.id !== 'lirio').map((c) => c.stats.moveSpeed)), 'Lírio: Os Cinco, Leonora, mais vida e o mais lento do elenco');
+ok(lir && lir.origin === 'Os Cinco' && lir.melee.name === 'Leonora' && lir.stats.moveSpeed < Math.min(...ROSTER.filter((c) => c.id !== 'lirio').map((c) => c.stats.moveSpeed)), 'Lírio: Os Cinco, Leonora e o mais lento do elenco');
 ok(lir && ['heavyBlow', 'caiDentro', 'bloodBind', 'curseWeapon', 'heavyProtection'].every((t) => abil('lirio', t)) && ['ironBlood', 'thickSkin', 'heavyHand'].every((t) => pas('lirio', t)), 'Lírio: Golpe Pesado, Cai Dentro, Amarras de Sangue, Leonora Amaldiçoada, Proteção Pesada + Sangue de Ferro, Casca Grossa, Mão Pesada');
 ok(lir && lir.melee.ground && lir.melee.ground.otg && lir.melee.strikes.some((s) => s.armor) && lir.assistAuto && lir.grip.twoHand, 'Lírio: golpe no chão, resistência em golpes pesados, Cai Dentro automático na equipe e Leonora com as duas mãos');
 

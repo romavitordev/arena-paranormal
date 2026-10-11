@@ -24,7 +24,7 @@ export default {
     identity: 'Forma do Capacete do ??? (até o fim do round)',
     tagline: 'Ao final do labirinto... um sorriso.',
   },
-  stats: { moveSpeed: 8.0, attackSpeed: 1.12, maxHealth: 1080 }, // cabe a vida extra do capacete (+80)
+  stats: { moveSpeed: 8.0, attackSpeed: 1.12, maxHealth: 1580 }, // cabe a vida extra da transformação
   chargeFx: { style: 'default', color: 0xc8a0ff },
 
   melee: {

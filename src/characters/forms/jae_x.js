@@ -27,7 +27,7 @@ export default {
     identity: 'Forma do X (até o fim do round)',
     tagline: 'Shhh.',
   },
-  stats: { moveSpeed: 8.9, maxHealth: 1010 }, // cabe a vida extra do capuz (+80)
+  stats: { moveSpeed: 8.9, maxHealth: 1580 }, // cabe a vida extra da transformação
   chargeFx: { style: 'blood', color: RED },
   melee: {
     ...M,

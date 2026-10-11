@@ -9,8 +9,8 @@ import { getForm } from '../characters/forms/index.js';
 //
 // Campos opcionais de uma forma:
 //   stats.size        tamanho do corpo (2 = o dobro): raio, altura do peito e área de acerto acompanham
-//   stats.maxHealth   vida máxima na forma (o chefe tem barra própria)
-//   boss              mostra a barra de vida preta no centro da tela
+//   stats.maxHealth   vida máxima na forma
+//   hpBar             barra de vida própria (cores/efeito; Portadores — ver HUD.js)
 //   weakTo            { fire, energia }: multiplicadores de dano recebido (fraquezas)
 //   regen             { every, amount }: regenera vida de tempo em tempo
 //   formDuration      segundos até voltar sozinho para a forma anterior

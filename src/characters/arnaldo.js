@@ -23,7 +23,7 @@ export default {
     identity: 'Aniquilador da Ordo Realitas: na Transformação, o relógio de bolso guarda a Relíquia e ele vira O Anfitrião',
     tagline: 'Senhoras e senhores, o espetáculo vai começar.',
   },
-  stats: { moveSpeed: 8.2, attackSpeed: 1.05, maxHealth: 1000 },
+  stats: { moveSpeed: 8.2, attackSpeed: 1.05 },
   anims: { idle: 'idle_arnaldo', run: 'run', charge: 'charge', victory: 'vic_arnaldo', block: 'block_weapon' },
   chargeFx: { style: 'default', color: GOLD },
   dodge: { style: 'default', distance: 4.6 },
@@ -209,7 +209,7 @@ export default {
     formBanner: 'O ANFITRIÃO',
     color: 0xb04aff,
     tint: 0xb04aff,
-    bonusHealth: 60,
+    bonusHealth: 300, // transformado, o Portador aguenta mais que o elenco
   },
 
   passives: [],

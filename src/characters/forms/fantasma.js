@@ -18,7 +18,7 @@ export default {
     identity: 'Forma das Faixas (até o fim do round)',
     tagline: 'Ninguém vê a Fantasma.',
   },
-  stats: { moveSpeed: 8.6, maxHealth: 1100 }, // cabe a vida extra das faixas (+100)
+  stats: { moveSpeed: 8.6, maxHealth: 1550 }, // cabe a vida extra da transformação
   anims: { idle: 'idle_knife', run: 'run', charge: 'charge', victory: 'vic_fantasma', block: 'block' },
   chargeFx: { style: 'default', color: 0x1a1620 },
   dodge: { style: 'default', distance: 6 },

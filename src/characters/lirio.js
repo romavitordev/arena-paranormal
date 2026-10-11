@@ -3,7 +3,7 @@
 // Poderes do cânone (wiki): Sangue de Ferro, Casca Grossa, Ataque Especial, Golpe Pesado, Mão Pesada, Cai Dentro e
 // Proteção Pesada; item paranormal Amarras de Sangue "Magras"; a Leonora amaldiçoada com Sangue (miniaturas).
 //
-// Lugar no elenco: o único PESADO de verdade. Mais vida (Sangue de Ferro), é empurrado menos (Casca Grossa), golpes
+// Lugar no elenco: o único PESADO de verdade (a vida é a mesma do elenco). É empurrado menos (Casca Grossa), golpes
 // físicos com muito impacto (Mão Pesada) e golpes pesados que aguentam um golpe pequeno. Em troca: o mais lento do
 // elenco, combo mais curto e golpes com preparação visível, esquiva mais curta e ataque à distância fraco
 // (canivete). Para alcançar quem foge: golpe de aproximação, Amarras de Sangue e o Cai Dentro (corrida + provocação).
@@ -21,7 +21,7 @@ export default {
     identity: 'A parede: aguenta o impacto, chega perto e decide com golpes que derrubam',
     tagline: "Hoje 'cê vai conhecer a Leonora!",
   },
-  stats: { moveSpeed: 6.9, maxHealth: 1350 }, // Sangue de Ferro + pesado: o mais lento e o que mais aguenta
+  stats: { moveSpeed: 6.9 },
   anims: { idle: 'idle_hammer', run: 'run', charge: 'charge', victory: 'victory_hammer', block: 'block_hammer', blockHeavy: 'block_heavy', dash: 'dash_heavy' },
   // Leonora de duas mãos: a esquerda segura o cabo; andando/correndo leva a marreta no ombro
   grip: {
@@ -205,7 +205,7 @@ export default {
   },
 
   passives: [
-    { type: 'ironBlood' }, // Sangue de Ferro: mais vitalidade (+15% de vida)
+    { type: 'ironBlood' }, // Sangue de Ferro: marca do cânone (a vida é a padrão do elenco; o Sangue de Ferro forte é o despertar)
     { type: 'thickSkin', knockback: 0.65, chip: 0.6, guard: 0.7 }, // Casca Grossa: menos recuo; defendendo, perde menos
     { type: 'heavyHand', knockback: 1.3, hitstun: 0.06 }, // Mão Pesada: golpes físicos empurram e atordoam mais
   ],

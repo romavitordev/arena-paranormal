@@ -1,7 +1,7 @@
 // FERREIRO (id: ferreiro) — o Luzidio que guarda Santo Berço (O Segredo na Floresta): 2,20 m, pele cinza, olhos
 // pretos, barba branca, peitoral de metal e a Espada Consumidora com as duas mãos.
 // Especial: PACTO DO SANTO (sanidade acima de 85%, 45 s) — se morrer nesse tempo, o Lodo toma o corpo e ele vira o
-// DEUS DA MORTE (chefe 2x maior, barra preta no centro, fraco contra fogo e Energia, regenera; ver forms/deus_morte.js).
+// DEUS DA MORTE (chefe 2x maior, barra de vida de Portador, fraco contra fogo e Energia, regenera; ver forms/deus_morte.js).
 export default {
   id: 'ferreiro',
   name: 'FERREIRO',
@@ -16,7 +16,7 @@ export default {
     identity: 'Guardião de Santo Berço: quase morto, o Pacto do Santo o transforma no Deus da Morte',
     tagline: 'Eu não posso permitir que vocês destruam minha cidade.',
   },
-  stats: { moveSpeed: 7.0, size: 1.1, maxHealth: 1250 }, // pesado: aguenta os rápidos pela vida,
+  stats: { moveSpeed: 7.0, size: 1.1 },
   anims: { idle: 'idle_katana', run: 'run', charge: 'charge', victory: 'vic_ferreiro', block: 'block_weapon' },
   grip: { twoHand: true, reach: 0.42, freeLeft: ['concentrate', 'charge', 'victory', 'hit', 'launched', 'fall', 'getup', 'point'] },
   chargeFx: { style: 'default', color: 0x8a8090 },
@@ -80,6 +80,26 @@ export default {
       offset: 1.6,
       stun: 0.8,
       color: 0x6a6670,
+    },
+    {
+      // os filhos do Ferreiro, criados para alimentar o Santo (wiki "Manancial")
+      id: 'mananciais',
+      name: 'Chamar os Mananciais',
+      input: 'carga+ranged', // △ → □ / Y → X
+      type: 'summonMananciais',
+      description: 'Três MANANCIAIS (os filhos do Ferreiro, presos nas salas brancas para alimentar o Santo) sobem do Símbolo Espiral em volta do adversário e lutam por ele por 10 s — enlouquecidos, arranham, agarram e se jogam em cima. Quando um morre, a sirene de Santo Berço toca e o Ferreiro recupera sanidade.',
+      energyCost: 35,
+      cooldown: 24,
+      count: 3,
+      duration: 10,
+      hp: 80,
+      feed: 10,
+      strikes: [
+        { anim: 'man_scratch', dur: 0.4, active: [0.18, 0.28], range: 1.6, damage: 12 },
+        { anim: 'man_grab', dur: 0.42, active: [0.2, 0.3], range: 1.6, damage: 14 },
+        { anim: 'man_lunge', dur: 0.46, active: [0.22, 0.34], range: 2.4, damage: 18 },
+      ],
+      color: 0xe8e4dc,
     },
     {
       id: 'espadaConsumidora',
@@ -155,6 +175,7 @@ export default {
     type: 'santoPact',
     immediate: true,
     form: 'deus_morte',
+    formHealth: 1500, // ergue-se com uma vida inteira de lutador comum (a barra de Portador vai além)
     color: 0x2a2632,
   },
 

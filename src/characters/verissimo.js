@@ -27,7 +27,7 @@ export default {
     identity: 'Líder da Ordo Realitas: Inteligência Estratégica e o Segredo de Veríssimo',
     tagline: 'Olhos sempre abertos.',
   },
-  stats: { moveSpeed: 7.8, maxHealth: 1080 },
+  stats: { moveSpeed: 7.8 },
   anims: { idle: 'idle_katana', run: 'run', charge: 'charge', victory: 'vic_verissimo', block: 'block_weapon' },
   chargeFx: { style: 'default', color: BLUE },
   dodge: { style: 'default', distance: 4.4 },

@@ -19,7 +19,7 @@ const RED = 0xd01828;
 const STEEL = 0xd8d4dc;
 
 export const JAE_KIT = {
-  stats: { moveSpeed: 8.3, maxHealth: 930 }, // VIG 1: a mais frágil das assassinas, AGI 3: a mais rápida
+  stats: { moveSpeed: 8.3 },
   anims: { idle: 'idle_knife', run: 'run', charge: 'charge', victory: 'vic_jae', block: 'block' },
   chargeFx: { style: 'blood', color: RED },
   dodge: { style: 'default', distance: 5.8 },
@@ -96,13 +96,14 @@ export const JAE_KIT = {
       name: 'Shhh...',
       input: 'carga+ranged', // △ → □
       type: 'shadowVeil',
-      description: 'Leva o dedo aos lábios e some nas sombras (4 s): quase invisível e mais rápida, o adversário perde o rastro dela. O primeiro ataque sai do escuro e pega o alvo DESPREVENIDO. Tomar dano a revela.',
+      description: 'Leva o dedo aos lábios e some nas sombras (4 s): quase invisível e mais rápida, o adversário perde o rastro dela. O primeiro ataque sai do escuro e pega o alvo DESPREVENIDO. Sem rastro: especiais que grudam no alvo e projéteis teleguiados NÃO a acham. Tomar dano a revela.',
       energyCost: 20,
       cooldown: 12,
       duration: 4,
       opacity: 0.12,
       speedMult: 1.15,
       surprise: 0.6,
+      noLock: true, // sem rastro: especiais que grudam e projéteis teleguiados não a acham
       color: RED,
     },
     {

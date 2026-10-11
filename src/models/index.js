@@ -27,7 +27,8 @@ const BLENDER_MODELS = {
   o_diabo: { url: 'models/o_diabo.glb', props: null }, // O Diabo de Ordem Paranormal (o Portador do Trono é a transformação dele)
   magistrada: { url: 'models/magistrada.glb', props: addMagistradaProps },
   estrangeiro: { url: 'models/estrangeiro.glb', props: null },
-  amigo: { url: 'models/amigo.glb', props: null }, // o Amigo Imaginário (O Segredo na Ilha) // O Estrangeiro (as garras são do modelo) // A Magistrada (Relíquia de Conhecimento) e a bengala
+  amigo: { url: 'models/amigo.glb', props: null }, // o Amigo Imaginário (O Segredo na Ilha)
+  manancial: { url: 'models/manancial.glb', props: null }, // os Mananciais (invocação do Ferreiro; fora da seleção)
   kemi: { url: 'models/kemi.glb', props: addKemiProps },
   fantasma: { url: 'models/fantasma.glb', props: addFantasmaProps }, // forma das Faixas
   balu: { url: 'models/balu.glb', props: addBaluProps }, // Antônio "Balu" Pontevedra (Machado Lancinante)

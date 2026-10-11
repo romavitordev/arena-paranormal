@@ -29,7 +29,7 @@ export default {
     identity: 'Forma Em Nome do Caos (até o fim do round)',
     tagline: 'Em nome do Caos!',
   },
-  stats: { moveSpeed: 9.0, attackSpeed: 1.25, maxHealth: 1060 }, // cabe a vida extra da máscara (+60)
+  stats: { moveSpeed: 9.0, attackSpeed: 1.25, maxHealth: 1560 }, // cabe a vida extra da transformação
   chargeFx: { style: 'default', color: CHAOS },
 
   melee: {

@@ -15,7 +15,7 @@ const RED = 0xc8281e;
 const PRESS = 0xffb070; // a onda de pressão das Manoplas
 
 export const DALMO_KIT = {
-  stats: { moveSpeed: 7.0, maxHealth: 1300 }, // VIG 3: aguenta muito; AGI 1: lento (só o Lírio é mais lento)
+  stats: { moveSpeed: 7.0 },
   anims: { idle: 'idle_fist', run: 'run', charge: 'charge_fists', victory: 'vic_dalmo', block: 'block' },
   chargeFx: { style: 'fists', color: 0xe8b070 },
   dodge: { style: 'default', distance: 4.0 }, // pesado: esquiva curta

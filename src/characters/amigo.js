@@ -20,6 +20,7 @@ export default {
   color: '#a0602a',
   origin: 'Portadores das Relíquias',
   element: 'tinta',
+  hpBar: { style: 'ink' }, // barra de vida de Portador (Tinta), sem número
   energyColor: INK,
   info: {
     weapon: 'Garras secas, tentáculos e a tinta que escorre do rosto',
@@ -27,8 +28,8 @@ export default {
     identity: 'A Obra de Arte Perfeita: quando o Sino tocar, a criatura vai retornar',
     tagline: 'Quando o Sino tocar, todo mundo vai morrer.',
   },
-  // enorme e lento; aguenta mais (o chefe da ilha)
-  stats: { moveSpeed: 7.0, attackSpeed: 0.9, maxHealth: 1100, size: 1.15 }, // o Lírio continua o mais lento (6,9)
+  // enorme e lento (o chefe da ilha)
+  stats: { moveSpeed: 7.0, attackSpeed: 0.9, size: 1.15, maxHealth: 1800 }, // Portador das Relíquias: aguenta mais que o elenco (o número não aparece na tela)
   anims: {
     idle: 'ai_idle', run: 'ai_run', walk: 'ai_walk', walk_back: 'ai_walk_back', strafe_L: 'ai_strafe_L', strafe_R: 'ai_strafe_R', dash: 'ai_dash',
     charge: 'ai_charge', concentrate: 'ai_charge', victory: 'vic_amigo', block: 'ai_block', block_hit: 'ai_block_hit', point: 'ai_point', gaze: 'ai_bell', breath: 'ai_dissolve',
@@ -150,6 +151,19 @@ export default {
       takenMult: 1.2,
       vulnTime: 4,
       color: 0xb07a3a,
+    },
+    {
+      // os animais de Tipora infectados pela Tinta (wiki: Javalis Infectados; Cachorros Selvagens Infectados)
+      id: 'bichos',
+      name: 'Bichos da Ilha',
+      input: 'block+jump', // R2 + ×
+      type: 'summonInkBeasts',
+      description: 'O Sino chama os animais da ilha INFECTADOS PELA TINTA: saem de poças em volta do adversário e atacam por 12 s — um JAVALI (presas e investida que derruba) e/ou CÃES SELVAGENS (mordidas e o salto). Cadáveres de carne derretida: morrem e viram poça.',
+      energyCost: 30,
+      cooldown: 22,
+      duration: 12,
+      // matilhas possíveis (sorteadas)
+      packs: [['javali'], ['cao', 'cao'], ['javali', 'cao'], ['cao', 'cao', 'cao']],
     },
     {
       // DISSOLVER: vira uma poça de tinta, absorve e se refaz

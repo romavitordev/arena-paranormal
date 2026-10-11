@@ -74,7 +74,7 @@ export function riseAsDeathGod(f, sp, world) {
   world.cameraRig.shake(0.8, 0.6);
   world.audio.play('drain', { volume: 1.1, pitch: 0.45 });
   world.screenFlash && world.screenFlash('#000000', 0.25);
-  transform(f, sp.form, { health: Infinity, banner: 'O Deus da Morte' });
+  transform(f, sp.form, { health: sp.formHealth ?? Infinity, banner: 'O Deus da Morte' });
   f.invuln = Math.max(f.invuln, 1.5);
   f.energy = f.maxEnergy;
   f.notify('O DEUS DA MORTE SE ERGUEU', true);

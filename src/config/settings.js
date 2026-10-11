@@ -4,14 +4,14 @@ import { SUPPORTED_LANGUAGES, initLanguage, setLanguage, t } from '../i18n/index
 const KEY = 'arena-paranormal:settings';
 
 const DEFAULTS = {
-  timer: 99, // segundos por round; 0 = infinito
+  timer: 150, // segundos por round (cabe a vida de 1500: 1,5× os antigos 99 s); 0 = infinito
   cpuLevel: 'normal', // easy | normal | hard | veryhard | superhard
   rounds: 2, // rounds para vencer
   language: 'pt-BR',
 };
 
 // opções das configurações de combate (tela antes do cenário)
-export const TIMER_OPTIONS = [30, 60, 90, 99, 120, 0];
+export const TIMER_OPTIONS = [45, 90, 120, 150, 180, 0]; // proporcionais à vida 1500 (antes 30–120 com vida 1000)
 export const CPU_LEVELS = [
   { id: 'easy', label: 'FÁCIL' },
   { id: 'normal', label: 'NORMAL' },

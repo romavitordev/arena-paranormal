@@ -11,6 +11,8 @@ import { bloodCoat } from '../models/weapons.js';
 import { addBloodPool, poolsOf, splatGeo } from './bloodPools.js';
 import { inscribe } from './kianPowers.js';
 import { AMIGO_TYPES } from './amigoPowers.js';
+import { Carnical, InkBeast } from './beasts.js';
+import { inkSplash } from '../fx/inkFx.js';
 
 // Paga um custo em vida (rituais de Sangue) sem nunca se matar
 function payHealth(f, n) {
@@ -2533,6 +2535,115 @@ Object.assign(ABILITY_TYPES, {
     },
   },
 
+  // FERREIRO — CHAMAR OS MANANCIAIS: os filhos do Ferreiro (presos nas salas brancas da Caverna para alimentar o Santo)
+  // sobem do chão marcado pelo Símbolo Espiral em volta do adversário e lutam por ele — enlouquecidos: arranham,
+  // agarram e se jogam em cima. Quando um Manancial MORRE, Santo Berço solta a SIRENE e a escuridão pesa: o Santo se
+  // alimenta e o Ferreiro recupera sanidade (a.feed).
+  summonMananciais: {
+    start(f, a, world) {
+      if (world.npcs.some((n) => n.alive && n.owner === f && n.isManancial)) { f.notify('OS MANANCIAIS JÁ ESTÃO AQUI'); return null; }
+      const opp = f.opponent;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.anim.play('point', { restart: true, duration: 0.7 });
+      world.audio.play('ritual', { volume: 0.7, pitch: 0.55 });
+      tl.add(0.4, () => {
+        const base = opp ? opp.pos : f.pos;
+        const back = Math.atan2(f.pos.x - base.x, f.pos.z - base.z);
+        const taken = [{ x: base.x, z: base.z, r: 0.8 }, { x: f.pos.x, z: f.pos.z, r: 0.7 }];
+        for (let i = 0; i < a.count; i++) {
+          const ang = back + Math.PI + (i - (a.count - 1) / 2) * 1.1;
+          const want = { x: base.x + Math.sin(ang) * 2.2, z: base.z + Math.cos(ang) * 2.2 };
+          const spot = findFreeSpotNear(world.arena, want.x, want.z, { radius: 0.5, others: taken }) || want;
+          taken.push({ x: spot.x, z: spot.z, r: 0.5 });
+          // o Símbolo Espiral se abre no chão e o Manancial sobe dele
+          const g = new THREE.Vector3(spot.x, 0.07, spot.z);
+          for (let k = 0; k < 3; k++) world.after(k * 0.08, () => world.fx.ring(g, { color: 0xe8e4dc, radius: 0.5 + k * 0.35, life: 0.6, inner: 0.86 }));
+          world.fx.burst(g.clone().setY(0.3), { count: 24, color: 0x2a2632, kind: 'smoke', speed: 1.6, up: 1.5, life: 0.8, size: 0.5 });
+          const npc = new DanteClone(f, world, i, a.duration, {
+            model: 'manancial', hp: a.hp, damageMult: 1, element: 'morte', rise: true, strikes: a.strikes,
+            anims: { idle: 'man_idle', run: 'man_run' },
+            restyle(m) { m.material.transparent = false; },
+            onSlain(n) {
+              // a SIRENE de Santo Berço: a noite pesa e o Santo se alimenta do filho morto
+              world.audio.play('siren', { volume: 0.8 });
+              world.screenFlash && world.screenFlash('#05040a', 0.35);
+              world.fx.burst(new THREE.Vector3(n.pos.x, 1, n.pos.z), { count: 30, color: 0xe8e4dc, speed: 2, up: 1, life: 0.7, size: 0.2 });
+              if (f.state !== 'ko') {
+                f.energy = Math.min(f.maxEnergy, f.energy + (a.feed ?? 10));
+                f.notify('UM MANANCIAL MORREU — O SANTO SE ALIMENTA', true);
+              }
+            },
+          });
+          npc.isManancial = true;
+          npc.pos.set(spot.x, 0, spot.z);
+          world.addNpc(npc);
+        }
+        f.notify(`OS MANANCIAIS ×${a.count}`, true);
+      });
+      tl.end(0.7);
+      return seqFrom(tl);
+    },
+  },
+
+  // DEUS DA MORTE — O CARNIÇAL: do Lodo sobe o Carniçal Preto da Morte (só UM por vez) e caça o adversário: Garra da
+  // Morte, Pancada Poderosa, o salto e a Hipnose Espiral; imune a tiros; ferido, perde a compostura (combat/beasts.js)
+  summonCarnical: {
+    start(f, a, world) {
+      if (world.npcs.some((n) => n.alive && n.owner === f && n.isCarnical)) { f.notify('O CARNIÇAL JÁ ESTÁ AQUI'); return null; }
+      const opp = f.opponent;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.anim.play('cast_up', { restart: true, duration: 0.8 });
+      world.audio.play('drain', { volume: 0.9, pitch: 0.5 });
+      tl.add(0.45, () => {
+        const base = opp ? opp.pos : f.pos;
+        const back = Math.atan2(f.pos.x - base.x, f.pos.z - base.z);
+        const want = { x: base.x + Math.sin(back + 1.2) * 2.4, z: base.z + Math.cos(back + 1.2) * 2.4 };
+        const spot = findFreeSpotNear(world.arena, want.x, want.z, { radius: 0.6, others: [{ x: base.x, z: base.z, r: 0.8 }, { x: f.pos.x, z: f.pos.z, r: 1.4 }] }) || want;
+        world.fx.ring(new THREE.Vector3(spot.x, 0.07, spot.z), { color: 0xff2a1a, radius: 1.2, life: 0.8, inner: 0.85 });
+        world.fx.burst(new THREE.Vector3(spot.x, 0.4, spot.z), { count: 40, color: 0x0a080c, kind: 'smoke', speed: 2, up: 2, life: 1, size: 0.8 });
+        world.addNpc(new Carnical(f, world, new THREE.Vector3(spot.x, 0, spot.z), { duration: a.duration, hp: a.hp }));
+        f.notify('O CARNIÇAL PRETO DA MORTE', true);
+      });
+      tl.end(0.8);
+      return seqFrom(tl);
+    },
+  },
+
+  // AMIGO IMAGINÁRIO — OS BICHOS DA ILHA: o Sino chama os animais de Tipora infectados pela Tinta (javalis e cães
+  // selvagens) — saem de poças de tinta em volta do adversário e atacam descontrolados (combat/beasts.js)
+  summonInkBeasts: {
+    start(f, a, world) {
+      if (world.npcs.some((n) => n.alive && n.owner === f && n.isInkBeast)) { f.notify('OS BICHOS JÁ ESTÃO AQUI'); return null; }
+      const opp = f.opponent;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.anim.play('gaze', { restart: true, duration: 0.8 });
+      world.audio.play('bellToll', { volume: 0.6, pitch: 1.3 });
+      const packs = a.packs || [['javali'], ['cao', 'cao']];
+      const pack = packs[Math.floor(Math.random() * packs.length)];
+      tl.add(0.45, () => {
+        const base = opp ? opp.pos : f.pos;
+        const back = Math.atan2(f.pos.x - base.x, f.pos.z - base.z);
+        const taken = [{ x: base.x, z: base.z, r: 0.8 }, { x: f.pos.x, z: f.pos.z, r: 0.8 }];
+        pack.forEach((kind, i) => {
+          const ang = back + Math.PI + (i - (pack.length - 1) / 2) * 1.0;
+          const want = { x: base.x + Math.sin(ang) * 2.6, z: base.z + Math.cos(ang) * 2.6 };
+          const r = kind === 'javali' ? 0.8 : 0.5;
+          const spot = findFreeSpotNear(world.arena, want.x, want.z, { radius: r, others: taken }) || want;
+          taken.push({ x: spot.x, z: spot.z, r });
+          inkSplash(world, new THREE.Vector3(spot.x, 0.05, spot.z), { size: kind === 'javali' ? 1.5 : 1.1, life: 1.5 });
+          world.addNpc(new InkBeast(f, world, new THREE.Vector3(spot.x, 0, spot.z), { kind, duration: a.duration }));
+        });
+        const n = { javali: pack.filter((k) => k === 'javali').length, cao: pack.filter((k) => k === 'cao').length };
+        f.notify([n.javali && `JAVALI${n.javali > 1 ? 'S' : ''} INFECTADO${n.javali > 1 ? 'S' : ''}`, n.cao && `${n.cao > 1 ? n.cao + ' CÃES' : 'CÃO'} DA ILHA`].filter(Boolean).join(' + '), true);
+      });
+      tl.end(0.8);
+      return seqFrom(tl);
+    },
+  },
+
   summonBlood: {
     start(f, a, world) {
       if (world.npcs.some((n) => n.alive && n.owner === f && n instanceof BloodZombie)) { f.notify('A HORDA JÁ ESTÁ EM CAMPO'); return null; }
@@ -3228,7 +3339,7 @@ export function veilFighter(world, f, a) {
   if (cur) { cur.time = Math.max(cur.time, time); return; }
   // stealth: a transparência depende de QUEM está vendo (Fighter.stealthOpacity) — quem controla a Jae a vê como
   // silhueta com um anel no chão; o adversário (CPU ou outra tela no online) quase não a vê
-  const buff = { type: 'veil', name: 'SHHH...', time, duration: time, opacity: a.opacity ?? 0.12, stealth: true, speedMult: a.speedMult ?? 1.15 };
+  const buff = { type: 'veil', name: 'SHHH...', time, duration: time, opacity: a.opacity ?? 0.12, stealth: true, speedMult: a.speedMult ?? 1.15, noLock: !!a.noLock }; // noLock (Shhh... da Jae): especiais que grudam e projéteis teleguiados não a acham
   f.addBuff(buff);
   world.fx.shadowDisc(f.pos, { radius: 1.1, life: 0.6 });
   world.fx.burst(f.chestPos(), { count: 22, color: 0x0a0608, kind: 'smoke', speed: 1.6, up: 0.8, life: 0.7, size: 0.7, grow: 1 });

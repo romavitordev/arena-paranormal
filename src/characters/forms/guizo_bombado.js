@@ -25,7 +25,7 @@ export default {
     identity: 'Distorcer Aparência (até o fim do round)',
     tagline: 'Eu sou o mais forte.',
   },
-  stats: { moveSpeed: 7.4, attackSpeed: 0.95, maxHealth: 1100, size: 1.12 },
+  stats: { moveSpeed: 7.4, attackSpeed: 0.95, size: 1.12, maxHealth: 1580 }, // cabe a vida extra da transformação
   anims: { ...base.anims, idle: 'idle_fist', block: 'block' },
   chargeFx: { style: 'default', color: ORANGE },
   melee: {

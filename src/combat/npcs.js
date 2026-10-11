@@ -65,7 +65,7 @@ export class DanteClone {
     });
     if (o.setup) o.setup(this.rig);
     this.riseT = o.rise ? 0.45 : 0;
-    this.anim = new Animator(this.rig, owner.def.anims);
+    this.anim = new Animator(this.rig, o.anims || owner.def.anims); // o.anims: invocação com animações próprias (Mananciais)
     this.anim.play('idle', { blend: 0 });
     world.scene.add(this.rig.root);
     this.flash = 0;
@@ -117,8 +117,8 @@ export class DanteClone {
         const sp = Math.min(CLONE.speed, dist * 4);
         this.pos.x += (dx / dist) * sp * dt;
         this.pos.z += (dz / dist) * sp * dt;
-        if (this.anim.currentName !== this.owner.def.anims.run && dist > 0.6) this.anim.play('run');
-      } else if (this.anim.currentName !== 'idle_fist') this.anim.play('idle', { blend: 0.15 });
+        if (this.anim.currentName !== this.anim.resolve('run') && dist > 0.6) this.anim.play('run');
+      } else if (this.anim.currentName !== this.anim.resolve('idle')) this.anim.play('idle', { blend: 0.15 });
       this.cd -= dt;
       if (this.cd <= 0 && dTarget < 2.4 && target.state !== 'downed' && target.state !== 'ko') {
         const strikes = this.o.strikes || this.owner.def.melee.strikes;
@@ -143,7 +143,10 @@ export class DanteClone {
     this.flash = 0.1;
     this.world.fx.impact(v.set(this.pos.x, this.pos.y + 1.1, this.pos.z).clone(), 0x9a94ae, 0.8);
     this.world.audio.play('punch', { volume: 0.5 });
-    if (this.hp <= 0) this.kill();
+    if (this.hp <= 0) {
+      if (this.o.onSlain) this.o.onSlain(this); // morreu apanhando (não por tempo)
+      this.kill();
+    }
   }
 
   kill() {

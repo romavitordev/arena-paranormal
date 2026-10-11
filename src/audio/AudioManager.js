@@ -166,6 +166,14 @@ export class AudioManager {
 
 // Biblioteca de sons sintetizados. Nome → função.
 const SYNTHS = {
+  // a SIRENE de Santo Berço (um Manancial morreu): sobe e desce, estridente, e some ao longe
+  siren: (a, t, v) => {
+    for (let i = 0; i < 2; i++) {
+      a.tone(t + i * 0.9, 0.9, { vol: 0.22 * v, type: 'sawtooth', freq: 520, freqEnd: 940, attack: 0.08 });
+      a.tone(t + i * 0.9 + 0.45, 0.5, { vol: 0.18 * v, type: 'sawtooth', freq: 940, freqEnd: 500, attack: 0.02 });
+    }
+    a.noise(t, 1.8, { vol: 0.08 * v, type: 'bandpass', freq: 800, q: 4, attack: 0.3 });
+  },
   // O SINO do Amigo Imaginário: sino de igreja grave (parciais de sino: hum, prime, terça menor, quinta, nominal)
   bellToll: (a, t, v, o = {}) => {
     const f0 = 196 * (o.pitch ?? 1);

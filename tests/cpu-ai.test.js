@@ -30,7 +30,7 @@ test('CPU retains enough dodge charges for substitution unless a projectile is i
 test('CPU ability priorities respond to openings, health, and active buffs', () => {
   const fighter = {
     health: 400,
-    maxHealth: 1000,
+    maxHealth: 1500,
     findBuff: (type) => ['heavyProtection', 'healing'].includes(type) ? { type } : null,
   };
   const opponent = { state: 'attack', isInvulnerable: () => false };

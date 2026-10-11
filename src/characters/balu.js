@@ -21,7 +21,7 @@ export default {
     identity: 'O tanque da Equipe Abutres: fica na linha de frente, apanha, sorri e derruba',
     tagline: 'Calma, calma… deixa que o tio Balu resolve.',
   },
-  stats: { moveSpeed: 7.1, maxHealth: 1300, attackSpeed: 1.04 },
+  stats: { moveSpeed: 7.1, attackSpeed: 1.04 },
   anims: { idle: 'idle_hammer', run: 'run', charge: 'charge', victory: 'vic_balu', block: 'block_hammer', blockHeavy: 'block_heavy', dash: 'dash_heavy' },
   // machado de duas mãos (mesma pegada da Leonora): andando leva no ombro
   grip: {

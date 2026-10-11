@@ -24,7 +24,7 @@ export default {
     identity: 'Forma do Mutilador Noturno (até o fim do round)',
     tagline: 'Ninguém sai do acampamento.',
   },
-  stats: { moveSpeed: 8.1, maxHealth: 1250 }, // cabe a vida extra da máscara (+100)
+  stats: { moveSpeed: 8.1, maxHealth: 1600 }, // cabe a vida extra da transformação
   chargeFx: { style: 'blood', color: RED },
 
   melee: {

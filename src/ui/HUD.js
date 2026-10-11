@@ -92,7 +92,7 @@ export class HUD {
       p.style.setProperty('--c', def.color);
       p.innerHTML = `
         <div class="name"><span class="tag">${this.names && this.names[i] ? escapeHtml(this.names[i]) : `P${i + 1}`}</span><span>${def.name}</span>${ELEMENTS[def.element] ? `<span class="el" style="color:${ELEMENTS[def.element].color}">${ELEMENTS[def.element].name}</span>` : ''}</div>
-        <div class="bar health"><div class="trail"></div><div class="fill"></div><div class="num"></div></div>
+        <div class="bar health"><div class="trail"></div><div class="fill"></div><div class="fx"></div></div>
         <div class="bar energy" title="Sanidade (PE): gasta em rituais, habilidades e especial"><div class="fill"></div><div class="mark" style="left:${(f.specialCost() / f.maxEnergy) * 100}%"></div></div>
         <div class="bar guard" title="Resistência da defesa"><div class="fill"></div></div>
         ${def.awakening ? `<div class="bar storm" title="Barra de Transformação: enche apanhando; cheia e com a vida baixa, segure ${actionLabel(i, 'carga', f.input.source)} até passar da sanidade cheia"><div class="fill"></div><div class="over"></div><span>${escapeHtml(def.awakening.name.toUpperCase())}</span></div>` : ''}
@@ -113,7 +113,6 @@ export class HUD {
         hp: p.querySelector('.bar.health'),
         hpFill: p.querySelector('.bar.health .fill'),
         hpTrail: p.querySelector('.bar.health .trail'),
-        hpNum: p.querySelector('.bar.health .num'),
         en: p.querySelector('.bar.energy .fill'),
         guard: p.querySelector('.bar.guard .fill'),
         storm: p.querySelector('.bar.storm'),
@@ -148,8 +147,15 @@ export class HUD {
       const hp = Math.max(0, f.health / f.maxHealth);
       e.hpFill.style.width = `${hp * 100}%`;
       e.hpTrail.style.width = `${hp * 100}%`;
-      e.hpNum.textContent = Math.ceil(f.health);
       e.hp.classList.toggle('low', hp < 0.3);
+      // a vida não mostra número. Os PORTADORES (alguns só transformados: Ferreiro → Deus da Morte, Arnaldo →
+      // Anfitrião) têm barra própria, com as cores e o efeito da Relíquia (def.hpBar.style → .hb-*)
+      const hb = f.def.hpBar ? `hb-${f.def.hpBar.style}` : '';
+      if (e.hpStyle !== hb) {
+        if (e.hpStyle) e.hp.classList.remove(e.hpStyle, 'custom');
+        if (hb) e.hp.classList.add(hb, 'custom');
+        e.hpStyle = hb;
+      }
       e.en.style.width = `${(f.energy / f.maxEnergy) * 100}%`;
       e.en.parentNode.classList.toggle('locked', hasPassive(f, 'noSanity')); // Erin sem sanidade: barra travada
       e.guard.style.width = `${(f.guard / f.maxGuard) * 100}%`;
@@ -225,15 +231,12 @@ export class HUD {
       }).join(' | ');
       e.msg.textContent = f.message ? f.message.text : '';
     });
-    // A Marionete e os CHEFES (Deus da Morte): barra de vida preta no topo + vinheta escura nas bordas
+    // A Marionete: barra de vida preta no topo + vinheta escura nas bordas (lutador não tem mais barra de chefe no
+    // centro: os Portadores usam a própria barra, customizada)
     const mar = match && match.world && match.world.npcs.find((n) => n.isMarionette && n.alive);
-    const boss = match && match.fighters && match.fighters.find((f) => f.def.boss && f.state !== 'ko');
-    this.vignette.classList.toggle('on', !!(mar || boss));
-    this.npcBar.classList.toggle('on', !!(mar || boss));
-    if (boss) {
-      this.npcBar.querySelector('b').textContent = boss.def.name;
-      this.npcBar.querySelector('.fill').style.width = `${Math.max(0, boss.health / boss.maxHealth) * 100}%`;
-    } else if (mar) {
+    this.vignette.classList.toggle('on', !!mar);
+    this.npcBar.classList.toggle('on', !!mar);
+    if (mar) {
       this.npcBar.querySelector('b').textContent = `${mar.name} · ${mar.owner.def.name}`;
       this.npcBar.querySelector('.fill').style.width = `${Math.max(0, mar.hp / mar.maxHp) * 100}%`;
     }

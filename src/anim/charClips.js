@@ -1,4 +1,4 @@
-// Animações próprias do ARNALDO FRITZ, do ANFITRIÃO, do SENHOR VERÍSSIMO (UPD de 2026-10-06) e do AMIGO IMAGINÁRIO.
+// Animações próprias do ARNALDO FRITZ, do ANFITRIÃO, do SENHOR VERÍSSIMO (UPD de 2026-10-06), do AMIGO IMAGINÁRIO e dos MANANCIAIS.
 // Chamado no fim de clips.js (recebe CLIPS e o ajudante k para não criar import circular).
 //   arn_*: ARNALDO — ator + espadachim experiente: guarda de esgrima de lado, mão livre atrás das costas, floreios,
 //          reverências e estocadas em afundo; teatral, mas preciso (não é dança).
@@ -140,6 +140,24 @@ export function addCharClips(CLIPS, k) {
       k(0.8, { ...HLEGS, sp: [-0.22, -0.2, 0.18], hd: [-0.38, -0.1, 0.45], sL: [-2.95, 0, 0.32], eL: [-0.15, 0, 0], sR: [-0.3, 0, -1.25], eR: [-0.3, 0, 0] }),
       k(1, HOST),
     ] },
+  });
+
+  // ======================= MANANCIAIS (invocação do Ferreiro) =======================
+  // man_*: enlouquecidos nas salas brancas — curvados, cabeça tombada, braços soltos; correm aos trancos e arranham
+  // desesperados com as duas mãos
+  const MAN = { h: -0.1, hip: [0, 0, 0], sp: [0.35, 0, 0.12], hd: [0.25, 0, 0.35], sL: [-0.2, 0, 0.12], eL: [-0.2, 0, 0], sR: [-0.25, 0, -0.1], eR: [-0.3, 0, 0], lL: [-0.15, 0, 0.1], kL: [0.35, 0, 0], lR: [0.15, 0, -0.1], kR: [0.3, 0, 0] };
+  const manRun = (s1) => ({ ...MAN, h: -0.16, sp: [0.6, 0, s1 * 0.12], hd: [0.1, 0, -s1 * 0.25], sL: [-0.6 - s1 * 0.6, 0, 0.3], eL: [-0.4, 0, 0], sR: [-0.6 + s1 * 0.6, 0, -0.3], eR: [-0.4, 0, 0], lL: [-0.8 * s1, 0, 0.05], kL: [s1 > 0 ? 0.3 : 1.2, 0, 0], lR: [0.8 * s1, 0, -0.05], kR: [s1 > 0 ? 1.2 : 0.3, 0, 0] });
+  const scratchUp = { ...MAN, h: -0.04, sp: [0.05, 0, 0], hd: [-0.2, 0, 0.1], sL: [-2.6, 0, 0.5], eL: [-0.8, 0, 0], sR: [-2.6, 0, -0.5], eR: [-0.8, 0, 0] };
+  const scratchDown = { ...MAN, h: -0.22, sp: [0.8, 0, 0], hd: [0.3, 0, 0], sL: [-1.1, -0.3, 0.1], eL: [-0.2, 0, 0], sR: [-1.1, 0.3, -0.1], eR: [-0.2, 0, 0], lL: [-0.6, 0, 0.1], kL: [0.7, 0, 0] };
+  Object.assign(CLIPS, {
+    man_idle: { dur: 1.6, loop: true, keys: [k(0, MAN), k(0.3, { ...MAN, hd: [0.3, 0.15, 0.45] }), k(0.36, { ...MAN, hd: [0.2, -0.1, 0.2] }), k(0.7, { ...MAN, h: -0.13, sp: [0.4, 0, 0.16] }), k(1, MAN)] },
+    man_run: { dur: 0.55, loop: true, keys: [k(0, manRun(1)), k(0.5, manRun(-1)), k(1, manRun(1))] },
+    // arranhão: as duas mãos sobem e descem rasgando
+    man_scratch: { dur: 0.4, keys: [k(0, MAN), k(0.35, scratchUp), k(0.6, scratchDown), k(1, MAN)] },
+    // agarra e puxa
+    man_grab: { dur: 0.42, keys: [k(0, MAN), k(0.3, { ...MAN, sp: [0.1, 0, 0], sL: [-1.4, -0.4, 0.4], eL: [-0.2, 0, 0], sR: [-1.4, 0.4, -0.4], eR: [-0.2, 0, 0] }), k(0.55, { ...MAN, h: -0.2, sp: [0.7, 0, 0], hd: [0.4, 0, 0], sL: [-1.5, 0.2, 0.1], eL: [-1.4, 0, 0], sR: [-1.5, -0.2, -0.1], eR: [-1.4, 0, 0], lL: [-0.7, 0, 0.1], kL: [0.8, 0, 0] }), k(1, MAN)] },
+    // se joga em cima, de cabeça
+    man_lunge: { dur: 0.46, keys: [k(0, MAN), k(0.3, { ...MAN, h: -0.25, sp: [0.9, 0, 0], hd: [0.1, 0, 0], ...{ sL: [0.6, 0, 0.4], sR: [0.6, 0, -0.4] }, kL: [1.0, 0, 0], kR: [1.0, 0, 0] }), k(0.55, { ...MAN, h: -0.05, sp: [1.0, 0, 0], hd: [-0.2, 0, 0], sL: [-1.7, 0, 0.3], eL: [-0.3, 0, 0], sR: [-1.7, 0, -0.3], eR: [-0.3, 0, 0], lL: [-1.0, 0, 0.1], kL: [0.4, 0, 0], lR: [0.6, 0, -0.1], kR: [0.2, 0, 0] }), k(1, MAN)] },
   });
 
   // ======================= AMIGO IMAGINÁRIO =======================

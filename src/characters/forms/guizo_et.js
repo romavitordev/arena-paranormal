@@ -29,7 +29,7 @@ export default {
     identity: 'Distorcer Aparência (até o fim do round)',
     tagline: 'Eu sou o que eu sempre quis encontrar!',
   },
-  stats: { moveSpeed: 8.3, maxHealth: 1060 }, // cabe a vida extra do disfarce (+80)
+  stats: { moveSpeed: 8.3, maxHealth: 1580 }, // cabe a vida extra da transformação
   chargeFx: { style: 'default', color: GREEN },
   melee: {
     ...M,

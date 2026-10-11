@@ -22,6 +22,7 @@ export default {
   model: 'anfitriao',
   color: '#b04aff',
   element: 'energia',
+  hpBar: { style: 'energy' }, // barra de vida de Portador (Energia), sem número
   energyColor: PURPLE,
   unarmed: true,
   info: {
@@ -30,7 +31,7 @@ export default {
     identity: 'Forma O Anfitrião (até o fim do round)',
     tagline: 'Bem-vindos ao meu jogo. As regras? Vocês vão lembrar delas.',
   },
-  stats: { moveSpeed: 8.6, attackSpeed: 1.1, maxHealth: 1060 }, // cabe a vida extra da Relíquia (+60)
+  stats: { moveSpeed: 8.6, attackSpeed: 1.1, maxHealth: 1800 }, // Portador transformado: aguenta mais que o elenco (o número não aparece na tela)
   anims: { idle: 'idle_host', run: 'run', charge: 'charge', victory: 'vic_anfitriao', block: 'block' },
   quirks: true, // manias do Anfitrião (chaos.js tickHostQuirks): cabeça torta, risadas, tique-taque, passos que "pulam"
   chargeFx: { style: 'default', color: PURPLE },

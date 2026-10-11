@@ -18,7 +18,7 @@ const GOLD = 0xe8c860; // Conhecimento
 const BLADE = 0xd8cfc4;
 
 export const GUIZO_KIT = {
-  stats: { moveSpeed: 8.2, maxHealth: 980 }, // ocultista: rápido e frágil
+  stats: { moveSpeed: 8.2 },
   anims: { idle: 'idle_guizo', run: 'run', charge: 'charge', victory: 'vic_guizo', block: 'block' },
   // a câmera fica na mão esquerda; ao atacar vai para o quadril (pendurada na alça) e a mão fica livre
   grip: { prop: 'camera', stow: 'hip', bothHands: false },

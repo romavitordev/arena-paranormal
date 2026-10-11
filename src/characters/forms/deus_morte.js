@@ -1,17 +1,17 @@
 // O DEUS DA MORTE (Relíquia de Morte no corpo do Ferreiro). Não aparece na seleção: o Ferreiro vira o Deus da Morte se
-// morrer durante o Pacto do Santo. CHEFE: o dobro do tamanho, barra de vida preta no centro da tela, fraco contra
+// morrer durante o Pacto do Santo. CHEFE: o dobro do tamanho, barra de vida própria (Portador transformado: cinza e cinzas de Morte), fraco contra
 // FOGO e ENERGIA (os Luzidios renegam a Energia, até o fogo), regenera de tempo em tempo e não fica preso em combos.
 // Habilidades do cânone: Espiral Descendente, Controlar Mortos, Senhor do Tempo e Regeneração.
 export default {
   id: 'deus_morte',
   form: true,
   baseId: 'ferreiro',
-  boss: true,
   name: 'O DEUS DA MORTE',
   model: 'deus_morte',
   color: '#2a2632',
   origin: 'Relíquia de Morte',
   element: 'morte',
+  hpBar: { style: 'death' }, // barra de vida de Portador (Morte), sem número
   energyColor: 0x6a6670,
   info: {
     weapon: 'Punhos de Lodo',
@@ -19,7 +19,7 @@ export default {
     identity: 'Forma de chefe do Ferreiro (morreu durante o Pacto do Santo)',
     tagline: 'É possível destruir a própria Morte?',
   },
-  stats: { moveSpeed: 5.4, size: 2, maxHealth: 850 }, // última resistência, não uma luta nova
+  stats: { moveSpeed: 5.4, size: 2, maxHealth: 1800 }, // Portador transformado: aguenta mais que o elenco (o número não aparece na tela)
   weakTo: { fire: 1.5, energia: 1.5 },
   regen: { every: 7, amount: 45, color: 0x0a080c },
   poise: { hits: 3 },
@@ -65,6 +65,18 @@ export default {
   },
 
   abilities: [
+    {
+      // o Carniçal Preto da Morte (O Segredo na Floresta): o Símbolo Espiral num crânio dá corpo à Morte
+      id: 'carnical',
+      name: 'O Carniçal',
+      input: 'carga+ranged', // △ → □ / Y → X
+      type: 'summonCarnical',
+      description: 'Do Lodo sobe O CARNIÇAL PRETO DA MORTE (só um por vez) e caça o adversário por 18 s: Garra da Morte, Pancada Poderosa que joga longe, o salto e a Hipnose Espiral que paralisa. Imune a TIROS (Corpo Fechado); ferido, perde a compostura e ataca sem parar.',
+      energyCost: 40,
+      cooldown: 28,
+      duration: 18,
+      hp: 380, // invocado é mais fraco que um Carniçal de verdade
+    },
     {
       id: 'espiralDescendente',
       name: 'Espiral Descendente',

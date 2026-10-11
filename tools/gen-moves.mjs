@@ -35,7 +35,7 @@ let md = `# Habilidades — Arena Paranormal
 
 > Gerado automaticamente a partir de \`src/characters/\` (\`npm run moves\`). Não edite à mão.
 
-**Regras gerais:** vida ${COMBAT.maxHealth} · energia ${COMBAT.maxEnergy} (começa em ${COMBAT.startEnergy}, +${COMBAT.energyRegen}/s, +${COMBAT.chargeRate}/s segurando a Carga de Poder) ·
+**Regras gerais:** vida igual para todos (os Portadores das Relíquias aguentam mais — Ferreiro e Arnaldo só transformados; a vida não mostra número) · energia ${COMBAT.maxEnergy} (começa em ${COMBAT.startEnergy}, +${COMBAT.energyRegen}/s, +${COMBAT.chargeRate}/s segurando a Carga de Poder) ·
 especial = Carga → Carga → ○ (custa ${COMBAT.specialEnergyCost}, ofensivos causam ${COMBAT.specialDamage}, nunca hitkill).
 
 **Defesa:** segurar R2/RT parado (defende até especiais, menos o Inexistir); andando com a defesa você se move mais rápido, mas fica aberto. Passa ${COMBAT.block.meleeChip * 100}% do dano físico e ${COMBAT.block.rangedChip * 100}% do resto, gasta a resistência

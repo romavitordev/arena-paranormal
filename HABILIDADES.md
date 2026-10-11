@@ -2,7 +2,7 @@
 
 > Gerado automaticamente a partir de `src/characters/` (`npm run moves`). Não edite à mão.
 
-**Regras gerais:** vida 1000 · energia 100 (começa em 30, +2.5/s, +32/s segurando a Carga de Poder) ·
+**Regras gerais:** vida igual para todos (os Portadores das Relíquias aguentam mais — Ferreiro e Arnaldo só transformados; a vida não mostra número) · energia 100 (começa em 30, +2.5/s, +32/s segurando a Carga de Poder) ·
 especial = Carga → Carga → ○ (custa 50, ofensivos causam 250, nunca hitkill).
 
 **Defesa:** segurar R2/RT parado (defende até especiais, menos o Inexistir); andando com a defesa você se move mais rápido, mas fica aberto. Passa 15% do dano físico e 35% do resto, gasta a resistência
@@ -759,7 +759,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 - **Punhal X** — △ + ○ / Y + B · custo 20 · cooldown 10 s · dano 38 · alcance 1.9 m
   Avança com o Punhal X num corte em X: quem é acertado fica CEGO por um instante — não consegue se defender nem se virar, e fica desprevenido.
 - **Shhh...** — △ + □ / Y + X · custo 20 · cooldown 12 s
-  Leva o dedo aos lábios e some nas sombras (4 s): quase invisível e mais rápida, o adversário perde o rastro dela. O primeiro ataque sai do escuro e pega o alvo DESPREVENIDO. Tomar dano a revela.
+  Leva o dedo aos lábios e some nas sombras (4 s): quase invisível e mais rápida, o adversário perde o rastro dela. O primeiro ataque sai do escuro e pega o alvo DESPREVENIDO. Sem rastro: especiais que grudam no alvo e projéteis teleguiados NÃO a acham. Tomar dano a revela.
 - **Assassinato Furtivo** — △ + L2 / Y + LT · custo 25 · cooldown 10 s
   Some e surge pelas costas do alvo já apunhalando: ele fica desprevenido e o golpe entra com o bônus de assassina.
 - **Zona dos Sussurros** — R2 + △ / RT + Y · custo 25 · cooldown 18 s
@@ -944,7 +944,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 - **Transportar pelo Sangue** — R2 + × / RT + A · custo 20 · cooldown 8 s
   Afunda no sangue e sai pela poça mais perto do adversário (ou por uma fenda atrás dele). Se o adversário estiver colado, é ARRASTADO junto e cuspido no chão de outra poça.
 - **Senhor do Sangue** — △ + ○ / Y + B · custo 30 · cooldown 22 s
-  Abre poças de sangue perto do adversário e delas sobe uma horda que luta pelo Diabo por 12 s: 1 a 3 Zumbis de Sangue fracos, ou 2 fracos e 1 forte.
+  Abre poças de sangue perto do adversário e delas sobem 1 ou 2 Zumbis de Sangue PEQUENOS que lutam pelo Diabo por 12 s. Transformado (Portador do Trono), o Zumbi GRANDE vem junto.
 - **Sangue nos Arredores** — △ + L2 / Y + LT · custo 30 · cooldown 16 s · dano 24
   O chão em volta jorra sangue em 4 ondas: dano, lentidão, e o Diabo bebe 50% do sangue derramado. Deixa poças de sangue em volta.
 
@@ -954,7 +954,7 @@ O alvo fica transtornado por 9 s: não defende e recebe mais dano; o Diabo se cu
 
 ### Transformação: Renascimento
 
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → transforma no Diabo até o fim do round (+150 de vida).
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → transforma no Diabo até o fim do round (+300 de vida).
 
 ---
 
@@ -1085,6 +1085,8 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 - **Hipnose Espiral** — △ + ○ / Y + B · custo 25 · cooldown 22 s · alcance 10 m
   A espiral do Parasita de Dimensões: o Lodo desenha uma espiral no chão e o alvo anda em círculos até o centro (perto do Ferreiro), sem conseguir defender; lá fica parado, hipnotizado.
+- **Chamar os Mananciais** — △ + □ / Y + X · custo 35 · cooldown 24 s
+  Três MANANCIAIS (os filhos do Ferreiro, presos nas salas brancas para alimentar o Santo) sobem do Símbolo Espiral em volta do adversário e lutam por ele por 10 s — enlouquecidos, arranham, agarram e se jogam em cima. Quando um morre, a sirene de Santo Berço toca e o Ferreiro recupera sanidade.
 - **Espada Consumidora** — R2 + × / RT + A · custo 20 · cooldown 16 s
   Desperta a espada amaldiçoada: por alguns segundos cada corte abre um ferimento que consome o alvo.
 - **Conforto de Santo Berço** — R2 + △ / RT + Y · custo 25 · cooldown 24 s
