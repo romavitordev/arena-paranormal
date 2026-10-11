@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.19.1';
+export const VERSION = '3.20.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,15 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.20.0',
+    date: '2026-10-11',
+    title: 'O Amigo Imaginário',
+    items: [
+      'Novo lutador nos Portadores das Relíquias: o AMIGO IMAGINÁRIO, "A Obra de Arte Perfeita", o chefe de O Segredo na Ilha — elemento TINTA. Curvado, de capuz alto e pontudo fundido ao corpo, espinhos nas costas, o manto rasgado até o chão, tentáculos negros, braços secos de garras e o buraco no lugar do rosto de onde a tinta escorre sem parar.',
+      'Kit da wiki: garras e chicotes de tentáculo de longe; o TENTÁCULO (□) que prende e puxa; DERRETER (a tinta despejada no rosto); TENTÁCULOS QUE PRENDEM; O SINO (paralisa quem estiver por perto, em qualquer direção); DISSOLVER (recupera vida). Especial: TODO MUNDO VAI MORRER. Transformação: FRENESI DE SANGUE (ferido, fica rápido e furioso).',
+    ],
+  },
   {
     v: '3.19.1',
     date: '2026-10-11',

@@ -2,6 +2,10 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.20.0 — O Amigo Imaginário
+- Novo lutador nos Portadores das Relíquias: o AMIGO IMAGINÁRIO, "A Obra de Arte Perfeita", o chefe de O Segredo na Ilha — elemento TINTA. Curvado, de capuz alto e pontudo fundido ao corpo, espinhos nas costas, o manto rasgado até o chão, tentáculos negros, braços secos de garras e o buraco no lugar do rosto de onde a tinta escorre sem parar.
+- Kit da wiki: garras e chicotes de tentáculo de longe; o TENTÁCULO (□) que prende e puxa; DERRETER (a tinta despejada no rosto); TENTÁCULOS QUE PRENDEM; O SINO (paralisa quem estiver por perto, em qualquer direção); DISSOLVER (recupera vida). Especial: TODO MUNDO VAI MORRER. Transformação: FRENESI DE SANGUE (ferido, fica rápido e furioso).
+
 ## v3.19.1 — Transmissão e Tortura Mental
 - Novos elementos dos Sinos de Tenebris: TRANSMISSÃO (verde) e TINTA (marrom). Ficam fora do ciclo de vantagens.
 - O ESTRANGEIRO agora é de TRANSMISSÃO, e a ultimate virou a TORTURA MENTAL — a cena do fim de Sinais do Outro Lado com o Xande: ele PARALISA o adversário, CONTROLA os movimentos dele e o faz se BATER três vezes, o força a AJOELHAR, APAGA AS MEMÓRIAS (esquece os rituais — todas as recargas voltam ao máximo — e perde a sanidade) e o derrete com o TOQUE SUTIL. Dá para esquivar no aviso.

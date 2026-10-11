@@ -24,6 +24,7 @@ export const CHARACTER_NAMES = {
   o_diabo: 'O Diabo',
   magistrada: 'A Magistrada',
   estrangeiro: 'O Estrangeiro',
+  amigo: 'Amigo Imaginário',
 };
 
 export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto', jae_x: 'jae', colosso: 'dalmo', guizo_et: 'guizo', kian_calamidade: 'kian', juan_odio: 'juan', guizo_bombado: 'guizo', guizo_velho: 'guizo' };
@@ -54,6 +55,7 @@ const INTRO_HOOKS = {
   o_diabo: 'um pacto',
   magistrada: 'a Máscara do Desespero',
   estrangeiro: 'o sinal',
+  amigo: 'o sino',
 };
 
 const INTRO_OPENERS = {
@@ -81,6 +83,7 @@ const INTRO_OPENERS = {
   o_diabo: (other, hook) => `${other}... eu sei o que você quer. Vim te oferecer ${hook}. O preço a gente discute depois.`,
   magistrada: (other, hook) => `${other}. Eu já sei por que você veio. ${hook[0].toUpperCase() + hook.slice(1)} lembra de tudo.`,
   estrangeiro: (other, hook) => `${other}... você ouviu ${hook}. Agora não consegue mais deixar de ouvir.`,
+  amigo: (other, hook) => `(${hook} ecoa de dentro da criatura) ...${other}... quer brincar... no quadro?`,
 };
 
 const INTRO_REPLIES = {
@@ -108,6 +111,7 @@ const INTRO_REPLIES = {
   o_diabo: (other, hook) => `${hook}? Que gracinha, ${other}. Todo mundo traz alguma coisa. Ninguém traz o suficiente.`,
   magistrada: (other, hook) => `${hook}... Saber tudo tem um preço, ${other}. Você ainda não pagou o seu.`,
   estrangeiro: (other, hook) => `${hook}. Interessante, ${other}. Amanhã você não vai lembrar desta conversa.`,
+  amigo: (other, hook) => `(a tinta pinga no chão) ...${hook} já tocou, ${other}... ninguém lembra de quando parou.`,
 };
 
 const INTRO_EXCHANGES = {
@@ -1967,6 +1971,61 @@ const VICTORY_ESTRANGEIRO = {
 };
 for (const [w, m] of Object.entries(VICTORY_ESTRANGEIRO)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
 
+// O AMIGO IMAGINÁRIO (Portadores das Relíquias): falas de vitória dele (sussurros) e de cada um contra ele
+const VICTORY_AMIGO = {
+  amigo: {
+    kaiser: ['...a névoa ficou marrom...', '(o sino toca baixinho) ...mais um quadro...'],
+    arthur: ['...sangue e tinta... a mesma cor no escuro...', '...um braço... no quadro, tem dois...'],
+    joui: ['...rápido... mas a tinta é mais...', '...o rosto dele derreteu bonito...'],
+    aghata: ['...o colar ficou sujo de tinta...', '...ela leu o quadro... e o quadro leu ela...'],
+    dante: ['...a Morte também escorre...', '...o lodo e a tinta... amigos...'],
+    erin: ['...barulho... o sino é mais alto...', '...explodiu... e escorreu...'],
+    gal_sal: ['...as correntes enferrujam na tinta...', '...justiça... derretida...'],
+    kian: ['...ele sabia... e veio mesmo assim...', '...escrita... e pintura...'],
+    aguiar: ['...o caçador virou a caça do quadro...', '...a máscara também derrete...'],
+    labirinto: ['...o labirinto tem saída... o quadro não...', '...corredores de tinta...'],
+    xande: ['...o skate parou...', '...ele quis proteger todo mundo... todo mundo vai morrer...'],
+    lirio: ['...a parede também escorre...', '...a marreta afundou na tinta...'],
+    ferreiro: ['...a Morte... e o Sangue... juntos em mim...', '...Santo Berço vai ter um quadro novo...'],
+    dalmo: ['...grande... e derretendo...', '...a plateia ficou quieta...'],
+    jae: ['...shh... o sino não faz shh...', '...ela se escondeu... a tinta achou...'],
+    kemi: ['...uma bala... não mata um quadro...', '...a mira embaçou de tinta...'],
+    juan: ['...ele gosta de sangue... eu tenho...', '...um novo começo... pintado...'],
+    balu: ['...grande... e quieto agora...', '...ele riu... depois não riu mais...'],
+    arnaldo: ['...o espetáculo... virou quadro...', '...aplausos... e o sino...'],
+    verissimo: ['...relatório... manchado de tinta...', '...olhos abertos... derretidos...'],
+    guizo: ['...a câmera gravou o sino...', '...o vídeo ficou marrom...'],
+    o_diabo: ['...pacto... com tinta não se assina...', '...o vermelho dele... e o meu...'],
+    magistrada: ['...ela sabia tudo... menos o quadro...', '...a máscara escorre...'],
+    estrangeiro: ['...o sinal... e o sino...', '...outro Sino... outro irmão...'],
+  },
+  kaiser: { amigo: ['Nada de quadro pra mim hoje.', 'A névoa leva até a tinta embora.'] },
+  arthur: { amigo: ['Acabou. E eu não vou virar pintura.', 'Pinta isso: você no chão.'] },
+  joui: { amigo: ['Rápido demais pra virar quadro.', 'O sino parou.'] },
+  aghata: { amigo: ['Registrado: criatura de Tinta. Página nova.', 'O grimório tem o seu nome agora.'] },
+  dante: { amigo: ['A peça terminou e o quadro ficou em branco.', 'Que coisa feia. Mas caiu.'] },
+  erin: { amigo: ['Boom! Tinta pra todo lado!', 'Explodi uma pintura! Anota!'] },
+  gal_sal: { amigo: ['Sentença dada. Até para quadros.', 'Justiça também alcança o que não tem rosto.'] },
+  kian: { amigo: ['Eu previ que você ia escorrer.', 'Sem rosto, sem futuro.'] },
+  aguiar: { amigo: ['Ha ha... um troféu que pinga.', 'Peguei a obra de arte.'] },
+  labirinto: { amigo: ['Nem a tinta acha a saída.', 'Perdido nos meus corredores.'] },
+  xande: { amigo: ['O sino parou! Ninguém morreu!', 'Por eles. Sempre por eles.'] },
+  lirio: { amigo: ['A parede ficou de pé, bicho!', 'Leonora não tem medo de quadro.'] },
+  ferreiro: { amigo: ['A Morte pesa mais que a tinta.', 'Santo Berço não guarda quadros.'] },
+  dalmo: { amigo: ['Aí sim, neném! Derrubei a pintura!', 'Grande você. Maior eu.'] },
+  jae: { amigo: ['Shh. O sino parou.', 'Até um quadro cala.'] },
+  kemi: { amigo: ['Um tiro no buraco do rosto.', 'Contrato fechado. Obra destruída.'] },
+  juan: { amigo: ['Ha! Seu sangue é tinta!', 'Que obra horrível. Adorei.'] },
+  balu: { amigo: ['Hahaha! Que bicho estranho! Pintou o chão todo!', 'Ê, rapaz! Derreteu foi você!'] },
+  arnaldo: { amigo: ['Que cenário! Mas o protagonista sou eu.', 'Cortina! E leva esse quadro daqui.'] },
+  verissimo: { amigo: ['Criatura de Tinta neutralizada. Relatório amanhã.', 'Olhos abertos. Até para o que não tem olhos.'] },
+  guizo: { amigo: ['EU DERRUBEI O AMIGO IMAGINÁRIO! TÁ GRAVADO!', 'Ninguém vai acreditar nesse vídeo!'] },
+  o_diabo: { amigo: ['Sangue de verdade vence sangue pintado.', 'Uma obra bonita. Sem pacto.'] },
+  magistrada: { amigo: ['O Equilíbrio também vale para quadros.', 'A Máscara lembra de você. Ninguém mais.'] },
+  estrangeiro: { amigo: ['Interessante. Outro Sino. Igualmente frágil.', 'Ninguém vai lembrar desta pintura.'] },
+};
+for (const [w, m] of Object.entries(VICTORY_AMIGO)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
+
 export const VICTORY_FALLBACKS = {
   kaiser: 'A névoa não escolheu por mim. Desta vez, eu fiquei.',
   arthur: 'Acabou. Agora posso garantir que ninguém mais se machuque.',
@@ -1992,6 +2051,7 @@ export const VICTORY_FALLBACKS = {
   o_diabo: 'Assinado. Ninguém lê as letras miúdas.',
   magistrada: 'O Equilíbrio foi mantido. Tá tudo tão quieto agora.',
   estrangeiro: 'Ninguém vai lembrar disto.',
+  amigo: '...mais um quadro na igreja...',
 };
 
 export const BATTLE_DIALOGUES = {
@@ -2020,6 +2080,7 @@ export const BATTLE_DIALOGUES = {
     o_diabo: 'Sangue derramado é sangue que eu bebo. Continue.',
     magistrada: 'Eu já vi este momento. Ele não termina aqui.',
     estrangeiro: 'Dor. Um conceito tão local.',
+    amigo: '(o sino toca mais rápido)',
     anfitriao: 'Essa dor combina com você. Não sei por quê; combina.',
   },
   special: {
@@ -2047,6 +2108,7 @@ export const BATTLE_DIALOGUES = {
     o_diabo: 'Eu vim te oferecer um pacto.',
     magistrada: 'Venha. Aqui ficam só nós dois.',
     estrangeiro: 'O que é pior do que a Dor e a Morte?',
+    amigo: '...todo mundo vai morrer...',
     anfitriao: 'Eu ia deixar você sair andando. Aí você me olhou com essa cara.',
   },
   transform: {
@@ -2090,6 +2152,7 @@ export const BATTLE_REPLIES = {
     o_diabo: 'Ferido, eu fico com mais fome.',
     magistrada: 'Isso também estava escrito.',
     estrangeiro: 'Persistente. Para a sua espécie.',
+    amigo: '...a tinta não acaba...',
     anfitriao: 'Sua coragem é comovente. Quase tanto quanto essa estratégia.',
   },
   special: {
@@ -2117,6 +2180,7 @@ export const BATTLE_REPLIES = {
     o_diabo: 'Que oferta generosa. Eu aceito... e cobro depois.',
     magistrada: 'As sombras não prendem quem as conhece.',
     estrangeiro: 'Interessante. Repita.',
+    amigo: '...ainda não derreteu...',
     anfitriao: 'Vai, capricha. Quero uma história boa pra contar quando você cair.',
   },
   transform: {
@@ -2144,6 +2208,7 @@ export const BATTLE_REPLIES = {
     o_diabo: 'Mudou de pele. O desejo é o mesmo.',
     magistrada: 'Uma nova forma. O Equilíbrio é o mesmo.',
     estrangeiro: 'Mudou de forma. A mente continua aberta.',
+    amigo: '...outro rosto... para derreter...',
     anfitriao: 'Isso era pra me assustar? Eu já vi coisa mais convincente no espelho.',
   },
 };

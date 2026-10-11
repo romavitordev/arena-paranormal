@@ -1,5 +1,10 @@
 # Changelog
 
+## v3.20.0 — 2026-10-11
+
+### Adicionado
+- Lutador `amigo` (`src/characters/amigo.js`, `tools/blender/char_amigo.py`, clips `ai_idle` e `vic_amigo`): elemento `tinta`, `drips` no socket da boca, falas completas.
+
 ## v3.19.1 — 2026-10-11
 
 ### Adicionado

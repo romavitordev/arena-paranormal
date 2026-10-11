@@ -1,5 +1,28 @@
 # Registro administrativo de alterações
 
+## v3.20.0 — O Amigo Imaginário
+
+- Versão: `VERSION` 3.19.1 → **3.20.0**.
+
+- **O Amigo Imaginário** (pedido: "comece a fazer o amigo imaginário de segredo na ilha"; elemento Tinta, marrom).
+  Wiki "Amigo Imaginário" (arte da cinematic do corpo e a miniatura de perfil): 2 m, curvado para a frente, coluna
+  retorcida com espinhos, capuz enorme e pontudo fundido ao corpo e rasgado em tiras até o chão, tentáculos negros,
+  braços secos e escuros de garras, sem rosto (o buraco de onde escorre a tinta marrom).
+  - Modelo `char_amigo.py`: capuz em `grid` que se projeta para a frente como um bico e, embaixo, se FUNDE aos ombros
+    (a primeira versão deixava o capuz solto e um buraco no alto do manto); a borda do rosto em dentes de pano; o
+    material do rosto escuro (sem textura ficava branco dentro do capuz); fios de tinta pendurados do rosto
+    (`ink_amigo`) + `drips` no socket da boca em código; fileira de espinhos da nuca pelas costas; manto até o chão
+    com a barra recortada em pontas; 40 tiras e 9 tentáculos pelo chão; braços com garras. Clip `ai_idle` (curvado).
+  - Kit (elemento `tinta`): garras (`db_*`) e chicotes de tentáculo (`wave_punch`, 3,8 m); □ "Tentáculo" (`chainHook`
+    que prende e puxa — o Agarrão da wiki); Derreter (`deathTouch`); Tentáculos que Prendem (`veinChains`); O Sino
+    (`fearGaze` em 360°, 6 m); Dissolver (`healOverTime` 90); especial Todo Mundo Vai Morrer (`cinematicCombo`
+    com `approach: 'chain'`); despertar Frenesi de Sangue (`awakenMode`: +20%, 1,3× velocidade, sangramento);
+    passiva `lifesteal` 0,06. Vida 1100, tamanho 1,15, velocidade 7,0 (o Lírio continua o mais lento: 6,9).
+  - Testado em luta: Derreter 57, Tentáculos 32, Dissolver cura 90, O Sino atordoa até quem está atrás, especial 216,
+    Frenesi ativa. Falas: aberturas sussurradas ("o sino ecoa de dentro da criatura"), `VICTORY_AMIGO` com todo o
+    elenco, vida baixa / especial / reação.
+  - Agarrão: o do Diabo (garras). Os Portadores agora têm 6 (página 2: Mascarados + Portadores = 12 cartões).
+
 ## v3.19.1 — Transmissão e Tortura Mental
 
 - Versão: `VERSION` 3.19.0 → **3.19.1**.

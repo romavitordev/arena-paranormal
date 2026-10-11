@@ -1147,3 +1147,49 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 ### Transformação: Incubar
 
 Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +15% de dano, −12% de dano recebido, +10% de velocidade, recargas 30% mais rápidas, cura 10% na hora.
+
+---
+
+## AMIGO IMAGINÁRIO
+
+*A Obra de Arte Perfeita: quando o Sino tocar, a criatura vai retornar* · arma: Garras secas, tentáculos e a tinta que escorre do rosto
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Garra seca | 30 | 2.4 m |  |
+| ○ 2 | Garra seca | 30 | 2.4 m |  |
+| ○ 3 | Chicote de tentáculo | 34 | 3.8 m |  |
+| ○ 4 | Dez garras | 42 (2 acertos) | 2.5 m |  |
+| ○ 5 | Rasgar o quadro | 64 | 2.6 m | finalizador: lança |
+| Frente + ○ | Avanço da criatura | 38 | 2.6 m |  |
+| Trás + ○ | Recua e chicoteia | 34 | 3.8 m | invulnerável no começo |
+| Lado + ○ | Varredura de tentáculos | 32 | 3 m |  |
+| No ar + ○ | Desabar | 38 | 2.5 m | desce com impacto |
+| ↑ + ○ (no combo) | Erguer pelos tentáculos | 42 | 2.6 m | finalizador: lança alto (combo aéreo) |
+| ↓ + ○ (no combo) | Esmagar | 48 | 2.5 m | finalizador: derruba |
+
+### Principal (□ / X): Tentáculo
+
+- Dano 26 · alcance 14 m · cooldown 5.5 s · custo 15
+- Prende e puxa o inimigo para 1.6 m, abrindo 0.7 s para combar
+
+### Habilidades
+
+- **Derreter** — △ + ○ / Y + B · custo 35 · cooldown 22 s · dano 44 · alcance 1.8 m
+  Aproxima o buraco do rosto e DESPEJA a tinta na cara da vítima: o rosto derrete — dano contínuo, lentidão e o alvo fica mais fraco por alguns segundos. Curto alcance; dá para esquivar.
+- **Tentáculos que Prendem** — △ + □ / Y + X · custo 25 · cooldown 13 s · dano 32 · alcance 12 m
+  Os tentáculos saem do chão debaixo do alvo e o prendem por um instante.
+- **O Sino** — R2 + △ / RT + Y · custo 25 · cooldown 16 s · alcance 6 m
+  O SINO toca dentro da criatura: quem estiver por perto, em qualquer direção, sente a mente falhar e fica paralisado por um instante.
+- **Dissolver** — △ + L2 / Y + LT · custo 30 · cooldown 24 s
+  Absorve a tinta derramada em volta e se recompõe: recupera vida em instantes.
+
+### Especial: Todo Mundo Vai Morrer
+
+250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: Frenesi de Sangue
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +20% de dano (físico, habilidades), −15% de dano recebido, +30% de velocidade, todo golpe sangra, cura 12% na hora.

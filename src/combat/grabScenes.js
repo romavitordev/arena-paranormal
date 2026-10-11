@@ -196,5 +196,6 @@ GRAB_SCENES.magistrada = GRAB_SCENES.arnaldo; // a bengala em esgrima, como a es
 GRAB_SCENES.o_diabo = GRAB_SCENES.diabo;
 GRAB_SCENES.guizo_velho = GRAB_SCENES.guizo; // o Guizo velho agarra igual
 GRAB_SCENES.guizo_bombado = GRAB_SCENES.kian; // o bombado agarra no soco
-GRAB_SCENES.estrangeiro = GRAB_SCENES.diabo; // as garras, como as do Diabo // o Diabo dos Portadores agarra como a forma do Juan
+GRAB_SCENES.estrangeiro = GRAB_SCENES.diabo;
+GRAB_SCENES.amigo = GRAB_SCENES.diabo; // garras, como as do Diabo // as garras, como as do Diabo // o Diabo dos Portadores agarra como a forma do Juan
 GRAB_SCENES.juan_odio = GRAB_SCENES.juan; // o Ódio do Diabo agarra como o Juan (as garras no lugar da faca)
