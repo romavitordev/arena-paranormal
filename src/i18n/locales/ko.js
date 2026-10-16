@@ -22,6 +22,8 @@ export default {
   "menu.news.desc": "버전 {v}의 변경 사항.",
   "menu.options": "옵션",
   "menu.options.desc": "대전 시간과 언어.",
+  "menu.about": "게임 소개 / 다운로드",
+  "menu.about.desc": "게임 방법과 PC·모바일 다운로드.",
   "menu.language": "언어",
   "menu.language.desc": "게임 표시 언어를 선택하세요.",
   "title.press": "ENTER, 스페이스 또는 START",

@@ -2,6 +2,12 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.25.0 — Leve a Arena com Você
+- BAIXE O JOGO: o menu principal ganhou SOBRE O JOGO / BAIXAR, uma página que explica como o jogo funciona (modos, sanidade e rituais, defesa e esquiva, especial e Transformação, o elenco e os controles) e tem os downloads para jogar fora do navegador.
+- PC (Windows): instalador .exe — o jogo abre em tela cheia numa janela própria (F11 alterna) e funciona sem internet; o Online / LAN continua precisando de conexão.
+- CELULAR (Android): arquivo .apk com os controles de toque, sempre na horizontal. No iPhone, jogue pelo site e use "Adicionar à Tela de Início".
+- O menu principal ficou um pouco mais compacto para as 10 opções caberem também no celular deitado.
+
 ## v3.24.1 — Último Sacrifício
 - CRISTOPHER — o especial agora se chama POR VOCÊ, FILHO! (as últimas palavras dele em O Segredo na Floresta). A Transformação virou ÚLTIMO SACRIFÍCIO: quanto MENOS vida, MAIS força física — de 25% a 80% a mais nos golpes físicos —, e ele quase não recua, mas a vida escoa de pouco em pouco (começa em 3 por segundo e chega a 5). O sacrifício nunca o derruba sozinho: quem dá o golpe final é sempre o adversário.
 - OPÇÕES: VOLUME do jogo (de 10 em 10, até o mudo) e EFEITOS DE TELA REDUZIDOS, para conforto e fotossensibilidade: sem os clarões de tela cheia e com o tremor de câmera bem mais fraco.

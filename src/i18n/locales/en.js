@@ -22,6 +22,8 @@ export default {
   "menu.news.desc": "What changed in version {v}.",
   "menu.options": "OPTIONS",
   "menu.options.desc": "Match time and language.",
+  "menu.about": "ABOUT / DOWNLOAD",
+  "menu.about.desc": "How the game works and downloads for PC and mobile.",
   "menu.language": "LANGUAGE",
   "menu.language.desc": "Choose the game display language.",
   "title.press": "PRESS ENTER, SPACE OR START",

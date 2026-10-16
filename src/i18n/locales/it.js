@@ -22,6 +22,8 @@ export default {
   "menu.news.desc": "Cosa è cambiato nella versione {v}.",
   "menu.options": "OPZIONI",
   "menu.options.desc": "Durata dello scontro e lingua.",
+  "menu.about": "INFO / SCARICA",
+  "menu.about.desc": "Come funziona il gioco e il download per PC e cellulare.",
   "menu.language": "LINGUA",
   "menu.language.desc": "Scegli la lingua del gioco.",
   "title.press": "PREMI INVIO, SPAZIO O START",

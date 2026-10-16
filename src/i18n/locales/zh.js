@@ -22,6 +22,8 @@ export default {
   "menu.news.desc": "版本 {v} 的改动。",
   "menu.options": "选项",
   "menu.options.desc": "对战时间和语言。",
+  "menu.about": "关于 / 下载",
+  "menu.about.desc": "游戏玩法介绍，以及电脑版和手机版下载。",
   "menu.language": "语言",
   "menu.language.desc": "选择游戏显示语言。",
   "title.press": "按 ENTER、空格键或 START",

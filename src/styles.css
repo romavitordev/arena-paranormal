@@ -411,9 +411,9 @@ table.moves td span { display: block; color: var(--muted); font-size: 12px; marg
   #home.menu-on .logo { position: absolute; top: 6vh; left: 5vw; transform: scale(.42); transform-origin: left top; text-align: left; margin: 0; }
   #home.menu-on .logo .elements { justify-content: flex-start; }
   #home.menu-on .logo .elements .ln:first-child { display: none; }
-  #home.menu-on .menu-home { position: absolute; left: 5vw; top: 31vh; margin: 0; align-items: flex-start; min-width: 380px; gap: 2px;
+  #home.menu-on .menu-home { position: absolute; left: 5vw; top: 27vh; margin: 0; align-items: flex-start; min-width: 380px; gap: 2px;
     padding: 18px 0 18px; background: linear-gradient(90deg, rgba(6,4,10,.82), rgba(6,4,10,.55) 70%, transparent); border-left: 2px solid rgba(164,107,255,.45); }
-  #home.menu-on .hopt { text-align: left; padding: 7px 26px; font-size: 30px; background: none; border: 0; }
+  #home.menu-on .hopt { text-align: left; padding: 6px 26px; font-size: clamp(24px, 3.9vh, 30px); background: none; border: 0; }
   #home.menu-on .hopt.on { letter-spacing: .14em; background: linear-gradient(90deg, rgba(120,70,190,.55), transparent); box-shadow: inset 3px 0 0 #c9a8ff; }
   #home.menu-on .hdesc { text-align: left; padding: 0 26px; max-width: 380px; font-size: 13px; color: #b9aed0; }
 }
@@ -618,10 +618,10 @@ body.touch-capable #select { padding-top: max(58px, calc(env(safe-area-inset-top
   #home .logo .kicker, #home .logo .tag { font-size: 10px; letter-spacing: .2em; margin-top: 2px; }
   #home.menu-on .logo { transform: scale(.7); margin-top: -6vh; margin-bottom: -6vh; }
   #home .menu-home { margin-top: 0; gap: 2px; }
-  #home .menu-home .hopt { padding-top: 2px; padding-bottom: 2px; font-size: clamp(18px, 7vh, 26px); }
+  #home .menu-home .hopt { padding-top: 2px; padding-bottom: 2px; font-size: clamp(15px, 5.6vh, 26px); line-height: 1.1; }
   #home .hopt .mk { line-height: 1.4; }
   #home .hdesc { display: none; }
-  /* com o menu aberto o logo sai: as 7 opções cabem na altura do celular deitado */
+  /* com o menu aberto o logo sai: as 10 opções cabem na altura do celular deitado */
   #home.menu-on .logo { display: none; }
 }
 #touch.away { display: none; }

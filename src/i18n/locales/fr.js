@@ -22,6 +22,8 @@ export default {
   "menu.news.desc": "Ce qui a changé dans la version {v}.",
   "menu.options": "OPTIONS",
   "menu.options.desc": "Durée du combat et langue.",
+  "menu.about": "À PROPOS / TÉLÉCHARGER",
+  "menu.about.desc": "Comment marche le jeu et le téléchargement pour PC et mobile.",
   "menu.language": "LANGUE",
   "menu.language.desc": "Choisis la langue du jeu.",
   "title.press": "APPUIE SUR ENTRÉE, ESPACE OU START",

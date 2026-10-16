@@ -4,7 +4,7 @@ Jogo de luta 3D em arena com temática paranormal. Combate rápido e acessível,
 movimentação livre, ataques direcionais, defesa, esquiva, habilidades por combinação de
 botões e especiais cinematográficos. Feito com **Three.js + Vite**, roda no navegador.
 
-Versão atual do jogo: **v3.24.1**.
+Versão atual do jogo: **v3.25.0**.
 
 A numeração segue **MAJOR.MINOR.PATCH**: microatualizações usam `x.y.z`, atualizações concretas usam `x.y.0` e grandes marcos usam `x.0.0`.
 
@@ -230,6 +230,16 @@ elementos únicos de cada lugar são feitos à mão (Símbolo Espiral, círculo 
 ### Sons
 Os sons são sintetizados na hora. Para usar arquivos, coloque-os em `public/sounds/` e liste
 em `SOUND_FILES` (`src/audio/AudioManager.js`) com o mesmo nome do som.
+
+## Apps para PC e celular
+
+O menu principal tem **SOBRE O JOGO / BAIXAR** (`sobre.html`), com os downloads da última release do GitHub:
+
+- **PC (Windows):** Electron (`electron/main.cjs`). `npm run pc` abre o jogo no app; `npm run dist:pc` gera
+  `release/Arena-Paranormal-Windows.exe`.
+- **Android:** Capacitor (`capacitor.config.json`). O APK é gerado no GitHub Actions (precisa de Java/Android SDK).
+- **Publicar:** envie uma tag de versão (`git tag v3.25.0 && git push origin v3.25.0`); o workflow
+  `.github/workflows/release-apps.yml` gera o `.exe` e o `.apk` e cria a release com as notas do CHANGELOG.
 
 ## Limitações conhecidas
 - Suporte a controle usa a Gamepad API do navegador (layout padrão Xbox/PlayStation); não testado com controle físico.

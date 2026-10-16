@@ -1,0 +1,91 @@
+# APPS INSTALÁVEIS: a cada tag de versão (v3.25.0...), gera o instalador do PC (Electron) e o APK do Android (Capacitor)
+# e publica os dois numa release do GitHub — os botões da página sobre.html apontam para "releases/latest/download".
+# Também dá para rodar à mão em Actions → "Apps (PC e Android)" → Run workflow, informando a tag.
+name: Apps (PC e Android)
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag da release (ex.: v3.25.0)'
+        required: true
+
+permissions:
+  contents: write
+
+env:
+  TAG: ${{ github.event.inputs.tag || github.ref_name }}
+  APP_BASE: /
+
+jobs:
+  pc:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run dist:pc
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pc
+          path: release/Arena-Paranormal-Windows.exe
+
+  android:
+    runs-on: ubuntu-latest
+    env:
+      ELECTRON_SKIP_BINARY_DOWNLOAD: 1 # o Electron só serve para o PC
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - run: npm ci
+      - run: npm run build
+      - run: npx cap add android
+      - name: Celular na horizontal e versão do jogo
+        run: |
+          VER=$(node -p "require('./package.json').version")
+          CODE=$(node -p "const [a,b,c]=require('./package.json').version.split('.').map(Number); a*10000+b*100+c")
+          sed -i 's/<activity/<activity android:screenOrientation="sensorLandscape"/' android/app/src/main/AndroidManifest.xml
+          sed -i "s/versionCode 1$/versionCode $CODE/; s/versionName \"1.0\"/versionName \"$VER\"/" android/app/build.gradle
+      - run: npx cap sync android
+      - name: Gerar o APK
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon
+      - run: mv android/app/build/outputs/apk/debug/app-debug.apk Arena-Paranormal-Android.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android
+          path: Arena-Paranormal-Android.apk
+
+  release:
+    needs: [pc, android]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node tools/release-notes.mjs > notas.md
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TAG }}
+          name: Arena Paranormal ${{ env.TAG }}
+          body_path: notas.md
+          make_latest: true
+          files: |
+            Arena-Paranormal-Windows.exe
+            Arena-Paranormal-Android.apk

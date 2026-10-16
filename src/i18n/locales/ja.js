@@ -22,6 +22,8 @@ export default {
   "menu.news.desc": "バージョン {v} の変更点。",
   "menu.options": "オプション",
   "menu.options.desc": "試合時間と言語。",
+  "menu.about": "ゲームについて / ダウンロード",
+  "menu.about.desc": "ゲームの遊び方と、PC版・スマホ版のダウンロード。",
   "menu.language": "言語",
   "menu.language.desc": "ゲームの表示言語を選択。",
   "title.press": "ENTER・スペース・START を押す",

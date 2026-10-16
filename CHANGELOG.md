@@ -1,5 +1,20 @@
 # Changelog
 
+## v3.25.0 — 2026-10-16
+
+### Adicionado
+- `sobre.html` (+ `src/sobre.js`, `src/sobre.css`), terceira entrada do Vite: como o jogo funciona, modos, elenco (lido de `ROSTER`), controles e os downloads (`releases/latest/download/Arena-Paranormal-Windows.exe` / `Arena-Paranormal-Android.apk`); destaca o aparelho de quem vê e esconde os downloads dentro dos apps.
+- Opção `about` no menu principal (`homeOptions`, `main.js` → `BASE_URL + sobre.html`); chaves `menu.about` / `menu.about.desc` nos 13 idiomas.
+- Versão para PC com Electron: `electron/main.cjs` (protocolo privilegiado `app://` servindo `dist/`, porque o fetch dos `.glb` não funciona em `file://`; tela cheia, F11, links externos no navegador) e a configuração `build` do electron-builder (NSIS x64, `Arena-Paranormal-Windows.exe`); scripts `pc` e `dist:pc`.
+- Versão Android com Capacitor: `capacitor.config.json` (`com.romavitordev.arenaparanormal`, `webDir: dist`); script `dist:android`.
+- Workflow `.github/workflows/release-apps.yml`: numa tag `v*` (ou à mão) gera o `.exe` (windows-latest) e o `.apk` (ubuntu + JDK 17: `cap add android`, horizontal com `sensorLandscape`, `versionCode`/`versionName` do package.json, `assembleDebug`) e publica a release com as notas de `tools/release-notes.mjs` (a entrada mais nova do CHANGELOG).
+- `vite.config.js`: `APP_BASE` sobrepõe o `base` (os apps servem o jogo na raiz mesmo com o build no GitHub Actions).
+
+### Alterado
+- Menu principal: em tela grande começa a 27vh e as opções usam `clamp(24px, 3.9vh, 30px)`; em tela baixa `clamp(15px, 5.6vh, 26px)` — as 10 opções cabem em 812×375.
+- `deploy-pages.yml`: `ELECTRON_SKIP_BINARY_DOWNLOAD=1` no `npm ci` (o site não precisa do Electron).
+- `.gitignore`: `release/` e `android/` (gerados).
+
 ## v3.24.1 — 2026-10-16
 
 ### Adicionado

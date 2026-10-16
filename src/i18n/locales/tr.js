@@ -22,6 +22,8 @@ export default {
   "menu.news.desc": "{v} sürümünde neler değişti.",
   "menu.options": "SEÇENEKLER",
   "menu.options.desc": "Maç süresi ve dil.",
+  "menu.about": "OYUN HAKKINDA / İNDİR",
+  "menu.about.desc": "Oyun nasıl oynanır, PC ve mobil için indirme.",
   "menu.language": "DİL",
   "menu.language.desc": "Oyunun dilini seç.",
   "title.press": "ENTER, BOŞLUK VEYA START TUŞUNA BAS",

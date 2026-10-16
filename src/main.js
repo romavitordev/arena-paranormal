@@ -871,6 +871,10 @@ function tick(dt) {
       } else if (c === 'options') {
         audio.play('confirm');
         toOptions();
+      } else if (c === 'about') {
+        // SOBRE O JOGO / BAIXAR: página à parte (sobre.html), com o "voltar ao jogo"
+        audio.play('confirm');
+        window.location.href = `${import.meta.env.BASE_URL}sobre.html`;
       }
       break;
     }

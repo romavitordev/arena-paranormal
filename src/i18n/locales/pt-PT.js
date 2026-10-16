@@ -22,6 +22,8 @@ export default {
   "menu.news.desc": "O que mudou na versão {v}.",
   "menu.options": "OPÇÕES",
   "menu.options.desc": "Tempo da luta e idioma.",
+  "menu.about": "SOBRE O JOGO / TRANSFERIR",
+  "menu.about.desc": "Como o jogo funciona e a transferência para PC e telemóvel.",
   "menu.language": "IDIOMA",
   "menu.language.desc": "Escolha o idioma do jogo.",
   "title.press": "PRIMA ENTER, ESPAÇO OU START",

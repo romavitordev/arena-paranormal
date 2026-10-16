@@ -22,6 +22,8 @@ export default {
   "menu.news.desc": "Was sich in Version {v} geändert hat.",
   "menu.options": "OPTIONEN",
   "menu.options.desc": "Kampfzeit und Sprache.",
+  "menu.about": "ÜBER DAS SPIEL / DOWNLOAD",
+  "menu.about.desc": "So funktioniert das Spiel – Download für PC und Handy.",
   "menu.language": "SPRACHE",
   "menu.language.desc": "Wähle die Sprache des Spiels.",
   "title.press": "DRÜCKE ENTER, LEERTASTE ODER START",

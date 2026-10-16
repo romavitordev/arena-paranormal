@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.24.1';
+export const VERSION = '3.25.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,17 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.25.0',
+    date: '2026-10-16',
+    title: 'Leve a Arena com Você',
+    items: [
+      'BAIXE O JOGO: o menu principal ganhou SOBRE O JOGO / BAIXAR, uma página que explica como o jogo funciona (modos, sanidade e rituais, defesa e esquiva, especial e Transformação, o elenco e os controles) e tem os downloads para jogar fora do navegador.',
+      'PC (Windows): instalador .exe — o jogo abre em tela cheia numa janela própria (F11 alterna) e funciona sem internet; o Online / LAN continua precisando de conexão.',
+      'CELULAR (Android): arquivo .apk com os controles de toque, sempre na horizontal. No iPhone, jogue pelo site e use "Adicionar à Tela de Início".',
+      'O menu principal ficou um pouco mais compacto para as 10 opções caberem também no celular deitado.',
+    ],
+  },
   {
     v: '3.24.1',
     date: '2026-10-16',

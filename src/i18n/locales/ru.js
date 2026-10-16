@@ -22,6 +22,8 @@ export default {
   "menu.news.desc": "Что изменилось в версии {v}.",
   "menu.options": "НАСТРОЙКИ",
   "menu.options.desc": "Время боя и язык.",
+  "menu.about": "ОБ ИГРЕ / СКАЧАТЬ",
+  "menu.about.desc": "Как устроена игра и загрузка для ПК и телефона.",
   "menu.language": "ЯЗЫК",
   "menu.language.desc": "Выберите язык игры.",
   "title.press": "НАЖМИТЕ ENTER, ПРОБЕЛ ИЛИ START",

@@ -37,7 +37,9 @@ function aiLearnedPlugin() {
 
 export default defineConfig({
   root: resolve(import.meta.dirname),
-  base: process.env.GITHUB_ACTIONS ? '/arena-paranormal/' : '/',
+  // APP_BASE: os apps instalados (PC/Electron e Android/Capacitor) servem o jogo na raiz, mesmo quando o build roda no
+  // GitHub Actions (o workflow de release passa APP_BASE=/)
+  base: process.env.APP_BASE || (process.env.GITHUB_ACTIONS ? '/arena-paranormal/' : '/'),
   plugins: [aiLearnedPlugin()],
   // gravar o aprendizado não pode recarregar a página no meio da luta
   server: { watch: { ignored: ['**/public/ai/**', '**/assets_src/**'] } },
@@ -48,6 +50,7 @@ export default defineConfig({
       input: {
         main: resolve(import.meta.dirname, 'index.html'),
         gallery: resolve(import.meta.dirname, 'gallery.html'),
+        sobre: resolve(import.meta.dirname, 'sobre.html'), // SOBRE O JOGO / BAIXAR (botão no menu principal)
       },
       // three.js num arquivo próprio: o código do jogo muda a cada versão, a biblioteca não — o navegador guarda o
       // three em cache entre atualizações. Personagens e animações (dados) também ficam à parte do motor do jogo.

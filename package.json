@@ -1,9 +1,12 @@
 {
   "name": "arena-paranormal",
-  "version": "3.24.1",
+  "version": "3.25.0",
   "private": true,
   "description": "Jogo de luta 3D em arena com temática paranormal (protótipo).",
+  "author": "Vitor Roma",
+  "homepage": "https://romavitordev.github.io/arena-paranormal/",
   "type": "module",
+  "main": "electron/main.cjs",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -13,12 +16,50 @@
     "export:dialogues": "node tools/export-dialogues.mjs",
     "moves": "node tools/gen-moves.mjs",
     "lore": "node tools/fetch-lore.mjs",
-    "audit": "node tools/blender/audit.mjs"
+    "audit": "node tools/blender/audit.mjs",
+    "pc": "vite build && electron .",
+    "dist:pc": "vite build && electron-builder --win --publish never",
+    "dist:android": "vite build && cap sync android"
   },
   "dependencies": {
     "three": "^0.169.0"
   },
   "devDependencies": {
+    "@capacitor/android": "^6.2.2",
+    "@capacitor/cli": "^6.2.2",
+    "@capacitor/core": "^6.2.2",
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8",
     "vite": "^5.4.21"
+  },
+  "build": {
+    "appId": "com.romavitordev.arenaparanormal",
+    "productName": "Arena Paranormal",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "public/ordo-realitas.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "Arena Paranormal",
+      "artifactName": "Arena-Paranormal-Windows.${ext}"
+    }
   }
 }

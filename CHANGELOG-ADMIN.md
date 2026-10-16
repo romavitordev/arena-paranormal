@@ -1,5 +1,28 @@
 # Registro administrativo de alterações
 
+## v3.25.0 — Leve a Arena com Você
+
+- Versão: `VERSION` 3.24.1 → **3.25.0** (package.json/lock junto).
+- **Download** (pedido: "um botão no menu principal que leva pra uma página explicando como o jogo funciona, opção de
+  download para jogar em executável sem ser web, isso pra celular e pc, dois diferentes"):
+  - página `sobre.html` com o "voltar ao jogo"; o TODO adiava a versão instalável, mas o pedido trouxe agora;
+  - **PC:** Electron 33 + electron-builder 25 (instalador NSIS, ~95 MB, sem assinatura de código: o Windows mostra o
+    aviso "Executar assim mesmo", explicado na página). Gerado e aberto aqui: menu, modelos, a página e o voltar
+    funcionando dentro do app. No Windows sem modo desenvolvedor o electron-builder falha ao extrair o `winCodeSign`
+    (links simbólicos do macOS) — extraído à mão no cache (`winCodeSign-2.6.0`);
+  - **Android:** Capacitor 6; sem Java/Android SDK nesta máquina, o APK só é gerado no GitHub Actions
+    (`release-apps.yml`). É o APK de debug (instala com "fontes desconhecidas"); para a Play Store faltaria uma chave
+    de assinatura de release;
+  - **iPhone:** fora da App Store não dá para instalar — a página manda jogar pelo site;
+  - os botões apontam para `releases/latest/download/...`: dão 404 até a primeira release dos apps existir. **Para
+    publicar:** depois do push, criar e enviar a tag `v3.25.0`; o workflow gera os dois arquivos e a release (com as
+    notas desta versão).
+- **Pergunta do usuário** ("por que essa última versão não teve changelog?"): a 3.24.1 tinha a entrada em `version.js`
+  e no site publicado (conferido no bundle em produção); provavelmente o navegador ainda estava com a versão anterior
+  em cache. A partir desta versão as notas também saem na release do GitHub.
+- Verificações: `check-roster`, `npm test` (41) e `npm run build`; o menu (desktop e 812×375) e a página (375 px, sem
+  rolagem lateral) conferidos no preview; o `.exe` instalado e testado por CDP.
+
 ## v3.24.1 — Último Sacrifício
 
 - Versão: `VERSION` 3.24.0 → **3.24.1** (package.json/lock junto).

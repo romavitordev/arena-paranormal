@@ -1,0 +1,6 @@
+{
+  "appId": "com.romavitordev.arenaparanormal",
+  "appName": "Arena Paranormal",
+  "webDir": "dist",
+  "android": { "backgroundColor": "#0b0910" }
+}

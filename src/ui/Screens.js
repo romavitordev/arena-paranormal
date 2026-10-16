@@ -74,6 +74,7 @@ const homeOptions = () => [
   { id: 'training', label: t('menu.training'), desc: t('menu.training.desc') },
   { id: 'news', label: t('menu.news'), desc: t('menu.news.desc', { v: VERSION_LABEL }) },
   { id: 'options', label: t('menu.options'), desc: t('menu.options.desc') },
+  { id: 'about', label: t('menu.about'), desc: t('menu.about.desc') },
 ];
 
 export class HomeScreen {

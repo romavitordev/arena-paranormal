@@ -16,3 +16,7 @@ __pycache__/
 
 # backups automáticos do Blender (o .blend fonte fica em tools/blender/fonte)
 *.blend1
+
+# apps instalados: saída do electron-builder e o projeto Android do Capacitor (gerado no CI)
+release/
+android/

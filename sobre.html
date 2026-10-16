@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Arena Paranormal — Sobre e Download</title>
+  <meta name="description" content="Jogo de luta 3D com os agentes e criaturas de Ordem Paranormal. Jogue no navegador ou baixe para PC e celular." />
+  <link rel="icon" href="%BASE_URL%ordo-realitas.ico" />
+  <link rel="stylesheet" href="/src/sobre.css" />
+</head>
+<body>
+  <header class="hero">
+    <a class="back" href="./">◀ VOLTAR AO JOGO</a>
+    <div class="kicker">JOGO DE LUTA 3D · ORDEM PARANORMAL</div>
+    <h1><span>ARENA</span> PARANORMAL</h1>
+    <p class="lead">Agentes da Ordo Realitas, cultistas, Mascarados e criaturas do Outro Lado se enfrentam em arenas 3D —
+      combate rápido, rituais por combinação de botões e especiais cinematográficos.</p>
+    <div class="ver" id="ver"></div>
+  </header>
+
+  <main>
+    <section id="baixar" class="downloads">
+      <h2>Baixar e jogar</h2>
+      <p class="note-app hidden" id="no-app">Você já está jogando pelo aplicativo. 👍</p>
+      <div class="cards">
+        <a class="card" id="dl-pc" href="https://github.com/romavitordev/arena-paranormal/releases/latest/download/Arena-Paranormal-Windows.exe">
+          <div class="icon">🖥️</div>
+          <div class="t">PC (Windows)</div>
+          <div class="d">Instalador .exe — abre em tela cheia, sem navegador, e funciona sem internet. Jogue com teclado
+            ou controle (PlayStation / Xbox).</div>
+          <div class="btn">BAIXAR PARA PC</div>
+        </a>
+        <a class="card" id="dl-android" href="https://github.com/romavitordev/arena-paranormal/releases/latest/download/Arena-Paranormal-Android.apk">
+          <div class="icon">📱</div>
+          <div class="t">Celular (Android)</div>
+          <div class="d">Arquivo .apk — controles de toque na tela (ou controle Bluetooth), sempre na horizontal e sem
+            internet.</div>
+          <div class="btn">BAIXAR PARA CELULAR</div>
+        </a>
+      </div>
+      <details class="how">
+        <summary>Como instalar</summary>
+        <ul>
+          <li><b>PC:</b> abra o <code>Arena-Paranormal-Windows.exe</code>. Se o Windows mostrar "O Windows protegeu o
+            computador", clique em <b>Mais informações → Executar assim mesmo</b> (o jogo não tem assinatura paga da
+            Microsoft). Depois é só abrir pelo atalho da Área de Trabalho.</li>
+          <li><b>Android:</b> abra o <code>.apk</code> baixado e permita <b>instalar apps de fontes desconhecidas</b>
+            quando o celular pedir (só para o navegador ou o gerenciador de arquivos usado). O jogo aparece na tela de
+            apps como "Arena Paranormal".</li>
+          <li><b>iPhone / iPad:</b> a Apple não permite instalar fora da App Store. Jogue no Safari pelo
+            <a href="./">site</a> e use <b>Compartilhar → Adicionar à Tela de Início</b> para abrir como um app.</li>
+          <li><b>Navegador:</b> sem baixar nada, em qualquer aparelho, pelo <a href="./">site do jogo</a>.</li>
+          <li>Versões novas: baixe de novo por esta página — o instalador atualiza por cima, sem perder as opções.</li>
+        </ul>
+      </details>
+    </section>
+
+    <section>
+      <h2>Como é o jogo</h2>
+      <div class="grid">
+        <div class="box"><h3>Lutas de arena 3D</h3><p>Movimentação livre pela arena, com a câmera travada no
+          adversário. Combos de golpes físicos, ataques direcionais (↑ lança, ↓ derruba), dashes de perseguição e combos
+          aéreos.</p></div>
+        <div class="box"><h3>Sanidade e rituais</h3><p>A barra azul é a sanidade (o PE): segure △ para carregar e gaste
+          em habilidades e rituais. Cada lutador tem os rituais e armas do cânone — e os elementos se enfrentam: Sangue
+          → Conhecimento → Energia → Morte → Sangue.</p></div>
+        <div class="box"><h3>Defesa e esquiva</h3><p>Defenda de frente (o Perfect Block anula o golpe e abre o rival),
+          esquive em qualquer direção com 4 cargas, use a Substituição para sair de um combo e o agarrão para quebrar
+          quem só defende.</p></div>
+        <div class="box"><h3>Especial e Transformação</h3><p>Todo lutador tem um especial cinematográfico. Com a vida
+          baixa e a barra de Transformação cheia, ele se transforma ou desperta num estado do cânone até o fim do
+          round.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Modos</h2>
+      <ul class="modes">
+        <li><b>Batalha solo</b> — 1 contra 1: contra outro jogador no mesmo aparelho (dois controles ou teclado dividido), contra o computador ou assistindo CPU × CPU.</li>
+        <li><b>Batalha em equipe</b> — líder + 2 assistências (L1 / R1), com troca de lutador no meio da luta.</li>
+        <li><b>Torre</b> — 8 torres: escolha o lutador e a dificuldade e suba até o vilão fortalecido no topo.</li>
+        <li><b>Torneio</b> — campeonato de 2 a 8 participantes, humanos ou CPU, solo ou em equipe, com chave até o campeão.</li>
+        <li><b>Online / LAN</b> — contra outra pessoa em outro aparelho: crie uma sala (pública ou privada), veja as salas abertas ou entre com um código.</li>
+        <li><b>Tutorial e Treino</b> — aprenda os comandos e teste os golpes de cada personagem à vontade.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Elenco</h2>
+      <p class="muted" id="roster-count"></p>
+      <div class="roster" id="roster"></div>
+    </section>
+
+    <section>
+      <h2>Controles</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Ação</th><th>PlayStation</th><th>Xbox</th><th>Teclado (P1)</th><th>Celular</th></tr></thead>
+          <tbody>
+            <tr><td>Mover</td><td>Analógico</td><td>Analógico</td><td>W A S D</td><td>Joystick</td></tr>
+            <tr><td>Carregar sanidade (segurar)</td><td>△</td><td>Y</td><td>I</td><td>△</td></tr>
+            <tr><td>Ataque principal</td><td>□</td><td>X</td><td>J</td><td>□</td></tr>
+            <tr><td>Ataque físico</td><td>○</td><td>B</td><td>L</td><td>○</td></tr>
+            <tr><td>Pulo · Dash (× + ×)</td><td>×</td><td>A</td><td>K / Espaço</td><td>×</td></tr>
+            <tr><td>Defesa (segurar)</td><td>R2</td><td>RT</td><td>E</td><td>DEF</td></tr>
+            <tr><td>Esquiva (+ direção)</td><td>L2</td><td>LT</td><td>Shift</td><td>ESQ</td></tr>
+            <tr><td>Agarrão</td><td>R2 + ○</td><td>RT + B</td><td>E + L</td><td>DEF + ○</td></tr>
+            <tr><td>Habilidades</td><td>△ → ○ · △ → □ · △ + L2 · R2 + △ · R2 + ×</td><td>Y → B · Y → X · Y + LT · RT + Y · RT + A</td><td>I → L · I → J · I + Shift · E + I · E + K</td><td>△ → ○ · △ → □ · △ + ESQ · DEF + △ · DEF + ×</td></tr>
+            <tr><td>Especial</td><td>△ → △ → ○</td><td>Y → Y → B</td><td>I → I → L</td><td>ESPECIAL</td></tr>
+            <tr><td>Assistências (equipe)</td><td>L1 / R1</td><td>LB / RB</td><td>Q / R</td><td>AS1 / AS2</td></tr>
+            <tr><td>Pausa</td><td>Start</td><td>Start</td><td>Esc</td><td>II</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted">O segundo jogador no teclado usa as setas e o teclado numérico. Os golpes de cada lutador estão
+        em <b>Treino</b> (e no menu de pausa, em Comandos).</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Projeto de fã, sem fins lucrativos, baseado em <b>Ordem Paranormal</b>, de Rafael Lange (Cellbit). Os personagens e o
+      universo pertencem aos seus criadores.</p>
+    <a class="back" href="./">◀ VOLTAR AO JOGO</a>
+  </footer>
+  <script type="module" src="/src/sobre.js"></script>
+</body>
+</html>
