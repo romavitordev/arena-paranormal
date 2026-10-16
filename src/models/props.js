@@ -451,14 +451,35 @@ export function addAnfitriaoProps(rig) {
   props.wires = { get visible() { return wraps[0].visible; }, set visible(v) { wraps.forEach((w) => { w.visible = v; }); }, traverse(fn) { wraps.forEach((w) => w.traverse(fn)); } };
 }
 
-// cabo que liga dois pontos do corpo e acompanha o movimento (tubo refeito a cada quadro no espaço do personagem)
+// cabo que liga dois pontos do corpo e acompanha o movimento (no espaço do personagem). A malha é UMA só, com um
+// buffer fixo de vértices reescrito no lugar a cada quadro (antes um TubeGeometry novo por quadro: lixo de memória)
+const CABLE_SEG = 12;
+const CABLE_RAD = 5;
 function liveCable(rig, from, to, color) {
   const mat = new THREE.MeshBasicMaterial({ color });
-  const mesh = new THREE.Mesh(new THREE.BufferGeometry(), mat);
+  const geo = new THREE.BufferGeometry();
+  const pos = new Float32Array((CABLE_SEG + 1) * CABLE_RAD * 3);
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3).setUsage(THREE.DynamicDrawUsage));
+  const idx = [];
+  for (let i = 0; i < CABLE_SEG; i++) {
+    for (let j = 0; j < CABLE_RAD; j++) {
+      const a0 = i * CABLE_RAD + j;
+      const a1 = i * CABLE_RAD + ((j + 1) % CABLE_RAD);
+      idx.push(a0, a1, a0 + CABLE_RAD, a1, a1 + CABLE_RAD, a0 + CABLE_RAD);
+    }
+  }
+  geo.setIndex(idx); // o buffer começa zerado: nada aparece até a primeira curva válida
+  const mesh = new THREE.Mesh(geo, mat);
   mesh.frustumCulled = false;
   rig.root.add(mesh);
   const a = new THREE.Vector3();
   const b = new THREE.Vector3();
+  const mid = new THREE.Vector3();
+  const p = new THREE.Vector3();
+  const tan = new THREE.Vector3();
+  const n1 = new THREE.Vector3();
+  const n2 = new THREE.Vector3();
+  const up = new THREE.Vector3(0, 0, 1);
   const inv = new THREE.Matrix4();
   let t = 0;
   mesh.onBeforeRender = () => {
@@ -467,12 +488,29 @@ function liveCable(rig, from, to, color) {
     inv.copy(rig.root.matrixWorld).invert();
     from.getWorldPosition(a).applyMatrix4(inv);
     to.getWorldPosition(b).applyMatrix4(inv);
-    // modelo recém-criado (antes da primeira pose) tem as juntas no mesmo ponto: a curva teria comprimento zero e o
-    // TubeGeometry quebrava DENTRO da renderização (o quadro inteiro ficava preto — ex.: tela de vitória do Anfitrião)
+    // modelo recém-criado (antes da primeira pose) tem as juntas no mesmo ponto: a curva teria comprimento zero
     if (!(a.distanceToSquared(b) > 1e-6) || !Number.isFinite(a.x + a.y + a.z + b.x + b.y + b.z)) return;
-    const mid = a.clone().lerp(b, 0.5).add(new THREE.Vector3(Math.sin(t * 3) * 0.03, -0.12, 0.08));
-    mesh.geometry.dispose();
-    mesh.geometry = new THREE.TubeGeometry(new THREE.CatmullRomCurve3([a, mid, b]), 12, 0.008, 5, false);
+    mid.copy(a).lerp(b, 0.5).add(n1.set(Math.sin(t * 3) * 0.03, -0.12, 0.08));
+    for (let i = 0; i <= CABLE_SEG; i++) {
+      const s = i / CABLE_SEG;
+      // curva de Bézier quadrática a → mid → b e a tangente nela
+      p.set(0, 0, 0).addScaledVector(a, (1 - s) * (1 - s)).addScaledVector(mid, 2 * (1 - s) * s).addScaledVector(b, s * s);
+      tan.copy(mid).sub(a).multiplyScalar(2 * (1 - s)).addScaledVector(n2.copy(b).sub(mid), 2 * s).normalize();
+      n1.crossVectors(tan, up);
+      if (n1.lengthSq() < 1e-8) n1.set(1, 0, 0);
+      n1.normalize();
+      n2.crossVectors(tan, n1).normalize();
+      for (let j = 0; j < CABLE_RAD; j++) {
+        const ang = (j / CABLE_RAD) * Math.PI * 2;
+        const c = Math.cos(ang) * 0.008;
+        const d = Math.sin(ang) * 0.008;
+        const k = (i * CABLE_RAD + j) * 3;
+        pos[k] = p.x + n1.x * c + n2.x * d;
+        pos[k + 1] = p.y + n1.y * c + n2.y * d;
+        pos[k + 2] = p.z + n1.z * c + n2.z * d;
+      }
+    }
+    geo.attributes.position.needsUpdate = true;
   };
   return mesh;
 }

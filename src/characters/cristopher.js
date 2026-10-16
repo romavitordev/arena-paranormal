@@ -6,9 +6,9 @@
 //   FÍSICO ("muralha" que toma a linha de frente e absorve o dano)    → A Muralha (R2 + △) e a passiva Couro de Dublê;
 //   EXPERIÊNCIA DE DUBLÊ (se recupera de machucados muito rápido)      → Levanta, Grandão! (△ + L2) e o □ Cena de Ação;
 //   DIREÇÃO AVANÇADA (manobras radicais com o carro)                   → Direção Avançada (△ → □);
-//   a carreira de dublê do Van Damme                                   → os chutes, o Suplex de Dublê e o especial
-//                                                                         Retroceder Nunca, Render-se Jamais;
-//   o sacrifício pela equipe                                           → a Transformação O Protetor.
+//   a carreira de dublê do Van Damme                                   → os chutes e o Suplex de Dublê;
+//   "Filho! Eu te amo!" (as últimas palavras)                          → o especial Por Você, Filho!;
+//   o sacrifício pela equipe                                           → a Transformação Último Sacrifício.
 // Sem afinidade no cânone; no jogo, SANGUE (pedido do usuário: o elemento da força e das emoções). Luta de punhos.
 const RED = 0xd8402c;
 const DUST = 0xb8a890;
@@ -128,11 +128,12 @@ export const CRISTOPHER_KIT = {
     },
   ],
 
-  // RETROCEDER NUNCA, RENDER-SE JAMAIS (o filme em que ele foi dublê do Van Damme): avança e encaixa a sequência de
-  // chutes do filme — frontal, lateral, joelhada, o giratório e o chute final que joga longe
+  // POR VOCÊ, FILHO! (as últimas palavras dele, "Filho! Eu te amo!", antes de pular na Aracnasita): avança e encaixa a
+  // sequência de chutes de filme de ação que aprendeu como dublê do Van Damme — frontal, lateral, joelhada, o
+  // giratório e o chute final que joga longe
   special: {
-    name: 'Retroceder Nunca, Render-se Jamais',
-    banner: 'Retroceder Nunca, Render-se Jamais',
+    name: 'Por Você, Filho!',
+    banner: 'Por Você, Filho!',
     type: 'cinematicCombo',
     energyCost: 50,
     cooldown: 14,
@@ -169,27 +170,32 @@ export default {
   info: {
     weapon: 'Os punhos e os chutes de dublê; o carro dele na Direção Avançada',
     style: 'Armário da linha de frente: socos e chutes de filme de ação, agarrões, o carro e aguenta tudo pela equipe',
-    identity: 'O dublê do Van Damme e o paizão da Equipe E — no fim, O Protetor',
+    identity: 'O dublê do Van Damme e o paizão da Equipe E — no fim, o Último Sacrifício',
     tagline: 'Filho, eu te amo!',
   },
   ...CRISTOPHER_KIT,
   ai: { abilityRate: 1.2 },
 
-  // TRANSFORMAÇÃO (Barra cheia + vida baixa, segurando △): O PROTETOR — o último gesto dele em OSNF: vai com tudo pela
-  // equipe até o fim do round, batendo mais forte, aguentando os golpes sem recuar e se levantando de tudo
+  // TRANSFORMAÇÃO (Barra cheia + vida baixa, segurando △): ÚLTIMO SACRIFÍCIO — o instinto protetor que o fez pular nas
+  // costas da Aracnasita: até o fim do round ele mal recua e QUANTO MENOS VIDA, MAIS FORÇA FÍSICA — mas a vida ESCOA
+  // (começa em 3 por segundo e sobe até 5 em 40 s; nunca o derruba sozinha: fica em 1, o golpe final é do adversário).
+  // Balanço (pedido do usuário): entra com ≤ 35% da vida (~525) batendo 25% mais forte; em linha reta até 80% mais
+  // forte perto de zero (com ~17%, ~+52%). O próprio sacrifício o leva ao pico, e no pico qualquer golpe o derruba.
   awakening: {
-    name: 'O Protetor',
-    banner: 'O Protetor',
-    label: 'O Protetor',
+    name: 'Último Sacrifício',
+    banner: 'Último Sacrifício',
+    label: 'Último Sacrifício',
     type: 'awakenMode',
     anim: 'charge_fists',
-    mult: 1.2,
-    takenMult: 0.8,
-    armorEvery: 3,
-    knockbackTakenMult: 0.4,
-    regen: 3,
-    heal: 0.08,
-    aura: 'flame',
-    color: 0xff7a3a,
+    lowHealth: { from: 0.35, min: 1.25, max: 1.8 },
+    affects: ['melee', 'ability'], // a força física: socos, chutes, o mergulho, o suplex e o carro (o especial fica de fora)
+    knockbackTakenMult: 0.5,
+    armorEvery: 4,
+    drain: 3,
+    drainMax: 5,
+    drainRamp: 40,
+    drainFloor: 1,
+    aura: 'blood',
+    color: 0xff4a2a,
   },
 };

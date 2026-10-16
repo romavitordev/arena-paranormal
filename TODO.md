@@ -1,6 +1,6 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.10.0
+**Versão de referência atual:** v3.24.1 (revisado em 2026-10-16: o que já estava pronto no código saiu da lista)
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente
 
@@ -2111,32 +2111,6 @@ pode servir como apoio.
 
 ---
 
-# 75. NOVAS TRANSFORMAÇÕES FUTURAS
-
-## Park Jae-yoon
-
-> 2026-10-09: ADICIONADA como lutadora (Jae) com a forma X (`forms/jae_x.js`), a partir das referências do usuário em
-> `Referencias visuais/Personagens/Jae`. A cena usa o `maskTransform` padrão (concentra, o capuz aparece, vermelho);
-> uma cena própria (puxar o capuz, sorriso, fundo vermelho) como no vídeo de referência fica para depois.
-
-* [x] Capuz
-* [x] X vermelho
-* [x] Explosão (clarão vermelho do `maskTransform`)
-* [ ] Pose (cena própria de puxar o capuz)
-* [ ] Animação (idem)
-* [x] `maskTransform`
-
-## Dalmo Magno
-
-* [x] Capacete (o escafandro em código: `props.js → colossoHelmet`, para a cena levá-lo do peito à cabeça)
-* [x] Olho vermelho (os três visores vermelhos rachados)
-* [x] Explosão vermelha (clarão e aura do `maskTransform`)
-* [x] Pose (`colosso_roar`: agachado de braços abertos, como no gif)
-* [x] Animação (cena `helmet`: segura no peito, ergue, encaixa; troca camisa → traje com `sp.swap`)
-* [x] `maskTransform`
-
----
-
 # 76. ARQUITETURA DOS MODOS
 
 Torneio e Torre devem reutilizar:
@@ -2168,17 +2142,12 @@ genérico demais), com o motivo. Nenhum item é de balanceamento.
 * [ ] **Comprimir os `.glb`** (meshopt ou Draco; texturas em KTX2/WebP). O maior é o Diabo (1,6 MB).
 * [ ] **Opção QUALIDADE GRÁFICA (Alta / Média / Baixa):** antialias, pixel ratio até 2 e sombras ficam sempre ligados
   (`main.js`). No Baixa: pixel ratio 1, sem sombras, menos partículas e rastros.
-* [ ] **Cabo do Anfitrião** (`props.js` → `liveCable`) cria um `TubeGeometry` novo a cada quadro (lixo de memória a
-  60 fps). Trocar por um buffer fixo atualizado no lugar, como já é feito na fita da espada.
 * [ ] **Contador de desempenho de dev** (FPS, memória, objetos na cena) para medir cada cenário/personagem antes e
   depois das otimizações acima.
 
 ## Opções e acessibilidade
 
-* [ ] **Volume** (geral, efeitos, falas): não existe nas OPÇÕES; o `AudioManager` já aceita volume por som.
 * [ ] **Remapear teclas e botões** (hoje fixos em `config/controls.js`), salvo no navegador.
-* [ ] **Reduzir flashes e tremor de câmera** (conforto/fotossensibilidade): `screenFlash` e `cameraRig.shake` aparecem
-  em quase todo especial e transformação.
 * [ ] **Falas:** velocidade das legendas e opção de desligar as falas durante a luta.
 
 ## Personagens e animação
@@ -2192,8 +2161,6 @@ genérico demais), com o motivo. Nenhum item é de balanceamento.
 
 * [ ] **Dividir os arquivos gigantes:** `combat/abilities.js` (3 024 linhas) e `combat/Fighter.js` (2 810) em módulos
   por família (movimento, buffs, invocações, agarrão, esquiva, transformação).
-* [ ] **`npm run check` conferir mais:** toda `anim` usada pelos kits existe em `CLIPS` (hoje só conferido à mão), todo
-  `type` de habilidade/especial existe e todo `sound` existe no `AudioManager`.
 * [ ] **Teste de fumaça automático dos kits:** todas as habilidades, especiais, agarrões e transformações de todos os
   personagens, sem erro e sem cinemática presa (hoje é feito à mão no navegador) — num navegador sem tela (ex.:
   Playwright) dentro do `npm test`.

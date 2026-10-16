@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { SETTINGS } from '../config/settings.js';
 import { clamp, angleDiff } from '../core/util.js';
 
 // Câmera de luta em arena, no estilo dos jogos de arena 3D (ref.: Naruto Storm 4):
@@ -65,6 +66,7 @@ export class CameraRig {
   }
 
   shake(amount, time) {
+    if (SETTINGS.reduceFx) amount *= 0.25; // EFEITOS DE TELA REDUZIDOS: o tremor quase some
     this.shakeAmt = Math.max(this.shakeAmt, amount);
     this.shakeTime = Math.max(this.shakeTime, time);
   }

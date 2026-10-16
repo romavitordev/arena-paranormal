@@ -7,6 +7,7 @@ import { buildModel } from '../models/index.js';
 import { Animator } from '../anim/Animator.js';
 import { ARENAS } from '../arena/index.js';
 import { yawTo } from '../core/util.js';
+import { SETTINGS } from '../config/settings.js';
 
 const RAY = new THREE.Raycaster();
 
@@ -291,6 +292,8 @@ export class World {
   }
 
   screenFlash(color, time) {
+    // EFEITOS DE TELA REDUZIDOS (OPÇÕES): sem o clarão de tela cheia — conforto e fotossensibilidade
+    if (SETTINGS.reduceFx) return;
     this.ui && this.ui.flash(color, time);
   }
 

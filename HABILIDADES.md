@@ -393,7 +393,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ## CRISTOPHER
 
-*O dublê do Van Damme e o paizão da Equipe E — no fim, O Protetor* · arma: Os punhos e os chutes de dublê; o carro dele na Direção Avançada
+*O dublê do Van Damme e o paizão da Equipe E — no fim, o Último Sacrifício* · arma: Os punhos e os chutes de dublê; o carro dele na Direção Avançada
 
 ### Físico (○ / B)
 
@@ -426,13 +426,13 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 - **A Muralha** — R2 + △ / RT + Y · custo 25 · cooldown 20 s
   Se planta na frente de tudo como fazia pela equipe: por 7 s recebe 30% menos dano e aguenta 3 golpes sem recuar, mas anda um pouco mais devagar.
 
-### Especial: Retroceder Nunca, Render-se Jamais
+### Especial: Por Você, Filho!
 
 250 de dano · custo 50 · cooldown 14 s.
 
-### Transformação: O Protetor
+### Transformação: Último Sacrifício
 
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +20% de dano, −20% de dano recebido, regenera 3 de vida/s, aguenta 1 golpe sem reagir a cada 3 s, cura 8% na hora.
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: aguenta 1 golpe sem reagir a cada 4 s.
 
 ---
 

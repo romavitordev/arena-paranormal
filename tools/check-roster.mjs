@@ -2,7 +2,7 @@
 //   npm run check
 import { ROSTER } from '../src/characters/index.js';
 import { GRAB_SCENES, FINISHERS } from '../src/combat/grabScenes.js';
-import { getForm } from '../src/characters/forms/index.js';
+import { getForm, FORMS } from '../src/characters/forms/index.js';
 import { weaknessMult } from '../src/combat/forms.js';
 import { COMBAT } from '../src/config/combat.js';
 import { computeDrain, validatePassives } from '../src/combat/passives.js';
@@ -349,6 +349,34 @@ ok(!COMBAT.powered && ROSTER.every((c) => !(c.abilities || []).some((a) => a.inp
   ok(COMBAT.roundTime >= 150, 'tempo do round cabe na vida de 1500');
 }
 
+// ---------------- REFERÊNCIAS DOS KITS: todo tipo de habilidade/especial/transformação e todo som usado existem ----------------
+{
+  await import('../src/combat/Fighter.js'); // carrega o registro inteiro na mesma ordem do jogo (sem import circular)
+  const { ABILITY_TYPES } = await import('../src/combat/abilities.js');
+  const { SPECIALS } = await import('../src/combat/specials/index.js');
+  const { SOUND_NAMES } = await import('../src/audio/AudioManager.js');
+  const sounds = SOUND_NAMES();
+  const RANGED_BUILTIN = ['projectile', 'counter', 'beam'];
+  const badType = [];
+  const badSound = new Set();
+  const walk = (o, owner) => {
+    if (!o || typeof o !== 'object') return;
+    for (const [k, v] of Object.entries(o)) {
+      if (typeof v === 'string' && /^(sound|hitSound|startSound|shotSound|endSound)$/.test(k) && !sounds.has(v)) badSound.add(`${owner}: ${v}`);
+      else if (v && typeof v === 'object') walk(v, owner);
+    }
+  };
+  for (const c of [...ROSTER, ...Object.values(FORMS)]) {
+    for (const a of c.abilities || []) if (!ABILITY_TYPES[a.type]) badType.push(`${c.id}: ${a.name} (${a.type})`);
+    if (c.ranged && c.ranged.type && !RANGED_BUILTIN.includes(c.ranged.type) && !ABILITY_TYPES[c.ranged.type]) badType.push(`${c.id}: □ ${c.ranged.name} (${c.ranged.type})`);
+    if (c.special && !SPECIALS[c.special.type]) badType.push(`${c.id}: especial ${c.special.name} (${c.special.type})`);
+    if (c.awakening && !SPECIALS[c.awakening.type]) badType.push(`${c.id}: transformação ${c.awakening.name} (${c.awakening.type})`);
+    walk({ melee: c.melee, ranged: c.ranged, abilities: c.abilities, special: c.special, awakening: c.awakening }, c.id);
+  }
+  ok(!badType.length, `todo tipo de habilidade, especial e transformação existe${badType.length ? ': ' + badType.join(', ') : ''}`);
+  ok(!badSound.size, `todo som usado nos kits existe${badSound.size ? ': ' + [...badSound].join(', ') : ''}`);
+}
+
 // ---------------- RITUAIS COMPARTILHADOS: o mesmo ritual do cânone funciona igual em quem o tiver (a versão mais nova) ----
 {
   const SHARED = { 'Decad': 'decadence', 'Embaralhar': 'shuffle', 'Cicatriza': 'agingHeal', 'Velocidade Mortal': 'deadlySpeedTrail', 'Amaldiçoar Arma': 'curseWeapon', 'Leonora Amaldiçoada': 'curseWeapon' };
@@ -370,8 +398,8 @@ ok(!COMBAT.powered && ROSTER.every((c) => !(c.abilities || []).some((a) => a.inp
     'Cristopher: Ordo Realitas (Sangue), de punhos, fecha com o chute giratório e o □ Cena de Ação (mergulho que quebra a defesa)');
   ok(ab('arenaGrab') && ab('stuntCar') && ab('stuntCar').damage > 0 && ab('healOverTime') && ab('heavyProtection') && cr.passives.some((p) => p.type === 'thickSkin'),
     'Cristopher: Suplex de Dublê, Direção Avançada (o carro), Levanta Grandão!, A Muralha e o Couro de Dublê');
-  ok(cr.special.name === 'Retroceder Nunca, Render-se Jamais' && cr.awakening.type === 'awakenMode' && cr.awakening.name === 'O Protetor',
-    'Cristopher: especial Retroceder Nunca, Render-se Jamais e a Transformação O Protetor');
+  ok(cr.special.name === 'Por Você, Filho!' && cr.awakening.type === 'awakenMode' && cr.awakening.name === 'Último Sacrifício' && cr.awakening.drain > 0 && cr.awakening.drainFloor >= 1 && cr.awakening.lowHealth && cr.awakening.lowHealth.max > cr.awakening.lowHealth.min,
+    'Cristopher: especial Por Você, Filho! e a Transformação Último Sacrifício (quanto menos vida, mais força física; a vida escoa sem matar sozinha)');
 }
 
 // ---------------- Cristino (Transtornados, Hexatombe) ----------------

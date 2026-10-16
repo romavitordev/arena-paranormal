@@ -20,7 +20,7 @@ import { validatePassives } from './combat/passives.js';
 import { Match } from './game/Match.js';
 import { CpuController } from './ai/CpuController.js';
 import { ARENAS, ARENA_ORDER, DEFAULT_ARENA, preloadArenas } from './arena/index.js';
-import { SETTINGS, cycleSetting, TIMER_OPTIONS, timerLabel, cpuLabel, LANGUAGE_OPTIONS, languageLabel } from './config/settings.js';
+import { SETTINGS, cycleSetting, TIMER_OPTIONS, timerLabel, cpuLabel, LANGUAGE_OPTIONS, languageLabel, VOLUME_OPTIONS, FX_OPTIONS, volumeLabel, fxLabel } from './config/settings.js';
 import { TutorialMode } from './ui/Tutorial.js';
 import { VERSION } from './config/version.js';
 import { t, tAlert } from './i18n/index.js';
@@ -48,6 +48,7 @@ renderer.toneMappingExposure = 1.1;
 
 const input = new InputManager();
 const audio = new AudioManager();
+audio.setVolume(SETTINGS.volume / 100); // o volume salvo nas OPÇÕES
 const hud = new HUD(document.getElementById('hud'));
 const screens = document.getElementById('screens');
 // modelos do Blender carregam no início; os retratos são gerados depois
@@ -103,6 +104,8 @@ game.renderer = renderer;
 
 const timeLabel = () => t('opt.time', { v: timerLabel() });
 const langLabel = () => t('opt.lang', { v: languageLabel() });
+const volLabel = () => t('opt.volume', { v: volumeLabel() });
+const fxOptLabel = () => t('opt.fx', { v: fxLabel() });
 
 function setScreen(state, screen) {
   game.uiSeq = ((game.uiSeq || 0) + 1) & 15; // toques online de uma tela que já saiu são descartados (netTaps)
@@ -140,6 +143,8 @@ function toOptions(index = 0) {
     options: [
       { id: 'time', label: timeLabel },
       { id: 'lang', label: langLabel },
+      { id: 'volume', label: volLabel },
+      { id: 'fx', label: fxOptLabel },
       { id: 'back', label: () => t('ui.back') },
     ],
   });
@@ -873,6 +878,8 @@ function tick(dt) {
       const c = game.screen.update(input);
       if (c === 'time') { cycleSetting('timer', TIMER_OPTIONS); audio.play('select'); game.screen.render(); }
       else if (c === 'lang') { cycleSetting('language', LANGUAGE_OPTIONS); audio.play('select'); toOptions(game.screen.index); }
+      else if (c === 'volume') { cycleSetting('volume', VOLUME_OPTIONS, -1); audio.setVolume(SETTINGS.volume / 100); audio.play('select'); game.screen.render(); }
+      else if (c === 'fx') { cycleSetting('reduceFx', FX_OPTIONS); audio.play('select'); game.screen.render(); }
       else if (c === 'back') toMainMenu();
       break;
     }

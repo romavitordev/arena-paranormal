@@ -15,6 +15,12 @@ export class AudioManager {
     this.loops = new Map();
   }
 
+  // volume do jogo (OPÇÕES): 0..1 sobre o volume base
+  setVolume(k) {
+    this.volume = 0.55 * Math.max(0, Math.min(1, k));
+    if (this.master) this.master.gain.value = this.volume;
+  }
+
   // Navegadores só liberam áudio após interação do usuário.
   unlock() {
     if (this.ctx) {
@@ -421,3 +427,6 @@ const SYNTHS = {
     a.tone(t + 0.08, 0.2, { vol: 0.2 * v, freq: 880, type: 'square' });
   },
 };
+
+// todos os nomes de som que o jogo sabe tocar (sintetizados + arquivos) — o check-roster confere os kits contra eles
+export const SOUND_NAMES = () => new Set([...Object.keys(SYNTHS), ...Object.keys(SOUND_FILES)]);

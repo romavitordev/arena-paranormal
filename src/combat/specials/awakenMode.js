@@ -11,6 +11,10 @@ import { faceClose, orbit } from '../../camera/shots.js';
 //   cdRate              recargas mais rápidas (1.3 = 30% mais rápido)
 //   energyRegenMult     sanidade regenera mais rápido
 //   regen               vida por segundo
+//   drain / drainFloor  PERDE vida por segundo, sem nunca passar de drainFloor (padrão 1): o sacrifício não mata sozinho
+//   drainMax/drainRamp  a perda sobe de drain até drainMax em drainRamp segundos
+//   lowHealth           { from, min, max }: QUANTO MENOS VIDA, MAIS FORÇA — o dano vai de min (com `from` da vida
+//                       máxima ou mais) até max (perto de zero), em linha reta (substitui `mult`)
 //   armorEvery          a cada N s ganha 1 golpe que aguenta sem reagir (acumula até armorMax, padrão 1)
 //   knockbackTakenMult  é empurrado menos (0.4 = 40% do empurrão)
 //   unblockable         golpes físicos atravessam a defesa
@@ -72,16 +76,35 @@ function applyAwakening(f, sp, world, col) {
   f.buffTint = tint;
   let armorClock = 0;
   let regenAcc = 0;
+  let drainAcc = 0;
+  let drainT = 0;
   f.addBuff({
     type: 'awakened', name: (sp.label || sp.name).toUpperCase(), time: Infinity, duration: Infinity,
-    mult: sp.mult, affects: sp.affects || ['melee', 'ranged', 'ability'], takenMult: sp.takenMult, speedMult: sp.speedMult,
+    mult: sp.lowHealth ? sp.lowHealth.min : sp.mult, affects: sp.affects || ['melee', 'ranged', 'ability'], takenMult: sp.takenMult, speedMult: sp.speedMult,
     cdRate: sp.cdRate, energyRegenMult: sp.energyRegenMult, knockbackTakenMult: sp.knockbackTakenMult, unblockable: !!sp.unblockable, meleeBleed: sp.meleeBleed,
     bloodArmor: !!sp.bloodArmSide, bloodArmSide: sp.bloodArmSide,
     onTick(dt) {
       if (f.state === 'ko') return;
+      if (sp.lowHealth) {
+        const L = sp.lowHealth;
+        const k = Math.max(0, Math.min(1, ((L.from ?? 0.35) - f.health / f.maxHealth) / (L.from ?? 0.35)));
+        this.mult = L.min + (L.max - L.min) * k;
+      }
       if (sp.regen && f.health < f.maxHealth) {
         regenAcc += sp.regen * dt;
         if (regenAcc >= 1) { const n = Math.floor(regenAcc); regenAcc -= n; f.health = Math.min(f.maxHealth, f.health + n); }
+      }
+      // o preço (Último Sacrifício do Cris): a vida escoa de pouco em pouco, mas quem dá o golpe final é o adversário
+      if (sp.drain && f.health > (sp.drainFloor ?? 1)) {
+        drainT += dt;
+        const rate = sp.drainMax ? sp.drain + (sp.drainMax - sp.drain) * Math.min(1, drainT / (sp.drainRamp || 30)) : sp.drain;
+        drainAcc += rate * dt;
+        if (drainAcc >= 1) {
+          const n = Math.floor(drainAcc);
+          drainAcc -= n;
+          f.health = Math.max(sp.drainFloor ?? 1, f.health - n);
+          if (Math.random() < 0.15) world.fx.burst(f.chestPos(), { count: 2, color: 0x9a0010, speed: 0.6, up: -0.4, life: 0.5, size: 0.1, gravity: 4 });
+        }
       }
       if (sp.armorEvery) {
         armorClock += dt;

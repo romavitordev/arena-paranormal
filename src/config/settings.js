@@ -8,6 +8,8 @@ const DEFAULTS = {
   cpuLevel: 'normal', // easy | normal | hard | veryhard | superhard
   rounds: 2, // rounds para vencer
   language: 'pt-BR',
+  volume: 100, // % do volume do jogo (0 = mudo)
+  reduceFx: false, // conforto/fotossensibilidade: flashes de tela e tremor de câmera bem mais fracos
 };
 
 // opções das configurações de combate (tela antes do cenário)
@@ -20,6 +22,8 @@ export const CPU_LEVELS = [
   { id: 'superhard', label: 'SUPER DIFÍCIL' },
 ];
 export const ROUND_OPTIONS = [1, 2, 3];
+export const VOLUME_OPTIONS = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+export const FX_OPTIONS = [false, true];
 export const LANGUAGE_OPTIONS = SUPPORTED_LANGUAGES;
 
 function load() {
@@ -32,6 +36,8 @@ function load() {
     if (!TIMER_OPTIONS.includes(s.timer)) s.timer = DEFAULTS.timer;
     if (!CPU_LEVELS.some((l) => l.id === s.cpuLevel)) s.cpuLevel = DEFAULTS.cpuLevel;
     if (!ROUND_OPTIONS.includes(s.rounds)) s.rounds = DEFAULTS.rounds;
+    if (!VOLUME_OPTIONS.includes(s.volume)) s.volume = DEFAULTS.volume;
+    s.reduceFx = !!s.reduceFx;
     if (!LANGUAGE_OPTIONS.some((l) => l.id === s.language)) s.language = initLanguage();
     else initLanguage(s.language);
     return s;
@@ -42,6 +48,8 @@ function load() {
   }
 }
 
+export const volumeLabel = (v = SETTINGS.volume) => (v ? `${v}%` : '🔇');
+export const fxLabel = (v = SETTINGS.reduceFx) => t(v ? 'opt.fx.reduced' : 'opt.fx.normal');
 export const timerLabel = (v = SETTINGS.timer) => (v ? `${v}s` : t('settings.timer.infinite'));
 export const cpuLabel = (id = SETTINGS.cpuLevel) => t('cpu.' + (CPU_LEVELS.find((l) => l.id === id) || CPU_LEVELS[1]).id);
 export const languageLabel = (id = SETTINGS.language) => {

@@ -1,5 +1,17 @@
 # Changelog
 
+## v3.24.1 — 2026-10-16
+
+### Adicionado
+- `awakenMode`: `drain` / `drainMax` / `drainRamp` / `drainFloor` (perde vida com o tempo sem passar do piso) e `lowHealth` `{ from, min, max }` (o multiplicador de dano sobe em linha reta conforme a vida cai).
+- Opções `volume` (`VOLUME_OPTIONS`, `AudioManager.setVolume`) e `reduceFx` (`FX_OPTIONS`: `World.screenFlash` não pisca e `CameraRig.shake` a 25%); chaves `opt.volume` / `opt.fx*` nos 13 idiomas.
+- `check-roster`: todo `type` de habilidade, □, especial e transformação existe nos registros e todo som dos kits existe (`AudioManager.SOUND_NAMES`).
+
+### Alterado
+- Cristopher: especial "Por Você, Filho!"; Transformação "Último Sacrifício" (`lowHealth` 1,25 → 1,8 a partir de 35% da vida, só físico; `drain` 3 → 5 em 40 s, piso 1; `knockbackTakenMult` 0,5; `armorEvery` 4).
+- `props.liveCable` (cabo do Anfitrião): buffer de vértices fixo reescrito no lugar, sem criar um `TubeGeometry` por quadro.
+- `TODO.md`: versão de referência v3.24.1; saíram os itens já prontos (§75 e quatro itens do §76.5).
+
 ## v3.24.0 — 2026-10-16
 
 ### Adicionado

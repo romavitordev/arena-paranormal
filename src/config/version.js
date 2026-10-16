@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.24.0';
+export const VERSION = '3.24.1';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,16 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.24.1',
+    date: '2026-10-16',
+    title: 'Último Sacrifício',
+    items: [
+      'CRISTOPHER — o especial agora se chama POR VOCÊ, FILHO! (as últimas palavras dele em O Segredo na Floresta). A Transformação virou ÚLTIMO SACRIFÍCIO: quanto MENOS vida, MAIS força física — de 25% a 80% a mais nos golpes físicos —, e ele quase não recua, mas a vida escoa de pouco em pouco (começa em 3 por segundo e chega a 5). O sacrifício nunca o derruba sozinho: quem dá o golpe final é sempre o adversário.',
+      'OPÇÕES: VOLUME do jogo (de 10 em 10, até o mudo) e EFEITOS DE TELA REDUZIDOS, para conforto e fotossensibilidade: sem os clarões de tela cheia e com o tremor de câmera bem mais fraco.',
+      'O cabo do Anfitrião não pesa mais na memória durante a luta.',
+    ],
+  },
   {
     v: '3.24.0',
     date: '2026-10-16',

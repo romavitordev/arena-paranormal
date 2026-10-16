@@ -2,6 +2,11 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.24.1 — Último Sacrifício
+- CRISTOPHER — o especial agora se chama POR VOCÊ, FILHO! (as últimas palavras dele em O Segredo na Floresta). A Transformação virou ÚLTIMO SACRIFÍCIO: quanto MENOS vida, MAIS força física — de 25% a 80% a mais nos golpes físicos —, e ele quase não recua, mas a vida escoa de pouco em pouco (começa em 3 por segundo e chega a 5). O sacrifício nunca o derruba sozinho: quem dá o golpe final é sempre o adversário.
+- OPÇÕES: VOLUME do jogo (de 10 em 10, até o mudo) e EFEITOS DE TELA REDUZIDOS, para conforto e fotossensibilidade: sem os clarões de tela cheia e com o tremor de câmera bem mais fraco.
+- O cabo do Anfitrião não pesa mais na memória durante a luta.
+
 ## v3.24.0 — Retroceder Nunca
 - NOVO LUTADOR — CRISTOPHER "CRIS" COHEN (Ordo Realitas, Sangue): o dublê do Van Damme e o paizão da Equipe E de O Segredo na Floresta. Um armário de 2 metros, grisalho, com a cicatriz de queimadura no lado esquerdo do rosto, regata branca e tatuagens tribais nos braços. Luta de punhos e com os chutes de filme de ação, e aguenta empurrão e desgaste na defesa (Couro de Dublê).
 - CRISTOPHER — o □ CENA DE AÇÃO é um mergulho de dublê que quebra a defesa. Habilidades: SUPLEX DE DUBLÊ (△ → ○, agarra e arremessa no chão), DIREÇÃO AVANÇADA (△ → □, o carro dele vem derrapando por trás, ele se joga para o lado e o carro atropela quem estiver na frente), LEVANTA, GRANDÃO! (△ + L2, recupera vida rápido) e A MURALHA (R2 + △, recebe menos dano e aguenta golpes sem recuar).

@@ -1,5 +1,25 @@
 # Registro administrativo de alterações
 
+## v3.24.1 — Último Sacrifício
+
+- Versão: `VERSION` 3.24.0 → **3.24.1** (package.json/lock junto).
+- **Cristopher** (pedidos: o especial "Por você, Filho!"; a Transformação "Último Sacrifício": "perde vida com o tempo,
+  de pouco em pouco, mas ganha mais força física com seu instinto protetor"; depois "uns 3-5 de vida em troca de mais
+  força"; e por fim "quanto menos vida, mais força — analise o quanto aumentar para quanto de vida"):
+  - curva: entra com ≤ 35% da vida (~525) a ×1,25; em linha reta até ×1,8 perto de zero (com ~17%, ×1,52); medido no
+    preview: o jab vai de 22 para 28 / 34 / 39;
+  - perda: começa em 3/s e sobe até 5/s em 40 s (medido: ~3,5/s nos primeiros 20 s, ~4,8/s depois); para em 1 de vida —
+    o sacrifício leva ao pico de força, mas o golpe final é sempre do adversário; o Levanta, Grandão! repõe 80;
+  - vale só para a força física (socos, chutes, o mergulho, o suplex e o carro); o especial fica de fora.
+- **TODO revisado** (pedido: "veja quais outras upds tem no todo para resolver"): 751 itens abertos, muitos defasados
+  (o documento ainda dizia v3.10.0). Desta lista entraram os rápidos: volume, efeitos de tela reduzidos (as falas são
+  só texto, então não há volume de falas), o cabo do Anfitrião e as checagens novas do `check-roster`. Continuam
+  abertos, entre outros: a tradução das falas/golpes/descrições para os 13 idiomas, carregar sob demanda e comprimir os
+  `.glb`, qualidade gráfica, a Máscara das Pessoas nas Sombras do Joui, a referência visual da Aghata, idles próprios,
+  o `npm run balance`, o teste automático dos kits e os modos (Torre: modificadores/recompensas; Torneio online).
+- Verificações: `check-roster` (com as regras novas), `npm test` (41) e `npm run build`; Opções, efeitos reduzidos, o
+  cabo e a transformação conferidos no preview.
+
 ## v3.24.0 — Retroceder Nunca
 
 - Versão: `VERSION` 3.23.1 → **3.24.0** (package.json/lock junto). O especial do Cristino ("Odeio Gente Barulhenta") já
