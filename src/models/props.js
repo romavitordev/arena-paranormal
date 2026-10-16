@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { glowMat, toon } from './rig.js';
+import { MATERIAL_TEXTURES } from './textures.js';
 import { katana, scabbard, m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, roundGlasses, neonWraps, pulseEmitter, bandolier, bengala, mustache, socadeira, peixeira, spikedLantern, tenebrisPendant } from './weapons.js';
 
 // Armas e acessórios adicionados em código sobre os modelos do Blender.
@@ -979,5 +980,39 @@ export function addCristinoDesertorProps(rig) {
     if (done.has(m) || m.userData.glow) return;
     done.add(m);
     scribbleGlow(m, (seed += 7919));
+  });
+}
+
+// DANTE (modelo próprio: tools/blender/char_dante.py): sem armas. As orelhas pontudas (prop_eartip) só aparecem de
+// OLHOS ABERTOS.
+export function addDanteProps(rig) {
+  rig.showProp('eartip_L+eartip_R', false);
+}
+
+// DANTE — OLHOS ABERTOS (a Transformação): o mesmo modelo com os olhos pretos e as duas faixas no rosto, as tatuagens
+// de volta no pescoço e nos braços e as orelhas pontudas — "uma aparência bastante similar à de um Luzidio" (wiki)
+const DANTE_OPEN = { face_dante: 'face_dante_open', skin_dante: 'skin_dante_open' };
+const danteOpenTex = {};
+export function addDanteAbertoProps(rig) {
+  rig.showProp('eartip_L+eartip_R', true);
+  const swapped = new Map();
+  rig.root.traverse((o) => {
+    if (!o.isMesh || !o.material || !o.material.name || o.userData.isOutline) return;
+    const key = Object.keys(DANTE_OPEN).find((k) => o.material.name.endsWith(k));
+    if (!key) return;
+    if (!swapped.has(o.material)) {
+      const m = o.material.clone();
+      const id = DANTE_OPEN[key];
+      if (!danteOpenTex[id]) {
+        const t = MATERIAL_TEXTURES[id]();
+        t.flipY = false;
+        t.needsUpdate = true;
+        danteOpenTex[id] = t;
+      }
+      m.map = danteOpenTex[id];
+      m.userData.sharedMap = true;
+      swapped.set(o.material, m);
+    }
+    o.material = swapped.get(o.material);
   });
 }

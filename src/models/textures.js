@@ -427,6 +427,93 @@ function leather(g, w, h, base, seed, { dark = '40,16,8', light = '200,130,90', 
   return rnd;
 }
 
+// DANTE (Calamidade): as tatuagens de "pele de onça" — pintas graúdas e irregulares, o pontilhado fino entre elas e as
+// espirais (a miniatura em combate). Só aparecem com os OLHOS ABERTOS.
+function danteTattoos(g, area = { x: 0, y: 0, w: 512, h: 512 }, base = '#dcc0b4') {
+  const { x: x0, y: y0, w, h } = area;
+  if (base) { g.fillStyle = base; g.fillRect(x0, y0, w, h); }
+  const rnd = seeded(1265);
+  const ink = 'rgba(30,18,22,0.88)';
+  g.fillStyle = ink;
+  for (let i = 0; i < (w * h) / 170; i++) {
+    const x = x0 + rnd() * w, y = y0 + rnd() * h;
+    if (Math.sin(x * 0.045) + Math.cos(y * 0.037) < -0.7) continue; // respiros de pele
+    // a pinta de onça: um anel aberto com o miolo mais claro
+    const rx = 2.5 + rnd() * 4, ry = 2 + rnd() * 3, a = rnd() * Math.PI;
+    g.beginPath(); g.ellipse(x, y, rx, ry, a, 0, Math.PI * 2); g.fill();
+    if (rx > 4.5) { g.fillStyle = 'rgba(200,150,140,0.85)'; g.beginPath(); g.ellipse(x, y, rx * 0.45, ry * 0.45, a, 0, Math.PI * 2); g.fill(); g.fillStyle = ink; }
+  }
+  for (let i = 0; i < (w * h) / 100; i++) { const x = x0 + rnd() * w, y = y0 + rnd() * h; g.beginPath(); g.arc(x, y, 0.7 + rnd() * 1.1, 0, Math.PI * 2); g.fill(); }
+  g.strokeStyle = ink; g.lineWidth = 2.6;
+  for (let k = 0; k < (w * h) / 14000; k++) {
+    const cx = x0 + 20 + rnd() * (w - 40), cy = y0 + 20 + rnd() * (h - 40), sc = 1.6 + rnd() * 1.4;
+    g.beginPath();
+    for (let t = 0; t < 15; t += 0.15) g.lineTo(cx + Math.cos(t) * t * sc, cy + Math.sin(t) * t * sc);
+    g.stroke();
+  }
+}
+
+// o rosto do Dante: fechado (a cegueira, sereno) ou ABERTO (olhos pretos, as faixas, as tatuagens no pescoço)
+function danteFace(open) {
+  return face((g) => {
+    // o sigilo do infinito na testa, com o traço vertical curto
+    g.strokeStyle = '#2a1c1c'; g.lineWidth = 2.6; g.lineCap = 'round';
+    g.beginPath();
+    for (let t = 0; t <= Math.PI * 2 + 0.01; t += 0.1) {
+      const x = CX + 13 * Math.sin(t);
+      const y = 72 + 5.5 * Math.sin(t) * Math.cos(t);
+      if (t === 0) g.moveTo(x, y); else g.lineTo(x, y);
+    }
+    g.stroke();
+    g.beginPath(); g.moveTo(CX - 40, 72); g.lineTo(CX - 18, 72); g.moveTo(CX + 18, 72); g.lineTo(CX + 40, 72); g.stroke();
+    g.beginPath(); g.moveTo(CX + 46, 66); g.lineTo(CX + 46, 78); g.stroke();
+    // a cicatriz na têmpora direita (x < 256), descendo para a maçã do rosto
+    g.strokeStyle = 'rgba(150,96,92,0.75)'; g.lineWidth = 2.2;
+    g.beginPath(); g.moveTo(CX - 66, EYE_Y - 24); g.quadraticCurveTo(CX - 62, EYE_Y + 2, CX - 52, EYE_Y + 22); g.stroke();
+    g.strokeStyle = 'rgba(150,96,92,0.5)'; g.lineWidth = 1.4;
+    for (let k = 0; k < 4; k++) { const y = EYE_Y - 16 + k * 10; g.beginPath(); g.moveTo(CX - 69, y); g.lineTo(CX - 57, y + 3); g.stroke(); }
+    if (!open) {
+      // OLHOS FECHADOS: a linha da pálpebra curvada para baixo, os cílios e a sombra leve
+      for (const s of [-1, 1]) {
+        const x = CX + s * 32;
+        const sh = g.createRadialGradient(x, EYE_Y - 2, 2, x, EYE_Y - 2, 18);
+        sh.addColorStop(0, 'rgba(150,100,100,0.22)'); sh.addColorStop(1, 'rgba(150,100,100,0)');
+        g.fillStyle = sh; g.beginPath(); g.ellipse(x, EYE_Y - 2, 19, 10, 0, 0, Math.PI * 2); g.fill();
+        g.strokeStyle = '#2a1a16'; g.lineWidth = 2.6;
+        g.beginPath(); g.moveTo(x - 14, EYE_Y - 1); g.quadraticCurveTo(x, EYE_Y + 6, x + 14, EYE_Y - 2); g.stroke();
+        g.lineWidth = 1.2;
+        for (let k = 0; k < 4; k++) { const t = 0.2 + k * 0.2, lx = x - 14 + 28 * t, ly = EYE_Y - 1 + 6 * Math.sin(t * Math.PI) * 0.9; g.beginPath(); g.moveTo(lx, ly); g.lineTo(lx + s * 1.5, ly + 4); g.stroke(); }
+        g.strokeStyle = 'rgba(80,50,46,0.4)'; g.lineWidth = 1.2; // a dobra da pálpebra
+        g.beginPath(); g.moveTo(x - 12, EYE_Y - 7); g.quadraticCurveTo(x, EYE_Y - 10, x + 12, EYE_Y - 8); g.stroke();
+      }
+      return;
+    }
+    // OLHOS ABERTOS: completamente pretos (sem branco nem íris), com um brilho fino
+    for (const s of [-1, 1]) {
+      const x = CX + s * 32;
+      g.fillStyle = '#060406';
+      g.beginPath(); g.moveTo(x - 15, EYE_Y); g.quadraticCurveTo(x, EYE_Y - 11, x + 15, EYE_Y - 1); g.quadraticCurveTo(x, EYE_Y + 8, x - 15, EYE_Y); g.fill();
+      g.fillStyle = 'rgba(120,130,150,0.5)'; g.beginPath(); g.arc(x + 4, EYE_Y - 4, 1.6, 0, Math.PI * 2); g.fill();
+      g.strokeStyle = '#0a0606'; g.lineWidth = 3.4;
+      g.beginPath(); g.moveTo(x - 16, EYE_Y + 0.5); g.quadraticCurveTo(x, EYE_Y - 12, x + 17, EYE_Y - 1.5); g.stroke();
+    }
+    // a FAIXA vertical pelo olho direito: da testa (por baixo do sigilo) até a bochecha
+    g.strokeStyle = 'rgba(12,8,10,0.92)'; g.lineWidth = 5; g.lineCap = 'butt';
+    g.beginPath(); g.moveTo(CX - 32, 52); g.bezierCurveTo(CX - 33, 95, CX - 31, 140, CX - 28, 188); g.stroke();
+    // e a faixa HORIZONTAL atravessando os lábios, de bochecha a bochecha
+    g.lineWidth = 4.4;
+    g.beginPath(); g.moveTo(CX - 58, MOUTH_Y - 2); g.quadraticCurveTo(CX, MOUTH_Y + 3, CX + 58, MOUTH_Y - 2); g.stroke();
+    // as tatuagens subindo pelo pescoço (a parte de baixo do canvas)
+    danteTattoos(g, { x: CX - 120, y: 212, w: 240, h: 44 }, null);
+  }, {
+    skin: '#e2c8bc',
+    noEyes: !open,
+    eye: { iris: '#060406', irisLight: '#060406', sclera: '#060406', tilt: -0.02, lid: 3.4 },
+    brow: { angry: 1, thick: 3, color: '#a88a58' },
+    mouth: { mouthW: 13, smile: 0, smirk: 0 },
+  });
+}
+
 export const MATERIAL_TEXTURES = {
   // ---------------- KAISER: queimadura no lado ESQUERDO (x > 256)
   face_cineraria: face((g) => {
@@ -1831,87 +1918,57 @@ export const MATERIAL_TEXTURES = {
     return { map, emissiveMap, emissive: 0xffd27a };
   },
 
-  // ---------------- DANTE: sigilo do infinito na testa, risco preto descendo pelo rosto,
-  // lágrimas de Lodo Preto (Morte), rosto sem barba e tatuagens subindo pelo pescoço
-  face_dante: face((g) => {
-    // linha na testa com o símbolo do infinito no meio
-    g.strokeStyle = '#1c1414'; g.lineWidth = 2.4; g.lineCap = 'round';
-    g.beginPath(); g.moveTo(CX - 62, 74); g.lineTo(CX - 16, 74); g.moveTo(CX + 16, 74); g.lineTo(CX + 62, 74); g.stroke();
-    g.lineWidth = 3;
-    g.beginPath();
-    for (let t = 0; t <= Math.PI * 2 + 0.01; t += 0.1) {
-      const x = CX + 15 * Math.sin(t);
-      const y = 74 + 6 * Math.sin(t) * Math.cos(t);
-      if (t === 0) g.moveTo(x, y); else g.lineTo(x, y);
-    }
-    g.stroke();
-    for (const s of [-1, 1]) { g.beginPath(); g.arc(CX + s * 70, 74, 2.2, 0, Math.PI * 2); g.fillStyle = '#1c1414'; g.fill(); }
-    // risco preto da testa ao queixo, passando pelo olho direito (x < 256)
-    g.strokeStyle = 'rgba(14,10,12,0.9)'; g.lineWidth = 3.2;
-    g.beginPath(); g.moveTo(CX - 34, 50); g.bezierCurveTo(CX - 36, 100, CX - 30, 150, CX - 22, 205); g.stroke();
-    // lágrimas de Lodo Preto escorrendo dos dois olhos
-    for (const s of [-1, 1]) {
-      const x0 = CX + s * 30;
-      g.fillStyle = 'rgba(8,6,8,0.92)';
-      g.beginPath();
-      g.moveTo(x0 - 6, EYE_Y + 5);
-      g.bezierCurveTo(x0 - 7, EYE_Y + 30, x0 - 3, EYE_Y + 52, x0 - 1, EYE_Y + 70);
-      g.lineTo(x0 + 3, EYE_Y + 70);
-      g.bezierCurveTo(x0 + 4, EYE_Y + 48, x0 + 6, EYE_Y + 26, x0 + 6, EYE_Y + 5);
-      g.closePath(); g.fill();
-      g.beginPath(); g.arc(x0 + 1, EYE_Y + 72, 3.4, 0, Math.PI * 2); g.fill(); // gota
-      // escorrido mais fino ao lado
-      g.strokeStyle = 'rgba(8,6,8,0.8)'; g.lineWidth = 1.6;
-      g.beginPath(); g.moveTo(x0 + s * 7, EYE_Y + 6); g.quadraticCurveTo(x0 + s * 9, EYE_Y + 24, x0 + s * 8, EYE_Y + 38); g.stroke();
-    }
-    // tatuagens subindo pelo pescoço (parte de baixo da textura)
-    g.fillStyle = 'rgba(20,14,16,0.75)';
-    for (let i = 0; i < 380; i++) {
-      const x = CX - 110 + Math.random() * 220, y = 214 + Math.random() * 42;
-      g.beginPath(); g.arc(x, y, 0.8 + Math.random() * 1.4, 0, Math.PI * 2); g.fill();
-    }
-    g.strokeStyle = 'rgba(20,14,16,0.8)'; g.lineWidth = 1.6;
-    for (const x of [CX - 70, CX + 60]) {
-      g.beginPath();
-      for (let t = 0; t < 14; t += 0.2) g.lineTo(x + Math.cos(t) * t * 1.1, 236 + Math.sin(t) * t * 1.1);
-      g.stroke();
-    }
-  }, {
-    skin: '#dcc0b0',
-    eye: { iris: '#3a3434', irisLight: '#6a6460', tilt: -0.02, lid: 4.2, bags: true },
-    brow: { angry: 2, thick: 4, color: '#7a6640' },
-    mouth: { mouthW: 14, smile: 2, smirk: 2 },
-  }),
+  // ---------------- DANTE (Calamidade): de OLHOS FECHADOS, pele pálida, sem as tatuagens à mostra, a cicatriz na têmpora
+  // direita (x < 256) e o sigilo do infinito na testa. OLHOS ABERTOS (a Transformação, dante_aberto): os olhos ficam
+  // COMPLETAMENTE PRETOS, surgem as duas FAIXAS (uma passando pelo olho direito, da testa à bochecha, e outra na
+  // horizontal pelos lábios) e as tatuagens de pintas e espirais voltam (pescoço e braços) — "como um Luzidio"
+  face_dante: danteFace(false),
+  face_dante_open: danteFace(true),
   skin_dante: () => canvasTex(512, 512, (g) => {
-    g.fillStyle = '#dcc0b0';
+    g.fillStyle = '#e2c8bc';
     g.fillRect(0, 0, 512, 512);
-    const ink = 'rgba(22,16,18,0.85)';
-    // pontilhado denso (como nas artes) com espirais e rosas de linhas
-    g.fillStyle = ink;
-    // manchas GRAÚDAS e irregulares (de longe a arte lê como pele de onça), com o pontilhado fino entre elas
-    for (let i = 0; i < 1500; i++) {
-      const x = Math.random() * 512, y = Math.random() * 512;
-      if ((Math.sin(x * 0.05) + Math.cos(y * 0.04)) < -0.6) continue; // deixa respiros de pele
-      g.beginPath(); g.ellipse(x, y, 2.5 + Math.random() * 4, 1.8 + Math.random() * 3, Math.random() * Math.PI, 0, Math.PI * 2); g.fill();
+    // pele pálida com um leve manchado (sem as tatuagens: elas só aparecem de olhos abertos)
+    const rnd = seeded(1265);
+    for (let i = 0; i < 260; i++) {
+      const x = rnd() * 512, y = rnd() * 512, r = 6 + rnd() * 18;
+      const gr = g.createRadialGradient(x, y, 1, x, y, r);
+      gr.addColorStop(0, 'rgba(200,150,140,0.10)'); gr.addColorStop(1, 'rgba(200,150,140,0)');
+      g.fillStyle = gr; g.fillRect(x - r, y - r, r * 2, r * 2);
     }
-    for (let i = 0; i < 2600; i++) {
-      const x = Math.random() * 512, y = Math.random() * 512;
-      g.beginPath(); g.arc(x, y, 0.7 + Math.random() * 1.1, 0, Math.PI * 2); g.fill();
+  }, { wrap: true }),
+  skin_dante_open: () => canvasTex(512, 512, (g) => danteTattoos(g), { wrap: true }),
+  // o xale BRANCO: tecido grosso com as dobras sombreadas em azul-acinzentado (como no traço da miniatura)
+  shawl_dante: () => canvasTex(512, 512, (g, w, h) => {
+    g.fillStyle = '#eeede8';
+    g.fillRect(0, 0, w, h);
+    const rnd = seeded(77);
+    for (let i = 0; i < 46; i++) {
+      const x = rnd() * w, y0 = rnd() * h * 0.3, len = 120 + rnd() * 320, wd = 6 + rnd() * 18;
+      const gr = g.createLinearGradient(x - wd, 0, x + wd, 0);
+      gr.addColorStop(0, 'rgba(150,158,172,0)'); gr.addColorStop(0.5, `rgba(150,158,172,${0.18 + rnd() * 0.22})`); gr.addColorStop(1, 'rgba(150,158,172,0)');
+      g.fillStyle = gr;
+      g.beginPath(); g.moveTo(x - wd, y0); g.quadraticCurveTo(x + (rnd() - 0.5) * 40, y0 + len / 2, x - wd * 0.3, y0 + len); g.lineTo(x + wd * 0.3, y0 + len); g.quadraticCurveTo(x + (rnd() - 0.5) * 40 + wd, y0 + len / 2, x + wd, y0); g.fill();
     }
-    g.strokeStyle = ink; g.lineWidth = 3;
-    for (let k = 0; k < 18; k++) {
-      const cx = 30 + Math.random() * 452, cy = 30 + Math.random() * 452, sc = 1.8 + Math.random() * 1.6;
-      g.beginPath();
-      for (let t = 0; t < 16; t += 0.15) g.lineTo(cx + Math.cos(t) * t * sc, cy + Math.sin(t) * t * sc);
-      g.stroke();
+    g.strokeStyle = 'rgba(70,76,90,0.35)'; g.lineWidth = 1.4; // traços de dobra (o nanquim da HQ)
+    for (let i = 0; i < 40; i++) {
+      const x = rnd() * w, y = rnd() * h;
+      g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + (rnd() - 0.5) * 20, y + 30, x + (rnd() - 0.5) * 16, y + 50 + rnd() * 60); g.stroke();
     }
-    // sigilos de círculo e escrita
-    g.lineWidth = 1.8;
-    for (let k = 0; k < 10; k++) {
-      const x = Math.random() * 512, y = Math.random() * 512, r = 10 + Math.random() * 12;
-      g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.moveTo(x - r * 0.7, y); g.lineTo(x + r * 0.7, y); g.moveTo(x, y - r * 0.7); g.lineTo(x, y + r * 0.7); g.stroke();
+    for (let i = 0; i < 2500; i++) { g.fillStyle = `rgba(120,120,110,${rnd() * 0.06})`; g.fillRect(rnd() * w, rnd() * h, 2, 2); } // trama do tecido
+  }, { wrap: true }),
+  // as faixas dos pés: pano cru encardido, com as voltas marcadas
+  wraps_dante: () => canvasTex(256, 256, (g, w, h) => {
+    g.fillStyle = '#cfc8b8';
+    g.fillRect(0, 0, w, h);
+    const rnd = seeded(31);
+    g.strokeStyle = 'rgba(110,98,80,0.45)'; g.lineWidth = 2;
+    for (let y = 8; y < h; y += 16 + rnd() * 6) { g.beginPath(); g.moveTo(0, y); g.lineTo(w, y + (rnd() - 0.5) * 6); g.stroke(); }
+    for (let i = 0; i < 30; i++) {
+      const x = rnd() * w, y = rnd() * h, r = 8 + rnd() * 20;
+      const gr = g.createRadialGradient(x, y, 1, x, y, r);
+      gr.addColorStop(0, 'rgba(110,90,70,0.28)'); gr.addColorStop(1, 'rgba(110,90,70,0)');
+      g.fillStyle = gr; g.fillRect(x - r, y - r, r * 2, r * 2);
     }
-    glyphs(g, 0, 0, 512, 512, 'rgba(22,16,18,0.6)', 10, 0.18);
   }, { wrap: true }),
 
   // ---------------- CRISTINO (Transtornados, Hexatombe): 45 anos, pele curtida de sol, barba por fazer, o olho DIREITO

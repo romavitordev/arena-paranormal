@@ -53,6 +53,12 @@ export const PASSIVES = {
   },
   // Arthur — Preço de Sangue: sem sanidade, paga rituais e a Arma de Sangue com a própria vida (lido no Fighter)
   bloodPrice: {},
+  // Dante (Olhos Abertos) — Marcado pela Morte: vantagem contra rituais e ataques de Morte (recebe menos dano de Morte)
+  deathMarked: {
+    damageTakenMod({ element, passive }) {
+      return element === 'morte' ? passive.mult ?? 0.8 : 1;
+    },
+  },
   // Kaiser — Resistente: armadura natural contra dano físico
   resistant: {
     damageTakenMod({ kind, passive }) {

@@ -25,7 +25,10 @@ export const marionette = {
     const spot = findFreeSpotNear(world.arena, want.x, want.z, { radius: 0.6, others: opp ? [{ x: opp.pos.x, z: opp.pos.z, r: 0.8 }] : [] }) || { x: want.x, z: want.z };
     tl.add(0.25, () => world.showBanner(sp.banner || 'A Marionete!', f.def.color));
     tl.add(0.45, () => {
-      world.addNpc(new Marionette(f, world, new THREE.Vector3(spot.x, 0, spot.z), { duration: sp.duration, hp: sp.hp }));
+      // invocada com o Dante TRANSFORMADO (Afinidade com o Outro Lado): ganha o corte à distância da foice
+      const ranged = !!(sp.ranged || (sp.rangedWhenAwakened && f.findBuff('awakened')));
+      world.addNpc(new Marionette(f, world, new THREE.Vector3(spot.x, 0, spot.z), { duration: sp.duration, hp: sp.hp, ranged }));
+      if (ranged) f.notify('A FOICE CORTA À DISTÂNCIA', true);
       world.cameraRig.shake(0.35, 0.3);
       world.audio.play('fearGaze');
     });

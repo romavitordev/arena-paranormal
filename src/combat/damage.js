@@ -273,6 +273,10 @@ export function applyHit(world, attacker, victim, o) {
   const blade = attacker.findBuff && attacker.findBuff('bloodBlade');
   if (blade && o.kind === 'melee' && victim.state !== 'ko') victim.applyBleed(blade.bleed, attacker);
 
+  // ECO ESPIRAL "Eco Dolor" (Dante — Olhos Abertos): o vulto do alvo repete cada golpe do Dante (danteAbilities.js)
+  const eco = victim.findBuff && victim.findBuff('ecoDolor');
+  if (eco && eco.owner === attacker && !o.echo && dealt > 0 && victim.state !== 'ko') eco.queue(dealt, o);
+
   world.onHit && world.onHit(attacker, victim, dealt, o);
   return dealt;
 }

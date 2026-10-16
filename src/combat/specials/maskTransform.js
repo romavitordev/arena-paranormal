@@ -20,6 +20,8 @@ import { MATERIAL_TEXTURES } from '../../models/textures.js';
 //             ao rosto; verde no lugar do vermelho — referências do usuário)
 //             'hood' (Jae → X: puxa o capuz, sorri e o rosto some com o X; sp.swap troca as peças do capuz)
 //             'hate' (Juan → Ódio do Diabo: corta o braço, o sangue vira garras, puxa o capuz e o olho acende)
+//             'eyes' (Dante → Olhos Abertos: de olhos fechados, o Lodo sobe do chão, ele ABRE OS OLHOS — pretos, as
+//             faixas e as orelhas pontudas)
 //             'watch' (Arnaldo → O Anfitrião: tira o relógio de bolso, abre a tampa, a Relíquia de Energia brilha lá
 //             dentro e ele ergue o relógio; a Energia toma o corpo em roxo, rosa e azul)
 //             omitido: concentra e o acessório aparece
@@ -298,6 +300,45 @@ export const maskTransform = {
       tl.add(0.95, () => world.screenFlash && world.screenFlash('#0a2a12', 0.12));
       tl.add(1.15, () => maskOn(true));
       total = 2.4;
+    } else if (scene === 'eyes') {
+      // DANTE — OLHOS ABERTOS (Calamidade): 1) de olhos fechados, concentra; o coração bate e o Lodo Preto sobe do chão
+      // em volta dele · 2) close no rosto sereno · 3) ele ABRE OS OLHOS: pretos, as faixas e as tatuagens surgem, as
+      // orelhas ficam pontudas — o clarão pálido e a névoa preta explodem em espiral
+      f.anim.play('idle', { restart: true, blend: 0.2 }); // de pé e sereno, as mãos longe do rosto: a câmera vê os olhos fechados
+      world.audio.play('heartbeat', { volume: 0.7 });
+      lightTo = 2;
+      world.cameraRig.playShots([
+        faceClose(f, { dur: 1.3, from: 1.7, to: 1.15, side: 0.35, height: hy - 0.05, fov: 36 }),
+        faceClose(f, { dur: 0.9, from: 1.2, to: 0.95, side: -0.12, height: hy, fov: 32 }),
+        lowAngle(f, { dur: 1.0, dist: 3.0, side: 0.7 }),
+      ]);
+      tl.add(0.25, () => world.showBanner(sp.banner || sp.name, f.def.color));
+      const lodo = world.fx.emitter({
+        rate: 70,
+        follow: () => { const a = Math.random() * Math.PI * 2; const r = 0.6 + Math.random() * 0.9; return new THREE.Vector3(f.pos.x + Math.cos(a) * r, 0.1, f.pos.z + Math.sin(a) * r); },
+        particle: { color: 0x0c0a0e, kind: 'smoke', speed: 0.3, up: 1.6, spread: 0.2, life: 0.9, size: 0.6 },
+      });
+      scrap.push(() => lodo.stop());
+      tl.add(0.5, () => world.fx.ring(new THREE.Vector3(f.pos.x, 0.06, f.pos.z), { color: tint, radius: 1.6, life: 1.0 }));
+      tl.add(0.9, () => {
+        world.fx.distort(f.chestPos(), { color: tint, radius: 1.6, life: 0.4 });
+        world.audio.play('ritual', { volume: 0.7, pitch: 0.6 });
+        world.audio.play('heartbeat', { volume: 0.9 });
+      });
+      tl.add(1.6, () => {
+        // os olhos abrem: troca o rosto ao vivo (o modelo da forma entra no fim da cena)
+        scrap.push(swapFace(f.rig, 'face_dante', 'face_dante_open'));
+        maskOn(true);
+        world.fx.burst(head(), { count: 40, color: 0x0c0a0e, kind: 'smoke', speed: 3, life: 0.8, size: 0.6, grow: 1 });
+      });
+      tl.add(1.9, () => {
+        lodo.stop();
+        const p = f.chestPos();
+        world.fx.burst(p, { count: 60, color: 0x0c0a0e, kind: 'smoke', speed: 5, life: 0.9, size: 0.7, grow: 1.2 });
+        for (let i = 0; i < 2; i++) world.fx.ring(new THREE.Vector3(f.pos.x, 0.07, f.pos.z), { color: i ? 0x0c0a0e : tint, radius: 2.4 + i * 1.4, life: 0.6 + i * 0.1 });
+        world.cameraRig.shake(0.4, 0.35);
+      });
+      total = 2.9;
     } else if (scene === 'watch') {
       // RELÍQUIA DE ENERGIA (Arnaldo → O Anfitrião) — uma cutscene de verdade, em nove fases:
       //  1 olha o relógio, que começa a brilhar · 2 o ambiente distorce (som estranho) · 3 a Relíquia se manifesta ·

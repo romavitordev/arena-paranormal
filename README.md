@@ -4,7 +4,7 @@ Jogo de luta 3D em arena com temática paranormal. Combate rápido e acessível,
 movimentação livre, ataques direcionais, defesa, esquiva, habilidades por combinação de
 botões e especiais cinematográficos. Feito com **Three.js + Vite**, roda no navegador.
 
-Versão atual do jogo: **v3.25.1**.
+Versão atual do jogo: **v3.26.0**.
 
 > Jogo **fan made**: projeto de fã sem fins lucrativos, baseado em *Ordem Paranormal* (Cellbit). Não é um jogo oficial.
 
@@ -112,7 +112,7 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 | ARTHUR CERVERO | Ordo Realitas | Sangue | Sniper (segure □: ajoelha e mira — mais tempo, mais dano) | □ Rebirth · ○ Ódio Incontrolável "Templo do Ódio" · △ Paralisia de Sangue "Dystopia" · L2 Analisar Brecha (+25% de dano físico no alvo) | Arma de Sangue | — (luta só com chutes: tem um braço) |
 |JOUI JOUKI | Ordo Realitas | Conhecimento | Sombra Rasteira | ○ Olhar do Desespero · L2 Corte das Sombras (investida) (△ + × Teleporte das Sombras) | Shi no Kage | Golpe pelas costas · Decepar |
 | AGHATA | Ordo Realitas | Sangue | Faca Arremessada | □ Amaldiçoar Arma (Sangue) · L2 Facas Amaldiçoadas · R2+× Passagem de Conhecimento · R2+△ Leitura de Rituais (3 em leque) | Descarnar | Colar Banhado em Sangue |
-| DANTE | Ordo Realitas | Morte | Decadenza (a Decadência: espirais que apertam e fazem definhar) | □ Embaralhar "Trinitá" (cópias que imitam e levam o golpe no lugar dele) · ○ Tentáculos de Lodo · △ Cicatrização "Paradiso" (cura em instantes, envelhece) · L2 Destruição Temporal "Rotura" | Invocação: A Marionete (NPC por 18 s, barra preta, pode ser destruída; anda aos trancos, atravessa obstáculos e agarra com a Ironia do Destino) | Concentração Inquebrável (rituais −10% de sanidade) |
+| DANTE | Ordo Realitas | Morte | Decadenza (a Decadência: espirais que apertam e fazem definhar) | □ Embaralhar "Trinitá" (3 cópias que andam, cercam e batem, e levam o golpe no lugar dele) · ○ Tentáculos de Lodo · △ Cicatrização "Paradiso" (cura em instantes, envelhece) · L2 Destruição Temporal "Rotura" | Invocação: A Marionete (NPC por 18 s, barra preta, pode ser destruída; anda aos trancos, atravessa obstáculos e agarra com a Ironia do Destino) · **Transformação:** Olhos Abertos até o fim do round (olhos pretos, "como um Luzidio": Decadência pela boca, Trinitá Aprimorado com troca de lugar, Paradoxo, Eco Espiral, Paradiso sem envelhecer, a Marionete com o corte à distância) | Concentração Inquebrável (rituais −10% de sanidade) · Marcado pela Morte (na forma) |
 | ERIN PARKER | Ordo Realitas | Energia | Escopeta calibre 12 (leque de chumbo) | □ Granada "Supernova" · × Granada "Nebulosa" (névoa) · ○ Bênção Maldita · △ Black Hole (cura) · L2 Granada de Luz (atordoa) | Supernova (granada de luz que dá para evitar; se cegar: corre, tiro de escopeta e granada) · **Transformação:** Em Nome do Caos (máscara de gás, enlouquece: golpes e granadas mais fortes, sem cura; especial Em Nome do Caos — corre e se explode: 450 de dano, ela morre; se levar o rival junto ganha o round, senão perde) | Amuleto Elétrico (choque em quem bate nela) |
 | GAL SAL | Escriptas | Conhecimento | Corrente de Captura (procura, prende e puxa) | □ Corrente Gancho · × Teletransporte · L2 Corrente Giratória (área) · trás + □ Ativar Ereshkigal (liga a cura que cobra sanidade por 6 s) | Injustiça né? | Desviar de Balas · Bloqueio Perfeito |
 | KIAN | Escriptas | Conhecimento | Impacto Sigilar | □ Teletransporte · ○ Lâmina do Medo · △ Levitação · × Rejeitar Névoa | Inexistir (2x por partida) | Precognição |

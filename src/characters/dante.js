@@ -60,13 +60,14 @@ export default {
       name: 'Embaralhar "Trinitá"',
       input: 'carga+ranged',
       type: 'shuffle',
-      description: 'Vira um vulto, troca de lugar e deixa 3 cópias realistas em volta que imitam cada movimento dele. Por 7 s, um golpe (não especial) pode acertar uma cópia no lugar dele — a cópia se desfaz.',
+      description: 'Vira um vulto, troca de lugar e deixa 3 cópias de Lodo que ANDAM, cercam o inimigo e batem com as palmas (metade do dano dele). Por 7 s, um golpe (não especial) pode acertar uma cópia no lugar dele — a cópia se desfaz; as cópias também podem ser destruídas.',
       energyCost: 30,
       cooldown: 22,
       duration: 7,
       copies: 3,
       spacing: 1.1,
       perCopy: 0.22,
+      fight: true, // só o Dante: as cópias lutam como invocações (DanteClone) — no Guizo elas só imitam
       color: 0x1a161e,
     },
     {
@@ -120,8 +121,10 @@ export default {
     },
   ],
 
-  // INVOCAÇÃO: A MARIONETE — um NPC real (vida, IA, ataques próprios) que fica 25 s em campo.
+  // INVOCAÇÃO: A MARIONETE — um NPC real (vida, IA, ataques próprios) que fica 18 s em campo.
   // Pode ser atacada e destruída. Recarga alta. Às vezes se volta contra o próprio Dante.
+  // Invocada de OLHOS ABERTOS (a forma dante_aberto: special.ranged), ganha o CORTE À DISTÂNCIA (a foice arremessa um
+  // corte de osso — npcs.js MARIONETTE.slash).
   special: {
     name: 'Invocação: A Marionete',
     banner: 'A Marionete!',
@@ -133,12 +136,23 @@ export default {
     color: 0x8ad8c0,
   },
 
-  // DESPERTAR (Barra de Transformação cheia + vida baixa, segurando △) — cânone: transcendeu depois de Tirigan e Sukkalgir e ganhou Afinidade com o Outro Lado — rituais de Morte mais fortes. Até o fim do round.
+  // TRANSFORMAÇÃO (Barra cheia + vida baixa, segurando △) — cânone (Calamidade): de olhos fechados desde a cegueira,
+  // quando ABRE OS OLHOS a afinidade com a Morte toma o corpo (olhos pretos, as faixas, as tatuagens e as orelhas
+  // pontudas, "como um Luzidio"). Vira a forma dante_aberto (kit melhorado) até o fim do round. Substitui o antigo
+  // despertar "Afinidade com o Outro Lado" (v3.26.0).
   awakening: {
-    name: 'Afinidade com o Outro Lado',
-    banner: 'Afinidade com o Outro Lado',
-    type: 'awakenMode',
-    mult: 1.25, affects: ['ability', 'special'], cdRate: 1.3, regen: 4, aura: 'smoke', color: 0x3a3442, heal: 0.1,
+    name: 'Olhos Abertos',
+    banner: 'Olhos Abertos',
+    type: 'maskTransform',
+    scene: 'eyes',
+    form: 'dante_aberto',
+    formBanner: 'OLHOS ABERTOS',
+    swap: [['eartip_L', true], ['eartip_R', true]],
+    sound: 'fearGaze',
+    tint: 0xc4bfd2,
+    duration: 0, // até o fim do round
+    bonusHealth: 100,
+    color: 0x6a6478,
   },
 
   passives: [

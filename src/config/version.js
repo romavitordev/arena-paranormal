@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.25.1';
+export const VERSION = '3.26.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,19 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.26.0',
+    date: '2026-10-16',
+    title: 'Olhos Abertos',
+    items: [
+      'DANTE DE VISUAL NOVO (Calamidade): de olhos fechados, cabelo loiro com franja e o rabo alto, o grande XALE BRANCO enrolado no pescoço, cruzado no peito com o broche azul e caindo até os joelhos, camiseta escura, cinto de corrente com a faca e os pés descalços enfaixados.',
+      'NOVA TRANSFORMAÇÃO DO DANTE — OLHOS ABERTOS: ele ABRE OS OLHOS e a afinidade com a Morte toma o corpo — olhos completamente pretos, as duas faixas no rosto, as tatuagens de volta e as orelhas pontudas, "como um Luzidio". Até o fim do round ele tem um kit melhorado:',
+      'OLHOS ABERTOS — a DECADÊNCIA sai da boca, vai mais longe e definha por mais tempo; o TRINITÁ APRIMORADO deixa 4 cópias que lutam e, apertando de novo, ele TROCA DE LUGAR com uma delas; os TENTÁCULOS DE LODO pegam uma área maior; o PARADISO cura mais e não envelhece; a DESTRUIÇÃO TEMPORAL "ROTURA" passa para ← + □.',
+      'OLHOS ABERTOS — rituais novos: PARADOXO (△ + L2), uma grande espiral preta no chão que faz definhar, deixa lento e apodrece as invocações inimigas; e ECO ESPIRAL "ECO DOLOR" (R2 + ×), a silhueta negra do alvo que repete cada golpe do Dante. E a passiva MARCADO PELA MORTE: recebe menos dano de Morte.',
+      'DANTE — no TRINITÁ as cópias agora são vultos pretos que ANDAM, cercam o inimigo e batem (e ainda podem levar um golpe no lugar dele).',
+      'A MARIONETE DE VISUAL NOVO: o crânio de mandíbula aberta pelos fios, o cabelo preto longo, o vestido azulado em tiras rasgadas, as estacas de osso e a grande foice de ossos. Invocada com o Dante de Olhos Abertos, a foice também CORTA À DISTÂNCIA.',
+    ],
+  },
   {
     v: '3.25.1',
     date: '2026-10-16',

@@ -13,6 +13,7 @@ import './hostAbilities.js'; // registra as habilidades do Anfitrião em ABILITY
 import './guizoAbilities.js'; // e as do Guizo (Embaralhar, Decadência, Espirais da Perdição...)
 import { detonateLanterns } from './cristinoAbilities.js'; // e as do Cristino (lampiões, fogo no chão)
 import './cristopherAbilities.js'; // e a do Cristopher (o carro de dublê)
+import './danteAbilities.js'; // e as do Dante de Olhos Abertos (Paradoxo, Eco Espiral)
 import { SPECIALS } from './specials/index.js';
 import { telegraphFor, startTelegraph, updateTelegraph, stopTelegraph, telegraphMissed, TELEGRAPH } from './specials/telegraph.js';
 import { hasPassive } from './passives.js';
@@ -2681,6 +2682,10 @@ export class Fighter {
   useAbility(a) {
     if (this.meleeLocked()) return;
     if (this.cooldowns[a.id] > 0) {
+      // recast: a habilidade tem um segundo uso enquanto recarrega (Trinitá Aprimorado: trocar de lugar com uma cópia)
+      const re = a.recast && ABILITY_TYPES[a.type] && ABILITY_TYPES[a.type].recast;
+      const seq = re ? re(this, a, this.world) : null;
+      if (seq) { this.setState('ability'); this.seq = seq; return; }
       this.notify(`${a.name.toUpperCase()}: RECARREGANDO`);
       return;
     }

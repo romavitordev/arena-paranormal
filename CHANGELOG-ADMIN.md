@@ -1,5 +1,32 @@
 # Registro administrativo de alterações
 
+## v3.26.0 — Olhos Abertos
+
+- Versão: `VERSION` 3.25.1 → **3.26.0** (package.json/lock junto).
+- Pedidos: "Dante, quando usar o Trinitá na forma normal, pode deixar os clones andarem e baterem no inimigo, assim
+  como outras invocações; a Marionete poderá usar ataques de longa distância se for invocada quando o Dante estiver
+  transformado"; depois "quero uma transformação canônica pra ele, uma boa transformação com um kit de habilidades
+  melhoradas" (aprovado: Olhos Abertos com o kit proposto) e "pode melhorar o modelo dele e da Marionete também?".
+- **Cânone** (wiki "Dante" e "A Marionete", lidas de novo — as referências locais se perderam com a pasta antiga):
+  - em Calamidade o Dante fica de olhos fechados e sem as tatuagens à mostra; "ao abrir seus olhos [...] as tatuagens
+    reaparecem, seus olhos se tornam completamente pretos e duas faixas surgem [...] orelhas levemente pontudas —
+    bastante similar à de um Luzidio";
+  - o Trinitá aprimorado ("clones que agem de forma independente [...] trocar a sua posição com qualquer uma das
+    cópias"), o Paradoxo e o Eco Espiral "Eco Dolor" estão na lista de rituais de Calamidade;
+  - Marcado pela Morte (vantagem contra Morte) é habilidade da ficha.
+- **Modelos:** Dante v2 (~47 mil triângulos, um pouco acima do orçamento de 40 mil, como os outros remodelados) e a
+  Marionete v2. A forma usa o mesmo .glb com as texturas trocadas.
+- **Números:** Paradoxo 16/s (raio 3 m, 5 s, lentidão 0,65; invocações 60/s); Eco 40% de cada golpe 0,35 s depois
+  (medido: golpe de 27 → eco de 9 no Kaiser, Morte contra Energia); Trinitá Aprimorado 4 cópias (17% cada), 9 s, troca
+  a cada 1,2 s; Decadência 72 (11 m, 6/s por 4 s); Paradiso 110 sem envelhecer; Marcado pela Morte ×0,8; +100 de vida.
+- **Ambiente:** a pasta antiga (D:\arena-paranormal) foi apagada e o repositório foi baixado de novo em
+  E:\arena paranormal. O cache do npm apontava para D:\npm-cache (não existe mais): o `npm ci` precisou de
+  `--cache` em outra pasta. As referências visuais e os .blend que não estavam no git se perderam (o dante.blend é novo).
+- Observado: a `gallery.html` já mostrava o erro "Cannot access 'BloodZombie' before initialization" (ciclo de
+  imports antigo; o jogo não é afetado) — fica para depois.
+- Verificações: `check-roster` (regras novas), `npm test` (41), `npm run build`; a cena da transformação, cada habilidade
+  da forma, as cópias, o Paradoxo e a Marionete nova conferidos no preview.
+
 ## v3.25.1 — Feito por Fãs
 
 - Versão: `VERSION` 3.25.0 → **3.25.1** (package.json/lock junto).

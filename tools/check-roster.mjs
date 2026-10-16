@@ -270,6 +270,15 @@ const dan = get('dante');
 ok(dan && dan.origin === 'Ordo Realitas' && dan.element === 'morte', 'Dante: Ordo Realitas, Morte');
 ok(dan && dan.ranged.name === 'Decadenza' && dan.ranged.type === 'decadence' && dan.ranged.decay, 'Dante: □ Decadenza = a Decadência (espirais que apertam, decadência contínua)');
 ok(dan && ['shuffle', 'lodoTentacles', 'agingHeal'].every((t) => dan.abilities.some((a) => a.type === t)), 'Dante: Trinitá (Embaralhar), Tentáculos de Lodo e Paradiso (Cicatrização)');
+{
+  const ab = getForm('dante_aberto');
+  const tri = dan && dan.abilities.find((a) => a.id === 'trinita');
+  const triA = ab && ab.abilities.find((a) => a.id === 'trinita');
+  ok(tri && tri.fight && dan.awakening.type === 'maskTransform' && dan.awakening.scene === 'eyes' && dan.awakening.form === 'dante_aberto', 'Dante: as cópias do Trinitá lutam; a Transformação é Olhos Abertos (a cena dos olhos, forma dante_aberto)');
+  ok(ab && ab.model === 'dante_aberto' && ['paradox', 'echoPain', 'decadence', 'agingHeal', 'lodoTentacles'].every((t) => ab.abilities.some((a) => a.type === t)) && triA && triA.copies === 4 && triA.recast
+    && ab.abilities.find((a) => a.type === 'agingHeal').noAging && ab.ranged.fromMouth && ab.ranged.variants.back.ability === 'rotura' && ab.special.ranged && ab.passives.some((p) => p.type === 'deathMarked'),
+  'Dante de Olhos Abertos: Decadência pela boca, Trinitá Aprimorado (4 cópias + troca de lugar), Paradoxo, Eco Espiral, Paradiso sem envelhecer, Rotura no ← + □, a Marionete com o corte à distância e Marcado pela Morte');
+}
 ok(dan && dan.special.type === 'marionette' && dan.special.duration <= 30 && dan.special.cooldown >= 30, 'Dante: especial Invocação da Marionete (NPC por tempo limitado, recarga alta)');
 ok(dan && allStrikes(dan).every((s) => !s.weapon), 'Dante: sem armas');
 

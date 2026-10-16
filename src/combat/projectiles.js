@@ -152,6 +152,21 @@ const VISUALS = {
     return g;
   },
   // Lâmina de Sangue (Juan): meia-lua de sangue cortada pela faca, deitada, com o fio claro na frente (aponta para +Z)
+  // corte da FOICE DE OSSOS da Marionete arremessado (só quando o Dante a invoca transformado): o mesmo crescente, em osso
+  boneCrescent(color) {
+    const g = new THREE.Group();
+    const arc = new THREE.Mesh(new THREE.TorusGeometry(0.8, 0.06, 6, 28, Math.PI), glowMat(color, 0.9));
+    arc.rotation.x = Math.PI / 2;
+    arc.scale.set(1, 1, 0.35);
+    g.add(arc);
+    const edge = new THREE.Mesh(new THREE.TorusGeometry(0.84, 0.02, 4, 28, Math.PI), glowMat(0xf2fffa, 0.95));
+    edge.rotation.x = Math.PI / 2;
+    g.add(edge);
+    const core = new THREE.Mesh(new THREE.SphereGeometry(0.14, 8, 6), glowMat(0x0c0a0e, 0.85));
+    core.position.z = 0.6;
+    g.add(core);
+    return g;
+  },
   bloodCrescent(color) {
     const g = new THREE.Group();
     const arc = new THREE.Mesh(new THREE.TorusGeometry(0.7, 0.07, 6, 28, Math.PI), glowMat(color, 0.95));

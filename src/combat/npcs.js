@@ -156,6 +156,9 @@ export class DanteClone {
     this.dispose();
   }
 
+  // Embaralhar com cópias que lutam (Trinitá do Dante): a cópia que levou o golpe no lugar dele se desfaz
+  shatter() { this.kill(); }
+
   dispose() {
     this.alive = false;
     this.world.scene.remove(this.rig.root);
@@ -193,8 +196,11 @@ export const MARIONETTE = {
     heavy: { windup: 0.6, active: 0.14, recovery: 0.65, range: 2.9, arc: 110, damage: 50, cd: 3.5, knockback: 4, knockdown: true },
     lunge: { windup: 0.32, active: 0.2, recovery: 0.5, range: 2.0, arc: 120, damage: 32, cd: 4.5, knockback: 5, dash: 12 },
     irony: { windup: 0.35, active: 0.5, recovery: 0.45, range: 2.6, arc: 150, damage: 18, cd: 11, knockback: 0.5, hits: [0.35, 0.62], grabAt: 0.82, hold: 1.1, release: 26, share: 0.5 },
+    // CORTE À DISTÂNCIA: só se o Dante a invocou TRANSFORMADO (Afinidade com o Outro Lado) — a foice arremessa um corte
+    // de osso no adversário que está longe (nunca no Dante: na "traição" ela só usa os golpes de perto)
+    slash: { windup: 0.45, active: 0.08, recovery: 0.5, range: 16, arc: 360, damage: 34, cd: 2.6, knockback: 2.5, projectile: { visual: 'boneCrescent', color: 0x8ad8c0, speed: 20, range: 16, radius: 0.55, damage: 34, knockback: 2.5, hitstun: 0.4, kind: 'ability', element: 'morte', hitSound: 'bladeHit', homing: 0.6 } },
   },
-  firstCd: { reflex: 0.3, quick: 0.5, heavy: 1.5, lunge: 1.5, irony: 3 },
+  firstCd: { reflex: 0.3, quick: 0.5, heavy: 1.5, lunge: 1.5, irony: 3, slash: 1.2 },
   // chance (por sorteio, a cada 2 s) de atacar o Dante: base + bônus de proximidade; × energia se o adversário é de Energia
   betray: { base: 0.08, near: 0.22, nearDist: 6, closer: 0.15, oppFar: 0.12, oppFarDist: 10, energia: 0.4 },
 };
@@ -234,6 +240,7 @@ export class Marionette {
     this.retarget = 2;
     this.flash = 0;
     this.held = null;
+    this.ranged = !!o.ranged; // invocada com o Dante transformado: ganha o corte à distância
     this.gait = 0;
     // Momento Passivo: só os limites da arena seguram (atravessa paredes, mesas, pilares)
     this.bounds = { colliders: [], boxes: [], bounds: world.arena.bounds, radius: world.arena.radius };
@@ -297,6 +304,7 @@ export class Marionette {
     if (d < 2.4 && c.irony <= 0 && Math.random() < 0.3) return 'irony';
     if (d < 2.6 && c.heavy <= 0 && Math.random() < 0.35) return 'heavy';
     if (d < 2.8 && c.quick <= 0) return 'quick';
+    if (this.ranged && this.target !== this.owner && d > 3.5 && d < 15 && c.slash <= 0 && Math.random() < 0.6) return 'slash';
     if (d > 4 && d < 10 && c.lunge <= 0) return 'lunge';
     return null;
   }
@@ -438,6 +446,14 @@ export class Marionette {
   bob() { return Math.sin(this.t * 2.2) * 0.1 + jerk(this.t, 9, 3) * 0.04; }
 
   strike(a, tg, d) {
+    if (a.projectile) {
+      // corte à distância: sai da altura da foice, na direção do alvo
+      const from = new THREE.Vector3(this.pos.x, this.pos.y + 1.3, this.pos.z).addScaledVector(forwardFromYaw(this.yaw, new THREE.Vector3()), 0.8);
+      const dir = new THREE.Vector3(tg.pos.x, tg.pos.y + 1.0, tg.pos.z).sub(from).normalize();
+      this.world.projectiles.spawn(this.owner, a.projectile, from, dir);
+      this.world.audio.play('swing', { volume: 0.8, pitch: 0.8 });
+      return true;
+    }
     const inArc = a.arc >= 360 || Math.abs(angleDiff(this.yaw, yawTo(this.pos, tg.pos))) <= (a.arc * DEG) / 2;
     if (!(d - tg.radius <= a.range && inArc && Math.abs(tg.pos.y - this.pos.y) < 2.2)) return false;
     const heavy = a.name === 'heavy' || a.name === 'slam';
@@ -451,6 +467,7 @@ export class Marionette {
 
   swingFx(a, i) {
     if (a.name === 'lunge') return;
+    if (a.projectile) { this.world.fx.slash(new THREE.Vector3(this.pos.x, this.pos.y + 1.4, this.pos.z), this.yaw, { color: 0xbfe8dc, radius: 1.6, arc: 2.4, life: 0.2, width: 0.3, roll: 1.2 }); return; }
     const roll = a.name === 'heavy' ? 1.4 : a.name === 'irony' ? (i ? -0.5 : 0.5) : 0.2;
     this.world.fx.slash(new THREE.Vector3(this.pos.x, this.pos.y + 1.4, this.pos.z), this.yaw, { color: 0xbfe8dc, radius: a.range, arc: a.name === 'heavy' ? 2.2 : 2.8, life: 0.25, width: 0.35, roll });
   }

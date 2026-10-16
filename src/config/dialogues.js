@@ -29,7 +29,7 @@ export const CHARACTER_NAMES = {
   cristopher: 'Cristopher',
 };
 
-export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto', jae_x: 'jae', colosso: 'dalmo', guizo_et: 'guizo', kian_calamidade: 'kian', juan_odio: 'juan', guizo_bombado: 'guizo', guizo_velho: 'guizo', cristino_desertor: 'cristino' };
+export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto', jae_x: 'jae', colosso: 'dalmo', guizo_et: 'guizo', kian_calamidade: 'kian', juan_odio: 'juan', guizo_bombado: 'guizo', guizo_velho: 'guizo', cristino_desertor: 'cristino', dante_aberto: 'dante' };
 
 export const INTRO_IDS = Object.keys(CHARACTER_NAMES);
 const INTRO_HOOKS = {
@@ -2296,6 +2296,7 @@ export const BATTLE_DIALOGUES = {
     guizo_bombado: 'Eu sou o mais forte! Grava isso!',
     guizo_velho: 'Na minha época, a gente gravava em fita, rapaz.',
     cristino_desertor: 'Eu toquei a Coroa. Agora eu sei o que você quer.',
+    dante_aberto: 'Eu parei de lutar contra o passado. Me aliei ao tempo.',
     cristopher: 'Filho... eu te amo! Ninguém encosta na minha equipe!',
   },
 };
@@ -2393,7 +2394,7 @@ export const BATTLE_REPLIES = {
   },
 };
 
-const DIALOGUE_BASE_IDS = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', juan_odio: 'juan', guizo_bombado: 'guizo', guizo_velho: 'guizo', cristino_desertor: 'cristino' };
+const DIALOGUE_BASE_IDS = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', juan_odio: 'juan', guizo_bombado: 'guizo', guizo_velho: 'guizo', cristino_desertor: 'cristino', dante_aberto: 'dante' };
 
 export function battleLines(speakerId, opponentId, event) {
   const lines = BATTLE_DIALOGUES[event];

@@ -1,5 +1,24 @@
 # Changelog
 
+## v3.26.0 — 2026-10-16
+
+### Adicionado
+- Forma `dante_aberto` (`src/characters/forms/dante_aberto.js`), a Transformação do Dante (`maskTransform`, cena nova `eyes`): de olhos fechados, o Lodo sobe do chão e ele abre os olhos (o rosto troca ao vivo com `swapFace`, as orelhas pontudas por `swap`). Kit: Decadência `fromMouth`, Trinitá Aprimorado (4 cópias, `recast`), Tentáculos maiores, Paradiso `noAging`, Paradoxo, Eco Espiral, Rotura no ← + □ (`ranged.variants.back`), especial com `ranged`, passiva `deathMarked`.
+- `src/combat/danteAbilities.js`: tipos `paradox` (`addParadoxZone`: espiral no chão, dano por segundo, lentidão, dano em invocações inimigas) e `echoPain` (buff `ecoDolor`; `damage.js` repete cada golpe do dono com `echo: true`).
+- `Fighter.useAbility`: `recast` — com a habilidade recarregando, `ABILITY_TYPES[type].recast` pode dar um segundo uso (o Embaralhar troca de lugar com uma cópia, uma vez a cada 1,2 s).
+- Embaralhar `fight: true` (só o Dante): as cópias são `DanteClone` (andam, cercam e batem a 50%; `shatter()` para levarem o golpe), escurecidas.
+- A Marionete: golpe `slash` (projétil `boneCrescent`), só com `o.ranged` (invocada pela forma `dante_aberto`).
+- Passiva `deathMarked` (dano de Morte × 0,8); `decadence.fromMouth`; `agingHeal.noAging`.
+- Variante de modelo `dante_aberto` (`addDanteAbertoProps`: troca `face_dante`/`skin_dante` por `face_dante_open`/`skin_dante_open` e mostra `prop_eartip`); `addDanteProps` esconde as orelhas pontudas.
+- Texturas `face_dante` (olhos fechados, cicatriz, sigilo), `face_dante_open`, `skin_dante` (sem tatuagens), `skin_dante_open` (as tatuagens), `shawl_dante`, `wraps_dante`.
+- Fala de transformação do `dante_aberto`; `check-roster`: regras do Trinitá que luta e da forma.
+
+### Alterado
+- `tools/blender/char_dante.py` v2 (técnica do Cristino/Cristopher): camiseta por `clothe`, calça e cabelo esculpidos, o xale em casca (`shell_grid`) com a aba cruzada, cintos com `chain_mesh` → `public/models/dante.glb` (~47 mil triângulos; fonte `tools/blender/fonte/dante.blend`).
+- `tools/blender/npc_marionette.py` v2, esculpida (tronco, crânio, mandíbula, cabelo, galhos dos braços, cabo e dorso da foice por metaballs; saia de tiras e lâmina em meia-lua por `shell_grid`) → `public/npcs/marionette.glb`. Mesmas juntas da v1.
+- Dante: a Transformação deixa de ser o despertar "Afinidade com o Outro Lado" (`awakenMode`) e vira a forma Olhos Abertos.
+- `guizoAbilities.js` pega `DanteClone` por `abilities.js` (importar `npcs.js` direto fechava um ciclo com `damage.js`).
+
 ## v3.25.1 — 2026-10-16
 
 ### Adicionado

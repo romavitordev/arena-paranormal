@@ -189,7 +189,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 ### Habilidades
 
 - **Embaralhar "Trinitá"** — △ + □ / Y + X · custo 30 · cooldown 22 s
-  Vira um vulto, troca de lugar e deixa 3 cópias realistas em volta que imitam cada movimento dele. Por 7 s, um golpe (não especial) pode acertar uma cópia no lugar dele — a cópia se desfaz.
+  Vira um vulto, troca de lugar e deixa 3 cópias de Lodo que ANDAM, cercam o inimigo e batem com as palmas (metade do dano dele). Por 7 s, um golpe (não especial) pode acertar uma cópia no lugar dele — a cópia se desfaz; as cópias também podem ser destruídas.
 - **Tentáculos de Lodo** — △ + ○ / Y + B · custo 30 · cooldown 11 s · dano 70 · alcance 10 m
   Põe a mão no chão: tentáculos de Lodo Preto brotam embaixo do inimigo, prendem e comprimem.
 - **Cicatrização "Paradiso"** — R2 + △ / RT + Y · custo 30 · cooldown 26 s
@@ -201,9 +201,9 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 Invoca a Marionete, que luta ao seu lado · custo 50 · cooldown 50 s.
 
-### Transformação: Afinidade com o Outro Lado
+### Transformação: Olhos Abertos
 
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +25% de dano (habilidades, especial), recargas 30% mais rápidas, regenera 4 de vida/s, cura 10% na hora.
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
 
 ---
 

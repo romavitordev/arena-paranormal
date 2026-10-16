@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Timeline, yawTo, distXZ, forwardFromYaw, angleDiff, DEG } from '../core/util.js';
-import { ABILITY_TYPES } from './abilities.js';
+import { ABILITY_TYPES, DanteClone } from './abilities.js'; // DanteClone por aqui: importar npcs.js direto fecha um ciclo com damage.js
 import { applyHit } from './damage.js';
 import { findFreeSpotNear } from './positioning.js';
 import { HoloCopy } from './holo.js';
@@ -50,7 +50,9 @@ export const GUIZO_TYPES = {
       f.yaw = yawTo(f.pos, opp.pos);
       f.anim.play('point', { restart: true, duration: a.cast + 0.35 });
       world.audio.play('ritual', { volume: 0.5, pitch: 0.8 });
-      const handFx = spiralFx(world, () => hand(f), { radius: 0.18, rise: 0.3, rate: 60, size: 0.1, color: MORTE });
+      // a.fromMouth (Dante de Olhos Abertos, a versão de Calamidade): a fumaça preta sai da BOCA, não da mão
+      const src = a.fromMouth ? () => f.rig.sockets.mouth.getWorldPosition(new THREE.Vector3()) : () => hand(f);
+      const handFx = spiralFx(world, src, { radius: 0.18, rise: 0.3, rate: 60, size: 0.1, color: MORTE });
       let ring = null;
       let target = null;
       tl.add(a.cast * 0.5, () => {
@@ -65,6 +67,7 @@ export const GUIZO_TYPES = {
         if (!target) { f.notify('FORA DE ALCANCE'); return; }
         if (target.state === 'ko' || target.isInvulnerable() || distXZ(f.pos, target.pos) - target.radius > a.range + 1) return;
         const c = target.chestPos();
+        if (a.fromMouth) world.fx.tracer(src(), c, { color: MORTE_DK, life: 0.3, width: 0.1 });
         world.fx.burst(c, { count: 36, color: MORTE_DK, kind: 'smoke', speed: 2, up: 0.4, life: 0.8, size: 0.45 });
         world.fx.distort(c, { color: MORTE, radius: 1.6, life: 0.3 });
         world.audio.play('drain', { volume: 0.9, pitch: 0.7 });
@@ -114,6 +117,32 @@ export const GUIZO_TYPES = {
   // realistas em volta, imitando cada movimento dele. Enquanto durarem, um golpe pode pegar numa cópia (que se desfaz)
   // em vez dele — mais cópias, mais chance (damage.js → shuffleDodge). Especiais acertam o verdadeiro.
   shuffle: {
+    // recast (Trinitá Aprimorado do Dante: "capaz de trocar a sua posição com qualquer uma das cópias"): com as cópias em
+    // campo, apertar de novo TROCA DE LUGAR com uma delas — a mais longe do adversário quando ele está em cima (fuga),
+    // senão a mais perto dele (ataque). Uma troca a cada 1,2 s; não gasta a recarga
+    recast(f, a, world) {
+      const b = f.findBuff('shuffle');
+      if (!a.recast || !b) return null;
+      const alive = b.copies.filter((c) => c.alive && c.isClone);
+      if (!alive.length || world.time < (b.nextSwap || 0)) return null;
+      const opp = f.opponent;
+      const close = opp && distXZ(f.pos, opp.pos) < 2.6;
+      alive.sort((x, y) => (opp ? distXZ(x.pos, opp.pos) - distXZ(y.pos, opp.pos) : 0));
+      const c = close ? alive[alive.length - 1] : alive[0];
+      b.nextSwap = world.time + 1.2;
+      const from = f.pos.clone();
+      world.fx.burst(new THREE.Vector3(from.x, 1, from.z), { count: 20, color: 0x0c0a0e, kind: 'smoke', speed: 2.2, life: 0.5, size: 0.7, grow: 1 });
+      f.pos.set(c.pos.x, 0, c.pos.z);
+      c.pos.copy(from);
+      if (opp) f.yaw = yawTo(f.pos, opp.pos);
+      f.invuln = Math.max(f.invuln, 0.25);
+      world.fx.burst(new THREE.Vector3(f.pos.x, 1, f.pos.z), { count: 20, color: 0x0c0a0e, kind: 'smoke', speed: 2.2, life: 0.5, size: 0.7, grow: 1 });
+      world.audio.play('blink', { volume: 0.7 });
+      f.notify('TROCA!', true);
+      const tl = new Timeline();
+      tl.end(0.18);
+      return seqFrom(tl);
+    },
     start(f, a, world) {
       if (f.findBuff('shuffle')) { f.notify('JÁ EMBARALHADO'); return null; }
       const opp = f.opponent;
@@ -134,8 +163,22 @@ export const GUIZO_TYPES = {
         if (opp) f.yaw = yawTo(f.pos, opp.pos);
         // as cópias em volta, no referencial dele: dos lados e uma atrás
         const slots = [[-shift, 0], [shift * 0.95, -0.35], [-shift * 0.5, -0.9], [shift * 0.5, -0.9]].slice(0, a.copies);
-        const copies = slots.map(([x, z]) => {
-          const c = new HoloCopy(f, world, { mode: 'mimic', offset: new THREE.Vector3(x, 0, z), life: a.duration, color: a.color, opacity: 0.62 });
+        const copies = slots.map(([x, z], i) => {
+          let c;
+          if (a.fight) {
+            // Trinitá do Dante: as cópias são vultos de Lodo que ANDAM, cercam e batem (DanteClone, metade do dano dele) — e
+            // continuam podendo levar um golpe no lugar dele
+            c = new DanteClone(f, world, i, a.duration, {
+              // vultos PRETOS (o "vulto preto" do cânone): o xale branco também escurece
+              restyle(m) {
+                m.material.transparent = true;
+                m.material.opacity = m.userData.isOutline ? 0.35 : 0.7;
+                if (m.material.color && !m.userData.isOutline) m.material.color.multiplyScalar(0.16);
+                m.castShadow = false;
+              },
+            });
+            c.pos.set(f.pos.x + side.x * x + fwd.x * z, 0, f.pos.z + side.z * x + fwd.z * z);
+          } else c = new HoloCopy(f, world, { mode: 'mimic', offset: new THREE.Vector3(x, 0, z), life: a.duration, color: a.color, opacity: 0.62 });
           world.addNpc(c);
           world.fx.burst(new THREE.Vector3(c.pos.x, 1, c.pos.z), { count: 14, color: a.color, speed: 2.5, life: 0.35, size: 0.12 });
           return c;
@@ -195,6 +238,7 @@ export const GUIZO_TYPES = {
     start(f, a, world) {
       const seq = ABILITY_TYPES.healOverTime.start(f, a, world);
       if (!seq) return null;
+      if (a.noAging) return seq; // Dante de Olhos Abertos: "aliado ao tempo", a cura não cobra mais a idade
       world.after(0.6, () => {
         f.ageLevel = Math.min(a.maxAge ?? 3, (f.ageLevel || 0) + 1);
         ageHair(f, f.ageLevel / (a.maxAge ?? 3));

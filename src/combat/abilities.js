@@ -5,6 +5,8 @@ import { applyHit } from './damage.js';
 import { splitDamage } from './specials/common.js';
 import { hasPassive } from './passives.js';
 import { DanteClone, CLONE, BloodZombie } from './npcs.js';
+
+export { DanteClone }; // o Embaralhar do Dante (guizoAbilities.js) usa as cópias que lutam
 import { MATERIAL_TEXTURES } from '../models/textures.js';
 import { buildHuntingDog } from '../models/dog.js';
 import { bloodCoat } from '../models/weapons.js';
