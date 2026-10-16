@@ -1,5 +1,18 @@
 # Registro administrativo de alterações
 
+## v3.27.0 — Do Seu Jeito
+
+- Versão: `VERSION` 3.26.1 → **3.27.0** (package.json/lock junto).
+- Pedido: "faça o menu melhor, volume com barra arrastável (slide) e opções de quais volumes vai mexer; toda a área de
+  menu pode ser repensada para ficar mais fácil e intuitiva" e "a parte de Jogo fan made pode ser menor — Jogo Fan Made
+  por romavitordev inspirado em Ordem Paranormal".
+- Canais de volume: GERAL, EFEITOS DA LUTA, MENUS e CARGA DE PODER. Não há canal de MÚSICA porque o jogo ainda não tem
+  música (§71 do TODO) — entra quando a música existir; as falas são só texto.
+- Conferido no preview: arrastar com mouse (efeitos 49%) e com toque no modo celular (geral 40%), ◀ ▶ do teclado
+  (menus 100 → 80), mudo pelo número, qualidade gráfica trocando na hora (pixel ratio e sombras), salvo no navegador;
+  layout no PC e no celular deitado (rolagem, botões de canto do toque fora do painel).
+- Verificações: `check-roster`, `npm test` (41), `npm run build`.
+
 ## v3.26.1 — Celular Mais Leve
 
 - Versão: `VERSION` 3.26.0 → **3.26.1** (package.json/lock junto).

@@ -8,7 +8,10 @@ const DEFAULTS = {
   cpuLevel: 'normal', // easy | normal | hard | veryhard | superhard
   rounds: 2, // rounds para vencer
   language: 'pt-BR',
-  volume: 100, // % do volume do jogo (0 = mudo)
+  volume: 100, // % do volume GERAL (0 = mudo)
+  volSfx: 100, // % dos efeitos da luta
+  volUi: 100, // % dos sons dos menus
+  volHum: 100, // % do zumbido da Carga de Poder
   reduceFx: false, // conforto/fotossensibilidade: flashes de tela e tremor de câmera bem mais fracos
   graphics: 'auto', // QUALIDADE GRÁFICA: auto (baixa no celular, alta no PC) | high | medium | low
 };
@@ -58,7 +61,8 @@ function load() {
     if (!TIMER_OPTIONS.includes(s.timer)) s.timer = DEFAULTS.timer;
     if (!CPU_LEVELS.some((l) => l.id === s.cpuLevel)) s.cpuLevel = DEFAULTS.cpuLevel;
     if (!ROUND_OPTIONS.includes(s.rounds)) s.rounds = DEFAULTS.rounds;
-    if (!VOLUME_OPTIONS.includes(s.volume)) s.volume = DEFAULTS.volume;
+    // volumes: 0..100 (a barra arrastável grava qualquer valor; as versões antigas gravavam de 10 em 10)
+    for (const k of ['volume', 'volSfx', 'volUi', 'volHum']) if (!(Number.isFinite(s[k]) && s[k] >= 0 && s[k] <= 100)) s[k] = DEFAULTS[k];
     s.reduceFx = !!s.reduceFx;
     if (!GFX_OPTIONS.includes(s.graphics)) s.graphics = DEFAULTS.graphics;
     if (!LANGUAGE_OPTIONS.some((l) => l.id === s.language)) s.language = initLanguage();

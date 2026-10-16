@@ -2,6 +2,12 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.27.0 — Do Seu Jeito
+- OPÇÕES NOVAS: uma tela só, organizada em SOM, IMAGEM, PARTIDA e IDIOMA, com uma linha embaixo explicando o que cada opção faz.
+- VOLUME com BARRA ARRASTÁVEL (mouse e toque) e separado por canal: Volume geral, Efeitos da luta, Menus e Carga de Poder (o zumbido enquanto segura △). Tocar no número deixa aquele canal mudo; ao mexer, toca um som de teste.
+- As escolhas viram BOTÕES lado a lado (Qualidade gráfica, Efeitos de tela) ou ◀ valor ▶ (Tempo da luta, Idioma). No controle e no teclado: ↑ ↓ escolhem a linha e ◀ ▶ ajustam.
+- TELA DE TÍTULO: o aviso agora é curto — "Jogo fan made por romavitordev · inspirado em Ordem Paranormal".
+
 ## v3.26.1 — Celular Mais Leve
 - CELULAR MAIS LEVE: o jogo deixava texturas presas na memória a cada luta (umas 30 por luta, nunca liberadas) — depois de algumas partidas o celular ficava sem memória e travava. Agora a memória fica estável, luta após luta.
 - OPÇÕES: QUALIDADE GRÁFICA (Automática, Alta, Média e Baixa). A automática usa a BAIXA no celular: resolução normal (sem o dobro de pixels), sem antialias e sem sombras, só a luz principal do cenário e no máximo 60 quadros por segundo (telas de 90/120 Hz desenhavam o dobro, esquentavam e o celular derrubava o desempenho).

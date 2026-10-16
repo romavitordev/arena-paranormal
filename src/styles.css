@@ -382,7 +382,7 @@ table.moves td span { display: block; color: var(--muted); font-size: 12px; marg
 @keyframes glitchA { 0%, 91%, 95%, 100% { opacity: 0; } 92% { opacity: 1; clip-path: inset(18% 0 52% 0); } 94% { opacity: 1; clip-path: inset(62% 0 8% 0); transform: translate(-6px, 0); } }
 @keyframes glitchB { 0%, 91%, 96%, 100% { opacity: 0; } 93% { opacity: 1; clip-path: inset(40% 0 30% 0); } 95% { opacity: 1; clip-path: inset(5% 0 75% 0); transform: translate(6px, 0); } }
 /* aviso de jogo fan made (não oficial) na tela de título */
-#home .logo .fanmade { margin: 12px auto 0; max-width: min(560px, 90vw); font-size: 11px; letter-spacing: .06em; line-height: 1.4; color: #cbbfe0; opacity: .8; }
+#home .logo .fanmade { margin: 10px auto 0; font-size: 10px; letter-spacing: .12em; color: #cbbfe0; opacity: .6; white-space: nowrap; }
 #home.menu-on .logo .fanmade { display: none; }
 #home .logo .elements { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 14px auto 0; }
 #home .logo .elements .ln { display: block; width: clamp(40px, 12vw, 150px); height: 1px; background: linear-gradient(90deg, transparent, rgba(220,205,255,.6)); }
@@ -869,3 +869,52 @@ body.touch-ui .startbtn small { display: none; }
 #tbracket .tb-btns { display: flex; gap: 10px; }
 #tbracket .tb-btns .opt { padding: 8px 26px; font: 400 24px/1 'Bebas Neue', sans-serif; letter-spacing: .14em; color: #bfb3d6; border: 1px solid rgba(255,255,255,.15); border-radius: 4px; background: rgba(10,8,14,.75); cursor: pointer; }
 #tbracket .tb-btns .opt.on { color: #1a1208; border-color: #ffd84a; background: linear-gradient(180deg, #ffe27a, #d9a52a); }
+
+/* ---------------- OPÇÕES (OptionsScreen): seções, barras de volume arrastáveis e botões de escolha ---------------- */
+#options { justify-content: center; align-items: center; padding: 12px 16px; }
+#options .opt-panel { width: min(720px, 100%); max-height: 100%; display: flex; flex-direction: column; background: rgba(10,8,14,.92); border: 1px solid #3a3346; border-radius: 10px; padding: 16px 18px 12px; box-shadow: 0 10px 40px rgba(0,0,0,.5); }
+#options h2 { font-family: 'Bebas Neue', sans-serif; font-size: 44px; letter-spacing: .1em; margin: 0 0 6px; text-align: center; }
+#options .opt-list { overflow-y: auto; min-height: 0; flex: 1; padding-right: 4px; }
+#options .opt-sec { font-size: 11px; font-weight: 800; letter-spacing: .3em; color: #a99ac6; margin: 12px 0 4px; padding-left: 4px; }
+#options .opt-sec:first-child { margin-top: 0; }
+#options .opt-row { display: grid; grid-template-columns: minmax(130px, 1fr) minmax(0, 1.6fr); align-items: center; gap: 14px; padding: 9px 12px; border-radius: 6px; border: 1px solid transparent; }
+#options .opt-row.on { border-color: rgba(164,107,255,.7); background: rgba(80,40,130,.28); }
+#options .opt-label { font-weight: 800; font-size: 15px; color: #e8e0f7; }
+#options .opt-ctl { display: flex; align-items: center; gap: 10px; min-width: 0; }
+#options button { font: inherit; color: inherit; cursor: pointer; }
+/* barra de volume: área de toque alta, trilho fino */
+#options .opt-slider { flex: 1; height: 34px; display: flex; align-items: center; cursor: pointer; touch-action: none; }
+#options .opt-track { position: relative; flex: 1; height: 8px; border-radius: 4px; background: #2a2436; }
+#options .opt-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; background: linear-gradient(90deg, #6a4ab0, #a46bff); }
+#options .opt-knob { position: absolute; top: 50%; width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 50%; background: #efe9f6; box-shadow: 0 0 0 3px rgba(164,107,255,.6); }
+#options .opt-row.on .opt-knob { box-shadow: 0 0 0 4px #a46bff, 0 0 14px rgba(164,107,255,.8); }
+#options .opt-val { width: 58px; flex: none; padding: 5px 0; border-radius: 5px; border: 1px solid #3a3346; background: rgba(255,255,255,.04); font-weight: 800; font-size: 13px; text-align: center; }
+#options .opt-val.muted { color: #ff8a8a; }
+/* escolhas curtas: botões lado a lado */
+#options .opt-seg { display: flex; flex: 1; gap: 4px; flex-wrap: wrap; }
+#options .opt-seg button { flex: 1 1 0; min-width: 64px; padding: 8px 6px; border-radius: 5px; border: 1px solid #3a3346; background: rgba(255,255,255,.04); font-weight: 800; font-size: 12px; letter-spacing: .04em; }
+#options .opt-seg button.sel { background: #a46bff; border-color: #fff; color: #000; }
+/* escolhas longas: ◀ valor ▶ */
+#options .opt-step { display: flex; flex: 1; align-items: center; gap: 6px; }
+#options .opt-step button { width: 40px; height: 34px; border-radius: 5px; border: 1px solid #3a3346; background: rgba(255,255,255,.04); font-size: 14px; }
+#options .opt-cur { flex: 1; text-align: center; font-weight: 800; font-size: 15px; }
+#options .opt-desc { min-height: 34px; margin-top: 8px; padding: 8px 10px; border-top: 1px solid #2c2438; font-size: 13px; color: #cfc5e3; }
+#options .opt-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 6px; }
+#options .opt-back { padding: 9px 18px; border-radius: 6px; border: 1px solid #3a3346; background: rgba(255,255,255,.05); font-weight: 800; letter-spacing: .08em; }
+#options .opt-back.on { border-color: #fff; background: #a46bff; color: #000; }
+#options .opt-hint { font-size: 12px; color: #9d92b3; }
+body.touch-capable #options .opt-hint { display: none; }
+@media (max-height: 520px) {
+  #options { padding: 6px 10px; }
+  #options .opt-panel { padding: 8px 12px 8px; }
+  #options h2 { font-size: 28px; margin-bottom: 2px; }
+  #options .opt-row { padding: 4px 10px; }
+  #options .opt-sec { margin: 6px 0 2px; }
+  #options .opt-desc { min-height: 0; margin-top: 4px; padding: 4px 8px; font-size: 12px; }
+}
+@media (max-width: 560px) {
+  #options .opt-row { grid-template-columns: 1fr; gap: 4px; }
+}
+/* no celular, os botões de canto do toque (← voltar e tela cheia) ficam fora do painel */
+body.touch-capable #options { padding-left: 64px; padding-right: 64px; }
+@media (max-width: 560px) { body.touch-capable #options { padding-left: 10px; padding-right: 10px; padding-top: 58px; } }

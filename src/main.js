@@ -20,10 +20,11 @@ import { validatePassives } from './combat/passives.js';
 import { Match } from './game/Match.js';
 import { CpuController } from './ai/CpuController.js';
 import { ARENAS, ARENA_ORDER, DEFAULT_ARENA, preloadArenas } from './arena/index.js';
-import { SETTINGS, cycleSetting, TIMER_OPTIONS, timerLabel, cpuLabel, LANGUAGE_OPTIONS, languageLabel, VOLUME_OPTIONS, FX_OPTIONS, volumeLabel, fxLabel, GFX_OPTIONS, gfxLabel, gfxProfile } from './config/settings.js';
+import { SETTINGS, cycleSetting, saveSettings, TIMER_OPTIONS, timerLabel, cpuLabel, LANGUAGE_OPTIONS, languageLabel, FX_OPTIONS, GFX_OPTIONS, gfxLabel, gfxProfile, autoGraphics } from './config/settings.js';
 import { TutorialMode } from './ui/Tutorial.js';
 import { VERSION } from './config/version.js';
-import { t, tAlert } from './i18n/index.js';
+import { t, tAlert, setLanguage } from './i18n/index.js';
+import { OptionsScreen } from './ui/OptionsScreen.js';
 import { TouchControls, isTouchDevice } from './ui/touchControls.js';
 
 const touchDevice = isTouchDevice();
@@ -56,7 +57,9 @@ renderer.toneMappingExposure = 1.1;
 
 const input = new InputManager();
 const audio = new AudioManager();
-audio.setVolume(SETTINGS.volume / 100); // o volume salvo nas OPÇÕES
+// os volumes salvos nas OPÇÕES (geral e um por canal)
+const VOL_KEYS = { volume: 'master', volSfx: 'sfx', volUi: 'ui', volHum: 'hum' };
+for (const [k, ch] of Object.entries(VOL_KEYS)) audio.setChannel(ch, SETTINGS[k] / 100);
 const hud = new HUD(document.getElementById('hud'));
 const screens = document.getElementById('screens');
 // modelos do Blender carregam no início; os retratos são gerados depois
@@ -111,10 +114,6 @@ game.arenaThumbs = arenaThumbs; // depuração
 game.renderer = renderer;
 
 const timeLabel = () => t('opt.time', { v: timerLabel() });
-const langLabel = () => t('opt.lang', { v: languageLabel() });
-const volLabel = () => t('opt.volume', { v: volumeLabel() });
-const fxOptLabel = () => t('opt.fx', { v: fxLabel() });
-const gfxOptLabel = () => t('opt.gfx', { v: gfxLabel() });
 
 function setScreen(state, screen) {
   game.uiSeq = ((game.uiSeq || 0) + 1) & 15; // toques online de uma tela que já saiu são descartados (netTaps)
@@ -145,21 +144,28 @@ function toMainMenu() {
 
 // index: opção já selecionada (ao trocar o idioma a tela é remontada no novo idioma, sem sair da linha IDIOMA)
 function toOptions(index = 0) {
-  const scr = new MenuScreen(screens, {
-    title: t('menu.options'),
+  const S = SETTINGS;
+  const vol = (id, key) => ({ section: t('opt.sec.sound'), id, kind: 'slider', label: t('opt.vol.' + key), desc: t('opt.desc.vol.' + key), get: () => S[id], set: (v) => { S[id] = v; } });
+  const pick = (id, key, list, label) => ({ section: null, id, kind: 'choice', label: t(key), get: () => S[id], set: (v) => { S[id] = v; }, choices: list.map((v) => ({ v, label: label(v) })) });
+  const rows = [
+    vol('volume', 'master'), vol('volSfx', 'sfx'), vol('volUi', 'ui'), vol('volHum', 'hum'),
+    { ...pick('graphics', 'opt.gfx.label', GFX_OPTIONS, (v) => t('opt.gfx.' + v)), section: t('opt.sec.video'), desc: t('opt.desc.gfx', { auto: t('opt.gfx.' + autoGraphics()) }) },
+    { ...pick('reduceFx', 'opt.fx.label', FX_OPTIONS, (v) => t(v ? 'opt.fx.reduced' : 'opt.fx.normal')), section: t('opt.sec.video'), desc: t('opt.desc.fx') },
+    { ...pick('timer', 'opt.time.label', TIMER_OPTIONS, (v) => timerLabel(v)), section: t('opt.sec.match'), desc: t('opt.desc.time') },
+    { ...pick('language', 'opt.lang.label', LANGUAGE_OPTIONS.map((l) => l.id), (v) => languageLabel(v)), section: t('opt.sec.lang'), desc: t('opt.desc.lang') },
+  ];
+  const scr = new OptionsScreen(screens, {
+    rows,
     audio,
-    clear: false,
-    options: [
-      { id: 'time', label: timeLabel },
-      { id: 'lang', label: langLabel },
-      { id: 'volume', label: volLabel },
-      { id: 'fx', label: fxOptLabel },
-      { id: 'gfx', label: gfxOptLabel },
-      { id: 'back', label: () => t('ui.back') },
-    ],
+    focus: index,
+    onChange(id, v) {
+      saveSettings();
+      if (VOL_KEYS[id]) audio.setChannel(VOL_KEYS[id], v / 100);
+      if (id === 'graphics') applyGraphics();
+      if (id === 'language') { setLanguage(v); return 'relabel'; }
+      return null;
+    },
   });
-  scr.index = index;
-  scr.render();
   setScreen('options', scr);
   if (index) scr.el.classList.remove('screen-enter'); // troca de idioma: sem a animação de entrada
 }
@@ -895,11 +901,7 @@ function tick(dt) {
     }
     case 'options': {
       const c = game.screen.update(input);
-      if (c === 'time') { cycleSetting('timer', TIMER_OPTIONS); audio.play('select'); game.screen.render(); }
-      else if (c === 'lang') { cycleSetting('language', LANGUAGE_OPTIONS); audio.play('select'); toOptions(game.screen.index); }
-      else if (c === 'volume') { cycleSetting('volume', VOLUME_OPTIONS, -1); audio.setVolume(SETTINGS.volume / 100); audio.play('select'); game.screen.render(); }
-      else if (c === 'fx') { cycleSetting('reduceFx', FX_OPTIONS); audio.play('select'); game.screen.render(); }
-      else if (c === 'gfx') { cycleSetting('graphics', GFX_OPTIONS); applyGraphics(); audio.play('select'); game.screen.render(); }
+      if (c === 'relabel') toOptions(game.screen.index); // idioma novo: a tela volta traduzida, na mesma linha
       else if (c === 'back') toMainMenu();
       break;
     }

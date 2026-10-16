@@ -1,5 +1,18 @@
 # Changelog
 
+## v3.27.0 — 2026-10-16
+
+### Adicionado
+- `src/ui/OptionsScreen.js`: a tela de OPÇÕES em seções, com linhas `slider` (barra arrastável por `pointer` com captura, ◀ ▶ de 5 em 5, toque no valor = mudo) e `choice` (até 4 → botões; mais → ◀ valor ▶), descrição da linha selecionada e o VOLTAR. Cada mudança chama `onChange(id, v)`; o idioma pede a tela de novo (`'relabel'`).
+- `AudioManager`: canais `sfx` / `ui` / `hum` (ganhos entre os sons e o `master`), `setChannel(ch, k)`, `channelOf(name)` (`UI_SOUNDS`: select, confirm, denied, back, move); os blocos de síntese ligam no canal do som em montagem (`this.out`, guardado e devolvido em sons aninhados); os loops da Carga vão para `hum`.
+- Opções `volSfx`, `volUi`, `volHum` (0–100); os volumes aceitam qualquer valor de 0 a 100 (a barra), não só de 10 em 10.
+- Chaves `opt.sec.*`, `opt.vol.*`, `opt.desc.*`, `opt.*.label`, `opt.hint` nos 13 idiomas.
+
+### Alterado
+- `main.js`: `toOptions` monta a `OptionsScreen` (sai a lista do `MenuScreen` e os rótulos `opt.volume`/`opt.fx`/`opt.gfx` da tela).
+- `menu.fanmade` mais curto em todos os idiomas ("Jogo fan made por romavitordev · inspirado em Ordem Paranormal") e o estilo `.fanmade` numa linha só, menor.
+- `menu.options.desc`: "Som, imagem, tempo da luta e idioma."
+
 ## v3.26.1 — 2026-10-16
 
 ### Corrigido

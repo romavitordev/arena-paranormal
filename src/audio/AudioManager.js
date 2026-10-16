@@ -6,20 +6,39 @@ import { SOUND_FILES } from './soundFiles.js';
 export { SOUND_FILES };
 const BASE = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.BASE_URL) || '';
 
+// CANAIS DE VOLUME (OPÇÕES): cada som vai para um canal, e cada canal tem o seu volume; todos passam pelo GERAL
+//   ui    os sons dos menus (navegar, confirmar, negar)
+//   hum   o zumbido da Carga de Poder (o som contínuo enquanto segura △)
+//   sfx   todo o resto: golpes, rituais, explosões, falas sonoras dos especiais
+export const VOLUME_CHANNELS = ['master', 'sfx', 'ui', 'hum'];
+const UI_SOUNDS = new Set(['select', 'confirm', 'denied', 'back', 'move']);
+
 export class AudioManager {
   constructor() {
     this.ctx = null;
     this.buffers = {};
     this.master = null;
     this.volume = 0.55;
+    this.levels = { sfx: 1, ui: 1, hum: 1 }; // volume de cada canal (0..1)
+    this.buses = null;
+    this.out = null; // canal do som que está sendo montado agora (os blocos de síntese ligam nele)
     this.loops = new Map();
   }
 
-  // volume do jogo (OPÇÕES): 0..1 sobre o volume base
+  // volume GERAL (OPÇÕES): 0..1 sobre o volume base
   setVolume(k) {
     this.volume = 0.55 * Math.max(0, Math.min(1, k));
     if (this.master) this.master.gain.value = this.volume;
   }
+
+  // volume de um canal (sfx / ui / hum): 0..1
+  setChannel(ch, k) {
+    if (ch === 'master') return this.setVolume(k);
+    this.levels[ch] = Math.max(0, Math.min(1, k));
+    if (this.buses && this.buses[ch]) this.buses[ch].gain.value = this.levels[ch];
+  }
+
+  channelOf(name) { return UI_SOUNDS.has(name) ? 'ui' : 'sfx'; }
 
   // Navegadores só liberam áudio após interação do usuário.
   unlock() {
@@ -34,6 +53,13 @@ export class AudioManager {
     this.master.gain.value = this.volume;
     const comp = this.ctx.createDynamicsCompressor();
     this.master.connect(comp).connect(this.ctx.destination);
+    this.buses = {};
+    for (const ch of ['sfx', 'ui', 'hum']) {
+      const g = this.ctx.createGain();
+      g.gain.value = this.levels[ch];
+      g.connect(this.master);
+      this.buses[ch] = g;
+    }
     this.noiseBuf = this._makeNoise(1.5);
     for (const [name, urls] of Object.entries(SOUND_FILES)) for (const url of [].concat(urls)) this._load(name, url);
   }
@@ -70,12 +96,15 @@ export class AudioManager {
       src.playbackRate.value = (opts.pitch ?? 1) * (0.95 + Math.random() * 0.1);
       const g = this.ctx.createGain();
       g.gain.value = vol;
-      src.connect(g).connect(this.master);
+      src.connect(g).connect(this.buses[this.channelOf(name)]);
       src.start();
       return;
     }
     const synth = SYNTHS[name];
-    if (synth) synth(this, this.ctx.currentTime, vol, opts);
+    if (!synth) return;
+    const prev = this.out; // um som pode tocar outro por dentro (ex.: a explosão chama o soco pesado)
+    this.out = this.buses[this.channelOf(name)];
+    try { synth(this, this.ctx.currentTime, vol, opts); } finally { this.out = prev; }
   }
 
   // Som contínuo (ex.: zumbido da Carga de Poder). Retorna id para parar.
@@ -93,7 +122,7 @@ export class AudioManager {
       const g = this.ctx.createGain();
       g.gain.value = 0;
       g.gain.linearRampToValueAtTime(0.4, t + 0.15);
-      src.connect(g).connect(this.master);
+      src.connect(g).connect(this.buses.hum);
       src.start();
       this.loops.set(id, { src, g });
       return;
@@ -114,7 +143,7 @@ export class AudioManager {
     g.gain.linearRampToValueAtTime(0.12, t + 0.15);
     osc.connect(f);
     osc2.connect(f);
-    f.connect(g).connect(this.master);
+    f.connect(g).connect(this.buses.hum);
     osc.start();
     osc2.start();
     this.loops.set(id, { osc, osc2, g });
@@ -150,7 +179,7 @@ export class AudioManager {
     g.gain.setValueAtTime(0.0001, t);
     g.gain.exponentialRampToValueAtTime(vol, t + attack);
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    src.connect(f).connect(g).connect(this.master);
+    src.connect(f).connect(g).connect(this.out || this.master);
     src.start(t, Math.random() * 0.5);
     src.stop(t + dur + 0.05);
   }
@@ -164,7 +193,7 @@ export class AudioManager {
     g.gain.setValueAtTime(0.0001, t);
     g.gain.exponentialRampToValueAtTime(vol, t + attack);
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    o.connect(g).connect(this.master);
+    o.connect(g).connect(this.out || this.master);
     o.start(t);
     o.stop(t + dur + 0.05);
   }

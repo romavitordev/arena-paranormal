@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.26.1';
+export const VERSION = '3.27.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,17 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.27.0',
+    date: '2026-10-16',
+    title: 'Do Seu Jeito',
+    items: [
+      'OPÇÕES NOVAS: uma tela só, organizada em SOM, IMAGEM, PARTIDA e IDIOMA, com uma linha embaixo explicando o que cada opção faz.',
+      'VOLUME com BARRA ARRASTÁVEL (mouse e toque) e separado por canal: Volume geral, Efeitos da luta, Menus e Carga de Poder (o zumbido enquanto segura △). Tocar no número deixa aquele canal mudo; ao mexer, toca um som de teste.',
+      'As escolhas viram BOTÕES lado a lado (Qualidade gráfica, Efeitos de tela) ou ◀ valor ▶ (Tempo da luta, Idioma). No controle e no teclado: ↑ ↓ escolhem a linha e ◀ ▶ ajustam.',
+      'TELA DE TÍTULO: o aviso agora é curto — "Jogo fan made por romavitordev · inspirado em Ordem Paranormal".',
+    ],
+  },
   {
     v: '3.26.1',
     date: '2026-10-16',
