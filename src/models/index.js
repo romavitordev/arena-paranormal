@@ -39,6 +39,7 @@ const BLENDER_MODELS = {
   dalmo: { url: 'models/dalmo.glb', props: addDalmoProps }, // Dalmo Magno, o Colosso (Hexatombe)
   guizo: { url: 'models/guizo.glb', props: addGuizoProps }, // Guilherme "Guizo" Santos (Sinais do Outro Lado)
   cristino: { url: 'models/cristino.glb', props: addCristinoProps }, // Cristino, o Cangaceiro (Transtornados, Hexatombe)
+  cristopher: { url: 'models/cristopher.glb', props: null }, // Cristopher Cohen, o dublê (Ordo Realitas, OSNF) — luta de punhos
 };
 
 // Formas que reaproveitam o .glb de outro modelo, só com os acessórios diferentes (máscaras dos Mascarados, Erin)

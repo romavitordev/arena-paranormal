@@ -2,6 +2,12 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.24.0 — Retroceder Nunca
+- NOVO LUTADOR — CRISTOPHER "CRIS" COHEN (Ordo Realitas, Sangue): o dublê do Van Damme e o paizão da Equipe E de O Segredo na Floresta. Um armário de 2 metros, grisalho, com a cicatriz de queimadura no lado esquerdo do rosto, regata branca e tatuagens tribais nos braços. Luta de punhos e com os chutes de filme de ação, e aguenta empurrão e desgaste na defesa (Couro de Dublê).
+- CRISTOPHER — o □ CENA DE AÇÃO é um mergulho de dublê que quebra a defesa. Habilidades: SUPLEX DE DUBLÊ (△ → ○, agarra e arremessa no chão), DIREÇÃO AVANÇADA (△ → □, o carro dele vem derrapando por trás, ele se joga para o lado e o carro atropela quem estiver na frente), LEVANTA, GRANDÃO! (△ + L2, recupera vida rápido) e A MURALHA (R2 + △, recebe menos dano e aguenta golpes sem recuar).
+- CRISTOPHER — especial RETROCEDER NUNCA, RENDER-SE JAMAIS (a sequência de chutes do filme em que ele foi dublê do Van Damme). Transformação O PROTETOR: vai com tudo pela equipe até o fim do round, batendo mais forte, aguentando golpes e se recuperando.
+- Falas novas do Cristopher contra todo o elenco, com conversas próprias com o Kaiser (o filho), o Arnaldo (o melhor amigo), o Joui, o Balu, o Veríssimo e o Kian.
+
 ## v3.23.1 — Os Mesmos Rituais
 - RITUAIS IGUAIS PARA TODOS: o mesmo ritual do cânone agora funciona igual em quem o tiver, na versão mais nova. A DECADENZA do Dante virou a Decadência do Guizo (as espirais surgem em volta do alvo, apertam e ele definha); o EMBARALHAR "Trinitá" do Dante deixa cópias que imitam cada movimento; a CICATRIZAÇÃO do Dante e do Xande cura em instantes, mas envelhece; a VELOCIDADE MORTAL do Xande deixa os rastros no ar; e o AMALDIÇOAR ARMA COM SANGUE (Aghata, Balu, Xande, Lírio e Guizo) tem o mesmo custo, duração e sangramento.
 - JUAN com MODELO NOVO, refeito do zero: o torso definido cheio de frases tatuadas, o manto vermelho rasgado em tiras pontudas (curto na frente, comprido atrás) com o capuz amontoado nas costas, correntes de elos de verdade no peito e enroladas no braço, o rabo alto com a lateral raspada e a franja sobre o olho perdido, a boca e o olho costurados com grampos de metal, calça folgada com chaparreiras.

@@ -264,3 +264,40 @@ def paint(obj, fn):
     for v in me.vertices:
         c = fn(mw @ v.co)
         ca.data[v.index].color = (c[0], c[1], c[2], 1)
+
+
+def clothe(src, keep, offset=0.006, cuts=3):
+    """ROUPA JUSTA a partir de uma peça do corpo: copia a malha de `src` (já no lugar, com UV), infla `offset` ao longo
+    da normal e fica só com as faces cujo centro passa em keep(p) — uma regata cortando decote e cavas do tronco.
+    Devolve (verts, faces, uvs) no mundo, para o Builder (use region='body' para não escalar de novo)."""
+    # a malha AVALIADA (com a subdivisão do Builder): o corte do decote sai liso, não em degraus
+    dg = bpy.context.evaluated_depsgraph_get()
+    me = bpy.data.meshes.new_from_object(src.evaluated_get(dg))
+    if cuts:  # subdivide antes de cortar: a borda do corte fica com degraus pequenos
+        bm = bmesh.new()
+        bm.from_mesh(me)
+        bmesh.ops.subdivide_edges(bm, edges=bm.edges[:], cuts=cuts, use_grid_fill=True)
+        bm.to_mesh(me)
+        bm.free()
+        me.update()
+    mw = src.matrix_world
+    nm = mw.to_3x3()
+    uv = me.uv_layers.active.data if me.uv_layers.active else None
+    verts, faces, uvs, remap = [], [], [], {}
+    for poly in me.polygons:
+        c = mw @ poly.center
+        if not keep(c):
+            continue
+        f = []
+        for li in poly.loop_indices:
+            vi = me.loops[li].vertex_index
+            key = (vi, tuple(round(x, 5) for x in uv[li].uv) if uv else None)
+            if key not in remap:
+                v = me.vertices[vi]
+                remap[key] = len(verts)
+                verts.append(tuple(mw @ v.co + (nm @ v.normal).normalized() * offset))
+                uvs.append(tuple(uv[li].uv) if uv else (0.0, 0.0))
+            f.append(remap[key])
+        faces.append(tuple(f))
+    bpy.data.meshes.remove(me)
+    return verts, faces, uvs

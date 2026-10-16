@@ -76,7 +76,7 @@ const PAIRS = ids.length * (ids.length - 1);
 ok(validIntroScenes && validIntroPairs === PAIRS && sampleIntro.length === 2 && randomSelectionValid, `introduções: ${PAIRS} confrontos, duas cenas alternadas e aleatórias, sem falas de resultado`);
 ok(validVictoryLines && validVictoryPairs === PAIRS && VICTORY_LINES.kaiser.erin.includes(sampleVictory) && randomSelectionValid, `vitórias: ${PAIRS} confrontos com duas falas selecionáveis aleatoriamente`);
 ok(VICTORY_LINES.anfitriao.default.length >= 16 && new Set(VICTORY_LINES.anfitriao.default).size === VICTORY_LINES.anfitriao.default.length && hostRandomSelectionValid, 'Anfitrião: falas caóticas próprias, variadas e selecionadas aleatoriamente');
-ok(ROSTER.map((c) => c.name).join() === 'ARTHUR CERVERO,JOUI JOUKI,KAISER,DANTE,ERIN PARKER,AGHATA,BALU,SENHOR VERÍSSIMO,KIAN,GAL SAL,XANDE,GUIZO,LÍRIO,DALMO,AGUIAR,JAE,KEMI,LABIRINTO,JUAN,CRISTINO,O DIABO,A MAGISTRADA,ARNALDO FRITZ,FERREIRO,O ESTRANGEIRO,AMIGO IMAGINÁRIO', 'elenco agrupado por equipe: Ordo Realitas, Escriptas, Os Cinco, Mascarados, Transtornados, Portadores das Relíquias');
+ok(ROSTER.map((c) => c.name).join() === 'ARTHUR CERVERO,JOUI JOUKI,KAISER,DANTE,ERIN PARKER,AGHATA,BALU,SENHOR VERÍSSIMO,CRISTOPHER,KIAN,GAL SAL,XANDE,GUIZO,LÍRIO,DALMO,AGUIAR,JAE,KEMI,LABIRINTO,JUAN,CRISTINO,O DIABO,A MAGISTRADA,ARNALDO FRITZ,FERREIRO,O ESTRANGEIRO,AMIGO IMAGINÁRIO', 'elenco agrupado por equipe: Ordo Realitas, Escriptas, Os Cinco, Mascarados, Transtornados, Portadores das Relíquias');
 const jae = get('jae');
 ok(jae && jae.origin === 'Mascarados' && jae.element === 'sangue' && jae.awakening.form === 'jae_x' && jae.awakening.scene === 'hood' && ['dashStrike', 'shadowVeil', 'teleportBehind', 'whisperZone'].every((t) => jae.abilities.some((a) => a.type === t)) && jae.abilities.find((a) => a.type === 'dashStrike').blind > 0 && jae.abilities.find((a) => a.type === 'teleportBehind').strike && jae.passives.some((p) => p.type === 'backstab' && p.surprised), 'Jae: Mascarada de Sangue — Punhal X (cega), Shhh... (some nas sombras), Assassinato Furtivo (apunhala as costas), Zona dos Sussurros, bônus em desprevenido e o Capuz de X');
 const dalmo = get('dalmo');
@@ -360,6 +360,18 @@ ok(!COMBAT.powered && ROSTER.every((c) => !(c.abilities || []).some((a) => a.inp
   }
   const curses = ROSTER.flatMap((c) => (c.abilities || []).filter((a) => a.type === 'curseWeapon' && /Sangue|Amaldiçoar Arma/.test(a.name)));
   ok(!bad.length && curses.every((a) => a.energyCost === 20 && a.cooldown === 18 && a.duration === 8 && a.bleed.dps === 4), `rituais compartilhados na mesma versão (Decadência, Embaralhar, Cicatrização, Velocidade Mortal, Amaldiçoar Arma)${bad.length ? ': ' + bad.join(', ') : ''}`);
+}
+
+// ---------------- Cristopher "Cris" Cohen (Ordo Realitas, OSNF) ----------------
+{
+  const cr = get('cristopher');
+  const ab = (t) => cr.abilities.find((a) => a.type === t);
+  ok(cr && cr.origin === 'Ordo Realitas' && cr.element === 'sangue' && cr.melee.strikes.at(-1).anim === 'spin_kick' && cr.ranged.type === 'dashStrike' && cr.ranged.guardCrush,
+    'Cristopher: Ordo Realitas (Sangue), de punhos, fecha com o chute giratório e o □ Cena de Ação (mergulho que quebra a defesa)');
+  ok(ab('arenaGrab') && ab('stuntCar') && ab('stuntCar').damage > 0 && ab('healOverTime') && ab('heavyProtection') && cr.passives.some((p) => p.type === 'thickSkin'),
+    'Cristopher: Suplex de Dublê, Direção Avançada (o carro), Levanta Grandão!, A Muralha e o Couro de Dublê');
+  ok(cr.special.name === 'Retroceder Nunca, Render-se Jamais' && cr.awakening.type === 'awakenMode' && cr.awakening.name === 'O Protetor',
+    'Cristopher: especial Retroceder Nunca, Render-se Jamais e a Transformação O Protetor');
 }
 
 // ---------------- Cristino (Transtornados, Hexatombe) ----------------

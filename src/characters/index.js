@@ -24,11 +24,12 @@ import magistrada from './magistrada.js';
 import estrangeiro from './estrangeiro.js';
 import amigo from './amigo.js';
 import cristino from './cristino.js';
+import cristopher from './cristopher.js';
 
 // Elenco jogável, na ordem da tela de seleção — AGRUPADO POR EQUIPE/TEMPORADA (a grade tem 3 colunas × 5 linhas por
 // página, então cada grupo ocupa linhas inteiras):
-//   página 1: Ordo Realitas — Equipe E / Força D (Arthur, Joui, Kaiser, Dante, Erin, Aghata), Equipe Abutres (Balu) e
-//             Veríssimo · Escriptas (Kian, Gal) · Os Cinco (Xande, Guizo, Lírio)
+//   página 1: Ordo Realitas — Equipe E / Força D (Arthur, Joui, Kaiser, Dante, Erin, Aghata), Equipe Abutres (Balu),
+//             Veríssimo e o Cristopher (Equipe E de OSNF) · Escriptas (Kian, Gal) · Os Cinco (Xande, Guizo, Lírio)
 //   página 2: Mascarados / Assassinos de Hexatombe (Dalmo, Aguiar, Jae, Kemi, Labirinto, Juan), os Transtornados de
 //             Hexatombe (Cristino) e os Portadores das Relíquias (O Diabo, A Magistrada, Arnaldo, Ferreiro, O Estrangeiro,
 //             O Amigo Imaginário) — a seleção quebra a página por equipe (Screens.js → SEL_PAGES),
@@ -36,7 +37,7 @@ import cristino from './cristino.js';
 // Para adicionar um personagem: crie o arquivo de definição aqui, registre o modelo em models/index.js e coloque-o
 // junto da equipe dele nesta lista.
 export const ROSTER = [
-  arthur, joui, kaiser, dante, erin, aghata, balu, verissimo, // Ordo Realitas
+  arthur, joui, kaiser, dante, erin, aghata, balu, verissimo, cristopher, // Ordo Realitas (o Cris fecha a Equipe E de OSNF)
   kian, gal_sal, // Escriptas
   xande, guizo, lirio, // Os Cinco (Sinais do Outro Lado) — o Guizo do lado do melhor amigo
   dalmo, aguiar, jae, kemi, labirinto, juan, // Mascarados (Hexatombe) — o Juan talvez vá para os "Sacrifícios" no futuro

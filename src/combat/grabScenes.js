@@ -183,6 +183,8 @@ export const GRAB_SCENES = {
   arnaldo: scene({ ...S('slash_h'), fx: { kind: 'slash' }, sound: 'bladeHit' }, { ...S('thrust'), fx: { kind: 'stab' }, sound: 'bladeHit' }, { anim: 'slash_finisher', fx: 'sigils', sound: 'slashFinal' }),
   // Cristino: segura pela gola, dois golpes de peixeira e a lâmina no pescoço ("Eu odeio gente barulhenta" — o Caíto)
   cristino: scene({ ...S('knife_1'), fx: { kind: 'slash' }, sound: 'bladeHit' }, { ...S('thrust'), fx: { kind: 'stab' }, sound: 'bladeHit' }, { anim: 'knife_final', fx: 'throat', sound: 'slashFinal', bleed: { dps: 4, duration: 2.5 } }),
+  // Cristopher: soco no estômago, cabeçada e o suplex de dublê no chão
+  cristopher: scene({ ...S('body_blow', 0.3), fx: { kind: 'punch' }, sound: 'heavyPunch' }, { ...S('headbutt', 0.34), fx: { kind: 'smash' }, sound: 'heavyPunch' }, { anim: 'hammer_ground', fx: 'slam', sound: 'heavyPunch' }),
   jae: scene({ ...S('knife_1'), fx: { kind: 'slash' }, sound: 'bladeHit' }, { ...S('knife_2'), fx: { kind: 'slash', flip: true }, sound: 'bladeHit' }, { anim: 'dual_cross', fx: 'throat', sound: 'slashFinal', bleed: { dps: 4, duration: 2 } }),
   verissimo: scene({ ...S('thrust'), fx: { kind: 'stab' }, sound: 'bladeHit' }, { ...S('slash_h_back'), fx: { kind: 'slash', flip: true }, sound: 'bladeHit' }, { anim: 'slash_v', fx: 'pointBlank', sound: 'shotgun' }),
   // Visão Traumática: chicotada de cabo, puxa o rosto do alvo para perto da máscara (a câmera fecha na máscara, que

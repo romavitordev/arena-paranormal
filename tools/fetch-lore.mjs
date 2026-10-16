@@ -27,7 +27,7 @@ export const ORIGINS = {
     { page: 'Mia' },
     { page: 'Luciano Carvalho' },
     { page: 'Beatrice Portinari' },
-    { page: 'Cristopher Cohen' },
+    { page: 'Cristopher Cohen', id: 'cristopher' },
     { page: 'Arnaldo Fritz' },
     { page: 'Chizue Akechi' },
     { page: 'Tristan' },

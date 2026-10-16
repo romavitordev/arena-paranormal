@@ -12,6 +12,7 @@ import { ABILITY_TYPES } from './abilities.js';
 import './hostAbilities.js'; // registra as habilidades do Anfitrião em ABILITY_TYPES
 import './guizoAbilities.js'; // e as do Guizo (Embaralhar, Decadência, Espirais da Perdição...)
 import { detonateLanterns } from './cristinoAbilities.js'; // e as do Cristino (lampiões, fogo no chão)
+import './cristopherAbilities.js'; // e a do Cristopher (o carro de dublê)
 import { SPECIALS } from './specials/index.js';
 import { telegraphFor, startTelegraph, updateTelegraph, stopTelegraph, telegraphMissed, TELEGRAPH } from './specials/telegraph.js';
 import { hasPassive } from './passives.js';

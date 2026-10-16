@@ -1991,6 +1991,92 @@ export const MATERIAL_TEXTURES = {
     g.beginPath(); g.moveTo(0, 40); g.lineTo(w, 40); g.stroke();
     g.setLineDash([]);
   }, { wrap: true }),
+
+  // ---------------- CRISTOPHER "CRIS" COHEN (Ordo Realitas, OSNF): 59 anos, olhos azuis, rugas, barba por fazer grisalha e
+  // a grande QUEIMADURA no lado ESQUERDO do rosto (x > 256): faixas vermelho-arroxeadas repuxadas, da testa ao queixo
+  face_cristopher: face((g) => {
+    stubble(g, 'rgba(150,140,130,0.55)', 1800, { y0: 140, y1: 228, w: 86 });
+    // a queimadura (Desconjuração / OSNF): só o lado ESQUERDO — da testa, pelo olho e a bochecha, até o maxilar e a
+    // orelha; não passa do nariz nem pega a boca. Base vermelho-arroxeada e as faixas de pele repuxada, irregulares
+    g.save();
+    g.beginPath();
+    g.moveTo(CX + 18, 40); g.quadraticCurveTo(CX + 50, 26, CX + 104, 44); g.lineTo(CX + 130, 150); g.quadraticCurveTo(CX + 118, 224, CX + 66, 238);
+    g.quadraticCurveTo(CX + 44, 206, CX + 40, 176); g.quadraticCurveTo(CX + 24, 150, CX + 22, 120); g.quadraticCurveTo(CX + 14, 80, CX + 18, 40); g.closePath();
+    g.clip();
+    g.fillStyle = '#6e2c38'; g.fillRect(0, 0, W, HT);
+    let sd = 5;
+    const rnd = () => { sd = (sd * 16807) % 2147483647; return sd / 2147483647; };
+    for (let i = 0; i < 30; i++) {
+      const y = 28 + i * 7.5 + rnd() * 4;
+      g.strokeStyle = i % 2 ? `rgba(70,18,32,${0.5 + rnd() * 0.3})` : `rgba(150,74,80,${0.45 + rnd() * 0.3})`; g.lineWidth = 2 + rnd() * 3;
+      g.beginPath(); g.moveTo(CX + 10, y + 12); g.bezierCurveTo(CX + 44, y - 8 + rnd() * 10, CX + 84, y + 16 - rnd() * 10, CX + 140, y - 6); g.stroke();
+    }
+    g.restore();
+    // o olho esquerdo continua lá dentro da cicatriz (um pouco caído): o branco, a íris azul e a pálpebra repuxada
+    g.fillStyle = '#e8ddd4';
+    g.beginPath(); g.ellipse(CX + 32, EYE_Y + 1, 13, 6, 0.12, 0, Math.PI * 2); g.fill();
+    g.fillStyle = '#3a6aa8'; g.beginPath(); g.arc(CX + 31, EYE_Y + 1, 5.5, 0, Math.PI * 2); g.fill();
+    g.fillStyle = '#0a0608'; g.beginPath(); g.arc(CX + 31, EYE_Y + 1, 2.4, 0, Math.PI * 2); g.fill();
+    g.strokeStyle = 'rgba(40,10,18,0.9)'; g.lineWidth = 3;
+    g.beginPath(); g.moveTo(CX + 18, EYE_Y - 1); g.quadraticCurveTo(CX + 32, EYE_Y - 9, CX + 46, EYE_Y + 2); g.stroke();
+    g.strokeStyle = 'rgba(96,36,44,0.55)'; g.lineWidth = 2;
+    g.beginPath(); g.moveTo(CX + 18, 40); g.quadraticCurveTo(CX + 14, 80, CX + 22, 120); g.quadraticCurveTo(CX + 24, 150, CX + 40, 176); g.quadraticCurveTo(CX + 44, 206, CX + 66, 238); g.stroke();
+    // rugas da idade
+    g.strokeStyle = 'rgba(110,60,40,0.4)'; g.lineWidth = 1.4;
+    for (let k = 0; k < 3; k++) { g.beginPath(); g.moveTo(CX - 26, EYE_Y - 38 + k * 6); g.lineTo(CX + 4, EYE_Y - 40 + k * 6); g.stroke(); }
+    for (let k = 0; k < 3; k++) { g.beginPath(); g.moveTo(CX - 54, EYE_Y - 3 + k * 5); g.lineTo(CX - 68, EYE_Y - 6 + k * 7); g.stroke(); }
+    g.beginPath(); g.moveTo(CX - 26, 150); g.quadraticCurveTo(CX - 36, 168, CX - 30, 184); g.stroke();
+  }, {
+    skin: '#d8a080',
+    eye: { iris: '#3a6aa8', irisLight: '#8ab8e8', tilt: -0.02, h: 6.5, lid: 4 },
+    brow: { angry: 0, thick: 6, color: '#a8a49c' },
+    mouth: { mouthW: 21, smile: 4, lip: 'rgba(150,80,70,0.5)' },
+  }),
+  // o tronco: pele (aparece no decote e nas cavas) e as ESCAMAS tatuadas nas costas (u perto de 0/1 = costas, em cima)
+  skin_torso_cristopher: () => canvasTex(512, 256, (g, w, h) => {
+    g.fillStyle = '#d8a080'; g.fillRect(0, 0, w, h);
+    g.strokeStyle = 'rgba(30,36,40,0.85)'; g.lineWidth = 2.2;
+    for (const [x0, x1] of [[0, 120], [392, 512]]) {
+      for (let y = 6; y < 120; y += 13) {
+        for (let x = x0 + ((y / 13) % 2) * 9; x < x1; x += 18) {
+          g.beginPath(); g.arc(x, y, 9, 0.1 * Math.PI, 0.9 * Math.PI); g.stroke(); // uma escama (meia-lua)
+        }
+      }
+    }
+    g.fillStyle = 'rgba(60,30,24,0.25)';
+    for (let i = 0; i < 40; i++) { g.beginPath(); g.arc(Math.random() * w, Math.random() * h, 1 + Math.random() * 2, 0, Math.PI * 2); g.fill(); } // pintas e poeira
+  }, { wrap: true }),
+  // os braços: TATUAGENS TRIBAIS em faixas pontudas no alto do braço e no antebraço
+  arms_cristopher: () => canvasTex(256, 256, (g, w, h) => {
+    g.fillStyle = '#d8a080'; g.fillRect(0, 0, w, h);
+    g.fillStyle = 'rgba(22,24,28,0.88)';
+    const band = (y0, hgt) => {
+      for (let x = 0; x < w; x += 32) {
+        g.beginPath();
+        g.moveTo(x, y0 + hgt * 0.5);
+        g.quadraticCurveTo(x + 10, y0 - hgt * 0.4, x + 30, y0);
+        g.quadraticCurveTo(x + 18, y0 + hgt * 0.4, x + 34, y0 + hgt);
+        g.quadraticCurveTo(x + 12, y0 + hgt * 0.8, x, y0 + hgt * 0.5);
+        g.fill();
+      }
+    };
+    band(30, 34); // o alto do braço
+    band(92, 22);
+    band(160, 26); // o antebraço
+    g.strokeStyle = 'rgba(120,70,50,0.35)'; g.lineWidth = 1.2; // veias
+    for (let i = 0; i < 6; i++) { const x = 100 + i * 10; g.beginPath(); g.moveTo(x, 150); g.bezierCurveTo(x + 6, 180, x - 6, 210, x + 4, 250); g.stroke(); }
+  }, { wrap: true }),
+  // a REGATA branca: canelada, encardida, com manchas de sangue e de terra da floresta
+  tank_cristopher: () => canvasTex(256, 256, (g, w, h) => {
+    g.fillStyle = '#ebe6dc'; g.fillRect(0, 0, w, h);
+    for (let x = 0; x < w; x += 4) { g.fillStyle = 'rgba(160,150,135,0.25)'; g.fillRect(x, 0, 1.5, h); }
+    let s = 17;
+    const rnd = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
+    for (let i = 0; i < 14; i++) {
+      g.fillStyle = rnd() < 0.4 ? `rgba(140,20,24,${0.3 + rnd() * 0.3})` : `rgba(110,90,60,${0.15 + rnd() * 0.2})`;
+      g.beginPath(); g.ellipse(rnd() * w, rnd() * h, 4 + rnd() * 16, 3 + rnd() * 10, rnd() * 3, 0, Math.PI * 2); g.fill();
+    }
+  }, { wrap: true }),
 };
 
 function paintKianSigils(g, color) {

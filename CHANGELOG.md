@@ -1,5 +1,15 @@
 # Changelog
 
+## v3.24.0 — 2026-10-16
+
+### Adicionado
+- Lutador `cristopher` (`src/characters/cristopher.js`, Ordo Realitas, Sangue), na página 1 depois do Veríssimo.
+- `src/combat/cristopherAbilities.js`: tipo `stuntCar` (o carro vem por trás, ele desvia, o carro atropela e capota na parede) e o modelo `stuntCar()`.
+- Modelo `tools/blender/char_cristopher.py` → `public/models/cristopher.glb` (fonte `tools/blender/fonte/cristopher.blend`): relevo dos músculos com `relief`, a regata e o cabelo com `clothe` (cópia inflada e cortada da malha do tronco / da cabeça), calça e sapatos por escultura.
+- `sculpt_lib.clothe` (roupa justa a partir de uma peça do corpo, com a malha avaliada e subdividida antes do corte).
+- Texturas `face_/skin_torso_/arms_/tank_cristopher`; pose `vic_cristopher`; cena de agarrão `cristopher`; falas (introdução, vitória, batalha) e regras no `check-roster`.
+- `tools/fetch-lore.mjs`: `cristopher` como id do Cristopher Cohen.
+
 ## v3.23.1 — 2026-10-16
 
 ### Alterado

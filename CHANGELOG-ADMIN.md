@@ -1,5 +1,25 @@
 # Registro administrativo de alterações
 
+## v3.24.0 — Retroceder Nunca
+
+- Versão: `VERSION` 3.23.1 → **3.24.0** (package.json/lock junto). O especial do Cristino ("Odeio Gente Barulhenta") já
+  foi no commit do usuário "upd cristino".
+- **Cristopher "Cris" Cohen** (pedido: "pesquise sobre Christopher Cohen"; kit aprovado com o elemento **Sangue**):
+  - grafia oficial **Cristopher** (sem h; "Christopher" só na ficha do LJoga e na graphic novel); já estava no banco de
+    lore, sem id; não tem afinidade no cânone — Sangue escolhido pelo usuário;
+  - referências: wiki (arte promocional de OSNF, Desconjuração, graphic novel, miniatura) e Pinterest pelo Chrome do
+    usuário; a wiki não lista arsenal — ele luta de punhos (a miniatura);
+  - kit: Pancadaria de Dublê (fecha no chute giratório); □ Cena de Ação (`dashStrike` pelo □ de habilidade); Suplex
+    de Dublê (`arenaGrab`); Direção Avançada (`stuntCar`, 78, quebra a defesa); Levanta, Grandão! (`healOverTime` 80);
+    A Muralha (`heavyProtection`, −30% de dano, 3 golpes); passivas `thickSkin` + `heavyHand`; especial Retroceder
+    Nunca, Render-se Jamais (`cinematicCombo`, 250); Transformação O Protetor (`awakenMode`: ×1,2 de dano, −20% de dano
+    recebido, armadura a cada 3 s, 40% do empurrão, 3 de vida por segundo);
+  - vida 1500 como todo o elenco humano; ~37 mil triângulos;
+  - aprendido no caminho: o metaball negativo alcança bem além do próprio raio (cascas finas não funcionam por
+    subtração) — o cabelo e a regata saíram melhor como cópia da malha do corpo (`clothe`).
+- Verificações: `check-roster` (702 confrontos com falas + regras do Cristopher), `npm test` (41) e `npm run build`;
+  todas as habilidades, o especial e a transformação executados no preview sem erro.
+
 ## v3.23.1 — Os Mesmos Rituais
 
 - Versão: `VERSION` 3.23.0 → **3.23.1** (package.json/lock junto). A 3.22.0 e a 3.23.0 continuam sem commit.

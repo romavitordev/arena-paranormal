@@ -23,7 +23,7 @@
 | [Mia](#mia) | — | Especialista / Perseverante |  | 1 |
 | [Luciano Carvalho](#luciano-carvalho) | — | Ocultista, } |  | 2 |
 | [Beatrice Portinari](#beatrice-portinari) | — | — |  | 0 |
-| [Cristopher Cohen](#cristopher-cohen) | — | — |  | 0 |
+| [Cristopher Cohen](#cristopher-cohen) | — | — | ✅ `cristopher` | 0 |
 | [Arnaldo Fritz](#arnaldo-fritz) | — | Ocultista |  | 0 |
 | [Chizue Akechi](#chizue-akechi) | — | Especialista |  | 0 |
 | [Tristan Monteiro](#tristan-monteiro) | — | Combatente |  | 0 |

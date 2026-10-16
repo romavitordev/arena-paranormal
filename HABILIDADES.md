@@ -391,6 +391,51 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ---
 
+## CRISTOPHER
+
+*O dublê do Van Damme e o paizão da Equipe E — no fim, O Protetor* · arma: Os punhos e os chutes de dublê; o carro dele na Direção Avançada
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Jab | 22 | 1.8 m |  |
+| ○ 2 | Direto | 28 | 1.9 m |  |
+| ○ 3 | Joelhada | 30 | 1.5 m |  |
+| ○ 4 | Cotovelada | 30 | 1.6 m |  |
+| ○ 5 | Chute giratório | 56 | 2.1 m | finalizador: lança |
+| Frente + ○ | Ombrada de armário | 38 | 1.9 m |  |
+| Trás + ○ | Rolamento de dublê | 32 | 1.8 m | invulnerável no começo |
+| Lado + ○ | Chute lateral | 36 | 2 m |  |
+| No ar + ○ | Chute voador | 40 | 1.9 m | desce com impacto |
+| ↑ + ○ (no combo) | Gancho | 42 | 1.9 m | finalizador: lança alto (combo aéreo) |
+| ↓ + ○ (no combo) | Pisão | 48 | 1.8 m | finalizador: derruba |
+
+### Principal (□ / X): Cena de Ação
+
+- Dano 34 · alcance 2 m · cooldown 3.6 s · custo 0
+
+### Habilidades
+
+- **Suplex de Dublê** — △ + ○ / Y + B · custo 30 · cooldown 12 s · alcance 1.8 m
+  Avança, agarra o adversário pela cintura, dá duas joelhadas e o arremessa por cima da cabeça contra o chão — a queda ensaiada que dói de verdade. Não dá para defender, só esquivar.
+- **Direção Avançada** — △ + □ / Y + X · custo 30 · cooldown 16 s · dano 78
+  Assobia, e o carro dele vem derrapando por trás numa cena de dublê; ele se joga para o lado no último instante e o carro atropela quem estiver na frente. Quebra a defesa e joga longe.
+- **Levanta, Grandão!** — △ + L2 / Y + LT · custo 25 · cooldown 22 s
+  A Experiência de Dublê: sacode a poeira, estala o pescoço e recupera vida rápido — quem caiu de prédio em filme não fica no chão.
+- **A Muralha** — R2 + △ / RT + Y · custo 25 · cooldown 20 s
+  Se planta na frente de tudo como fazia pela equipe: por 7 s recebe 30% menos dano e aguenta 3 golpes sem recuar, mas anda um pouco mais devagar.
+
+### Especial: Retroceder Nunca, Render-se Jamais
+
+250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: O Protetor
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +20% de dano, −20% de dano recebido, regenera 3 de vida/s, aguenta 1 golpe sem reagir a cada 3 s, cura 8% na hora.
+
+---
+
 ## KIAN
 
 *Força física absurda + paranormal + mobilidade + ataques devastadores* · arma: Punhos (sem armas)

@@ -26,6 +26,7 @@ export const CHARACTER_NAMES = {
   estrangeiro: 'O Estrangeiro',
   amigo: 'Amigo Imaginário',
   cristino: 'Cristino',
+  cristopher: 'Cristopher',
 };
 
 export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto', jae_x: 'jae', colosso: 'dalmo', guizo_et: 'guizo', kian_calamidade: 'kian', juan_odio: 'juan', guizo_bombado: 'guizo', guizo_velho: 'guizo', cristino_desertor: 'cristino' };
@@ -58,6 +59,7 @@ const INTRO_HOOKS = {
   estrangeiro: 'o sinal',
   amigo: 'o sino',
   cristino: 'a socadeira',
+  cristopher: 'esses punhos de dublê',
 };
 
 const INTRO_OPENERS = {
@@ -87,6 +89,7 @@ const INTRO_OPENERS = {
   estrangeiro: (other, hook) => `${other}... você ouviu ${hook}. Agora não consegue mais deixar de ouvir.`,
   amigo: (other, hook) => `(${hook} ecoa de dentro da criatura) ...${other}... quer brincar... no quadro?`,
   cristino: (other, hook) => `Não é pessoal, ${other}. Larga ${hook} e sai do meu caminho.`,
+  cristopher: (other, hook) => `HEY, ${other}! Bonito ${hook}! Mas aqui é cena de ação, e eu faço as minhas sem dublê!`,
 };
 
 const INTRO_REPLIES = {
@@ -116,9 +119,35 @@ const INTRO_REPLIES = {
   estrangeiro: (other, hook) => `${hook}. Interessante, ${other}. Amanhã você não vai lembrar desta conversa.`,
   amigo: (other, hook) => `(a tinta pinga no chão) ...${hook} já tocou, ${other}... ninguém lembra de quando parou.`,
   cristino: (other, hook) => `${hook}... Eu já vi coisa pior no mato, ${other}. Fala menos.`,
+  cristopher: (other, hook) => `${hook}? Já caí de prédio por menos, ${other}! Vem, que o tio aguenta!`,
 };
 
 const INTRO_EXCHANGES = {
+  // CRISTOPHER (O Segredo na Floresta): o pai do Cesar, o melhor amigo do Arnaldo, o "Gringão" dos Gaudérios Abutres
+  'cristopher+kaiser': [
+    { starter: 'cristopher', line: 'Cesar! Filho! Eu sei que eu sumi... deixa eu compensar agora?', response: 'kaiser', responseLine: 'Velho vacilão. Vai ter que me alcançar primeiro.' },
+    { starter: 'kaiser', line: 'Você nunca contou da Ordem, pai.', response: 'cristopher', responseLine: 'Pra te proteger, filho. E olha onde a gente veio parar... juntos.' },
+  ],
+  'arnaldo+cristopher': [
+    { starter: 'arnaldo', line: 'Cris! O meu dublê favorito! Ainda cai bonito?', response: 'cristopher', responseLine: 'ARNALDO! Cai melhor que você atua, meu amigo!' },
+    { starter: 'cristopher', line: 'Foi você que me trouxe pra essa vida, Arnaldo.', response: 'arnaldo', responseLine: 'E você demorou trinta anos pra aceitar o papel.' },
+  ],
+  'cristopher+joui': [
+    { starter: 'joui', line: 'Senhor Cris. Vou tentar não cortar demais.', response: 'cristopher', responseLine: 'Ha! Gostei de você, Joui-san! Pode vir com tudo!' },
+    { starter: 'cristopher', line: 'Rapaz, você luta igual filme de kung fu!', response: 'joui', responseLine: 'E o senhor apanha igual filme de ação.' },
+  ],
+  'balu+cristopher': [
+    { starter: 'balu', line: 'Olha o Gringão! Bora ver quem é o maior?', response: 'cristopher', responseLine: 'Tio Balu! O maior a gente decide no braço!' },
+    { starter: 'cristopher', line: 'Depois a gente come lá no Suvaco Seco?', response: 'balu', responseLine: 'Só se você pagar, gringo!' },
+  ],
+  'cristopher+verissimo': [
+    { starter: 'verissimo', line: 'Cohen. Demorou, mas você entrou para a Ordem.', response: 'cristopher', responseLine: 'Com uma condição, chefe: a minha família fica de fora.' },
+    { starter: 'cristopher', line: 'Senhor Veríssimo! Igual àquela vez do Kian, hein?', response: 'verissimo', responseLine: 'Olhos sempre abertos, Cristopher. Daquela vez quase não voltamos.' },
+  ],
+  'cristopher+kian': [
+    { starter: 'kian', line: 'Eu lembro de você. Você estava lá quando tentaram me apagar.', response: 'cristopher', responseLine: 'E voltei vivo pra contar, primeiro ocultista!' },
+    { starter: 'cristopher', line: 'Você devia estar morto, cara!', response: 'kian', responseLine: 'Devia. Muita gente devia.' },
+  ],
   // CRISTINO (Hexatombe): a caça ao Quibungo com a Jae e o Labirinto, o Pomba sequestrado, a promessa e o fim pelo Juan
   'cristino+jae': [
     { starter: 'cristino', line: 'Vocês ainda têm a minha palavra. Uma vez só.', response: 'jae', responseLine: 'Shh... guarda ela, cangaceiro. Hoje eu não vim pedir.' },
@@ -2104,6 +2133,65 @@ const VICTORY_CRISTINO = {
 };
 for (const [w, m] of Object.entries(VICTORY_CRISTINO)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
 
+// CRISTOPHER (Ordo Realitas, OSNF): falas de vitória dele contra cada um e de cada um contra ele
+const VICTORY_CRISTOPHER = {
+  cristopher: {
+    kaiser: ['Desculpa, filho! O pai ainda tem uns golpes!', 'Eu te amo, Cesar. Agora levanta, que eu te ajudo.'],
+    arthur: ['Boa luta, motoqueiro! Um braço vale por dois!', 'Fica no chão, Cervero, que a cena acabou!'],
+    joui: ['Joui-san! Quase me pegou! Quase!', 'Kung fu bonito, mas o armário aqui não cai!'],
+    aghata: ['Desculpa, menina! Foi sem querer... quase!', 'Muito ritual, pouca porrada, querida!'],
+    dante: ['Corta! Essa cena ficou ótima, Dante!', 'Discurso bonito. Mas o soco foi mais rápido!'],
+    erin: ['Explosão de verdade? Eu já fiz cena com mais fogo!', 'Garota, você é maluca! Gostei!'],
+    gal_sal: ['Correntes? Eu já fui amarrado em helicóptero!', 'Justiça é proteger quem a gente ama, Gal.'],
+    kian: ['Previu isso, primeiro ocultista? Previu o tio Cris?', 'Te derrubaram uma vez. Eu derrubei de novo!'],
+    aguiar: ['Calma, delegado! Ninguém morreu... hoje!', 'Larga esse machado antes que se machuque!'],
+    labirinto: ['Labirinto? Eu só ando reto e passo por cima!', 'Achei a saída! Era o meu punho!'],
+    xande: ['Moleque bom de briga! Gostei de você!', 'Skate é perigoso, garoto! Use capacete!'],
+    lirio: ['Armário contra armário! O mais velho ganhou!', 'Que pancada, rapaz! Vem cá, me dá um abraço!'],
+    ferreiro: ['Carpazinha não me pega duas vezes, velho!', 'Seu santo pode esperar. Eu tenho uma equipe pra proteger.'],
+    juan: ['Calma, garoto. Ninguém precisa sangrar hoje.', 'Você precisa de um abraço, não de um pacto!'],
+    kemi: ['Sniper? Eu caí de um prédio de vinte andares!', 'Mira boa, mocinha. Eu sou maior que o alvo!'],
+    balu: ['Desculpa, tio Balu! Hoje o gringo ganhou!', 'Bora pro Suvaco Seco? Eu pago!'],
+    arnaldo: ['Hoje o dublê roubou a cena, meu amigo!', 'Que saudade, Arnaldo. Que saudade.'],
+    verissimo: ['Relatório, chefe: o tio Cris resolveu!', 'Olhos abertos, senhor! O meu ficou roxo, mas abriu!'],
+    jae: ['Shh nada! Aqui é cena de ação, barulho é tudo!', 'Esconde-esconde comigo não dá, eu sou grande demais!'],
+    dalmo: ['Dois armários, um em pé. Esse é o velho aqui!', 'Que soco, grandão! Isso foi de filme!'],
+    guizo: ['Filmou, rapaz? Essa cena foi de primeira!', 'Câmera boa! Agora corta e manda pro Van Damme!'],
+    o_diabo: ['Pacto? Eu já fiz o meu: proteger a minha equipe!', 'Nem o Diabo tira o tio Cris de cena!'],
+    magistrada: ['Saber tudo não segura um chute giratório!', 'Desculpa, dona! Eu sou meio escandaloso!'],
+    estrangeiro: ['Que bicho estranho! Você é de que filme?', 'Ninguém vai lembrar? Eu vou contar pra todo mundo!'],
+    amigo: ['Credo, que coisa! Mas o tio aguenta!', 'Sino nenhum me faz parar, monstro!'],
+    cristino: ['Odeia gente barulhenta? Azar o seu, amigo!', 'Cangaceiro duro! Mas o gringo é mais!'],
+  },
+  kaiser: { cristopher: ['Agora você fica, velho. Nem que seja no chão.', 'Pai... dessa vez eu cuidei de você.'] },
+  arthur: { cristopher: ['Grandão demais pra errar, Cris.', 'Levanta, gringo. A equipe precisa de você.'] },
+  joui: { cristopher: ['Desculpe, senhor Cris. Foi rápido.', 'O senhor é forte. Eu só fui mais rápido.'] },
+  aghata: { cristopher: ['Força bruta não lê rituais.', 'Grande, barulhento e previsível, senhor Cohen.'] },
+  dante: { cristopher: ['Que entrada! Que queda! Bravo, dublê!', 'O tempo derruba até os armários.'] },
+  erin: { cristopher: ['Kaboom! O tio caiu bonito!', 'Calculei a carga pro seu tamanho, Cris!'] },
+  gal_sal: { cristopher: ['Preso na corrente, igual a todo mundo.', 'Proteger também é saber a hora de parar, Cris.'] },
+  kian: { cristopher: ['Você sobreviveu daquela vez. Não dessa.', 'Eu vi o armário cair antes do primeiro soco.'] },
+  aguiar: { cristopher: ['Ha ha... o grandão caiu na caçada.', 'Gringo grande, queda grande.'] },
+  labirinto: { cristopher: ['Grande demais para os meus corredores.', 'Você andou reto. Reto até a parede.'] },
+  xande: { cristopher: ['Desculpa, tio! Valeu, skate!', 'Por eles, grandão. Você ia entender.'] },
+  lirio: { cristopher: ['A Leonora aguentou o armário!', 'Que pancada, tio! Mas eu sou mais teimoso!'] },
+  ferreiro: { cristopher: ['Carpazinha guarda os que caem aqui.', 'O Santo agradece o seu sangue, estrangeiro.'] },
+  juan: { cristopher: ['Seu sangue protege bem, grandão. Agora é meu.', 'Ha! Um pai a menos.'] },
+  kemi: { cristopher: ['Alvo grande. Tiro fácil.', 'Trabalho encerrado. Sem rancor, Cohen.'] },
+  balu: { cristopher: ['Hahaha! O tio Balu ainda é o maior, gringo!', 'Bora comer? Você paga, perdeu!'] },
+  arnaldo: { cristopher: ['Aplausos para o meu dublê favorito!', 'Desculpa, Cris. Essa cena era minha.'] },
+  verissimo: { cristopher: ['Coragem você tem, Cohen. Juízo, nem tanto.', 'Relatório: agente Cohen fora de combate.'] },
+  jae: { cristopher: ['Shh, grandão. Você fala alto demais.', 'Quanto maior, mais barulho cai.'] },
+  dalmo: { cristopher: ['Aí sim, neném! Derrubei o armário!', 'Grande você. Maior eu.'] },
+  guizo: { cristopher: ['Gravei! O dublê do Van Damme caindo de verdade!', 'Essa queda vai bombar na internet!'] },
+  o_diabo: { cristopher: ['Proteger todo mundo... que desejo bonito, Cris.', 'Eu podia ter trazido o Arnaldo de volta.'] },
+  magistrada: { cristopher: ['Tanto barulho. Agora, silêncio.', 'O sacrifício não pesa na balança, Cohen.'] },
+  estrangeiro: { cristopher: ['Ninguém vai lembrar do dublê.', 'Grande. Para a sua espécie.'] },
+  amigo: { cristopher: ['...o armário... derreteu...', '...mais um pai... no quadro...'] },
+  cristino: { cristopher: ['Eu odeio gente barulhenta.', 'Não é pessoal, gringo. Fala menos.'] },
+};
+for (const [w, m] of Object.entries(VICTORY_CRISTOPHER)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
+
 export const VICTORY_FALLBACKS = {
   kaiser: 'A névoa não escolheu por mim. Desta vez, eu fiquei.',
   arthur: 'Acabou. Agora posso garantir que ninguém mais se machuque.',
@@ -2131,6 +2219,7 @@ export const VICTORY_FALLBACKS = {
   estrangeiro: 'Ninguém vai lembrar disto.',
   amigo: '...mais um quadro na igreja...',
   cristino: 'Não é pessoal. Eu disse que não me importo com os joguinhos de vocês.',
+  cristopher: 'Corta! Essa foi de primeira! Todo mundo bem aí?',
 };
 
 export const BATTLE_DIALOGUES = {
@@ -2161,6 +2250,7 @@ export const BATTLE_DIALOGUES = {
     estrangeiro: 'Dor. Um conceito tão local.',
     amigo: '(o sino toca mais rápido)',
     cristino: 'Já levei tiro de bicho pior. Não é hoje.',
+    cristopher: 'Experiência de dublê, rapaz! Eu já caí de prédio!',
     anfitriao: 'Essa dor combina com você. Não sei por quê; combina.',
   },
   special: {
@@ -2190,6 +2280,7 @@ export const BATTLE_DIALOGUES = {
     estrangeiro: 'O que é pior do que a Dor e a Morte?',
     amigo: '...todo mundo vai morrer...',
     cristino: 'Um... dois... três.',
+    cristopher: 'Essa cena eu fiz com o Van Damme!',
     anfitriao: 'Eu ia deixar você sair andando. Aí você me olhou com essa cara.',
   },
   transform: {
@@ -2205,6 +2296,7 @@ export const BATTLE_DIALOGUES = {
     guizo_bombado: 'Eu sou o mais forte! Grava isso!',
     guizo_velho: 'Na minha época, a gente gravava em fita, rapaz.',
     cristino_desertor: 'Eu toquei a Coroa. Agora eu sei o que você quer.',
+    cristopher: 'Filho... eu te amo! Ninguém encosta na minha equipe!',
   },
 };
 
@@ -2236,6 +2328,7 @@ export const BATTLE_REPLIES = {
     estrangeiro: 'Persistente. Para a sua espécie.',
     amigo: '...a tinta não acaba...',
     cristino: 'Então levanta. Caça boa não acaba no primeiro tiro.',
+    cristopher: 'Isso! Levanta, que o tio te dá a mão!',
     anfitriao: 'Sua coragem é comovente. Quase tanto quanto essa estratégia.',
   },
   special: {
@@ -2265,6 +2358,7 @@ export const BATTLE_REPLIES = {
     estrangeiro: 'Interessante. Repita.',
     amigo: '...ainda não derreteu...',
     cristino: 'Eu odeio gente barulhenta.',
+    cristopher: 'Retroceder nunca! Render-se jamais!',
     anfitriao: 'Vai, capricha. Quero uma história boa pra contar quando você cair.',
   },
   transform: {
@@ -2294,6 +2388,7 @@ export const BATTLE_REPLIES = {
     estrangeiro: 'Mudou de forma. A mente continua aberta.',
     amigo: '...outro rosto... para derreter...',
     cristino: 'A Coroa me mostrou o que você quer. Não vai ter.',
+    cristopher: 'Uau! Que figurino! De que filme é isso?',
     anfitriao: 'Isso era pra me assustar? Eu já vi coisa mais convincente no espelho.',
   },
 };

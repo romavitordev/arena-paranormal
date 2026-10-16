@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.23.1';
+export const VERSION = '3.24.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,17 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.24.0',
+    date: '2026-10-16',
+    title: 'Retroceder Nunca',
+    items: [
+      'NOVO LUTADOR — CRISTOPHER "CRIS" COHEN (Ordo Realitas, Sangue): o dublê do Van Damme e o paizão da Equipe E de O Segredo na Floresta. Um armário de 2 metros, grisalho, com a cicatriz de queimadura no lado esquerdo do rosto, regata branca e tatuagens tribais nos braços. Luta de punhos e com os chutes de filme de ação, e aguenta empurrão e desgaste na defesa (Couro de Dublê).',
+      'CRISTOPHER — o □ CENA DE AÇÃO é um mergulho de dublê que quebra a defesa. Habilidades: SUPLEX DE DUBLÊ (△ → ○, agarra e arremessa no chão), DIREÇÃO AVANÇADA (△ → □, o carro dele vem derrapando por trás, ele se joga para o lado e o carro atropela quem estiver na frente), LEVANTA, GRANDÃO! (△ + L2, recupera vida rápido) e A MURALHA (R2 + △, recebe menos dano e aguenta golpes sem recuar).',
+      'CRISTOPHER — especial RETROCEDER NUNCA, RENDER-SE JAMAIS (a sequência de chutes do filme em que ele foi dublê do Van Damme). Transformação O PROTETOR: vai com tudo pela equipe até o fim do round, batendo mais forte, aguentando golpes e se recuperando.',
+      'Falas novas do Cristopher contra todo o elenco, com conversas próprias com o Kaiser (o filho), o Arnaldo (o melhor amigo), o Joui, o Balu, o Veríssimo e o Kian.',
+    ],
+  },
   {
     v: '3.23.1',
     date: '2026-10-16',
