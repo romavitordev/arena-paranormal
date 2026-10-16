@@ -35,8 +35,12 @@ function aiLearnedPlugin() {
   };
 }
 
+const PKG = JSON.parse(readFileSync(resolve(import.meta.dirname, 'package.json'), 'utf8'));
+
 export default defineConfig({
   root: resolve(import.meta.dirname),
+  // a versão do jogo para páginas leves (sobre.html) sem carregar o changelog inteiro de config/version.js
+  define: { __APP_VERSION__: JSON.stringify(PKG.version) },
   // APP_BASE: os apps instalados (PC/Electron e Android/Capacitor) servem o jogo na raiz, mesmo quando o build roda no
   // GitHub Actions (o workflow de release passa APP_BASE=/)
   base: process.env.APP_BASE || (process.env.GITHUB_ACTIONS ? '/arena-paranormal/' : '/'),

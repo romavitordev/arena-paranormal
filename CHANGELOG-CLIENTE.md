@@ -2,6 +2,10 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.27.1 — Baixe e Jogue
+- PÁGINA SOBRE / BAIXAR NOVA: mais direta e fácil — o botão principal já baixa a versão do seu aparelho (Windows, Android; no iPhone, jogar no navegador), com fotos reais do jogo ao lado de cada parte, os modos, o elenco, os controles e as perguntas mais comuns. Abre rápido até no celular.
+- DANTE — as cópias do Trinitá agora são vultos PRETOS de verdade (antes saíam acinzentadas); a franja ficou mais curta e deixa ver os olhos (os olhos pretos do Olhos Abertos aparecem); e a cena da transformação não estoura mais de luz branca.
+
 ## v3.27.0 — Do Seu Jeito
 - OPÇÕES NOVAS: uma tela só, organizada em SOM, IMAGEM, PARTIDA e IDIOMA, com uma linha embaixo explicando o que cada opção faz.
 - VOLUME com BARRA ARRASTÁVEL (mouse e toque) e separado por canal: Volume geral, Efeitos da luta, Menus e Carga de Poder (o zumbido enquanto segura △). Tocar no número deixa aquele canal mudo; ao mexer, toca um som de teste.

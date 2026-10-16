@@ -258,7 +258,7 @@ for k in range(9):
     x = (-0.1 + k * 0.025) * H
     yb = hc.y - (0.142 - 0.5 * (x / H) ** 2 / 0.14) * H
     ln = 0.075 + (0.01 if k % 3 == 1 else 0.0) - (0.008 if k % 4 == 0 else 0.0)
-    F.chain([Vector((x, yb + 0.03 * H, hc.z + 0.13 * H)), Vector((x * 1.04, yb - 0.004 * H, hc.z + 0.09 * H)), Vector((x * 1.06, yb - 0.008 * H, hc.z + (0.11 - ln) * H))],
+    F.chain([Vector((x, yb + 0.03 * H, hc.z + 0.13 * H)), Vector((x * 1.04, yb - 0.004 * H, hc.z + 0.09 * H)), Vector((x * 1.06, yb - 0.008 * H, hc.z + (0.135 - ln) * H))],
             [0.02 * H, 0.016 * H, 0.008 * H], step=0.5)
 for s in (1, -1):  # as laterais curtas cobrindo as têmporas (as orelhas ficam de fora)
     F.chain([hc + Vector((s * 0.128 * H, -0.075 * H, 0.1 * H)), hc + Vector((s * 0.138 * H, -0.085 * H, 0.05 * H)), hc + Vector((s * 0.138 * H, -0.09 * H, 0.02 * H))],

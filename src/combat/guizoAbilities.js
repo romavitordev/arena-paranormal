@@ -173,7 +173,7 @@ export const GUIZO_TYPES = {
               restyle(m) {
                 m.material.transparent = true;
                 m.material.opacity = m.userData.isOutline ? 0.35 : 0.7;
-                if (m.material.color && !m.userData.isOutline) m.material.color.multiplyScalar(0.16);
+                if (m.material.color && !m.userData.isOutline) m.material.color.multiplyScalar(0.035); // linear: 0,035 ≈ #353535 na tela
                 m.castShadow = false;
               },
             });

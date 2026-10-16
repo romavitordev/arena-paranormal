@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.27.0';
+export const VERSION = '3.27.1';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,15 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.27.1',
+    date: '2026-10-16',
+    title: 'Baixe e Jogue',
+    items: [
+      'PÁGINA SOBRE / BAIXAR NOVA: mais direta e fácil — o botão principal já baixa a versão do seu aparelho (Windows, Android; no iPhone, jogar no navegador), com fotos reais do jogo ao lado de cada parte, os modos, o elenco, os controles e as perguntas mais comuns. Abre rápido até no celular.',
+      'DANTE — as cópias do Trinitá agora são vultos PRETOS de verdade (antes saíam acinzentadas); a franja ficou mais curta e deixa ver os olhos (os olhos pretos do Olhos Abertos aparecem); e a cena da transformação não estoura mais de luz branca.',
+    ],
+  },
   {
     v: '3.27.0',
     date: '2026-10-16',

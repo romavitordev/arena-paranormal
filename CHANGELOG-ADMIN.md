@@ -1,5 +1,21 @@
 # Registro administrativo de alterações
 
+## v3.27.1 — Baixe e Jogue
+
+- Versão: `VERSION` 3.27.0 → **3.27.1** (package.json/lock junto).
+- Pedido: "antes do push, reformule a página de jogo/baixar com a skill de padrão de qualidade de sites" (a 3.27.0 já
+  tinha subido; esta versão leva a página nova).
+- Padrão aplicado: §1 (referências → ThoughtLab no Refero Styles; tokens antes das telas), §2 (layout, CTA, desempenho,
+  acessibilidade, SEO) e §5 (entrega). §3 (backend) e §4 (LGPD) não se aplicam a uma página estática sem coleta de
+  dados — o motivo de cada item está em `docs/QUALIDADE-SOBRE.md`.
+- Lighthouse 12 no celular (Edge headless, build de produção): 92 → **99** de desempenho (as fontes bloqueavam a primeira
+  pintura e as imagens eram maiores que o celular precisa), acessibilidade/boas práticas/SEO **100**; LCP 1,7 s, CLS 0,059.
+- Telas da página capturadas no próprio jogo (título, luta com o Paradoxo e as cópias, o rosto de Olhos Abertos, a
+  Marionete, a seleção). As capturas mostraram três problemas do Dante, corrigidos aqui: cópias acinzentadas, a franja
+  cobrindo os olhos e a cena de transformação estourada de luz.
+- Pendente (fora do alcance do código): Search Console com a conta do dono; testar no Safari do iPhone e no Samsung
+  Internet.
+
 ## v3.27.0 — Do Seu Jeito
 
 - Versão: `VERSION` 3.26.1 → **3.27.0** (package.json/lock junto).

@@ -329,6 +329,7 @@ export const maskTransform = {
         // os olhos abrem: troca o rosto ao vivo (o modelo da forma entra no fim da cena)
         scrap.push(swapFace(f.rig, 'face_dante', 'face_dante_open'));
         maskOn(true);
+        lightTo = 4; // a luz pálida no máximo do maskOn (14) estourava o xale branco: fica fraca, e a névoa preta faz o resto
         world.fx.burst(head(), { count: 40, color: 0x0c0a0e, kind: 'smoke', speed: 3, life: 0.8, size: 0.6, grow: 1 });
       });
       tl.add(1.9, () => {

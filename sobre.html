@@ -3,124 +3,270 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Arena Paranormal — Sobre e Download</title>
-  <meta name="description" content="Jogo de luta 3D com os agentes e criaturas de Ordem Paranormal. Jogue no navegador ou baixe para PC e celular." />
+  <title>Arena Paranormal · Baixar o jogo de luta 3D (PC e Android)</title>
+  <meta name="description" content="Jogo de luta 3D fan made inspirado em Ordem Paranormal: agentes, cultistas e criaturas do Outro Lado em arenas 3D. Grátis para Windows, Android e navegador." />
+  <meta name="theme-color" content="#0a0809" />
+  <link rel="canonical" href="https://romavitordev.github.io/arena-paranormal/sobre.html" />
   <link rel="icon" href="%BASE_URL%ordo-realitas.ico" />
+  <!-- compartilhamento -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:site_name" content="Arena Paranormal" />
+  <meta property="og:title" content="Arena Paranormal — o jogo de luta 3D fan made de Ordem Paranormal" />
+  <meta property="og:description" content="Agentes, cultistas e criaturas do Outro Lado em arenas 3D. Grátis para Windows, Android e navegador." />
+  <meta property="og:url" content="https://romavitordev.github.io/arena-paranormal/sobre.html" />
+  <meta property="og:image" content="https://romavitordev.github.io/arena-paranormal/sobre/og.jpg" />
+  <meta property="og:image:width" content="800" />
+  <meta property="og:image:height" content="420" />
+  <meta property="og:image:alt" content="Tela de título do Arena Paranormal com cinco lutadores" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Arena Paranormal — jogo de luta 3D fan made" />
+  <meta name="twitter:description" content="Grátis para Windows, Android e navegador." />
+  <meta name="twitter:image" content="https://romavitordev.github.io/arena-paranormal/sobre/og.jpg" />
+  <!-- fontes: só as duas famílias da página, com display=swap -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- não bloqueia a primeira pintura: o texto aparece na fonte do sistema e troca quando a fonte chega (display=swap) -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;800&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;800&display=swap" /></noscript>
   <link rel="stylesheet" href="/src/sobre.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "VideoGame",
+        "name": "Arena Paranormal",
+        "url": "https://romavitordev.github.io/arena-paranormal/",
+        "image": "https://romavitordev.github.io/arena-paranormal/sobre/og.jpg",
+        "description": "Jogo de luta 3D fan made, sem fins lucrativos, inspirado em Ordem Paranormal.",
+        "genre": ["Luta", "Ação"],
+        "gamePlatform": ["PC", "Android", "Navegador"],
+        "operatingSystem": "Windows 10, Windows 11, Android, navegador",
+        "applicationCategory": "GameApplication",
+        "inLanguage": "pt-BR",
+        "playMode": ["SinglePlayer", "MultiPlayer"],
+        "author": { "@type": "Person", "name": "romavitordev", "url": "https://github.com/romavitordev" },
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "BRL" }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          { "@type": "Question", "name": "O Arena Paranormal é de graça?", "acceptedAnswer": { "@type": "Answer", "text": "Sim. É um projeto de fã sem fins lucrativos: o jogo e os downloads são gratuitos." } },
+          { "@type": "Question", "name": "É um jogo oficial de Ordem Paranormal?", "acceptedAnswer": { "@type": "Answer", "text": "Não. É um jogo fan made por romavitordev, inspirado em Ordem Paranormal, de Rafael Lange (Cellbit). Os personagens e o universo pertencem aos seus criadores." } },
+          { "@type": "Question", "name": "Precisa de internet para jogar?", "acceptedAnswer": { "@type": "Answer", "text": "Nas versões de PC e Android, só para baixar e para o modo Online. As lutas contra a CPU e com dois jogadores no mesmo aparelho funcionam sem internet." } },
+          { "@type": "Question", "name": "Dá para jogar no iPhone?", "acceptedAnswer": { "@type": "Answer", "text": "Sim, pelo navegador (Safari). A Apple não permite instalar fora da App Store; use Compartilhar → Adicionar à Tela de Início para abrir como um app." } }
+        ]
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
-  <header class="hero">
-    <a class="back" href="./">◀ VOLTAR AO JOGO</a>
-    <div class="kicker">JOGO DE LUTA 3D · ORDEM PARANORMAL</div>
-    <h1><span>ARENA</span> PARANORMAL</h1>
-    <p class="lead">Agentes da Ordo Realitas, cultistas, Mascarados e criaturas do Outro Lado se enfrentam em arenas 3D —
-      combate rápido, rituais por combinação de botões e especiais cinematográficos.</p>
-    <div class="ver" id="ver"></div>
+  <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="top">
+    <div class="wrap top-in">
+      <a class="mark" href="./" aria-label="Arena Paranormal — abrir o jogo">ARENA <span>PARANORMAL</span></a>
+      <nav aria-label="Seções da página">
+        <a href="#baixar">Baixar</a>
+        <a href="#jogo">O jogo</a>
+        <a href="#modos">Modos</a>
+        <a href="#elenco">Elenco</a>
+        <a href="#controles">Controles</a>
+        <a href="#perguntas">Perguntas</a>
+      </nav>
+      <a class="pill ghost small" href="./">Jogar agora</a>
+    </div>
   </header>
 
-  <main>
-    <section id="baixar" class="downloads">
-      <h2>Baixar e jogar</h2>
-      <p class="note-app hidden" id="no-app">Você já está jogando pelo aplicativo. 👍</p>
+  <main id="conteudo">
+    <!-- HERO: o que é + a ação principal (o download do aparelho de quem vê) -->
+    <section class="hero wrap" aria-labelledby="titulo">
+      <div class="hero-copy">
+        <p class="eyebrow">Jogo de luta 3D · fan made</p>
+        <h1 id="titulo">Arena<br />Paranormal</h1>
+        <p class="lead">Agentes da Ordo Realitas, cultistas, Mascarados e criaturas do Outro Lado se enfrentam em arenas 3D —
+          combos rápidos, rituais por combinação de botões, transformações e especiais cinematográficos.</p>
+        <div class="cta">
+          <a class="pill primary" id="cta-main" href="https://github.com/romavitordev/arena-paranormal/releases/latest/download/Arena-Paranormal-Windows.exe">
+            <span id="cta-label">Baixar para Windows</span>
+          </a>
+          <a class="pill ghost" href="./">Jogar no navegador</a>
+        </div>
+        <p class="meta"><span id="ver">Versão atual</span> · grátis · <a href="#baixar">outras plataformas</a></p>
+        <p class="in-app hidden" id="no-app" role="status">Você já está jogando pelo aplicativo. Para atualizar, baixe a versão nova aqui embaixo.</p>
+      </div>
+      <figure class="hero-shot">
+        <img src="%BASE_URL%sobre/titulo.webp" srcset="%BASE_URL%sobre/titulo-480.webp 480w, %BASE_URL%sobre/titulo.webp 800w" sizes="(min-width: 1024px) 530px, 100vw" width="800" height="450" alt="Tela de título do Arena Paranormal: cinco lutadores em pose sob o logo" fetchpriority="high" />
+      </figure>
+    </section>
+
+    <!-- DOWNLOADS -->
+    <section class="wrap block" id="baixar" aria-labelledby="t-baixar">
+      <h2 id="t-baixar">Baixar e jogar</h2>
+      <p class="sub">Escolha o seu aparelho. Tudo grátis, sem conta e sem anúncios.</p>
       <div class="cards">
-        <a class="card" id="dl-pc" href="https://github.com/romavitordev/arena-paranormal/releases/latest/download/Arena-Paranormal-Windows.exe">
-          <div class="icon">🖥️</div>
-          <div class="t">PC (Windows)</div>
-          <div class="d">Instalador .exe — abre em tela cheia, sem navegador, e funciona sem internet. Jogue com teclado
-            ou controle (PlayStation / Xbox).</div>
-          <div class="btn">BAIXAR PARA PC</div>
-        </a>
-        <a class="card" id="dl-android" href="https://github.com/romavitordev/arena-paranormal/releases/latest/download/Arena-Paranormal-Android.apk">
-          <div class="icon">📱</div>
-          <div class="t">Celular (Android)</div>
-          <div class="d">Arquivo .apk — controles de toque na tela (ou controle Bluetooth), sempre na horizontal e sem
-            internet.</div>
-          <div class="btn">BAIXAR PARA CELULAR</div>
-        </a>
+        <article class="card" id="dl-pc">
+          <p class="card-k">PC</p>
+          <h3>Windows</h3>
+          <ul class="facts">
+            <li>Instalador <code>.exe</code> · ≈ 96 MB</li>
+            <li>Windows 10 ou 11 (64 bits)</li>
+            <li>Teclado ou controle (PlayStation / Xbox)</li>
+            <li>Joga sem internet; o Online precisa de conexão</li>
+          </ul>
+          <a class="pill outline" href="https://github.com/romavitordev/arena-paranormal/releases/latest/download/Arena-Paranormal-Windows.exe">Baixar para Windows</a>
+          <details>
+            <summary>Como instalar</summary>
+            <p>Abra o <code>Arena-Paranormal-Windows.exe</code>. Se aparecer "O Windows protegeu o computador", clique em
+              <b>Mais informações → Executar assim mesmo</b> — o jogo não tem a assinatura paga da Microsoft. Depois, abra pelo atalho
+              da Área de Trabalho.</p>
+          </details>
+        </article>
+        <article class="card" id="dl-android">
+          <p class="card-k">Celular</p>
+          <h3>Android</h3>
+          <ul class="facts">
+            <li>Arquivo <code>.apk</code> · ≈ 24 MB</li>
+            <li>Controles de toque ou controle Bluetooth</li>
+            <li>Sempre na horizontal</li>
+            <li>Qualidade gráfica leve automática no celular</li>
+          </ul>
+          <a class="pill outline" href="https://github.com/romavitordev/arena-paranormal/releases/latest/download/Arena-Paranormal-Android.apk">Baixar para Android</a>
+          <details>
+            <summary>Como instalar</summary>
+            <p>Abra o <code>.apk</code> baixado e permita <b>instalar apps de fontes desconhecidas</b> quando o celular pedir
+              (só para o navegador ou o gerenciador de arquivos que você usou). O jogo aparece na tela de apps como "Arena Paranormal".</p>
+          </details>
+        </article>
+        <article class="card" id="dl-web">
+          <p class="card-k">Qualquer aparelho</p>
+          <h3>Navegador e iPhone</h3>
+          <ul class="facts">
+            <li>Sem baixar nada</li>
+            <li>Chrome, Edge, Firefox ou Safari atualizados</li>
+            <li>No iPhone e iPad: só pelo navegador</li>
+            <li>As opções ficam salvas no navegador</li>
+          </ul>
+          <a class="pill outline" href="./">Jogar no navegador</a>
+          <details>
+            <summary>Abrir como app no iPhone</summary>
+            <p>A Apple não permite instalar fora da App Store. Abra o jogo no Safari e use <b>Compartilhar → Adicionar à Tela de
+              Início</b>: ele abre em tela cheia, como um app.</p>
+          </details>
+        </article>
       </div>
-      <details class="how">
-        <summary>Como instalar</summary>
-        <ul>
-          <li><b>PC:</b> abra o <code>Arena-Paranormal-Windows.exe</code>. Se o Windows mostrar "O Windows protegeu o
-            computador", clique em <b>Mais informações → Executar assim mesmo</b> (o jogo não tem assinatura paga da
-            Microsoft). Depois é só abrir pelo atalho da Área de Trabalho.</li>
-          <li><b>Android:</b> abra o <code>.apk</code> baixado e permita <b>instalar apps de fontes desconhecidas</b>
-            quando o celular pedir (só para o navegador ou o gerenciador de arquivos usado). O jogo aparece na tela de
-            apps como "Arena Paranormal".</li>
-          <li><b>iPhone / iPad:</b> a Apple não permite instalar fora da App Store. Jogue no Safari pelo
-            <a href="./">site</a> e use <b>Compartilhar → Adicionar à Tela de Início</b> para abrir como um app.</li>
-          <li><b>Navegador:</b> sem baixar nada, em qualquer aparelho, pelo <a href="./">site do jogo</a>.</li>
-          <li>Versões novas: baixe de novo por esta página — o instalador atualiza por cima, sem perder as opções.</li>
-        </ul>
-      </details>
+      <p class="note">Versões novas: baixe de novo por esta página — o instalador atualiza por cima, sem perder as opções.
+        Todas as versões ficam nas <a href="https://github.com/romavitordev/arena-paranormal/releases">releases do GitHub</a>.</p>
     </section>
 
-    <section>
-      <h2>Como é o jogo</h2>
-      <div class="grid">
-        <div class="box"><h3>Lutas de arena 3D</h3><p>Movimentação livre pela arena, com a câmera travada no
-          adversário. Combos de golpes físicos, ataques direcionais (↑ lança, ↓ derruba), dashes de perseguição e combos
-          aéreos.</p></div>
-        <div class="box"><h3>Sanidade e rituais</h3><p>A barra azul é a sanidade (o PE): segure △ para carregar e gaste
-          em habilidades e rituais. Cada lutador tem os rituais e armas do cânone — e os elementos se enfrentam: Sangue
-          → Conhecimento → Energia → Morte → Sangue.</p></div>
-        <div class="box"><h3>Defesa e esquiva</h3><p>Defenda de frente (o Perfect Block anula o golpe e abre o rival),
-          esquive em qualquer direção com 4 cargas, use a Substituição para sair de um combo e o agarrão para quebrar
-          quem só defende.</p></div>
-        <div class="box"><h3>Especial e Transformação</h3><p>Todo lutador tem um especial cinematográfico. Com a vida
-          baixa e a barra de Transformação cheia, ele se transforma ou desperta num estado do cânone até o fim do
-          round.</p></div>
+    <!-- COMO É O JOGO: cada afirmação ao lado de uma tela real -->
+    <section class="wrap block" id="jogo" aria-labelledby="t-jogo">
+      <h2 id="t-jogo">Como é o jogo</h2>
+      <div class="feature">
+        <img src="%BASE_URL%sobre/luta.webp" srcset="%BASE_URL%sobre/luta-480.webp 480w, %BASE_URL%sobre/luta.webp 800w" sizes="(min-width: 1024px) 540px, (min-width: 900px) 55vw, 100vw" width="800" height="450" loading="lazy" decoding="async" alt="Dante com quatro cópias de sombra cercando o Kaiser, em cima da espiral preta do Paradoxo, no cemitério" />
+        <div>
+          <h3>Lutas de arena em 3D</h3>
+          <p>Movimentação livre com a câmera travada no adversário, combos com ataques direcionais (↑ lança, ↓ derruba),
+            dashes de perseguição e combos aéreos. Defenda de frente, esquive com 4 cargas e quebre a defesa com o agarrão.</p>
+        </div>
+      </div>
+      <div class="feature flip">
+        <img src="%BASE_URL%sobre/olhos-abertos.webp" srcset="%BASE_URL%sobre/olhos-abertos-400.webp 400w, %BASE_URL%sobre/olhos-abertos.webp 560w" sizes="(min-width: 1024px) 540px, (min-width: 900px) 55vw, 100vw" width="560" height="340" loading="lazy" decoding="async" alt="O rosto do Dante de Olhos Abertos: olhos pretos, as duas faixas no rosto e as orelhas pontudas" />
+        <div>
+          <h3>Rituais, sanidade e transformações</h3>
+          <p>A barra azul é a sanidade: segure △ para carregar e gaste em rituais. Os elementos se enfrentam — Sangue →
+            Conhecimento → Energia → Morte → Sangue. Com a vida baixa, cada lutador se transforma num estado do cânone, como o
+            Dante de Olhos Abertos.</p>
+        </div>
+      </div>
+      <div class="feature">
+        <img src="%BASE_URL%sobre/marionete.webp" srcset="%BASE_URL%sobre/marionete-480.webp 480w, %BASE_URL%sobre/marionete.webp 800w" sizes="(min-width: 1024px) 540px, (min-width: 900px) 55vw, 100vw" width="800" height="450" loading="lazy" decoding="async" alt="A Marionete do Dante flutuando com a foice de ossos erguida entre o Dante e o Kaiser" />
+        <div>
+          <h3>Especiais e invocações</h3>
+          <p>Todo lutador tem um especial cinematográfico. Alguns invocam criaturas de verdade, com vida e ataques próprios —
+            como a Marionete do Dante, que às vezes se volta contra quem a chamou.</p>
+        </div>
+      </div>
+      <div class="feature flip">
+        <img src="%BASE_URL%sobre/selecao.webp" srcset="%BASE_URL%sobre/selecao-480.webp 480w, %BASE_URL%sobre/selecao.webp 800w" sizes="(min-width: 1024px) 540px, (min-width: 900px) 55vw, 100vw" width="800" height="450" loading="lazy" decoding="async" alt="A seleção de personagem: grade do elenco por equipe e os dois lutadores escolhidos frente a frente" />
+        <div>
+          <h3>Elenco fiel ao cânone</h3>
+          <p>Cada personagem tem as armas, os rituais e as falas da sua história, com introduções e vitórias próprias contra
+            cada adversário.</p>
+        </div>
       </div>
     </section>
 
-    <section>
-      <h2>Modos</h2>
-      <ul class="modes">
-        <li><b>Batalha solo</b> — 1 contra 1: contra outro jogador no mesmo aparelho (dois controles ou teclado dividido), contra o computador ou assistindo CPU × CPU.</li>
-        <li><b>Batalha em equipe</b> — líder + 2 assistências (L1 / R1), com troca de lutador no meio da luta.</li>
-        <li><b>Torre</b> — 8 torres: escolha o lutador e a dificuldade e suba até o vilão fortalecido no topo.</li>
-        <li><b>Torneio</b> — campeonato de 2 a 8 participantes, humanos ou CPU, solo ou em equipe, com chave até o campeão.</li>
-        <li><b>Online / LAN</b> — contra outra pessoa em outro aparelho: crie uma sala (pública ou privada), veja as salas abertas ou entre com um código.</li>
-        <li><b>Tutorial e Treino</b> — aprenda os comandos e teste os golpes de cada personagem à vontade.</li>
-      </ul>
+    <!-- MODOS -->
+    <section class="wrap block" id="modos" aria-labelledby="t-modos">
+      <h2 id="t-modos">Modos</h2>
+      <ol class="modes">
+        <li><b>Batalha solo</b><span>1 contra 1: contra outra pessoa no mesmo aparelho, contra o computador ou assistindo CPU × CPU.</span></li>
+        <li><b>Batalha em equipe</b><span>Líder + 2 assistências, com troca de lutador no meio da luta.</span></li>
+        <li><b>Torre</b><span>8 torres: escolha o lutador e a dificuldade e suba até o vilão fortalecido no topo.</span></li>
+        <li><b>Torneio</b><span>De 2 a 8 participantes, humanos ou CPU, solo ou em equipe, com chave até o campeão.</span></li>
+        <li><b>Online / LAN</b><span>Contra outra pessoa em outro aparelho: sala pública ou privada, ou entrada por código.</span></li>
+        <li><b>Tutorial e Treino</b><span>Aprenda os golpes passo a passo e pratique combos num alvo parado.</span></li>
+      </ol>
     </section>
 
-    <section>
-      <h2>Elenco</h2>
-      <p class="muted" id="roster-count"></p>
-      <div class="roster" id="roster"></div>
+    <!-- ELENCO (montado pelos dados do jogo quando a seção chega na tela) -->
+    <section class="wrap block" id="elenco" aria-labelledby="t-elenco">
+      <h2 id="t-elenco">Elenco</h2>
+      <p class="sub" id="roster-count">Os lutadores jogáveis, agrupados por origem.</p>
+      <div class="roster" id="roster" aria-live="polite"></div>
     </section>
 
-    <section>
-      <h2>Controles</h2>
+    <!-- CONTROLES -->
+    <section class="wrap block" id="controles" aria-labelledby="t-controles">
+      <h2 id="t-controles">Controles</h2>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Ação</th><th>PlayStation</th><th>Xbox</th><th>Teclado (P1)</th><th>Celular</th></tr></thead>
+          <caption class="sr">Comandos por tipo de controle</caption>
+          <thead><tr><th scope="col">Ação</th><th scope="col">PlayStation</th><th scope="col">Xbox</th><th scope="col">Teclado</th><th scope="col">Celular</th></tr></thead>
           <tbody>
-            <tr><td>Mover</td><td>Analógico</td><td>Analógico</td><td>W A S D</td><td>Joystick</td></tr>
-            <tr><td>Carregar sanidade (segurar)</td><td>△</td><td>Y</td><td>I</td><td>△</td></tr>
-            <tr><td>Ataque principal</td><td>□</td><td>X</td><td>J</td><td>□</td></tr>
-            <tr><td>Ataque físico</td><td>○</td><td>B</td><td>L</td><td>○</td></tr>
-            <tr><td>Pulo · Dash (× + ×)</td><td>×</td><td>A</td><td>K / Espaço</td><td>×</td></tr>
-            <tr><td>Defesa (segurar)</td><td>R2</td><td>RT</td><td>E</td><td>DEF</td></tr>
-            <tr><td>Esquiva (+ direção)</td><td>L2</td><td>LT</td><td>Shift</td><td>ESQ</td></tr>
-            <tr><td>Agarrão</td><td>R2 + ○</td><td>RT + B</td><td>E + L</td><td>DEF + ○</td></tr>
-            <tr><td>Habilidades</td><td>△ → ○ · △ → □ · △ + L2 · R2 + △ · R2 + ×</td><td>Y → B · Y → X · Y + LT · RT + Y · RT + A</td><td>I → L · I → J · I + Shift · E + I · E + K</td><td>△ → ○ · △ → □ · △ + ESQ · DEF + △ · DEF + ×</td></tr>
-            <tr><td>Especial</td><td>△ → △ → ○</td><td>Y → Y → B</td><td>I → I → L</td><td>ESPECIAL</td></tr>
-            <tr><td>Assistências (equipe)</td><td>L1 / R1</td><td>LB / RB</td><td>Q / R</td><td>AS1 / AS2</td></tr>
-            <tr><td>Pausa</td><td>Start</td><td>Start</td><td>Esc</td><td>II</td></tr>
+            <tr><th scope="row">Mover</th><td>Analógico</td><td>Analógico</td><td>W A S D</td><td>Joystick</td></tr>
+            <tr><th scope="row">Carregar sanidade</th><td>△ (segurar)</td><td>Y</td><td>I</td><td>△</td></tr>
+            <tr><th scope="row">Ataque principal</th><td>□</td><td>X</td><td>J</td><td>□</td></tr>
+            <tr><th scope="row">Ataque físico</th><td>○</td><td>B</td><td>L</td><td>○</td></tr>
+            <tr><th scope="row">Pulo · dash (× + ×)</th><td>×</td><td>A</td><td>K / Espaço</td><td>×</td></tr>
+            <tr><th scope="row">Defesa</th><td>R2 (segurar)</td><td>RT</td><td>E</td><td>DEF</td></tr>
+            <tr><th scope="row">Esquiva</th><td>L2 + direção</td><td>LT</td><td>Shift</td><td>ESQ</td></tr>
+            <tr><th scope="row">Agarrão</th><td>R2 + ○</td><td>RT + B</td><td>E + L</td><td>DEF + ○</td></tr>
+            <tr><th scope="row">Habilidades</th><td>△ → ○ · △ → □ · △ + L2 · R2 + △ · R2 + ×</td><td>Y → B · Y → X · Y + LT · RT + Y · RT + A</td><td>I → L · I → J · I + Shift · E + I · E + K</td><td>△ → ○ · △ → □ · △ + ESQ · DEF + △ · DEF + ×</td></tr>
+            <tr><th scope="row">Especial</th><td>△ → △ → ○</td><td>Y → Y → B</td><td>I → I → L</td><td>ESPECIAL</td></tr>
+            <tr><th scope="row">Assistências</th><td>L1 / R1</td><td>LB / RB</td><td>Q / R</td><td>AS1 / AS2</td></tr>
+            <tr><th scope="row">Pausa</th><td>Start</td><td>Start</td><td>Esc</td><td>II</td></tr>
           </tbody>
         </table>
       </div>
-      <p class="muted">O segundo jogador no teclado usa as setas e o teclado numérico. Os golpes de cada lutador estão
-        em <b>Treino</b> (e no menu de pausa, em Comandos).</p>
+      <p class="note">O segundo jogador no teclado usa as setas e o teclado numérico. Os golpes de cada lutador estão no
+        Treino e no menu de pausa, em Comandos.</p>
+    </section>
+
+    <!-- PERGUNTAS -->
+    <section class="wrap block" id="perguntas" aria-labelledby="t-perguntas">
+      <h2 id="t-perguntas">Perguntas</h2>
+      <div class="faq">
+        <details><summary>É de graça?</summary><p>Sim. É um projeto de fã sem fins lucrativos: o jogo e os downloads são gratuitos, sem anúncios.</p></details>
+        <details><summary>É um jogo oficial de Ordem Paranormal?</summary><p>Não. É um jogo fan made por romavitordev, inspirado em Ordem Paranormal, de Rafael Lange (Cellbit). Os personagens e o universo pertencem aos seus criadores.</p></details>
+        <details><summary>Precisa de internet?</summary><p>Nas versões de PC e Android, só para baixar e para o modo Online. As lutas contra a CPU e com dois jogadores no mesmo aparelho funcionam sem internet.</p></details>
+        <details><summary>Dá para jogar no iPhone?</summary><p>Sim, pelo Safari. Use Compartilhar → Adicionar à Tela de Início para abrir como um app.</p></details>
+        <details><summary>O jogo está pesado no meu celular. E agora?</summary><p>Em Opções → Imagem, deixe a Qualidade gráfica em Automática ou Baixa (sem sombras, 60 quadros por segundo). A automática já usa a Baixa no celular.</p></details>
+        <details><summary>O Windows avisou que o arquivo pode ser perigoso.</summary><p>O aviso aparece porque o instalador não tem a assinatura paga da Microsoft. Clique em Mais informações → Executar assim mesmo. O código do jogo é aberto no GitHub.</p></details>
+      </div>
     </section>
   </main>
 
-  <footer>
-    <p>Projeto de fã, sem fins lucrativos, baseado em <b>Ordem Paranormal</b>, de Rafael Lange (Cellbit). Os personagens e o
-      universo pertencem aos seus criadores.</p>
-    <a class="back" href="./">◀ VOLTAR AO JOGO</a>
+  <footer class="foot">
+    <div class="wrap foot-in">
+      <p class="mark small">ARENA <span>PARANORMAL</span></p>
+      <p>Jogo fan made por <a href="https://github.com/romavitordev">romavitordev</a> · inspirado em <b>Ordem Paranormal</b>, de
+        Rafael Lange (Cellbit). Projeto sem fins lucrativos; os personagens e o universo pertencem aos seus criadores.</p>
+      <p><a href="https://github.com/romavitordev/arena-paranormal">Código no GitHub</a> · <a href="./">Voltar ao jogo</a></p>
+    </div>
   </footer>
   <script type="module" src="/src/sobre.js"></script>
 </body>

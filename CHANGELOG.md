@@ -1,5 +1,18 @@
 # Changelog
 
+## v3.27.1 — 2026-10-16
+
+### Alterado
+- `sobre.html` / `src/sobre.css` / `src/sobre.js` refeitos pelo padrão de qualidade de sites: direção visual ThoughtLab (Refero) em `docs/DESIGN-SOBRE.md`, tokens em variáveis CSS, CTA principal pelo aparelho (Android → `.apk`, iPhone/iPad → navegador, resto → `.exe`), seções Baixar · O jogo (capturas reais em `public/sobre/*.webp` com `srcset` de 480 px) · Modos · Elenco (carregado por `IntersectionObserver`) · Controles · Perguntas; SEO (canonical, Open Graph, Twitter Card, JSON-LD `VideoGame` + `FAQPage`) e acessibilidade (link de pular, foco visível, alvos ≥ 44 px). Fontes sem bloquear a pintura (`preload` + troca).
+- `vite.config.js`: `define.__APP_VERSION__` (a versão do `package.json` para páginas leves, sem o changelog).
+- Embaralhar do Dante: as cópias escurecem × 0,035 (linear — o × 0,16 de antes dava #6f6f6f na tela).
+- `char_dante.py`: franja mais curta (termina 0,025 H mais alto) — os olhos aparecem.
+- Cena `eyes` (`maskTransform`): a luz da cena cai para 4 depois de abrir os olhos (o 14 do `maskOn` estourava o xale branco).
+
+### Adicionado
+- `public/robots.txt`, `public/sitemap.xml`, `public/404.html` e `public/sobre/og.jpg`.
+- `docs/DESIGN-SOBRE.md` (direção visual) e `docs/QUALIDADE-SOBRE.md` (status do checklist, com os itens que não se aplicam).
+
 ## v3.27.0 — 2026-10-16
 
 ### Adicionado
