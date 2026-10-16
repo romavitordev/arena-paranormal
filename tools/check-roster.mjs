@@ -372,7 +372,7 @@ ok(!COMBAT.powered && ROSTER.every((c) => !(c.abilities || []).some((a) => a.inp
     'Cristino: Lampião Explosivo (fogo no chão), Trilha de Lampiões (até 3), Corda do Telhado e Decepar (sangra; mais fundo em quem está preso)');
   const des = getForm('cristino_desertor');
   ok(cri.special.type === 'lanternCount' && cri.awakening.form === 'cristino_desertor' && des && des.ranged.name === 'Rifle' && des.passives.some((p) => p.type === 'precognition'),
-    'Cristino: especial Um, Dois, Três e a Transformação Tocado pela Coroa (Desertor: rifle e a Intenção)');
+    'Cristino: especial Odeio Gente Barulhenta e a Transformação Tocado pela Coroa (Desertor: rifle e a Intenção)');
 }
 
 console.log(fails ? `\n${fails} verificação(ões) falharam.` : '\nTudo certo.');

@@ -944,7 +944,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 - **Decepar** — R2 + △ / RT + Y · custo 25 · cooldown 11 s · dano 60 · alcance 2 m
   Ergue a peixeira e desce num golpe que abre a carne: o alvo SANGRA. Em quem está atordoado, agarrado ou sendo puxado, entra muito mais fundo. Aguenta um golpe na preparação.
 
-### Especial: Um, Dois, Três
+### Especial: Odeio Gente Barulhenta
 
 250 de dano · custo 50 · cooldown 14 s.
 

@@ -6,7 +6,7 @@ import { splitDamage } from './common.js';
 import { faceClose, overShoulder } from '../../camera/shots.js';
 import { FIRE, lobLantern, placeLantern, addFireZone } from '../cristinoAbilities.js';
 
-// Especial do Cristino — "UM, DOIS, TRÊS" (a armadilha do Quibungo, Hexatombe ep. 5: as lamparinas no caminho do bicho,
+// Especial do Cristino — "ODEIO GENTE BARULHENTA" (a contagem "um, dois, três" da armadilha do Quibungo, Hexatombe ep. 5: as lamparinas no caminho do bicho,
 // a contagem até três e o tiro na primeira; o fogo pula de lampião em lampião e o amontoado explode).
 //  1. (sem parar o mundo) arremessa TRÊS LAMPIÕES em volta de onde o adversário está — dá para sair do cerco;
 //  2. cercou: a cinemática — por cima do ombro, a Socadeira apontada; "UM... DOIS... TRÊS!";
@@ -120,7 +120,7 @@ export const lanternCount = {
         applyHit(world, f, opp, { damage: dmg, kind: 'special', fire: true, reaction: false, ignoreInvuln: true, sound: 'heavyPunch', color: FIRE, scale: big ? 2.4 : 1.4 });
         if (big) {
           world.screenFlash && world.screenFlash('#ffd2a0', 0.14);
-          world.showBanner(sp.banner || 'UM, DOIS, TRÊS', f.def.color);
+          world.showBanner(sp.banner || 'Odeio Gente Barulhenta', f.def.color);
           addFireZone(world, f, center.x, center.z, { radius: 2.4, life: 4, dps: 0 });
           if (opp.state !== 'ko') opp.anim.play('launched', { restart: true });
         }

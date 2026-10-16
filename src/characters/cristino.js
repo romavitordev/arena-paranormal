@@ -6,7 +6,7 @@
 // Arsenal (wiki): ESPINGARDA SOCADEIRA (carrega pela boca; a coronha com a roda de espinhos vira bastão), PEIXEIRA e
 // LAMPIÕES EXPLOSIVOS. Momentos do Hexatombe que viram golpe:
 //   a armadilha do Quibungo (ep. 5): lampiões no caminho, "um, dois, três", o tiro e o fogo pulando de um para o outro
-//     → Lampião Explosivo, Trilha de Lampiões, o tiro que detona os lampiões e o especial Um, Dois, Três;
+//     → Lampião Explosivo, Trilha de Lampiões, o tiro que detona os lampiões e o especial Odeio Gente Barulhenta;
 //   a Igreja de Sangue (ep. 9): escalou a capela, flanqueou do teto e desceu pela corda → Corda do Telhado;
 //   decepou o braço do Raziel com a peixeira; finalizou o Caíto → Decepar (dói mais em quem está preso/atordoado);
 //   tocou a Verdadeira Coroa de Espinhos e ficou coberto de rabiscos vermelhos (ep. 9) → a Transformação, o Desertor
@@ -152,11 +152,11 @@ export const CRISTINO_KIT = {
     },
   ],
 
-  // UM, DOIS, TRÊS: cerca o adversário com três lampiões, conta até três e atira — o fogo pula de um para o outro e o
+  // ODEIO GENTE BARULHENTA (a fala dele no Hexatombe, antes de finalizar o Caíto): cerca o adversário com três lampiões, conta até três e atira — o fogo pula de um para o outro e o
   // amontoado explode (a armadilha do Quibungo)
   special: {
-    name: 'Um, Dois, Três',
-    banner: 'UM, DOIS, TRÊS',
+    name: 'Odeio Gente Barulhenta',
+    banner: 'Odeio Gente Barulhenta',
     type: 'lanternCount',
     energyCost: 50,
     cooldown: 14,

@@ -45,7 +45,7 @@ A wiki não traz o arsenal em tabela (o `npm run lore` grava `arsenal: ""`), ent
 - **Ficha de Hexatombe:** 120 PV (visto pela Intenção do Remi) → passiva Couro Curtido; a ficha alternativa dos Arquivos
   Secretos (Pacote 01) é paga e não está na wiki.
 - **Cena → golpe:** a armadilha do Quibungo (ep. 5) → Lampião Explosivo, Trilha de Lampiões, o tiro que detona os
-  lampiões em cadeia e o especial *Um, Dois, Três*; a Igreja de Sangue (ep. 9) → Corda do Telhado; o braço do Raziel e o
+  lampiões em cadeia e o especial *Odeio Gente Barulhenta*; a Igreja de Sangue (ep. 9) → Corda do Telhado; o braço do Raziel e o
   Caíto → Decepar; tocar a Verdadeira Coroa de Espinhos (ep. 9) → a Transformação *Tocado pela Coroa* (Cristino
   Desertor: rabiscos vermelhos, o rifle das artes e a ligação com a Intenção).
 - **Modelo:** `tools/blender/char_cristino.py` (fonte `tools/blender/fonte/cristino.blend`); cabelo, bigode, lenço, bolsa,
