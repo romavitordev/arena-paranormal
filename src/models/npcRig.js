@@ -59,6 +59,7 @@ export function buildNpcModel(id, { outline = 0.012, noOutline = ['hair', 'cloth
       side: THREE.DoubleSide,
       transparent: src.transparent,
       opacity: src.opacity,
+      vertexColors: !!o.geometry.attributes.color, // cor por vértice (o Carniçal: Lodo, estrias e osso numa malha só)
     });
     o.material.name = name;
     o.material.userData.glow = glow;

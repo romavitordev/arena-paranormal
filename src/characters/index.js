@@ -23,13 +23,15 @@ import oDiabo from './o_diabo.js';
 import magistrada from './magistrada.js';
 import estrangeiro from './estrangeiro.js';
 import amigo from './amigo.js';
+import cristino from './cristino.js';
 
 // Elenco jogável, na ordem da tela de seleção — AGRUPADO POR EQUIPE/TEMPORADA (a grade tem 3 colunas × 5 linhas por
 // página, então cada grupo ocupa linhas inteiras):
 //   página 1: Ordo Realitas — Equipe E / Força D (Arthur, Joui, Kaiser, Dante, Erin, Aghata), Equipe Abutres (Balu) e
 //             Veríssimo · Escriptas (Kian, Gal) · Os Cinco (Xande, Guizo, Lírio)
-//   página 2: Mascarados / Assassinos de Hexatombe (Dalmo, Aguiar, Jae, Kemi, Labirinto, Juan) e os Portadores das
-//             Relíquias (O Diabo, A Magistrada, Arnaldo, Ferreiro, O Estrangeiro, O Amigo Imaginário) — a seleção quebra a página por equipe (Screens.js → SEL_PAGES),
+//   página 2: Mascarados / Assassinos de Hexatombe (Dalmo, Aguiar, Jae, Kemi, Labirinto, Juan), os Transtornados de
+//             Hexatombe (Cristino) e os Portadores das Relíquias (O Diabo, A Magistrada, Arnaldo, Ferreiro, O Estrangeiro,
+//             O Amigo Imaginário) — a seleção quebra a página por equipe (Screens.js → SEL_PAGES),
 //             então cada grupo fica junto mesmo se a página anterior não encher
 // Para adicionar um personagem: crie o arquivo de definição aqui, registre o modelo em models/index.js e coloque-o
 // junto da equipe dele nesta lista.
@@ -38,6 +40,7 @@ export const ROSTER = [
   kian, gal_sal, // Escriptas
   xande, guizo, lirio, // Os Cinco (Sinais do Outro Lado) — o Guizo do lado do melhor amigo
   dalmo, aguiar, jae, kemi, labirinto, juan, // Mascarados (Hexatombe) — o Juan talvez vá para os "Sacrifícios" no futuro
+  cristino, // Transtornados (Hexatombe) — o cangaceiro que não queria jogar o jogo
   oDiabo, magistrada, arnaldo, ferreiro, estrangeiro, amigo, // Portadores das Relíquias (Sangue, Conhecimento, Energia, Morte) + o Estrangeiro e o Amigo Imaginário
 ];
 

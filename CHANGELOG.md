@@ -1,5 +1,32 @@
 # Changelog
 
+## v3.23.0 — 2026-10-16
+
+### Adicionado
+- Lutador `cristino` (`src/characters/cristino.js`, origem `Transtornados`, Sangue) e a forma `cristino_desertor` (`forms/cristino_desertor.js`); equipe `Transtornados` em `config/teams.js`, no título e na página 2 da seleção.
+- `src/combat/cristinoAbilities.js`: `addFireZone` (fogo no chão), `lanternBlast`, `placeLantern`/`lanternsOf`/`explodeLantern`, `detonateLanterns` (detonação em cadeia num cone), `lobLantern` e os tipos `lanternThrow` e `lanternTrap`.
+- Especial `lanternCount` (`specials/lanternCount.js`): três lampiões em cerco → cinemática com a contagem e o tiro → três explosões + a grande (250 dividido); fora do cerco, os lampiões viram armadilhas.
+- Modelo `tools/blender/char_cristino.py` → `public/models/cristino.glb` (fonte `tools/blender/fonte/cristino.blend`); `tools/blender/sculpt_lib.py` (escultura orgânica por metaballs para os `char_*`); armas `socadeira`, `peixeira`, `spikedLantern`, `tenebrisPendant` (`weapons.js`); `addCristinoProps`/`addCristinoDesertorProps` (rabiscos vermelhos como mapa de brilho); texturas `face_/shirt_/jacket_/trim_/pants_/bandage_/hat_cristino`, `bloodSymbol` e `leather`.
+- Pose `vic_cristino`, cena de agarrão `cristino`/`cristino_desertor`, falas (introdução, vitória contra os 25, batalha) e regras no `check-roster`.
+
+### Alterado
+- `teleportBehind`: `a.rope` (sobe pela corda e cai atrás em vez de afundar na sombra). `heavyBlow`: `a.bleed` e `a.downBonus` (mais dano em alvo atordoado, agarrado ou puxado).
+- `Fighter.tryRanged`: `ranged.ignitesLanterns` detona os lampiões do lutador no primeiro disparo. `rig.showProp('a+b')` mostra/esconde as duas peças.
+- Carniçal refeito: `npc_carnical.py` agora esculpe cada parte com metaballs (estrias por deslocamento, cor por vértice `COLOR_0`) e guarda `tools/blender/fonte/carnical.blend`; `buildNpcModel` liga `vertexColors` quando a malha tem cor por vértice.
+- `tools/fetch-lore.mjs`: origem `Transtornados` (Cristino e a equipe); `lore/membros.json`/`MEMBROS.md` regerados; `lore/NOTAS.md` com o arsenal e o mapeamento do kit do Cristino.
+
+## v3.22.0 — 2026-10-16
+
+### Adicionado
+- `summonMananciais` (Ferreiro), `summonCarnical` (Deus da Morte) e `summonInkBeasts` (Amigo) em `abilities.js`; NPCs `Carnical` e `InkBeast` em `src/combat/beasts.js` (modelos em `src/models/beasts.js`).
+- Modelos: `char_manancial.py` (models/manancial.glb, fora da seleção), `npc_carnical.py`, `npc_bicho_lib.py` (+ `npc_javali_tinta.py`, `npc_cao_tinta.py`); texturas `face_/gown_/pants_manancial`; clipes `man_*`; som `siren`.
+- `def.hpBar` (barras de vida dos Portadores, `.hb-*` em `styles.css`); `Fighter.untrackable()` e `STICKY_SPECIALS` (Shhh sem rastro); `DanteClone` aceita `o.anims` e `o.onSlain`; `hitBy(..., { bullet })` para o Corpo Fechado.
+
+### Alterado
+- `COMBAT.maxHealth` 1000 → 1500 e `roundTime`/`timer` 99 → 150 (`TIMER_OPTIONS` 45–180); vida individual removida do elenco (Portadores 1800; formas de Portador 1800–2100; outras formas 1500 + bônus); o número de vida saiu do HUD e da barra de chefe (`def.boss`).
+- Senhor do Sangue: O Diabo só zumbis fracos; o Portador do Trono sempre com o forte.
+- `.gitignore`: `__pycache__/` (os .pyc que entraram no commit anterior foram tirados do repositório).
+
 ## v3.21.0 — 2026-10-11
 
 ### Adicionado

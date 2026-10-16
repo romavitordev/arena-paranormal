@@ -909,6 +909,51 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ---
 
+## CRISTINO
+
+*O cangaceiro que não queria jogar o Hexatombe — tocando a Coroa de Espinhos, vira o Desertor* · arma: Peixeira, Espingarda Socadeira e Lampiões Explosivos
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Corte de peixeira | 24 | 1.7 m |  |
+| ○ 2 | Corte de volta | 24 | 1.7 m |  |
+| ○ 3 | Estocada | 28 | 1.9 m |  |
+| ○ 4 | Cotovelada | 28 | 1.6 m |  |
+| ○ 5 | Peixeirada | 54 | 1.9 m | finalizador: lança |
+| Frente + ○ | Investida do cangaço | 32 | 1.9 m |  |
+| Trás + ○ | Recua e corta | 30 | 1.8 m | invulnerável no começo |
+| Lado + ○ | Flanco | 30 | 1.8 m |  |
+| No ar + ○ | Peixeira do alto | 34 | 1.8 m | desce com impacto |
+| ↑ + ○ (no combo) | Peixeira de baixo | 36 | 1.8 m | finalizador: lança alto (combo aéreo) |
+| ↓ + ○ (no combo) | Pisão de alpercata | 42 | 1.7 m | finalizador: derruba |
+
+### Principal (□ / X): Espingarda Socadeira
+
+- Dano 13 × 7 · alcance 12 m · cooldown 3.2 s · custo 0
+
+### Habilidades
+
+- **Lampião Explosivo** — △ + ○ / Y + B · custo 20 · cooldown 8 s · dano 55 · alcance 14 m
+  Arremessa um lampião de espinhos onde o adversário está: estoura em fogo, joga para cima e deixa o chão queimando por alguns segundos.
+- **Trilha de Lampiões** — △ + □ / Y + X · custo 15 · cooldown 4 s · dano 42
+  Agacha e planta um lampião aceso à frente (até 3). Estoura quando o adversário pisa perto — ou quando o tiro da Socadeira passa: aí o fogo pula de lampião em lampião.
+- **Corda do Telhado** — △ + L2 / Y + LT · custo 20 · cooldown 10 s
+  Laça uma corda no alto, sobe e cai atrás do adversário já cravando a peixeira (como na Igreja de Sangue). Pega desprevenido.
+- **Decepar** — R2 + △ / RT + Y · custo 25 · cooldown 11 s · dano 60 · alcance 2 m
+  Ergue a peixeira e desce num golpe que abre a carne: o alvo SANGRA. Em quem está atordoado, agarrado ou sendo puxado, entra muito mais fundo. Aguenta um golpe na preparação.
+
+### Especial: Um, Dois, Três
+
+250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: Tocado pela Coroa
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
+
+---
+
 ## O DIABO
 
 *O Portador da Relíquia de Sangue: regenera, bebe o sangue derramado e oferece pactos* · arma: Quatro braços com garras
@@ -1185,6 +1230,8 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
   Aponta a garra e uma POÇA de tinta se abre debaixo do alvo (o aviso: dá para sair dela). Os tentáculos brotam, se enrolam em quem ficou em cima e o PRENDEM.
 - **O Sino** — R2 + △ / RT + Y · custo 25 · cooldown 16 s · dano 14 · alcance 6 m
   O SINO toca dentro da criatura: três badaladas, cada uma uma onda de som em volta (qualquer direção) que machuca um pouco. Quem ainda estiver perto na ÚLTIMA fica paralisado e VULNERÁVEL (leva mais dano) por alguns segundos.
+- **Bichos da Ilha** — R2 + × / RT + A · custo 30 · cooldown 22 s
+  O Sino chama os animais da ilha INFECTADOS PELA TINTA: saem de poças em volta do adversário e atacam por 12 s — um JAVALI (presas e investida que derruba) e/ou CÃES SELVAGENS (mordidas e o salto). Cadáveres de carne derretida: morrem e viram poça.
 - **Dissolver** — △ + L2 / Y + LT · custo 30 · cooldown 24 s · dano 24
   DERRETE numa poça da própria tinta (intocável enquanto isso), absorve e recupera vida, e se refaz de uma vez: a tinta espirra em volta e machuca quem estiver em cima da poça.
 

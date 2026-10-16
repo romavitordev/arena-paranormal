@@ -76,7 +76,7 @@ const PAIRS = ids.length * (ids.length - 1);
 ok(validIntroScenes && validIntroPairs === PAIRS && sampleIntro.length === 2 && randomSelectionValid, `introduções: ${PAIRS} confrontos, duas cenas alternadas e aleatórias, sem falas de resultado`);
 ok(validVictoryLines && validVictoryPairs === PAIRS && VICTORY_LINES.kaiser.erin.includes(sampleVictory) && randomSelectionValid, `vitórias: ${PAIRS} confrontos com duas falas selecionáveis aleatoriamente`);
 ok(VICTORY_LINES.anfitriao.default.length >= 16 && new Set(VICTORY_LINES.anfitriao.default).size === VICTORY_LINES.anfitriao.default.length && hostRandomSelectionValid, 'Anfitrião: falas caóticas próprias, variadas e selecionadas aleatoriamente');
-ok(ROSTER.map((c) => c.name).join() === 'ARTHUR CERVERO,JOUI JOUKI,KAISER,DANTE,ERIN PARKER,AGHATA,BALU,SENHOR VERÍSSIMO,KIAN,GAL SAL,XANDE,GUIZO,LÍRIO,DALMO,AGUIAR,JAE,KEMI,LABIRINTO,JUAN,O DIABO,A MAGISTRADA,ARNALDO FRITZ,FERREIRO,O ESTRANGEIRO,AMIGO IMAGINÁRIO', 'elenco agrupado por equipe: Ordo Realitas, Escriptas, Os Cinco, Mascarados, Portadores das Relíquias');
+ok(ROSTER.map((c) => c.name).join() === 'ARTHUR CERVERO,JOUI JOUKI,KAISER,DANTE,ERIN PARKER,AGHATA,BALU,SENHOR VERÍSSIMO,KIAN,GAL SAL,XANDE,GUIZO,LÍRIO,DALMO,AGUIAR,JAE,KEMI,LABIRINTO,JUAN,CRISTINO,O DIABO,A MAGISTRADA,ARNALDO FRITZ,FERREIRO,O ESTRANGEIRO,AMIGO IMAGINÁRIO', 'elenco agrupado por equipe: Ordo Realitas, Escriptas, Os Cinco, Mascarados, Transtornados, Portadores das Relíquias');
 const jae = get('jae');
 ok(jae && jae.origin === 'Mascarados' && jae.element === 'sangue' && jae.awakening.form === 'jae_x' && jae.awakening.scene === 'hood' && ['dashStrike', 'shadowVeil', 'teleportBehind', 'whisperZone'].every((t) => jae.abilities.some((a) => a.type === t)) && jae.abilities.find((a) => a.type === 'dashStrike').blind > 0 && jae.abilities.find((a) => a.type === 'teleportBehind').strike && jae.passives.some((p) => p.type === 'backstab' && p.surprised), 'Jae: Mascarada de Sangue — Punhal X (cega), Shhh... (some nas sombras), Assassinato Furtivo (apunhala as costas), Zona dos Sussurros, bônus em desprevenido e o Capuz de X');
 const dalmo = get('dalmo');
@@ -333,6 +333,35 @@ ok(COMBAT.down && COMBAT.down.lie > 0 && COMBAT.airCombo.maxHits <= 4, 'queda co
 // ---------------- Regras gerais V2.1 ----------------
 ok(COMBAT.grab && COMBAT.grab.range < 2 && COMBAT.grab.damage > 0, 'agarrão (Defesa + ○): curta distância');
 ok(!COMBAT.powered && ROSTER.every((c) => !(c.abilities || []).some((a) => a.input.startsWith('mod+'))), 'habilidades em △ + ○/□/L2 e R2 + △/× (sem versões fortes, sem R1 modificador)');
+
+// ---------------- V3.22: invocações (Mananciais, hordas do Diabo, Carniçal, bichos da ilha) e o Shhh sem rastro ----------------
+{
+  const fer = get('ferreiro').abilities.find((a) => a.type === 'summonMananciais');
+  ok(fer && fer.count === 3 && fer.strikes.every((s) => CLIPS[s.anim]) && CLIPS.man_idle && CLIPS.man_run, 'Ferreiro: Chamar os Mananciais (3, com animações man_*)');
+  const hordes = (def) => def.abilities.find((a) => a.type === 'summonBlood').hordes;
+  ok(hordes(get('o_diabo')).every((h) => h.length <= 2 && !h.includes('strong')), 'O Diabo: Senhor do Sangue só com 1 ou 2 zumbis pequenos');
+  ok(hordes(getForm('diabo')).every((h) => h.includes('strong') && h.includes('weak')), 'Portador do Trono: o zumbi grande sempre com os pequenos');
+  const car = getForm('deus_morte').abilities.find((a) => a.type === 'summonCarnical');
+  ok(car && car.hp < COMBAT.maxHealth / 2, 'Deus da Morte: invoca O Carniçal (só um; o invocado é bem mais fraco que um lutador)');
+  const bic = get('amigo').abilities.find((a) => a.type === 'summonInkBeasts');
+  ok(bic && bic.packs.length && bic.packs.every((p) => p.every((k) => ['javali', 'cao'].includes(k))), 'Amigo Imaginário: Bichos da Ilha (javalis e cães infectados pela Tinta)');
+  const sh = get('jae').abilities.find((a) => a.id === 'shhh');
+  ok(sh && sh.noLock, 'Jae: Shhh... sem rastro (especiais que grudam e projéteis teleguiados não a acham)');
+  ok(COMBAT.roundTime >= 150, 'tempo do round cabe na vida de 1500');
+}
+
+// ---------------- Cristino (Transtornados, Hexatombe) ----------------
+{
+  const cri = get('cristino');
+  const ab = (t) => cri.abilities.find((a) => a.type === t);
+  ok(cri && cri.origin === 'Transtornados' && cri.element === 'sangue' && cri.melee.name === 'Peixeira' && cri.ranged.name === 'Espingarda Socadeira' && cri.ranged.ignitesLanterns && cri.ranged.cooldown >= 3,
+    'Cristino: Transtornados (Sangue), Peixeira e a Socadeira (recarga longa, o tiro detona os lampiões)');
+  ok(ab('lanternThrow') && ab('lanternThrow').fire && ab('lanternTrap') && ab('lanternTrap').max === 3 && ab('teleportBehind') && ab('teleportBehind').rope && ab('heavyBlow') && ab('heavyBlow').bleed && ab('heavyBlow').downBonus > 1,
+    'Cristino: Lampião Explosivo (fogo no chão), Trilha de Lampiões (até 3), Corda do Telhado e Decepar (sangra; mais fundo em quem está preso)');
+  const des = getForm('cristino_desertor');
+  ok(cri.special.type === 'lanternCount' && cri.awakening.form === 'cristino_desertor' && des && des.ranged.name === 'Rifle' && des.passives.some((p) => p.type === 'precognition'),
+    'Cristino: especial Um, Dois, Três e a Transformação Tocado pela Coroa (Desertor: rifle e a Intenção)');
+}
 
 console.log(fails ? `\n${fails} verificação(ões) falharam.` : '\nTudo certo.');
 process.exit(fails ? 1 : 0);

@@ -4,7 +4,7 @@ Jogo de luta 3D em arena com temática paranormal. Combate rápido e acessível,
 movimentação livre, ataques direcionais, defesa, esquiva, habilidades por combinação de
 botões e especiais cinematográficos. Feito com **Three.js + Vite**, roda no navegador.
 
-Versão atual do jogo: **v3.21.0**.
+Versão atual do jogo: **v3.23.0**.
 
 A numeração segue **MAJOR.MINOR.PATCH**: microatualizações usam `x.y.z`, atualizações concretas usam `x.y.0` e grandes marcos usam `x.0.0`.
 
@@ -121,6 +121,7 @@ npm run moves    # regenera HABILIDADES.md a partir dos dados dos personagens
 | BALU | Ordo Realitas | Sangue | Machado em Giro (o machado volta para a mão) | △ Amaldiçoar Arma com Sangue · ○ Machado Demônio (paga com vida: maça de sangue) · R2+△ Fala Imponente (provoca) · L2 110% · R2+× Colete Físico-Balístico | Pancada do Urso | Resistência à Dor · Força Física · Derrubar e Atacar |
 | XANDE | Os Cinco | Sangue | Skate Caótico (vai e volta) | □ Amaldiçoar Arma · ○ Polarização Caótica · △ Tela de Ruído (escudo de 140) · × Velocidade Mortal · L2 Cicatrização | Por Eles | Gladiador Paranormal (+3 sanidade por golpe) |
 | AGUIAR | Mascarados | Sangue | Machado na Corda (arremessa, sangra e puxa) | ○ Ataque Especial · L2 Armadilha de Urso · × Predador de Sangue · △ Cães de Caça | Caçada no Acampamento · **Transformação:** Máscara do Mutilador Noturno → **MUTILADOR NOTURNO** até o fim do round (todo golpe sangra, Ataque Mutilador, Predador Perfeito, Finalização do Mutilador) | Filho da Dor (apanhando seguido, resiste mais) |
+| CRISTINO | Transtornados | Sangue | Espingarda Socadeira (chumbo grosso, recarga longa; o tiro detona os lampiões em cadeia) | ○ Lampião Explosivo (fogo no chão) · □ Trilha de Lampiões (até 3) · L2 Corda do Telhado · R2+△ Decepar (sangra) | Um, Dois, Três (lampiões em cerco, contagem e o tiro) · **Transformação:** Tocado pela Coroa → **CRISTINO DESERTOR** até o fim do round (rifle sem recarga, lampiões maiores, sente a intenção do adversário) | Couro Curtido (segura empurrão e desgaste na defesa) |
 | ARNALDO FRITZ | Ordo Realitas | Energia | Emissor de Pulsos Paranormais (atrai e emenda a estocada; trás + □ afasta) | ○ Finta Teatral (quebra a defesa) · □ Pulso Paranormal (atrai longe / joga longe perto) · × Rodopio da Fita · L2 Aniquilador · △ Ensaio Geral | Ato Final (execução teatral: reverência, avanço esquivável, 4 golpes e o impacto chega depois) · **Transformação:** A Relíquia do Relógio → **O ANFITRIÃO** até o fim do round (Disparo do Caos de 8 cores, Regra do Caos, Multiplicação, Distorção, Tempo Distorcido, Jogo do Orfanato, Botão do Anfitrião, □ + direção: Chicotada do Caos / Tradição de Família / A Plateia; especial O Jogo do Anfitrião — a roleta; passiva Percepção Anacrônica) | — |
 | SENHOR VERÍSSIMO | Ordo Realitas | Medo | Escopeta de Varredura (leque forte de perto) | ○ Inteligência Estratégica (corte extra a cada golpe) · □ Brecha na Guarda · × Em Seu Caminho · L2 Jaqueta de Veríssimo | Oficial Comandante · trás + ○ Olhos Sempre Abertos! (bloqueia e contra-ataca) · Despertar: Líder da Ordo Realitas | Segredo de Veríssimo (o primeiro golpe fatal da partida o deixa com 1 de vida) · Bloqueio Perfeito maior |
 

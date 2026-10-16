@@ -1,5 +1,86 @@
 # Registro administrativo de alterações
 
+## v3.23.0 — O Cangaceiro
+
+- Versão: `VERSION` 3.22.0 → **3.23.0** (package.json/lock junto). A 3.22.0 continua sem commit; esta versão vai por cima.
+- **Cristino** (pedido: "criar um novo personagem para testar a skill de modelagem"; referências: wiki "Cristino" — artes
+  de frente, de costas, concept, Desertor, lampião, pingente, espingarda — e fan arts do Pinterest pelo Chrome do usuário,
+  só para conferir leitura; equipe escolhida pelo usuário: **Transtornados**, página 2):
+  - não existia em nenhuma documentação do projeto; a ficha alternativa dos Arquivos Secretos (Pacote 01) é paga e não
+    está na wiki;
+  - kit pelo cânone: Peixeira; Espingarda Socadeira (7 × 13, recarga 3,2 s, detona os lampiões em cadeia); Lampião
+    Explosivo (55 + fogo 16/s por 5 s); Trilha de Lampiões (até 3, estouram a 1 m: 42 + fogo); Corda do Telhado
+    (`teleportBehind` com `rope`); Decepar (60, sangra 6/s por 4 s, ×1,5 em alvo atordoado/agarrado/puxado); passiva
+    Couro Curtido (`thickSkin` 0,7/0,7); especial Um, Dois, Três (`lanternCount`, 250 dividido 18/18/18/46%);
+  - Transformação Tocado pela Coroa (`maskTransform` genérico, `cast_up`, vermelho) → **Cristino Desertor**: rifle
+    3 × 26 sem a recarga longa, lampiões maiores, Corda e Decepar 25% mais rápidos, `precognition` (a Intenção),
+    especial 300, +80 de vida;
+  - vida 1500 como todo o elenco humano;
+  - modelo: Builder (pesos do esqueleto) + escultura por metaballs em `sculpt_lib.py`, usada no cabelo, bigode, lenço,
+    bolsa, copa do chapéu e calça bufante; ~45 mil triângulos (Jae 49 mil, Dalmo 38 mil);
+  - corrigido no caminho: `irisR` no `eye()` é o raio da íris, não a cor do olho direito (o olho cego é pintado por cima);
+    os rabiscos do Desertor só vão nas malhas com esqueleto e material toon (a chama do lampião é `MeshBasicMaterial`
+    e quebrava o render).
+- **Carniçal refeito do zero** (pedido; referências: arte do livro de regras e miniatura de O Segredo na Floresta; o
+  usuário corrigiu: "não tem coroa de espinhos, é um crânio tomado por lodo" e "parece formas geométricas coladas"):
+  - técnica nova: metaballs fundidos (negativos cavam órbitas e o topo do crânio), suavização, estrias por deslocamento,
+    decimação e cor por vértice; ~18 mil triângulos (acima dos 5–15 mil sugeridos: as estrias precisam de geometria,
+    porque o toon do jogo não usa normal map);
+  - `npc_carnical.py` continua no `build.mjs` (é ele que gera o modelo novo); fonte `tools/blender/fonte/carnical.blend`;
+  - `npcRig.js` liga `vertexColors` só em malha com `COLOR_0` (os outros NPCs não têm: conferido nos .glb).
+- O Blender MCP conectou, mas sem Blender aberto com o addon; os modelos foram gerados pelo Blender do projeto em modo
+  background (o mesmo `bpy`), com renders de conferência em 4 vistas e testes no preview do jogo.
+- Verificações: `node tools/check-roster.mjs` (650 confrontos com falas + regras do Cristino), `npm test` (41) e
+  `npm run build`.
+
+## v3.22.0 — Do Outro Lado
+
+- Versão: `VERSION` 3.21.0 → **3.22.0**. Parte do código já tinha ido no commit "upd pela metade" (4e64b97); esta
+  versão fecha o pacote (verificações, changelogs, `.gitignore`).
+
+- **Vida** (pedidos: "todos com a mesma vida 1500, sem mostrar o número"; "vida pesada não terá mais"; "os únicos com
+  vida a mais serão os do Outro Lado — relíquias e futuramente criaturas"; "o tempo de round tem que caber na vida"):
+  - `COMBAT.maxHealth` 1500. Saíram todos os `stats.maxHealth` do elenco humano (Lírio, Dalmo, Balu, Aguiar, Jae etc.).
+  - Portadores 1800: O Diabo, Magistrada, Estrangeiro e Amigo. Ferreiro e Arnaldo só transformados:
+    - Deus da Morte: máximo 1800, ergue-se com 1500 (`formHealth`);
+    - Anfitrião: máximo 1800, `bonusHealth` 300.
+  - Portador do Trono: máximo 2100 (O Diabo com `bonusHealth` 300). Demais formas: 1500 + o bônus da transformação.
+  - O HUD não mostra mais o número (`.num` removido); o `HABILIDADES.md` também não.
+  - Round: `roundTime` e `SETTINGS.timer` 150; `TIMER_OPTIONS` [45, 90, 120, 150, 180, ∞]. Um valor salvo antigo volta
+    para 150.
+  - A passiva Sangue de Ferro do Lírio virou só a marca do cânone.
+- **Barras de vida**:
+  - acabou a barra de chefe centralizada (`def.boss` removido do Deus da Morte); a da Marionete continua, porque é
+    invocação;
+  - `def.hpBar.style` → classes `.hb-blood`, `.hb-knowledge`, `.hb-signal`, `.hb-ink`, `.hb-death` e `.hb-energy`, com
+    animação CSS; a vida baixa pulsa.
+- **Mananciais** (wiki "Manancial": filhos do Ferreiro, salas brancas da Caverna, Símbolo Espiral):
+  - `summonMananciais`: 3 `DanteClone` com o modelo `manancial`, animações `man_idle`/`man_run`/`man_scratch`/
+    `man_grab`/`man_lunge`, 80 de vida, 10 s;
+  - `onSlain`: toca a sirene (`siren`), escurece a tela e devolve 10 de sanidade ao Ferreiro.
+- **O Carniçal** (wiki "Carniçal Preto da Morte"):
+  - `npc_carnical.py`: corpo de Lodo em tendões, crânio apodrecido aberto e a espiral vermelha emissiva;
+  - `Carnical` estende `BloodZombie` (claw, slam com knockback 7, bite como salto com derrubada, hypno que paralisa 1 s);
+  - Corpo Fechado: imune a projéteis de bala (`isBullet`);
+  - Instinto Mortal: abaixo de 50% fica 1,35× mais rápido e com recargas ×0,6;
+  - um por vez, 380 de vida, 18 s.
+- **Bichos da ilha** (wiki "Javalis Infectados" e os Cachorros Selvagens Infectados):
+  - `npc_bicho_lib.py`: quadrúpedes de carne derretida, costelas, veias marrons, tinta escorrendo dos olhos e presas;
+  - `InkBeast` estende `Marionette`: galope em diagonal, tremor e derrete numa poça ao morrer;
+  - javali 170 (gore + charge que derruba), cão 80 (bite + pounce); matilhas sorteadas, 12 s.
+- **Diabo**: hordas do O Diabo `[['weak'], ['weak', 'weak']]`; do Portador do Trono `[['weak', 'strong'], ['weak',
+  'strong', 'weak']]`.
+- **Jae**: o buff `veil` com `noLock`, usando `Fighter.untrackable()`:
+  - os especiais de `STICKY_SPECIALS` erram com `whiffSpecial('hidden')`;
+  - a bala curva e os projéteis teleguiados não a seguem.
+- Testado:
+  - Mananciais 62 de dano em 4 s, sirene e +10 de sanidade;
+  - O Diabo sempre "ww" e o Portador do Trono "wSw";
+  - Carniçal só 1, imune a tiro, Instinto Mortal ativa, 82 de dano em 5 s;
+  - bichos 44 de dano em 5 s;
+  - especial do Amigo contra a Jae no Shhh: erra; sem o Shhh: 206;
+  - CPU × CPU sem erros.
+
 ## v3.21.0 — Quando o Sino Tocar
 
 - Versão: `VERSION` 3.20.0 → **3.21.0**.

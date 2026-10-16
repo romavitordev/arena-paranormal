@@ -267,6 +267,8 @@ export function rigFromGLB(gltf, { scale = 1, outline = 0.012 } = {}) {
       return s;
     },
     showProp(name, v) {
+      // 'a+b' mostra/esconde as duas peças (o Cristino guarda a peixeira E tira a espingarda das costas para atirar)
+      if (name.includes('+')) { for (const n of name.split('+')) rig.showProp(n, v); return; }
       const p = props[name];
       if (!p) return;
       p.visible = v;

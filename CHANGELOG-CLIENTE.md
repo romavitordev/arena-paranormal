@@ -2,6 +2,23 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.23.0 — O Cangaceiro
+- NOVO LUTADOR — CRISTINO, o Cangaceiro (Transtornados, Sangue): o caçador de Hexatombe que não queria jogar o jogo. Chapéu de cangaceiro em meia-lua com a estrela e a Coroa de Espinhos, óculos de lentes vermelhas, lenço vermelho, cartucheiras, a bolsa amarela e o grande Símbolo de Sangue costurado nas costas. Robusto: segura empurrão e desgaste na defesa (Couro Curtido).
+- CRISTINO — PEIXEIRA de perto e a ESPINGARDA SOCADEIRA no □: um tiro de chumbo grosso, forte de perto, com recarga longa (carregar pela boca demora). O tiro DETONA EM CADEIA os lampiões dele que estão à frente — o fogo pula de um para o outro.
+- CRISTINO — habilidades: LAMPIÃO EXPLOSIVO (△ → ○, estoura em fogo e deixa o chão queimando), TRILHA DE LAMPIÕES (△ → □, planta até 3 lampiões que estouram quando o adversário pisa perto), CORDA DO TELHADO (△ + L2, sobe pela corda e cai atrás do alvo cravando a peixeira) e DECEPAR (R2 + △, o alvo sangra; em quem está atordoado ou agarrado entra muito mais fundo).
+- CRISTINO — especial UM, DOIS, TRÊS: cerca o adversário com três lampiões, conta até três e atira; o fogo pula de lampião em lampião e o amontoado explode (a armadilha do Quibungo). Quem sai do cerco deixa os lampiões no chão como armadilhas. Transformação TOCADO PELA COROA: o corpo se enche de rabiscos vermelhos e ele vira o CRISTINO DESERTOR — rifle sem recarga, lampiões maiores e ele sente a intenção do adversário (não é pego desprevenido).
+- Nova equipe na seleção: TRANSTORNADOS (página 2, etiqueta laranja). Falas de introdução e de vitória do Cristino contra todo o elenco, com conversas próprias com a Jae, o Labirinto, o Aguiar e o Juan.
+- O CARNIÇAL do Deus da Morte com MODELO NOVO, refeito do zero pela arte do livro de regras e pela miniatura de O Segredo na Floresta: uma figura de Lodo preto toda estriada, ombros largos com o brilho vermelho por baixo, cintura fina, tendões pálidos soltos e a caveira tomada pelo Lodo, com o topo rompido mostrando o cérebro e o Símbolo Espiral brilhando na testa.
+
+## v3.22.0 — Do Outro Lado
+- VIDA IGUAL PARA TODOS e sem número na barra. Não existe mais personagem "pesado" com mais vida: só os seres do OUTRO LADO aguentam mais — O Diabo, A Magistrada, O Estrangeiro e o Amigo Imaginário sempre, e o Ferreiro e o Arnaldo só transformados (Deus da Morte e Anfitrião). O tempo do round cresceu junto (150 s; as opções agora vão de 45 a 180 s).
+- BARRAS DE VIDA DOS PORTADORES: cada um tem a sua, com a cor e o efeito da Relíquia — sangue correndo (O Diabo e o Portador do Trono), trama dourada de sigilo (Magistrada), sinal verde com chiado (Estrangeiro), tinta escorrendo (Amigo), cinzas subindo (Deus da Morte) e energia que troca de cor (Anfitrião). Acabou a barra de chefe no centro da tela.
+- FERREIRO — CHAMAR OS MANANCIAIS (△ → □): três dos filhos do Ferreiro, presos nas salas brancas para alimentar o Santo, sobem do Símbolo Espiral e lutam por ele — pálidos, de roupa branca, enlouquecidos. Quando um morre, a sirene de Santo Berço toca e o Ferreiro recupera sanidade.
+- DEUS DA MORTE — O CARNIÇAL (△ → □): do Lodo sobe o Carniçal Preto da Morte (só um por vez) — Garra da Morte, Pancada Poderosa que joga longe, o salto e a Hipnose Espiral. Imune a tiros (Corpo Fechado) e, ferido, perde a compostura e ataca sem parar.
+- AMIGO IMAGINÁRIO — BICHOS DA ILHA (R2 + ×): o Sino chama os animais de Tipora infectados pela Tinta — javalis (presas e investida que derruba) e cães selvagens (mordidas e o salto), cadáveres de carne derretida que saem de poças de tinta.
+- O DIABO chama só zumbis de sangue pequenos (1 ou 2); transformado em Portador do Trono, o zumbi GRANDE vem junto com os pequenos.
+- JAE — o "Shhh..." agora deixa ela SEM RASTRO: especiais que prendem o alvo numa cena erram ("PERDEU O RASTRO") e projéteis teleguiados não a seguem.
+
 ## v3.21.0 — Quando o Sino Tocar
 - AMIGO IMAGINÁRIO com modelo novo, refeito pelas artes da wiki: o capuz pende como um visor sobre o buraco do rosto, com a franja rasgada em dentes; barbatanas de pano descem pelas costas; o manto arrasta uma cauda para trás com fitas onduladas; o lado de baixo fibroso aparece na frente; mais tentáculos, enrolados nas pontas; garras longas e curvas. E agora a TINTA JORRA do rosto até o chão sem parar, formando uma poça embaixo dele.
 - Animações próprias do Amigo: ele DESLIZA curvado em vez de correr, rasga com garras em arcos largos, chicoteia com o corpo inteiro, se ergue e desaba, abre os braços quando o Sino toca, se curva sobre a vítima para despejar a tinta e convulsiona no Frenesi de Sangue.

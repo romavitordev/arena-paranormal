@@ -62,6 +62,16 @@ export const ORIGINS = {
     { page: 'Dalmo Magno' },
     { page: 'Kemi' },
   ],
+  // Equipe Transtornados (Hexatombe): os Apóstolos de Sangue — Cristino era deles, mas não queria jogar o jogo
+  Transtornados: [
+    { page: 'Cristino', id: 'cristino' },
+    { page: 'Cleo Brisa' },
+    { page: 'Giovanni Opspor' },
+    { page: 'Mosto' },
+    { page: 'Nando Salles' },
+    { page: 'Tarrafa' },
+    { page: 'Carrara' },
+  ],
   // Os Cinco (Sinais do Outro Lado): o grupo de Morato Vertaler
   'Os Cinco': [
     { page: 'Alexandre', name: 'Xande (Alexandre)', id: 'xande' },

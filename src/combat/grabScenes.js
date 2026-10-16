@@ -181,6 +181,8 @@ export const GRAB_SCENES = {
   juan: scene({ ...S('knife_1'), fx: { kind: 'slash' }, sound: 'bladeHit' }, { ...S('knife_2'), fx: { kind: 'slash', flip: true }, sound: 'bladeHit' }, { anim: 'thrust', fx: 'throat', sound: 'slashFinal', heal: 15 }),
   kemi: scene({ ...S('knife_1'), fx: { kind: 'slash' }, sound: 'bladeHit' }, { ...S('shoulder_bash'), fx: { kind: 'punch' }, sound: 'punch' }, { anim: 'thrust', fx: 'pointBlank', sound: 'sniper' }),
   arnaldo: scene({ ...S('slash_h'), fx: { kind: 'slash' }, sound: 'bladeHit' }, { ...S('thrust'), fx: { kind: 'stab' }, sound: 'bladeHit' }, { anim: 'slash_finisher', fx: 'sigils', sound: 'slashFinal' }),
+  // Cristino: segura pela gola, dois golpes de peixeira e a lâmina no pescoço ("Eu odeio gente barulhenta" — o Caíto)
+  cristino: scene({ ...S('knife_1'), fx: { kind: 'slash' }, sound: 'bladeHit' }, { ...S('thrust'), fx: { kind: 'stab' }, sound: 'bladeHit' }, { anim: 'knife_final', fx: 'throat', sound: 'slashFinal', bleed: { dps: 4, duration: 2.5 } }),
   jae: scene({ ...S('knife_1'), fx: { kind: 'slash' }, sound: 'bladeHit' }, { ...S('knife_2'), fx: { kind: 'slash', flip: true }, sound: 'bladeHit' }, { anim: 'dual_cross', fx: 'throat', sound: 'slashFinal', bleed: { dps: 4, duration: 2 } }),
   verissimo: scene({ ...S('thrust'), fx: { kind: 'stab' }, sound: 'bladeHit' }, { ...S('slash_h_back'), fx: { kind: 'slash', flip: true }, sound: 'bladeHit' }, { anim: 'slash_v', fx: 'pointBlank', sound: 'shotgun' }),
   // Visão Traumática: chicotada de cabo, puxa o rosto do alvo para perto da máscara (a câmera fecha na máscara, que
@@ -196,6 +198,7 @@ export const GRAB_SCENES = {
   diabo: scene({ ...S('db_claw_r'), fx: { kind: 'claw' }, sound: 'clawHit' }, { ...S('db_claw_l'), fx: { kind: 'claw', flip: true }, sound: 'clawHit' }, { anim: 'db_rend', fx: 'devil', sound: 'bloodClaw', bleed: { dps: 5, duration: 2 } }),
   jae_x: scene({ ...S('knife_1'), fx: { kind: 'slash' }, sound: 'bladeHit' }, { ...S('knife_3'), fx: { kind: 'stab' }, sound: 'bladeHit' }, { anim: 'dual_cross', fx: 'shadow', sound: 'slashFinal', bleed: { dps: 5, duration: 2.5 } }),
   fantasma: scene({ ...S('knife_1'), fx: { kind: 'slash' }, sound: 'bladeHit' }, { ...S('shoulder_bash'), fx: { kind: 'punch' }, sound: 'punch' }, { anim: 'thrust', fx: 'bands', sound: 'sniper' }),
+  cristino_desertor: scene({ ...S('knife_1'), fx: { kind: 'slash' }, sound: 'bladeHit' }, { ...S('thrust'), fx: { kind: 'stab' }, sound: 'bladeHit' }, { anim: 'knife_final', fx: 'throat', sound: 'slashFinal', bleed: { dps: 5, duration: 3 } }),
   deus_morte: scene({ ...S('dm_slap', 0.34), fx: { kind: 'smash' }, sound: 'heavyPunch' }, { ...S('dm_hook', 0.34), fx: { kind: 'smash' }, sound: 'heavyPunch' }, { anim: 'dm_smash', fx: 'crush', sound: 'heavyPunch' }),
 };
 GRAB_SCENES.kian_calamidade = GRAB_SCENES.kian; // a forma de Calamidade agarra igual (só mais forte)

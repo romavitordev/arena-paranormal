@@ -1,7 +1,7 @@
 # Membros das origens — banco para futuras adições
 
 > Gerado por `npm run lore` a partir da [Ordem Paranormal Wiki](https://ordemparanormal.fandom.com). Não edite à mão;
-> notas de design ficam em `lore/NOTAS.md`. Atualizado em 2026-10-01.
+> notas de design ficam em `lore/NOTAS.md`. Atualizado em 2026-10-16.
 
 ## Ordo Realitas
 
@@ -15,7 +15,7 @@
 | [Elizabeth Webber](#elizabeth-webber) | — | Especialista / Médica de Campo |  | 0 |
 | [Thiago Fritz](#thiago-fritz) | — | — |  | 0 |
 | [Rubens Naluti](#rubens-naluti) | Energia | Especialista / Atirador de Elite Socorrista |  | 1 |
-| [Balu](#balu) | — | Combatente / Duelista |  | 1 |
+| [Balu](#balu) | Sangue | Combatente / Duelista | ✅ `balu` | 1 |
 | [Erin Parker](#erin-parker) | Energia | Especialista | ✅ `erin` | 2 |
 | [Carina Leone](#carina-leone) | Conhecimento | Especialista / Artista Marcial |  | 0 |
 | [Senhor Veríssimo](#senhor-verissimo) | — | Combatente / Comandante de Campo |  | 0 |
@@ -63,6 +63,18 @@
 | [Dalmo Magno](#dalmo-magno) | — | Combatente |  | 0 |
 | [Kemi](#kemi) | — | Especialista |  | 0 |
 
+## Transtornados
+
+| Nome | Elemento | Classe / Trilha | No jogo | Rituais |
+|---|---|---|---|---|
+| [Cristino](#cristino) | — | — | ✅ `cristino` | 0 |
+| [Cleo Brisa](#cleo-brisa) | — | — |  | 0 |
+| [Giovanni Opspor](#giovanni-opspor) | — | — |  | 0 |
+| [Mosto](#mosto) | — | — |  | 0 |
+| [Nando Salles](#nando-salles) | — | — |  | 0 |
+| [Tarrafa](#tarrafa) | — | — |  | 0 |
+| [Carrara](#carrara) | — | — |  | 0 |
+
 ## Os Cinco
 
 | Nome | Elemento | Classe / Trilha | No jogo | Rituais |
@@ -70,7 +82,7 @@
 | [Xande (Alexandre)](#xande-alexandre) | Sangue | Ocultista / Lâmina Paranormal | ✅ `xande` | 13 |
 | [Dara Alice Venturini](#dara-alice-venturini) | — | Especialista / Médica de Campo |  | 0 |
 | [Francisco Albuquerque](#francisco-albuquerque) | — | Especialista / Técnico |  | 0 |
-| [Lírio Tellini](#lirio-tellini) | — | Combatente / Tropa de Choque |  | 0 |
+| [Lírio Tellini](#lirio-tellini) | — | Combatente / Tropa de Choque | ✅ `lirio` | 0 |
 | [Voytek Nowak](#voytek-nowak) | — | — |  | 0 |
 | [Morato Vertaler](#morato-vertaler) | — | — |  | 1 |
 
@@ -330,7 +342,7 @@ Ele é um agente da Ordo Realitas e parceiro de longa data de Johnny Tabasco. Ru
 
 ### Balu
 
-**Origem:** Ordo Realitas · **Elemento:** — · **Classe:** Combatente · **Trilha:** Duelista · **Status:** Vivo · [wiki](https://ordemparanormal.fandom.com/wiki/Ant%C3%B4nio_Pontevedra)
+**Origem:** Ordo Realitas · **Elemento:** Sangue · **Classe:** Combatente · **Trilha:** Duelista · **Status:** Vivo · [wiki](https://ordemparanormal.fandom.com/wiki/Ant%C3%B4nio_Pontevedra)
 
 Antônio "Balu" Pontevedra é um dos protagonistas da série Ordem Paranormal, presente em .  Ele é um ex-agente aposentado da Ordo Realitas que colaborou com diversos veteranos da Ordem em algumas missões. Ele estava afastado há mais ou menos cinco anos e apenas retornou a pedido do Senhor Veríssimo.
 
@@ -864,7 +876,7 @@ Dagan foi um jovem ocultista que se juntou aos Escriptas após o final de Descon
 
 ### Juan (Henri)
 
-**Origem:** Escriptas · **Elemento:** Sangue · **Classe:** Ocultista · **Trilha:** — · **Status:** Portador de Relíquia · [wiki](https://ordemparanormal.fandom.com/wiki/Juan)
+**Origem:** Mascarados · **Elemento:** Sangue · **Classe:** Ocultista · **Trilha:** — · **Status:** Portador de Relíquia · [wiki](https://ordemparanormal.fandom.com/wiki/Juan)
 
 Juan Davo, anteriormente conhecido como Henri e cujo nome original é Lúcio Davo, é um ocultista de Sangue, um dos antagonistas e Escriptas de Kian durante e um dos protagonistas da série Ordem Paranormal, presente em . Juan era um dos órfãos do Orfanato Santa Menefreda, sendo chamado de Henri na época. Durante seu tempo no local, se tornou um dos amigos mais próximos de Gal, que o induzia a fugir junto com ele do orfanato, causando diversos problemas aos cuidadores do local. Com o tempo se passando, Juan foi crescendo, sendo influenciado por Leonardo Gomes assim como a maioria das crianças do orfanato, se tornando um Escripta obcecado por sangue.
 
@@ -1015,6 +1027,88 @@ Kemi, também conhecida como Fantasma, é uma silenciosa assassina em série e m
 - **Disparo Espiral**: Ao atirar com seu rifle, Fantasma pode usar suas faixas para puxar a sniper atirando em balas curvas. Gastando 3 PD, ela nega toda cobertura que não seja completa e ignora 10 pontos de resistência a dano.
 
 **Aparência:** Kemi é uma mulher negra, de 1,60m de altura, com dreads loiros quase brancos e bem cuidados, com olhos âmbar. Tem piercings no septo e nas orelhas, e usa roupas leves, com um top branco, uma calça larga e um casaco amarrado em sua cintura, além de bandagens ao longo de seu corpo. Ela tem como arma principal um rifle de precisão do elemento de Morte. Quando veste suas faixas e se torna a Fantasma, Kemi usa um grande casaco marrom de couro e gola alta, acompanhado de suas faixas, que agora escondem seu rosto, deixando apenas seus olhos à mostra em meio a escuridão que oculta sua identidade. Além disso, seu rifle de precisão começa a pingar lodo preto de forma constante do cano da arma.
+
+---
+
+### Cristino
+
+**Origem:** Transtornados · **Elemento:** — · **Classe:** — · **Trilha:** — · **Status:** Falecido · [wiki](https://ordemparanormal.fandom.com/wiki/Cristino)
+
+Cristino era um dos participantes do Hexatombe, sendo integrante da equipe dos Transtornados, mas não querendo fazer parte do jogo. Teve sua primeira aparição no , sendo visto por Labirinto no topo de uma colina disparando contra o Quibungo que corria em sua direção.  Posteriormente, ele reaparece no , batendo na porta da Mansão Abandonada para pedir a ajuda da equipe dos Mascarados, solicitando que eles o ajudassem a emboscar o Quibungo durante a noite, prometendo que seriam recompensados caso o fizessem.
+
+**Aparência:** Cristino era um homem de meia idade, com porte físico robusto, cabelos longos castanhos e um bigode grosso, ele tinha um de seus olhos aparentemente cego devido a um ferimento de combate e também possuia diversas outras cicatrizes espalhadas por todo seu corpo. Ele utilizava um traje de cangaceiro composto por uma jaqueta de couro com um grande símbolo de Sangue costurado em suas costas, uma camisa estilo social com um tom azul esverdeado, uma calça de couro com costuras bem aparentes, faixas ensanguentadas cobrindo suas canelas e um par de alpercatas de couro. Ele também possuia diversos acessórios, sendo o mais marcante entre eles um grande chapéu de cangaceiro com espinhos cravados em seu topo, além dele também é possível notar diversas cartucheiras e cintos de couros passando pelo seu corpo, uma bolsa amarela com um lampião adornado com espinhos amarrado nela, um par de óculos com lentes vermelhas e um grande lenço vermelho e branco amarrado em seu pescoço.
+
+---
+
+### Cleo Brisa
+
+**Origem:** Transtornados · **Elemento:** — · **Classe:** — · **Trilha:** — · **Status:** Falecida · [wiki](https://ordemparanormal.fandom.com/wiki/Cleo_Brisa)
+
+Cleo Brisa foi uma investigadora da polícia civil de Inquisidor do Vale. Fez sua primeira aparição no primeiro episódio de Hexatombe, encontrando Aguiar em seu escritório e indo com ele até São Paulo atender um chamado da polícia de lá, que solicitava a presença dele em um caso envolvendo o Labirinto. Em Hexatombe, Cleo foi jogada à força no portal, se tornando uma das integrantes da equipe dos Transtornados. Ela imediatamente saiu correndo e se separou da equipe, se abrigando na Casa de Taipa. Depois de ter sido transformada em uma vampira por Velisar, no meio da batalha dos Mascarados com os Vampiros, ela tem a sua cabeça explodida após Remi tocar nela.
+
+**Aparência:** Cleo era uma mulher jovem de estatura baixa, com um porte físico definido e cabelos loiros amarrados por uma faixa verde. Como vestimenta ela utilizava um casaco verde com o brasão da polícia de Inquisidor do Vale, vestido por cima de um top preto, uma calça jeans esverdeada e botas pretas. Possuía como acessórios um óculos escuro pendurado em seu top e uma bolsa de couro.
+
+---
+
+### Giovanni Opspor
+
+**Origem:** Transtornados · **Elemento:** — · **Classe:** — · **Trilha:** — · **Status:** Falecido · [wiki](https://ordemparanormal.fandom.com/wiki/Giovanni_Opspor)
+
+Giovanni Opspor foi o pai de Gabriel Opspor e dono da empresa que reformou a Escola Nostradamus em A Ordem Paranormal.  Depois de mencionado na primeira temporada, Giovanni apareceu no Livro de Regras de Ordem Paranormal RPG, numa arte representando os Transtornados. Durante Hexatombe, Giovanni é apresentado como um líder dos Transtornados, presente em uma sala restrita no The Monica Club.
+
+**Habilidades**
+
+- **Espelho**: Durante o Hexatombe, Giovanni criava clones de carne capazes de percorrer longas distâncias para coletar informações ou se comunicar com outras equipes fora de sua base, funcionando como uma forma de proteção até o fim do evento. Essas cópias podiam assumir a aparência de Giovanni ou de pessoas que ele conhecia, mas apresentavam um atraso na fala e partes do corpo se desfazendo.
+
+**Aparência:** Giovanni era um homem de pele clara, cabelos curtos e castanhos, e barba rala com cavanhaque. Seu rosto era fino, com nariz estreito, olhos escuros, sobrancelhas marcadas e diversas cicatrizes de cortes. Ele utilizava em sua cabeça uma gaiola metálica dourada e adornada com espinhos no topo e na base. Correntes e fios de arame farpado envolviam e perfuravam o seu corpo, especialmente seus braços e uma de suas pernas. Giovanni vestia uma camisa de gola alta clara sob um casaco vinho escuro de mangas arregaçadas, além de calças marrons e sapatos pretos. Todo o corpo e o traje de Giovanni estavam sujos e manchados em sangue. Após ter seu sacrifício morto no Hexatombe, Giovanni começou a sofrer as consequências de ser um desertor. Sua ilusão mostrada no quinto dia do Hexatombe mostrava que ele adquiriu as feridas de desertor em seu rosto, com um grande corte horizontal e dois cortes que sobem de suas bochechas até acima de suas sobrancelhas, e possuía diversos ferimentos em seus braços.
+
+---
+
+### Mosto
+
+**Origem:** Transtornados · **Elemento:** — · **Classe:** — · **Trilha:** — · **Status:** Falecido · [wiki](https://ordemparanormal.fandom.com/wiki/Mosto)
+
+Mosto foi um ocultista e guarda do The Monica Club, sendo um dos Transtornados subordinados de Giovanni Opspor, tendo sua primeira aparição visual no Livro de Regras de Ordem Paranormal RPG, em uma arte representando os Transtornados.  Posteriormente, em Hexatombe, Mosto faz sua primeira aparição como o segurança na entrada do The Monica Club, controlando a entrada de Transtornados para o show da banda PSIKOLERA, reaparecendo ao final do , entrando no portal invocado pelo Tributo de Sangue.
+
+**Habilidades**
+
+- **Trocação Justa**: Mosto convida o alvo para uma luta à mão, onde os dois não precisam realizar testes de ataque, pois todos os golpes serão acertos automáticos. Mosto desbloqueia essa habilidade ao ter a sacola de pão retirada de sua cabeça.
+
+**Aparência:** Mosto era um homem grande e corpulento com diversas cicatrizes e costuras por todo seu corpo, com uma enorme tatuagem do símbolo do Diabo em seu braço esquerdo. Usava apenas um avental de açougueiro branco coberto de manchas de sangue, uma calça cinza e, como acessório, um saco de pão para cobrir seu rosto desfigurado, além de diversos arames farpados enrolados por todo seu corpo, carregando um cutelo consigo. Por baixo de sua máscara se escondia o rosto desfigurado por Dalmo Magno, com uma cabeça redonda marcada por vários ferimentos abertos e mal costurados do seu lado direito, com os arames farpados dourados que cobrem seu corpo saindo do buraco onde ficava seu olho esquerdo. Seu olho restante possuía uma íris vermelha.
+
+---
+
+### Nando Salles
+
+**Origem:** Transtornados · **Elemento:** — · **Classe:** — · **Trilha:** — · **Status:** Falecido · [wiki](https://ordemparanormal.fandom.com/wiki/Nando_Salles)
+
+Nando Salles era um dos estigmados do Hexatombe, sendo o sacrifício da equipe Transtornados, usando como base o Mercado Central, carregando o estima do Orgulho, Desprezo e Arrogância. Ele teve sua primeira aparição no , se apresentando como o sacrifício dos Transtornados para Dalmo Magno e Kemi durante sua visita à base do grupo. Ele foi morto pela própria arma por Kemi, após tentar pegar desprevenido e matar Henri, o sacrifício da equipe dos Mascarados.
+
+**Habilidades**
+
+- **Arrogância Diabólica**: Nando desafia um alvo a sua escolha, o provocando, fazendo com que sinta uma vergonha quase física passando pelo seu corpo. Se recusar o desafio, o alvo leva um dano relevante de PD.
+
+**Aparência:** Nando era um homem alto de pele clara, olhos azuis e cabelo castanho com mexas azuis nas pontas, ele tem tatuagens em padrões geométricos simétricos em ambos os braços e, em seu peito, está o Estigma do Orgulho que sangra constantemente. Ele usava óculos de armação escura e vestia uma camisa polo branca manchada de sangue na região do torso, desabotoada no peito (aonde estava a marca do estigma), com uma gravata azul listrada desamarrada sobre os ombros, calças azuis com cinto e sapatos marrons.
+
+---
+
+### Tarrafa
+
+**Origem:** Transtornados · **Elemento:** — · **Classe:** — · **Trilha:** — · **Status:** Falecido · [wiki](https://ordemparanormal.fandom.com/wiki/Tarrafa)
+
+Tarrafa era um ocultista e funcionário do The Monica Club, trabalhando sob Giovanni Opspor. Sua primeira aparição foi no Livro de Regras de Ordem Paranormal RPG, em uma arte representando os Transtornados. Em Hexatombe, ele aparece causando um congestionamento no banheiro do The Monica Club, após engolir um molho de chaves, contendo a chave para o escritório de Giovanni. Mais tarde, ele ingressa no Portal que leva seu grupo, os Transtornados, para o Hexatombe, onde usariam o Mercado Central como base.
+
+**Aparência:** Tarrafa era um homem magro de postura curvada e com cabelos escuros jogados para frente, sua pele possuía um aspecto acinzentado e enrugado, com diversos cortes, cicatrizes e costuras por todo seu corpo, além de uma enorme tatuagem do símbolo do Pacto que preenchia seu peito e abdômen. Vestia apenas uma calça cinza rasgada e manchada de sangue. Ele usava como acessórios diversos pedaços de arame farpado enrolados por todo seu corpo, um anzol como brinco e uma barra de ferro que costumava estar cravada em sua garganta.
+
+---
+
+### Carrara
+
+**Origem:** Transtornados · **Elemento:** — · **Classe:** — · **Trilha:** — · **Status:** Falecido · [wiki](https://ordemparanormal.fandom.com/wiki/Carrara)
+
+Carrara é um ocultista transtornado, que fez sua primeira aparição em , invadindo o apartamento de Kemi, durante o .  Enquanto vasculhava o apartamento da assassina, Carrara acaba ativando uma armadilha na área de serviço que lançou diversas facas contra seu peito, o deixando gravemente ferido e incapacitado no chão, sendo brutalmente executado com diversos golpes de faca e degolado por Kemi.
+
+**Aparência:** Carrara era um homem esguio de meia-idade com diversos pregos cravados ao redor de seu crânio, pescoço e braços, ainda com sangue escorrendo de suas feridas, tinha um cabelo castanho penteado para o lado e a barba por fazer. Usava um conjunto de roupa típico dos anos 70, composto por uma camisa vintage com uma estampa ondulada com cores quentes, uma calça social laranja com estampa xadrez e rasgos nos joelhos e nas barras, além de um sapato de couro bicolor com cadarços. Como acessórios ele possuía um óculos de sol retrô, diversos anéis, pulseiras e cordões de ouro, com algumas dessas peças tendo joias cravadas nelas, também utilizava um cinto de couro branco e um relógio dourado em posição militar no seu pulso.
 
 ---
 

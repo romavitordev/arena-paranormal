@@ -25,9 +25,10 @@ export const CHARACTER_NAMES = {
   magistrada: 'A Magistrada',
   estrangeiro: 'O Estrangeiro',
   amigo: 'Amigo Imaginário',
+  cristino: 'Cristino',
 };
 
-export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto', jae_x: 'jae', colosso: 'dalmo', guizo_et: 'guizo', kian_calamidade: 'kian', juan_odio: 'juan', guizo_bombado: 'guizo', guizo_velho: 'guizo' };
+export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto', jae_x: 'jae', colosso: 'dalmo', guizo_et: 'guizo', kian_calamidade: 'kian', juan_odio: 'juan', guizo_bombado: 'guizo', guizo_velho: 'guizo', cristino_desertor: 'cristino' };
 
 export const INTRO_IDS = Object.keys(CHARACTER_NAMES);
 const INTRO_HOOKS = {
@@ -56,6 +57,7 @@ const INTRO_HOOKS = {
   magistrada: 'a Máscara do Desespero',
   estrangeiro: 'o sinal',
   amigo: 'o sino',
+  cristino: 'a socadeira',
 };
 
 const INTRO_OPENERS = {
@@ -84,6 +86,7 @@ const INTRO_OPENERS = {
   magistrada: (other, hook) => `${other}. Eu já sei por que você veio. ${hook[0].toUpperCase() + hook.slice(1)} lembra de tudo.`,
   estrangeiro: (other, hook) => `${other}... você ouviu ${hook}. Agora não consegue mais deixar de ouvir.`,
   amigo: (other, hook) => `(${hook} ecoa de dentro da criatura) ...${other}... quer brincar... no quadro?`,
+  cristino: (other, hook) => `Não é pessoal, ${other}. Larga ${hook} e sai do meu caminho.`,
 };
 
 const INTRO_REPLIES = {
@@ -112,9 +115,27 @@ const INTRO_REPLIES = {
   magistrada: (other, hook) => `${hook}... Saber tudo tem um preço, ${other}. Você ainda não pagou o seu.`,
   estrangeiro: (other, hook) => `${hook}. Interessante, ${other}. Amanhã você não vai lembrar desta conversa.`,
   amigo: (other, hook) => `(a tinta pinga no chão) ...${hook} já tocou, ${other}... ninguém lembra de quando parou.`,
+  cristino: (other, hook) => `${hook}... Eu já vi coisa pior no mato, ${other}. Fala menos.`,
 };
 
 const INTRO_EXCHANGES = {
+  // CRISTINO (Hexatombe): a caça ao Quibungo com a Jae e o Labirinto, o Pomba sequestrado, a promessa e o fim pelo Juan
+  'cristino+jae': [
+    { starter: 'cristino', line: 'Vocês ainda têm a minha palavra. Uma vez só.', response: 'jae', responseLine: 'Shh... guarda ela, cangaceiro. Hoje eu não vim pedir.' },
+    { starter: 'jae', line: 'Você sumiu depois da caçada. Achou o que era seu?', response: 'cristino', responseLine: 'Achei. E não é da sua conta.' },
+  ],
+  'cristino+labirinto': [
+    { starter: 'labirinto', line: 'O medalhão, Cristino. Eu sei o que aquele símbolo abre.', response: 'cristino', responseLine: 'Então sabe que não é pra você.' },
+    { starter: 'cristino', line: 'A rajada falhou na caçada. Não falha hoje.', response: 'labirinto', responseLine: 'Todo caminho tem uma segunda chance. O seu acabou aqui.' },
+  ],
+  'aguiar+cristino': [
+    { starter: 'aguiar', line: 'Você cortou o garoto devagar. Pra quê?', response: 'cristino', responseLine: 'A porta pedia sangue. Eu só paguei.' },
+    { starter: 'cristino', line: 'Eu odeio gente barulhenta, delegado.', response: 'aguiar', responseLine: 'Ha ha... então hoje você vai odiar muito.' },
+  ],
+  'cristino+juan': [
+    { starter: 'juan', line: 'Eu senti a sua intenção, cangaceiro. Você veio me matar.', response: 'cristino', responseLine: 'Não é pessoal. É a promessa do meu irmão.' },
+    { starter: 'cristino', line: 'Se tiver um jeito do sacrifício ficar vivo, eu descubro.', response: 'juan', responseLine: 'Não precisa. Eu já sei qual é o meu novo começo.' },
+  ],
   'kaiser+arthur': [
     { starter: 'arthur', line: 'Kaiser, você não precisa carregar tudo sozinho, filho.', response: 'kaiser', responseLine: 'Eu sei, pai. Só não aprendi a largar ainda.' },
     { starter: 'kaiser', line: 'Arthur, você sempre aparece quando alguém precisa de ajuda.', response: 'arthur', responseLine: 'E você sempre finge que não precisava, César.' },
@@ -2026,6 +2047,63 @@ const VICTORY_AMIGO = {
 };
 for (const [w, m] of Object.entries(VICTORY_AMIGO)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
 
+// CRISTINO (Transtornados, Hexatombe): falas de vitória dele contra cada um e de cada um contra ele
+const VICTORY_CRISTINO = {
+  cristino: {
+    kaiser: ['Fumaça não esconde de quem caça à noite.', 'Respira devagar, rapaz. Assim dura mais.'],
+    arthur: ['Boa mira. A minha é mais velha.', 'Não é pessoal, Cervero. Você tava no caminho.'],
+    joui: ['Espada rápida. Chumbo é mais.', 'Não corre no escuro. Eu enxergo com um olho só e te vi.'],
+    aghata: ['Livro nenhum ensina a caçar.', 'Muita reza pra pouca pólvora.'],
+    dante: ['Fala bonito. Cai igual.', 'Acabou o teatro. Sai da frente.'],
+    erin: ['Gosta de fogo? Eu também. Faz tempo.', 'Explosão é coisa séria, menina. Eu montei a minha antes.'],
+    gal_sal: ['Correntes não seguram quem andou a pé até aqui.', 'Não quero justiça. Quero o que é meu.'],
+    kian: ['Viu o futuro? Não viu o lampião.', 'Presságio nenhum desvia de um tiro de perto.'],
+    aguiar: ['Faz menos barulho no chão, delegado.', 'Eu disse pra não se meter no meu caminho.'],
+    labirinto: ['O caminho era reto. Você que se perdeu.', 'A minha parte do acordo acabou na caçada.'],
+    xande: ['Moleque barulhento. Agora fica quieto.', 'Teoria nenhuma te salvou do chumbo.'],
+    lirio: ['Parede grossa. Pólvora mais.', 'Grande e lento. Igual ao Quibungo.'],
+    ferreiro: ['Já cacei bicho maior que você no mato.', 'Espada que consome não consome chumbo.'],
+    juan: ['Hoje a Lua de Sangue fica comigo.', 'Não é pessoal, Henri. Era a promessa do meu irmão.'],
+    kemi: ['Silenciosa. Gosto disso. Fica assim.', 'Contrato é contrato. O meu era outro.'],
+    balu: ['Machado pesado demais, tio. Chumbo pesa menos.', 'Grande e risonho. Agora só grande.'],
+    arnaldo: ['Fecha a cortina, velho. Sem aplauso.', 'Teatro não assusta quem dorme no mato.'],
+    verissimo: ['A Ordem não me achou antes. Não acha agora.', 'Relatório? Escreve aí: o cangaceiro passou.'],
+    jae: ['Shh... eu sei fazer silêncio também.', 'Você ainda tem a minha palavra. Mas não hoje.'],
+    dalmo: ['Grandão. Caiu igual a qualquer bicho.', 'Arena é bonito. O mato é pior.'],
+    guizo: ['Desliga essa câmera, rapaz.', 'Filma isso: o cangaceiro foi embora.'],
+    o_diabo: ['Pacto nenhum. Eu cumpro as minhas promessas sozinho.', 'Já toquei a Coroa. Você não me assusta.'],
+    magistrada: ['Saber tudo não te avisou do lampião.', 'Equilíbrio é coisa de quem tem tempo.'],
+    estrangeiro: ['Não lembro de você. Melhor assim.', 'Sinal nenhum chega onde eu ando.'],
+    amigo: ['Bicho pintado. Queima igual.', 'O sino tocou. Hoje não foi pra mim.'],
+  },
+  kaiser: { cristino: ['Até no mato a névoa chega, cangaceiro.', 'Seu lampião apagou na fumaça, Cristino.'] },
+  arthur: { cristino: ['Socadeira demora pra carregar. Eu não.', 'Um tiro só, Cristino. O meu chegou primeiro.'] },
+  joui: { cristino: ['Você mirou na sombra. Eu já estava atrás.', 'Um olho só não vê a lâmina vindo.'] },
+  aghata: { cristino: ['O símbolo nas suas costas não te protegeu.', 'Sangue de cangaceiro. Anotado.'] },
+  dante: { cristino: ['Personagem bom, final trágico. Clássico.', 'Saiu de cena calado. Pelo menos isso.'] },
+  erin: { cristino: ['Seus lampiões são lindos! Mas a minha bomba é maior!', 'Kaboom! Aprende com quem entende, tio!'] },
+  gal_sal: { cristino: ['Promessa de irmão não é justiça, Cristino.', 'Presa na corrente igual ao bicho que você caçava.'] },
+  kian: { cristino: ['Eu vi o tiro antes da pólvora.', 'Você queria a Coroa. Ela não queria você.'] },
+  aguiar: { cristino: ['Ha ha... e agora quem tá dilacerado?', 'Isso foi pelo garoto, cangaceiro.'] },
+  labirinto: { cristino: ['O medalhão abre portas. Não abre a saída.', 'Você se perdeu no meu labirinto, Cristino.'] },
+  xande: { cristino: ['Barulhento sim, e de pé!', 'Por eles, cangaceiro. Você não ia passar.'] },
+  lirio: { cristino: ['A Leonora aguenta chumbo, véi.', 'Lampião nenhum derruba essa parede.'] },
+  ferreiro: { cristino: ['Santo Berço não teme caçador.', 'O fogo do seu lampião não esquenta a minha espada.'] },
+  juan: { cristino: ['Esse é o meu novo começo.', 'Descarnado, igual da primeira vez.'] },
+  kemi: { cristino: ['Silêncio, cangaceiro. Você mesmo pediu.', 'Alvo abatido. Sem pressa, como você gosta.'] },
+  balu: { cristino: ['Hahaha! Que chapéu de espinho, hein!', 'Bora tirar esses espinhos e comer alguma coisa?'] },
+  arnaldo: { cristino: ['Que figurino! Pena o final.', 'Bravo, cangaceiro! O último ato era meu.'] },
+  verissimo: { cristino: ['Olhos abertos, Cristino. Até pra quem anda a pé.', 'Desertor de Hexatombe. A Ordo tem perguntas.'] },
+  jae: { cristino: ['Shh... palavra cumprida.', 'Você odeia barulho. Então dorme quieto.'] },
+  dalmo: { cristino: ['Aí sim, neném! Derrubei o cangaceiro!', 'Grande você. Maior eu.'] },
+  guizo: { cristino: ['Gravei! Um cangaceiro de verdade! Ninguém vai acreditar!', 'Chapéu de espinho, óculos vermelho... isso é ouro!'] },
+  o_diabo: { cristino: ['Você também queria alguma coisa, Cristino. Todos querem.', 'A promessa do seu irmão... eu podia ter cumprido.'] },
+  magistrada: { cristino: ['Tenebris. Eu sei o que esse medalhão significa.', 'O Equilíbrio não deixa a Coroa nas mãos de ninguém.'] },
+  estrangeiro: { cristino: ['Ninguém vai lembrar do cangaceiro.', 'Você caçou monstros. Achou um.'] },
+  amigo: { cristino: ['...o lampião apagou...', '...mais um chapéu... no quadro...'] },
+};
+for (const [w, m] of Object.entries(VICTORY_CRISTINO)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
+
 export const VICTORY_FALLBACKS = {
   kaiser: 'A névoa não escolheu por mim. Desta vez, eu fiquei.',
   arthur: 'Acabou. Agora posso garantir que ninguém mais se machuque.',
@@ -2052,6 +2130,7 @@ export const VICTORY_FALLBACKS = {
   magistrada: 'O Equilíbrio foi mantido. Tá tudo tão quieto agora.',
   estrangeiro: 'Ninguém vai lembrar disto.',
   amigo: '...mais um quadro na igreja...',
+  cristino: 'Não é pessoal. Eu disse que não me importo com os joguinhos de vocês.',
 };
 
 export const BATTLE_DIALOGUES = {
@@ -2081,6 +2160,7 @@ export const BATTLE_DIALOGUES = {
     magistrada: 'Eu já vi este momento. Ele não termina aqui.',
     estrangeiro: 'Dor. Um conceito tão local.',
     amigo: '(o sino toca mais rápido)',
+    cristino: 'Já levei tiro de bicho pior. Não é hoje.',
     anfitriao: 'Essa dor combina com você. Não sei por quê; combina.',
   },
   special: {
@@ -2109,6 +2189,7 @@ export const BATTLE_DIALOGUES = {
     magistrada: 'Venha. Aqui ficam só nós dois.',
     estrangeiro: 'O que é pior do que a Dor e a Morte?',
     amigo: '...todo mundo vai morrer...',
+    cristino: 'Um... dois... três.',
     anfitriao: 'Eu ia deixar você sair andando. Aí você me olhou com essa cara.',
   },
   transform: {
@@ -2123,6 +2204,7 @@ export const BATTLE_DIALOGUES = {
     juan_odio: 'Eu não quero morrer... eu quero um novo começo.',
     guizo_bombado: 'Eu sou o mais forte! Grava isso!',
     guizo_velho: 'Na minha época, a gente gravava em fita, rapaz.',
+    cristino_desertor: 'Eu toquei a Coroa. Agora eu sei o que você quer.',
   },
 };
 
@@ -2153,6 +2235,7 @@ export const BATTLE_REPLIES = {
     magistrada: 'Isso também estava escrito.',
     estrangeiro: 'Persistente. Para a sua espécie.',
     amigo: '...a tinta não acaba...',
+    cristino: 'Então levanta. Caça boa não acaba no primeiro tiro.',
     anfitriao: 'Sua coragem é comovente. Quase tanto quanto essa estratégia.',
   },
   special: {
@@ -2181,6 +2264,7 @@ export const BATTLE_REPLIES = {
     magistrada: 'As sombras não prendem quem as conhece.',
     estrangeiro: 'Interessante. Repita.',
     amigo: '...ainda não derreteu...',
+    cristino: 'Eu odeio gente barulhenta.',
     anfitriao: 'Vai, capricha. Quero uma história boa pra contar quando você cair.',
   },
   transform: {
@@ -2209,11 +2293,12 @@ export const BATTLE_REPLIES = {
     magistrada: 'Uma nova forma. O Equilíbrio é o mesmo.',
     estrangeiro: 'Mudou de forma. A mente continua aberta.',
     amigo: '...outro rosto... para derreter...',
+    cristino: 'A Coroa me mostrou o que você quer. Não vai ter.',
     anfitriao: 'Isso era pra me assustar? Eu já vi coisa mais convincente no espelho.',
   },
 };
 
-const DIALOGUE_BASE_IDS = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', juan_odio: 'juan', guizo_bombado: 'guizo', guizo_velho: 'guizo' };
+const DIALOGUE_BASE_IDS = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', juan_odio: 'juan', guizo_bombado: 'guizo', guizo_velho: 'guizo', cristino_desertor: 'cristino' };
 
 export function battleLines(speakerId, opponentId, event) {
   const lines = BATTLE_DIALOGUES[event];

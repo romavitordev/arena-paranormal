@@ -1547,3 +1547,135 @@ export function bandolier() {
   }
   return g;
 }
+
+// ---------------- CRISTINO (Transtornados, Hexatombe) — wiki "Cristino", Arsenal
+// A ESPINGARDA SOCADEIRA: espingarda de carregar pela boca, cano longo, coronha de madeira enfaixada com a RODA DE
+// ESPINHOS (dá para usar como bastão quando não dá tempo de carregar). Mesmo encaixe da escopeta: cano para baixo (-y).
+export function socadeira({ rifle = false } = {}) {
+  const g = new THREE.Group();
+  const wood = 0x6a3a22;
+  const stock = part(new THREE.BoxGeometry(0.05, 0.3, 0.1), wood);
+  stock.position.set(0, 0.2, -0.025);
+  stock.rotation.x = -0.12;
+  g.add(stock);
+  const wrap = part(new THREE.CylinderGeometry(0.058, 0.058, 0.12, 10), 0xd8ccbc);
+  wrap.position.set(0, 0.24, -0.03);
+  g.add(wrap);
+  const lock = part(new THREE.BoxGeometry(0.045, 0.1, 0.07), 0x3a3634);
+  lock.position.y = 0.02;
+  g.add(lock);
+  const hammer = part(new THREE.BoxGeometry(0.014, 0.04, 0.03), 0xc8a048);
+  hammer.position.set(0.026, 0.05, 0.03);
+  hammer.rotation.x = 0.5;
+  g.add(hammer);
+  const fore = part(new THREE.BoxGeometry(0.04, 0.42, 0.05), wood);
+  fore.position.set(0, -0.24, -0.006);
+  g.add(fore);
+  const len = rifle ? 0.78 : 0.92;
+  const barrel = part(new THREE.CylinderGeometry(0.017, 0.019, len, 8), 0x2a2828);
+  barrel.position.set(0, -len / 2 + 0.02, 0.022);
+  g.add(barrel);
+  for (const y of [-0.12, -0.42]) { // as braçadeiras de latão
+    const band = part(new THREE.TorusGeometry(0.026, 0.006, 4, 10), 0xc8a048, { outline: false });
+    band.rotation.x = Math.PI / 2;
+    band.position.set(0, y, 0.01);
+    g.add(band);
+  }
+  if (rifle) {
+    // o rifle do Desertor: ferrolho e alça de mira, sem a roda de espinhos
+    const bolt = part(new THREE.CylinderGeometry(0.008, 0.008, 0.06, 6), 0x9a9692);
+    bolt.rotation.z = Math.PI / 2;
+    bolt.position.set(0.04, 0.0, 0.03);
+    g.add(bolt);
+  } else {
+    // a RODA DE ESPINHOS na coronha
+    const steel = toon(0xc8c4bc, { emissive: 0x141210 });
+    const hub = part(new THREE.TorusGeometry(0.075, 0.008, 4, 16), 0, { mat: steel });
+    hub.rotation.y = Math.PI / 2;
+    hub.position.set(0, 0.34, -0.05);
+    g.add(hub);
+    for (let k = 0; k < 9; k++) {
+      const a = (k / 9) * Math.PI * 2;
+      const sp = part(new THREE.ConeGeometry(0.012, 0.12, 5), 0, { mat: steel });
+      sp.position.set(0, 0.34 + Math.cos(a) * 0.12, -0.05 + Math.sin(a) * 0.12);
+      sp.rotation.x = a;
+      g.add(sp);
+    }
+  }
+  const muzzle = new THREE.Object3D();
+  muzzle.position.set(0, -len + 0.02, 0.022);
+  g.add(muzzle);
+  g.userData.muzzle = muzzle;
+  return g;
+}
+
+// a PEIXEIRA: lâmina estreita e pontuda, manchada de sangue, cabo de madeira com anéis de metal
+export function peixeira() {
+  const g = new THREE.Group();
+  const handle = part(new THREE.CylinderGeometry(0.017, 0.015, 0.13, 8), 0x5a3420);
+  handle.position.y = 0.03;
+  g.add(handle);
+  for (const y of [-0.03, 0.09]) {
+    const ring = part(new THREE.CylinderGeometry(0.019, 0.019, 0.012, 8), 0xc8c4bc, { outline: false });
+    ring.position.y = y;
+    g.add(ring);
+  }
+  const blade = part(extrude(bladeShape(0.34, 0.03, 0.03, 0.55), 0.006), 0xd4d0cc, { mat: toon(0xd4d0cc, { emissive: 0x1a0c0c }) });
+  blade.position.y = -0.04;
+  blade.rotation.y = Math.PI / 2;
+  g.add(blade);
+  const blood = part(extrude(bladeShape(0.16, 0.026, 0.02, 0.5), 0.0075), 0x8a1010, { outline: false });
+  blood.position.y = -0.2;
+  blood.rotation.y = Math.PI / 2;
+  g.add(blood);
+  return g;
+}
+
+// o LAMPIÃO de espinhos: corpo vermelho, vidro com a chama acesa, espinhos em volta e a alça
+export function spikedLantern() {
+  const g = new THREE.Group();
+  const red = 0xa0141c;
+  const base = part(new THREE.CylinderGeometry(0.06, 0.07, 0.04, 10), red);
+  base.position.y = -0.12;
+  g.add(base);
+  const cap = part(new THREE.ConeGeometry(0.065, 0.07, 10), red);
+  cap.position.y = 0.06;
+  g.add(cap);
+  const glass = part(new THREE.CylinderGeometry(0.05, 0.05, 0.13, 10), 0xffb050, { mat: toon(0xffb050, { emissive: 0xff7a1a, emissiveIntensity: 1.2, transparent: true, opacity: 0.85 }), outline: false });
+  glass.position.y = -0.035;
+  g.add(glass);
+  const flame = new THREE.Mesh(new THREE.SphereGeometry(0.03, 8, 6), glowMat(0xffd070, 0.95));
+  flame.scale.y = 1.6;
+  flame.position.y = -0.04;
+  g.add(flame);
+  for (const s of [-1, 1]) { // as barras de proteção e os espinhos
+    const bar = part(new THREE.BoxGeometry(0.012, 0.16, 0.012), red);
+    bar.position.set(s * 0.058, -0.035, 0);
+    g.add(bar);
+    for (const y of [-0.1, 0.02]) {
+      const sp = part(new THREE.ConeGeometry(0.008, 0.05, 4), 0xc8c4bc, { outline: false });
+      sp.position.set(s * 0.085, y, 0);
+      sp.rotation.z = -s * Math.PI / 2;
+      g.add(sp);
+    }
+  }
+  const handle = part(new THREE.TorusGeometry(0.04, 0.005, 4, 10, Math.PI), 0x2a2420, { outline: false });
+  handle.position.y = 0.1;
+  g.add(handle);
+  g.userData.flame = flame;
+  return g;
+}
+
+// o PINGENTE de Tenebris: o círculo com os triângulos (o medalhão que o Quibungo roubou)
+export function tenebrisPendant() {
+  const g = new THREE.Group();
+  const bronze = toon(0xb07848, { emissive: 0x1a0c06 });
+  const ring = part(new THREE.TorusGeometry(0.035, 0.005, 4, 16), 0, { mat: bronze });
+  g.add(ring);
+  for (let k = 0; k < 3; k++) {
+    const bar = part(new THREE.BoxGeometry(0.06, 0.006, 0.006), 0, { mat: bronze });
+    bar.rotation.z = (k / 3) * Math.PI;
+    g.add(bar);
+  }
+  return g;
+}

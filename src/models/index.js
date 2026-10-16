@@ -1,4 +1,4 @@
-import { addKaiserProps, addArthurProps, addJouiProps, addAghataProps, addGalSalProps, addKianProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps, addFerreiroProps, addJuanProps, addKemiProps, addFantasmaProps, addBaluProps, addErinCaosProps, addLabirintoElmoProps, addAguiarMutiladorProps, addArnaldoProps, addAnfitriaoProps, addVerissimoProps, addJaeProps, addJaeXProps, addDalmoProps, addColossoProps, addGuizoProps, addGuizoETProps, addKianCalamidadeProps, addJuanOdioProps, addMagistradaProps, addGuizoBombadoProps, addGuizoVelhoProps } from './props.js';
+import { addKaiserProps, addArthurProps, addJouiProps, addAghataProps, addGalSalProps, addKianProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps, addFerreiroProps, addJuanProps, addKemiProps, addFantasmaProps, addBaluProps, addErinCaosProps, addLabirintoElmoProps, addAguiarMutiladorProps, addArnaldoProps, addAnfitriaoProps, addVerissimoProps, addJaeProps, addJaeXProps, addDalmoProps, addColossoProps, addGuizoProps, addGuizoETProps, addKianCalamidadeProps, addJuanOdioProps, addMagistradaProps, addGuizoBombadoProps, addGuizoVelhoProps, addCristinoProps, addCristinoDesertorProps } from './props.js';
 import { loadGLB, rigFromGLB } from './glbRig.js';
 import { preloadNpcModels } from './npcRig.js';
 
@@ -38,6 +38,7 @@ const BLENDER_MODELS = {
   jae: { url: 'models/jae.glb', props: addJaeProps }, // Park Jae-Yoon (Hexatombe)
   dalmo: { url: 'models/dalmo.glb', props: addDalmoProps }, // Dalmo Magno, o Colosso (Hexatombe)
   guizo: { url: 'models/guizo.glb', props: addGuizoProps }, // Guilherme "Guizo" Santos (Sinais do Outro Lado)
+  cristino: { url: 'models/cristino.glb', props: addCristinoProps }, // Cristino, o Cangaceiro (Transtornados, Hexatombe)
 };
 
 // Formas que reaproveitam o .glb de outro modelo, só com os acessórios diferentes (máscaras dos Mascarados, Erin)
@@ -51,6 +52,7 @@ const MODEL_VARIANTS = {
   guizo_bombado: { base: 'guizo', props: addGuizoBombadoProps }, // Distorcer Aparência: a versão bombada
   guizo_velho: { base: 'guizo', props: addGuizoVelhoProps }, // Distorcer Aparência: a versão velha
   juan_odio: { base: 'juan', props: addJuanOdioProps }, // Ódio do Diabo: garras de sangue, capuz e o olho vermelho
+  cristino_desertor: { base: 'cristino', props: addCristinoDesertorProps }, // Tocado pela Coroa: rabiscos vermelhos e o rifle
   kian_calamidade: { base: 'kian', props: addKianCalamidadeProps }, // a barba cheia e as faixas // Distorcer Aparência: o disfarce alienígena
 };
 

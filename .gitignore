@@ -10,3 +10,6 @@ Referencias visuais/**
 # modelos prontos baixados (Kenney, CC0) — ver assets_src/README.md
 assets_src/**
 !assets_src/README.md
+
+# cache do Python (scripts do Blender)
+__pycache__/

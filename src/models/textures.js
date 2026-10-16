@@ -375,6 +375,58 @@ function energyVeins(g, w, h) {
   }
 }
 
+// o SÍMBOLO DE SANGUE costurado nas costas da jaqueta do Cristino: a haste com a ponta de flecha em cima e as duas
+// travessas com pontas de flecha (a de baixo mais larga). (x, y) = meio da haste; `size` = altura; `down` vira de
+// cabeça para baixo (no UV da jaqueta a barra fica no alto do canvas)
+function bloodSymbol(g, x, y, size, color, { down = false, stitch } = {}) {
+  g.save();
+  g.translate(x, y);
+  if (down) g.rotate(Math.PI);
+  const u = size / 10;
+  const arrow = (px, py, ang) => {
+    g.save(); g.translate(px, py); g.rotate(ang);
+    g.beginPath(); g.moveTo(0, -1.3 * u); g.lineTo(1.1 * u, 0.4 * u); g.lineTo(-1.1 * u, 0.4 * u); g.closePath(); g.fill();
+    g.restore();
+  };
+  g.fillStyle = color;
+  g.fillRect(-0.45 * u, -4.2 * u, 0.9 * u, 9.2 * u); // a haste
+  arrow(0, -4.6 * u, 0);
+  g.fillRect(-2.6 * u, -1.6 * u, 5.2 * u, 0.85 * u); // travessa de cima
+  arrow(-3.0 * u, -1.18 * u, -Math.PI / 2); arrow(3.0 * u, -1.18 * u, Math.PI / 2);
+  g.fillRect(-4.0 * u, 1.6 * u, 8.0 * u, 0.85 * u); // travessa de baixo (mais larga)
+  arrow(-4.4 * u, 2.02 * u, -Math.PI / 2); arrow(4.4 * u, 2.02 * u, Math.PI / 2);
+  if (stitch) { // a costura em volta
+    g.strokeStyle = stitch; g.lineWidth = Math.max(1, u * 0.18); g.setLineDash([u * 0.4, u * 0.35]);
+    g.strokeRect(-0.75 * u, -4.2 * u, 1.5 * u, 9.2 * u);
+    g.setLineDash([]);
+  }
+  g.restore();
+}
+
+// couro gasto: vincos verticais, manchas e brilho fraco (base de jaqueta, calça e chapéu do Cristino)
+function leather(g, w, h, base, seed, { dark = '40,16,8', light = '200,130,90', marks = 50 } = {}) {
+  let s = seed;
+  const rnd = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
+  g.fillStyle = base; g.fillRect(0, 0, w, h);
+  for (let i = 0; i < marks; i++) {
+    const x = rnd() * w;
+    const ww = 3 + rnd() * 12;
+    const isDark = rnd() < 0.6;
+    const grd = g.createLinearGradient(x - ww, 0, x + ww, 0);
+    const c = isDark ? dark : light;
+    const a = isDark ? 0.2 + rnd() * 0.25 : 0.1 + rnd() * 0.12;
+    grd.addColorStop(0, `rgba(${c},0)`); grd.addColorStop(0.5, `rgba(${c},${a})`); grd.addColorStop(1, `rgba(${c},0)`);
+    g.fillStyle = grd;
+    const y0 = rnd() * h * 0.4;
+    g.fillRect(x - ww, y0, ww * 2, h - y0 * rnd());
+  }
+  for (let i = 0; i < 18; i++) { // manchas de sangue seco e sujeira
+    g.fillStyle = rnd() < 0.5 ? 'rgba(90,10,8,0.25)' : 'rgba(30,18,10,0.2)';
+    g.beginPath(); g.ellipse(rnd() * w, rnd() * h, 4 + rnd() * 16, 3 + rnd() * 10, rnd() * 3, 0, Math.PI * 2); g.fill();
+  }
+  return rnd;
+}
+
 export const MATERIAL_TEXTURES = {
   // ---------------- KAISER: queimadura no lado ESQUERDO (x > 256)
   face_cineraria: face((g) => {
@@ -1860,6 +1912,84 @@ export const MATERIAL_TEXTURES = {
       g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.moveTo(x - r * 0.7, y); g.lineTo(x + r * 0.7, y); g.moveTo(x, y - r * 0.7); g.lineTo(x, y + r * 0.7); g.stroke();
     }
     glyphs(g, 0, 0, 512, 512, 'rgba(22,16,18,0.6)', 10, 0.18);
+  }, { wrap: true }),
+
+  // ---------------- CRISTINO (Transtornados, Hexatombe): 45 anos, pele curtida de sol, barba por fazer, o olho DIREITO
+  // cego (leitoso, atravessado por uma cicatriz de combate) e outras cicatrizes; bigode grosso (volume no modelo)
+  face_cristino: face((g) => {
+    stubble(g, 'rgba(48,30,18,0.5)', 1700, { y0: 140, y1: 228, w: 84 });
+    // o olho direito CEGO: a íris some num branco leitoso (pintado por cima do olho normal)
+    const blind = g.createRadialGradient(CX - 32, EYE_Y - 1, 1, CX - 32, EYE_Y - 1, 7);
+    blind.addColorStop(0, '#e4ded4'); blind.addColorStop(1, '#bdb4a8');
+    g.fillStyle = blind;
+    g.beginPath(); g.arc(CX - 32, EYE_Y - 1, 6.4, 0, Math.PI * 2); g.fill();
+    // a cicatriz que cega o olho direito (x < 256): da testa até a maçã do rosto
+    g.strokeStyle = 'rgba(120,58,44,0.9)'; g.lineWidth = 3.2; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(CX - 40, EYE_Y - 34); g.lineTo(CX - 30, EYE_Y - 4); g.lineTo(CX - 26, EYE_Y + 30); g.stroke();
+    g.strokeStyle = 'rgba(230,180,160,0.5)'; g.lineWidth = 1;
+    g.beginPath(); g.moveTo(CX - 39, EYE_Y - 33); g.lineTo(CX - 29, EYE_Y - 4); g.lineTo(CX - 25, EYE_Y + 29); g.stroke();
+    // cicatrizes menores: a bochecha esquerda e o queixo
+    g.strokeStyle = 'rgba(120,64,48,0.7)'; g.lineWidth = 2;
+    g.beginPath(); g.moveTo(CX + 44, NOSE_Y - 4); g.lineTo(CX + 60, NOSE_Y + 10); g.stroke();
+    g.beginPath(); g.moveTo(CX + 8, MOUTH_Y + 30); g.lineTo(CX + 18, MOUTH_Y + 40); g.stroke();
+    // rugas de quem vive no sol
+    g.strokeStyle = 'rgba(90,50,32,0.4)'; g.lineWidth = 1.3;
+    for (const s of [-1, 1]) for (let k = 0; k < 3; k++) { g.beginPath(); g.moveTo(CX + s * 56, EYE_Y - 2 + k * 5); g.lineTo(CX + s * 68, EYE_Y - 6 + k * 8); g.stroke(); }
+    g.beginPath(); g.moveTo(CX - 22, EYE_Y - 36); g.lineTo(CX + 22, EYE_Y - 36); g.stroke();
+  }, {
+    skin: '#b88262',
+    eye: { iris: '#3a2616', irisLight: '#6a4a2a', tilt: -0.05, h: 6.5, lid: 4 },
+    brow: { angry: 2, thick: 7, color: '#2e1e14' },
+    mouth: { mouthW: 18, lip: 'rgba(110,60,44,0.7)' },
+  }),
+  // camisa social azul-esverdeada, amassada e suja de sangue
+  shirt_cristino: () => canvasTex(512, 256, (g, w, h) => {
+    const rnd = leather(g, w, h, '#3f8a86', 23, { dark: '14,40,40', light: '140,200,190', marks: 40 });
+    g.strokeStyle = 'rgba(14,40,40,0.35)'; g.lineWidth = 2;
+    for (let i = 0; i < 24; i++) { const x = rnd() * w, y = rnd() * h; g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + 8, y + 6, x + 22, y + 3); g.stroke(); }
+  }, { wrap: true }),
+  // a jaqueta de couro marrom-avermelhada: costuras grossas e o grande SÍMBOLO DE SANGUE costurado nas costas (u = 0,5;
+  // no UV da jaqueta a barra fica no alto do canvas, então o símbolo vai de cabeça para baixo, na parte de baixo)
+  jacket_cristino: () => canvasTex(512, 512, (g, w, h) => {
+    leather(g, w, h, '#8a4a2c', 31, { marks: 24 });
+    g.strokeStyle = 'rgba(40,16,8,0.6)'; g.lineWidth = 2; g.setLineDash([7, 5]);
+    for (const x of [96, 416]) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, h); g.stroke(); } // costuras dos lados
+    g.beginPath(); g.moveTo(0, 30); g.lineTo(w, 30); g.stroke();
+    g.setLineDash([]);
+    bloodSymbol(g, 256, 360, 210, '#3a160c', { down: true, stitch: 'rgba(220,190,150,0.55)' });
+  }, { wrap: true }),
+  // acabamento branco das bordas: ziguezague marrom (os "dentes" da arte)
+  trim_cristino: () => canvasTex(64, 256, (g, w, h) => {
+    g.fillStyle = '#e8e0d0'; g.fillRect(0, 0, w, h);
+    g.fillStyle = '#6a3a20';
+    for (let y = 0; y < h; y += 32) { g.beginPath(); g.moveTo(0, y); g.lineTo(w, y + 16); g.lineTo(0, y + 32); g.closePath(); g.fill(); }
+  }, { wrap: true, repeat: [1, 4] }),
+  // calça de couro: costuras em X subindo as laterais
+  pants_cristino: () => canvasTex(256, 256, (g, w, h) => {
+    leather(g, w, h, '#7a4630', 47);
+    g.strokeStyle = 'rgba(232,214,180,0.75)'; g.lineWidth = 1.6;
+    for (const x0 of [64, 192]) {
+      for (let y = 8; y < h; y += 18) { g.beginPath(); g.moveTo(x0 - 6, y); g.lineTo(x0 + 6, y + 12); g.moveTo(x0 + 6, y); g.lineTo(x0 - 6, y + 12); g.stroke(); }
+    }
+  }, { wrap: true }),
+  // faixas das canelas: pano cru com as manchas de sangue
+  bandage_cristino: () => canvasTex(128, 256, (g, w, h) => {
+    g.fillStyle = '#d8ccbc'; g.fillRect(0, 0, w, h);
+    let s = 9;
+    const rnd = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
+    g.strokeStyle = 'rgba(120,100,80,0.35)'; g.lineWidth = 1;
+    for (let y = 4; y < h; y += 6) { g.beginPath(); g.moveTo(0, y); g.lineTo(w, y + rnd() * 2); g.stroke(); }
+    for (let i = 0; i < 16; i++) {
+      g.fillStyle = `rgba(${120 + rnd() * 40 | 0},10,12,${0.45 + rnd() * 0.4})`;
+      g.beginPath(); g.ellipse(rnd() * w, rnd() * h, 3 + rnd() * 14, 2 + rnd() * 8, rnd() * 3, 0, Math.PI * 2); g.fill();
+    }
+  }, { wrap: true }),
+  // o couro do chapéu: claro, gasto, com a costura da aba
+  hat_cristino: () => canvasTex(256, 256, (g, w, h) => {
+    leather(g, w, h, '#9a5a34', 59, { marks: 40 });
+    g.strokeStyle = 'rgba(232,210,170,0.6)'; g.lineWidth = 1.4; g.setLineDash([5, 4]);
+    g.beginPath(); g.moveTo(0, 40); g.lineTo(w, 40); g.stroke();
+    g.setLineDash([]);
   }, { wrap: true }),
 };
 

@@ -203,8 +203,16 @@ export const ABILITY_TYPES = {
       const tl = new Timeline();
       const sink = a.vanishTime;
       f.vel.set(0, 0, 0);
-      f.anim.play('vanish', { restart: true, duration: sink });
-      world.fx.shadowDisc(f.pos, { radius: 1.1, life: sink + 0.35, rim: a.color });
+      // a.rope (Cristino — Corda do Telhado): em vez de afundar na sombra, laça uma corda no alto, SOBE por ela e cai
+      // atrás do alvo (a Igreja de Sangue: subiu na parede da capela e desceu pela corda no meio do combate)
+      const rope = !!a.rope;
+      f.anim.play(rope ? 'jump' : 'vanish', { restart: true, duration: sink });
+      if (rope) {
+        const hand = f.rig.sockets.handL ? f.rig.sockets.handL.getWorldPosition(new THREE.Vector3()) : f.chestPos();
+        world.fx.tracer(hand, new THREE.Vector3(f.pos.x, f.pos.y + 9, f.pos.z), { color: 0xb89a6a, life: sink + 0.1, width: 0.035 });
+        world.fx.play('FX_DUST', f.pos, { scale: 0.7 });
+        world.audio.play('chainThrow', { volume: 0.6, pitch: 0.8 });
+      } else world.fx.shadowDisc(f.pos, { radius: 1.1, life: sink + 0.35, rim: a.color });
       // a.vanishFx: 'sigil' (Magistrada — a Dimensão das Sombras distorce a realidade com os Sigilos dourados) ·
       // 'signal' (Estrangeiro — some numa interferência de sinal)
       const vanishFx = (p) => {
@@ -215,23 +223,24 @@ export const ABILITY_TYPES = {
         if (a.vanishFx === 'signal') for (let i = 0; i < 4; i++) world.fx.lightning(c.clone().add(new THREE.Vector3((Math.random() - 0.5) * 1.2, (Math.random() - 0.5) * 1.6, (Math.random() - 0.5) * 1.2)), c.clone().add(new THREE.Vector3((Math.random() - 0.5) * 1.2, (Math.random() - 0.5) * 1.6, (Math.random() - 0.5) * 1.2)), { color: a.color, life: 0.18 });
       };
       vanishFx(f.pos);
-      world.audio.play('teleport');
+      if (!rope) world.audio.play('teleport');
       f.invuln = sink + 0.05;
       tl.each((time) => {
-        // afunda na sombra
-        if (time <= sink) f.rig.body.position.y = -1.9 * (time / sink);
+        // afunda na sombra (ou sobe pela corda)
+        if (time <= sink) f.rig.body.position.y = rope ? 5.5 * (time / sink) ** 1.6 : -1.9 * (time / sink);
       });
       tl.add(sink, () => {
         f.setVisible(false);
-        world.fx.burst(new THREE.Vector3(f.pos.x, 0.2, f.pos.z), { count: 18, color: 0x0c0608, kind: 'smoke', speed: 2, up: 1, life: 0.6, size: 0.7 });
+        if (!rope) world.fx.burst(new THREE.Vector3(f.pos.x, 0.2, f.pos.z), { count: 18, color: 0x0c0608, kind: 'smoke', speed: 2, up: 1, life: 0.6, size: 0.7 });
       });
       tl.add(sink + 0.06, () => {
         const spot = findSpotBehind(world.arena, target(), { distance: a.distance, radius: f.radius }) || first;
         f.pos.set(spot.x, Math.max(0, opp.pos.y), spot.z);
         f.yaw = yawTo(f.pos, opp.pos);
-        world.fx.shadowDisc(f.pos, { radius: 1.1, life: 0.45, rim: a.color });
+        if (!rope) world.fx.shadowDisc(f.pos, { radius: 1.1, life: 0.45, rim: a.color });
+        else world.fx.tracer(new THREE.Vector3(f.pos.x, f.pos.y + 9, f.pos.z), new THREE.Vector3(f.pos.x, f.pos.y + 1.6, f.pos.z), { color: 0xb89a6a, life: 0.25, width: 0.035 });
         vanishFx(f.pos);
-        f.rig.body.position.y = -1.6;
+        f.rig.body.position.y = rope ? 3.2 : -1.6;
         f.setVisible(true);
         f.invuln = 0.12;
         // o adversário demora um instante para perceber de onde ele veio (Precognição evita)
@@ -239,10 +248,11 @@ export const ABILITY_TYPES = {
       });
       // emerge da sombra já pronto para atacar
       tl.each((time) => {
-        if (time > sink + 0.06) f.rig.body.position.y = Math.min(0, -1.6 + ((time - sink - 0.06) / 0.1) * 1.6);
+        if (time > sink + 0.06) f.rig.body.position.y = rope ? Math.max(0, 3.2 - ((time - sink - 0.06) / 0.1) * 3.2) : Math.min(0, -1.6 + ((time - sink - 0.06) / 0.1) * 1.6);
       });
       tl.add(sink + 0.16, () => {
         f.rig.body.position.y = 0;
+        if (rope) { world.fx.play('FX_DUST', f.pos, { scale: 0.9 }); world.audio.play('heavyPunch', { volume: 0.4, pitch: 0.7 }); }
         world.fx.burst(f.chestPos(), { count: 14, color: a.color, speed: 4, life: 0.3, size: 0.2 });
         f.anim.play(a.strike ? a.strike.anim || 'thrust' : 'idle', { restart: true, blend: 0.05, duration: a.strike ? a.strike.dur || 0.32 : undefined });
       });
@@ -1975,13 +1985,18 @@ Object.assign(ABILITY_TYPES, {
         const inArc = Math.abs(angleDiff(f.yaw, yawTo(f.pos, opp.pos))) <= (a.arc * DEG) / 2;
         if (d <= a.range && inArc && Math.abs(opp.pos.y - f.pos.y) < 1.6) {
           hit = true;
+          // a.downBonus (Decepar do Cristino): no alvo atordoado, agarrado ou puxado o golpe entra mais fundo
+          const helpless = ['stun', 'grabbed', 'pulled'].includes(opp.state);
+          const dmg = a.downBonus && helpless ? Math.round(a.damage * a.downBonus) : a.damage;
+          if (a.downBonus && helpless) f.notify(a.downLabel || 'GOLPE CERTEIRO', true);
           // a.stun (Pressão Atmosférica do Dalmo): o alvo fica ATORDOADO no lugar em vez de ser lançado
           const res = applyHit(world, f, opp, {
-            damage: a.damage, kind: 'ability', element: a.element, knockback: a.knockback, hitstun: 1.0,
+            damage: dmg, kind: 'ability', element: a.element, knockback: a.knockback, hitstun: 1.0,
             launch: !a.stun, lowLaunch: !a.stun, stun: a.stun, guardCrush: a.guardCrush, sound: a.hitSound || 'heavyPunch', scale: 2.2, hitstop: 0.14,
             dir: F.clone(), strike: { impactFx: 'smash' },
           });
           if (a.stun && typeof res === 'number' && opp.state !== 'ko') opp.stun(a.stun);
+          if (a.bleed && typeof res === 'number' && opp.state !== 'ko') opp.applyBleed(a.bleed, f);
         }
         // a.pressure: o soco solta uma onda de pressão atmosférica (distorção do ar e anel de choque à frente)
         if (a.pressure) {

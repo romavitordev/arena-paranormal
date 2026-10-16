@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { glowMat, toon } from './rig.js';
-import { katana, scabbard, m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, roundGlasses, neonWraps, pulseEmitter, bandolier, bengala, mustache } from './weapons.js';
+import { katana, scabbard, m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, roundGlasses, neonWraps, pulseEmitter, bandolier, bengala, mustache, socadeira, peixeira, spikedLantern, tenebrisPendant } from './weapons.js';
 
 // Armas e acessórios adicionados em código sobre os modelos do Blender.
 // Usam só `sockets`, `attach()` e `props`, que existem nos dois tipos de rig.
@@ -856,4 +856,90 @@ export function addGuizoVelhoProps(rig) {
   m.position.set(0, -0.005, 0.0);
   rig.sockets.mouth.add(m);
   rig.props.oldStache = m;
+}
+
+// CRISTINO (modelo próprio: tools/blender/char_cristino.py): a PEIXEIRA na mão direita; a ESPINGARDA SOCADEIRA atravessada
+// nas costas (vai para as mãos no tiro — props.socadeira); o LAMPIÃO de espinhos pendurado no quadril esquerdo (e um na
+// mão para arremessar — props.lantern); o pingente de Tenebris no peito. hideProp 'peixeira+gunBack' esconde os dois.
+export function addCristinoProps(rig, { rifle = false } = {}) {
+  const { sockets, props } = rig;
+  const knife = peixeira();
+  knife.rotation.x = -0.3;
+  sockets.handR.add(knife);
+  props.peixeira = knife;
+  const gun = socadeira({ rifle });
+  gun.position.y = -0.02;
+  gun.visible = false;
+  sockets.handR.add(gun);
+  props.socadeira = gun;
+  rig.muzzle = gun.userData.muzzle;
+  const back = socadeira({ rifle });
+  back.position.set(0, 0.0, -0.06);
+  back.rotation.set(0, 0, Math.PI * 0.78); // atravessada: o cano sai por cima do ombro esquerdo
+  sockets.back.add(back);
+  props.gunBack = back;
+  const hipLamp = spikedLantern();
+  hipLamp.position.set(0.02, -0.16, 0.06);
+  sockets.hip.add(hipLamp);
+  props.lanternHip = hipLamp;
+  const lamp = spikedLantern();
+  lamp.position.y = -0.1;
+  lamp.visible = false;
+  sockets.handR.add(lamp);
+  props.lantern = lamp;
+  const pend = tenebrisPendant();
+  pend.position.set(0.06, -0.12, 0.03);
+  sockets.chest.add(pend);
+  props.pendant = pend;
+}
+
+// os RABISCOS VERMELHOS de quem tocou a Coroa de Espinhos (o Cristino Desertor): pintados num mapa de brilho por cima
+// de cada textura — o couro, a pele e o pano continuam, e os rabiscos brilham. Só nas peças do corpo com UV.
+function scribbleGlow(mat, seed) {
+  const src = mat.map && mat.map.image;
+  const w = (src && src.width) || 256;
+  const h = (src && src.height) || 256;
+  const c = document.createElement('canvas');
+  c.width = w;
+  c.height = h;
+  const g = c.getContext('2d');
+  g.fillStyle = '#000'; g.fillRect(0, 0, w, h);
+  let s = seed;
+  const rnd = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
+  g.strokeStyle = '#ff2a1a'; g.lineCap = 'round'; g.lineJoin = 'round';
+  const n = Math.round((w * h) / 9000) + 6;
+  for (let i = 0; i < n; i++) {
+    g.lineWidth = 1 + rnd() * 2.2;
+    let x = rnd() * w;
+    let y = rnd() * h;
+    let a = rnd() * Math.PI * 2;
+    g.beginPath(); g.moveTo(x, y);
+    for (let k = 0; k < 14; k++) { a += (rnd() - 0.5) * 2.4; x += Math.cos(a) * 9; y += Math.sin(a) * 9; g.lineTo(x, y); }
+    g.stroke();
+  }
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.flipY = false;
+  if (mat.map) { t.wrapS = mat.map.wrapS; t.wrapT = mat.map.wrapT; t.repeat.copy(mat.map.repeat); }
+  mat.emissiveMap = t;
+  mat.emissive = new THREE.Color(0xff2a1a);
+  mat.emissiveIntensity = 1.3;
+  mat.userData.baseEmissive = { color: mat.emissive.clone(), intensity: 1.3 };
+  mat.needsUpdate = true;
+}
+
+// CRISTINO DESERTOR (Transformação "Tocado pela Coroa"): o corpo todo coberto de rabiscos vermelhos e o RIFLE no lugar da
+// Socadeira (as artes do Desertor)
+export function addCristinoDesertorProps(rig) {
+  addCristinoProps(rig, { rifle: true });
+  const done = new Set();
+  let seed = 5;
+  rig.body.traverse((o) => {
+    // só o corpo (malhas com esqueleto, material toon): as armas e a chama do lampião ficam como estão
+    if (!o.isSkinnedMesh || o.userData.isOutline || !o.geometry.attributes.uv || !o.material.isMeshToonMaterial) return;
+    const m = o.material;
+    if (done.has(m) || m.userData.glow) return;
+    done.add(m);
+    scribbleGlow(m, (seed += 7919));
+  });
 }
