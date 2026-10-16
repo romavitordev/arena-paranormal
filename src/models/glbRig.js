@@ -139,6 +139,8 @@ export function rigFromGLB(gltf, { scale = 1, outline = 0.012 } = {}) {
       convert.set(src, m);
     }
     o.material = convert.get(src);
+    // cor por vértice (COLOR_0): o corpo esculpido do Deus da Morte (Lodo, cristas dos tendões e a espiral vermelha)
+    if (o.geometry.attributes.color && !o.material.vertexColors) { o.material.vertexColors = true; o.material.needsUpdate = true; }
     // a geometria e as texturas vêm do .glb carregado UMA vez e são as mesmas em todas as cópias do personagem
     // (lutadores, palco da seleção, retratos): quem descarta uma cena não pode liberá-las (ver World.dispose)
     o.userData.sharedGeometry = true;
@@ -148,7 +150,8 @@ export function rigFromGLB(gltf, { scale = 1, outline = 0.012 } = {}) {
   // contornos
   const oMat = outlineMaterial(outline);
   for (const o of meshes) {
-    if (!o.isSkinnedMesh || o.material.userData.glow) continue;
+    // peças finas (material com 'fine_' no nome: grampos, mechas da franja) ficam sem contorno — o traço preto as engolia
+    if (!o.isSkinnedMesh || o.material.userData.glow || /fine_/.test(o.material.name)) continue;
     const ol = new THREE.SkinnedMesh(o.geometry, oMat);
     ol.bind(o.skeleton, o.bindMatrix);
     ol.frustumCulled = false;

@@ -13,3 +13,6 @@ assets_src/**
 
 # cache do Python (scripts do Blender)
 __pycache__/
+
+# backups automáticos do Blender (o .blend fonte fica em tools/blender/fonte)
+*.blend1

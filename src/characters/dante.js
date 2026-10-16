@@ -37,47 +37,36 @@ export default {
     air: { name: 'Pisão espiral', anim: 'air_kick', dur: 0.45, active: [0.15, 0.35], damage: 38, range: 1.9, arc: 110, knockback: 4, slam: 15, vertical: 2.2, sound: 'swing', hitSound: 'heavyPunch' },
   },
 
-  // Decadência "Decadenza" (cânone: a fumaça preta sai da BOCA e vai até o alvo; ao tocar, degradação acelerada):
-  // ele ASSOPRA cinzas e fumaça — MÉDIO alcance (8 m), nuvem lenta que abre conforme anda (grow), dano contínuo.
+  // Decadência "Decadenza": o MESMO ritual Decadência do Guizo (a versão mais nova, v3.16) — espirais de Morte surgem em
+  // volta do alvo, apertam e ele DEFINHA. É o □ dele: roda como habilidade (Fighter.tryRanged → ABILITY_TYPES).
   ranged: {
     name: 'Decadenza',
-    type: 'projectile',
-    anim: 'breath',
-    origin: 'chest',
-    windup: 0.36,
-    recovery: 0.36,
-    count: 1,
-    interval: 0,
-    damage: 30,
-    range: 8, // médio alcance (era 20): o sopro não vai longe
-    speed: 12, // nuvem lenta
-    radius: 0.5,
-    grow: 1.6, // abre de 0,5 m até ~1,3 m no fim do alcance
-    spread: 0,
-    knockback: 1.2,
-    hitstun: 0.3,
-    cooldown: 4.2,
-    energyCost: 12,
-    visual: 'decay',
-    color: 0x1a161e,
-    sound: 'smoke',
-    hitSound: 'drain',
-    impactScale: 1.3,
-    onHit: { bleed: { dps: 4, duration: 3, color: 0x141016 } }, // decadência acelerada
+    type: 'decadence',
+    description: 'Estende a mão envolta em espirais: elas surgem em volta do alvo, apertam e ele DEFINHA (dano de Morte e uma decadência curta depois). Dá para esquivar quando as espirais fecham.',
+    energyCost: 25,
+    cooldown: 9,
+    cast: 0.62,
+    range: 9,
+    damage: 62,
+    decay: { dps: 4, duration: 3 },
+    element: 'morte',
+    color: 0x8a8494,
+    ai: { max: 8.5 },
   },
 
   abilities: [
     {
       id: 'trinita',
       name: 'Embaralhar "Trinitá"',
-      input: 'carga+ranged', // △ + □ / Y + X
-      type: 'shadowClones',
-      description: 'Vira um vulto preto, troca de lugar e cria 3 cópias com vontade própria (4 Dantes em campo). Cada cópia causa metade do dano dele e some ao ser destruída ou quando o tempo acaba.',
-      energyCost: 40,
-      cooldown: 45, // ferramenta forte de controle de campo: recarga longa
+      input: 'carga+ranged',
+      type: 'shuffle',
+      description: 'Vira um vulto, troca de lugar e deixa 3 cópias realistas em volta que imitam cada movimento dele. Por 7 s, um golpe (não especial) pode acertar uma cópia no lugar dele — a cópia se desfaz.',
+      energyCost: 30,
+      cooldown: 22,
       duration: 7,
-      clones: 3,
-      sidestep: 2.4,
+      copies: 3,
+      spacing: 1.1,
+      perCopy: 0.22,
       color: 0x1a161e,
     },
     {
@@ -99,15 +88,15 @@ export default {
     {
       id: 'paradiso',
       name: 'Cicatrização "Paradiso"',
-      input: 'block+carga', // R2 + △ / RT + Y
-      type: 'healOverTime',
-      description: 'Assopra uma névoa preta em espiral que envelhece as próprias feridas até cicatrizarem. Parado, cicatriza 25% mais.',
+      input: 'block+carga',
+      type: 'agingHeal',
+      description: 'Acelera o tempo nas feridas: recupera vida em instantes — mas envelhece. A névoa preta sai em espiral da boca dele.',
       energyCost: 30,
       cooldown: 26,
-      heal: 60,
-      duration: 2.5,
+      heal: 85,
+      duration: 2.4,
       style: 'mist',
-      stillBonus: 1.25, // parado: até 75 (o Black Hole da Erin continua o mais forte, como no cânone)
+      maxAge: 3,
       color: 0x2a2632,
     },
     {

@@ -1,5 +1,28 @@
 # Registro administrativo de alterações
 
+## v3.23.1 — Os Mesmos Rituais
+
+- Versão: `VERSION` 3.23.0 → **3.23.1** (package.json/lock junto). A 3.22.0 e a 3.23.0 continuam sem commit.
+- **Rituais padronizados** (pedido: "o Decadenza do Dante é de um jeito e o do Guizo é de outro, veja se acontece com
+  outros golpes e deixe-os nas suas versões mais atualizadas"):
+  - auditoria de todo o elenco e das formas pelo nome do ritual; divergências encontradas e a versão escolhida (a mais
+    nova pelo `git log`): Decadência (espirais, v3.16), Embaralhar (`shuffle`, v3.16), Cicatrização (`agingHeal`, v3.16),
+    Velocidade Mortal (`deadlySpeedTrail`, v3.16/v3.19), Amaldiçoar Arma com Sangue (números do Guizo, v3.16);
+  - ficaram como estão, por serem da mesma versão e terem mecânicas próprias: o Teletransporte do Kian (`blink`) e o
+    da Gal (`sparkTeleport`); Envelhecimento Localizado, Olhar do Desespero, Levitação e Controle Mental já eram iguais;
+  - a Cicatrização só deixa grisalho quem tem a peça `hair` (o Guizo); no Dante e no Xande ela cura sem isso;
+  - o Dante agora tem duas habilidades do tipo `decadence` (o □ Decadenza e a Destruição Temporal "Rotura").
+- **Juan e Deus da Morte remodelados** (pedido: "os dois precisam de um remodel com a qualidade do Cristino"):
+  - Juan: referências locais `Referencias visuais/Personagens/Juan Henri`; ~36 mil triângulos (o antigo tinha 29 mil);
+    os acessórios em código (faca, braço de sangue, capuz erguido, olho vermelho) continuam no mesmo lugar;
+  - Deus da Morte: referências da wiki "O Deus da Morte" (Livro de Regras, miniatura e cena de O Segredo na Floresta);
+    mesmo esqueleto (~3,9 m); ~43 mil triângulos (o antigo tinha 37 mil); as texturas `lodo_tendon`/`lodo_chest`
+    deixaram de ser usadas por ele;
+  - corrigido no caminho: o contorno preto engolia as peças finas (grampos, franja) — material `fine_*` sem contorno.
+- **Peixeira do Cristino** (pedido: "ele devia usar uma peixeira, uma espécie de machete brasileiro nordestino").
+- Verificações: `check-roster` (com a regra nova), `npm test` (41) e `npm run build`; os três modelos conferidos no
+  preview do jogo e as habilidades trocadas executadas sem erro.
+
 ## v3.23.0 — O Cangaceiro
 
 - Versão: `VERSION` 3.22.0 → **3.23.0** (package.json/lock junto). A 3.22.0 continua sem commit; esta versão vai por cima.

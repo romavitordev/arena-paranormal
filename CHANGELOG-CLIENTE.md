@@ -2,6 +2,12 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.23.1 — Os Mesmos Rituais
+- RITUAIS IGUAIS PARA TODOS: o mesmo ritual do cânone agora funciona igual em quem o tiver, na versão mais nova. A DECADENZA do Dante virou a Decadência do Guizo (as espirais surgem em volta do alvo, apertam e ele definha); o EMBARALHAR "Trinitá" do Dante deixa cópias que imitam cada movimento; a CICATRIZAÇÃO do Dante e do Xande cura em instantes, mas envelhece; a VELOCIDADE MORTAL do Xande deixa os rastros no ar; e o AMALDIÇOAR ARMA COM SANGUE (Aghata, Balu, Xande, Lírio e Guizo) tem o mesmo custo, duração e sangramento.
+- JUAN com MODELO NOVO, refeito do zero: o torso definido cheio de frases tatuadas, o manto vermelho rasgado em tiras pontudas (curto na frente, comprido atrás) com o capuz amontoado nas costas, correntes de elos de verdade no peito e enroladas no braço, o rabo alto com a lateral raspada e a franja sobre o olho perdido, a boca e o olho costurados com grampos de metal, calça folgada com chaparreiras.
+- DEUS DA MORTE com MODELO NOVO, refeito do zero: o corpo todo de tendões de Lodo estriados, a corcunda do trapézio subindo acima do crânio, a espiral de tendões do peito brilhando vermelho, a barba branca do Ferreiro, braceletes com rebites, correntes e os fios de Lodo subindo dos ombros como chamas pretas.
+- CRISTINO agora luta com uma PEIXEIRA de verdade: a faca longa do sertão, de lâmina estreita e dorso reto, com a guarda de latão e o cabo de chifre.
+
 ## v3.23.0 — O Cangaceiro
 - NOVO LUTADOR — CRISTINO, o Cangaceiro (Transtornados, Sangue): o caçador de Hexatombe que não queria jogar o jogo. Chapéu de cangaceiro em meia-lua com a estrela e a Coroa de Espinhos, óculos de lentes vermelhas, lenço vermelho, cartucheiras, a bolsa amarela e o grande Símbolo de Sangue costurado nas costas. Robusto: segura empurrão e desgaste na defesa (Couro Curtido).
 - CRISTINO — PEIXEIRA de perto e a ESPINGARDA SOCADEIRA no □: um tiro de chumbo grosso, forte de perto, com recarga longa (carregar pela boca demora). O tiro DETONA EM CADEIA os lampiões dele que estão à frente — o fogo pula de um para o outro.

@@ -86,14 +86,15 @@ export default {
     {
       id: 'amaldicoarMachado',
       name: 'Amaldiçoar Arma com Sangue',
-      input: 'carga+ranged', // △ + □ / Y + X
+      input: 'carga+ranged',
       type: 'curseWeapon',
-      description: 'Desperta as veias que o Diabo deixou no machado: por alguns segundos cada machadada (e o machado arremessado) abre um sangramento.',
-      energyCost: 25,
+      description: 'O sangue sobe em espiral até o machado: por 8 s fica coberta de Sangue e todo golpe físico abre um sangramento.',
+      energyCost: 20,
       cooldown: 18,
       duration: 8,
       props: ['axe'],
-      bleed: { dps: 5, duration: 3 },
+      element: 'sangue',
+      bleed: { dps: 4, duration: 3 },
       color: 0xc01828,
     },
     {

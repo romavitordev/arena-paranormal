@@ -23,7 +23,7 @@ Coordenadas do tronco ANTES da escala do Builder (x × k_tx, y × k_ty); tudo em
 import sys, os, math, random
 sys.path.insert(0, os.path.dirname(__file__))
 from lib import *
-from sculpt_lib import Sculpt, ridge, n3
+from sculpt_lib import Sculpt, ridge, n3, rod, outward, ring_pts, shell_grid
 from mathutils import Vector
 
 OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'cristino.glb'
@@ -76,91 +76,6 @@ for m in bpy.data.materials:
 # tronco robusto: peito largo, barriga firme, ombros fortes
 hc = b.body(M, [(-0.12, 0.172), (0.0, 0.178), (0.17, 0.174), (0.36, 0.212), (0.48, 0.226), (0.57, 0.13), (0.64, 0.074)],
             arm_r=(0.076, 0.062, 0.05), leg_r=(0.09, 0.07, 0.055), head_r=(0.14, 0.15, 0.164), neck_r=0.064, feet='bare')
-
-
-def ring_pts(z, rx, ry, a0, a1, n):
-    """pontos de um anel elíptico (ângulo 0 = frente, -y), de a0 a a1"""
-    out = []
-    for i in range(n + 1):
-        a = a0 + (a1 - a0) * i / n
-        out.append(Vector((math.sin(a) * rx, -math.cos(a) * ry, z)))
-    return out
-
-
-def rod(pts, radii, seg=6, caps=True, flat=None):
-    """Tubo com anéis perpendiculares ao caminho (o tube() do lib faz anéis horizontais: só serve para peças em pé).
-    flat=(normal_fn, achatamento): seção achatada na direção da normal — tiras de couro e faixas rentes ao corpo."""
-    pts = [Vector(p) for p in pts]
-    n = len(pts)
-    rs = radii if isinstance(radii, (list, tuple)) else [radii] * n
-    verts, faces, uvs = [], [], []
-    prev = None
-    for i, p in enumerate(pts):
-        t = (pts[min(i + 1, n - 1)] - pts[max(i - 1, 0)]).normalized()
-        if flat:
-            nn = flat[0](p)
-            nn = (nn - t * nn.dot(t)).normalized()
-            side = t.cross(nn).normalized()
-            up = nn
-        else:
-            side = (prev - t * prev.dot(t)) if prev is not None else t.orthogonal()
-            side.normalize()
-            prev = side
-            up = t.cross(side)
-        k = flat[1] if flat else 1.0
-        for j in range(seg + 1):
-            a = j / seg * TAU
-            verts.append(tuple(p + side * math.cos(a) * rs[i] + up * math.sin(a) * rs[i] * k))
-            uvs.append((j / seg, i / (n - 1)))
-    row = seg + 1
-    for i in range(n - 1):
-        for j in range(seg):
-            a = i * row + j
-            faces.append((a, a + row, a + 1 + row, a + 1))
-    if caps:
-        for k_, flip in ((0, True), (n - 1, False)):
-            c = len(verts)
-            verts.append(tuple(pts[k_]))
-            uvs.append((0.5, k_ / (n - 1)))
-            for j in range(seg):
-                faces.append((c, k_ * row + j + 1, k_ * row + j) if flip else (c, k_ * row + j, k_ * row + j + 1))
-    return verts, faces, uvs
-
-
-def outward(c):
-    """normal "para fora" a partir de um eixo vertical em c (x, y): fitas deitadas na superfície do corpo"""
-    return lambda p: Vector((p.x - c[0], p.y - c[1], 0)) if (p.x - c[0]) ** 2 + (p.y - c[1]) ** 2 > 1e-9 else Vector((0, -1, 0))
-
-
-def shell_grid(rows, thick=0.006):
-    """superfície por linhas de pontos (todas do mesmo tamanho), com espessura (frente e verso + bordas)"""
-    nr, nc = len(rows), len(rows[0])
-    verts, faces, uvs = [], [], []
-    # normal aproximada por diferenças finitas
-    def nrm(i, j):
-        a = rows[min(i + 1, nr - 1)][j] - rows[max(i - 1, 0)][j]
-        b_ = rows[i][min(j + 1, nc - 1)] - rows[i][max(j - 1, 0)]
-        n = a.cross(b_)
-        return n.normalized() if n.length > 1e-9 else Vector((0, 0, 1))
-    for side in (1, -1):
-        for i in range(nr):
-            for j in range(nc):
-                verts.append(tuple(rows[i][j] + nrm(i, j) * thick * 0.5 * side))
-                uvs.append((j / (nc - 1), 1 - i / (nr - 1)))
-    off = nr * nc
-    for i in range(nr - 1):
-        for j in range(nc - 1):
-            a = i * nc + j
-            faces.append((a, a + 1, a + 1 + nc, a + nc))
-            faces.append((off + a + nc, off + a + 1 + nc, off + a + 1, off + a))
-    # bordas fechando as duas faces
-    loop = [(0, j) for j in range(nc)] + [(i, nc - 1) for i in range(1, nr)] + [(nr - 1, j) for j in range(nc - 2, -1, -1)] + [(i, 0) for i in range(nr - 2, 0, -1)]
-    for k in range(len(loop)):
-        i0, j0 = loop[k]
-        i1, j1 = loop[(k + 1) % len(loop)]
-        a, c = i0 * nc + j0, i1 * nc + j1
-        faces.append((a, off + a, off + c, c))
-    return verts, faces, uvs
 
 
 # ================================================================ JAQUETA de couro aberta

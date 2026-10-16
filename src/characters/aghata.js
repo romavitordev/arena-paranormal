@@ -67,13 +67,14 @@ export default {
     {
       id: 'amaldicoar',
       name: 'Amaldiçoar Arma',
-      input: 'carga+ranged', // △ + □ / Y + X
+      input: 'carga+ranged',
       type: 'curseWeapon',
-      description: 'Amaldiçoa a faca com o elemento Sangue: por alguns segundos cada acerto (físico ou faca arremessada) abre um sangramento que continua tirando vida.',
-      energyCost: 25,
-      cooldown: 16,
-      duration: 9, // segundos com a arma amaldiçoada
-      bleed: { dps: 7, duration: 3 }, // dano por segundo e duração do sangramento (renova a cada acerto)
+      description: 'O sangue sobe em espiral até a faca: por 8 s fica coberta de Sangue e todo golpe físico abre um sangramento.',
+      energyCost: 20,
+      cooldown: 18,
+      duration: 8,
+      element: 'sangue',
+      bleed: { dps: 4, duration: 3 },
       color: 0xe0204a,
     },
     {

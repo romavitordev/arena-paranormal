@@ -268,10 +268,9 @@ for (const cfg of Object.values(ARENA_CFGS)) {
 // ---------------- Dante ----------------
 const dan = get('dante');
 ok(dan && dan.origin === 'Ordo Realitas' && dan.element === 'morte', 'Dante: Ordo Realitas, Morte');
-ok(dan && dan.ranged.name === 'Decadenza' && dan.ranged.onHit.bleed && dan.ranged.range <= 10 && dan.ranged.grow > 0, 'Dante: □ Decadenza soprada, médio alcance (≤ 10 m), nuvem que abre, decadência contínua');
-ok(dan && ['shadowClones', 'lodoTentacles', 'healOverTime'].every((t) => dan.abilities.some((a) => a.type === t)), 'Dante: Trinitá, Tentáculos de Lodo e Paradiso');
+ok(dan && dan.ranged.name === 'Decadenza' && dan.ranged.type === 'decadence' && dan.ranged.decay, 'Dante: □ Decadenza = a Decadência (espirais que apertam, decadência contínua)');
+ok(dan && ['shuffle', 'lodoTentacles', 'agingHeal'].every((t) => dan.abilities.some((a) => a.type === t)), 'Dante: Trinitá (Embaralhar), Tentáculos de Lodo e Paradiso (Cicatrização)');
 ok(dan && dan.special.type === 'marionette' && dan.special.duration <= 30 && dan.special.cooldown >= 30, 'Dante: especial Invocação da Marionete (NPC por tempo limitado, recarga alta)');
-ok(dan && dan.abilities.find((a) => a.type === 'shadowClones').cooldown >= 30, 'Dante: Trinitá com recarga longa');
 ok(dan && allStrikes(dan).every((s) => !s.weapon), 'Dante: sem armas');
 
 // ---------------- Erin Parker e Aguiar
@@ -302,7 +301,7 @@ ok(lab && ['mentalMaze', 'predatorScent', 'blessing'].every((t) => abil('labirin
   ok(lab.awakening.type === 'maskTransform' && lab.awakening.form === 'labirinto_elmo' && elmo && elmo.baseId === 'labirinto' && ['mentalMaze', 'consumeMoment', 'chaosStorm', 'predatorScent'].every((t) => elmo.abilities.some((a) => a.type === t)) && elmo.ranged.name === 'Tempestade Caótica', 'Labirinto: o Capacete do ??? só na Transformação (Tempestade Caótica, Labirinto Abissal, Consumir Momento, Revelação Sanguínea)');
 }
 ok(xan && xan.origin === 'Os Cinco' && xan.melee.name.includes('Taco') && xan.ranged.boomerang, 'Xande: Os Cinco, taco com arame farpado e Skate Caótico que volta');
-ok(xan && ['curseWeapon', 'polarize', 'noiseScreen', 'selfBuff'].every((t) => abil('xande', t)) && pas('xande', 'paranormalGladiator'), 'Xande: Amaldiçoar Arma, Polarização Caótica, Tela de Ruído, Velocidade Mortal, Gladiador Paranormal');
+ok(xan && ['curseWeapon', 'polarize', 'noiseScreen', 'deadlySpeedTrail', 'agingHeal'].every((t) => abil('xande', t)) && pas('xande', 'paranormalGladiator'), 'Xande: Amaldiçoar Arma, Polarização Caótica, Tela de Ruído, Velocidade Mortal, Gladiador Paranormal');
 const fer = get('ferreiro');
 ok(fer && fer.special.type === 'cinematicCombo' && fer.awakening.type === 'santoPact' && fer.awakening.immediate && fer.awakening.form === 'deus_morte' && fer.melee.name === 'Espada Consumidora', 'Ferreiro: especial Consumir; o Pacto do Santo (Deus da Morte) é a transformação da Barra de Transformação');
 {
@@ -348,6 +347,19 @@ ok(!COMBAT.powered && ROSTER.every((c) => !(c.abilities || []).some((a) => a.inp
   const sh = get('jae').abilities.find((a) => a.id === 'shhh');
   ok(sh && sh.noLock, 'Jae: Shhh... sem rastro (especiais que grudam e projéteis teleguiados não a acham)');
   ok(COMBAT.roundTime >= 150, 'tempo do round cabe na vida de 1500');
+}
+
+// ---------------- RITUAIS COMPARTILHADOS: o mesmo ritual do cânone funciona igual em quem o tiver (a versão mais nova) ----
+{
+  const SHARED = { 'Decad': 'decadence', 'Embaralhar': 'shuffle', 'Cicatriza': 'agingHeal', 'Velocidade Mortal': 'deadlySpeedTrail', 'Amaldiçoar Arma': 'curseWeapon', 'Leonora Amaldiçoada': 'curseWeapon' };
+  const bad = [];
+  for (const c of ROSTER) {
+    for (const a of [c.ranged, ...(c.abilities || [])]) {
+      for (const [k, t] of Object.entries(SHARED)) if (a && a.name && a.name.startsWith(k) && a.type !== t) bad.push(`${c.id}: ${a.name} (${a.type})`);
+    }
+  }
+  const curses = ROSTER.flatMap((c) => (c.abilities || []).filter((a) => a.type === 'curseWeapon' && /Sangue|Amaldiçoar Arma/.test(a.name)));
+  ok(!bad.length && curses.every((a) => a.energyCost === 20 && a.cooldown === 18 && a.duration === 8 && a.bleed.dps === 4), `rituais compartilhados na mesma versão (Decadência, Embaralhar, Cicatrização, Velocidade Mortal, Amaldiçoar Arma)${bad.length ? ': ' + bad.join(', ') : ''}`);
 }
 
 // ---------------- Cristino (Transtornados, Hexatombe) ----------------

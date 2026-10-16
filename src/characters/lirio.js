@@ -142,14 +142,15 @@ export default {
     {
       id: 'leonoraAmaldicoada',
       name: 'Leonora Amaldiçoada (Sangue)',
-      input: 'block+jump', // R2 + × / RT + A
+      input: 'block+jump',
       type: 'curseWeapon',
-      description: 'Amaldiçoa a Leonora com Sangue: por alguns segundos cada marretada abre um sangramento.',
-      energyCost: 25,
+      description: 'O sangue sobe em espiral até a Leonora: por 8 s fica coberta de Sangue e todo golpe físico abre um sangramento.',
+      energyCost: 20,
       cooldown: 18,
       duration: 8,
       props: ['leonora'],
-      bleed: { dps: 5, duration: 3 },
+      element: 'sangue',
+      bleed: { dps: 4, duration: 3 },
       color: 0xc01828,
     },
     {

@@ -1,5 +1,16 @@
 # Changelog
 
+## v3.23.1 — 2026-10-16
+
+### Alterado
+- Rituais compartilhados na versão mais nova (v3.16/v3.19): Dante □ Decadenza `projectile` → `decadence`; Dante Embaralhar "Trinitá" `shadowClones` → `shuffle`; Cicatrização do Dante ("Paradiso") e do Xande `healOverTime` → `agingHeal`; Velocidade Mortal do Xande `selfBuff` → `deadlySpeedTrail`; `curseWeapon` de Aghata, Balu, Xande e Lírio com os números do Guizo (20 / 18 s / 8 s / sangramento 4 por 3 s).
+- `Fighter.tryRanged`: um □ cujo `type` é um tipo de `ABILITY_TYPES` (que não seja `projectile`) roda como habilidade, com a recarga e o custo do □.
+- Modelos refeitos: `char_juan.py` (relevo esculpido no tronco com `relief`, manto `shell_grid` rasgado, capuz/cabelo/calça/chaparreiras por escultura, correntes `chain_mesh`, grampos 3D) e `char_deus_morte.py` (corpo esculpido por partes com estrias e a espiral do peito por deslocamento, cor por vértice, espiral emissiva, fios de Lodo); fontes em `tools/blender/fonte/`.
+- `sculpt_lib.py`: `rod`, `outward`, `ring_pts`, `shell_grid` (vindos do Cristino), `relief`, `chain_mesh`, `vcol_material` e `paint`.
+- `glbRig`: `vertexColors` quando a malha tem `COLOR_0`; material com `fine_` no nome fica sem contorno.
+- `weapons.peixeira`: lâmina de ~50 cm, dorso reto, guarda de latão e cabo de chifre.
+- `check-roster`: regra dos rituais compartilhados; regras do Dante e do Xande atualizadas.
+
 ## v3.23.0 — 2026-10-16
 
 ### Adicionado

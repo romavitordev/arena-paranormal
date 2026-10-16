@@ -1609,23 +1609,43 @@ export function socadeira({ rifle = false } = {}) {
   return g;
 }
 
-// a PEIXEIRA: lâmina estreita e pontuda, manchada de sangue, cabo de madeira com anéis de metal
+// a PEIXEIRA: a faca longa do sertão (quase um facão) — lâmina de ~50 cm, estreita, dorso reto e a ponta afilada, a
+// guarda de latão e o cabo de chifre com anéis de metal; manchada de sangue
 export function peixeira() {
   const g = new THREE.Group();
-  const handle = part(new THREE.CylinderGeometry(0.017, 0.015, 0.13, 8), 0x5a3420);
-  handle.position.y = 0.03;
+  const handle = part(new THREE.CylinderGeometry(0.02, 0.017, 0.17, 10), 0x2a1c16);
+  handle.position.y = 0.05;
   g.add(handle);
-  for (const y of [-0.03, 0.09]) {
-    const ring = part(new THREE.CylinderGeometry(0.019, 0.019, 0.012, 8), 0xc8c4bc, { outline: false });
+  for (const y of [0.0, 0.05, 0.1]) {
+    const ring = part(new THREE.CylinderGeometry(0.021, 0.021, 0.008, 10), 0xc8c4bc, { outline: false });
     ring.position.y = y;
     g.add(ring);
   }
-  const blade = part(extrude(bladeShape(0.34, 0.03, 0.03, 0.55), 0.006), 0xd4d0cc, { mat: toon(0xd4d0cc, { emissive: 0x1a0c0c }) });
-  blade.position.y = -0.04;
+  const pommel = part(new THREE.SphereGeometry(0.022, 10, 8), 0xc8a048);
+  pommel.position.y = 0.14;
+  pommel.scale.set(1, 0.8, 1);
+  g.add(pommel);
+  const bolster = part(new THREE.BoxGeometry(0.07, 0.025, 0.03), 0xc8a048);
+  bolster.position.y = -0.04;
+  g.add(bolster);
+  // dorso reto e gume reto que só cai na ponta (o perfil da peixeira)
+  const sh = new THREE.Shape();
+  const L = 0.5;
+  sh.moveTo(-0.022, 0);
+  sh.lineTo(-0.022, -L * 0.86);
+  sh.quadraticCurveTo(-0.02, -L * 0.96, 0.004, -L);
+  sh.quadraticCurveTo(0.03, -L * 0.85, 0.028, -L * 0.7);
+  sh.lineTo(0.026, 0);
+  sh.lineTo(-0.022, 0);
+  const blade = part(extrude(sh, 0.006), 0xd4d0cc, { mat: toon(0xd4d0cc, { emissive: 0x1a0c0c }) });
+  blade.position.y = -0.05;
   blade.rotation.y = Math.PI / 2;
   g.add(blade);
-  const blood = part(extrude(bladeShape(0.16, 0.026, 0.02, 0.5), 0.0075), 0x8a1010, { outline: false });
-  blood.position.y = -0.2;
+  const groove = part(new THREE.BoxGeometry(0.008, L * 0.7, 0.004), 0x9a9692, { outline: false }); // o vinco do dorso
+  groove.position.set(0.0045, -0.05 - L * 0.38, -0.012); // na face da lâmina, perto do dorso
+  g.add(groove);
+  const blood = part(extrude(bladeShape(0.2, 0.034, 0.004, 0.6), 0.0075), 0x8a1010, { outline: false });
+  blood.position.y = -0.3;
   blood.rotation.y = Math.PI / 2;
   g.add(blood);
   return g;

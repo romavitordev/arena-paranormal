@@ -184,16 +184,16 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ### Principal (□ / X): Decadenza
 
-- Dano 30 · alcance 8 m · cooldown 4.2 s · custo 12
+- Dano 62 · alcance 9 m · cooldown 9 s · custo 25
 
 ### Habilidades
 
-- **Embaralhar "Trinitá"** — △ + □ / Y + X · custo 40 · cooldown 45 s
-  Vira um vulto preto, troca de lugar e cria 3 cópias com vontade própria (4 Dantes em campo). Cada cópia causa metade do dano dele e some ao ser destruída ou quando o tempo acaba.
+- **Embaralhar "Trinitá"** — △ + □ / Y + X · custo 30 · cooldown 22 s
+  Vira um vulto, troca de lugar e deixa 3 cópias realistas em volta que imitam cada movimento dele. Por 7 s, um golpe (não especial) pode acertar uma cópia no lugar dele — a cópia se desfaz.
 - **Tentáculos de Lodo** — △ + ○ / Y + B · custo 30 · cooldown 11 s · dano 70 · alcance 10 m
   Põe a mão no chão: tentáculos de Lodo Preto brotam embaixo do inimigo, prendem e comprimem.
 - **Cicatrização "Paradiso"** — R2 + △ / RT + Y · custo 30 · cooldown 26 s
-  Assopra uma névoa preta em espiral que envelhece as próprias feridas até cicatrizarem. Parado, cicatriza 25% mais.
+  Acelera o tempo nas feridas: recupera vida em instantes — mas envelhece. A névoa preta sai em espiral da boca dele.
 - **Destruição Temporal "Rotura"** — △ + L2 / Y + LT · custo 25 · cooldown 14 s · dano 58 · alcance 9 m
   Concentra-se no Símbolo: espirais de Morte surgem em volta do alvo, apertam e ele APODRECE (dano de Morte e uma decomposição que continua). Dá para esquivar quando as espirais fecham.
 
@@ -280,8 +280,8 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ### Habilidades
 
-- **Amaldiçoar Arma** — △ + □ / Y + X · custo 25 · cooldown 16 s
-  Amaldiçoa a faca com o elemento Sangue: por alguns segundos cada acerto (físico ou faca arremessada) abre um sangramento que continua tirando vida.
+- **Amaldiçoar Arma** — △ + □ / Y + X · custo 20 · cooldown 18 s
+  O sangue sobe em espiral até a faca: por 8 s fica coberta de Sangue e todo golpe físico abre um sangramento.
 - **Facas Amaldiçoadas** — △ + L2 / Y + LT · custo 20 · cooldown 11 s
   Arremessa três facas banhadas em sangue, em leque, que se curvam atrás do alvo e VOLTAM para a mão — a que errou na ida ainda pode acertar na volta.
 - **Passagem de Conhecimento** — R2 + × / RT + A · custo 25 · cooldown 14 s · alcance 14 m
@@ -325,8 +325,8 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ### Habilidades
 
-- **Amaldiçoar Arma com Sangue** — △ + □ / Y + X · custo 25 · cooldown 18 s
-  Desperta as veias que o Diabo deixou no machado: por alguns segundos cada machadada (e o machado arremessado) abre um sangramento.
+- **Amaldiçoar Arma com Sangue** — △ + □ / Y + X · custo 20 · cooldown 18 s
+  O sangue sobe em espiral até o machado: por 8 s fica coberta de Sangue e todo golpe físico abre um sangramento.
 - **Machado Demônio** — △ + ○ / Y + B · custo 0 · cooldown 22 s
   Crava o pomo de pantera no próprio peito (custa 60 de VIDA, não sanidade): o sangue vira uma maça-estrela no lugar da lâmina por 10 s — golpes físicos 25% mais fortes, mais alcance, sangramento e aguenta 2 golpes sem recuar.
 - **Fala Imponente** — R2 + △ / RT + Y · custo 20 · cooldown 14 s · alcance 9 m
@@ -520,16 +520,16 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ### Habilidades
 
-- **Amaldiçoar Arma com Sangue** — △ + □ / Y + X · custo 25 · cooldown 16 s
-  Imbui o taco com Sangue: por alguns segundos cada golpe físico e o skate abrem um sangramento.
+- **Amaldiçoar Arma com Sangue** — △ + □ / Y + X · custo 20 · cooldown 18 s
+  O sangue sobe em espiral até o taco: por 8 s fica coberta de Sangue e todo golpe físico abre um sangramento.
 - **Polarização Caótica** — △ + ○ / Y + B · custo 30 · cooldown 12 s · alcance 11 m
   Aura magnética: o inimigo LONGE é atraído até ele; o inimigo PERTO é repelido para longe e cai.
 - **Tela de Ruído** — R2 + △ / RT + Y · custo 30 · cooldown 22 s
   Película de Energia que absorve até 140 de dano físico e de projétil por alguns segundos.
 - **Velocidade Mortal** — R2 + × / RT + A · custo 25 · cooldown 20 s
-  Distorce o tempo em volta de si: fica muito mais rápido e recupera todas as esquivas.
+  Distorce o tempo em volta de si: por 6 s fica muito mais rápido, bate mais rápido, recupera as esquivas e deixa rastros dele no ar.
 - **Cicatrização** — △ + L2 / Y + LT · custo 30 · cooldown 26 s
-  Ritual de Sangue: fios de sangue correm pelo corpo e fecham as feridas, recuperando vida aos poucos.
+  Acelera o tempo nas feridas: recupera vida em instantes — mas envelhece.
 - **Bloqueio Perfeito** — defender no instante exato (0.14 s) anula o dano e atordoa o atacante por 0.45 s
 
 ### Especial: Por Eles
@@ -623,8 +623,8 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
   Chama a atenção do inimigo e assume o confronto: longe, corre e dá uma ombrada; perto, grita. O inimigo fica PROVOCADO (só ataca no corpo a corpo por 4 s) e o Lírio recebe 20% menos dano.
 - **Amarras de Sangue "Magras"** — △ + □ / Y + X · custo 25 · cooldown 15 s · dano 30 · alcance 9 m
   Estala as Magras — corda de tripas carnudas trançadas — no alvo, e as voltas se enrolam no corpo dele e o prendem. Feitas para prender criaturas de Conhecimento: seguram 60% mais tempo quem é de Conhecimento.
-- **Leonora Amaldiçoada (Sangue)** — R2 + × / RT + A · custo 25 · cooldown 18 s
-  Amaldiçoa a Leonora com Sangue: por alguns segundos cada marretada abre um sangramento.
+- **Leonora Amaldiçoada (Sangue)** — R2 + × / RT + A · custo 20 · cooldown 18 s
+  O sangue sobe em espiral até a Leonora: por 8 s fica coberta de Sangue e todo golpe físico abre um sangramento.
 - **Proteção Pesada** — △ + L2 / Y + LT · custo 25 · cooldown 22 s
   Põe o capacete azul e se fecha: recebe 25% menos dano e aguenta 2 golpes sem recuar por 7 s, mas fica um pouco mais lento.
 

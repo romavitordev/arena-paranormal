@@ -2196,6 +2196,18 @@ export class Fighter {
       this.startBeam(base);
       return;
     }
+    // o □ que é um RITUAL de habilidade (a Decadenza do Dante é a mesma Decadência do Guizo): roda o tipo de habilidade
+    // com a recarga e o custo do □
+    if (base.type && base.type !== 'projectile' && ABILITY_TYPES[base.type]) {
+      if (!this.spendEnergy(base.energyCost || 0)) { this.notify('SEM SANIDADE'); return; }
+      this.setState('ranged');
+      const seq = ABILITY_TYPES[base.type].start(this, base, this.world);
+      if (!seq) { this.energy += base.energyCost || 0; this.setState('idle'); return; }
+      this.cooldowns.ranged = base.cooldown;
+      this.cooldownMax.ranged = base.cooldown;
+      this.seq = seq;
+      return;
+    }
     // a arma do □ muda com um estado (ex.: Machado Demônio do Balu: arremessa a maça de sangue, não o machado)
     if (!variant && base.whileBuff) for (const t in base.whileBuff) if (this.findBuff(t)) { variant = base.whileBuff[t]; break; }
     let r = variant ? { ...base, ...variant } : base;
