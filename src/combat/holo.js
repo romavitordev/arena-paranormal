@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { buildModel } from '../models/index.js';
+import { disposeSkeletons } from '../models/glbRig.js';
 
 // CÓPIAS ILUSÓRIAS (Guizo — Embaralhar, Velocidade Mortal e o Registro do Outro Lado): o mesmo modelo, translúcido e
 // tingido, que COPIA A POSE do dono quadro a quadro (cada osso e cada peça), então as cópias fazem exatamente o que ele
@@ -148,6 +149,7 @@ export class HoloCopy {
     this.world.scene.remove(this.rig.root);
     if (!this.freed) {
       this.freed = true;
+      disposeSkeletons(this.rig.root);
       for (const { m } of this.mats) m.dispose();
     }
   }

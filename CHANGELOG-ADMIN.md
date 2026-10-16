@@ -1,5 +1,24 @@
 # Registro administrativo de alterações
 
+## v3.26.1 — Celular Mais Leve
+
+- Versão: `VERSION` 3.26.0 → **3.26.1** (package.json/lock junto).
+- Pedidos: "pegue e faça as mais simples [do TODO] e em seguida dê push" e, no meio, "o jogo está injogável em
+  qualquer celular, trava muito" — o celular virou a prioridade; das simples entrou a correção do erro da galeria.
+- **Diagnóstico** (medido no preview): numa luta, 801 texturas e 1415 geometrias na GPU, e as texturas cresciam ~35
+  por luta. Rastreado (gancho no `needsUpdate` das texturas): a textura de ossos dos esqueletos, criada a cada cópia de
+  modelo e nunca liberada. Lógica do jogo leve (0,7 ms por passo) e ~84 chamadas de desenho: o gargalo do celular é a
+  GPU — resolução dobrada, antialias, sombras suaves de 2048 e as luzes pontuais em todo pixel do material toon.
+- **Feito:** a liberação dos esqueletos (texturas estáveis em ~260 em seis lutas seguidas), as texturas pintadas
+  compartilhadas e a QUALIDADE GRÁFICA com o automático (baixa no celular). Conferido no preview no modo celular:
+  baixa automática, pixel ratio 1, sem sombras, 1 luz, 60 quadros desenhados por segundo.
+- **Não mexido de propósito:** a quantidade de partículas — os efeitos sorteiam com o mesmo `Math.random` com semente
+  do online; cortar partículas só de um lado dessincronizaria a luta em rede.
+- **Ainda falta testar** num celular de verdade (o preview não simula a GPU do celular). Próximos passos se ainda pesar:
+  carregar os modelos sob demanda e comprimir os `.glb` (§76.5).
+- TODO: §23.5 com os modelos que ainda não passaram pela técnica nova (23 lutadores, 3 formas, 3 invocações); a versão
+  instalável saiu do adendo (já feita na v3.25.0); a QUALIDADE GRÁFICA saiu do §76.5.
+
 ## v3.26.0 — Olhos Abertos
 
 - Versão: `VERSION` 3.25.1 → **3.26.0** (package.json/lock junto).

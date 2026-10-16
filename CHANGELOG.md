@@ -1,5 +1,16 @@
 # Changelog
 
+## v3.26.1 — 2026-10-16
+
+### Corrigido
+- Vazamento de memória de GPU: a textura de ossos de cada `Skeleton` (`computeBoneTexture`) nunca era liberada — ~30 texturas a mais por luta (765 → 900+ em cinco lutas; agora estável em ~260). `glbRig.disposeSkeletons(root)` chamado em `World.dispose`, `DanteClone.dispose`, `HoloCopy.dispose`, `portraits` e `selectStage.dispose`.
+- `glbRig`: as texturas pintadas (`MATERIAL_TEXTURES`) são feitas UMA vez por material e compartilhadas (`paintedTexture`), em vez de repintadas a cada cópia do modelo.
+- Ciclo de imports `damage → guizoAbilities → abilities → beasts → npcs → damage`: `shuffleDodge` passou para `damage.js`.
+
+### Adicionado
+- Opção `graphics` (`GFX_OPTIONS`: auto · high · medium · low; `gfxProfile`, `gfxLevel`, `autoGraphics` — auto = low com ponteiro `coarse` ou `deviceMemory ≤ 4`): `pixelRatio` (2 / 1,5 / 1), `antialias` (só ao abrir o jogo), sombras (PCFSoft 2048 / PCF 1024 / sem), luzes pontuais dos cenários (8 / 2 / 1, as mais fortes), luzes de contorno da tela de título (8 / 2 / 0) e `maxFps` (sem limite / 60 / 60). Chaves `opt.gfx*` nos 13 idiomas. Nada que mude a luta nem o sorteio dos efeitos (o online depende disso).
+- `WebGLRenderer({ powerPreference: 'high-performance' })`.
+
 ## v3.26.0 — 2026-10-16
 
 ### Adicionado

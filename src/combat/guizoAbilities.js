@@ -115,7 +115,7 @@ export const GUIZO_TYPES = {
 
   // EMBARALHAR: vira um holograma por um instante, as posições se EMBARALHAM (ele troca de lugar) e ficam cópias
   // realistas em volta, imitando cada movimento dele. Enquanto durarem, um golpe pode pegar numa cópia (que se desfaz)
-  // em vez dele — mais cópias, mais chance (damage.js → shuffleDodge). Especiais acertam o verdadeiro.
+  // em vez dele — mais cópias, mais chance (damage.js → shuffleDodge, que mora lá para não fechar um ciclo de imports). Especiais acertam o verdadeiro.
   shuffle: {
     // recast (Trinitá Aprimorado do Dante: "capaz de trocar a sua posição com qualquer uma das cópias"): com as cópias em
     // campo, apertar de novo TROCA DE LUGAR com uma delas — a mais longe do adversário quando ele está em cima (fuga),
@@ -288,21 +288,6 @@ function ageHair(f, k) {
     if (!o.userData.ownHairMat) { o.material = o.material.clone(); o.userData.ownHairMat = true; o.userData.hairBase = o.material.color.clone(); }
     o.material.color.copy(o.userData.hairBase).lerp(grey, k);
   });
-}
-
-// EMBARALHAR (lido em damage.js): um golpe que ia acertar o Guizo pega numa cópia — ela se desfaz e o dano some
-export function shuffleDodge(world, attacker, victim, o) {
-  const b = victim.findBuff && victim.findBuff('shuffle');
-  if (!b || o.kind === 'special' || o.ignoreInvuln || !['melee', 'ranged', 'ability'].includes(o.kind)) return false;
-  const alive = b.copies.filter((c) => c.alive);
-  if (!alive.length) return false;
-  if (Math.random() > b.perCopy * alive.length) return false;
-  // a cópia mais perto de quem bateu leva o golpe
-  alive.sort((x, y) => distXZ(x.pos, attacker.pos) - distXZ(y.pos, attacker.pos));
-  alive[0].shatter(0xd8c070);
-  victim.notify('ERA UMA CÓPIA!', true);
-  if (attacker.notify) attacker.notify('ERA UMA CÓPIA!');
-  return true;
 }
 
 Object.assign(ABILITY_TYPES, GUIZO_TYPES);

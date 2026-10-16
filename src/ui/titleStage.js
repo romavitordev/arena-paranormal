@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { buildModel } from '../models/index.js';
 import { Animator } from '../anim/Animator.js';
+import { gfxProfile } from '../config/settings.js';
 
 // Fundo 3D da tela inicial e dos menus: alguns lutadores do elenco em pose parada, contra a luz (silhueta escura com
 // contorno na cor do poder de cada um), neblina, o círculo ritual brilhando no chão, cinzas subindo e a câmera se
@@ -87,12 +88,14 @@ export class TitleStage {
       rig.root.position.set(L.x, 0, L.z);
       rig.root.rotation.y = L.yaw;
       this.scene.add(rig.root);
+      this.actors.push({ rig, anim });
+      // QUALIDADE GRÁFICA: no baixo não há as luzes de contorno (cada SpotLight pesa em todo pixel no celular)
+      if (this.actors.length > gfxProfile().rimLights) continue;
       // contorno na cor do poder: luz forte vindo de trás e de cima
       const rim = new THREE.SpotLight(def.energyColor ?? 0xa46bff, 70, 10, 0.6, 0.6, 1.3);
       rim.position.set(L.x * 1.15, 3.4, L.z - 2.6);
       rim.target.position.set(L.x, 1, L.z);
       this.scene.add(rim, rim.target);
-      this.actors.push({ rig, anim });
     }
   }
 

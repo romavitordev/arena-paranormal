@@ -2,6 +2,11 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.26.1 — Celular Mais Leve
+- CELULAR MAIS LEVE: o jogo deixava texturas presas na memória a cada luta (umas 30 por luta, nunca liberadas) — depois de algumas partidas o celular ficava sem memória e travava. Agora a memória fica estável, luta após luta.
+- OPÇÕES: QUALIDADE GRÁFICA (Automática, Alta, Média e Baixa). A automática usa a BAIXA no celular: resolução normal (sem o dobro de pixels), sem antialias e sem sombras, só a luz principal do cenário e no máximo 60 quadros por segundo (telas de 90/120 Hz desenhavam o dobro, esquentavam e o celular derrubava o desempenho).
+- Os personagens montam mais rápido no começo da luta (as texturas pintadas são feitas uma vez só).
+
 ## v3.26.0 — Olhos Abertos
 - DANTE DE VISUAL NOVO (Calamidade): de olhos fechados, cabelo loiro com franja e o rabo alto, o grande XALE BRANCO enrolado no pescoço, cruzado no peito com o broche azul e caindo até os joelhos, camiseta escura, cinto de corrente com a faca e os pés descalços enfaixados.
 - NOVA TRANSFORMAÇÃO DO DANTE — OLHOS ABERTOS: ele ABRE OS OLHOS e a afinidade com a Morte toma o corpo — olhos completamente pretos, as duas faixas no rosto, as tatuagens de volta e as orelhas pontudas, "como um Luzidio". Até o fim do round ele tem um kit melhorado:

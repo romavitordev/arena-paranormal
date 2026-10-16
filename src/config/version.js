@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.26.0';
+export const VERSION = '3.26.1';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,16 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.26.1',
+    date: '2026-10-16',
+    title: 'Celular Mais Leve',
+    items: [
+      'CELULAR MAIS LEVE: o jogo deixava texturas presas na memória a cada luta (umas 30 por luta, nunca liberadas) — depois de algumas partidas o celular ficava sem memória e travava. Agora a memória fica estável, luta após luta.',
+      'OPÇÕES: QUALIDADE GRÁFICA (Automática, Alta, Média e Baixa). A automática usa a BAIXA no celular: resolução normal (sem o dobro de pixels), sem antialias e sem sombras, só a luz principal do cenário e no máximo 60 quadros por segundo (telas de 90/120 Hz desenhavam o dobro, esquentavam e o celular derrubava o desempenho).',
+      'Os personagens montam mais rápido no começo da luta (as texturas pintadas são feitas uma vez só).',
+    ],
+  },
   {
     v: '3.26.0',
     date: '2026-10-16',

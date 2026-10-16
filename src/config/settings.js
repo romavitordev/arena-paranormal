@@ -10,6 +10,7 @@ const DEFAULTS = {
   language: 'pt-BR',
   volume: 100, // % do volume do jogo (0 = mudo)
   reduceFx: false, // conforto/fotossensibilidade: flashes de tela e tremor de câmera bem mais fracos
+  graphics: 'auto', // QUALIDADE GRÁFICA: auto (baixa no celular, alta no PC) | high | medium | low
 };
 
 // opções das configurações de combate (tela antes do cenário)
@@ -24,6 +25,27 @@ export const CPU_LEVELS = [
 export const ROUND_OPTIONS = [1, 2, 3];
 export const VOLUME_OPTIONS = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 export const FX_OPTIONS = [false, true];
+export const GFX_OPTIONS = ['auto', 'high', 'medium', 'low'];
+
+// QUALIDADE GRÁFICA: o que cada nível liga. Só mexe no DESENHO (resolução, antialias, sombras, luzes pontuais) — nada
+// que mude a luta ou o sorteio dos efeitos (o online depende de os dois lados sortearem igual).
+const GFX_PROFILES = {
+  // maxFps: celular de 90/120 Hz desenhava o dobro de quadros, esquentava e o sistema derrubava o desempenho
+  high: { pixelRatio: 2, antialias: true, shadows: true, softShadows: true, shadowSize: 2048, pointLights: 8, maxFps: 0, rimLights: 8 },
+  medium: { pixelRatio: 1.5, antialias: false, shadows: true, softShadows: false, shadowSize: 1024, pointLights: 2, maxFps: 60, rimLights: 2 },
+  low: { pixelRatio: 1, antialias: false, shadows: false, softShadows: false, shadowSize: 512, pointLights: 1, maxFps: 60, rimLights: 0 },
+};
+// celular / tablet (toque como ponteiro principal) ou pouca memória → baixa; o resto → alta
+let _auto = null; // o aparelho não muda durante a sessão: decide uma vez (o laço de quadros pergunta sempre)
+export function autoGraphics() {
+  if (_auto) return _auto;
+  const coarse = typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches;
+  const lowMem = typeof navigator !== 'undefined' && navigator.deviceMemory && navigator.deviceMemory <= 4;
+  _auto = coarse || lowMem ? 'low' : 'high';
+  return _auto;
+}
+export const gfxLevel = (v = SETTINGS.graphics) => (v === 'auto' ? autoGraphics() : v);
+export const gfxProfile = (v) => GFX_PROFILES[gfxLevel(v)] || GFX_PROFILES.high;
 export const LANGUAGE_OPTIONS = SUPPORTED_LANGUAGES;
 
 function load() {
@@ -38,6 +60,7 @@ function load() {
     if (!ROUND_OPTIONS.includes(s.rounds)) s.rounds = DEFAULTS.rounds;
     if (!VOLUME_OPTIONS.includes(s.volume)) s.volume = DEFAULTS.volume;
     s.reduceFx = !!s.reduceFx;
+    if (!GFX_OPTIONS.includes(s.graphics)) s.graphics = DEFAULTS.graphics;
     if (!LANGUAGE_OPTIONS.some((l) => l.id === s.language)) s.language = initLanguage();
     else initLanguage(s.language);
     return s;
@@ -49,6 +72,7 @@ function load() {
 }
 
 export const volumeLabel = (v = SETTINGS.volume) => (v ? `${v}%` : '🔇');
+export const gfxLabel = (v = SETTINGS.graphics) => (v === 'auto' ? `${t('opt.gfx.auto')} (${t('opt.gfx.' + autoGraphics())})` : t('opt.gfx.' + v));
 export const fxLabel = (v = SETTINGS.reduceFx) => t(v ? 'opt.fx.reduced' : 'opt.fx.normal');
 export const timerLabel = (v = SETTINGS.timer) => (v ? `${v}s` : t('settings.timer.infinite'));
 export const cpuLabel = (id = SETTINGS.cpuLevel) => t('cpu.' + (CPU_LEVELS.find((l) => l.id === id) || CPU_LEVELS[1]).id);

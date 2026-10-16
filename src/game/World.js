@@ -4,6 +4,7 @@ import { CameraRig } from '../camera/CameraRig.js';
 import { Projectiles } from '../combat/projectiles.js';
 import { Fighter } from '../combat/Fighter.js';
 import { buildModel } from '../models/index.js';
+import { disposeSkeletons } from '../models/glbRig.js';
 import { Animator } from '../anim/Animator.js';
 import { ARENAS } from '../arena/index.js';
 import { yawTo } from '../core/util.js';
@@ -380,6 +381,7 @@ export class World {
     this.audio.stopAllLoops();
     this.projectiles.clear();
     this.fx.clear();
+    disposeSkeletons(this.scene);
     this.scene.traverse((o) => {
       // geometria/textura compartilhada dos modelos .glb: liberar aqui deixava os corpos INVISÍVEIS na seleção de
       // personagem depois de uma partida (só as armas, que são criadas por cópia, apareciam)

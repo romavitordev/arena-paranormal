@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { buildModel } from '../models/index.js';
+import { disposeSkeletons } from '../models/glbRig.js';
 import { Animator } from '../anim/Animator.js';
 import { teamColor } from '../config/teams.js';
 
@@ -90,6 +91,7 @@ export function renderPortraits(roster, renderer, { w = 300, h = 400, anim: anim
     out[def.id] = canvas.toDataURL('image/png');
     scene.remove(rig.root);
     rig.root.traverse((o) => { if (o.geometry && !o.userData.sharedGeometry) o.geometry.dispose(); });
+    disposeSkeletons(rig.root);
   }
   renderer.setRenderTarget(prevTarget);
   renderer.setClearColor(0x000000, prevClear);

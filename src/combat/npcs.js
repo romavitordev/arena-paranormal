@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { yawTo, distXZ, angleDiff, forwardFromYaw, DEG } from '../core/util.js';
 import { applyHit } from './damage.js';
 import { buildModel } from '../models/index.js';
+import { disposeSkeletons } from '../models/glbRig.js';
 import { Animator } from '../anim/Animator.js';
 import { buildMarionette, updateMarionetteStrings } from '../models/marionette.js';
 import { buildBloodZombie } from '../models/bloodZombie.js';
@@ -165,6 +166,7 @@ export class DanteClone {
     // os materiais foram clonados para este clone (a geometria é compartilhada com o modelo: não descartar)
     if (!this.freed) {
       this.freed = true;
+      disposeSkeletons(this.rig.root);
       this.rig.root.traverse((o) => { if (o.isMesh && o.material && !o.userData.isOutline) o.material.dispose(); });
     }
   }

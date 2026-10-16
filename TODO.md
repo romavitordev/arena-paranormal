@@ -1,6 +1,7 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.24.1 (revisado em 2026-10-16: o que já estava pronto no código saiu da lista)
+**Versão de referência atual:** v3.26.1 (revisado em 2026-10-16: o que já estava pronto no código saiu da lista; a
+versão instalável já saiu na v3.25.0 e o adendo dela foi retirado)
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente
 
@@ -764,7 +765,7 @@ Não criar barra separada de Exposição Paranormal sem nova decisão.
 
 **Nome oficial: AGHATA**
 
-* [ ] Utilizar referência visual definida
+* [ ] Utilizar referência visual definida (remodel na técnica nova — §23.5)
 * [ ] Descarnar
 * [ ] Livro
 * [ ] Faca
@@ -935,6 +936,56 @@ Vida da forma: 1250 → 1150
 * [ ] Coração de Urso
 * [ ] IA
 * [ ] Balanceamento
+
+---
+
+# 23.5 REMODELAR COM A TÉCNICA NOVA (Blender MCP + `sculpt_lib`)
+
+A partir da v3.23 os modelos passaram a ser feitos com a técnica nova (`tools/blender/sculpt_lib.py`: escultura por
+metaballs, relevo na própria malha, roupa por `clothe`, cascas por `shell_grid`), conferindo com as referências da
+wiki. Os modelos abaixo ainda são da técnica antiga (peças geométricas coladas) e devem ser refeitos na mesma
+qualidade do Cristino / Cristopher / Dante v2 — um por vez, com o kit e as juntas preservados.
+(A Aghata já teve um remodel, mas foi antes da técnica nova: entra aqui.)
+
+**Já na técnica nova:** Cristino, Cristopher, Dante (+ Olhos Abertos), Juan / Henri, Deus da Morte, Carniçal, A Marionete.
+
+## Personagens jogáveis
+
+* [ ] Aghata
+* [ ] Aguiar
+* [ ] Amigo Imaginário
+* [ ] Arnaldo Fritz
+* [ ] Arthur Cervero
+* [ ] Balu
+* [ ] Dalmo (e o Colosso)
+* [ ] Erin
+* [ ] O Estrangeiro
+* [ ] Ferreiro
+* [ ] Gal Sal
+* [ ] Guizo
+* [ ] Jae
+* [ ] Joui
+* [ ] Kaiser
+* [ ] Kemi
+* [ ] Kian
+* [ ] Labirinto
+* [ ] Lírio
+* [ ] A Magistrada
+* [ ] O Diabo
+* [ ] Senhor Veríssimo
+* [ ] Xande
+
+## Formas com modelo próprio
+
+* [ ] O Anfitrião
+* [ ] O Portador do Trono (forma do Juan)
+* [ ] A Fantasma (forma da Kemi)
+
+## Invocações
+
+* [ ] Os Mananciais (Ferreiro)
+* [ ] Zumbi de Sangue e Zumbi de Sangue forte (O Diabo / Portador do Trono)
+* [ ] As feras de tinta — cão e javali (Amigo Imaginário)
 
 ---
 
@@ -2140,8 +2191,6 @@ genérico demais), com o motivo. Nenhum item é de balanceamento.
   `preloadArenas` (os 5 cenários, 16 MB). Baixar só no "Carregamento" os lutadores escolhidos (2, ou 6 na equipe) +
   as formas deles + o cenário, com cache; a seleção mostra os retratos/miniaturas.
 * [ ] **Comprimir os `.glb`** (meshopt ou Draco; texturas em KTX2/WebP). O maior é o Diabo (1,6 MB).
-* [ ] **Opção QUALIDADE GRÁFICA (Alta / Média / Baixa):** antialias, pixel ratio até 2 e sombras ficam sempre ligados
-  (`main.js`). No Baixa: pixel ratio 1, sem sombras, menos partículas e rastros.
 * [ ] **Contador de desempenho de dev** (FPS, memória, objetos na cena) para medir cada cenário/personagem antes e
   depois das otimizações acima.
 
@@ -2532,74 +2581,3 @@ Cada personagem deve possuir:
 E, principalmente:
 
 > **Nenhum buff, nerf ou valor de balanceamento deste TODO deve ser considerado definitivo antes da bateria de testes. Os dados de telemetria, partidas CPU × CPU e testes manuais devem determinar o balanceamento final.**
-
-## ADENDO FINAL — FUTURO: VERSÃO INSTALÁVEL / SOFTWARE
-
-### Objetivo futuro
-
-O Arena Paranormal não deve permanecer indefinidamente como um jogo executado exclusivamente pelo navegador.
-
-Futuramente, o projeto deverá ser transformado em uma **versão instalável e executável diretamente na máquina do jogador**, funcionando como um software/jogo independente, sem depender da abertura do navegador para jogar.
-
-O formato técnico ainda não está definido e deverá ser estudado posteriormente (por exemplo, executável para Windows ou outra solução adequada à tecnologia utilizada pelo projeto).
-
-### Prioridade atual
-
-**Não iniciar essa migração agora.**
-
-Antes disso, a prioridade é:
-
-* otimizar a versão atual para **mobile**;
-* reduzir travamentos e quedas de desempenho;
-* melhorar consumo de memória;
-* otimizar renderização 3D;
-* reduzir processamento desnecessário;
-* melhorar carregamento de modelos, texturas, efeitos e cenários;
-* testar em dispositivos móveis reais;
-* garantir que a experiência mobile seja estável antes de iniciar uma nova etapa de distribuição.
-
-### Etapa futura — versão instalável para PC
-
-Quando a versão web estiver suficientemente estável e otimizada, estudar a transformação do jogo em uma aplicação/jogo instalável para PC.
-
-Essa etapa deverá avaliar:
-
-* tecnologia mais adequada para empacotar o projeto atual;
-* geração de executável/instalador;
-* execução sem navegador;
-* gerenciamento de arquivos e assets;
-* carregamento e armazenamento local;
-* desempenho superior ou equivalente ao da versão web;
-* suporte a teclado, mouse e controles;
-* resolução e configurações gráficas;
-* sistema de atualização;
-* tratamento de erros e logs;
-* compatibilidade com diferentes máquinas;
-* tamanho final da instalação;
-* possibilidade de versão portátil, caso faça sentido.
-
-**Não assumir antecipadamente que o formato será `.exe`**. A tecnologia e o formato final devem ser escolhidos depois de avaliar a arquitetura do projeto e as opções disponíveis.
-
-### Distribuição futura
-
-O próprio site oficial do Arena Paranormal deverá futuramente oferecer uma área de **Download**, permitindo que o jogador escolha a versão adequada e instale o jogo diretamente.
-
-Possível estrutura futura:
-
-* **Jogar no navegador**
-* **Download para PC**
-* futuramente, caso seja viável:
-
-  * versão Android;
-  * versão iOS;
-  * outras plataformas.
-
-A versão web e a versão instalável devem compartilhar o máximo possível da mesma base do jogo, evitando manter projetos completamente separados.
-
-### Regra de prioridade
-
-A ordem deve ser:
-
-**Otimização mobile → estabilidade geral → versão instalável para PC → distribuição pelo site → possíveis versões para outras plataformas.**
-
-A transformação em software é uma **meta futura de produto**, não uma tarefa imediata do desenvolvimento atual.

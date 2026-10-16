@@ -1,10 +1,9 @@
 import * as THREE from 'three';
 import { PASSIVES, hasPassive } from './passives.js';
 import { COMBAT } from '../config/combat.js';
-import { angleDiff, yawTo, DEG } from '../core/util.js';
+import { angleDiff, yawTo, DEG, distXZ } from '../core/util.js';
 import { elementMultiplier } from '../config/elements.js';
 import { weaknessMult } from './forms.js';
-import { shuffleDodge } from './guizoAbilities.js';
 
 // Pausa no impacto conforme o peso do golpe
 function hitstopFor(o, dealt) {
@@ -288,4 +287,21 @@ function runMeleePassives(world, attacker, victim, o, dealt, attempted) {
       P.onMeleeHit({ attacker, victim, strike: o.strike || { damage: attempted }, dealt, attempted, passive, world });
     }
   }
+}
+
+// (antes em guizoAbilities.js: importá-lo de lá fechava o ciclo damage → guizoAbilities → abilities → beasts → npcs →
+// damage, e a galeria quebrava com "Cannot access 'BloodZombie' before initialization")
+// EMBARALHAR (lido em damage.js): um golpe que ia acertar o Guizo pega numa cópia — ela se desfaz e o dano some
+function shuffleDodge(world, attacker, victim, o) {
+  const b = victim.findBuff && victim.findBuff('shuffle');
+  if (!b || o.kind === 'special' || o.ignoreInvuln || !['melee', 'ranged', 'ability'].includes(o.kind)) return false;
+  const alive = b.copies.filter((c) => c.alive);
+  if (!alive.length) return false;
+  if (Math.random() > b.perCopy * alive.length) return false;
+  // a cópia mais perto de quem bateu leva o golpe
+  alive.sort((x, y) => distXZ(x.pos, attacker.pos) - distXZ(y.pos, attacker.pos));
+  alive[0].shatter(0xd8c070);
+  victim.notify('ERA UMA CÓPIA!', true);
+  if (attacker.notify) attacker.notify('ERA UMA CÓPIA!');
+  return true;
 }

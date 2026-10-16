@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { loadGLB } from '../models/glbRig.js';
 import { ARENA_TEXTURES } from './arenaTextures.js';
+import { gfxProfile } from '../config/settings.js';
 import { blocksPointGeneric } from '../combat/positioning.js';
 
 // Cenário feito no Blender (tools/blender/arena_<id>.py → public/arenas/<id>.glb).
@@ -148,7 +149,12 @@ export function createGLBArena(cfg) {
       scene.background = cfg.sky.isTexture ? cfg.sky : new THREE.Color(cfg.sky);
       if (cfg.skyGradient) scene.background = gradientSky(cfg.skyGradient);
       scene.fog = cfg.fog ? new THREE.FogExp2(cfg.fog.color, cfg.fog.density) : null;
+      // QUALIDADE GRÁFICA: luzes pontuais custam em CADA pixel do material toon — no baixo/médio ficam só as mais fortes
+      // (a luz delas some do cálculo, não do cenário: o fogo e as lâmpadas continuam acesos como objetos)
+      const G = gfxProfile();
+      const points = cfg.lights.filter((L) => L.type === 'point').sort((a, b) => b.intensity - a.intensity).slice(0, G.pointLights);
       for (const L of cfg.lights) {
+        if (L.type === 'point' && !points.includes(L)) continue;
         let light;
         if (L.type === 'hemi') light = new THREE.HemisphereLight(L.sky, L.ground, L.intensity);
         else if (L.type === 'ambient') light = new THREE.AmbientLight(L.color, L.intensity);
@@ -161,7 +167,7 @@ export function createGLBArena(cfg) {
           light.position.set(...L.pos);
           if (L.shadow) {
             light.castShadow = true;
-            light.shadow.mapSize.set(2048, 2048);
+            light.shadow.mapSize.set(G.shadowSize, G.shadowSize);
             const s = L.area ?? 26;
             const c = light.shadow.camera;
             c.left = c.bottom = -s; c.right = c.top = s; c.near = 1; c.far = 120;

@@ -20,7 +20,7 @@ import { validatePassives } from './combat/passives.js';
 import { Match } from './game/Match.js';
 import { CpuController } from './ai/CpuController.js';
 import { ARENAS, ARENA_ORDER, DEFAULT_ARENA, preloadArenas } from './arena/index.js';
-import { SETTINGS, cycleSetting, TIMER_OPTIONS, timerLabel, cpuLabel, LANGUAGE_OPTIONS, languageLabel, VOLUME_OPTIONS, FX_OPTIONS, volumeLabel, fxLabel } from './config/settings.js';
+import { SETTINGS, cycleSetting, TIMER_OPTIONS, timerLabel, cpuLabel, LANGUAGE_OPTIONS, languageLabel, VOLUME_OPTIONS, FX_OPTIONS, volumeLabel, fxLabel, GFX_OPTIONS, gfxLabel, gfxProfile } from './config/settings.js';
 import { TutorialMode } from './ui/Tutorial.js';
 import { VERSION } from './config/version.js';
 import { t, tAlert } from './i18n/index.js';
@@ -37,11 +37,19 @@ document.addEventListener('touchmove', (e) => {
 for (const def of ROSTER) for (const p of validatePassives(def)) console.warn(p);
 
 const canvas = document.getElementById('game');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-renderer.setPixelRatio(Math.min(2, window.devicePixelRatio));
-renderer.setSize(innerWidth, innerHeight);
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+// QUALIDADE GRÁFICA (OPÇÕES; auto = baixa no celular): resolução, antialias e sombras. O antialias só muda ao abrir o
+// jogo de novo (o WebGL não troca depois de criado); o resto muda na hora
+const GFX0 = gfxProfile();
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: GFX0.antialias, powerPreference: 'high-performance' });
+function applyGraphics() {
+  const G = gfxProfile();
+  renderer.setPixelRatio(Math.min(G.pixelRatio, window.devicePixelRatio));
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.shadowMap.enabled = G.shadows;
+  renderer.shadowMap.type = G.softShadows ? THREE.PCFSoftShadowMap : THREE.PCFShadowMap;
+  renderer.shadowMap.needsUpdate = true;
+}
+applyGraphics();
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.1;
@@ -106,6 +114,7 @@ const timeLabel = () => t('opt.time', { v: timerLabel() });
 const langLabel = () => t('opt.lang', { v: languageLabel() });
 const volLabel = () => t('opt.volume', { v: volumeLabel() });
 const fxOptLabel = () => t('opt.fx', { v: fxLabel() });
+const gfxOptLabel = () => t('opt.gfx', { v: gfxLabel() });
 
 function setScreen(state, screen) {
   game.uiSeq = ((game.uiSeq || 0) + 1) & 15; // toques online de uma tela que já saiu são descartados (netTaps)
@@ -145,6 +154,7 @@ function toOptions(index = 0) {
       { id: 'lang', label: langLabel },
       { id: 'volume', label: volLabel },
       { id: 'fx', label: fxOptLabel },
+      { id: 'gfx', label: gfxOptLabel },
       { id: 'back', label: () => t('ui.back') },
     ],
   });
@@ -596,7 +606,12 @@ function placeVictoryLabels() {
 }
 
 const clock = new THREE.Clock();
-function frame() {
+let lastFrame = 0;
+function frame(now) {
+  // limite de quadros da QUALIDADE GRÁFICA (60 no médio/baixo): tela de 120 Hz não desenha o dobro à toa
+  const cap = gfxProfile().maxFps;
+  if (cap && now && now - lastFrame < 1000 / cap - 2) { requestAnimationFrame(frame); return; }
+  lastFrame = now || performance.now();
   const dt = clock.getDelta();
   if (game.net) netPump(dt);
   else tick(Math.min(1 / 30, dt));
@@ -884,6 +899,7 @@ function tick(dt) {
       else if (c === 'lang') { cycleSetting('language', LANGUAGE_OPTIONS); audio.play('select'); toOptions(game.screen.index); }
       else if (c === 'volume') { cycleSetting('volume', VOLUME_OPTIONS, -1); audio.setVolume(SETTINGS.volume / 100); audio.play('select'); game.screen.render(); }
       else if (c === 'fx') { cycleSetting('reduceFx', FX_OPTIONS); audio.play('select'); game.screen.render(); }
+      else if (c === 'gfx') { cycleSetting('graphics', GFX_OPTIONS); applyGraphics(); audio.play('select'); game.screen.render(); }
       else if (c === 'back') toMainMenu();
       break;
     }

@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { buildModel } from '../models/index.js';
+import { disposeSkeletons } from '../models/glbRig.js';
 import { Animator } from '../anim/Animator.js';
 
 // Palco 3D da seleção de personagem (estilo Storm 4): o lutador que o P1 está olhando aparece à esquerda
@@ -166,7 +167,7 @@ export class SelectStage {
   }
 
   dispose() {
-    for (const m of this.cache) for (const e of m.values()) e.rig.root.traverse((o) => { if (o.geometry && !o.userData.sharedGeometry) o.geometry.dispose(); });
+    for (const m of this.cache) for (const e of m.values()) { e.rig.root.traverse((o) => { if (o.geometry && !o.userData.sharedGeometry) o.geometry.dispose(); }); disposeSkeletons(e.rig.root); }
     for (const S of this.sides) for (const b of S.back) b.rig.root.traverse((o) => { if (o.geometry && !o.userData.sharedGeometry) o.geometry.dispose(); });
     this.cache = [new Map(), new Map()];
   }

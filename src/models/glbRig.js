@@ -59,6 +59,27 @@ function outlineMaterial(thickness) {
   return m;
 }
 
+// texturas pintadas em canvas: UMA por material, compartilhada por todas as cópias do personagem (lutadores, palco da
+// seleção, retratos, clones). Antes cada cópia pintava as suas de novo — custava CPU na hora de montar o modelo e as
+// texturas nunca eram liberadas (~40 a mais por luta: o celular ficava sem memória e travava)
+const PAINTED = new Map();
+function paintedTexture(key) {
+  if (!MATERIAL_TEXTURES[key]) return null;
+  if (!PAINTED.has(key)) PAINTED.set(key, MATERIAL_TEXTURES[key]());
+  return PAINTED.get(key);
+}
+
+// libera a TEXTURA DE OSSOS de cada esqueleto (Skeleton.boneTexture): cada cópia de um modelo com esqueleto cria a sua e
+// ela não sai com a geometria nem com o material — sem isto ficavam ~30 texturas na GPU a cada luta (o celular travava)
+export function disposeSkeletons(root) {
+  const done = new Set();
+  root.traverse((o) => {
+    if (!o.isSkinnedMesh || !o.skeleton || done.has(o.skeleton)) return;
+    done.add(o.skeleton);
+    o.skeleton.dispose();
+  });
+}
+
 export function rigFromGLB(gltf, { scale = 1, outline = 0.012 } = {}) {
   const body = SkeletonUtils.clone(gltf.scene);
   const root = new THREE.Group();
@@ -110,7 +131,7 @@ export function rigFromGLB(gltf, { scale = 1, outline = 0.012 } = {}) {
     if (!convert.has(src)) {
       // nomes vêm como MAT_<CATEGORIA>_<nome> (V4); a textura é procurada pelo nome curto
       const key = src.name.replace(/^MAT_[A-Z]+_/, '');
-      let tex = MATERIAL_TEXTURES[key] ? MATERIAL_TEXTURES[key]() : null;
+      let tex = paintedTexture(key);
       let emissiveMap = null;
       let texEmissive = null;
       if (tex && !tex.isTexture) {
