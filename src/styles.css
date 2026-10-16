@@ -381,6 +381,9 @@ table.moves td span { display: block; color: var(--muted); font-size: 12px; marg
 #home .logo h1::after { color: rgba(60,220,255,.45); transform: translate(3px, 0); animation: glitchB 6s steps(1) infinite; }
 @keyframes glitchA { 0%, 91%, 95%, 100% { opacity: 0; } 92% { opacity: 1; clip-path: inset(18% 0 52% 0); } 94% { opacity: 1; clip-path: inset(62% 0 8% 0); transform: translate(-6px, 0); } }
 @keyframes glitchB { 0%, 91%, 96%, 100% { opacity: 0; } 93% { opacity: 1; clip-path: inset(40% 0 30% 0); } 95% { opacity: 1; clip-path: inset(5% 0 75% 0); transform: translate(6px, 0); } }
+/* aviso de jogo fan made (não oficial) na tela de título */
+#home .logo .fanmade { margin: 12px auto 0; max-width: min(560px, 90vw); font-size: 11px; letter-spacing: .06em; line-height: 1.4; color: #cbbfe0; opacity: .8; }
+#home.menu-on .logo .fanmade { display: none; }
 #home .logo .elements { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 14px auto 0; }
 #home .logo .elements .ln { display: block; width: clamp(40px, 12vw, 150px); height: 1px; background: linear-gradient(90deg, transparent, rgba(220,205,255,.6)); }
 #home .logo .elements .ln:last-child { background: linear-gradient(90deg, rgba(220,205,255,.6), transparent); }

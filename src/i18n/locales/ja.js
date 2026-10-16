@@ -3,6 +3,7 @@
 export default {
   "menu.title": "ARENA PARANORMAL",
   "menu.subtitle": "超常格闘ゲーム",
+  "menu.fanmade": "ファンメイドゲーム · Ordem Paranormal（Cellbit）を元にした非営利のファン作品です。公式ゲームではありません。",
   "menu.press_start": "<b>START</b>・<b>{ok}</b>・<kbd>ENTER</kbd> を押してください",
   "menu.press_touch": "画面をタップしてスタート",
   "menu.foot_touch": "項目をタップして選択 · 隅の矢印で戻る",

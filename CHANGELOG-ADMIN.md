@@ -1,5 +1,15 @@
 # Registro administrativo de alterações
 
+## v3.25.1 — Feito por Fãs
+
+- Versão: `VERSION` 3.25.0 → **3.25.1** (package.json/lock junto).
+- Pedido: "deixe um aviso no título que o jogo é fan made e deixe Dalmo como Sangue".
+  - aviso na tela de "pressione start", abaixo das origens (some com o menu aberto, para não apertar as 10 opções);
+  - Dalmo: no cânone as Manoplas do Colosso são de Energia (ficha de Hexatombe) — no jogo vira tudo Sangue, a pedido do
+    usuário; os comentários registram o cânone.
+- Verificações: `check-roster`, `npm test` (41), `npm run build` e `npm run moves`; o aviso conferido no preview (desktop
+  e 812×375).
+
 ## v3.25.0 — Leve a Arena com Você
 
 - Versão: `VERSION` 3.24.1 → **3.25.0** (package.json/lock junto).

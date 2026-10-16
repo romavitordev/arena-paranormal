@@ -711,7 +711,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 ### Habilidades
 
 - **Pressão Atmosférica** — △ + ○ / Y + B · custo 25 · cooldown 11 s · dano 58 · alcance 2.4 m
-  Concentra a força num soco que solta uma onda de pressão (dano de Energia): quem é atingido fica ATORDOADO. Aguenta um golpe durante a preparação; errar deixa ele aberto.
+  Concentra a força num soco que solta uma onda de pressão (dano de Sangue): quem é atingido fica ATORDOADO. Aguenta um golpe durante a preparação; errar deixa ele aberto.
 - **Agarrão de Arena** — △ + □ / Y + X · custo 30 · cooldown 12 s · alcance 1.8 m
   Avança e agarra o adversário pela cabeça: duas cabeçadas segurando e bate o corpo dele no chão. Não dá para defender — só esquivar.
 - **Atropelar** — △ + L2 / Y + LT · custo 20 · cooldown 9 s · dano 44 · alcance 2 m

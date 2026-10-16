@@ -92,6 +92,8 @@ export class HomeScreen {
         <h1 data-text="PARANORMAL">PARANORMAL</h1>
         <div class="elements"><i class="ln"></i>${Object.values(ELEMENTS).map((e) => `<b style="--c:${e.color}" title="${e.name}"></b>`).join('')}<i class="ln"></i></div>
         <div class="tag">ORDO REALITAS <i>·</i> ESCRIPTAS <i>·</i> OS CINCO <i>·</i> MASCARADOS <i>·</i> TRANSTORNADOS <i>·</i> PORTADORES</div>
+
+        <div class="fanmade">${t('menu.fanmade')}</div>
       </div>
       <div class="press">${touchOnly ? t('menu.press_touch') : t('menu.press_start', { ok: OK })}</div>
       <div class="menu-home">

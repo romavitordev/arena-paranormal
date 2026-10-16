@@ -2,6 +2,10 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.25.1 — Feito por Fãs
+- TELA DE TÍTULO: aviso de que o Arena Paranormal é um JOGO FAN MADE — um projeto de fã sem fins lucrativos, baseado em Ordem Paranormal (Cellbit), e não um jogo oficial.
+- DALMO agora é do elemento SANGUE (antes Energia): a Pressão Atmosférica, os socos e as Manoplas do Colosso passam a contar como Sangue na roda dos elementos.
+
 ## v3.25.0 — Leve a Arena com Você
 - BAIXE O JOGO: o menu principal ganhou SOBRE O JOGO / BAIXAR, uma página que explica como o jogo funciona (modos, sanidade e rituais, defesa e esquiva, especial e Transformação, o elenco e os controles) e tem os downloads para jogar fora do navegador.
 - PC (Windows): instalador .exe — o jogo abre em tela cheia numa janela própria (F11 alterna) e funciona sem internet; o Online / LAN continua precisando de conexão.

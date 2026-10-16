@@ -3,6 +3,7 @@
 export default {
   "menu.title": "ARENA PARANORMAL",
   "menu.subtitle": "UN PICCHIADURO PARANORMALE",
+  "menu.fanmade": "GIOCO FAN MADE · progetto amatoriale senza scopo di lucro, basato su Ordem Paranormal (Cellbit). Non è un gioco ufficiale.",
   "menu.press_start": "PREMI <b>START</b>, <b>{ok}</b> O <kbd>INVIO</kbd>",
   "menu.press_touch": "TOCCA LO SCHERMO PER INIZIARE",
   "menu.foot_touch": "Tocca un'opzione per scegliere · la freccia nell'angolo torna indietro",

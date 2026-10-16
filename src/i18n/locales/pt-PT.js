@@ -3,6 +3,7 @@
 export default {
   "menu.title": "ARENA PARANORMAL",
   "menu.subtitle": "UM JOGO DE LUTA PARANORMAL",
+  "menu.fanmade": "JOGO FAN MADE · projeto de fã sem fins lucrativos, baseado em Ordem Paranormal (Cellbit). Não é um jogo oficial.",
   "menu.press_start": "PRIMA <b>START</b>, <b>{ok}</b> OU <kbd>ENTER</kbd>",
   "menu.press_touch": "TOQUE NO ECRÃ PARA COMEÇAR",
   "menu.foot_touch": "Toque nas opções para escolher · a seta no canto volta",

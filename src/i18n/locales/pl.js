@@ -3,6 +3,7 @@
 export default {
   "menu.title": "ARENA PARANORMAL",
   "menu.subtitle": "PARANORMALNA BIJATYKA",
+  "menu.fanmade": "GRA FANOWSKA · niekomercyjny projekt fanów oparty na Ordem Paranormal (Cellbit). To nie jest oficjalna gra.",
   "menu.press_start": "NACIŚNIJ <b>START</b>, <b>{ok}</b> LUB <kbd>ENTER</kbd>",
   "menu.press_touch": "DOTKNIJ EKRANU, ABY ZACZĄĆ",
   "menu.foot_touch": "Dotknij opcji, aby wybrać · strzałka w rogu wraca",

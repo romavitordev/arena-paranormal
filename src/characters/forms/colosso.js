@@ -3,8 +3,8 @@
 // Visual: o escafandro de cobre arranhado com os três visores vermelhos rachados e o axolote rosa pendurado na frente;
 // o tronco cheio de cicatrizes à mostra, retalhos de pano cru, mangueiras, arnês e cinturão de espinhos, as MANOPLAS de
 // cobre e as botas com espinhos (referência "Colosso corpo inteiro").
-// Poderes com o escafandro — as MANOPLAS DO COLOSSO (Energia: "cada soco é acompanhado por uma pressão atmosférica
-// demolidora"): todo soco solta uma onda de pressão (dano extra de Energia) e os finalizadores ATORDOAM; o □ vira o
+// Poderes com o escafandro — as MANOPLAS DO COLOSSO (Energia no cânone, Sangue no jogo desde a v3.25.1: "cada soco é acompanhado por uma pressão atmosférica
+// demolidora"): todo soco solta uma onda de pressão (dano extra de Sangue) e os finalizadores ATORDOAM; o □ vira o
 // VEM, NENÉM! (a postura de contra com as Manoplas); Pressão Demolidora, Esmagar o Crânio (a lenda das arenas), Atropelar e o Pisão do Colosso
 // (a finalização do Mosto). Especial "AÍ SIM, NENÉM!" (a frase do Tuco testando as Manoplas). Mais forte, aguenta mais
 // e quase não é empurrado — mas continua lento.
@@ -13,7 +13,7 @@ import base from '../dalmo.js';
 const RED = 0xff2a1e;
 const PRESS = 0xffb070;
 // as Manoplas são de METAL: todo golpe soa como soco de manopla (pancada + tinido)
-const heavier = (s) => ({ ...s, damage: Math.round(s.damage * 1.15), element: 'energia', hitSound: 'metalPunch' });
+const heavier = (s) => ({ ...s, damage: Math.round(s.damage * 1.15), element: 'sangue', hitSound: 'metalPunch' });
 const M = base.melee;
 const byId = Object.fromEntries(base.abilities.map((a) => [a.id, a]));
 
@@ -27,7 +27,7 @@ export default {
   color: '#c8401e',
   energyColor: RED,
   info: {
-    weapon: 'As Manoplas do Colosso (Energia)',
+    weapon: 'As Manoplas do Colosso (Sangue)',
     style: 'O gladiador de escafandro: cada soco solta uma onda de pressão; agarra, esmaga e pisa',
     identity: 'Forma do Colosso (até o fim do round)',
     tagline: 'Aí sim, neném!',
@@ -65,7 +65,7 @@ export default {
       final: 'slam',
       finalDamage: 38,
       pressure: true,
-      element: 'energia',
+      element: 'sangue',
       hitSound: 'metalPunch',
       label: 'GOLPE SEGURADO!',
       color: PRESS,
@@ -76,7 +76,7 @@ export default {
       ...byId.pressaoAtmosferica,
       id: 'pressaoDemolidora',
       name: 'Pressão Demolidora',
-      description: 'O soco das Manoplas com toda a força: uma onda de pressão bem maior, mais dano de Energia e o alvo ATORDOADO por mais tempo.',
+      description: 'O soco das Manoplas com toda a força: uma onda de pressão bem maior, mais dano de Sangue e o alvo ATORDOADO por mais tempo.',
       cooldown: 8,
       range: 3.0,
       arc: 130,
@@ -115,7 +115,7 @@ export default {
       radius: 4.2,
       range: 4, // a CPU só pisa com o adversário perto
       damage: 52,
-      element: 'energia',
+      element: 'sangue',
       hitSound: 'metalPunch',
       color: PRESS,
     },

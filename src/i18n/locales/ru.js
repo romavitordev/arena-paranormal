@@ -3,6 +3,7 @@
 export default {
   "menu.title": "ARENA PARANORMAL",
   "menu.subtitle": "ПАРАНОРМАЛЬНЫЙ ФАЙТИНГ",
+  "menu.fanmade": "ФАНАТСКАЯ ИГРА · некоммерческий фан-проект по Ordem Paranormal (Cellbit). Не официальная игра.",
   "menu.press_start": "НАЖМИТЕ <b>START</b>, <b>{ok}</b> ИЛИ <kbd>ENTER</kbd>",
   "menu.press_touch": "КОСНИТЕСЬ ЭКРАНА, ЧТОБЫ НАЧАТЬ",
   "menu.foot_touch": "Коснитесь варианта для выбора · стрелка в углу — назад",

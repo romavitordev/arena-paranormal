@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.25.0';
+export const VERSION = '3.25.1';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,15 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.25.1',
+    date: '2026-10-16',
+    title: 'Feito por Fãs',
+    items: [
+      'TELA DE TÍTULO: aviso de que o Arena Paranormal é um JOGO FAN MADE — um projeto de fã sem fins lucrativos, baseado em Ordem Paranormal (Cellbit), e não um jogo oficial.',
+      'DALMO agora é do elemento SANGUE (antes Energia): a Pressão Atmosférica, os socos e as Manoplas do Colosso passam a contar como Sangue na roda dos elementos.',
+    ],
+  },
   {
     v: '3.25.0',
     date: '2026-10-16',

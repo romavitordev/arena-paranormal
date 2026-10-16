@@ -3,6 +3,7 @@
 export default {
   "menu.title": "ARENA PARANORMAL",
   "menu.subtitle": "超自然格斗游戏",
+  "menu.fanmade": "粉丝自制游戏 · 基于 Ordem Paranormal（Cellbit）的非营利粉丝作品，并非官方游戏。",
   "menu.press_start": "按 <b>START</b>、<b>{ok}</b> 或 <kbd>ENTER</kbd>",
   "menu.press_touch": "轻触屏幕开始",
   "menu.foot_touch": "轻触选项进行选择 · 角落的箭头返回",

@@ -1,5 +1,13 @@
 # Changelog
 
+## v3.25.1 — 2026-10-16
+
+### Adicionado
+- Tela de título: `.fanmade` dentro do logo (`menu.fanmade` nos 13 idiomas), escondido quando o menu abre.
+
+### Alterado
+- Dalmo e a forma Colosso: `element` `energia` → `sangue` (o personagem, a Pressão Atmosférica, os golpes das Manoplas e o soco do Colosso).
+
 ## v3.25.0 — 2026-10-16
 
 ### Adicionado

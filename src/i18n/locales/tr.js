@@ -3,6 +3,7 @@
 export default {
   "menu.title": "ARENA PARANORMAL",
   "menu.subtitle": "PARANORMAL BİR DÖVÜŞ OYUNU",
+  "menu.fanmade": "HAYRAN YAPIMI OYUN · Ordem Paranormal (Cellbit) temelli, kâr amacı gütmeyen bir hayran projesi. Resmî oyun değildir.",
   "menu.press_start": "<b>START</b>, <b>{ok}</b> VEYA <kbd>ENTER</kbd> TUŞUNA BAS",
   "menu.press_touch": "BAŞLAMAK İÇİN EKRANA DOKUN",
   "menu.foot_touch": "Seçmek için bir seçeneğe dokun · köşedeki ok geri döner",

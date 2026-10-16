@@ -77,7 +77,7 @@ export const DALMO_KIT = {
       name: 'Pressão Atmosférica',
       input: 'carga+physical', // △ → ○
       type: 'heavyBlow',
-      description: 'Concentra a força num soco que solta uma onda de pressão (dano de Energia): quem é atingido fica ATORDOADO. Aguenta um golpe durante a preparação; errar deixa ele aberto.',
+      description: 'Concentra a força num soco que solta uma onda de pressão (dano de Sangue): quem é atingido fica ATORDOADO. Aguenta um golpe durante a preparação; errar deixa ele aberto.',
       energyCost: 25,
       cooldown: 11,
       anim: 'heavy_punch',
@@ -92,7 +92,7 @@ export const DALMO_KIT = {
       stun: 1.1,
       pressure: 2.2,
       whiffRecovery: 0.35,
-      element: 'energia',
+      element: 'sangue',
       color: PRESS,
     },
     {
@@ -196,7 +196,7 @@ export default {
   model: 'dalmo',
   color: '#b8562e',
   origin: 'Mascarados', // Hexatombe (associação: Assassinos)
-  element: 'energia', // as Manoplas do Colosso são amaldiçoadas com Energia
+  element: 'sangue', // no cânone as Manoplas do Colosso são de Energia; no jogo, SANGUE (pedido do usuário, v3.25.1)
   energyColor: PRESS,
   info: {
     weapon: 'Os punhos; as Manoplas do Colosso na Transformação',

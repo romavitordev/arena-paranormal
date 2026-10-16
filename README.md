@@ -4,7 +4,9 @@ Jogo de luta 3D em arena com temática paranormal. Combate rápido e acessível,
 movimentação livre, ataques direcionais, defesa, esquiva, habilidades por combinação de
 botões e especiais cinematográficos. Feito com **Three.js + Vite**, roda no navegador.
 
-Versão atual do jogo: **v3.25.0**.
+Versão atual do jogo: **v3.25.1**.
+
+> Jogo **fan made**: projeto de fã sem fins lucrativos, baseado em *Ordem Paranormal* (Cellbit). Não é um jogo oficial.
 
 A numeração segue **MAJOR.MINOR.PATCH**: microatualizações usam `x.y.z`, atualizações concretas usam `x.y.0` e grandes marcos usam `x.0.0`.
 
