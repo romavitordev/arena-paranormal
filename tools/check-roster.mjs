@@ -277,7 +277,7 @@ ok(dan && ['shuffle', 'lodoTentacles', 'agingHeal'].every((t) => dan.abilities.s
   ok(tri && tri.fight && dan.awakening.type === 'maskTransform' && dan.awakening.scene === 'eyes' && dan.awakening.form === 'dante_aberto', 'Dante: as cópias do Trinitá lutam; a Transformação é Olhos Abertos (a cena dos olhos, forma dante_aberto)');
   ok(ab && ab.model === 'dante_aberto' && ['paradox', 'echoPain', 'decadence', 'agingHeal', 'lodoTentacles'].every((t) => ab.abilities.some((a) => a.type === t)) && triA && triA.copies === 4 && triA.recast
     && ab.abilities.find((a) => a.type === 'agingHeal').noAging && ab.ranged.fromMouth && ab.ranged.variants.back.ability === 'rotura' && ab.special.ranged && ab.passives.some((p) => p.type === 'deathMarked'),
-  'Dante de Olhos Abertos: Decadência pela boca, Trinitá Aprimorado (4 cópias + troca de lugar), Paradoxo, Eco Espiral, Paradiso sem envelhecer, Rotura no ← + □, a Marionete com o corte à distância e Marcado pela Morte');
+  'Dante de Olhos Abertos: Decadência pela boca, Trinitá Aprimorado (4 cópias + troca de lugar), Paradoxo, Eco Espiral, Paradiso sem envelhecer, Rotura no ← + □, a Marionete com os Fios do Luto e Marcado pela Morte');
 }
 ok(dan && dan.special.type === 'marionette' && dan.special.duration <= 30 && dan.special.cooldown >= 30, 'Dante: especial Invocação da Marionete (NPC por tempo limitado, recarga alta)');
 ok(dan && allStrikes(dan).every((s) => !s.weapon), 'Dante: sem armas');
@@ -342,15 +342,15 @@ ok(COMBAT.down && COMBAT.down.lie > 0 && COMBAT.airCombo.maxHits <= 4, 'queda co
 ok(COMBAT.grab && COMBAT.grab.range < 2 && COMBAT.grab.damage > 0, 'agarrão (Defesa + ○): curta distância');
 ok(!COMBAT.powered && ROSTER.every((c) => !(c.abilities || []).some((a) => a.input.startsWith('mod+'))), 'habilidades em △ + ○/□/L2 e R2 + △/× (sem versões fortes, sem R1 modificador)');
 
-// ---------------- V3.22: invocações (Mananciais, hordas do Diabo, Carniçal, bichos da ilha) e o Shhh sem rastro ----------------
+// ---------------- V3.22: invocações (Mananciais, hordas do Diabo, Existido de Morte, bichos da ilha) e o Shhh sem rastro ----------------
 {
   const fer = get('ferreiro').abilities.find((a) => a.type === 'summonMananciais');
   ok(fer && fer.count === 3 && fer.strikes.every((s) => CLIPS[s.anim]) && CLIPS.man_idle && CLIPS.man_run, 'Ferreiro: Chamar os Mananciais (3, com animações man_*)');
   const hordes = (def) => def.abilities.find((a) => a.type === 'summonBlood').hordes;
   ok(hordes(get('o_diabo')).every((h) => h.length <= 2 && !h.includes('strong')), 'O Diabo: Senhor do Sangue só com 1 ou 2 zumbis pequenos');
   ok(hordes(getForm('diabo')).every((h) => h.includes('strong') && h.includes('weak')), 'Portador do Trono: o zumbi grande sempre com os pequenos');
-  const car = getForm('deus_morte').abilities.find((a) => a.type === 'summonCarnical');
-  ok(car && car.hp < COMBAT.maxHealth / 2, 'Deus da Morte: invoca O Carniçal (só um; o invocado é bem mais fraco que um lutador)');
+  const car = getForm('deus_morte').abilities.find((a) => a.type === 'summonExistido');
+  ok(car && car.hp < COMBAT.maxHealth / 2, 'Deus da Morte: invoca um Existido de Morte (só um; bem mais fraco que um lutador)');
   const bic = get('amigo').abilities.find((a) => a.type === 'summonInkBeasts');
   ok(bic && bic.packs.length && bic.packs.every((p) => p.every((k) => ['javali', 'cao'].includes(k))), 'Amigo Imaginário: Bichos da Ilha (javalis e cães infectados pela Tinta)');
   const sh = get('jae').abilities.find((a) => a.id === 'shhh');

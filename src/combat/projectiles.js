@@ -1,5 +1,4 @@
 import { COMBAT } from '../config/combat.js';
-import { isBullet } from './beasts.js';
 import * as THREE from 'three';
 import { applyHit } from './damage.js';
 import { glowMat } from '../models/rig.js';
@@ -601,7 +600,7 @@ export class Projectiles {
         if (a.visual === 'shadow') p.pos.y = 0.12;
         const npc = w.npcs.find((n) => n.alive && n.owner !== p.owner && n.hitTest(p.pos, p.r ?? a.radius));
         if (npc) {
-          npc.hitBy(p.owner, a.damage, { kind: 'ranged', bullet: isBullet(a) }); // bullet: o Carniçal é imune a tiros
+          npc.hitBy(p.owner, a.damage, { kind: 'ranged' });
           w.fx.impact(p.pos.clone(), a.color ?? 0xffffff, 0.8);
           dead = true;
           break;

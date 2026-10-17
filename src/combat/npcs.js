@@ -198,11 +198,12 @@ export const MARIONETTE = {
     heavy: { windup: 0.6, active: 0.14, recovery: 0.65, range: 2.9, arc: 110, damage: 50, cd: 3.5, knockback: 4, knockdown: true },
     lunge: { windup: 0.32, active: 0.2, recovery: 0.5, range: 2.0, arc: 120, damage: 32, cd: 4.5, knockback: 5, dash: 12 },
     irony: { windup: 0.35, active: 0.5, recovery: 0.45, range: 2.6, arc: 150, damage: 18, cd: 11, knockback: 0.5, hits: [0.35, 0.62], grabAt: 0.82, hold: 1.1, release: 26, share: 0.5 },
-    // CORTE À DISTÂNCIA: só se o Dante a invocou TRANSFORMADO (Afinidade com o Outro Lado) — a foice arremessa um corte
-    // de osso no adversário que está longe (nunca no Dante: na "traição" ela só usa os golpes de perto)
-    slash: { windup: 0.45, active: 0.08, recovery: 0.5, range: 16, arc: 360, damage: 34, cd: 2.6, knockback: 2.5, projectile: { visual: 'boneCrescent', color: 0x8ad8c0, speed: 20, range: 16, radius: 0.55, damage: 34, knockback: 2.5, hitstun: 0.4, kind: 'ability', element: 'morte', hitSound: 'bladeHit', homing: 0.6 } },
+    // FIOS DO LUTO (à distância, só com o Dante de OLHOS ABERTOS): os fios invisíveis que erguem o corpo dela são
+    // lançados no alvo — se prendem, puxam a vítima até a frente da foice (o "arrasta a vítima consigo" da Ironia do
+    // Destino) e o corte sai em seguida. Dá para esquivar (o fio voa) e defender (o fio bate e cai). Nunca no Dante.
+    strings: { windup: 0.55, active: 0, recovery: 0.55, range: 13, speed: 26, damage: 10, cd: 5.5, pullDist: 1.7, pullTime: 0.35 },
   },
-  firstCd: { reflex: 0.3, quick: 0.5, heavy: 1.5, lunge: 1.5, irony: 3, slash: 1.2 },
+  firstCd: { reflex: 0.3, quick: 0.5, heavy: 1.5, lunge: 1.5, irony: 3, strings: 1.0 },
   // chance (por sorteio, a cada 2 s) de atacar o Dante: base + bônus de proximidade; × energia se o adversário é de Energia
   betray: { base: 0.08, near: 0.22, nearDist: 6, closer: 0.15, oppFar: 0.12, oppFarDist: 10, energia: 0.4 },
 };
@@ -242,7 +243,8 @@ export class Marionette {
     this.retarget = 2;
     this.flash = 0;
     this.held = null;
-    this.ranged = !!o.ranged; // invocada com o Dante transformado: ganha o corte à distância
+    this.forceRanged = !!o.ranged; // invocada com o Dante transformado: já nasce com os Fios do Luto
+    this.wasRanged = this.ranged;
     this.gait = 0;
     // Momento Passivo: só os limites da arena seguram (atravessa paredes, mesas, pilares)
     this.bounds = { colliders: [], boxes: [], bounds: world.arena.bounds, radius: world.arena.radius };
@@ -258,6 +260,14 @@ export class Marionette {
   }
 
   configFor() { return MARIONETTE; }
+
+  // FIOS DO LUTO: valem enquanto o Dante está de OLHOS ABERTOS (a forma transformada tem special.ranged) — também
+  // quando ele se transforma com ela já em campo — ou quando ela foi invocada assim
+  get ranged() {
+    if (!this.isMarionette) return false;
+    const o = this.owner;
+    return this.forceRanged || !!(o && o.def && o.def.special && o.def.special.ranged) || !!(o && o.findBuff && o.findBuff('awakened'));
+  }
 
   // surgir: sobe reta do Lodo, inclinada
   riseTime() { return 0.9; }
@@ -306,7 +316,8 @@ export class Marionette {
     if (d < 2.4 && c.irony <= 0 && Math.random() < 0.3) return 'irony';
     if (d < 2.6 && c.heavy <= 0 && Math.random() < 0.35) return 'heavy';
     if (d < 2.8 && c.quick <= 0) return 'quick';
-    if (this.ranged && this.target !== this.owner && d > 3.5 && d < 15 && c.slash <= 0 && Math.random() < 0.6) return 'slash';
+    // de longe: FIOS DO LUTO (puxa a vítima para a foice)
+    if (this.ranged && this.target !== this.owner && d > 3.5 && d < this.cfg.attacks.strings.range - 1 && c.strings <= 0) return 'strings';
     if (d > 4 && d < 10 && c.lunge <= 0) return 'lunge';
     return null;
   }
@@ -357,6 +368,10 @@ export class Marionette {
     if (this.state === 'chase' && (this.retarget <= 0 || !this.target || this.target.state === 'ko')) { this.retarget = 2; this.chooseTarget(); }
     const tg = this.target;
     if (!tg) return;
+    // o Dante abriu os olhos com ela em campo: passa a cortar à distância (avisa uma vez)
+    const rangedNow = this.ranged;
+    if (rangedNow && !this.wasRanged) this.owner.notify('A MARIONETE LANÇA OS FIOS DO LUTO', true);
+    this.wasRanged = rangedNow;
     const d = distXZ(this.pos, tg.pos);
     const face = yawTo(this.pos, tg.pos);
     const px = this.pos.x;
@@ -374,6 +389,8 @@ export class Marionette {
         this.pos.x += Math.sin(face + 0.25) * sp * dt;
         this.pos.z += Math.cos(face + 0.25) * sp * dt;
       }
+    } else if (this.state === 'attack' && this.atk.name === 'strings') {
+      this.updateStrings(dt, tg, face);
     } else if (this.state === 'attack') {
       const a = this.atk;
       const t = this.stateT;
@@ -447,21 +464,87 @@ export class Marionette {
 
   bob() { return Math.sin(this.t * 2.2) * 0.1 + jerk(this.t, 9, 3) * 0.04; }
 
-  strike(a, tg, d) {
-    if (a.projectile) {
-      // corte à distância: sai da altura da foice, na direção do alvo
-      const from = new THREE.Vector3(this.pos.x, this.pos.y + 1.3, this.pos.z).addScaledVector(forwardFromYaw(this.yaw, new THREE.Vector3()), 0.8);
-      const dir = new THREE.Vector3(tg.pos.x, tg.pos.y + 1.0, tg.pos.z).sub(from).normalize();
-      this.world.projectiles.spawn(this.owner, a.projectile, from, dir);
-      this.world.audio.play('swing', { volume: 0.8, pitch: 0.8 });
-      return true;
+  // FIOS DO LUTO: braços erguidos (preparo), o fio sai voando reto até onde o alvo estava; se pega, puxa e a foice corta
+  stringsOrigin(out) {
+    return out.set(this.pos.x, this.pos.y + 2.1, this.pos.z).addScaledVector(forwardFromYaw(this.yaw, v), 0.4);
+  }
+
+  updateStrings(dt, tg, face) {
+    const a = this.atk;
+    const w = this.world;
+    const t = this.stateT;
+    if (!a.thread) {
+      this.yaw = face;
+      if (t < a.windup) {
+        // preparo: os fios brilham em volta dela (aviso para quem vai levar)
+        if (Math.random() < 0.6) w.fx.burst(this.stringsOrigin(new THREE.Vector3()), { count: 2, color: 0xe8e2d6, speed: 1.2, up: 0.4, life: 0.3, size: 0.04 });
+        return;
+      }
+      // lança: o fio voa reto até o peito do alvo (onde ele estava agora)
+      const from = this.stringsOrigin(new THREE.Vector3());
+      const dir = tg.chestPos().sub(from).normalize();
+      const tip = from.clone();
+      a.thread = { tip, dir, gone: 0, state: 'fly' };
+      a.fx = w.fx.chain(() => this.stringsOrigin(new THREE.Vector3()), () => a.thread.tip.clone(), { rope: true, links: 26, thick: 0.01, color: 0xe8e2d6, glow: 0x8ad8c0 });
+      w.audio.play('swing', { volume: 0.8, pitch: 1.4 });
+      return;
     }
+    const th = a.thread;
+    if (th.state === 'fly') {
+      const step = a.speed * dt;
+      th.tip.addScaledVector(th.dir, step);
+      th.gone += step;
+      const c = tg.chestPos();
+      const near = th.tip.distanceTo(c) <= (tg.radius || 0.4) + 0.55;
+      if (near && !w.cinematic) {
+        const res = applyHit(w, this.owner, tg, {
+          damage: a.damage, kind: 'ability', element: 'morte', knockback: 0, dir: th.dir.clone().setY(0).normalize(), sound: 'chainPull', color: 0xe8e2d6, scale: 0.8,
+        });
+        if (typeof res === 'number' && res > 0 && tg.state !== 'ko' && tg.pullTo) {
+          // preso: puxa a vítima até a frente da foice
+          const F = forwardFromYaw(yawTo(this.pos, tg.pos), new THREE.Vector3());
+          tg.pullTo(new THREE.Vector3(this.pos.x + F.x * a.pullDist, tg.pos.y, this.pos.z + F.z * a.pullDist), { time: a.pullTime, after: 0.55 });
+          tg.notify && tg.notify('FIOS DO LUTO', true);
+          a.fx.toFn = () => tg.chestPos();
+          th.state = 'pull';
+          th.t = 0;
+        } else {
+          th.state = 'back'; // defendeu / esquivou: o fio bate e volta
+        }
+        return;
+      }
+      if (th.gone >= a.range) th.state = 'back';
+      return;
+    }
+    if (th.state === 'pull') {
+      th.t += dt;
+      this.yaw = face;
+      if (th.t >= a.pullTime) {
+        // chegou: o corte da foice sai na hora
+        if (a.fx) a.fx.stop();
+        this.cds.strings = a.cd;
+        this.atk = { name: 'quick', ...this.cfg.attacks.quick, windup: 0.12, done: [], swung: [], vsOwner: false };
+        this.setState('attack');
+        w.audio.play('swing', { volume: 0.8 });
+      }
+      return;
+    }
+    // recolhe o fio e termina
+    th.tip.lerp(this.stringsOrigin(new THREE.Vector3()), Math.min(1, dt * 10));
+    th.t = (th.t || 0) + dt;
+    if (th.t >= a.recovery) {
+      if (a.fx) a.fx.stop();
+      this.endAttack();
+    }
+  }
+
+  strike(a, tg, d) {
     const inArc = a.arc >= 360 || Math.abs(angleDiff(this.yaw, yawTo(this.pos, tg.pos))) <= (a.arc * DEG) / 2;
     if (!(d - tg.radius <= a.range && inArc && Math.abs(tg.pos.y - this.pos.y) < 2.2)) return false;
     const heavy = a.name === 'heavy' || a.name === 'slam';
     const res = applyHit(this.world, this.owner, tg, {
       damage: a.damage, kind: 'ability', element: this.cfg.element || 'morte', knockback: a.knockback, launch: !!a.knockdown, lowLaunch: !!a.knockdown,
-      stun: a.stun, dir: forwardFromYaw(this.yaw, new THREE.Vector3()), sound: heavy ? 'heavyPunch' : 'bladeHit', color: this.cfg.fxColor, scale: heavy ? 1.8 : 1.2,
+      stun: a.stun, dir: forwardFromYaw(this.yaw, new THREE.Vector3()), sound: a.sound || (heavy ? 'heavyPunch' : 'bladeHit'), color: this.cfg.fxColor, scale: heavy ? 1.8 : 1.2,
     });
     if (typeof res === 'number' && a.stun && tg.state !== 'ko') tg.stun(a.stun, 'fear');
     return true;
@@ -469,7 +552,6 @@ export class Marionette {
 
   swingFx(a, i) {
     if (a.name === 'lunge') return;
-    if (a.projectile) { this.world.fx.slash(new THREE.Vector3(this.pos.x, this.pos.y + 1.4, this.pos.z), this.yaw, { color: 0xbfe8dc, radius: 1.6, arc: 2.4, life: 0.2, width: 0.3, roll: 1.2 }); return; }
     const roll = a.name === 'heavy' ? 1.4 : a.name === 'irony' ? (i ? -0.5 : 0.5) : 0.2;
     this.world.fx.slash(new THREE.Vector3(this.pos.x, this.pos.y + 1.4, this.pos.z), this.yaw, { color: 0xbfe8dc, radius: a.range, arc: a.name === 'heavy' ? 2.2 : 2.8, life: 0.25, width: 0.35, roll });
   }

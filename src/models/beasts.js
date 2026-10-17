@@ -3,11 +3,11 @@ import { buildNpcModel } from './npcRig.js';
 import { buildBloodZombie } from './bloodZombie.js';
 import { toon } from './rig.js';
 
-// O CARNIÇAL (invocação do Deus da Morte, tools/blender/npc_carnical.py): mesmo esqueleto dos Zumbis de Sangue, então
-// usa a pose deles (em pé e altivo). Se o .glb faltar, usa o Zumbi fraco.
-export function buildCarnical() {
-  const m = buildNpcModel('carnical', { outline: 0.012, noOutline: ['tendon', 'glow', 'claw'] });
-  if (!m) return buildBloodZombie(false);
+// O EXISTIDO DE MORTE (invocação do Deus da Morte, tools/blender/npc_existido_morte.py): mesmo esqueleto dos Zumbis de
+// Sangue, então a pose (combat/npcs.js BloodZombie.pose) serve igual. Sem o .glb, usa o zumbi provisório.
+export function buildExistido() {
+  const m = buildNpcModel('existido_morte', { outline: 0.012, noOutline: ['lodo_existido', 'dente'] });
+  if (!m) return buildBloodZombie(true);
   const J = m.joint;
   return {
     root: m.root,

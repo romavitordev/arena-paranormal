@@ -123,8 +123,8 @@ export default {
 
   // INVOCAÇÃO: A MARIONETE — um NPC real (vida, IA, ataques próprios) que fica 18 s em campo.
   // Pode ser atacada e destruída. Recarga alta. Às vezes se volta contra o próprio Dante.
-  // Invocada de OLHOS ABERTOS (a forma dante_aberto: special.ranged), ganha o CORTE À DISTÂNCIA (a foice arremessa um
-  // corte de osso — npcs.js MARIONETTE.slash).
+  // Com o Dante de OLHOS ABERTOS (a forma dante_aberto: special.ranged) ela ganha os FIOS DO LUTO: lança os fios que a
+  // erguem no alvo e o puxa até a foice (npcs.js MARIONETTE.strings) — vale também se ele se transformar com ela em campo.
   special: {
     name: 'Invocação: A Marionete',
     banner: 'A Marionete!',

@@ -293,9 +293,8 @@ export class TouchControls {
     this.spBtn.classList.toggle('nocost', !used && !avail && spC <= 0);
     this.spBtn.classList.toggle('used', !!used);
     cd(this.ringEls.ranged, 'ranged');
-    // △: etapas da carga (1, 2 = especial armado) e a transformação disponível (segurar)
+    // △: a transformação disponível (segurar)
     const tri = this.ringEls.carga;
-    tri.dataset.stage = f.carga ? f.carga.stage : 0;
     tri.classList.toggle('awaken', !!(f.canTransform && f.canTransform()));
     // ESQ: as cargas da esquiva (bolinhas embaixo)
     const esq = this.ringEls.dodge;

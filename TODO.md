@@ -1,6 +1,6 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.30.1 (revisado em 2026-10-16: o que já estava pronto no código saiu da lista; a
+**Versão de referência atual:** v3.31.0 (revisado em 2026-10-16: o que já estava pronto no código saiu da lista; a
 versão instalável já saiu na v3.25.0 e o adendo dela foi retirado)
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente
@@ -947,7 +947,12 @@ wiki. Os modelos abaixo ainda são da técnica antiga (peças geométricas colad
 qualidade do Cristino / Cristopher / Dante v2 — um por vez, com o kit e as juntas preservados.
 (A Aghata já teve um remodel, mas foi antes da técnica nova: entra aqui.)
 
-**Já na técnica nova:** Cristino, Cristopher, Dante (+ Olhos Abertos), Juan / Henri, Deus da Morte, Carniçal, A Marionete.
+**Já na técnica nova:** Cristino, Cristopher, Dante (+ Olhos Abertos), Juan / Henri, Deus da Morte, Existido de Morte, A Marionete.
+
+- [ ] **O Carniçal como personagem jogável** (criatura do Outro Lado) — saiu das invocações na v3.31.0 (o Deus da Morte
+  agora invoca um Existido de Morte). Reaproveitar `tools/blender/npc_carnical.py` / `public/npcs/carnical.glb` e o kit
+  antigo (Garra da Morte, Pancada Poderosa, o salto, Hipnose Espiral, Corpo Fechado, Instinto Mortal — no histórico da
+  v3.30.1, `src/combat/beasts.js`).
 
 ## Personagens jogáveis
 

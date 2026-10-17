@@ -1,3 +1,4 @@
+import { ExistidoMorte } from '../combat/beasts.js';
 import * as THREE from 'three';
 import { preloadNpcModels } from '../models/npcRig.js';
 import { Marionette, BloodZombie } from '../combat/npcs.js';
@@ -35,8 +36,9 @@ const owner = { yaw: 0, pos: new THREE.Vector3(0, 0, -20), state: 'idle', notify
 await preloadNpcModels();
 const npcs = [
   new Marionette(owner, world, new THREE.Vector3(-3.4, 0, 0)),
-  new BloodZombie(owner, world, new THREE.Vector3(0, 0, 0), {}),
-  new BloodZombie(owner, world, new THREE.Vector3(3.6, 0, 0), { strong: true }),
+  new ExistidoMorte(owner, world, new THREE.Vector3(0, 0, 0)),
+  new BloodZombie(owner, world, new THREE.Vector3(3.6, 0, 0), {}),
+  new BloodZombie(owner, world, new THREE.Vector3(7.2, 0, 0), { strong: true }),
 ];
 for (const n of npcs) { n.state = 'chase'; n.yaw = 0; n.pool.visible = false; }
 

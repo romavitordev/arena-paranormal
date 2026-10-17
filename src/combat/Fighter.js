@@ -1109,14 +1109,15 @@ export class Fighter {
   }
 
   // △/Y é o MODIFICADOR de ○ e □, como no Storm 4: △ → ○ e △ → □ (um toque logo depois do outro, dentro de
-  // COMBAT.cargaComboWindow; também vale junto ou segurando △) soltam a habilidade daquele comando ('carga+physical' / 'carga+ranged')
-  // e desfazem a etapa de Carga daquele toque. △ → △ → ○ continua sendo o especial.
+  // COMBAT.cargaComboWindow, ou os dois juntos) soltam a habilidade daquele comando ('carga+physical' / 'carga+ranged')
+  // e desfazem a etapa de Carga daquele toque. △ → △ → ○ continua sendo o especial. Segurar △ (carregar sanidade) não
+  // arma nada: o ○ depois de carregar é ataque normal.
   chordWithCarga() {
     const inp = this.input;
     // em sequência (△, solta, ○/□): só vale logo depois do △ — andar um tempo e apertar ○ é ataque normal
     const t = inp.pressTime.carga;
     const seq = this.carga.stage === 1 && t !== undefined && this.world.inputTime - t <= COMBAT.cargaComboWindow;
-    if (!inp.pressed.carga && !inp.held.carga && !this.recent('carga') && !seq) return false;
+    if (!inp.pressed.carga && !this.recent('carga') && !seq) return false;
     if (!inp.pressed.carga && this.carga.stage > 0) this.carga.stage -= 1;
     return true;
   }
@@ -1446,7 +1447,6 @@ export class Fighter {
       return;
     }
     this.addEnergy(COMBAT.chargeRate * (moving ? COMBAT.chargeMoveRate : 1) * dt);
-    if (this.carga.stage > 0) this.carga.timer = Math.max(this.carga.timer, 0.6);
     // Barra de Transformação cheia e vida baixa: com a sanidade cheia, continuar segurando passa do limite e transforma
     if (this.canTransform() && this.energy >= this.maxEnergy) {
       this.overcharge = Math.min(1, this.overcharge + dt / COMBAT.storm.overcharge);

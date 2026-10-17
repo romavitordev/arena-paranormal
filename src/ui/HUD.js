@@ -98,7 +98,6 @@ export class HUD {
         <div class="bar guard" title="Resistência da defesa"><div class="fill"></div></div>
         ${def.awakening ? `<div class="bar storm" title="Barra de Transformação: enche apanhando; cheia e com a vida baixa, segure ${actionLabel(i, 'carga', f.input.source)} até passar da sanidade cheia"><div class="fill"></div><div class="over"></div><span>${escapeHtml(def.awakening.name.toUpperCase())}</span></div>` : ''}
         <div class="row">
-          <div class="carga" title="Carga de Poder"><span class="lbl">${t('hud.charge')}</span><i class="pip"></i><i class="pip"></i><b class="go">${t('hud.special')}</b></div>
           <div class="dodges" title="Esquivas (recuperam conforme toma dano)"><span class="lbl">${t('hud.dodge')}</span><i></i><i></i><i></i><i></i></div>
           <div class="state"></div>
         </div>
@@ -120,8 +119,6 @@ export class HUD {
         guardBar: p.querySelector('.bar.guard'),
         state: p.querySelector('.state'),
         dodgePips: [...p.querySelectorAll('.dodges i')],
-        pips: [...p.querySelectorAll('.pip')],
-        go: p.querySelector('.go'),
         abEls: [...p.querySelectorAll('.ab')],
         buff: p.querySelector('.buff'),
         msg: p.querySelector('.msg'),
@@ -193,14 +190,7 @@ export class HUD {
       e.dodgePips.forEach((pip, k) => pip.classList.toggle('on', f.dodges > k));
       e.dodgePips[0].parentNode.classList.toggle('locked', f.dodgeLockout > 0);
 
-      // Carga de Poder: etapas da sequência
-      const st = f.carga.stage;
-      e.pips.forEach((pip, k) => pip.classList.toggle('on', st > k));
-      const armed = st >= 2;
-      const avail = f.specialAvailable();
-      e.go.classList.toggle('ready', armed && avail);
-      e.go.classList.toggle('blocked', armed && !avail);
-      e.go.textContent = armed ? (avail ? t('hud.special_ready', { btn: actionLabel(i, 'physical', f.input.source) }) : t(f.cooldowns.special > 0 ? 'hud.recharging' : 'hud.no_sanity')) : t('hud.special');
+      // (a Carga de Poder não tem mais contador na tela: △ → ○ e △ → △ → ○ são comandos tocados seguidos — Fighter)
 
       // ícones de habilidade com cooldown
       const source = f.input.source;

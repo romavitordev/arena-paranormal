@@ -66,16 +66,16 @@ export default {
 
   abilities: [
     {
-      // o Carniçal Preto da Morte (O Segredo na Floresta): o Símbolo Espiral num crânio dá corpo à Morte
-      id: 'carnical',
-      name: 'O Carniçal',
+      // um Existido de Morte (Desconjuração / Calamidade): o Existido tocado pela Morte, de pele cinza e Lodo nas órbitas
+      id: 'existido',
+      name: 'Existido de Morte',
       input: 'carga+ranged', // △ → □ / Y → X
-      type: 'summonCarnical',
-      description: 'Do Lodo sobe O CARNIÇAL PRETO DA MORTE (só um por vez) e caça o adversário por 18 s: Garra da Morte, Pancada Poderosa que joga longe, o salto e a Hipnose Espiral que paralisa. Imune a TIROS (Corpo Fechado); ferido, perde a compostura e ataca sem parar.',
+      type: 'summonExistido',
+      description: 'Do Lodo sobe um EXISTIDO DE MORTE (só um por vez) que caça o adversário por 18 s: Pancadas pesadas, a Distorção Temporal que deixa o alvo LENTO e a Aceleração (dispara e parte dos golpes passa por ele). Anda de um jeito errático — do nada em câmera lenta, do nada rápido demais.',
       energyCost: 40,
       cooldown: 28,
       duration: 18,
-      hp: 380, // invocado é mais fraco que um Carniçal de verdade
+      hp: 340,
     },
     {
       id: 'espiralDescendente',

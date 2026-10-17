@@ -13,7 +13,7 @@ import { bloodCoat } from '../models/weapons.js';
 import { addBloodPool, poolsOf, splatGeo } from './bloodPools.js';
 import { inscribe } from './kianPowers.js';
 import { AMIGO_TYPES } from './amigoPowers.js';
-import { Carnical, InkBeast } from './beasts.js';
+import { ExistidoMorte, InkBeast } from './beasts.js';
 import { inkSplash } from '../fx/inkFx.js';
 
 // Paga um custo em vida (rituais de Sangue) sem nunca se matar
@@ -2603,11 +2603,11 @@ Object.assign(ABILITY_TYPES, {
     },
   },
 
-  // DEUS DA MORTE — O CARNIÇAL: do Lodo sobe o Carniçal Preto da Morte (só UM por vez) e caça o adversário: Garra da
-  // Morte, Pancada Poderosa, o salto e a Hipnose Espiral; imune a tiros; ferido, perde a compostura (combat/beasts.js)
-  summonCarnical: {
+  // DEUS DA MORTE — EXISTIDO DE MORTE: do Lodo sobe um Existido de Morte (só UM por vez) e caça o adversário: Pancada,
+  // Distorção Temporal (deixa o alvo lento), Aceleração e o andar errático, lento ↔ rápido (combat/beasts.js)
+  summonExistido: {
     start(f, a, world) {
-      if (world.npcs.some((n) => n.alive && n.owner === f && n.isCarnical)) { f.notify('O CARNIÇAL JÁ ESTÁ AQUI'); return null; }
+      if (world.npcs.some((n) => n.alive && n.owner === f && n.isExistido)) { f.notify('O EXISTIDO JÁ ESTÁ AQUI'); return null; }
       const opp = f.opponent;
       const tl = new Timeline();
       f.vel.set(0, 0, 0);
@@ -2620,8 +2620,8 @@ Object.assign(ABILITY_TYPES, {
         const spot = findFreeSpotNear(world.arena, want.x, want.z, { radius: 0.6, others: [{ x: base.x, z: base.z, r: 0.8 }, { x: f.pos.x, z: f.pos.z, r: 1.4 }] }) || want;
         world.fx.ring(new THREE.Vector3(spot.x, 0.07, spot.z), { color: 0xff2a1a, radius: 1.2, life: 0.8, inner: 0.85 });
         world.fx.burst(new THREE.Vector3(spot.x, 0.4, spot.z), { count: 40, color: 0x0a080c, kind: 'smoke', speed: 2, up: 2, life: 1, size: 0.8 });
-        world.addNpc(new Carnical(f, world, new THREE.Vector3(spot.x, 0, spot.z), { duration: a.duration, hp: a.hp }));
-        f.notify('O CARNIÇAL PRETO DA MORTE', true);
+        world.addNpc(new ExistidoMorte(f, world, new THREE.Vector3(spot.x, 0, spot.z), { duration: a.duration, hp: a.hp }));
+        f.notify('EXISTIDO DE MORTE', true);
       });
       tl.end(0.8);
       return seqFrom(tl);

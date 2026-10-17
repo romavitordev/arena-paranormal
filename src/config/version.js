@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.30.1';
+export const VERSION = '3.31.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,16 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.31.0',
+    date: '2026-10-17',
+    title: 'Fios e Escritas',
+    items: [
+      'CARGA COMO COMANDO (igual ao Storm): △ → ○ é a habilidade e △ → △ → ○ tocados seguidos é o especial. Cada △ só vale por um instante — nada fica "guardado". Antes, um △ apertado segundos antes fazia o próximo △ → ○ (ou só o ○) sair como especial. Segurar △ para carregar sanidade não arma mais nada, e o contador de cargas saiu da tela.',
+      'DANTE — a MARIONETE ganha os FIOS DO LUTO com o Dante de Olhos Abertos (inclusive se ele se transformar com ela já em campo): ela lança os fios invisíveis que a erguem, prende o adversário de longe, puxa até a frente da foice e corta. Dá para esquivar e defender. Sai o corte de osso à distância, que não existia na série.',
+      'DEUS DA MORTE — O Carniçal sai das invocações (vai virar personagem jogável) e entra o EXISTIDO DE MORTE: modelo novo feito a partir das artes oficiais (o corpo todo coberto de escrita, rosto de caveira com os olhos saltados e os dentes à mostra, o Lodo Preto tomando os braços e escorrendo do rosto). Anda de um jeito errático — do nada em câmera lenta, do nada rápido demais — e usa Pancadas pesadas, a Distorção Temporal (deixa você lento) e a Aceleração (dispara e parte dos golpes passa por ele).',
+    ],
+  },
   {
     v: '3.30.1',
     date: '2026-10-17',

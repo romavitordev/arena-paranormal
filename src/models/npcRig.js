@@ -10,7 +10,7 @@ export const NPC_MODELS = {
   marionette: 'npcs/marionette.glb',
   zumbi_sangue: 'npcs/zumbi_sangue.glb',
   zumbi_sangue_forte: 'npcs/zumbi_sangue_forte.glb',
-  carnical: 'npcs/carnical.glb', // o Carniçal Preto da Morte (invocação do Deus da Morte)
+  existido_morte: 'npcs/existido_morte.glb', // o Existido de Morte (invocação do Deus da Morte)
   javali_tinta: 'npcs/javali_tinta.glb', // os animais infectados pela Tinta (invocação do Amigo Imaginário)
   cao_tinta: 'npcs/cao_tinta.glb',
 };
@@ -59,7 +59,8 @@ export function buildNpcModel(id, { outline = 0.012, noOutline = ['hair', 'cloth
       side: THREE.DoubleSide,
       transparent: src.transparent,
       opacity: src.opacity,
-      vertexColors: !!o.geometry.attributes.color, // cor por vértice (o Carniçal: Lodo, estrias e osso numa malha só)
+      vertexColors: !!o.geometry.attributes.color, // cor por vértice (sombras e manchas de Lodo; multiplica a textura)
+      map: src.map || null, // textura do .glb (o Existido de Morte: a pele toda coberta de escrita)
     });
     o.material.name = name;
     o.material.userData.glow = glow;

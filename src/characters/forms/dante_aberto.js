@@ -99,6 +99,6 @@ export default {
     },
     { ...byId.rotura, input: 'ranged+back' }, // ← + □
   ],
-  special: { ...base.special, ranged: true }, // a Marionete invocada de olhos abertos: o corte à distância da foice
+  special: { ...base.special, ranged: true }, // a Marionete com o Dante de olhos abertos: os Fios do Luto (puxam a vítima até a foice)
   passives: [...base.passives, { type: 'deathMarked', mult: 0.8 }],
 };

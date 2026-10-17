@@ -168,7 +168,7 @@ function buildSteps(def) {
   for (const a of def.abilities || []) {
     steps.push({ title: a.name.toUpperCase(), cmd: comboCmd(a.input), text: a.description || '', needs: ['ability:' + a.id], heal: a.type === 'healOverTime' });
   }
-  steps.push({ title: `ESPECIAL: ${def.special.name.toUpperCase()}`, cmd: ['@carga', '→', '@carga', '→', '@physical'], text: 'Duas cargas seguidas e o físico. Custa 50 de sanidade (aqui a sanidade é infinita).', needs: ['special'] });
+  steps.push({ title: `ESPECIAL: ${def.special.name.toUpperCase()}`, cmd: ['@carga', '→', '@carga', '→', '@physical'], text: 'Toque seguido, sem parar entre os botões (como no Storm). Custa 50 de sanidade (aqui a sanidade é infinita).', needs: ['special'] });
   return steps;
 }
 

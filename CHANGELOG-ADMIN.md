@@ -1,5 +1,23 @@
 # Registro administrativo de alterações
 
+## v3.31.0 — Fios e Escritas
+
+- Versão: `VERSION` 3.30.1 → **3.31.0** (package.json/lock junto).
+- Pedidos: (1) "por ter apertado antes o Y ele usa o Especial — sem esse salvamento, Y-B é o poder, Y-Y-B é especial,
+  como no Storm"; (2) a Marionete com ataque à distância baseado nas habilidades dela na série → escolhido **Fios do
+  Luto**; (3) "remover o Carniçal (vai ser jogável), transformar em Existido de Morte com habilidades mais simples e o
+  movimento que varia do nada, lento e rápido" — sem barra própria, como os Zumbis; (4) "não parece nada com as imagens,
+  busque mais referências e melhore via MCP".
+- Fontes: wiki A Marionete (Foice Óssea, Momento Passivo, Reflexos Guiados por Corda, Ironia do Destino — nenhuma à
+  distância; o fio veio dos fios que a erguem + "arrasta a vítima"), wiki Existidos de Morte (corpo, Lodo nos olhos e
+  braços, Distorção Temporal, Aceleração, movimento errático) e as três artes da galeria (miniatura e variação de
+  Desconjuração, arte de Vendeta Oculta).
+- Conferido: os 6 casos da carga (só △ → △ → ○ seguido dá o especial; o caso do pedido virou habilidade); os Fios do
+  Luto prendendo a 6,6 m, puxando e emendando o corte; o Existido com os dois ritmos, Pancadas, Aceleração e Distorção
+  Temporal deixando o alvo lento; o modelo visto no jogo (npcs.html).
+- O MCP do Blender perdeu a conexão no meio (script longo); o modelo foi terminado pelo Blender sem janela com
+  prévias renderizadas (`preview_npc.py`).
+
 ## v3.30.1 — Tela Inteira
 
 - Versão: `VERSION` 3.30.0 → **3.30.1** (package.json/lock junto).

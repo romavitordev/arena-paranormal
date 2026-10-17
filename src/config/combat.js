@@ -18,8 +18,9 @@ export const COMBAT = {
   // nesse momento interrompe o especial (a sanidade gasta se perde; recarga curta)
   specialStartup: { time: 0.45, interruptedCooldown: 4 },
 
-  // Sequência CARGA → CARGA → ATAQUE FÍSICO
-  cargaWindow: 2.5, // segundos para continuar a sequência após cada etapa
+  // COMANDOS DE CARGA (como no Storm): △ → ○ = habilidade; △ → △ → ○ = especial. Cada △ só vale por um instante — a
+  // sequência precisa ser tocada seguida. Nada fica "guardado": segurar △ para carregar e depois apertar ○ é ataque normal
+  cargaWindow: 0.45, // segundos para o próximo toque da sequência (△ ou ○) depois de cada △
   cargaComboWindow: 0.4, // △ → ○ / △ → □: tempo máximo entre soltar o △ e apertar o segundo botão
   // Comandos de duas teclas (ex.: Energia + Pulo). Tolerância entre os toques.
   chordWindow: 0.16,

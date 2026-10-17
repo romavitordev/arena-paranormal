@@ -1,5 +1,30 @@
 # Changelog
 
+## v3.31.0 — 2026-10-17
+
+### Alterado
+- Carga (△): `COMBAT.cargaWindow` 2,5 → **0,45 s** (o próximo toque da sequência precisa vir logo); segurar △ não
+  estende mais a etapa (`updateCharging`); `chordWithCarga` sem o caminho "△ segurado" — só △ junto, logo antes ou em
+  sequência curta. HUD: saiu o bloco `.carga` (losangos + "○ → ESPECIAL!"); toque: saiu `data-stage` do △.
+- Marionete: `get ranged()` dinâmico (forma com `special.ranged`, buff `awakened` ou invocada assim) e aviso quando
+  muda; o ataque `slash` (corte de osso por projétil) virou `strings` — **Fios do Luto**: preparo 0,55 s, o fio voa a
+  26 m/s até 13 m, `applyHit` de 10 e, se acertar, `pullTo` até 1,7 m da Marionete e o golpe `quick` emenda; defendido
+  ou esquivado, o fio volta. `strike` aceita `a.sound`.
+- Deus da Morte: `summonCarnical` → `summonExistido`; habilidade `existido` (hp 340).
+
+### Adicionado
+- `ExistidoMorte` (`combat/beasts.js`, `EXISTIDO`): passo errático (sorteia ×0,3 ou ×2,1 a cada 0,35–1,1 s), Pancada
+  (`claw` com som de soco), `slam`, `timeWarp` (buff `timeWarp` `speedMult` 0,45 por 2,5 s) e `accel` (4 s ×1,9 e 40% dos
+  golpes passam). Sem barra própria na tela (como os Zumbis de Sangue).
+- Modelo `tools/blender/npc_existido_morte.py` → `public/npcs/existido_morte.glb`: textura de escrita
+  (`tools/blender/tex/existido_texto.png`, frases da wiki) com UV cilíndrico por peça, cor por vértice multiplicando,
+  Lodo como casca brilhante nos antebraços e mãos. `buildNpcModel` passa a usar a textura do .glb (`map`).
+- `tools/blender/preview_npc.py`: renderiza frente/lado/três-quartos/rosto de uma invocação a partir do .blend.
+
+### Removido
+- O Carniçal das invocações (`Carnical`, `buildCarnical`, `isBullet`/Corpo Fechado) e do carregamento; o script
+  `npc_carnical.py` e o .glb ficam para o personagem jogável futuro.
+
 ## v3.30.1 — 2026-10-17
 
 ### Corrigido
