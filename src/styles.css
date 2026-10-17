@@ -19,6 +19,10 @@ canvas#game { display: block; position: fixed; inset: 0; width: 100%; height: 10
 
 /* ---------------- HUD ---------------- */
 #hud { position: fixed; inset: 0; pointer-events: none; }
+/* iPhone com o jogo instalado: o iOS errou o tamanho da página depois de girar — as camadas de tela cheia usam o
+   tamanho da tela de verdade (core/viewport.js põe a classe vp-fix e as medidas) */
+html.vp-fix, html.vp-fix body { width: var(--app-w); height: var(--app-h); }
+html.vp-fix canvas#game, html.vp-fix #hud, html.vp-fix .screen, html.vp-fix #touch { right: auto; bottom: auto; width: var(--app-w) !important; height: var(--app-h) !important; }
 .panel { position: absolute; top: 14px; width: min(42vw, 520px); }
 .panel.p1 { left: 16px; }
 .panel.p2 { right: 16px; text-align: right; }
@@ -291,6 +295,16 @@ kbd { display: inline-block; padding: 0 5px; border: 1px solid #5a5268; border-b
 
 .menu .sub { text-align: center; color: var(--muted); margin: -4px 0 8px; }
 .menu .opt.disabled { opacity: .4; }
+/* celular deitado: menus de lista (pausa e afins) em duas colunas, título menor e painel escuro por trás (a HUD da luta
+   não aparece através); o primeiro item (CONTINUAR...) ocupa a linha inteira */
+@media (max-height: 520px) {
+  .screen > .menu:not(.lan) { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: min(620px, 92vw); min-width: 0; max-height: calc(100% - 16px); overflow-y: auto;
+    padding: 10px 14px 12px; border-radius: 10px; background: rgba(8, 6, 12, .86); box-shadow: 0 8px 30px rgba(0,0,0,.6); }
+  .screen > .menu:not(.lan) h2 { grid-column: 1 / -1; font-size: 32px; margin: 0; line-height: 1; }
+  .screen > .menu:not(.lan) .sub { grid-column: 1 / -1; margin: 0 0 2px; font-size: 11px; text-align: center; }
+  .screen > .menu:not(.lan) .opt { padding: 8px 10px; font-size: 13px; min-height: 40px; display: flex; align-items: center; justify-content: center; }
+  .screen > .menu:not(.lan) .opt:first-of-type { grid-column: 1 / -1; }
+}
 #select h2 small { font-family: Inter, sans-serif; font-size: 13px; font-weight: 800; letter-spacing: .1em; color: var(--muted); vertical-align: middle; margin-left: 10px; }
 
 /* seleção de cenário */
@@ -641,6 +655,52 @@ body.touch-ui .panel { width: min(36vw, 440px); }
   .sel-side { background: rgba(10, 8, 14, .94); }
 }
 body.touch-capable #select { padding-top: max(58px, calc(env(safe-area-inset-top) + 48px)); }
+/* SELEÇÃO NO CELULAR DEITADO (altura até 520 px): grades largas de 5 × 3 com rostos maiores; cabeçalho de cada lado numa
+   linha só (P1 · status · ◀ 1/2 ▶); no meio, uma coluna estreita com os modelos 3D à mostra e embaixo só o nome, a
+   origem e a equipe (em fichas pequenas); COMEÇAR compacto. O título fica na altura da seta de voltar. */
+@media (max-height: 520px) {
+  #select { grid-template-columns: minmax(0, 1fr) clamp(150px, 24vw, 260px) minmax(0, 1fr); grid-template-rows: 44px minmax(0, 1fr);
+    gap: 4px 8px; padding: max(6px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(6px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left)); }
+  body.touch-capable #select { padding-top: max(6px, env(safe-area-inset-top)); }
+  #select .sel-title { grid-column: 1 / -1; align-self: center; font-size: 22px !important; padding: 0 60px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #select .sel-title small { font-size: 10px; margin-left: 8px; }
+  #select .hint { display: none; }
+  .sel-side { grid-row: 2; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: 30px minmax(0, 1fr); gap: 4px 6px; padding: 6px; background: rgba(10, 8, 14, .94); }
+  .sel-side.s2 { grid-column: 3; }
+  .sel-side .sel-head { grid-column: 1; grid-row: 1; gap: 8px; justify-content: flex-start; }
+  .sel-side.s2 { grid-template-columns: auto minmax(0, 1fr); }
+  .sel-side.s2 .sel-head { grid-column: 2; justify-content: flex-end; }
+  .sel-side .sel-head { min-width: 0; overflow: hidden; }
+  .sel-head .tag { padding: 3px 8px; }
+  .sel-head .st { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  .sel-side .sel-pages { grid-column: 2; grid-row: 1; justify-content: flex-end; gap: 6px; }
+  .sel-side.s2 .sel-pages { grid-column: 1; justify-content: flex-start; }
+  .sel-pages kbd { display: none; }
+  .sel-pages .pg-n { white-space: nowrap; font-size: 9px; }
+  .sel-pages b { display: grid; place-items: center; min-width: 30px; height: 28px; border: 1px solid #3a3346; border-radius: 6px; }
+  .sel-pages.single { visibility: hidden; height: auto; }
+  .sel-side .sel-grid { grid-column: 1 / -1; grid-row: 2; grid-template-columns: repeat(5, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(0, 1fr)); gap: 4px; }
+  .sel-grid .card img { object-position: 50% 14%; }
+  .sel-grid .card .tm { font-size: 7px; padding: 0 3px; top: 2px; left: 2px; }
+  .sel-grid .card .cn { padding: 10px 2px 2px; font-size: clamp(8px, 1.25vw, 11px); line-height: 1.05; }
+  .sel-grid .card .cn b { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
+  .sel-grid .card.on { transform: scale(1.04); }
+  /* meio: modelos 3D à mostra, placas embaixo */
+  .sel-center { grid-column: 2; grid-row: 2; }
+  .sel-center .sel-vs { display: none; }
+  .sel-center .plates { gap: 6px; align-items: flex-end; }
+  .sel-center .plate { max-width: 50%; padding: 3px 6px; }
+  .plate .pn { font-size: clamp(15px, 2.4vw, 20px); }
+  .plate .po { font-size: 9px; line-height: 1.2; }
+  .plate .pt { display: none; }
+  .plate .teampicks { flex-direction: column; gap: 2px; margin: 3px 0 0; }
+  .plate .teampicks span { min-width: 0; padding: 1px 5px; flex-direction: row; gap: 4px; align-items: baseline; }
+  .plate .teampicks small { font-size: 7px; white-space: nowrap; }
+  .plate .teampicks b { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sel-center .startbtn { margin-top: 6px; padding: 6px 18px; font-size: 22px; letter-spacing: .2em; }
+  .sel-center .startbtn small { display: none; }
+}
+@media (max-height: 520px) and (max-width: 760px) { .sel-pages .pg-n { display: none; } .sel-grid .card .cn b { letter-spacing: 0; } } /* celular estreito: só as setas */
 /* menu principal em tela baixa (celular deitado): logo menor para as opções caberem */
 @media (max-height: 520px) {
   #home .logo h1 { font-size: clamp(40px, 15vh, 90px); }
@@ -705,6 +765,8 @@ body.touch-capable #install-hint { left: 50%; max-width: min(64vw, 520px); } /* 
   #changelog li { margin: 3px 0; font-size: 12px; line-height: 1.25; }
 }
 body.touch-capable #changelog .cmdbox { width: min(94vw, 640px); padding: 10px 14px; }
+/* toque: as caixas grandes (COMANDOS, NOVIDADES) ficam entre a seta de voltar e o botão de tela cheia dos cantos */
+@media (max-height: 520px) { body.touch-capable .screen > .cmdbox { width: min(calc(100vw - 132px), 900px); padding: 10px 14px; } }
 body.touch-capable #changelog .news-nav { display: flex; }
 
 /* ---------------- ONLINE / LAN */
@@ -951,6 +1013,28 @@ body.touch-ui .startbtn small { display: none; }
 @media (max-width: 560px) { #tbracket .tv-panel.duel { grid-template-columns: minmax(0, auto) minmax(16px, 1fr) 4px minmax(70px, 1fr); padding: 16px 10px 10px; } #tbracket .dl-f small { display: none; } }
 @media (prefers-reduced-motion: reduce) { #tbracket .duel * { animation-duration: .01ms !important; animation-delay: 0s !important; } }
 #tbracket .tb-btns { display: flex; gap: 10px; }
+/* celular deitado: chave, painel e botões cabem na altura (os botões ficavam cortados embaixo) */
+@media (max-height: 520px) {
+  #tbracket { gap: 4px; padding: max(6px, env(safe-area-inset-top)) 64px max(6px, env(safe-area-inset-bottom)); }
+  #tbracket h2 { font-size: 24px; letter-spacing: .16em; }
+  #tbracket .tb-tree { flex: 1 1 auto; min-height: 0; max-height: none; }
+  #tbracket .tn img, #tbracket .tn i { width: 34px; height: 34px; border-width: 2px; }
+  #tbracket .tn.big img, #tbracket .tn.big i { width: 42px; height: 42px; }
+  #tbracket .tn.champ img, #tbracket .tn.champ i { width: 54px; height: 54px; }
+  #tbracket .tn.champ i { font-size: 28px; }
+  #tbracket .tn span { font-size: 10px; }
+  #tbracket .tv-panel { padding: 10px 14px 4px; gap: 10px; }
+  #tbracket .tv-f img { width: 44px; height: 44px; }
+  #tbracket .tv-f b { font-size: 20px; }
+  #tbracket .tv-vs { font-size: 34px; }
+  #tbracket .tv-panel.duel { grid-template-rows: 46px 46px; row-gap: 6px; padding: 12px 14px 6px; }
+  #tbracket .dl-f img { width: 42px; height: 42px; }
+  #tbracket .dl-bar { margin: 23px 0; }
+  #tbracket .dl-x { font-size: 24px; }
+  #tbracket .tb-btns .opt { padding: 6px 18px; font-size: 18px; min-height: 36px; display: flex; align-items: center; }
+  #tbracket .tv-panel.champ img { width: 60px; height: 76px; }
+  #tbracket .tv-panel.champ b { font-size: 34px; }
+}
 #tbracket .tb-btns .opt { padding: 8px 26px; font: 400 24px/1 'Bebas Neue', sans-serif; letter-spacing: .14em; color: #bfb3d6; border: 1px solid rgba(255,255,255,.15); border-radius: 4px; background: rgba(10,8,14,.75); cursor: pointer; }
 #tbracket .tb-btns .opt.on { color: #1a1208; border-color: #ffd84a; background: linear-gradient(180deg, #ffe27a, #d9a52a); }
 

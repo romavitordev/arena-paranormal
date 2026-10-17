@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.30.0';
+export const VERSION = '3.30.1';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,17 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.30.1',
+    date: '2026-10-17',
+    title: 'Tela Inteira',
+    items: [
+      'iPHONE (app instalado) — a tela não fica mais cortada: abrir o app com o celular em pé e depois deitar deixava a luta e os menus sem um pedaço embaixo ou do lado. Agora o jogo usa o tamanho de verdade da tela.',
+      'CELULAR — os botões de habilidade mostram o nome que mais identifica cada uma: o nome do ritual vem primeiro (a Erin tem Supernova, Nebulosa e Black Hole em vez de três "Granada"), e nenhum lutador tem dois botões com o mesmo nome.',
+      'CELULAR — seleção de personagens refeita para a tela deitada: rostos maiores (5 × 3 por página), nomes legíveis, os modelos 3D à mostra no meio, a equipe em fichas pequenas e o COMEÇAR sempre visível.',
+      'CELULAR — pausa em duas colunas (cabe inteira), COMANDOS sem ficar embaixo dos botões dos cantos e a chave do TORNEIO com os botões à vista.',
+    ],
+  },
   {
     v: '3.30.0',
     date: '2026-10-17',

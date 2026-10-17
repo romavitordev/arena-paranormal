@@ -8,6 +8,7 @@
 // As posições são calculadas aqui (layout), na escala da tela. Aparece sozinho em aparelhos com tela de toque (ou com
 // ?touch=1 na URL para testar no PC).
 
+import { viewSize } from '../core/viewport.js';
 import { t, onLanguageChange } from '../i18n/index.js';
 import { hasPassive } from '../combat/passives.js';
 
@@ -40,12 +41,26 @@ const CHORDS = {
 };
 const ORDER = Object.keys(CHORDS);
 
-// nome curto para caber no botão: sem o apelido entre aspas ("Templo do Ódio") nem parênteses; até 2 palavras curtas
-function shortName(name) {
-  const words = String(name).replace(/["“”«»][^"“”«»]*["“”«»]/g, '').replace(/\([^)]*\)/g, '').trim().split(/\s+/).filter(Boolean);
-  let s = words[0] || name;
-  if (words[1] && s.length + words[1].length < 11 && !/^(de|do|da|dos|das|e|of|the)$/i.test(words[1])) s += ` ${words[1]}`;
-  return s;
+// nome do botão: o que mais IDENTIFICA a habilidade. O apelido do ritual entre aspas vem primeiro (Granada "Supernova"
+// → Supernova; Cicatrização "Paradiso" → Paradiso); sem apelido, o maior começo do nome que cabe (até 20 letras, sem
+// terminar em "de", "do"...). Se dois botões do mesmo lutador ficarem iguais, os dois mostram o nome inteiro.
+const LABEL_MAX = 20;
+const FILLER = /^(de|do|da|dos|das|e|com|que|pelo|pela|nos|nas|no|na|em|of|the)$/i;
+export function abilityLabel(name) {
+  const nick = String(name).match(/["“«]([^"”»]+)["”»]/);
+  if (nick && nick[1].trim()) return nick[1].trim();
+  const words = String(name).replace(/\([^)]*\)/g, '').trim().split(/\s+/).filter(Boolean);
+  let best = words[0] || String(name);
+  for (let n = 2; n <= words.length; n++) {
+    const s = words.slice(0, n).join(' ');
+    if (s.length > LABEL_MAX) break;
+    if (!FILLER.test(words[n - 1])) best = s;
+  }
+  return best;
+}
+export function abilityLabels(names) {
+  const labels = names.map(abilityLabel);
+  return labels.map((l, i) => (labels.indexOf(l) !== labels.lastIndexOf(l) ? String(names[i]).replace(/["“”«»]/g, '') : l));
 }
 
 // tamanho da letra para o nome caber no botão (mede o texto; abaixo de 7,5 px abrevia a palavra comprida: "Cicatriz.")
@@ -65,7 +80,7 @@ function fitLabel(text, width, maxPx) {
 }
 
 // escala dos controles pela tela (o desenho é feito para 844 × 390, celular comum deitado)
-const scaleFor = () => Math.max(0.8, Math.min(1.35, Math.min(innerHeight / 390, innerWidth / 800)));
+const scaleFor = () => { const { w, h } = viewSize(); return Math.max(0.8, Math.min(1.35, Math.min(h / 390, w / 800))); };
 
 export class TouchControls {
   constructor(input) {
@@ -118,8 +133,7 @@ export class TouchControls {
     this.bindStick();
     this.bindNavigation();
     this.bindFullscreen();
-    this.layout();
-    window.addEventListener('resize', () => this.layout());
+    this.layout(); // ao girar, o main.js chama layout() de novo (com o tamanho certo de core/viewport.js)
   }
 
   // botões: segurar = held; um toque rápido também vale (taps) para não perder o aperto entre dois quadros
@@ -213,12 +227,13 @@ export class TouchControls {
     this.abilBox.innerHTML = '';
     this.abilBtns = [];
     this.abilities = f ? (f.def.abilities || []).filter((a) => CHORDS[a.input]).sort((x, y) => ORDER.indexOf(x.input) - ORDER.indexOf(y.input)).slice(0, 6) : [];
+    const labels = abilityLabels(this.abilities.map((a) => a.name));
     this.abilities.forEach((a, i) => {
       const b = document.createElement('button');
       b.className = 'tb abil';
       b.dataset.ab = i;
       b.setAttribute('aria-label', a.name);
-      b.dataset.label = shortName(a.name);
+      b.dataset.label = labels[i];
       b.innerHTML = '<span></span><i class="cd"></i><em class="s"></em>';
       this.abilBox.appendChild(b);
       this.bindButton(b);

@@ -1,3 +1,4 @@
+import { viewSize } from '../core/viewport.js';
 import * as THREE from 'three';
 import { Effects } from '../fx/Effects.js';
 import { CameraRig } from '../camera/CameraRig.js';
@@ -22,7 +23,7 @@ export class World {
     this.ui = ui;
     this.scene = new THREE.Scene();
     // near maior: objetos colados na câmera (mesas, cadeiras) não tapam a luta
-    this.camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 0.7, 300);
+    this.camera = new THREE.PerspectiveCamera(50, viewSize().w / viewSize().h, 0.7, 300);
     this.fx = new Effects(this.scene);
     this.cameraRig = new CameraRig(this.camera, this);
     this.cameraBasis = this.cameraRig.basis;
@@ -123,7 +124,7 @@ export class World {
   layoutVictoryLineup() {
     if (!this.victoryActors) return;
     const count = this.victoryActors.length;
-    const narrow = innerWidth / innerHeight < 0.85;
+    const narrow = viewSize().w / viewSize().h < 0.85;
     const winner = this.fighters.find((f) => f.def.id === this.victoryActors[0].def.id || (f.baseForm && f.baseForm.def.id === this.victoryActors[0].def.id)) || this.fighters[0];
     const center = new THREE.Vector3(winner.pos.x, 0, winner.pos.z);
     const spots = this.arena.spawns || [];
@@ -140,7 +141,7 @@ export class World {
     };
     const want = narrow ? 10 : 7.5;
     // espaço entre os vencedores: cabe na largura visível (o vencedor no meio, a equipe dos lados)
-    const halfW = (dist) => Math.tan(((40 / 2) * Math.PI) / 180) * dist * (innerWidth / innerHeight);
+    const halfW = (dist) => Math.tan(((40 / 2) * Math.PI) / 180) * dist * (viewSize().w / viewSize().h);
     const spacingFor = (dist) => (count < 2 ? 0 : Math.min(2.35, (halfW(dist) - 0.8) / Math.floor(count / 2)));
     const slot = (i) => (i === 0 ? 0 : i % 2 ? -Math.ceil(i / 2) : Math.ceil(i / 2)); // 0, -1, +1, -2...
     let best = null;

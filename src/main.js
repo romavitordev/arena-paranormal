@@ -1,3 +1,4 @@
+import { viewSize, watchViewport } from './core/viewport.js';
 import * as THREE from 'three';
 import { InputManager } from './input/InputManager.js';
 import { AudioManager } from './audio/AudioManager.js';
@@ -46,7 +47,7 @@ const renderer = new THREE.WebGLRenderer({ canvas, antialias: GFX0.antialias, po
 function applyGraphics() {
   const G = gfxProfile();
   renderer.setPixelRatio(Math.min(G.pixelRatio, window.devicePixelRatio));
-  renderer.setSize(innerWidth, innerHeight);
+  renderer.setSize(viewSize().w, viewSize().h);
   renderer.shadowMap.enabled = G.shadows;
   renderer.shadowMap.type = G.softShadows ? THREE.PCFSoftShadowMap : THREE.PCFShadowMap;
   renderer.shadowMap.needsUpdate = true;
@@ -597,15 +598,18 @@ game.quick = (a, b, cpu = false, arenaId = DEFAULT_ARENA, dialogue = false) => {
 
 window.addEventListener('pointerdown', () => audio.unlock());
 window.addEventListener('keydown', () => audio.unlock());
-window.addEventListener('resize', () => {
-  renderer.setSize(innerWidth, innerHeight);
+// girar / redimensionar (no iPhone com o jogo instalado, o tamanho de verdade vem de core/viewport.js)
+watchViewport(() => {
+  const { w, h } = viewSize();
+  renderer.setSize(w, h);
   for (const cam of [menuCam, game.match && game.match.world.camera]) {
     if (!cam) continue;
-    cam.aspect = innerWidth / innerHeight;
+    cam.aspect = w / h;
     cam.updateProjectionMatrix();
   }
   if (game.match) game.match.world.layoutVictoryLineup();
   placeVictoryLabels();
+  if (game.touch) game.touch.layout();
 });
 
 // nomes da equipe vencedora embaixo de cada modelo (projeta o pé de cada um na tela)
@@ -616,7 +620,7 @@ function placeVictoryLabels() {
   const pts = [];
   for (const a of w.victoryActors) {
     const v = a.rig.root.position.clone().setY(-0.05).project(w.camera);
-    pts[a.index] = { x: (v.x * 0.5 + 0.5) * innerWidth, y: (-v.y * 0.5 + 0.5) * innerHeight + 6 };
+    pts[a.index] = { x: (v.x * 0.5 + 0.5) * viewSize().w, y: (-v.y * 0.5 + 0.5) * viewSize().h + 6 };
   }
   game.overlay.placeLabels(pts);
 }

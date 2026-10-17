@@ -1,5 +1,22 @@
 # Changelog
 
+## v3.30.1 — 2026-10-17
+
+### Corrigido
+- iPhone/iPad com o jogo instalado: depois de girar, o iOS deixava a página com o tamanho de antes (faltavam ~47 pt, a
+  altura da barra de status). `src/core/viewport.js`: `viewSize()` usa o tamanho da tela (`screen` + orientação) quando o
+  iOS erra, põe `html.vp-fix` com `--app-w/--app-h` nas camadas de tela cheia, e `watchViewport()` mede de novo depois
+  do giro (resize, orientationchange, visualViewport). `main.js` (renderer, câmeras, nomes da vitória), `World`, `HUD`
+  e os controles de toque usam `viewSize()`.
+- Botões de habilidade (toque): `abilityLabel()` — o apelido entre aspas primeiro; sem apelido, o maior começo do nome
+  até 20 letras sem terminar em conector; `abilityLabels()` usa o nome inteiro quando dois rótulos empatam.
+
+### Alterado
+- Seleção com altura até 520 px: grades 5 × 3, cabeçalho de cada lado numa linha (P1 · status · ◀ ▶; em telas até 760 px
+  só as setas), coluna do meio estreita com os modelos 3D, placas sem a frase e com a equipe em fichas, COMEÇAR compacto.
+- Menus de lista (`.menu` fora do ONLINE) em duas colunas com painel escuro em telas baixas; COMANDOS/NOVIDADES entre os
+  botões dos cantos no toque; chave do torneio compacta (os botões ficavam cortados).
+
 ## v3.30.0 — 2026-10-17
 
 ### Adicionado

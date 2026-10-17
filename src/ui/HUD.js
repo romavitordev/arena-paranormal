@@ -1,3 +1,4 @@
+import { viewSize } from '../core/viewport.js';
 import { COMBAT } from '../config/combat.js';
 import { actionLabel } from './labels.js';
 import { t } from '../i18n/index.js';
@@ -326,13 +327,14 @@ export class HUD {
     // posição: acima e ao lado de quem está batendo, para fora do centro da luta
     const cam = match.world.camera;
     _v.set(f.pos.x, f.pos.y + 2.3, f.pos.z).project(cam);
-    const sx = (_v.x * 0.5 + 0.5) * innerWidth;
-    const sy = (-_v.y * 0.5 + 0.5) * innerHeight;
+    const { w: W, h: H } = viewSize();
+    const sx = (_v.x * 0.5 + 0.5) * W;
+    const sy = (-_v.y * 0.5 + 0.5) * H;
     _v.set(opp.pos.x, opp.pos.y + 2.3, opp.pos.z).project(cam);
-    const ox = (_v.x * 0.5 + 0.5) * innerWidth;
+    const ox = (_v.x * 0.5 + 0.5) * W;
     const side = sx <= ox ? -1 : 1;
-    const x = Math.max(70, Math.min(innerWidth - 70, sx + side * 90));
-    const y = Math.max(150, Math.min(innerHeight - 60, sy));
+    const x = Math.max(70, Math.min(W - 70, sx + side * 90));
+    const y = Math.max(150, Math.min(H - 60, sy));
     el.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px) translate(-50%, -50%)`;
   }
 

@@ -1,5 +1,17 @@
 # Registro administrativo de alterações
 
+## v3.30.1 — Tela Inteira
+
+- Versão: `VERSION` 3.30.0 → **3.30.1** (package.json/lock junto).
+- Pedido (com 3 fotos do iPhone): "a tela no app de iPhone está bugada, a partida fica cortada pra esquerda (no outro
+  teste não ocorreu)"; "3 botões da Erin com o nome Granada, sendo que cada uma tem um nome"; "a tela de seleção de
+  personagem do mobile está toda apertada — melhorar todo HUD do mobile nessa upd".
+- Diagnóstico do iPhone: o pedaço que faltava tinha a altura da barra de status (~47 pt) e só acontecia ao abrir em pé e
+  girar — erro conhecido do iOS em app da tela de início. A correção só liga quando o tamanho informado não bate com a tela.
+- Conferido no navegador em 852 × 393 e 667 × 375: seleção solo e equipe até o COMEÇAR, configurações, cenário, luta,
+  pausa, comandos, vitória e torneio (chave e duelo). Os rótulos dos 27 lutadores conferidos (nenhum repetido).
+- Falta: confirmar a correção num iPhone de verdade (abrir em pé e deitar).
+
 ## v3.30.0 — Na Tela de Início
 
 - Versão: `VERSION` 3.29.0 → **3.30.0** (package.json/lock junto).
