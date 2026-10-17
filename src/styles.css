@@ -654,6 +654,19 @@ body.touch-capable #select { padding-top: max(58px, calc(env(safe-area-inset-top
   #home.menu-on .logo { display: none; }
 }
 #touch.away { display: none; }
+/* app instalado (aberto pela tela de início): já está em tela cheia — o botão de tela cheia sai */
+@media (display-mode: standalone), (display-mode: fullscreen) { #touch .t-fullscreen { display: none; } }
+/* como instalar (tela inicial): no alto, no meio, pequeno */
+#install-hint { display: none; position: fixed; top: max(10px, env(safe-area-inset-top)); left: 50%; transform: translateX(-50%); z-index: 40; max-width: min(92vw, 520px);
+  align-items: center; gap: 10px; padding: 7px 8px 7px 14px; border: 1px solid rgba(164,107,255,.5); border-radius: 10px; background: rgba(12,8,20,.9);
+  color: #e8e0f7; font: 600 12px/1.35 Inter, system-ui, sans-serif; box-shadow: 0 6px 20px rgba(0,0,0,.5); animation: homeIn .4s ease-out; }
+#install-hint.on { display: flex; }
+#install-hint svg { vertical-align: -3px; color: #7ab6ff; }
+#install-hint b { color: #fff; }
+#install-hint button { flex: none; min-height: 34px; border: 0; border-radius: 8px; cursor: pointer; font: 800 12px/1 Inter, sans-serif; letter-spacing: .08em; }
+#install-hint .ih-go { padding: 0 14px; background: #a46bff; color: #12081f; }
+#install-hint .ih-x { width: 34px; background: transparent; color: #b8a8e0; font-size: 20px; }
+body.touch-capable #install-hint { left: 50%; max-width: min(64vw, 520px); } /* entre a seta de voltar e o botão de tela cheia */
 
 /* ---------------- MODO TUTORIAL: cartão do passo atual (topo, abaixo do HUD) */
 #tutorial-panel { position: absolute; left: 50%; top: 215px; transform: translateX(-50%); z-index: 6; pointer-events: none; width: min(560px, calc(100vw - 32px)); }

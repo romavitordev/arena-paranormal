@@ -15,7 +15,7 @@ const android = /Android/i.test(ua);
 const cta = document.getElementById('cta-main');
 const ctaLabel = document.getElementById('cta-label');
 if (android) { cta.href = REL + 'Arena-Paranormal-Android.apk'; ctaLabel.textContent = 'Baixar para Android'; }
-else if (ios) { cta.href = './'; ctaLabel.textContent = 'Jogar no navegador'; }
+else if (ios) { cta.href = '#dl-web'; ctaLabel.textContent = 'Instalar no iPhone'; } // os passos ficam no cartão (instala pela tela de início)
 document.getElementById(android ? 'dl-android' : ios ? 'dl-web' : 'dl-pc')?.classList.add('suggested');
 
 // dentro do app instalado (Electron / Capacitor): avisa e mantém os downloads (servem para atualizar)

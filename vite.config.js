@@ -37,6 +37,24 @@ function aiLearnedPlugin() {
 
 const PKG = JSON.parse(readFileSync(resolve(import.meta.dirname, 'package.json'), 'utf8'));
 
+// APP INSTALÁVEL (PWA): grava o sw.js no build a partir de src/sw-template.js, com a versão do jogo e a lista da "casca"
+// (página, scripts e estilos do jogo, manifesto e ícones) — ver o modelo para o que fica guardado no aparelho
+function pwaPlugin() {
+  return {
+    name: 'arena-pwa',
+    apply: 'build',
+    generateBundle(_, bundle) {
+      const files = Object.values(bundle).map((f) => f.fileName).filter((f) => /\.(js|css)$/.test(f) && !/gallery/.test(f));
+      const shell = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png', ...files.map((f) => `./${f}`)];
+      const src = readFileSync(resolve(import.meta.dirname, 'src/sw-template.js'), 'utf8')
+        .replace("const VERSION = '__VERSION__';", `const VERSION = ${JSON.stringify(PKG.version)};`)
+        .replace('const SHELL = __SHELL__;', `const SHELL = ${JSON.stringify(shell)};`);
+      if (src.includes("= '__VERSION__'") || src.includes('= __SHELL__')) this.error('sw-template.js: não achei as linhas de VERSION/SHELL');
+      this.emitFile({ type: 'asset', fileName: 'sw.js', source: src });
+    },
+  };
+}
+
 export default defineConfig({
   root: resolve(import.meta.dirname),
   // a versão do jogo para páginas leves (sobre.html) sem carregar o changelog inteiro de config/version.js
@@ -44,7 +62,7 @@ export default defineConfig({
   // APP_BASE: os apps instalados (PC/Electron e Android/Capacitor) servem o jogo na raiz, mesmo quando o build roda no
   // GitHub Actions (o workflow de release passa APP_BASE=/)
   base: process.env.APP_BASE || (process.env.GITHUB_ACTIONS ? '/arena-paranormal/' : '/'),
-  plugins: [aiLearnedPlugin()],
+  plugins: [aiLearnedPlugin(), pwaPlugin()],
   // gravar o aprendizado não pode recarregar a página no meio da luta
   server: { watch: { ignored: ['**/public/ai/**', '**/assets_src/**'] } },
   build: {

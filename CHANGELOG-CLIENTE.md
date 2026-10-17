@@ -2,6 +2,12 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.30.0 — Na Tela de Início
+- iPHONE E iPAD — agora dá para INSTALAR: abra o jogo no Safari, toque em Compartilhar e depois em "Adicionar à Tela de Início". Ele ganha ícone próprio, abre em tela cheia como um app e atualiza sozinho a cada versão nova. A tela inicial do jogo mostra o passo a passo.
+- SEM INTERNET — depois da primeira partida, o jogo instalado (ou aberto no navegador) funciona offline: os personagens e cenários que você já usou ficam guardados no aparelho. O modo online continua precisando de internet.
+- ANDROID E PC PELO NAVEGADOR — no Chrome e no Edge aparece o botão INSTALAR na tela inicial (alternativa ao APK e ao instalador).
+- Página SOBRE / BAIXAR: o cartão do iPhone mostra os 4 passos para instalar, e o botão principal no iPhone leva direto a eles.
+
 ## v3.29.0 — Arquibancada
 - TORNEIO — as lutas agora vão EM ORDEM, uma de cada vez. Luta entre CPUs aparece na chave como um duelo animado: os dois correm a linha até o encontro ⚔️, as espadas batem e a linha de quem venceu acende e segue (quem perdeu fica ELIMINADO). Antes, todas as lutas dos bots já apareciam decididas de uma vez. O botão PULAR adianta.
 - ONLINE — ASSISTIR: as salas públicas que estão jogando aparecem na lista de SALAS como AO VIVO, com os nomes de quem joga e quantos assistem. Escolha uma e assista à partida ao vivo, do ponto em que ela está (sala com senha pede a senha). Para sair, toque no selo ASSISTINDO no alto ou aperte Esc.

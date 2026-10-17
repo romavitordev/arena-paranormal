@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.29.0';
+export const VERSION = '3.30.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,17 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.30.0',
+    date: '2026-10-17',
+    title: 'Na Tela de Início',
+    items: [
+      'iPHONE E iPAD — agora dá para INSTALAR: abra o jogo no Safari, toque em Compartilhar e depois em "Adicionar à Tela de Início". Ele ganha ícone próprio, abre em tela cheia como um app e atualiza sozinho a cada versão nova. A tela inicial do jogo mostra o passo a passo.',
+      'SEM INTERNET — depois da primeira partida, o jogo instalado (ou aberto no navegador) funciona offline: os personagens e cenários que você já usou ficam guardados no aparelho. O modo online continua precisando de internet.',
+      'ANDROID E PC PELO NAVEGADOR — no Chrome e no Edge aparece o botão INSTALAR na tela inicial (alternativa ao APK e ao instalador).',
+      'Página SOBRE / BAIXAR: o cartão do iPhone mostra os 4 passos para instalar, e o botão principal no iPhone leva direto a eles.',
+    ],
+  },
   {
     v: '3.29.0',
     date: '2026-10-17',

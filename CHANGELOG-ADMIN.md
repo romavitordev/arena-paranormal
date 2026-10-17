@@ -1,5 +1,15 @@
 # Registro administrativo de alterações
 
+## v3.30.0 — Na Tela de Início
+
+- Versão: `VERSION` 3.29.0 → **3.30.0** (package.json/lock junto).
+- Pedido: "tem como fazer instalador pra iPhone?" → opções apresentadas (App Store/TestFlight: US$ 99/ano e risco alto
+  de recusa por propriedade intelectual, guideline 5.2; sideload: expira em 7 dias; PWA) → escolhida a **3, PWA**.
+- Conferido no build de produção (`vite preview`): service worker ativo controlando a página, casca com 16 arquivos,
+  44 modelos e os cenários guardados depois de abrir o jogo; com o servidor DESLIGADO a página recarregou e uma luta
+  começou, sem erro no console. Botão INSTALAR chama o pedido de instalação do navegador.
+- Falta: testar num iPhone de verdade (Safari → Adicionar à Tela de Início) e num Android.
+
 ## v3.29.0 — Arquibancada
 
 - Versão: `VERSION` 3.28.0 → **3.29.0** (package.json/lock junto).

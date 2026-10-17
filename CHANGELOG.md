@@ -1,5 +1,27 @@
 # Changelog
 
+## v3.30.0 — 2026-10-17
+
+### Adicionado
+- App instalável (PWA): `public/manifest.webmanifest` (caminhos relativos — vale em `/` e em `/arena-paranormal/`;
+  `display: fullscreen`, paisagem) e ícones em `public/icons/` (192, 512, maskable 512, apple-touch-icon 180) — monograma
+  "AP" com os cinco elementos, feito para o jogo (o emblema da Ordo Realitas tem texto e detalhe demais para ícone).
+- `index.html`: manifesto, `apple-touch-icon`, `theme-color` e as metas `apple-mobile-web-app-*` (barra translúcida,
+  título "Arena").
+- Service worker: modelo em `src/sw-template.js`, gravado como `sw.js` pelo `pwaPlugin` do `vite.config.js` com a
+  versão e a "casca" (página, scripts e estilos do build, manifesto e ícones). Casca na instalação; modelos, cenários,
+  sons e imagens guardados no primeiro uso (cache-first, sem baixar os ~57 MB de uma vez); página, manifesto e
+  `ai/learned.json` da rede primeiro; fontes do Google guardadas. Versão nova apaga a casca anterior.
+- `src/ui/installHint.js`: `registerPWA()` (só no build publicado; nunca no Electron, no Capacitor nem no `npm run dev`)
+  e o aviso de instalar na tela inicial — passos do Safari no iPhone/iPad, botão INSTALAR (`beforeinstallprompt`) no
+  Chrome/Edge; some quando já está instalado ou quando fecham (lembrado no aparelho).
+- Textos `install.ios/app/button/close` nos 13 idiomas.
+
+### Alterado
+- `sobre.html`: cartão "Instalar pelo navegador" com os 4 passos do iPhone; FAQ e JSON-LD atualizados; no iPhone o
+  botão principal vira "Instalar no iPhone" e leva aos passos.
+- Instalado (`display-mode` standalone/fullscreen), o botão de tela cheia dos controles de toque sai.
+
 ## v3.29.0 — 2026-10-17
 
 ### Alterado

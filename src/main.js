@@ -26,6 +26,7 @@ import { VERSION } from './config/version.js';
 import { t, tAlert, setLanguage } from './i18n/index.js';
 import { OptionsScreen } from './ui/OptionsScreen.js';
 import { TouchControls, isTouchDevice } from './ui/touchControls.js';
+import { registerPWA, InstallHint } from './ui/installHint.js';
 
 const touchDevice = isTouchDevice();
 document.addEventListener('gesturestart', (e) => e.preventDefault(), { passive: false });
@@ -879,8 +880,13 @@ game.step = (n = 1, dt = 1 / 60) => {
 const touch = touchDevice ? new TouchControls(input) : null;
 game.touch = touch;
 
+// app instalável: service worker (site publicado) + como instalar, na tela inicial
+registerPWA();
+const installHint = new InstallHint();
+
 function tick(dt) {
   if (touch) touch.sync(game.state, !!input.teamMode, game.state === 'mainmenu' && game.screen.menu, game.state === 'fight' && !!game.match && ['entrance', 'dialogue'].includes(game.match.phase), game.match && game.match.fighters ? game.match.fighters[input.netSlot || 0] : null);
+  installHint.sync(game.state);
   if (game.tutorial) game.tutorial.el.style.display = game.state === 'fight' ? '' : 'none';
   input.update(dt);
   if (input.netFrame) applyNetTaps();
