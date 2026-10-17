@@ -3,7 +3,7 @@ import { InputManager } from './input/InputManager.js';
 import { AudioManager } from './audio/AudioManager.js';
 import { HUD } from './ui/HUD.js';
 import { HomeScreen, BattleConfigScreen, VictoryScreen, MODES, SelectScreen, MenuScreen, StageSelectScreen, LoadingScreen, CommandsScreen, ChangelogScreen, LanScreen, TowerScreen, TowerSelectScreen, TournamentSetupScreen, TournamentScreen, NET_UI } from './ui/Screens.js';
-import { createTournament, nextMatch, setWinner, autoResolve } from './game/tournament.js';
+import { createTournament, nextMatch, setWinner, isCpuMatch, simulateMatch } from './game/tournament.js';
 import { buildTower, pickBoss, towerFloorCount, isTowerUnlocked, bestDifficulty, saveTowerClear, TOWERS, TOWER_DIFFICULTIES, VILLAINS } from './game/tower.js';
 import { TowerStage } from './ui/towerStage.js';
 import { getForm } from './characters/forms/index.js';
@@ -468,7 +468,6 @@ function pickNextTour() {
   if (!game.tourQueue.length) {
     game.tour = createTournament(game.tourPeople);
     game.tourAutos = new Set();
-    for (const d of autoResolve(game.tour)) game.tourAutos.add(`${d.r}:${d.m}`);
     toTourBracket();
     return;
   }
@@ -479,10 +478,21 @@ function pickNextTour() {
   setScreen('select', new SelectScreen(screens, { portraits, audio, mode: 'tournament', team: game.tourCfg.team, heading: t('tour.pick', { name: who.name }) }));
 }
 
-function toTourBracket() {
+// chave do torneio. A próxima luta (em ordem) só de CPU aparece animada (sim) e se resolve sozinha; last = a luta que
+// acabou de ser decidida (mostra quem venceu e quem caiu antes de seguir)
+function toTourBracket(last = null) {
   endMatch();
   setOverlay(null, null);
-  setScreen('tbracket', new TournamentScreen(screens, { tour: game.tour, portraits, next: nextMatch(game.tour), autos: game.tourAutos }));
+  const next = last ? null : nextMatch(game.tour);
+  setScreen('tbracket', new TournamentScreen(screens, { tour: game.tour, portraits, next, autos: game.tourAutos, sim: isCpuMatch(game.tour, next), last }));
+}
+
+function simTourMatch() {
+  const n = nextMatch(game.tour);
+  if (!isCpuMatch(game.tour, n)) { toTourBracket(); return; }
+  const res = simulateMatch(game.tour, n);
+  game.tourAutos.add(`${res.r}:${res.m}`);
+  toTourBracket(res);
 }
 
 // luta da chave: o humano fica no lado P1 (se só um for humano)
@@ -502,12 +512,11 @@ function startTourMatch() {
   startMatch();
 }
 
-// terminou a luta: o vencedor sobe na chave e as lutas só de CPU que ficarem prontas são sorteadas
+// terminou a luta: o vencedor sobe na chave; as próximas lutas seguem em ordem na chave
 function tourMatchDone(winnerSide) {
   const m = game.tourMatch;
   const sides = m.swapped ? [m.match.b, m.match.a] : [m.match.a, m.match.b];
   setWinner(game.tour, m.r, m.m, sides[winnerSide]);
-  for (const d of autoResolve(game.tour)) game.tourAutos.add(`${d.r}:${d.m}`);
   toTourBracket();
 }
 
@@ -687,24 +696,35 @@ function netPump(realDt) {
   const net = game.net;
   if (net.closed) { endNet(net.closeReason || 'A partida LAN terminou.'); return; }
   net.acc = Math.min(net.acc + realDt, 0.2);
+  // quem ASSISTE e está atrás (acabou de entrar: refaz a sessão desde o começo) anda até 40 quadros por desenho
+  const watch = net.role === 'watch';
+  const catchUp = watch && net.behind() > 20;
+  const maxSteps = catchUp ? 40 : 6;
+  if (catchUp) net.acc = Math.max(net.acc, NET_STEP * maxSteps);
   let n = 0;
-  while (net.acc >= NET_STEP && n < 6) {
+  while (net.acc >= NET_STEP && n < maxSteps) {
+    // espectador: espera os próprios modelos carregarem antes de seguir (quem joga já começou a luta)
+    if (watch && game.state === 'loading' && !game.netLoaded) { net.acc = Math.min(net.acc, NET_STEP); break; }
     net.fill(packLocal);
     if (!net.ready()) { net.waiting += realDt; break; }
     net.waiting = 0;
     input.netFrame = net.take().map(unpackInput);
     Math.random = game.simRandom; // a simulação usa o sorteio com semente (igual nos dois computadores)
     try { tick(NET_STEP); } finally { Math.random = nativeRandom; }
-    if (net.role === 'guest') while (net.fixes.length) netApplyFix(net.fixes.shift());
+    if (net.role !== 'host') while (net.fixes.length) netApplyFix(net.fixes.shift());
     if (game.net) net.afterTick(netHash, netSnapshot);
     net.acc -= NET_STEP;
     n++;
     if (!game.net) return;
   }
+  if (game.liveRoom) game.liveRoom.watchers = net.watchers.length; // a lista de SALAS mostra quantos assistem
   if (netBadge) {
-    const wait = net.waiting > 0.4;
+    const wait = net.waiting > 0.4 && !watch;
     netBadge.classList.toggle('wait', wait);
-    netBadge.textContent = wait ? t('net.waiting') : `ONLINE · ${net.names[0]} × ${net.names[1]} · ${net.ping} ms${net.desyncs ? ` · ${t('net.resynced')}` : ''}`;
+    const eyes = net.watchers.length ? ` · 👁 ${net.watchers.length}` : '';
+    netBadge.textContent = watch
+      ? `👁 ${t('net.watching')} · ${net.names[0]} × ${net.names[1]} · ${net.behind() > 60 ? t('net.syncing') : t('net.leave_watch')}`
+      : wait ? t('net.waiting') : `ONLINE · ${net.names[0]} × ${net.names[1]} · ${net.ping} ms${eyes}${net.desyncs ? ` · ${t('net.resynced')}` : ''}`;
   }
 }
 
@@ -743,10 +763,15 @@ function startNet(session) {
   game.uiSeq = 0; // os dois aparelhos contam as telas a partir daqui (igual nos dois)
   NET_UI.slot = session.slot;
   NET_UI.send = (code) => { if (game.netTaps.length < 4) game.netTaps.push(code | (game.uiSeq << 10)); };
+  // espectador: os toques e botões daqui não mandam nada; o selo no alto vira o botão de SAIR
+  const watching = session.role === 'watch';
+  if (watching) NET_UI.send = () => {};
+  document.body.classList.toggle('spectating', watching);
   setLabelNetplay(true);
   hud.names = session.names.slice();
   netBadge = document.createElement('div');
   netBadge.id = 'net-badge';
+  if (watching) netBadge.addEventListener('click', () => { if (game.net && game.net.role === 'watch') endNet(null, true); });
   document.body.appendChild(netBadge);
   game.mode = { kind: 'pvp', cpu: false, team: false, net: true };
   game.lastSelect = null;
@@ -767,13 +792,16 @@ function endNet(reason, byMe = false) {
   game.netTaps = null;
   if (net) { if (byMe) net.leave(); else net.close(); }
   if (game.netSettings) { Object.assign(SETTINGS, game.netSettings); game.netSettings = null; }
-  document.body.classList.remove('netplay');
+  document.body.classList.remove('netplay', 'spectating');
+  if (game.liveLobby) { game.liveLobby.stop(); game.liveLobby = null; game.liveRoom = null; }
   setLabelNetplay(false);
   hud.names = null;
   if (netBadge) { netBadge.remove(); netBadge = null; }
   if (reason) netToast(reason);
   toMainMenu();
 }
+
+window.addEventListener('keydown', (e) => { if (e.key === 'Escape' && game.net && game.net.role === 'watch') endNet(null, true); });
 
 // tela ONLINE / LAN (antes de conectar: roda fora da sincronia) + lista de salas abertas (Lobby)
 function openOnline() {
@@ -800,7 +828,7 @@ function updateLan() {
   else if (c === 'refresh') { audio.play('select'); if (game.lobby) game.lobby.refresh(); }
   else if (c === 'back') { leaveOnline(); audio.play('select'); toMainMenu(); }
   else if (c === 'cancel') { cancelPending(); audio.play('select'); }
-  else if (c && (c.act === 'host' || c.act === 'join')) {
+  else if (c && (c.act === 'host' || c.act === 'join' || c.act === 'watch')) {
     audio.play('confirm');
     cancelPending();
     const ticket = {};
@@ -816,12 +844,20 @@ function updateLan() {
           if (c.isPublic && game.lobby) { game.lanRoom = code; game.lobby.announce({ code, name: scr.name, locked: !!c.password }); }
         },
       })
-      : NetSession.join(c.code, { name: scr.name, password: c.password, onSession });
+      : c.act === 'watch' ? NetSession.watch(c.code, { name: scr.name, password: c.password, onSession })
+        : NetSession.join(c.code, { name: scr.name, password: c.password, onSession });
     p.then((session) => {
       if (game.lanTicket !== ticket || game.screen !== scr || session.closed) { session.close(); return; }
       game.lanPending = null;
       game.lanRoom = null;
       leaveOnline();
+      // sala pública: continua na lista como AO VIVO, para quem quiser assistir
+      if (session.role === 'host' && c.isPublic) {
+        game.liveRoom = { code: session.code, name: scr.name, locked: !!c.password, live: true, players: session.names.slice(), watchers: 0 };
+        game.liveLobby = new Lobby();
+        game.liveLobby.start();
+        game.liveLobby.announce(game.liveRoom);
+      }
       startNet(session);
     }).catch((err) => {
       if (game.lanTicket !== ticket || game.screen !== scr) return;
@@ -950,6 +986,9 @@ function tick(dt) {
       const c = game.screen.update(input);
       if (c === 'move') audio.play('select');
       else if (c === 'fight') { audio.play('confirm'); startTourMatch(); }
+      else if (c === 'clash') audio.play('bladeHit');
+      else if (c === 'simdone') { audio.play('ready'); simTourMatch(); }
+      else if (c === 'next') toTourBracket();
       else if (c === 'quit' || c === 'done') { audio.play('select'); toMainMenu(); }
       break;
     }

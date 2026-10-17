@@ -704,6 +704,7 @@ body.touch-capable #changelog .news-nav { display: flex; }
 #lan .lan-input:focus { border-color: #ffd84a; }
 #lan .lan-status { min-height: 1.3em; font-size: 14px; color: #b8a8e0; margin: 6px 0 10px; }
 #lan .lan-status.err { color: #ff6a5a; }
+#lan .lan-live { display: inline-block; padding: 1px 7px; border-radius: 3px; background: #c8183a; color: #fff; font-size: .75em; letter-spacing: .12em; vertical-align: middle; animation: pressPulse 2s ease-in-out infinite; }
 /* na LAN o toque/clique só vale nas telas que o sincronizam; no resto, só o controle/teclado comanda */
 body.netplay #screens { pointer-events: none; }
 /* ...menos nas telas que mandam o toque pela rede (Screens.js NET_UI: seleção, configurações, cenário, pausa, vitória) */
@@ -711,6 +712,10 @@ body.netplay #screens .net-taps { pointer-events: auto; }
 body.netplay #screens #victory.net-taps { pointer-events: none; } /* a vitória só recebe toque nas opções */
 #net-badge { position: fixed; right: 12px; bottom: 10px; z-index: 30; font: 800 12px/1.3 system-ui, sans-serif; letter-spacing: .08em; color: #b8a8e0; background: rgba(10, 8, 16, .75); border: 1px solid #3a2a5a; border-radius: 6px; padding: 4px 8px; pointer-events: none; }
 #net-badge.wait { color: #ffd84a; border-color: #8a6a1a; }
+/* ASSISTINDO uma partida online: o selo vira o botão de sair (no alto, no meio) e os controles de toque somem */
+body.spectating #net-badge { right: auto; left: 50%; top: max(8px, env(safe-area-inset-top)); bottom: auto; transform: translateX(-50%); margin-top: 64px; padding: 8px 14px; pointer-events: auto; cursor: pointer; color: #fff; border-color: #c8183a; background: rgba(40, 8, 16, .82); }
+body.spectating #net-badge:hover { background: rgba(80, 14, 30, .9); }
+body.spectating #touch .t-fight, body.spectating #touch .t-back { display: none !important; }
 #net-toast { position: fixed; left: 50%; top: 18px; transform: translateX(-50%); z-index: 40; font: 700 15px/1.4 system-ui, sans-serif; color: #fff; background: rgba(120, 20, 30, .92); border-radius: 8px; padding: 10px 16px; max-width: 90vw; text-align: center; }
 
 /* toque: sem dicas de botão de controle no COMEÇAR */
@@ -892,6 +897,46 @@ body.touch-ui .startbtn small { display: none; }
 #tbracket .tv-panel.champ small { font: 400 18px/1 'Bebas Neue', sans-serif; letter-spacing: .25em; color: #ffd84a; }
 #tbracket .tv-panel.champ b { display: block; font: 400 clamp(40px, 5vw, 64px)/1 'Bebas Neue', sans-serif; color: var(--c); text-shadow: 3px 3px 0 #000; }
 #tbracket .tv-panel.champ p { margin: 2px 0 0; font-size: 12px; color: var(--muted); }
+/* DUELO entre CPUs (uma luta de cada vez): Lutador 1 ——┐ ⚔️ ├—— vencedor / Lutador 2 ——┘ */
+#tbracket .tv-panel.duel { display: grid; grid-template-columns: minmax(0, auto) minmax(30px, 1fr) 4px minmax(90px, 1fr); grid-template-rows: 60px 60px; row-gap: 10px; column-gap: 0; padding: 18px 20px 12px; }
+#tbracket .dl-f { display: flex; align-items: center; gap: 10px; min-width: 0; padding-right: 10px; transition: filter .4s, opacity .4s; }
+#tbracket .dl-f.a { grid-area: 1 / 1; } #tbracket .dl-f.b { grid-area: 2 / 1; }
+#tbracket .dl-f img { width: 54px; height: 54px; flex: none; border-radius: 8px; object-fit: cover; object-position: top; border: 3px solid var(--c); background: #15111c; }
+#tbracket .dl-f span { min-width: 0; }
+#tbracket .dl-f b { display: block; font: 400 clamp(18px, 2.2vw, 28px)/1 'Bebas Neue', sans-serif; letter-spacing: .06em; color: var(--c); text-shadow: 2px 2px 0 #000; white-space: nowrap; }
+#tbracket .dl-f small { display: block; max-width: 30vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; color: var(--muted); }
+#tbracket .dl-f em { display: inline-block; margin-top: 2px; padding: 1px 6px; border-radius: 3px; background: #3a1018; color: #ff8a8a; font: 400 13px/1.2 'Bebas Neue', sans-serif; letter-spacing: .14em; font-style: normal; animation: dlIn .3s ease-out both; }
+#tbracket .dl-f.lose { filter: grayscale(1) brightness(.55); }
+#tbracket .dl-f.lose b { text-decoration: line-through; }
+#tbracket .dl-f.win img { box-shadow: 0 0 14px var(--c), 0 0 22px rgba(255,216,74,.6); }
+#tbracket .dl-ln { display: block; height: 3px; align-self: center; background: repeating-linear-gradient(90deg, #8a7fa0 0 8px, transparent 8px 13px); transform-origin: left center; }
+#tbracket .dl-ln.a { grid-area: 1 / 2; } #tbracket .dl-ln.b { grid-area: 2 / 2; }
+#tbracket .dl-bar { grid-area: 1 / 3 / 3 / 4; align-self: stretch; margin: 30px 0; background: #8a7fa0; transform-origin: center; }
+#tbracket .dl-x { grid-area: 1 / 3 / 3 / 4; place-self: center; z-index: 1; font-size: 30px; line-height: 1; filter: drop-shadow(0 0 8px rgba(255,216,74,.8)); }
+#tbracket .dl-out { grid-area: 1 / 4 / 3 / 5; align-self: center; display: flex; align-items: center; gap: 10px; min-width: 0; }
+#tbracket .dl-out .dl-ln { flex: 0 0 34px; }
+#tbracket .dl-res b { display: block; font: 400 clamp(22px, 2.8vw, 34px)/1 'Bebas Neue', sans-serif; letter-spacing: .06em; text-shadow: 2px 2px 0 #000; white-space: nowrap; }
+#tbracket .dl-res b.q { color: #ffd84a; animation: tnPulse 1s ease-in-out infinite; }
+#tbracket .dl-res small { display: block; font: 400 14px/1 'Bebas Neue', sans-serif; letter-spacing: .25em; color: #ffd84a; }
+/* fase 1: as linhas correm até o encontro, a barra fecha e as espadas batem */
+#tbracket .duel.play .dl-ln.a, #tbracket .duel.play .dl-ln.b { animation: dlGrow .9s ease-out both; }
+#tbracket .duel.play .dl-bar { animation: dlBar .35s .85s ease-out both; }
+#tbracket .duel.play .dl-x { animation: dlClash .5s 1.2s ease-out both, dlShake .18s 1.7s 5 ease-in-out; }
+#tbracket .duel.play .dl-out { opacity: .5; }
+/* fase 2: a linha de quem venceu acende (dourada) e segue até o nome; a de quem perdeu apaga */
+#tbracket .duel.result .dl-ln.win, #tbracket .duel.result .dl-ln.o { background: #ffd84a; box-shadow: 0 0 8px rgba(255,216,74,.8); }
+#tbracket .duel.result .dl-ln.lose { opacity: .25; }
+#tbracket .duel.result .dl-bar { background: linear-gradient(#ffd84a, #ffd84a); }
+#tbracket .duel.result .dl-ln.o { animation: dlGrow .45s ease-out both; }
+#tbracket .duel.result .dl-res { animation: dlIn .4s .35s ease-out both; }
+#tbracket .duel.result .dl-x { opacity: .35; }
+@keyframes dlGrow { from { transform: scaleX(0); } }
+@keyframes dlBar { from { transform: scaleY(0); } }
+@keyframes dlClash { 0% { opacity: 0; transform: scale(2.4) rotate(-30deg); } 60% { opacity: 1; transform: scale(.85); } 100% { opacity: 1; transform: none; } }
+@keyframes dlShake { 50% { transform: translateX(-3px) rotate(-6deg); } }
+@keyframes dlIn { from { opacity: 0; transform: translateX(-8px); } }
+@media (max-width: 560px) { #tbracket .tv-panel.duel { grid-template-columns: minmax(0, auto) minmax(16px, 1fr) 4px minmax(70px, 1fr); padding: 16px 10px 10px; } #tbracket .dl-f small { display: none; } }
+@media (prefers-reduced-motion: reduce) { #tbracket .duel * { animation-duration: .01ms !important; animation-delay: 0s !important; } }
 #tbracket .tb-btns { display: flex; gap: 10px; }
 #tbracket .tb-btns .opt { padding: 8px 26px; font: 400 24px/1 'Bebas Neue', sans-serif; letter-spacing: .14em; color: #bfb3d6; border: 1px solid rgba(255,255,255,.15); border-radius: 4px; background: rgba(10,8,14,.75); cursor: pointer; }
 #tbracket .tb-btns .opt.on { color: #1a1208; border-color: #ffd84a; background: linear-gradient(180deg, #ffe27a, #d9a52a); }

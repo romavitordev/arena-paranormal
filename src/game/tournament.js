@@ -1,6 +1,6 @@
 // TORNEIO (local, v1): 2 a 8 participantes (humano ou CPU), eliminatória simples. Com número que não é potência de 2,
-// alguns passam direto na 1ª rodada (sem nunca sobrar uma luta vazia). Lutas só de CPU são resolvidas na hora
-// (pedido do usuário: sempre pular); as com humano são jogadas. Aqui só a chave (sem DOM), para testar fora do jogo.
+// alguns passam direto na 1ª rodada (sem nunca sobrar uma luta vazia). As lutas vão EM ORDEM, uma de cada vez: as só
+// de CPU são sorteadas e mostradas animadas na chave (simulateMatch); as com humano são jogadas. Aqui só a chave (sem DOM), para testar fora do jogo.
 //
 // participante: { id, name, human, defs: [def] (solo) ou [líder, assist1, assist2] (equipe) }
 // chave: rounds[r][m] = { a, b, winner }  (a/b = índice do participante ou null; winner = índice ou null)
@@ -61,6 +61,18 @@ export function nextMatch(t) {
     }
   }
   return null;
+}
+
+// a luta pronta é só de CPU? (o torneio a mostra animada, uma de cada vez, em vez de pedir LUTAR)
+export function isCpuMatch(t, n) {
+  return !!n && !t.participants[n.match.a].human && !t.participants[n.match.b].human;
+}
+
+// sorteia UMA luta só de CPU (meio a meio) e devolve { r, m, winner }
+export function simulateMatch(t, n) {
+  const w = t.rand() < 0.5 ? n.match.a : n.match.b;
+  setWinner(t, n.r, n.m, w);
+  return { r: n.r, m: n.m, winner: w };
 }
 
 // resolve na hora TODAS as lutas só de CPU que estiverem prontas (sorteio meio a meio), mesmo que antes delas haja

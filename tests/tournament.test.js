@@ -51,3 +51,22 @@ test('torneio: luta só de CPU é sorteada mesmo com uma luta de humano antes de
   const cpuOnly = t.rounds[0].filter((m) => !t.participants[m.a].human && !t.participants[m.b].human);
   assert.ok(cpuOnly.every((m) => m.winner !== null));
 });
+
+test('torneio: em ordem, uma luta de cada vez — as de CPU uma a uma, e a de humano espera a vez dela', async () => {
+  const { isCpuMatch, simulateMatch } = await import('../src/game/tournament.js');
+  const t = createTournament(people(8, [5]), { seed: 4 });
+  const order = [];
+  for (let n = nextMatch(t), guard = 0; n && guard < 20; n = nextMatch(t), guard++) {
+    order.push(`${n.r}:${n.m}`);
+    if (isCpuMatch(t, n)) {
+      const before = t.rounds.flat().filter((m) => m.winner !== null).length;
+      const res = simulateMatch(t, n);
+      assert.equal(t.rounds.flat().filter((m) => m.winner !== null).length, before + 1, 'decide só UMA luta');
+      assert.ok(res.winner === n.match.a || res.winner === n.match.b);
+    } else setWinner(t, n.r, n.m, n.match.a);
+  }
+  // a ordem segue a chave: rodada por rodada, luta por luta
+  const sorted = [...order].sort((x, y) => x.split(':')[0] - y.split(':')[0] || x.split(':')[1] - y.split(':')[1]);
+  assert.deepEqual(order, sorted);
+  assert.notEqual(t.champion, null);
+});

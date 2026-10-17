@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.28.0';
+export const VERSION = '3.29.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,16 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.29.0',
+    date: '2026-10-17',
+    title: 'Arquibancada',
+    items: [
+      'TORNEIO — as lutas agora vão EM ORDEM, uma de cada vez. Luta entre CPUs aparece na chave como um duelo animado: os dois correm a linha até o encontro ⚔️, as espadas batem e a linha de quem venceu acende e segue (quem perdeu fica ELIMINADO). Antes, todas as lutas dos bots já apareciam decididas de uma vez. O botão PULAR adianta.',
+      'ONLINE — ASSISTIR: as salas públicas que estão jogando aparecem na lista de SALAS como AO VIVO, com os nomes de quem joga e quantos assistem. Escolha uma e assista à partida ao vivo, do ponto em que ela está (sala com senha pede a senha). Para sair, toque no selo ASSISTINDO no alto ou aperte Esc.',
+      'ONLINE — quem joga vê no selo da partida quantas pessoas estão assistindo (👁).',
+    ],
+  },
   {
     v: '3.28.0',
     date: '2026-10-17',

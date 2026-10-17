@@ -2,6 +2,11 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.29.0 — Arquibancada
+- TORNEIO — as lutas agora vão EM ORDEM, uma de cada vez. Luta entre CPUs aparece na chave como um duelo animado: os dois correm a linha até o encontro ⚔️, as espadas batem e a linha de quem venceu acende e segue (quem perdeu fica ELIMINADO). Antes, todas as lutas dos bots já apareciam decididas de uma vez. O botão PULAR adianta.
+- ONLINE — ASSISTIR: as salas públicas que estão jogando aparecem na lista de SALAS como AO VIVO, com os nomes de quem joga e quantos assistem. Escolha uma e assista à partida ao vivo, do ponto em que ela está (sala com senha pede a senha). Para sair, toque no selo ASSISTINDO no alto ou aperte Esc.
+- ONLINE — quem joga vê no selo da partida quantas pessoas estão assistindo (👁).
+
 ## v3.28.0 — Na Palma da Mão
 - CELULAR — CONTROLES NOVOS: um botão de ATAQUE grande no canto direito, com pulo, tiro, esquiva, carga e defesa em volta, e UM BOTÃO PARA CADA HABILIDADE do seu lutador + o ESPECIAL. É só tocar: o botão faz o comando sozinho (nada de apertar dois botões ao mesmo tempo). Cada botão mostra a recarga, apaga quando falta sanidade e brilha quando está pronto.
 - CELULAR — o joystick agora aparece onde o polegar encosta, em qualquer lugar da metade esquerda da tela.

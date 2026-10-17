@@ -10,6 +10,10 @@
 // comandos locais valem DELAY quadros depois (atraso de entrada), o que esconde a latência da rede.
 // A cada CHECK quadros os dois comparam um resumo do estado; se divergirem, o anfitrião manda os números da luta e o
 // convidado corrige.
+//
+// ESPECTADORES: o anfitrião continua no corretor durante a partida e aceita quem quiser ASSISTIR (até MAX_WATCHERS).
+// Quem assiste recebe todos os comandos desde o quadro 0 (a sessão inteira, menus incluídos), refaz tudo rápido até
+// alcançar a partida e daí segue ao vivo, uns quadros atrás; a cada CHECK quadros recebe os números da luta e corrige.
 
 import { VERSION_LABEL, VERSION, formatVersion } from '../config/version.js';
 
@@ -22,6 +26,8 @@ const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // sem 0/O e 1/I, para n�
 export const DELAY = 4;
 export const CHECK = 120;
 export const NAME_MAX = 16;
+export const MAX_WATCHERS = 8;
+const HISTORY_CHUNK = 1000; // quadros por mensagem ao mandar o histórico para quem chegou para assistir
 
 const rid = (n) => Array.from({ length: n }, () => CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)]).join('');
 export const cleanName = (s) => String(s || '').replace(/[\u0000-\u001f<>]/g, '').trim().slice(0, NAME_MAX);
@@ -195,7 +201,7 @@ class Link {
 // ------------------------------------------------------------------ partida (lockstep entre dois)
 export class NetSession {
   constructor(role) {
-    this.role = role; // 'host' (P1) | 'guest' (P2)
+    this.role = role; // 'host' (P1) | 'guest' (P2) | 'watch' (espectador: só assiste, vê pelo lado do P1)
     this.slot = role === 'host' ? 0 : 1;
     this.frame = 0; // próximo quadro a simular
     this.localNext = 0; // próximo quadro local a registrar/enviar
@@ -210,6 +216,12 @@ export class NetSession {
     this.desyncs = 0;
     this.fixes = [];
     this.names = ['P1', 'P2'];
+    this.history = []; // anfitrião: os comandos [P1, P2] de cada quadro já simulado (para quem chegar para assistir)
+    this.watchers = []; // anfitrião: conexões de quem assiste
+    this.wbuf = [];
+    this.frames = new Map(); // espectador: comandos que chegaram, por quadro
+    this.snaps = new Map(); // espectador: números da luta mandados pelo anfitrião, por quadro
+    this.latest = 0; // espectador: último quadro recebido + 1
   }
 
   // Cria a sala e espera alguém entrar com o código (e a senha, se houver). onCode(código) assim que vale.
@@ -230,14 +242,20 @@ export class NetSession {
     const link = await new Promise((resolve, reject) => {
       s.cancel = () => reject(new Error('cancelado'));
       s.broker.onOffer = async (m) => {
-        if (s.link) return; // a sala já tem dois
         let l;
         try { l = await Link.accept(s.broker, m); } catch { return; }
         l.onmessage = (h) => {
-          if (h.t !== 'hello' || s.link) return;
+          if (h.t !== 'hello') return;
           const deny = (reason) => { l.send({ t: 'deny', reason }); setTimeout(() => l.close(), 300); };
           if (h.v !== VERSION) return deny(`Versões diferentes do jogo (${VERSION_LABEL} na sala, ${formatVersion(h.v)} aí). Atualizem a página.`);
           if (password && h.password !== password) return deny('Senha errada.');
+          if (h.watch) {
+            if (!s.link) return deny('A partida ainda não começou.');
+            if (s.watchers.length >= MAX_WATCHERS) return deny('A sala já tem espectadores demais.');
+            s.addWatcher(l, h);
+            return;
+          }
+          if (s.link) return deny('A sala já está cheia.');
           s.names[1] = cleanName(h.name) || 'P2';
           l.send({ t: 'welcome', v: VERSION, seed: s.seed, settings: s.settings, name: s.names[0] });
           resolve(l);
@@ -282,13 +300,74 @@ export class NetSession {
     return s;
   }
 
+  // ASSISTIR a partida da sala do código (a sala precisa já estar jogando)
+  static async watch(code, { name, password = '', onSession } = {}) {
+    const s = new NetSession('watch');
+    onSession && onSession(s);
+    s.slot = 0;
+    s.code = String(code || '').trim().toUpperCase();
+    if (!/^[A-Z0-9]{5}$/.test(s.code)) throw new Error('O código tem 5 letras/números.');
+    s.broker = new Broker(ID_PREFIX + 'w-' + rid(10));
+    await s.broker.open();
+    if (s.closed) throw new Error('cancelado');
+    const link = await Promise.race([
+      Link.connect(s.broker, ID_PREFIX + s.code),
+      new Promise((_, reject) => { s.cancel = () => reject(new Error('cancelado')); }),
+    ]);
+    await new Promise((resolve, reject) => {
+      s.cancel = () => { link.close(); reject(new Error('cancelado')); };
+      const timer = setTimeout(() => { link.close(); reject(new Error('A sala não respondeu.')); }, 10000);
+      link.onmessage = (m) => {
+        if (m.t === 'deny') { clearTimeout(timer); link.onclose = null; link.close(); reject(new Error(m.reason || 'A sala recusou a entrada.')); }
+        if (m.t === 'welcome' && m.watch) {
+          clearTimeout(timer);
+          s.seed = m.seed;
+          s.settings = m.settings;
+          s.names = [cleanName(m.names && m.names[0]) || 'P1', cleanName(m.names && m.names[1]) || 'P2'];
+          s.watchCount = m.watchers || 1;
+          resolve();
+        }
+      };
+      link.onclose = () => { clearTimeout(timer); reject(new Error('A sala fechou a conexão.')); };
+      link.send({ t: 'hello', v: VERSION, name: cleanName(name), password, watch: true });
+    });
+    s.useLink(link);
+    return s;
+  }
+
+  // anfitrião: quem chegou para assistir recebe o histórico inteiro (em pedaços) e daí os quadros novos
+  addWatcher(l, h) {
+    const w = { link: l, name: cleanName(h.name) || '?' };
+    this.watchers.push(w);
+    l.send({ t: 'welcome', watch: true, v: VERSION, seed: this.seed, settings: this.settings, names: this.names, watchers: this.watchers.length });
+    this.flushWatchers();
+    for (let f = 0; f < this.history.length; f += HISTORY_CHUNK) l.send({ t: 'w', f, d: this.history.slice(f, f + HISTORY_CHUNK) });
+    const drop = () => { this.watchers = this.watchers.filter((x) => x !== w); };
+    l.onmessage = (m) => { if (m.t === 'bye') { drop(); l.close(); } };
+    l.onclose = drop;
+  }
+
+  // anfitrião: manda para quem assiste os quadros simulados desde o último envio
+  flushWatchers() {
+    if (!this.wbuf.length) return;
+    const f = this.history.length - this.wbuf.length;
+    for (const w of this.watchers) w.link.send({ t: 'w', f, d: this.wbuf });
+    this.wbuf = [];
+  }
+
+  // espectador: quantos quadros faltam para alcançar a partida
+  behind() {
+    return this.latest - this.frame;
+  }
+
   // daqui em diante a conversa é direta: larga o corretor e passa a usar o canal da partida
+  // (o anfitrião continua no corretor: é por ele que chega quem quer assistir)
   useLink(link) {
     this.link = link;
-    this.broker.close();
+    if (this.role !== 'host') this.broker.close();
     link.onmessage = (m) => this.onMessage(m);
-    link.onclose = () => this.close('O outro jogador saiu da partida.');
-    this.pingTimer = setInterval(() => this.send({ t: 'ping', k: performance.now() }), 1000);
+    link.onclose = () => this.close(this.role === 'watch' ? 'A partida terminou.' : 'O outro jogador saiu da partida.');
+    if (this.role !== 'watch') this.pingTimer = setInterval(() => this.send({ t: 'ping', k: performance.now() }), 1000);
   }
 
   send(m) {
@@ -296,6 +375,13 @@ export class NetSession {
   }
 
   onMessage(m) {
+    if (m.t === 'w') {
+      m.d.forEach((pair, i) => this.frames.set(m.f + i, pair));
+      this.latest = Math.max(this.latest, m.f + m.d.length);
+      return;
+    }
+    if (m.t === 'ws') { this.snaps.set(m.f, m.s); return; }
+    if (this.role === 'watch' && m.t === 'bye') { this.close('A partida terminou.'); return; }
     if (m.t === 'i') this.remote.set(m.f, m.d);
     else if (m.t === 'h') this.checkHash(m.f, m.h);
     else if (m.t === 'fix') this.fixes.push(m.s);
@@ -309,6 +395,8 @@ export class NetSession {
     this.closed = true;
     this.closeReason = this.closeReason || reason;
     clearInterval(this.pingTimer);
+    for (const w of this.watchers) { w.link.send({ t: 'bye' }); setTimeout(() => w.link.close(), 200); }
+    this.watchers = [];
     if (this.cancel) this.cancel();
     if (this.broker) this.broker.close();
     if (this.link) this.link.close();
@@ -323,6 +411,7 @@ export class NetSession {
   // ---------------------------------------------------------------- lockstep
   // registra (e envia) os comandos locais até DELAY quadros à frente do quadro atual
   fill(read) {
+    if (this.role === 'watch') return; // quem assiste não manda comandos
     while (this.localNext < this.frame + DELAY) {
       const d = read();
       this.local.set(this.localNext, d);
@@ -332,26 +421,48 @@ export class NetSession {
   }
 
   ready() {
+    if (this.role === 'watch') return this.frames.has(this.frame);
     return this.local.has(this.frame) && this.remote.has(this.frame);
   }
 
   // comandos do quadro atual, na ordem dos lados [P1, P2]
   take() {
+    if (this.role === 'watch') {
+      const pair = this.frames.get(this.frame);
+      this.frames.delete(this.frame);
+      this.frame++;
+      return pair;
+    }
     const mine = this.local.get(this.frame);
     const theirs = this.remote.get(this.frame);
     this.local.delete(this.frame);
     this.remote.delete(this.frame);
     this.frame++;
-    return this.slot === 0 ? [mine, theirs] : [theirs, mine];
+    const pair = this.slot === 0 ? [mine, theirs] : [theirs, mine];
+    if (this.role === 'host') {
+      this.history.push(pair);
+      this.wbuf.push(pair);
+      if (this.wbuf.length >= 4) this.flushWatchers();
+    }
+    return pair;
   }
 
   // depois de simular um quadro: de tempos em tempos compara o resumo do estado
   afterTick(hashFn, snapshotFn) {
     const f = this.frame - 1;
+    if (this.role === 'watch') {
+      // os números que o anfitrião tinha neste quadro: corrige o que tiver saído do lugar
+      if (this.snaps.has(f)) { this.fixes.push(this.snaps.get(f)); this.snaps.delete(f); }
+      return;
+    }
     if (f % CHECK !== 0) return;
     const h = hashFn();
     this.hashes.set(f, h);
     this.snapshot = this.role === 'host' ? { f, s: snapshotFn() } : null;
+    if (this.role === 'host' && this.watchers.length && this.snapshot.s) {
+      this.flushWatchers();
+      for (const w of this.watchers) w.link.send({ t: 'ws', f, s: this.snapshot.s });
+    }
     this.send({ t: 'h', f, h });
     const theirs = this.theirHash && this.theirHash[f];
     if (theirs !== undefined) this.compare(f, h, theirs);
@@ -449,6 +560,7 @@ export class Lobby {
 
   store(room) {
     const r = { code: String(room.code || '').slice(0, 5), name: cleanName(room.name) || 'Sala', locked: !!room.locked };
+    if (room.live) { r.live = true; r.players = [cleanName(room.players && room.players[0]) || 'P1', cleanName(room.players && room.players[1]) || 'P2']; r.watchers = Math.max(0, Math.min(99, Number(room.watchers) || 0)); }
     if (!/^[A-Z0-9]{5}$/.test(r.code)) return;
     this.rooms.set(r.code, { room: r, until: Date.now() + 12000 });
   }

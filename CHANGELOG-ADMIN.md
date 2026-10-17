@@ -1,5 +1,17 @@
 # Registro administrativo de alterações
 
+## v3.29.0 — Arquibancada
+
+- Versão: `VERSION` 3.28.0 → **3.29.0** (package.json/lock junto).
+- Pedidos: "opção de assistir as partidas das salas online que estão acontecendo" e "arrume o torneio: começo e
+  instantaneamente todas as batalhas dos bots já aconteceram — tem que ser em ordem, uma de cada vez, mostrando quem
+  ganhou e quem perdeu", com o desenho `Personagem 1 - - - I ⚔️ Personagem 2 - - - I`.
+- Conferido no navegador: torneio de 5 CPUs do começo ao campeão (quartas → semis → final, cada luta ~3 s de duelo e
+  ~3 s de resultado). Partida online real pelo corretor público (anfitrião, convidado e espectador em 3 abas): o
+  espectador entrou com a luta carregando, refez ~1100 quadros em ~1 s e ficou igual quadro a quadro (uma diferença de
+  0,2 na posição depois do fim da luta, corrigida pelo envio seguinte dos números); Esc sai e o anfitrião continua.
+- Falta: testar com aparelhos diferentes (celular assistindo partida de PC) e com muitos espectadores ao mesmo tempo.
+
 ## v3.28.0 — Na Palma da Mão
 
 - Versão: `VERSION` 3.27.1 → **3.28.0** (package.json/lock junto).

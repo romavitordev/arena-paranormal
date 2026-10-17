@@ -1104,8 +1104,11 @@ export class TournamentSetupScreen {
 // no centro), medalhões com o retrato, linhas que acendem em dourado pelo caminho do vencedor, eliminados em cinza.
 // Embaixo o painel VS da próxima luta (LUTAR / SAIR) ou o CAMPEÃO com troféu (CONTINUAR).
 export class TournamentScreen {
-  constructor(root, { tour, portraits, next = null, autos = new Set() }) {
+  // sim: a próxima luta é só de CPU — o painel mostra o duelo animado e a tela devolve 'clash' (som) e 'simdone';
+  // last: { r, m, winner } da luta que acabou de ser decidida — mostra quem venceu e quem caiu e devolve 'next'
+  constructor(root, { tour, portraits, next = null, autos = new Set(), sim = false, last = null }) {
     this.tour = tour;
+    this.t0 = performance.now();
     const P = tour.participants;
     const R = tour.rounds.length;
     const colX = (col, side) => {
@@ -1151,7 +1154,7 @@ export class TournamentScreen {
         if (!bye) lines.push(`<path class="${lit ? 'lit' : ''}" d="M${s.x} ${s.y} H${final ? s.x : midX} V${target.y} H${target.x}"/>`);
         const p = who(idx);
         const st = match.winner === null ? '' : lit ? 'win' : 'lose';
-        const isNext = next && next.r === r && next.m === m;
+        const isNext = (next && next.r === r && next.m === m) || (last && last.r === r && last.m === m);
         // "passa direto": sem assento vazio — a linha dourada já mostra quem avançou
         if (!bye) nodes.push(`<div class="tn ${p ? '' : 'empty'} ${st} ${isNext ? 'next' : ''} ${final ? 'big' : ''} ${p && p.human ? 'human' : ''}" style="left:${s.x}%;top:${s.y}%;--c:${p ? p.defs[0].color : '#3a3346'}">
               ${p ? `<img src="${portraits[p.defs[0].id] || ''}" alt="">` : '<i>?</i>'}<span>${p ? p.name : ''}</span></div>`);
@@ -1168,7 +1171,21 @@ export class TournamentScreen {
 
     let panel;
     let opts;
-    if (ch) {
+    const lastM = last ? tour.rounds[last.r][last.m] : null;
+    if ((sim && next) || lastM) {
+      // DUELO: os dois correm a linha até o encontro (⚔️); no resultado, a linha de quem venceu acende e segue
+      const n = lastM ? { r: last.r, match: lastM } : next;
+      const a = P[n.match.a];
+      const b = P[n.match.b];
+      const res = (i) => (!lastM ? '' : lastM.winner === i ? 'win' : 'lose');
+      const W = lastM ? P[lastM.winner] : null;
+      const duelist = (p, k, st) => `<div class="dl-f ${k} ${st}" style="--c:${p.defs[0].color}"><img src="${portraits[p.defs[0].id] || ''}" alt=""><span><b>${p.name}</b><small>${p.defs.map((d) => d.name).join(' · ')}</small>${st === 'lose' ? `<em>${t('tour.out')}</em>` : ''}</span></div><i class="dl-ln ${k} ${st}"></i>`;
+      this.phase = lastM ? 'result' : 'play';
+      opts = [['skip', t('tour.skip')], ['quit', t('tour.quit')]];
+      panel = `<div class="tv-panel duel ${this.phase}"><div class="tv-round">${roundName(n.r)} · ${t('tour.sim')}</div>
+        ${duelist(a, 'a', res(n.match.a))}${duelist(b, 'b', res(n.match.b))}<i class="dl-bar"></i><span class="dl-x">⚔️</span>
+        <div class="dl-out"><i class="dl-ln o"></i><span class="dl-res">${W ? `<b style="color:${W.defs[0].color}">${W.name}</b><small>${t('tour.winner')}</small>` : '<b class="q">?</b>'}</span></div></div>`;
+    } else if (ch) {
       opts = [['done', t('tour.continue')]];
       panel = `<div class="tv-panel champ" style="--c:${ch.defs[0].color}"><img src="${portraits[ch.defs[0].id] || ''}" alt="">
         <div><small>🏆 ${t('tour.champion')}</small><b>${ch.name}</b><p>${ch.defs.map((d) => d.name).join(' · ')}</p></div></div>`;
@@ -1195,6 +1212,19 @@ export class TournamentScreen {
   }
   render() { this.btns.forEach((b, i) => b.classList.toggle('on', i === this.index)); }
   update(input) {
+    const r = this.read(input);
+    // PULAR: adianta o duelo (ou o resultado)
+    if (r === 'skip') { const ph = this.phase; this.phase = null; return ph === 'play' ? 'simdone' : ph === 'result' ? 'next' : null; }
+    if (r) return r;
+    if (this.phase) {
+      const ms = performance.now() - this.t0;
+      if (this.phase === 'play' && !this.clashed && ms > 1250) { this.clashed = true; return 'clash'; }
+      if (this.phase === 'play' && ms > 2700) { this.phase = null; return 'simdone'; }
+      if (this.phase === 'result' && ms > 2400) { this.phase = null; return 'next'; }
+    }
+    return null;
+  }
+  read(input) {
     if (this.clicked) { const a = this.clicked; this.clicked = null; return a; }
     for (const p of input.players) {
       const n = this.btns.length;
@@ -1244,7 +1274,10 @@ export class LanScreen {
       case 'menu': return [['create', t('lan.create')], ['rooms', t('lan.rooms')], ['join', t('lan.join')], ['back', t('ui.back')]];
       case 'create': return [['vis', t('lan.vis', { v: t(this.isPublic ? 'lan.public' : 'lan.private') })], ['host', t('lan.do_create')], ['menu', t('ui.back')]];
       case 'rooms': return [
-        ...this.rooms.map((r, i) => [`room:${i}`, `${r.locked ? '🔒 ' : ''}${t('lan.room_of', { name: esc(r.name) })} · ${r.code}`]),
+        // salas esperando (entrar para jogar) e salas jogando (AO VIVO: assistir)
+        ...this.rooms.map((r, i) => [`room:${i}`, r.live
+          ? `<span class="lan-live">${t('lan.live')}</span> ${r.locked ? '🔒 ' : ''}${esc(r.players[0])} × ${esc(r.players[1])}${r.watchers ? ` · 👁 ${r.watchers}` : ''} · <b>${t('lan.watch')}</b>`
+          : `${r.locked ? '🔒 ' : ''}${t('lan.room_of', { name: esc(r.name) })} · ${r.code}`]),
         ['refresh', t('lan.refresh')], ['menu', t('ui.back')],
       ];
       case 'join': case 'password': return [['go', t('lan.enter')], [this.view === 'password' ? 'rooms' : 'menu', t('ui.back')]];
@@ -1351,6 +1384,7 @@ export class LanScreen {
       if (r.locked) return this.go('password', 'move');
       this.from = 'rooms';
       this.go('wait', null);
+      if (r.live) { this.setStatus(t('lan.watching', { name: r.name })); return { act: 'watch', code: r.code, password: '' }; }
       this.setStatus(t('lan.joining', { name: r.name }));
       return { act: 'join', code: r.code, password: '' };
     }
@@ -1358,9 +1392,10 @@ export class LanScreen {
       if (!/^[A-Z0-9]{5}$/.test(this.code || '')) { this.setStatus(t('lan.code_invalid'), true); return null; }
       this.saveName();
       this.from = this.view === 'password' ? 'rooms' : 'menu';
+      const watch = this.view === 'password' && this.target && this.target.live;
       this.go('wait', null);
       this.setStatus(t('lan.connecting'));
-      return { act: 'join', code: this.code, password: this.password };
+      return { act: watch ? 'watch' : 'join', code: this.code, password: this.password };
     }
     return null;
   }

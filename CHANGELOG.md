@@ -1,5 +1,30 @@
 # Changelog
 
+## v3.29.0 — 2026-10-17
+
+### Alterado
+- Torneio: as lutas seguem a ordem da chave (`nextMatch`), uma de cada vez. `autoResolve` saiu do fluxo do jogo (fica
+  na API e nos testes); `isCpuMatch` / `simulateMatch` em `game/tournament.js` decidem UMA luta só de CPU.
+- `TournamentScreen` (`sim`, `last`): duelo animado no painel — fase `play` (linhas até o encontro, barra, ⚔️; devolve
+  `clash` aos 1,25 s e `simdone` aos 2,7 s) e fase `result` (linha do vencedor dourada até o nome, perdedor riscado e
+  ELIMINADO; devolve `next` aos 2,4 s). PULAR adianta a fase. `main.js`: `toTourBracket(last)` e `simTourMatch()`.
+- `NetSession`: o anfitrião continua no corretor durante a partida e atende ofertas — `hello.watch` vira espectador
+  (até `MAX_WATCHERS` = 8; mesma checagem de versão e senha); um segundo jogador recebe "A sala já está cheia.".
+- Anfitrião guarda `history` (os comandos [P1, P2] de cada quadro) e manda a quem assiste: o histórico inteiro em
+  pedaços de 1000 quadros na entrada, depois os quadros novos a cada 4 (`t: 'w'`) e, a cada `CHECK` quadros, os números
+  da luta (`t: 'ws'`) para corrigir.
+- `NetSession.watch(code)` (papel `watch`): não manda comandos, lê os quadros recebidos, vê pelo lado do P1. `netPump`
+  refaz até 40 quadros por desenho quando está mais de 20 atrás e espera os próprios modelos na tela de carregamento.
+- Lobby: salas jogando são anunciadas com `live`, `players` e `watchers`; o anfitrião de sala pública mantém um `Lobby`
+  (`game.liveLobby`) durante a partida.
+- `LanScreen`: salas AO VIVO na lista com ASSISTIR (com senha → tela de senha → `act: 'watch'`).
+- Espectador: selo no alto vira o botão de sair (Esc também), controles de toque escondidos (`body.spectating`).
+
+### Adicionado
+- Textos `tour.sim/winner/out/skip`, `lan.live/watch/watching` e `net.watching/syncing/leave_watch/not_started/
+  too_many_watchers/room_full/match_over` nos 13 idiomas.
+- Teste: as lutas do torneio saem em ordem e `simulateMatch` decide uma só por vez.
+
 ## v3.28.0 — 2026-10-17
 
 ### Alterado
