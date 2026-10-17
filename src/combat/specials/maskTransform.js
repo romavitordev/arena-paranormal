@@ -57,7 +57,7 @@ function carryProp(prop) {
 
 // troca a textura do rosto do modelo (ex.: o sorriso da Jae debaixo do capuz); devolve a função que desfaz
 const _faceTex = {};
-function swapFace(rig, from, to) {
+export function swapFace(rig, from, to) {
   if (!MATERIAL_TEXTURES[to]) return () => {};
   if (!_faceTex[to]) {
     const t = MATERIAL_TEXTURES[to]();

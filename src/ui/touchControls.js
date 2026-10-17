@@ -145,8 +145,9 @@ export class TouchControls {
       try { b.setPointerCapture(e.pointerId); } catch (err) { /* evento sintético sem ponteiro real */ }
       b.classList.add('on');
       if (b.dataset.macro === 'special') {
-        // △ △ ○ com um quadro de intervalo entre cada toque
-        T.queue.push(['carga'], [], ['carga'], [], ['physical']);
+        // △ △ ○ com um quadro de intervalo entre cada toque; com a Barra de Equipe cheia, △ △ △ ○ (Especial em Equipe)
+        const team = this.fighter && this.fighter.teamReady && this.fighter.teamReady();
+        T.queue.push(['carga'], [], ['carga'], [], ...(team ? [['carga'], []] : []), ['physical']);
         return;
       }
       if (b.dataset.ab !== undefined) { this.fireAbility(+b.dataset.ab); return; }
@@ -292,6 +293,7 @@ export class TouchControls {
     this.spBtn.classList.toggle('ready', avail);
     this.spBtn.classList.toggle('nocost', !used && !avail && spC <= 0);
     this.spBtn.classList.toggle('used', !!used);
+    this.spBtn.classList.toggle('team', !used && !!(f.teamReady && f.teamReady())); // Barra de Equipe cheia: vira o Especial em Equipe
     cd(this.ringEls.ranged, 'ranged');
     // △: a transformação disponível (segurar)
     const tri = this.ringEls.carga;

@@ -10,6 +10,7 @@ import { Animator } from '../anim/Animator.js';
 import { ARENAS } from '../arena/index.js';
 import { yawTo } from '../core/util.js';
 import { SETTINGS } from '../config/settings.js';
+import { updateRiddle, cancelRiddle } from '../combat/riddle.js';
 
 const RAY = new THREE.Raycaster();
 
@@ -256,6 +257,8 @@ export class World {
     this.zones.length = 0;
     this.timers.length = 0;
     this.endCinematic();
+    cancelRiddle(this);
+    this.riddlesUsed = null;
     this.projectiles.clear();
     this.fx.clear();
     for (const f of this.fighters) f.reset();
@@ -325,7 +328,11 @@ export class World {
       return;
     }
 
-    if (this.cinematic) {
+    if (this.riddle) {
+      // ENIGMA DA ESFINGE: tudo parado esperando a resposta (combat/riddle.js)
+      updateRiddle(this, dt);
+      for (const f of this.fighters) f.updatePresentation(dt);
+    } else if (this.cinematic) {
       // mundo congelado: só quem está no especial se mexe
       const { actor, target } = this.cinematic;
       actor.update(dt);

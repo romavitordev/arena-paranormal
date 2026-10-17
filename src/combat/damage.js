@@ -58,6 +58,16 @@ export function applyHit(world, attacker, victim, o) {
     }
   }
 
+  // DESVIO IMPERTURBÁVEL (Nubi): na janela de calma, o golpe (não especial) é desviado com a Substituição do jogo
+  const ce = victim.calmEvade;
+  if (ce && world.time <= ce.until && o.kind !== 'special' && !o.ignoreInvuln && !o.grab) {
+    victim.calmEvade = null;
+    if (victim.trySubstitution({ free: true, label: ce.label })) {
+      world.fx.burst(victim.chestPos(), { count: 14, color: 0x0c0a0e, kind: 'smoke', speed: 1.4, life: 0.4, size: 0.4 });
+      return 0;
+    }
+  }
+
   // EMBARALHAR (Guizo): o golpe pode acertar uma das cópias ilusórias em vez dele
   if (shuffleDodge(world, attacker, victim, o)) return 'countered';
 

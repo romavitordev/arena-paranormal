@@ -26,6 +26,7 @@ export class HUD {
       <div id="center"><div id="timer">99</div><div class="rounds"></div></div>
       <div id="vignette"></div>
       <div id="npcbar"><b></b><div class="bar"><div class="fill"></div></div></div>
+      <div id="riddle"><div class="rq"><small></small><p></p><i class="rt"><u></u></i></div><div class="ropts"></div></div>
       <div class="dmg p1"><small>DANO</small><b></b></div>
       <div class="dmg p2"><small>DANO</small><b></b></div>
       <div id="callout"></div>
@@ -40,6 +41,7 @@ export class HUD {
     this.dmgEls = [root.querySelector('.dmg.p1'), root.querySelector('.dmg.p2')];
     this.vignette = root.querySelector('#vignette');
     this.npcBar = root.querySelector('#npcbar');
+    this.riddleEl = root.querySelector('#riddle');
     this.dmgState = [{ value: 0, hold: 0 }, { value: 0, hold: 0 }];
     this.bannerEl = root.querySelector('#banner');
     this.letterbox = root.querySelector('#letterbox');
@@ -72,6 +74,7 @@ export class HUD {
     for (const d of this.dmgEls) { d.classList.remove('on', 'pop'); d.querySelector('b').textContent = ''; d.querySelector('small').textContent = t('hud.damage'); }
     this.vignette.classList.remove('on');
     this.npcBar.classList.remove('on');
+    this.riddle(null);
     this.dmgState = [{ value: 0, hold: 0 }, { value: 0, hold: 0 }];
     this.timerEl.textContent = '';
     this.roundsEl.innerHTML = '';
@@ -104,6 +107,7 @@ export class HUD {
         <div class="abilities">${abil.map((a) => `
           <div class="ab ${a.none ? 'none' : ''}" data-k="${a.key}" title="${a.name.replace(/"/g, '&quot;')}"><div class="cd"></div><div class="k"></div><div class="n${a.name.length > 18 || a.name.split(/\s+/).some((w) => w.length > 10) ? ' long' : ''}">${a.name}</div><div class="s"></div></div>`).join('')}
         </div>
+        ${f.assists ? `<div class="bar teamg" title="Barra de Equipe: enche usando as assistências e trocando de personagem"><div class="fill"></div><span>${t('hud.team_gauge')}</span></div>` : ''}
         ${f.assists ? `<div class="assists">${f.assists.map((a, k) => `<div class="as" data-k="${k}" style="--ac:${a.def.color}"><i class="ak"></i><b>${a.def.name}</b><span class="acd"></span><i class="sk" title="Trocar de personagem"></i></div>`).join('')}</div>` : ''}
         <div class="buff"></div>
         <div class="msg"></div>`;
@@ -116,6 +120,7 @@ export class HUD {
         en: p.querySelector('.bar.energy .fill'),
         guard: p.querySelector('.bar.guard .fill'),
         storm: p.querySelector('.bar.storm'),
+        teamg: p.querySelector('.bar.teamg'),
         guardBar: p.querySelector('.bar.guard'),
         state: p.querySelector('.state'),
         dodgePips: [...p.querySelectorAll('.dodges i')],
@@ -171,6 +176,12 @@ export class HUD {
       e.state.textContent = stateText || awakenHint;
       e.state.classList.toggle('awaken', !stateText && !!awakenHint);
       this.updateDamageMarker(i, f, match);
+      // Barra de Equipe
+      if (e.teamg) {
+        const k = (f.teamGauge || 0) / COMBAT.teamGauge.max;
+        e.teamg.children[0].style.width = `${k * 100}%`;
+        e.teamg.classList.toggle('full', k >= 1);
+      }
       // assistências: pronta / em campo / recarregando
       if (f.assists) {
         f.assists.forEach((a, k) => {
@@ -224,12 +235,27 @@ export class HUD {
     });
     // A Marionete: barra de vida preta no topo + vinheta escura nas bordas (lutador não tem mais barra de chefe no
     // centro: os Portadores usam a própria barra, customizada)
-    const mar = match && match.world && match.world.npcs.find((n) => n.isMarionette && n.alive);
+    // (também o Carniçal da Esfinge da Nubi: n.bossBar)
+    const mar = match && match.world && match.world.npcs.find((n) => (n.isMarionette || n.bossBar) && n.alive);
     this.vignette.classList.toggle('on', !!mar);
     this.npcBar.classList.toggle('on', !!mar);
     if (mar) {
       this.npcBar.querySelector('b').textContent = `${mar.name} · ${mar.owner.def.name}`;
       this.npcBar.querySelector('.fill').style.width = `${Math.max(0, mar.hp / mar.maxHp) * 100}%`;
+      // as MARCAS do enigma (Carniçal da Esfinge): um traço em cada uma; apagam depois de usadas
+      const marks = mar.cfg && mar.cfg.marks ? mar.cfg.marks : [];
+      const key = marks.map((m) => `${m}:${mar.marksLeft && mar.marksLeft.includes(m) ? 1 : 0}`).join(',');
+      if (this.npcMarksKey !== key) {
+        this.npcMarksKey = key;
+        const bar = this.npcBar.querySelector('.bar');
+        bar.querySelectorAll('.mk').forEach((e) => e.remove());
+        for (const m of marks) {
+          const e = document.createElement('i');
+          e.className = `mk${mar.marksLeft && mar.marksLeft.includes(m) ? '' : ' used'}`;
+          e.style.left = `${m * 100}%`;
+          bar.appendChild(e);
+        }
+      }
     }
     if (match) {
       this.timerEl.textContent = !SETTINGS.timer || match.training ? '∞' : Math.max(0, Math.ceil(match.timer));
@@ -347,6 +373,49 @@ export class HUD {
     el.classList.remove('show');
     void el.offsetWidth;
     el.classList.add('show');
+  }
+
+  // ENIGMA DA ESFINGE (combat/riddle.js): a pergunta e as quatro respostas no losango Y / X / B / A, com o botão de
+  // quem responde (controle, teclado ou tela). r = null esconde. No celular, tocar na resposta também responde.
+  riddle(r) {
+    const el = this.riddleEl;
+    if (!el) return;
+    el.classList.toggle('on', !!r);
+    el.classList.remove('done');
+    if (!r) return;
+    const inp = r.victim.input || {};
+    const src = inp.source === 'cpu' ? 'gamepad' : inp.source;
+    el.querySelector('small').textContent = `${r.sphinx.name} · ${r.victim.def.name} RESPONDE`;
+    el.querySelector('p').textContent = r.q;
+    const box = el.querySelector('.ropts');
+    box.innerHTML = '';
+    for (const o of r.opts) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = `ro ro-${o.key}`;
+      b.dataset.key = o.key;
+      b.innerHTML = `<kbd></kbd><span></span>`;
+      b.querySelector('kbd').textContent = actionLabel(inp.index ?? 0, o.key, src);
+      b.querySelector('span').textContent = o.text;
+      b.addEventListener('pointerdown', (e) => { e.preventDefault(); this.onRiddleTap && this.onRiddleTap(o.key, r.victim); });
+      box.appendChild(b);
+    }
+    this.riddleTick(r);
+  }
+
+  riddleTick(r) {
+    const el = this.riddleEl;
+    if (!el || !r) return;
+    el.querySelector('.rt u').style.width = `${Math.max(0, r.left / 10) * 100}%`;
+    if (r.phase === 'result' && !el.classList.contains('done')) {
+      el.classList.add('done');
+      el.querySelectorAll('.ro').forEach((b) => {
+        const o = r.opts.find((x) => x.key === b.dataset.key);
+        b.classList.toggle('right', o.right);
+        b.classList.toggle('picked', o.key === r.chosen);
+      });
+      el.querySelector('small').textContent = r.right ? 'RESPOSTA CERTA — A ESFINGE PARALISA' : r.chosen ? 'RESPOSTA ERRADA — DEVORADO' : 'SEM RESPOSTA — DEVORADO';
+    }
   }
 
   setCinematic(on) {

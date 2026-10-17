@@ -98,6 +98,14 @@ html.vp-fix canvas#game, html.vp-fix #hud, html.vp-fix .screen, html.vp-fix #tou
 .panel.p2 .bar.storm span { right: auto; left: 4px; }
 .bar.storm.full .fill { background: linear-gradient(90deg, #ff4a3a, #ffd27a); }
 .bar.storm.ready { animation: stormPulse .6s ease-in-out infinite alternate; }
+/* BARRA DE EQUIPE (batalha em equipe): enche com as assistências; cheia, brilha dourada */
+.bar.teamg { height: 7px; width: 60%; margin-top: 3px; position: relative; overflow: visible; }
+.panel.p2 .bar.teamg { margin-left: auto; }
+.bar.teamg .fill { background: linear-gradient(90deg, #3a2a6a, #a46bff); transition: width .25s; }
+.bar.teamg span { position: absolute; top: -1px; right: 4px; font-size: 7px; line-height: 9px; letter-spacing: .12em; color: rgba(255,255,255,.6); white-space: nowrap; }
+.panel.p2 .bar.teamg span { right: auto; left: 4px; }
+.bar.teamg.full .fill { background: linear-gradient(90deg, #ffb02a, #ffe27a); }
+.bar.teamg.full { animation: stormPulse .6s ease-in-out infinite alternate; }
 @keyframes stormPulse { from { box-shadow: 0 0 0 rgba(255,120,60,0); } to { box-shadow: 0 0 10px rgba(255,150,70,.9); } }
 .bar.guard { height: 5px; width: 60%; margin-top: 3px; border-width: 1px; }
 .panel.p2 .bar.guard { margin-left: auto; }
@@ -237,7 +245,36 @@ html.vp-fix canvas#game, html.vp-fix #hud, html.vp-fix .screen, html.vp-fix #tou
 #npcbar.on { opacity: 1; }
 #npcbar b { display: block; font-family: 'Bebas Neue', sans-serif; font-weight: 400; letter-spacing: .25em; font-size: 16px; color: #bfe8dc; text-shadow: 2px 2px 0 #000; }
 #npcbar .bar { height: 12px; border: 2px solid #000; background: #1c1c20; box-shadow: 0 0 0 1px rgba(191,232,220,.35); }
+#npcbar .bar { position: relative; }
+#npcbar .mk { position: absolute; top: -5px; bottom: -5px; width: 4px; margin-left: -2px; background: #c9a640; box-shadow: 0 0 6px #c9a640, 0 0 0 1px #000; }
+#npcbar .mk::after { content: '?'; position: absolute; top: -17px; left: 50%; transform: translateX(-50%); font: 400 14px/1 'Bebas Neue', sans-serif; color: #c9a640; text-shadow: 1px 1px 0 #000; }
+#npcbar .mk.used { background: #3a3040; box-shadow: none; }
+#npcbar .mk.used::after { color: #4a4050; }
 #npcbar .fill { height: 100%; width: 100%; background: linear-gradient(180deg, #2a2a2e, #050506); box-shadow: inset 0 0 6px rgba(138,216,192,.5); transition: width .15s; }
+/* ENIGMA DA ESFINGE (Nubi): pergunta no alto, respostas no losango Y (cima) X (esq.) B (dir.) A (baixo) */
+#riddle { position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 16px; background: radial-gradient(ellipse at center, rgba(20,8,30,.55), rgba(0,0,0,.82)); z-index: 6; pointer-events: none; }
+#riddle.on { display: flex; }
+#riddle .rq { width: min(760px, 100%); padding: 14px 20px 12px; border: 2px solid #6a3488; background: linear-gradient(180deg, rgba(16,10,22,.95), rgba(8,5,12,.95)); box-shadow: 0 0 30px rgba(106,52,136,.45); text-align: center; }
+#riddle small { display: block; font: 400 15px/1 'Bebas Neue', sans-serif; letter-spacing: .25em; color: #c9a640; }
+#riddle p { margin: 10px 0 12px; font: 600 clamp(18px, 2.6vw, 28px)/1.25 Georgia, serif; color: #f0e8f4; text-shadow: 2px 2px 0 #000; }
+#riddle .rt { display: block; height: 5px; background: #1c1424; }
+#riddle .rt u { display: block; height: 100%; background: linear-gradient(90deg, #6a3488, #c9a640); transition: width .1s linear; }
+#riddle .ropts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: 'y y' 'x b' 'a a'; gap: 10px; width: min(640px, 100%); pointer-events: auto; }
+#riddle .ro { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 2px solid #3a2a48; background: rgba(12,8,18,.92); color: #f0e8f4; font: 600 clamp(15px, 2vw, 20px)/1.2 Georgia, serif; text-align: left; cursor: pointer; }
+#riddle .ro-carga { grid-area: y; justify-self: center; width: min(320px, 100%); }
+#riddle .ro-ranged { grid-area: x; }
+#riddle .ro-physical { grid-area: b; }
+#riddle .ro-jump { grid-area: a; justify-self: center; width: min(320px, 100%); }
+#riddle .ro kbd { flex: none; min-width: 42px; padding: 4px 6px; border: 2px solid #c9a640; border-radius: 6px; font: 400 18px/1 'Bebas Neue', sans-serif; color: #c9a640; text-align: center; }
+#riddle.done .ro { opacity: .45; }
+#riddle.done .ro.right { opacity: 1; border-color: #4ac87a; box-shadow: 0 0 16px rgba(74,200,122,.5); }
+#riddle.done .ro.picked:not(.right) { opacity: 1; border-color: #d0303a; box-shadow: 0 0 16px rgba(208,48,58,.5); }
+#hud.intro-scene #riddle { display: none; }
+@media (max-width: 640px) {
+  #riddle { gap: 10px; }
+  #riddle .ropts { grid-template-columns: 1fr; grid-template-areas: 'y' 'x' 'b' 'a'; }
+  #riddle .ro-carga, #riddle .ro-jump { width: 100%; }
+}
 /* tela de vitória */
 #victory { display: block; overflow: hidden; background: transparent; pointer-events: none; }
 #victory .vbg { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(4,3,8,.54), transparent 32%, transparent 56%, rgba(4,3,8,.7)); }
@@ -556,6 +593,7 @@ table.moves td span { display: block; color: var(--muted); font-size: 12px; marg
 #touch .c-sp { border-color: rgba(255,210,90,.55); color: #ffd25a; }
 #touch .c-sp.ready { border-color: #ffd25a; box-shadow: 0 0 12px rgba(255,210,90,.75); background: rgba(70,50,10,.6); }
 #touch .c-sp.used .s { font: 800 calc(8px * var(--k)) Inter, sans-serif; }
+#touch .c-sp.team { border-color: #fff2c8; background: rgba(110, 70, 10, .75); box-shadow: 0 0 16px #ffd84a; animation: tAwake .7s ease-in-out infinite alternate; }
 /* pausa: pequena, no alto, ao lado do relógio (entre ele e a barra do P2) */
 #touch .b-pause { width: 34px; height: 30px; top: max(8px, env(safe-area-inset-top)); left: calc(50% + 28px); font-size: 12px; border-radius: 8px; opacity: .8; }
 /* equipe (2 contra 2): assistência (nome de quem vem) + troca, à esquerda, abaixo da HUD */

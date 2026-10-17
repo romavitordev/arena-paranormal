@@ -63,6 +63,12 @@ const audio = new AudioManager();
 const VOL_KEYS = { volume: 'master', volSfx: 'sfx', volUi: 'ui', volHum: 'hum' };
 for (const [k, ch] of Object.entries(VOL_KEYS)) audio.setChannel(ch, SETTINGS[k] / 100);
 const hud = new HUD(document.getElementById('hud'));
+// ENIGMA DA ESFINGE: tocar/clicar na resposta = apertar o botão dela (só quem responde e joga neste aparelho)
+hud.onRiddleTap = (key, victim) => {
+  const idx = victim && victim.input ? victim.input.index : 0;
+  if (game.net ? idx !== game.net.slot : idx !== 0) return;
+  input.touch.taps.add(key);
+};
 const screens = document.getElementById('screens');
 // modelos do Blender carregam no início; os retratos são gerados depois
 const portraits = {};

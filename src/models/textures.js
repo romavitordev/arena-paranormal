@@ -453,6 +453,48 @@ function danteTattoos(g, area = { x: 0, y: 0, w: 512, h: 512 }, base = '#dcc0b4'
   }
 }
 
+// NUBI: o rosto normal (olhos pretos de íris, faixas pretas descendo) e o da AFINIDADE COM A MORTE (a Transformação):
+// o olho inteiro fica PRETO e o Lodo escorre mais grosso dos olhos, como na Mansão Leone
+function nubiFace(open) {
+  return face((g) => {
+    // as duas faixas pretas: saem da pálpebra de baixo e descem pela bochecha até o maxilar (um pouco irregulares)
+    g.strokeStyle = 'rgba(8,4,6,0.94)'; g.lineCap = 'round';
+    for (const s of [-1, 1]) {
+      const x = CX + s * 32;
+      g.lineWidth = open ? 11 : 7;
+      g.beginPath(); g.moveTo(x - s * 2, EYE_Y + 6); g.bezierCurveTo(x - s * 1, EYE_Y + 40, x + s * 3, EYE_Y + 80, x + s * 1, 236); g.stroke();
+      g.lineWidth = open ? 4 : 2.5;
+      g.beginPath(); g.moveTo(x + s * 6, EYE_Y + 8); g.quadraticCurveTo(x + s * 8, EYE_Y + 40, x + s * 6, EYE_Y + 66); g.stroke();
+      if (open) {
+        // o Lodo transbordando: uma mancha em volta do olho, um fio a mais e gotas penduradas
+        g.fillStyle = 'rgba(6,4,6,0.55)';
+        g.beginPath(); g.ellipse(x, EYE_Y + 2, 21, 12, 0, 0, Math.PI * 2); g.fill();
+        g.lineWidth = 3;
+        g.beginPath(); g.moveTo(x - s * 9, EYE_Y + 7); g.quadraticCurveTo(x - s * 12, EYE_Y + 34, x - s * 10, EYE_Y + 52); g.stroke();
+        g.fillStyle = 'rgba(8,4,6,0.95)';
+        for (const [dx, dy, r] of [[-s * 10, EYE_Y + 54, 3], [s * 6, EYE_Y + 68, 2.6], [s * 1, 238, 4]]) { g.beginPath(); g.arc(x + dx, dy, r, 0, Math.PI * 2); g.fill(); }
+        // o brilho molhado do Lodo
+        g.strokeStyle = 'rgba(120,112,130,0.35)'; g.lineWidth = 1.5;
+        g.beginPath(); g.moveTo(x - s * 3, EYE_Y + 30); g.lineTo(x - s * 2, EYE_Y + 60); g.stroke();
+        g.strokeStyle = 'rgba(8,4,6,0.94)';
+      }
+    }
+    // "MORTE" na testa, em letras escuras de traço fino (como escrito à mão)
+    g.fillStyle = 'rgba(14,8,8,0.92)'; g.font = 'bold 22px Georgia, serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.save(); g.translate(CX, 74); g.scale(1.15, 1); g.fillText('MORTE', 0, 0); g.restore();
+    g.textAlign = 'left'; g.textBaseline = 'alphabetic';
+    // tatuagens dos Escriptas: fileiras de escrita subindo pelo pescoço (a parte de baixo do canvas)
+    glyphs(g, CX - 130, 206, 260, 50, 'rgba(18,10,8,0.85)', 10, 0.75);
+  }, {
+    skin: '#5a3828',
+    // transformada: o olho todo preto (íris e branco), só um reflexo fraco
+    eye: open ? { iris: '#040304', irisLight: '#2a2630', sclera: '#060406', tilt: 0.04, lashes: true, w: 14, h: 7 }
+      : { iris: '#0a0606', irisLight: '#1c1214', tilt: 0.04, lashes: true, w: 14, h: 7 },
+    brow: { angry: open ? 0.15 : 0, thick: 2.6, color: '#0c0808' },
+    mouth: { mouthW: 13, smile: 0, lip: 'rgba(40,18,16,0.85)', lipLine: '#1a0c0a' },
+  });
+}
+
 // o rosto do Dante: fechado (a cegueira, sereno) ou ABERTO (olhos pretos, as faixas, as tatuagens no pescoço)
 function danteFace(open) {
   return face((g) => {
@@ -1924,6 +1966,44 @@ export const MATERIAL_TEXTURES = {
   // horizontal pelos lábios) e as tatuagens de pintas e espirais voltam (pescoço e braços) — "como um Luzidio"
   face_dante: danteFace(false),
   face_dante_open: danteFace(true),
+
+  // ---------------- NUBI (Escriptas): pele escura, olhos pretos, uma FAIXA PRETA descendo de cada olho até o queixo,
+  // "MORTE" escrito na testa e as tatuagens dos Escriptas subindo pelo pescoço (wiki "Nubi" + a arte de referência)
+  face_nubi: nubiFace(false),
+  face_nubi_open: nubiFace(true),
+  // pele dos braços, mãos, pernas e pés: escura, com fileiras de escrita dos Escriptas em tinta preta
+  skin_nubi: () => canvasTex(256, 512, (g) => {
+    g.fillStyle = '#5a3828'; g.fillRect(0, 0, 256, 512);
+    for (let y = 8; y < 512; y += 26) glyphs(g, 0, y, 256, 16, 'rgba(16,8,6,0.82)', 13, 0.55);
+    g.strokeStyle = 'rgba(16,8,6,0.7)'; g.lineWidth = 2;
+    for (const y of [150, 330]) { g.beginPath(); g.moveTo(0, y); g.lineTo(256, y); g.stroke(); }
+  }, { wrap: true }),
+  // tronco: o mesmo, com uma coluna de escrita descendo pelo meio da barriga e linhas finas nos lados
+  skin_torso_nubi: () => canvasTex(512, 512, (g) => {
+    g.fillStyle = '#5a3828'; g.fillRect(0, 0, 512, 512);
+    for (let y = 10; y < 512; y += 30) glyphs(g, 0, y, 512, 18, 'rgba(16,8,6,0.7)', 12, 0.42);
+    g.fillStyle = 'rgba(12,6,4,0.9)';
+    for (let y = 40; y < 470; y += 16) glyphs(g, 236, y, 40, 14, 'rgba(12,6,4,0.95)', 13, 0.95);
+  }, { wrap: true }),
+  // manto preto: dobras verticais (faixas um pouco mais claras e mais escuras) e a barra gasta
+  cloak_nubi: () => canvasTex(512, 512, (g) => {
+    g.fillStyle = '#141114'; g.fillRect(0, 0, 512, 512);
+    for (let x = 0; x < 512; x += 32) {
+      const grd = g.createLinearGradient(x, 0, x + 32, 0);
+      grd.addColorStop(0, 'rgba(255,255,255,0)'); grd.addColorStop(0.5, 'rgba(255,255,255,0.05)'); grd.addColorStop(1, 'rgba(0,0,0,0.12)');
+      g.fillStyle = grd; g.fillRect(x, 0, 32, 512);
+    }
+    g.strokeStyle = 'rgba(0,0,0,0.35)'; g.lineWidth = 1;
+    for (let i = 0; i < 60; i++) { const x = Math.random() * 512, y = 420 + Math.random() * 92; g.beginPath(); g.moveTo(x, y); g.lineTo(x + (Math.random() - 0.5) * 8, y + 10); g.stroke(); }
+  }, { wrap: true }),
+  // tranças pretas puxadas para trás: listras finas com brilho azulado
+  hair_nubi: () => canvasTex(256, 256, (g) => {
+    g.fillStyle = '#0e0a0c'; g.fillRect(0, 0, 256, 256);
+    for (let x = 0; x < 256; x += 12) {
+      g.fillStyle = 'rgba(90,90,110,0.18)'; g.fillRect(x + 3, 0, 3, 256);
+      g.fillStyle = 'rgba(0,0,0,0.35)'; g.fillRect(x + 9, 0, 2, 256);
+    }
+  }, { wrap: true }),
   skin_dante: () => canvasTex(512, 512, (g) => {
     g.fillStyle = '#e2c8bc';
     g.fillRect(0, 0, 512, 512);

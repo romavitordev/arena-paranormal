@@ -92,8 +92,9 @@ h3 { margin: 0 0 var(--s1); font: 400 30px/1 var(--display); letter-spacing: .02
 .facts li:last-child { border-bottom: 0; }
 /* passos de instalar no iPhone (numerados) */
 .steps { margin: 0; padding: 0; list-style: none; counter-reset: st; display: grid; gap: 8px; }
-.steps li { counter-increment: st; display: grid; grid-template-columns: 26px 1fr; gap: 8px; align-items: start; font-size: 15px; }
-.steps li::before { content: counter(st); display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--line); color: var(--frost); font: 800 12px/1 var(--body); }
+/* o número fica à esquerda (posicionado) e o texto corre normal — em grade, cada palavra em negrito virava uma coluna */
+.steps li { counter-increment: st; position: relative; padding-left: 34px; min-height: 24px; font-size: 15px; line-height: 1.5; }
+.steps li::before { content: counter(st); position: absolute; left: 0; top: 0; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--line); color: var(--frost); font: 800 12px/1 var(--body); }
 .steps svg { vertical-align: -3px; color: var(--frost); }
 .steps b { color: var(--frost); }
 details summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-weight: 600; color: var(--frost); list-style: none; }

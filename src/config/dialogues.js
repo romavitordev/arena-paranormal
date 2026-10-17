@@ -7,6 +7,7 @@ export const CHARACTER_NAMES = {
   dante: 'Dante',
   erin: 'Erin Parker',
   gal_sal: 'Gal Sal',
+  nubi: 'Nubi',
   kian: 'Kian',
   aguiar: 'Aguiar',
   labirinto: 'Labirinto',
@@ -40,6 +41,7 @@ const INTRO_HOOKS = {
   dante: 'o lodo',
   erin: 'as granadas',
   gal_sal: 'as correntes',
+  nubi: 'a bengala de chacal',
   kian: 'os presságios',
   aguiar: 'a máscara',
   labirinto: 'o capacete',
@@ -70,6 +72,8 @@ const INTRO_OPENERS = {
   dante: (other, hook) => `${other}, eu poderia começar perguntando sobre ${hook}. Qual é a história?`,
   erin: (other, hook) => `${other}, pergunta rápida: devo me preocupar com ${hook}?`,
   gal_sal: (other, hook) => `${other}, ${hook} te trouxe até aqui, ou foi escolha sua?`,
+  // NUBI (falas originais do jogo): calma, distante; cada segundo dura horas pra ela
+  nubi: (other, hook) => `${other}. Eu tive horas pra pensar em ${hook} enquanto você piscava.`,
   kian: (other, hook) => `${other}, ${hook} foi escolha sua ou consequência?`,
   aguiar: (other, hook) => `${other}, devo me preocupar com ${hook} ou com a intenção?`,
   labirinto: (other, hook) => `${other}, você veio com ${hook}; isso é parte do caminho ou o destino?`,
@@ -100,6 +104,7 @@ const INTRO_REPLIES = {
   dante: (other, hook) => `Entendo. Não esperava que você trouxesse ${hook}, ${other}.`,
   erin: (other, hook) => `${other}, posso olhar ${hook} depois? Prometo não desmontar.`,
   gal_sal: (other, hook) => `Não culpe ${hook}, ${other}. Você ainda pode escolher.`,
+  nubi: (other, hook) => `${hook}, ${other}? Pra mim essa conversa já dura séculos.`,
   kian: (other, hook) => `${other}, ${hook} não muda o que você decidiu.`,
   aguiar: (other, hook) => `Ha ha... você veio com ${hook}. Chamou minha atenção, ${other}.`,
   labirinto: (other, hook) => `${other}, então esse é o caminho que você escolheu com ${hook}.`,
@@ -123,6 +128,24 @@ const INTRO_REPLIES = {
 };
 
 const INTRO_EXCHANGES = {
+  // NUBI (falas originais do jogo): o líder dela, o tiro que ela desviou na Mansão Leone, o machado do Balu e a outra
+  // órfã do Santa Menefreda
+  'kian+nubi': [
+    { starter: 'nubi', line: 'Você prometeu me tirar daqui de dentro, Kian. Eu ainda conto os séculos.', response: 'kian', responseLine: 'Eu lembro da promessa. Fica de pé até lá.' },
+    { starter: 'kian', line: 'Quanto tempo passou pra você desde ontem, Nubi?', response: 'nubi', responseLine: 'O suficiente pra esquecer o seu rosto e lembrar de novo. Três vezes.' },
+  ],
+  'arthur+nubi': [
+    { starter: 'arthur', line: 'Eu errei aquele tiro. Não acontece de novo.', response: 'nubi', responseLine: 'Você não errou. Eu tive tempo de sair da frente. Muito tempo.' },
+    { starter: 'nubi', line: 'Eu vi a bala sair do cano, Cervero. Devagar. Como tudo.', response: 'arthur', responseLine: 'Então vê essa chegando também.' },
+  ],
+  'balu+nubi': [
+    { starter: 'balu', line: 'Moça, esse olhar parado me dá arrepio. Vamo resolver logo.', response: 'nubi', responseLine: 'Logo? Pra mim, você já está levantando esse machado faz uma semana.' },
+    { starter: 'nubi', line: 'Esse machado... eu já vi esse instante. Já durou anos.', response: 'balu', responseLine: 'Então você sabe como termina, né? Ha ha!' },
+  ],
+  'gal_sal+nubi': [
+    { starter: 'gal_sal', line: 'Nubi. A gente saiu do mesmo fogo.', response: 'nubi', responseLine: 'Você saiu. Eu ainda estou lá dentro, Gal. Cada segundo.' },
+    { starter: 'nubi', line: 'Lembra do orfanato? Pra mim ele nunca parou de queimar.', response: 'gal_sal', responseLine: 'Então solta isso. Um pedaço de cada vez.' },
+  ],
   // CRISTOPHER (O Segredo na Floresta): o pai do Cesar, o melhor amigo do Arnaldo, o "Gringão" dos Gaudérios Abutres
   'cristopher+kaiser': [
     { starter: 'cristopher', line: 'Cesar! Filho! Eu sei que eu sumi... deixa eu compensar agora?', response: 'kaiser', responseLine: 'Velho vacilão. Vai ter que me alcançar primeiro.' },
@@ -2191,6 +2214,121 @@ const VICTORY_CRISTOPHER = {
   cristino: { cristopher: ['Eu odeio gente barulhenta.', 'Não é pessoal, gringo. Fala menos.'] },
 };
 for (const [w, m] of Object.entries(VICTORY_CRISTOPHER)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
+
+// NUBI (Escriptas): falas originais do jogo, dela contra cada um e de cada um contra ela
+const VICTORY_NUBI = {
+  nubi: {
+    arthur: ['Um tiro só, Cervero. Eu vi ele chegar por horas.', 'A sua pressa é a coisa mais lenta que eu já vi.'],
+    joui: ['Rápido. Pra vocês.', 'Eu tive tempo de ver a lâmina inteira. Duas vezes.'],
+    kaiser: ['A névoa demora pra cair. Eu esperei.', 'Respira devagar. Assim você chega aonde eu estou.'],
+    dante: ['Você viu a mente de uma Existida. Eu vivo dentro de uma.', 'O lodo é meu também, Dante. Só mais antigo.'],
+    erin: ['A explosão demorou um dia inteiro pra mim.', 'Barulho não apressa o tempo, menina.'],
+    aghata: ['O grimório não tem a página que eu vivi.', 'Ler é lento. Eu já sei o fim.'],
+    balu: ['Hoje o machado não chegou a tempo.', 'Eu esperei anos por esse golpe. Não veio.'],
+    verissimo: ['Estratégia é um plano pros próximos minutos. Eu vivi os próximos séculos.', 'Anota no relatório: ela não teve pressa.'],
+    cristopher: ['Você fala alto. Eu escuto devagar.', 'O dublê caiu. A cena durou horas pra mim.'],
+    kian: ['Eu ainda espero você me salvar, Kian.', 'Me desculpa. Cada segundo aqui é longo demais.'],
+    gal_sal: ['As correntes não seguram o tempo, Gal.', 'A gente saiu do mesmo fogo. Você só saiu mais rápido.'],
+    xande: ['Teoria nenhuma explica o que eu sinto.', 'Você piscou. Eu envelheci.'],
+    guizo: ['Filma devagar. É assim que eu vejo tudo.', 'Embaralhou. Eu tive tempo de achar a verdadeira.'],
+    lirio: ['Parede grossa. Eu esperei ela rachar.', 'Paciência eu tenho de sobra. Muito mais que você.'],
+    dalmo: ['A arena gritava. Pra mim, um sussurro arrastado.', 'Grande. E devagar como tudo.'],
+    aguiar: ['Os cães correram. Eu vi cada passo.', 'Caçador sem pressa? Eu sou pior.'],
+    jae: ['Silêncio dura muito pra mim. Eu me acostumei.', 'Eu ouvi o seu passo antes de você dar.'],
+    kemi: ['A mira foi perfeita. Lenta, mas perfeita.', 'Contrato de minutos. Eu vivo em séculos.'],
+    labirinto: ['Labirinto é tempo. E tempo eu tenho.', 'Eu andei pelo seu caminho mil vezes antes de você.'],
+    juan: ['O seu sangue escorreu tão devagar.', 'Recomeço é só mais um segundo pra mim.'],
+    cristino: ['Você odeia gente barulhenta. Eu odeio gente rápida.', 'O lampião levou uma eternidade pra apagar.'],
+    o_diabo: ['Nem o Diabo tem pressa comigo.', 'Pacto de uma vida. Pra mim, um piscar longo.'],
+    magistrada: ['Saber tudo é perder tudo. Eu sei.', 'O Equilíbrio também espera. Igual a mim.'],
+    arnaldo: ['A peça foi longa. Eu assisti tudo.', 'Cortina devagar, ator. Eu gosto de ver.'],
+    ferreiro: ['O Santo Berço foi meu antes de ser seu.', 'A Morte também é minha, Ferreiro.'],
+    estrangeiro: ['O sinal levou horas pra chegar.', 'Você vem de longe. Eu venho de muito tempo.'],
+    amigo: ['A tinta escorreu como o lodo. Devagar.', 'O sino tocou uma vez. Pra mim, um dia inteiro.'],
+  },
+  arthur: {
+    nubi: ['Dessa vez ela não teve tempo de desviar.', 'Paciência é a minha também. E a minha atira.'],
+  },
+  joui: {
+    nubi: ['Mesmo devagar, você não viu essa.', 'Shi no Kage. Rápido demais até pra você.'],
+  },
+  kaiser: {
+    nubi: ['Na névoa o tempo não importa.', 'Escriptas. Sempre com essa calma irritante.'],
+  },
+  dante: {
+    nubi: ['Cada segundo são horas? Então foi um dia longo pra você.', 'Eu ouvi milhares de vozes uma vez. A sua ficou quieta.'],
+  },
+  erin: {
+    nubi: ['Kaboom! Isso durou quanto pra você? Uma semana?', 'Calma demais, moça! Sorri um pouco!'],
+  },
+  aghata: {
+    nubi: ['Anotei a sua condição. Interessante e triste.', 'Escripta de Morte. Raro. E derrotada.'],
+  },
+  balu: {
+    nubi: ['De novo, moça. Eu disse que era rapidinho.', 'O machado chega. Sempre chega. Ha ha!'],
+  },
+  verissimo: {
+    nubi: ['Escripta contida. Relatório fechado.', 'Calma não substitui estratégia.'],
+  },
+  cristopher: {
+    nubi: ['Moça, pra você isso foi um filme inteiro, né?', 'Corta! Agora descansa, tá?'],
+  },
+  kian: {
+    nubi: ['Aguenta mais um pouco, Nubi. Eu prometi.', 'Desculpa. Isso deve ter durado anos pra você.'],
+  },
+  gal_sal: {
+    nubi: ['Solta esse fogo, Nubi. A gente já saiu dele.', 'Justiça pela Nina. Mesmo que demore.'],
+  },
+  xande: {
+    nubi: ['Percepção alterada não te salvou da minha.', 'Por eles. Inclusive por quem você machucou.'],
+  },
+  guizo: {
+    nubi: ['Filmei em câmera lenta só pra você ver igual.', 'Nina mandou um recado. Esse foi ele.'],
+  },
+  lirio: {
+    nubi: ['Lerda igual tartaruga, véi. Ah, não, isso é você vendo.', 'A Leonora não espera ninguém.'],
+  },
+  dalmo: {
+    nubi: ['A arena não perdoa quem fica parado.', 'Calma bonita. Caiu igual.'],
+  },
+  aguiar: {
+    nubi: ['Os cães sentiram o cheiro do lodo. Fácil.', 'Ha ha... presa calma é a mais gostosa.'],
+  },
+  jae: {
+    nubi: ['Shh... você ouviu isso durante horas, né?', 'Silêncio. É o que você mais tem.'],
+  },
+  kemi: {
+    nubi: ['Um tiro. Você teve horas pra ver. Não adiantou.', 'Alvo calmo. Abatido.'],
+  },
+  labirinto: {
+    nubi: ['Mesmo com todo o tempo do mundo, não achou a saída.', 'O meu labirinto é mais longo que a sua eternidade.'],
+  },
+  juan: {
+    nubi: ['Escriptas. Sempre achando que o tempo é delas.', 'Sangue corre rápido. Até pra você.'],
+  },
+  cristino: {
+    nubi: ['Não é pessoal. Você só demorou demais.', 'Cansei de esperar.'],
+  },
+  o_diabo: {
+    nubi: ['O tempo é meu também. E o sangue mais.', 'Pequena ocultista. O Diabo não espera.'],
+  },
+  magistrada: {
+    nubi: ['Você vê o tempo de longe. Eu vejo tudo.', 'O Equilíbrio voltou. Descansa.'],
+  },
+  arnaldo: {
+    nubi: ['Que plateia paciente! Uma salva de palmas lenta!', 'Ato final, minha cara. Fecha a cortina.'],
+  },
+  ferreiro: {
+    nubi: ['O Santo Berço lembra de você. E não te quer.', 'A Morte me escolheu primeiro.'],
+  },
+  estrangeiro: {
+    nubi: ['Tempo é uma coisa curiosa no seu planeta.', 'Você vai esquecer disso. Devagar.'],
+  },
+  amigo: {
+    nubi: ['Pintei você bem paradinha. Igual um quadro.', 'O sino tocou pra você, viu?'],
+  },
+};
+for (const [w, m] of Object.entries(VICTORY_NUBI)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
 
 export const VICTORY_FALLBACKS = {
   kaiser: 'A névoa não escolheu por mim. Desta vez, eu fiquei.',

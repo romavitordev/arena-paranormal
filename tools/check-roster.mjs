@@ -8,6 +8,7 @@ import { COMBAT } from '../src/config/combat.js';
 import { computeDrain, validatePassives } from '../src/combat/passives.js';
 import { CLIPS } from '../src/anim/clips.js';
 import { GAMEPAD_LAYOUT } from '../src/config/controls.js';
+import { RIDDLES } from '../src/config/riddles.js';
 import { BEATS, ELEMENTS, elementMultiplier } from '../src/config/elements.js';
 import * as ARENA_CFGS from '../src/arena/configs.js';
 import { INTRO_DIALOGUES, VICTORY_LINES, introLines, victoryLine } from '../src/config/dialogues.js';
@@ -76,7 +77,7 @@ const PAIRS = ids.length * (ids.length - 1);
 ok(validIntroScenes && validIntroPairs === PAIRS && sampleIntro.length === 2 && randomSelectionValid, `introduções: ${PAIRS} confrontos, duas cenas alternadas e aleatórias, sem falas de resultado`);
 ok(validVictoryLines && validVictoryPairs === PAIRS && VICTORY_LINES.kaiser.erin.includes(sampleVictory) && randomSelectionValid, `vitórias: ${PAIRS} confrontos com duas falas selecionáveis aleatoriamente`);
 ok(VICTORY_LINES.anfitriao.default.length >= 16 && new Set(VICTORY_LINES.anfitriao.default).size === VICTORY_LINES.anfitriao.default.length && hostRandomSelectionValid, 'Anfitrião: falas caóticas próprias, variadas e selecionadas aleatoriamente');
-ok(ROSTER.map((c) => c.name).join() === 'ARTHUR CERVERO,JOUI JOUKI,KAISER,DANTE,ERIN PARKER,AGHATA,BALU,SENHOR VERÍSSIMO,CRISTOPHER,KIAN,GAL SAL,XANDE,GUIZO,LÍRIO,DALMO,AGUIAR,JAE,KEMI,LABIRINTO,JUAN,CRISTINO,O DIABO,A MAGISTRADA,ARNALDO FRITZ,FERREIRO,O ESTRANGEIRO,AMIGO IMAGINÁRIO', 'elenco agrupado por equipe: Ordo Realitas, Escriptas, Os Cinco, Mascarados, Transtornados, Portadores das Relíquias');
+ok(ROSTER.map((c) => c.name).join() === 'ARTHUR CERVERO,JOUI JOUKI,KAISER,DANTE,ERIN PARKER,AGHATA,BALU,SENHOR VERÍSSIMO,CRISTOPHER,KIAN,GAL SAL,NUBI,XANDE,GUIZO,LÍRIO,DALMO,AGUIAR,JAE,KEMI,LABIRINTO,JUAN,CRISTINO,O DIABO,A MAGISTRADA,ARNALDO FRITZ,FERREIRO,O ESTRANGEIRO,AMIGO IMAGINÁRIO', 'elenco agrupado por equipe: Ordo Realitas, Escriptas, Os Cinco, Mascarados, Transtornados, Portadores das Relíquias');
 const jae = get('jae');
 ok(jae && jae.origin === 'Mascarados' && jae.element === 'sangue' && jae.awakening.form === 'jae_x' && jae.awakening.scene === 'hood' && ['dashStrike', 'shadowVeil', 'teleportBehind', 'whisperZone'].every((t) => jae.abilities.some((a) => a.type === t)) && jae.abilities.find((a) => a.type === 'dashStrike').blind > 0 && jae.abilities.find((a) => a.type === 'teleportBehind').strike && jae.passives.some((p) => p.type === 'backstab' && p.surprised), 'Jae: Mascarada de Sangue — Punhal X (cega), Shhh... (some nas sombras), Assassinato Furtivo (apunhala as costas), Zona dos Sussurros, bônus em desprevenido e o Capuz de X');
 const dalmo = get('dalmo');
@@ -419,9 +420,26 @@ ok(!COMBAT.powered && ROSTER.every((c) => !(c.abilities || []).some((a) => a.inp
     'Cristino: Transtornados (Sangue), Peixeira e a Socadeira (recarga longa, o tiro detona os lampiões)');
   ok(ab('lanternThrow') && ab('lanternThrow').fire && ab('lanternTrap') && ab('lanternTrap').max === 3 && ab('teleportBehind') && ab('teleportBehind').rope && ab('heavyBlow') && ab('heavyBlow').bleed && ab('heavyBlow').downBonus > 1,
     'Cristino: Lampião Explosivo (fogo no chão), Trilha de Lampiões (até 3), Corda do Telhado e Decepar (sangra; mais fundo em quem está preso)');
+  ok(ab('heavyBlow').noHeal >= 8 && ab('heavyBlow').noHeal <= 15 && ab('heavyBlow').track && ab('heavyBlow').impact <= 0.32,
+    'Cristino: Decepar acerta fácil (rápido, vira para o alvo) e deixa a FERIDA ABERTA (8 a 15 s sem cura)');
   const des = getForm('cristino_desertor');
   ok(cri.special.type === 'lanternCount' && cri.awakening.form === 'cristino_desertor' && des && des.ranged.name === 'Rifle' && des.passives.some((p) => p.type === 'precognition'),
     'Cristino: especial Odeio Gente Barulhenta e a Transformação Tocado pela Coroa (Desertor: rifle e a Intenção)');
+}
+
+// ---------------- Nubi (Escriptas) ----------------
+{
+  const nb = get('nubi');
+  const ab = (t) => nb.abilities.find((a) => a.type === t);
+  ok(nb && nb.origin === 'Escriptas' && nb.element === 'morte' && nb.melee.name === 'Bengala Ritualística' && nb.ranged.visual === 'lodoMass' && nb.dodge.style === 'calm',
+    'Nubi: Escriptas (Morte), Bengala Ritualística, Lodo da Morte e a esquiva calma');
+  ok(ab('calmEvade') && ab('calmEvade').input === 'carga+dodge' && ab('calmEvade').window <= 0.5 && ab('decadence') && ab('timeWarp') && ab('timeWarp').duration <= 3,
+    'Nubi: Desvio Imperturbável (janela curta, não automático), Decadência e Ritual de Drenagem (lentidão curta)');
+  ok(nb.special.type === 'sphinx' && nb.special.name === 'Carniçal da Esfinge' && nb.awakening.type === 'awakenMode',
+    'Nubi: especial Carniçal da Esfinge e a Transformação Afinidade com a Morte (sem trocar de modelo)');
+  const qs = new Set(RIDDLES.map((r) => r.q));
+  ok(RIDDLES.length >= 40 && qs.size === RIDDLES.length && RIDDLES.every((r) => r.a && r.w.length === 3 && !r.w.includes(r.a) && new Set(r.w).size === 3),
+    `Esfinge: ${RIDDLES.length} enigmas diferentes, cada um com 1 resposta certa e 3 erradas distintas`);
 }
 
 console.log(fails ? `\n${fails} verificação(ões) falharam.` : '\nTudo certo.');

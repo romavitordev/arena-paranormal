@@ -181,6 +181,8 @@ export const GRAB_SCENES = {
   juan: scene({ ...S('knife_1'), fx: { kind: 'slash' }, sound: 'bladeHit' }, { ...S('knife_2'), fx: { kind: 'slash', flip: true }, sound: 'bladeHit' }, { anim: 'thrust', fx: 'throat', sound: 'slashFinal', heal: 15 }),
   kemi: scene({ ...S('knife_1'), fx: { kind: 'slash' }, sound: 'bladeHit' }, { ...S('shoulder_bash'), fx: { kind: 'punch' }, sound: 'punch' }, { anim: 'thrust', fx: 'pointBlank', sound: 'sniper' }),
   arnaldo: scene({ ...S('slash_h'), fx: { kind: 'slash' }, sound: 'bladeHit' }, { ...S('thrust'), fx: { kind: 'stab' }, sound: 'bladeHit' }, { anim: 'slash_finisher', fx: 'sigils', sound: 'slashFinal' }),
+  // Nubi: prende com a bengala, uma pancada curta no tronco e a batida de baixo para cima com o Lodo respingando
+  nubi: scene({ ...S('slash_h'), fx: { kind: 'slash' }, sound: 'heavyPunch' }, { ...S('thrust'), fx: { kind: 'punch' }, sound: 'heavyPunch' }, { anim: 'slash_up', fx: 'slam', sound: 'drain' }),
   // Cristino: segura pela gola, dois golpes de peixeira e a lâmina no pescoço ("Eu odeio gente barulhenta" — o Caíto)
   cristino: scene({ ...S('knife_1'), fx: { kind: 'slash' }, sound: 'bladeHit' }, { ...S('thrust'), fx: { kind: 'stab' }, sound: 'bladeHit' }, { anim: 'knife_final', fx: 'throat', sound: 'slashFinal', bleed: { dps: 4, duration: 2.5 } }),
   // Cristopher: soco no estômago, cabeçada e o suplex de dublê no chão

@@ -273,6 +273,7 @@ export default {
   "install.close": "Chiudi",
   "hud.damage": "DANNI",
   "hud.used": "USATO",
+  "hud.team_gauge": "SQUADRA",
   "combat.reset": "RESET",
   "alert.missed": "MANCATO",
   "alert.no_room_tp": "NESSUNO SPAZIO PER TELETRASPORTARSI",

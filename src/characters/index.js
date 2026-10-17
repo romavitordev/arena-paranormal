@@ -3,6 +3,7 @@ import arthur from './arthur.js';
 import joui from './joui.js';
 import aghata from './aghata.js';
 import gal_sal from './gal_sal.js';
+import nubi from './nubi.js';
 import kian from './kian.js';
 import dante from './dante.js';
 import erin from './erin.js';
@@ -38,7 +39,7 @@ import cristopher from './cristopher.js';
 // junto da equipe dele nesta lista.
 export const ROSTER = [
   arthur, joui, kaiser, dante, erin, aghata, balu, verissimo, cristopher, // Ordo Realitas (o Cris fecha a Equipe E de OSNF)
-  kian, gal_sal, // Escriptas
+  kian, gal_sal, nubi, // Escriptas
   xande, guizo, lirio, // Os Cinco (Sinais do Outro Lado) — o Guizo do lado do melhor amigo
   dalmo, aguiar, jae, kemi, labirinto, juan, // Mascarados (Hexatombe) — o Juan talvez vá para os "Sacrifícios" no futuro
   cristino, // Transtornados (Hexatombe) — o cangaceiro que não queria jogar o jogo

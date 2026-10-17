@@ -281,4 +281,30 @@ export function addCharClips(CLIPS, k) {
       k(1, AI),
     ] },
   });
+
+  // ======================= NUBI (Escriptas) =======================
+  // inquietantemente calma: apoiada na bengala fincada um pouco à frente (o braço direito desce em diagonal, a bengala
+  // segue o antebraço), a mão esquerda à frente do corpo, o queixo baixo e o olhar fixo; respira devagar e inclina a
+  // cabeça de leve, como quem observa o oponente
+  const NB = {
+    h: -0.02, hip: [0, 0, 0], sp: [0.04, 0, 0], hd: [0.12, 0, 0.06],
+    sR: [-0.38, 0, -0.06], eR: [-0.3, 0, 0], sL: [-0.5, 0, -0.42], eL: [-1.1, 0, 0],
+    lL: [-0.05, 0, 0.04], kL: [0.08, 0, 0], lR: [0.05, 0, -0.03], kR: [0.06, 0, 0],
+  };
+  Object.assign(CLIPS, {
+    idle_nubi: { dur: 3.2, loop: true, keys: [
+      k(0, NB),
+      k(0.28, { ...NB, sp: [0.06, 0.02, 0], hd: [0.14, 0.12, 0.1], sL: [-0.52, 0, -0.44] }),
+      k(0.55, { ...NB, sp: [0.03, -0.02, 0], hd: [0.08, -0.05, 0.03], eL: [-1.14, 0, 0] }),
+      k(0.8, { ...NB, sp: [0.05, 0, 0], hd: [0.11, 0.04, 0.08] }),
+      k(1, NB),
+    ] },
+    // conjurando (Carniçal da Esfinge, rituais longos): as duas mãos na bengala à frente do corpo e a cabeça baixa —
+    // o Lodo sai dos olhos e da boca
+    nubi_ritual: { dur: 1.2, loop: true, keys: [
+      k(0, { ...NB, h: -0.05, sp: [0.16, 0, 0], hd: [0.5, 0, 0], sR: [-0.85, 0, -0.28], eR: [-0.55, 0, 0], sL: [-0.85, 0, 0.28], eL: [-0.55, 0, 0] }),
+      k(0.5, { ...NB, h: -0.06, sp: [0.2, 0, 0], hd: [0.56, 0, 0.03], sR: [-0.88, 0, -0.28], eR: [-0.55, 0, 0], sL: [-0.88, 0, 0.28], eL: [-0.55, 0, 0] }),
+      k(1, { ...NB, h: -0.05, sp: [0.16, 0, 0], hd: [0.5, 0, 0], sR: [-0.85, 0, -0.28], eR: [-0.55, 0, 0], sL: [-0.85, 0, 0.28], eL: [-0.55, 0, 0] }),
+    ] },
+  });
 }

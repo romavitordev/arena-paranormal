@@ -450,7 +450,7 @@ export class Assist {
     return new THREE.Vector3(this.pos.x, this.pos.y + 1.15, this.pos.z);
   }
 
-  call({ auto = false } = {}) {
+  call({ auto = false, still = false } = {}) {
     const o = this.owner;
     const w = this.world;
     const opp = o.opponent;
@@ -482,10 +482,17 @@ export class Assist {
         return applyHit(w, o, opp, { damage: Math.round(dmg * ASSIST.damageMult), kind: 'ability', knockback: 3, element: this.def.element, dir, color: this.color, scale: 1.3, ...opts });
       },
     };
-    this.active = (auto && acts.auto ? acts.auto : moving ? acts.moving : acts.still)(ctx);
+    this.active = (auto && acts.auto ? acts.auto : moving && !still ? acts.moving : acts.still)(ctx);
     this.autoCall = auto;
     this.update(0);
     return true;
+  }
+
+  // ESPECIAL EM EQUIPE: entra mesmo recarregando e faz o golpe/habilidade dela (a versão parada)
+  callTeam() {
+    if (this.active) this.leave();
+    this.cooldown = 0;
+    return this.call({ still: true });
   }
 
   poof() {

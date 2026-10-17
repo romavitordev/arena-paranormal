@@ -273,6 +273,7 @@ export default {
   "install.close": "닫기",
   "hud.damage": "대미지",
   "hud.used": "사용됨",
+  "hud.team_gauge": "팀",
   "combat.reset": "리셋",
   "alert.missed": "빗나감",
   "alert.no_room_tp": "순간이동할 공간 없음",

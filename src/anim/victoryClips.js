@@ -61,6 +61,8 @@ export function addVictoryClips(CLIPS, k) {
     vic_arnaldo: pose({ sp: [0.5, 0, 0], hd: [-0.25, 0, 0], sR: [-0.4, 0, -1.2], eR: [-0.15, 0, 0], sL: [-1.0, 0.8, 0.1], eL: [-2.1, 0, 0], lR: [0.35, 0, -0.08], kR: [0.3, 0, 0], lL: [-0.12, 0, 0.1] }),
     // Cristino: a mão esquerda na aba do chapéu de cangaceiro, cabeça baixa (os óculos vermelhos por baixo da meia-lua),
     // a peixeira solta na direita — indiferente ("não é pessoal")
+    // Nubi: parada, a bengala fincada à frente nas duas mãos e a cabeça inclinada de leve — olhando sem pressa
+    vic_nubi: pose({ hip: [0, 0, 0], sp: [0.05, 0, 0], hd: [0.18, 0.1, 0.12], sR: [-0.62, 0, -0.22], eR: [-0.45, 0, 0], sL: [-0.62, 0, 0.22], eL: [-0.6, 0, 0], lL: [-0.04, 0, 0.05], lR: [0.04, 0, -0.05] }),
     vic_cristino: pose({ hip: [0, -0.15, 0], sp: [0.05, 0.1, 0], hd: [0.28, -0.1, 0], sL: [-2.25, 0.35, 0.45], eL: [-2.15, 0, 0], sR: [0.1, 0, -0.2], eR: [-0.25, 0, 0], lL: [-0.12, 0, 0.14], lR: [0.1, 0, -0.14] }),
     // Cristopher: os dois braços erguidos e o sorrisão de quem fez a cena de primeira (escandaloso, o paizão da equipe)
     vic_cristopher: pose({ hip: [0, 0.05, 0], sp: [-0.12, 0, 0], hd: [-0.2, 0, 0], sL: [-2.6, 0.2, 0.55], eL: [-0.7, 0, 0], sR: [-2.6, -0.2, -0.55], eR: [-0.7, 0, 0], lL: [-0.12, 0, 0.18], lR: [0.12, 0, -0.18] }),

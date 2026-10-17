@@ -422,6 +422,7 @@ export class Marionette {
       const inp = g && g.input;
       if (inp && (inp.pressed.physical || inp.pressed.jump || inp.pressed.dodge || inp.pressed.ranged)) a.hold -= 0.15;
       if (!g || g.state !== 'grabbed' || this.stateT >= a.hold) this.release(true);
+      else if (this.dragTick) this.dragTick(dt, g, a); // o Carniçal da Esfinge segura dentro das costelas
       else {
         // arrasta a vítima de costas, aos trancos, segurando-a na frente
         const sp = 2.4 * (0.5 + Math.max(0, Math.sin(this.t * 9)));

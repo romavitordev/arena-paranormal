@@ -1,5 +1,30 @@
 # Registro administrativo de alterações
 
+## Próxima versão (em andamento) — Nubi, a Escripta
+
+- Pedido: "Vamos adicionar uma nova personagem, uma escripta. Nubi" (com a ficha de implementação e a imagem de
+  referência); especial **Carniçal da Esfinge**. Depois: "tem que ser uma invocação com barra de vida assim como a
+  Marionete e, diferente da Marionete, não ataca o usuário"; "no meio da partida ela pode fazer um enigma com 4 opções
+  Y A B X — errou toma dano considerável, acertou a criatura fica paralisada e toma dano"; "muitas variações, sem
+  repetição"; "pode ter pontos da vida dela (3 na barra) onde você tem que responder um enigma"; "depois melhore o
+  modelo, foque no funcionamento".
+- Fontes: wiki Nubi (aparência, Orfanato Santa Menefreda, a percepção de tempo distorcida, Calamidade ep. 10) e wiki
+  Carniçal da Esfinge (corpo quadrúpede esquelético com mãos e cauda, costelas em volta do estômago, pescoço em Menés,
+  colar de crânios, roxo, asas rasgadas, Lodo; Amedrontar, Saltar, Vomitar Lodo, Enigma, Estômago).
+- Cânone × adaptação documentados no cabeçalho de `src/characters/nubi.js` e de `src/combat/beasts.js` (SphinxGhoul).
+  Os enigmas do jogo (`src/config/riddles.js`, 52) são adivinhas populares reescritas — **não** são os da série.
+- Novo: modelo `tools/blender/char_nubi.py` → `public/models/nubi.glb`; `npc_esfinge.py` → `public/npcs/esfinge.glb`
+  (base funcional; o acabamento do modelo fica para depois, a pedido); habilidade `calmEvade` (Desvio Imperturbável,
+  janela de 0,45 s que usa a Substituição, não vale contra especiais); visual `lodoMass`; esquiva `calm`; cena de
+  agarrão; especial `sphinx` (formação em etapas, poça sem objeto órfão); `combat/riddle.js` (o mundo para durante o
+  enigma; no online o sorteio usa a semente da partida e a memória de "já vistos" fica desligada); a barra do topo
+  vale para qualquer invocação com `bossBar` e mostra as 3 marcas do enigma.
+- Conferido no jogo: invocação, Amedrontar, Saltar (46), marca de 75% → enigma, acerto (paralisada 4,5 s, −18%, +50%
+  de dano), erro (mordida e Estômago curando a Esfinge), as marcas na barra; Nubi: Lodo da Morte, Decadência, Ritual
+  de Drenagem, Desvio (0 de dano dentro da janela, dano normal fora dela e em especial), agarrão (70). `npm run check`,
+  `npm test`, `npm run build` ok.
+- Falta: acabamento do modelo da Esfinge; testar o enigma numa partida online de verdade (dois aparelhos).
+
 ## v3.31.0 — Fios e Escritas
 
 - Versão: `VERSION` 3.30.1 → **3.31.0** (package.json/lock junto).

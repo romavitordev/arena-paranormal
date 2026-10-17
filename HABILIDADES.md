@@ -539,6 +539,50 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ---
 
+## NUBI
+
+*Escripta de Morte: para ela cada segundo dura horas — nada a apressa* · arma: A bengala da cabeça de chacal
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Pancada horizontal | 26 | 2.1 m |  |
+| ○ 2 | Ponta de volta | 26 | 2.1 m |  |
+| ○ 3 | Passo e pancada no tronco | 30 | 2 m |  |
+| ○ 4 | Batida ascendente | 56 | 2.2 m | finalizador: lança |
+| Frente + ○ | Passo calmo | 34 | 2.2 m |  |
+| Trás + ○ | Recuo e ponta | 32 | 2.1 m | invulnerável no começo |
+| Lado + ○ | Giro do manto | 30 | 2.2 m |  |
+| No ar + ○ | Bengala no ar | 34 | 2.2 m | desce com impacto |
+| ↑ + ○ (no combo) | Bengala de baixo | 38 | 2.2 m | finalizador: lança alto (combo aéreo) |
+| ↓ + ○ (no combo) | Bengala fincada | 46 | 2.2 m | finalizador: derruba |
+
+### Principal (□ / X): Lodo da Morte
+
+- Dano 38 · alcance 15 m · cooldown 3.2 s · custo 0
+- Prende o inimigo por 0.45 s
+
+### Habilidades
+
+- **Desvio Imperturbável** — △ + L2 / Y + LT · custo 15 · cooldown 12 s
+  Fica imóvel por um instante, olhando: se um golpe ou tiro chegar nessa janela, ela desvia com um passo calmo, sem gastar esquiva. Não vale contra especiais.
+- **Decadência** — △ + ○ / Y + B · custo 25 · cooldown 10 s · dano 58 · alcance 9 m
+  Espirais de Morte surgem em volta do alvo, apertam e ele DEFINHA (dano de Morte e uma decadência curta depois). Dá para esquivar quando as espirais fecham.
+- **Ritual de Drenagem** — R2 + △ / RT + Y · custo 25 · cooldown 16 s · alcance 12 m
+  Finca a bengala: a marca de Lodo abre embaixo do alvo e os filamentos fecham — ele fica LENTO por 2,5 s.
+- **Desvio Imperturbável** (esquiva própria) — invulnerável por undefined s · cooldown undefined s
+
+### Especial: Carniçal da Esfinge
+
+250 de dano · custo 50 · cooldown 50 s.
+
+### Transformação: Afinidade com a Morte
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +15% de dano (habilidades, especial, distância), recargas 40% mais rápidas, sanidade regenera +40%, cura 10% na hora.
+
+---
+
 ## XANDE
 
 *Brigão versátil: amaldiçoa o taco, puxa ou repele com magnetismo e se protege com a Tela de Ruído* · arma: Taco com arame farpado e o Skate Caótico
@@ -986,8 +1030,8 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
   Agacha e planta um lampião aceso à frente (até 3). Estoura quando o adversário pisa perto — ou quando o tiro da Socadeira passa: aí o fogo pula de lampião em lampião.
 - **Corda do Telhado** — △ + L2 / Y + LT · custo 20 · cooldown 10 s
   Laça uma corda no alto, sobe e cai atrás do adversário já cravando a peixeira (como na Igreja de Sangue). Pega desprevenido.
-- **Decepar** — R2 + △ / RT + Y · custo 25 · cooldown 11 s · dano 60 · alcance 2 m
-  Ergue a peixeira e desce num golpe que abre a carne: o alvo SANGRA. Em quem está atordoado, agarrado ou sendo puxado, entra muito mais fundo. Aguenta um golpe na preparação.
+- **Decepar** — R2 + △ / RT + Y · custo 25 · cooldown 11 s · dano 60 · alcance 2.6 m
+  Ergue a peixeira e desce num golpe que abre a carne: o alvo SANGRA e fica com a FERIDA ABERTA — não se cura por 12 s. Avança e vira para o alvo enquanto prepara. Em quem está atordoado, agarrado ou sendo puxado, entra muito mais fundo. Aguenta um golpe na preparação.
 
 ### Especial: Odeio Gente Barulhenta
 

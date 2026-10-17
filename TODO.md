@@ -223,6 +223,9 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
 9. Telemetria
 10. Balanceamento
 
+   - **Equipe: Barra de Equipe, transformação em equipe e Especial em Equipe (△ △ △ ○)** — ver a seção
+     *EQUIPE — BARRA DE EQUIPE E ESPECIAIS EM EQUIPE* logo abaixo (pedido de 2026-10-17, inspirado no Storm 4).
+
 ## 🟠 P1 — Infraestrutura
 
 11. LAN real
@@ -250,6 +253,78 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
 24. Novos personagens
 25. Novos cenários
 26. Novos modos
+
+---
+
+# NUBI — PERSONAGEM NOVA (Escriptas)
+
+- [x] Modelo, texturas, golpes, Desvio Imperturbável, Decadência, Ritual de Drenagem, Afinidade com a Morte, agarrão, falas.
+- [x] Carniçal da Esfinge: invocação com barra de vida (não trai a Nubi), Amedrontar, Saltar, Vomitar Lodo, Estômago.
+- [x] Enigma nas 3 marcas da barra (75/50/25%): Y/A/B/X, 52 enigmas sem repetir; acertou = paralisa, errou = devorada.
+- [ ] Acabamento do modelo da Esfinge (pedido: "depois melhore o modelo"): proporções de leão, patas mais grossas, Menés
+      lisa com listras nítidas, asas maiores e menos ruidosas; refazer a base e refinar pelo MCP.
+- [ ] Testar o enigma numa partida online real (dois aparelhos) e no celular (toque nas respostas).
+
+# EQUIPE — BARRA DE EQUIPE E ESPECIAIS EM EQUIPE
+
+Pedido de 2026-10-17 (inspirado no Naruto Storm 4). Vale só na **batalha em equipe** (líder + 2 assistências). Por
+enquanto é documentação; a implementação vai por fases (abaixo).
+
+### Barra de Equipe
+- Uma barra por lado, embaixo do painel do líder, que **enche quanto mais o jogador usa as assistências**.
+  Balanceamento (v3.32.0): cada chamada de assistência **+6%**, cada troca **+3%** — cerca de 17 chamadas para encher,
+  ≈ uma vez por partida (o Especial em Equipe é raro). Não esvazia sozinha; reinicia a cada partida (não a cada round).
+- **Cheia + Transformação** (segurar △ com a Barra de Transformação pronta): o líder **e as assistências** se
+  transformam juntos — as assistências que têm forma (Dante → Olhos Abertos, Arnaldo → Anfitrião etc.) aparecem
+  transformadas até o fim do round. **Gasta a barra inteira.**
+- **Cheia + △ △ △ ○**: o **Especial em Equipe**. **Gasta a barra inteira** (e a sanidade do especial normal).
+  Sem a barra cheia, △ △ △ ○ continua sendo o especial normal (△ △ ○).
+- O comando usa a mesma janela curta da Carga (0,45 s entre os toques, v3.31.0): os três △ precisam ser seguidos.
+
+### Especial em Equipe — dano
+- **Dano = especial normal do líder + 100** (com o especial base de 250: 350). Não é a soma das partes: os golpes das
+  assistências entram dentro desses +100 (cada parte delas tem dano limitado), e o especial do líder sai inteiro.
+- O alvo não pode defender nem fugir depois que a primeira parte acerta (como o especial normal).
+
+### Especial em Equipe SIMPLIFICADO (quem não tem ligação na lore)
+1. A assistência 1 entra e dá uma sequência de socos **ou** a habilidade △ → ○ dela;
+2. a assistência 2 entra e faz o mesmo;
+3. o líder fecha com o **próprio especial** (△ △ ○).
+
+### Especiais CUSTOMIZADOS (ligação na lore) — regra de prioridade
+Cada equipe tem um especial próprio só quando os personagens têm **ligação na lore**. Ordem (a primeira que valer):
+1. **Os 3 do mesmo grupo com especial de grupo** (ex.: 3 Mascarados) → o especial do grupo, em que **aparecem todos os
+   membros do grupo** (mesmo dano de qualquer Especial em Equipe; muda só a animação).
+2. **Um trio com especial próprio** (ex.: Joui + Kaiser + Arthur) → o especial do trio.
+3. **Uma dupla com ligação** (ex.: Cristopher + Kaiser) → o terceiro (sem ligação) **ataca primeiro** (socos ou a
+   habilidade dele) e depois a dupla faz o **especial dela**. Se houver duas duplas possíveis, vale a que tem o líder.
+   Uma dupla de um grupo **não precisa do grupo completo** para ter o especial dela.
+4. **Ninguém ligado** → o simplificado.
+
+Exemplos do Storm 4 que serviram de base: Naruto + Sasuke + Kiba → o Kiba ataca e Naruto e Sasuke fazem o especial
+deles; Pain + Konan + Hidan → o especial da Akatsuki; Pain + Konan + Sasuke → o especial do Pain e da Konan (o Sasuke
+ataca antes).
+
+### Ligações (a tabela vai para `src/config/teamLinks.js`)
+Confirmadas pelo pedido:
+- [ ] **Joui + Kaiser + Arthur** — especial de trio.
+- [ ] **Cristopher + Kaiser** — especial de dupla.
+- [ ] **Mascarados** (Dalmo, Aguiar, Jae, Kemi, Labirinto, Juan) — especial de grupo com 3 ou mais na equipe (aparecem
+  todos os membros).
+A confirmar (o dono decide antes de entrar):
+- [ ] Outras duplas/trios da Ordo Realitas (ex.: a Equipe Abutres de Calamidade), Escriptas (Kian + Gal Sal) e os
+  Portadores (são inimigos entre si — provavelmente nenhuma ligação).
+- **Os Cinco** (Xande, Guizo, Lírio): grupo incompleto no elenco — **sem especial de grupo** até todos estarem no jogo.
+
+### Fases
+- [x] **F1** Barra de Equipe: enche com as assistências (+6) e trocas (+3), aparece na HUD (e no toque), reinicia por
+  partida (`COMBAT.teamGauge`, `Fighter.addTeamGauge`).
+- [x] **F2** △ △ △ ○ com a barra cheia → Especial em Equipe **simplificado** para todo mundo (+ a IA usando; no toque, o
+  botão ESPECIAL vira o de equipe com a barra cheia). `abilities.js teamSpecial`, `COMBAT.teamSpecial` (bônus 100).
+- [ ] **F3** Transformação em equipe com a barra cheia (assistências transformadas até o fim do round).
+- [ ] **F4** `teamLinks.js` + a regra de prioridade + os primeiros especiais customizados (Mascarados, Joui/Kaiser/
+  Arthur, Cristopher/Kaiser).
+- [ ] Telas: mostrar na seleção da equipe quando o trio escolhido tem especial próprio.
 
 ---
 

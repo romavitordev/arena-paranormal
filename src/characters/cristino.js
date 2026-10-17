@@ -131,19 +131,22 @@ export const CRISTINO_KIT = {
       name: 'Decepar',
       input: 'block+carga', // R2 + △
       type: 'heavyBlow',
-      description: 'Ergue a peixeira e desce num golpe que abre a carne: o alvo SANGRA. Em quem está atordoado, agarrado ou sendo puxado, entra muito mais fundo. Aguenta um golpe na preparação.',
+      description: 'Ergue a peixeira e desce num golpe que abre a carne: o alvo SANGRA e fica com a FERIDA ABERTA — não se cura por 12 s. Avança e vira para o alvo enquanto prepara. Em quem está atordoado, agarrado ou sendo puxado, entra muito mais fundo. Aguenta um golpe na preparação.',
       energyCost: 25,
       cooldown: 11,
       anim: 'knife_final',
       duration: 0.85,
-      armorFrom: 0.1,
-      impact: 0.42,
-      step: 5,
-      range: 2.0,
-      arc: 110,
+      armorFrom: 0.08,
+      impact: 0.3, // mais rápido (era 0,42): menos tempo para o alvo sair
+      step: 7.5,
+      stepTime: 0.32, // o avanço começa antes e vai mais longe
+      track: true, // vira para o alvo durante a preparação
+      range: 2.6,
+      arc: 150,
       damage: 60,
       knockback: 1.6,
       bleed: { dps: 6, duration: 4 },
+      noHeal: 12, // FERIDA ABERTA: segundos sem cura (renova a cada acerto)
       downBonus: 1.5,
       downLabel: 'DECEPOU!',
       whiffRecovery: 0.35,

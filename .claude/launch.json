@@ -1,6 +1,7 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "arena-paranormal", "runtimeExecutable": "npx", "runtimeArgs": ["vite", "--port", "3030", "--strictPort"], "port": 3030 }
+    { "name": "arena-paranormal", "runtimeExecutable": "npx", "runtimeArgs": ["vite", "--port", "3030", "--strictPort"], "port": 3030 },
+    { "name": "arena-dist", "runtimeExecutable": "npx", "runtimeArgs": ["vite", "preview", "--port", "4173", "--strictPort"], "port": 4173 }
   ]
 }

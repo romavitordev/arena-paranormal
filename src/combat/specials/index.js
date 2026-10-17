@@ -20,8 +20,10 @@ import { actFinal } from './actFinal.js';
 import { mindTorture } from './mindTorture.js';
 import { inkRequiem } from './inkRequiem.js';
 import { lanternCount } from './lanternCount.js';
+import { sphinx } from './sphinx.js';
 
 // Tipos de especial disponíveis. Cada personagem escolhe um em `special.type`.
 // Para criar um tipo novo: { canStart(f, sp, world), start(f, sp, world) → {update(dt)→done, cancel()} }
 // Se acerta à distância sem projétil, defina também telegraph(f, sp) → aviso antes de conectar (ver telegraph.js).
-export const SPECIALS = { mistField, cinematicCombo, teleportStrike, ritual, erase, marionette, supernova, abyssMaze, santoPact, devilPact, devilDeal, ghostBands, spiralSnipe, awakenMode, ageGrab, maskTransform, kamikaze, hostGame, actFinal, mindTorture, inkRequiem, lanternCount };
+
+export const SPECIALS = { sphinx, mistField, cinematicCombo, teleportStrike, ritual, erase, marionette, supernova, abyssMaze, santoPact, devilPact, devilDeal, ghostBands, spiralSnipe, awakenMode, ageGrab, maskTransform, kamikaze, hostGame, actFinal, mindTorture, inkRequiem, lanternCount };

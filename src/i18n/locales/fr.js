@@ -273,6 +273,7 @@ export default {
   "install.close": "Fermer",
   "hud.damage": "DÉGÂTS",
   "hud.used": "UTILISÉ",
+  "hud.team_gauge": "ÉQUIPE",
   "combat.reset": "RESET",
   "alert.missed": "RATÉ",
   "alert.no_room_tp": "PAS DE PLACE POUR SE TÉLÉPORTER",

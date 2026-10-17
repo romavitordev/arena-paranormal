@@ -683,6 +683,8 @@ export class CpuController {
       });
     }
     // especial
+    // Barra de Equipe cheia: o Especial em Equipe (△ △ △ ○) vale mais que o especial normal
+    if (f.teamReady && f.teamReady() && f.specialAvailable() && sacrificeOk(f, opp) && d < 7) add('teamSpecial', open ? 3 : 1.6, () => { this.tap('carga'); this.tap('carga'); this.tap('carga'); this.tap('physical'); });
     if (f.specialAvailable() && sacrificeOk(f, opp) && d < 7) add('special', open ? 2.2 : 1.1, () => { this.tap('carga'); this.tap('carga'); this.tap('physical'); });
     // longe: aproxima (teleporte ou dash longo)
     const tele = (def.abilities || []).find((a) => a.input === 'carga+jump');

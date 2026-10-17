@@ -95,6 +95,7 @@ export class Fighter {
     if (this.baseForm) revertForm(this, { keepHealth: false });
     this.lethalHook = null;
     this.revengeUsed = false; // Sede de Vingança (Kemi): uma vez por round
+    this.pendingTeamSpecial = false;
     this.storm = 0; // Barra de Transformação (0–100), zera a cada round
     this.overcharge = 0; // segurando △ com a sanidade cheia (0–1) → transforma
     this.health = this.maxHealth;
@@ -262,8 +263,26 @@ export class Fighter {
   }
 
   heal(n) {
+    if (this.findBuff('noHeal')) return; // FERIDA ABERTA (Decepar do Cristino): nada cura
     this.health = Math.min(this.maxHealth, this.health + n);
     this.world.fx.burst(this.chestPos(), { count: 8, color: 0x7dffb0, speed: 2, life: 0.6, size: 0.25, up: 1 });
+  }
+
+  // FERIDA ABERTA: por `time` s a vida só desce — qualquer cura (habilidade, passiva, transformação, assistência) é
+  // desfeita no mesmo quadro (a vida fica presa no menor valor desde o golpe). Outro Decepar renova o tempo.
+  blockHealing(time) {
+    const cur = this.findBuff('noHeal');
+    if (cur) { cur.time = Math.max(cur.time, time); return; }
+    const self = this;
+    const b = {
+      type: 'noHeal', name: 'SEM CURA', time, duration: time, cap: this.health,
+      onTick() {
+        if (self.health < b.cap) b.cap = self.health;
+        else if (self.health > b.cap) self.health = b.cap;
+        if (Math.random() < 0.08) self.world.fx.burst(self.chestPos(), { count: 1, color: 0x7a0a10, speed: 0.6, up: -0.5, life: 0.5, size: 0.12 });
+      },
+    };
+    this.addBuff(b);
   }
 
   drainEnergy(n) {
@@ -510,7 +529,21 @@ export class Fighter {
     w.audio.play('teleport');
     this.notify(`TROCA: ${newDef.name}!`, true);
     w.onSwitch && w.onSwitch(this, oldDef, newDef);
+    this.addTeamGauge(COMBAT.teamGauge.swap);
     return true;
+  }
+
+  // BARRA DE EQUIPE: enche com as assistências e as trocas (só na batalha em equipe); avisa quando enche
+  addTeamGauge(n) {
+    if (!this.assists) return;
+    const G = COMBAT.teamGauge;
+    const before = this.teamGauge || 0;
+    this.teamGauge = Math.min(G.max, before + n);
+    if (before < G.max && this.teamGauge >= G.max) {
+      this.notify('BARRA DE EQUIPE CHEIA', true);
+      this.world.audio.play('ready', { volume: 0.8, pitch: 1.2 });
+      this.world.fx.ring(this.pos.clone().setY(0.06), { color: 0xffd84a, radius: 2.2, life: 0.6 });
+    }
   }
 
   // troca a definição (personagem) deste lutador mantendo vida, sanidade, posição e placar
@@ -650,8 +683,8 @@ export class Fighter {
 
     // batalha em equipe: chamar assistência 1/2 (D-pad ◀/▶) ou TROCAR de personagem (analógico direito ◀/▶)
     if (this.assists && !this.world.cinematic) {
-      if (this.input.pressed.assist1 && this.assists[0]) this.assists[0].call();
-      if (this.input.pressed.assist2 && this.assists[1]) this.assists[1].call();
+      if (this.input.pressed.assist1 && this.assists[0] && this.assists[0].call()) this.addTeamGauge(COMBAT.teamGauge.assist);
+      if (this.input.pressed.assist2 && this.assists[1] && this.assists[1].call()) this.addTeamGauge(COMBAT.teamGauge.assist);
       if (this.input.pressed.switch1) this.trySwitch(0);
       if (this.input.pressed.switch2) this.trySwitch(1);
     }
@@ -1085,8 +1118,9 @@ export class Fighter {
     }
     if (inp.pressed.physical) {
       if (this.carga.stage >= 2) {
+        const team = this.carga.stage >= 3;
         this.carga.stage = 0;
-        this.trySpecial();
+        if (team) this.tryTeamSpecial(); else this.trySpecial();
       } else if (!this.tryCargaAbility('physical')) {
         this.startMelee();
       }
@@ -1129,13 +1163,22 @@ export class Fighter {
     return true;
   }
 
+  // Barra de Equipe cheia (batalha em equipe): libera a 3ª etapa da Carga — △ △ △ ○ = Especial em Equipe
+  teamReady() {
+    return !!this.assists && (this.teamGauge || 0) >= COMBAT.teamGauge.max;
+  }
+
   advanceCarga() {
-    this.carga.stage = Math.min(2, this.carga.stage + 1);
+    this.carga.stage = Math.min(this.teamReady() ? 3 : 2, this.carga.stage + 1);
     this.carga.timer = COMBAT.cargaWindow;
     const col = this.def.energyColor;
     this.world.fx.ring(v1.set(this.pos.x, this.pos.y + 0.05, this.pos.z), { color: col, radius: 1.8 + this.carga.stage * 0.6, life: 0.45 });
     this.world.fx.burst(this.chestPos(), { count: 18, color: col, speed: 4, life: 0.5, size: 0.3 });
-    if (this.carga.stage === 2) {
+    if (this.carga.stage === 3) {
+      // pronto para o Especial em Equipe: o anel dourado
+      this.world.audio.play('armed', { pitch: 1.3 });
+      this.world.fx.ring(v1.set(this.pos.x, this.pos.y + 0.05, this.pos.z), { color: 0xffd84a, radius: 3.4, life: 0.5 });
+    } else if (this.carga.stage === 2) {
       this.world.audio.play('armed');
       this.world.fx.flash(this.chestPos(), { color: col, size: 3, life: 0.2 });
     } else {
@@ -1201,6 +1244,12 @@ export class Fighter {
   }
 
   updateIdle(dt) {
+    // fim da parte das assistências do Especial em Equipe: sai o especial do líder
+    if (this.pendingTeamSpecial) {
+      this.pendingTeamSpecial = false;
+      this.trySpecial();
+      if (this.state !== 'idle') return;
+    }
     if (this.handleCommands()) return;
     const inp = this.input;
     const dir = this.moveInputWorld(v1);
@@ -1431,8 +1480,9 @@ export class Fighter {
     }
     if (this.tryChord()) return;
     if (inp.pressed.physical && this.carga.stage >= 2) {
+      const team = this.carga.stage >= 3;
       this.carga.stage = 0;
-      this.trySpecial();
+      if (team) this.tryTeamSpecial(); else this.trySpecial();
       return;
     }
     if (inp.pressed.carga) this.advanceCarga();
@@ -1594,13 +1644,17 @@ export class Fighter {
     this.carga.stage = 0;
     this.setState('dodge');
     this.anim.play('dodge', { restart: true, duration: d.duration, blend: 0.03 });
-    this.world.audio.play(this.dodgeCfg.style === 'shadow' || this.dodgeCfg.style === 'inexistir' ? 'teleport' : 'jump', { volume: 0.6 });
+    this.world.audio.play(this.dodgeCfg.style === 'shadow' || this.dodgeCfg.style === 'inexistir' ? 'teleport' : this.dodgeCfg.style === 'calm' ? 'swing' : 'jump', { volume: 0.6 });
     const style = this.dodgeCfg.style || 'default';
     const p = v2.set(this.pos.x, 0.3, this.pos.z);
     if (style === 'shadow') {
       this.world.fx.burst(p, { count: 14, color: 0x0c0608, kind: 'smoke', speed: 2, life: 0.5, size: 0.6, up: 0.6 });
     } else if (style === 'inexistir') {
       this.world.fx.distort(this.chestPos(), { color: this.def.energyColor, radius: 1.4, life: 0.3 });
+    } else if (style === 'calm') {
+      // Desvio Imperturbável (Nubi): sem pulo nem pressa — um rastro curto de Lodo fica onde ela estava
+      this.world.fx.burst(p, { count: 10, color: 0x0c0a0e, kind: 'smoke', speed: 0.7, life: 0.55, size: 0.5, up: 0.2 });
+      this.world.fx.burst(this.chestPos(), { count: 4, color: 0x2a2430, kind: 'smoke', speed: 0.3, life: 0.35, size: 0.8 });
     } else {
       this.world.fx.burst(p, { count: 8, color: 0x8a8090, kind: 'smoke', speed: 2, life: 0.4, size: 0.4 });
     }
@@ -2724,6 +2778,17 @@ export class Fighter {
   }
 
   // ------------------------------------------------ especial
+  // ESPECIAL EM EQUIPE (△ △ △ ○ com a Barra de Equipe cheia): gasta a barra; as assistências entram e o especial do
+  // líder sai no fim (abilities.js teamSpecial). Sem especial disponível, avisa e não gasta a barra.
+  tryTeamSpecial() {
+    if (!this.teamReady()) { this.trySpecial(); return; }
+    if (!this.specialAvailable()) { this.trySpecial(); return; } // o próprio trySpecial diz o motivo
+    const before = this.teamGauge;
+    this.teamGauge = 0;
+    this.useAbility({ id: 'teamSpecial', type: 'teamSpecial', name: 'Especial em Equipe', energyCost: 0, cooldown: 0 });
+    if (this.state !== 'ability') this.teamGauge = before; // não começou (sem alvo): devolve a barra
+  }
+
   trySpecial() {
     const sp = this.def.special;
     if (!sp) {

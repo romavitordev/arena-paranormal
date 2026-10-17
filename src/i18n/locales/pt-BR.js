@@ -273,6 +273,7 @@ export default {
   "install.close": "Fechar",
   "hud.damage": "DANO",
   "hud.used": "USADO",
+  "hud.team_gauge": "EQUIPE",
   "combat.reset": "RESET",
   "alert.missed": "ERROU",
   "alert.no_room_tp": "SEM ESPAÇO PARA TELEPORTAR",

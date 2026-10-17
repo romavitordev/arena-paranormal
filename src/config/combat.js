@@ -129,6 +129,15 @@ export const COMBAT = {
   down: { lie: 0.95, techFrom: 0.12, techUntil: 0.6, techDistance: 2.6, techTime: 0.32, getup: 0.55 },
   // ---- Batalha em equipe: troca de personagem (estilo Storm 4) ----
   switch: { cooldown: 5, assistCooldown: 6, invuln: 0.35 }, // vida e sanidade são da equipe
+  // BARRA DE EQUIPE (batalha em equipe, estilo Storm 4): enche usando as assistências (cada chamada que sai) e trocando
+  // de personagem; vale a partida inteira (não zera por round). Cheia: transformação em equipe e o Especial em Equipe
+  // (△ △ △ ○) — ver TODO.md, "EQUIPE — BARRA DE EQUIPE E ESPECIAIS EM EQUIPE"
+  // devagar de propósito: ~17 chamadas para encher (≈ uma vez por partida) — o Especial em Equipe é raro numa luta
+  teamGauge: { max: 100, assist: 6, swap: 3 },
+  // ESPECIAL EM EQUIPE (simplificado): assistência 1 → assistência 2 → o especial do líder. Se pegou, a parte das
+  // assistências vale EXATAMENTE `bonus` (o que faltar entra no fim; o que passar é devolvido): total = especial + bonus.
+  // hold: até quando o alvo pego fica atordoado (cobre a preparação do especial do líder)
+  teamSpecial: { bonus: 100, second: 1.1, leader: 2.3, hold: 3.9 },
   // ---- Anti-repetição ----
   maxVolleys: 2, // no máximo 2 disparos do mesmo jogador no ar (um terceiro apaga o mais antigo)
   repeat: { after: 2, mult: 0.7, window: 2.5 }, // o mesmo golpe 3x seguidas causa 70% (até variar)

@@ -13,6 +13,28 @@ const UP = new THREE.Vector3(0, 1, 0);
 // A aparência vem de `visual` na definição do ataque; a lógica é a mesma para todos.
 
 const VISUALS = {
+  // Lodo da Morte (Nubi): uma massa compacta de Lodo Preto, brilho molhado, com tentáculos curtos que se mexem no voo
+  lodoMass(color) {
+    const g = new THREE.Group();
+    const mat = new THREE.MeshToonMaterial({ color: 0x0a080c, emissive: 0x050406 });
+    const core = new THREE.Mesh(new THREE.SphereGeometry(0.26, 12, 10), mat);
+    core.scale.set(1, 0.85, 1.15);
+    g.add(core);
+    const shine = new THREE.Mesh(new THREE.SphereGeometry(0.07, 8, 6), new THREE.MeshBasicMaterial({ color: 0x5a5866, transparent: true, opacity: 0.55 }));
+    shine.position.set(0.09, 0.12, 0.1);
+    g.add(shine);
+    const arms = new THREE.Group();
+    for (let i = 0; i < 6; i++) {
+      const a = (i / 6) * Math.PI * 2;
+      const t = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.42, 5), mat);
+      t.position.set(Math.cos(a) * 0.2, Math.sin(a) * 0.17, -0.12);
+      t.rotation.set(Math.PI / 2 + Math.sin(a) * 0.6, 0, -Math.cos(a) * 0.6);
+      arms.add(t);
+    }
+    g.add(arms);
+    g.userData.spin = arms;
+    return g;
+  },
   // Decadenza (Dante): nuvem de fumaça preta com núcleo escuro e anel cinza
   decay(color) {
     const g = new THREE.Group();
@@ -674,6 +696,11 @@ export class Projectiles {
       }
       if (a.visual === 'cursedSniper' && Math.random() < 0.6) {
         w.fx.lightning(p.pos, p.pos.clone().add(new THREE.Vector3((Math.random() - 0.5), (Math.random() - 0.5), (Math.random() - 0.5)).multiplyScalar(1.6)), { color: a.color, life: 0.08 });
+      }
+      if (a.visual === 'lodoMass' && Math.random() < 0.7) {
+        // pingos de Lodo caindo atrás da massa
+        w.fx.burst(p.pos, { count: 2, color: 0x0a080c, speed: 0.6, up: -1.2, life: 0.45, size: 0.09, gravity: 9 });
+        if (Math.random() < 0.3) w.fx.burst(p.pos, { count: 1, color: 0x14121a, kind: 'smoke', speed: 0.3, up: 0.1, life: 0.4, size: 0.3 });
       }
       if (a.visual === 'shadow') w.fx.burst(p.pos.clone().setY(0.3), { count: 2, color: 0x0a0608, kind: 'smoke', speed: 0.8, up: 0.8, life: 0.5, size: 0.5 });
       if (a.visual === 'decay') {

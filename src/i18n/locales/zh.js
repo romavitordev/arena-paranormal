@@ -273,6 +273,7 @@ export default {
   "install.close": "关闭",
   "hud.damage": "伤害",
   "hud.used": "已用",
+  "hud.team_gauge": "团队",
   "combat.reset": "重置",
   "alert.missed": "落空",
   "alert.no_room_tp": "没有空间瞬移",

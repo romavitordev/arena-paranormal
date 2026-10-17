@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { Timeline, yawTo, distXZ, forwardFromYaw, angleDiff, turnTowards, DEG } from '../core/util.js';
+import { COMBAT } from '../config/combat.js';
 import { findSpotBehind, findFreeSpotNear } from './positioning.js';
 import { applyHit } from './damage.js';
 import { splitDamage } from './specials/common.js';
@@ -190,6 +191,67 @@ function bloodEruption(f, world) {
 }
 
 export const ABILITY_TYPES = {
+  // DESVIO IMPERTURBÁVEL (Nubi): uma janela curta parada e atenta; o golpe que chegar nela é desviado pela Substituição
+  // do jogo (damage.js, victim.calmEvade). Não é automático (precisa de tempo certo) e não vale contra especiais
+  calmEvade: {
+    start(f, a, world) {
+      const tl = new Timeline();
+      const opp = f.opponent;
+      f.vel.set(0, 0, 0);
+      if (opp) f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('idle', { restart: true, duration: a.window + 0.15 });
+      f.calmEvade = { until: world.time + a.window, label: (a.label || a.name).toUpperCase() };
+      world.fx.ring(new THREE.Vector3(f.pos.x, 0.05, f.pos.z), { color: 0x2a2430, radius: 1.1, life: a.window });
+      tl.add(a.window, () => { f.calmEvade = null; });
+      tl.end(a.window + 0.12);
+      return seqFrom(tl, { cancel: () => { f.calmEvade = null; } });
+    },
+  },
+  // ESPECIAL EM EQUIPE (simplificado, Barra de Equipe cheia + △ △ △ ○): a assistência 1 entra e ataca, depois a 2, e o
+  // líder fecha com o próprio especial (Fighter.pendingTeamSpecial → trySpecial no fim). Quem é pego não escapa até o
+  // especial (atordoado a cada golpe); o dano das assistências é limitado a COMBAT.teamSpecial.bonus.
+  teamSpecial: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      const TS = COMBAT.teamSpecial;
+      if (!opp || !f.assists || opp.state === 'ko') return null;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.yaw = yawTo(f.pos, opp.pos);
+      f.invuln = Math.max(f.invuln, TS.leader + 0.3);
+      f.anim.play('concentrate', { restart: true, duration: TS.leader });
+      world.showBanner('Especial em Equipe!', f.def.color);
+      world.audio.play('specialStart', { volume: 0.9 });
+      world.fx.ring(f.pos.clone().setY(0.06), { color: 0xffd84a, radius: 2.8, life: 0.7 });
+      const h0 = opp.health;
+      let last = h0;
+      let caught = false;
+      tl.add(0.05, () => f.assists[0] && f.assists[0].callTeam());
+      tl.add(TS.second, () => f.assists[1] && f.assists[1].callTeam());
+      tl.each((t) => {
+        // pegou: atordoado a cada golpe até o especial do líder (não foge entre as partes)
+        if (opp.health < last && opp.state !== 'ko') {
+          caught = true;
+          if (t < TS.leader) opp.stun(Math.max(0.3, TS.hold - t), 'stagger');
+        }
+        last = opp.health;
+      });
+      tl.add(TS.leader - 0.05, () => {
+        // a parte das assistências vale exatamente o bônus: o que passou é devolvido, o que faltou entra agora
+        if (opp.state !== 'ko') opp.health = Math.max(opp.health, h0 - TS.bonus);
+        const rest = TS.bonus - (h0 - opp.health);
+        if (caught && rest > 0 && opp.state !== 'ko') {
+          applyHit(world, f, opp, { damage: rest, kind: 'ability', reaction: false, knockback: 0, ignoreInvuln: true, sound: 'impact', color: 0xffd84a, scale: 1.4 });
+        }
+        // o especial do líder entra inteiro (sem a escala de combo das partes das assistências): especial + bônus
+        opp.comboHits = 0;
+        f.pendingTeamSpecial = true;
+        if (caught) f.notify('ESPECIAL EM EQUIPE!', true);
+      });
+      tl.end(TS.leader);
+      return seqFrom(tl);
+    },
+  },
   // ------------------------------------------------------------------ JOUI
   // Teleporte das Sombras: afunda na própria sombra e surge atrás do inimigo.
   teleportBehind: {
@@ -1969,8 +2031,10 @@ Object.assign(ABILITY_TYPES, {
         world.audio.play('heavyPunch', { volume: 0.3, pitch: 0.5 });
       });
       tl.each((t) => {
+        // a.track (Decepar): continua virando para o alvo durante a preparação
+        if (a.track && t < a.impact && opp && opp.state !== 'ko') f.yaw = yawTo(f.pos, opp.pos);
         // deslocamento do corpo à frente logo antes do golpe
-        if (t > a.impact - 0.2 && t < a.impact && !(opp && distXZ(f.pos, opp.pos) < 1.3)) {
+        if (t > a.impact - (a.stepTime ?? 0.2) && t < a.impact && !(opp && distXZ(f.pos, opp.pos) < 1.3)) {
           const F = forwardFromYaw(f.yaw);
           f.vel.x = F.x * a.step;
           f.vel.z = F.z * a.step;
@@ -1999,6 +2063,11 @@ Object.assign(ABILITY_TYPES, {
           });
           if (a.stun && typeof res === 'number' && opp.state !== 'ko') opp.stun(a.stun);
           if (a.bleed && typeof res === 'number' && opp.state !== 'ko') opp.applyBleed(a.bleed, f);
+          // a.noHeal (Decepar): FERIDA ABERTA — o alvo não se cura por um tempo
+          if (a.noHeal && typeof res === 'number' && opp.state !== 'ko') {
+            opp.blockHealing(a.noHeal);
+            opp.notify('FERIDA ABERTA: SEM CURA', true);
+          }
         }
         // a.pressure: o soco solta uma onda de pressão atmosférica (distorção do ar e anel de choque à frente)
         if (a.pressure) {

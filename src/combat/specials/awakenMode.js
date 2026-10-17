@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { Timeline } from '../../core/util.js';
 import { faceClose, orbit } from '../../camera/shots.js';
+import { swapFace } from './maskTransform.js';
 
 // DESPERTAR (Barra de Transformação de quem não tem uma forma própria): uma cena curta — o personagem se concentra, a
 // aura cresce, o nome do estado aparece — e ele fica nesse estado ATÉ O FIM DO ROUND. Cada um escolhe o estado pelo
@@ -22,6 +23,8 @@ import { faceClose, orbit } from '../../camera/shots.js';
 //   bloodArmSide        braço de sangue (visual da Armadura de Sangue) + bloodArmor
 //   heal                cura na hora (fração da vida máxima)
 //   aura                'flame' | 'smoke' | 'sigil' | 'blood' (partículas em volta)
+//   face                [de, para]: troca a textura do rosto na hora do close (ex.: os olhos todos pretos da Nubi)
+//   eyeDrip             cor do Lodo que escorre do rosto enquanto durar
 export const awakenMode = {
   canStart: (f) => !f.findBuff('awakened'),
   blockMsg: 'JÁ DESPERTOU',
@@ -41,6 +44,9 @@ export const awakenMode = {
       follow: () => new THREE.Vector3(f.pos.x + (Math.random() - 0.5) * 1.4, f.pos.y + Math.random() * 0.4, f.pos.z + (Math.random() - 0.5) * 1.4),
       particle: { color: col, speed: 0.5, up: 3, spread: 0.3, life: 0.6, size: 0.2 },
     });
+    // o rosto muda no meio do close (a câmera está nele)
+    let undoFace = null;
+    if (sp.face) tl.add(0.45, () => { undoFace = swapFace(f.rig, sp.face[0], sp.face[1]); });
     tl.add(0.35, () => world.showBanner(sp.banner || sp.name, f.def.color));
     tl.add(1.0, () => {
       world.fx.ring(new THREE.Vector3(f.pos.x, 0.06, f.pos.z), { color: col, radius: 5, life: 0.7 });
@@ -55,7 +61,8 @@ export const awakenMode = {
     const finish = () => {
       rise.stop();
       world.endCinematic();
-      applyAwakening(f, sp, world, col);
+      applyAwakening(f, sp, world, col, undoFace);
+      undoFace = null;
     };
     return {
       update: (dt) => {
@@ -63,13 +70,15 @@ export const awakenMode = {
         if (done) finish();
         return done;
       },
-      cancel: () => { rise.stop(); world.endCinematic(); },
+      cancel: () => { rise.stop(); world.endCinematic(); if (undoFace) { undoFace(); undoFace = null; } },
     };
   },
 };
 
-function applyAwakening(f, sp, world, col) {
-  if (f.state === 'ko') return;
+function applyAwakening(f, sp, world, col, undoFace) {
+  if (f.state === 'ko') { if (undoFace) undoFace(); return; }
+  // o Lodo escorrendo do rosto (olhos e boca) enquanto durar
+  const drip = sp.eyeDrip !== undefined ? world.fx.emitter({ rate: 14, follow: () => f.rig.joints.hd.getWorldPosition(new THREE.Vector3()), particle: { color: sp.eyeDrip, kind: 'smoke', speed: 0.15, up: -1.2, spread: 0.08, life: 0.6, size: 0.12, gravity: 3 } }) : null;
   if (sp.heal) f.health = Math.min(f.maxHealth, f.health + f.maxHealth * sp.heal);
   const aura = auraEmitter(f, world, sp.aura || 'flame', col);
   const tint = { color: col, base: 0.16 };
@@ -111,7 +120,7 @@ function applyAwakening(f, sp, world, col) {
         if (armorClock >= sp.armorEvery && (f.armorHits || 0) < (sp.armorMax ?? 1)) { armorClock = 0; f.armorHits = (f.armorHits || 0) + 1; }
       }
     },
-    onEnd() { aura.stop(); if (f.buffTint === tint) f.buffTint = null; },
+    onEnd() { aura.stop(); if (drip) drip.stop(); if (undoFace) undoFace(); if (f.buffTint === tint) f.buffTint = null; },
   });
   f.notify(`${(sp.label || sp.name).toUpperCase()}!`, true);
 }

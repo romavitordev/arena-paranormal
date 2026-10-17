@@ -273,6 +273,7 @@ export default {
   "install.close": "Kapat",
   "hud.damage": "HASAR",
   "hud.used": "KULLANILDI",
+  "hud.team_gauge": "TAKIM",
   "combat.reset": "SIFIRLA",
   "alert.missed": "ISKALADI",
   "alert.no_room_tp": "IŞINLANACAK YER YOK",

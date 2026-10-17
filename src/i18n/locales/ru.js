@@ -273,6 +273,7 @@ export default {
   "install.close": "Закрыть",
   "hud.damage": "УРОН",
   "hud.used": "ИСПОЛЬЗОВАНО",
+  "hud.team_gauge": "КОМАНДА",
   "combat.reset": "СБРОС",
   "alert.missed": "ПРОМАХ",
   "alert.no_room_tp": "НЕТ МЕСТА ДЛЯ ТЕЛЕПОРТА",

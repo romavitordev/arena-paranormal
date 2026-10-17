@@ -201,7 +201,7 @@ export class Match {
         w.update(dt);
         this.checkCriticalDialogues();
         this.updateBattleDialogue(dt);
-        if (!w.cinematic && SETTINGS.timer && !this.training) this.timer -= dt;
+        if (!w.cinematic && !w.riddle && SETTINGS.timer && !this.training) this.timer -= dt;
         // K.O. só é resolvido depois que o especial termina
         if (this.koPending && !w.cinematic) this.endRound('ko');
         else if (this.timer <= 0) this.endRound('time');

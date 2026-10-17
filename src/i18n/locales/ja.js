@@ -273,6 +273,7 @@ export default {
   "install.close": "閉じる",
   "hud.damage": "ダメージ",
   "hud.used": "使用済み",
+  "hud.team_gauge": "チーム",
   "combat.reset": "リセット",
   "alert.missed": "ミス",
   "alert.no_room_tp": "テレポートする場所がない",

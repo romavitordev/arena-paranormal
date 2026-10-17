@@ -14,6 +14,7 @@ const BLENDER_MODELS = {
   aghata: { url: 'models/aghata.glb', props: addAghataProps },
   gal_sal: { url: 'models/gal_sal.glb', props: addGalSalProps },
   kian: { url: 'models/kian.glb', props: addKianProps },
+  nubi: { url: 'models/nubi.glb', props: null }, // a bengala de chacal vem no próprio modelo
   dante: { url: 'models/dante.glb', props: addDanteProps }, // sem armas (Calamidade, de olhos fechados)
   erin: { url: 'models/erin.glb', props: addErinProps },
   aguiar: { url: 'models/aguiar.glb', props: addAguiarProps },

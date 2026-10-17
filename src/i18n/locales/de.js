@@ -273,6 +273,7 @@ export default {
   "install.close": "Schließen",
   "hud.damage": "SCHADEN",
   "hud.used": "BENUTZT",
+  "hud.team_gauge": "TEAM",
   "combat.reset": "RESET",
   "alert.missed": "DANEBEN",
   "alert.no_room_tp": "KEIN PLATZ ZUM TELEPORTIEREN",

@@ -21,6 +21,28 @@ export function buildExistido() {
   };
 }
 
+// O CARNIÇAL DA ESFINGE (especial da Nubi, tools/blender/npc_esfinge.py): quadrúpede com pescoço de Menés e asas.
+// Juntas: body, torso, neck, head, jaw, legs[FL, FR, BL, BR] (+ joelho), tail, wingL, wingR. Sem o .glb, usa o bloco do
+// javali com juntas extras vazias.
+export function buildSphinx() {
+  const m = buildNpcModel('esfinge', { outline: 0.014, noOutline: ['asa', 'lodo', 'dente', 'roxo'] });
+  if (m) {
+    const J = m.joint;
+    return {
+      root: m.root,
+      joints: {
+        body: J('body'), torso: J('torso'), neck: J('neck'), head: J('head'), jaw: J('jaw'), tail: J('tail'), wingL: J('wingL'), wingR: J('wingR'),
+        legs: ['FL', 'FR', 'BL', 'BR'].map((n) => ({ hip: J('leg' + n), knee: J('knee' + n) })),
+      },
+    };
+  }
+  const b = buildInkBeast('javali');
+  b.root.scale.setScalar(1.6);
+  const e = () => { const o = new THREE.Object3D(); b.joints.torso.add(o); return o; };
+  Object.assign(b.joints, { neck: e(), wingL: e(), wingR: e() });
+  return b;
+}
+
 // ANIMAIS INFECTADOS PELA TINTA (invocação do Amigo Imaginário, tools/blender/npc_bicho_lib.py): javali e cão
 // selvagem de quatro patas. Juntas: body, torso, head, jaw, legs[FL, FR, BL, BR] (+ joelho) e tail.
 export function buildInkBeast(kind) {

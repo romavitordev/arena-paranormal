@@ -273,6 +273,7 @@ export default {
   "install.close": "Zamknij",
   "hud.damage": "OBRAŻENIA",
   "hud.used": "UŻYTE",
+  "hud.team_gauge": "DRUŻYNA",
   "combat.reset": "RESET",
   "alert.missed": "PUDŁO",
   "alert.no_room_tp": "BRAK MIEJSCA NA TELEPORT",
