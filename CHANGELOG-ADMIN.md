@@ -1,5 +1,18 @@
 # Registro administrativo de alterações
 
+## v3.28.0 — Na Palma da Mão
+
+- Versão: `VERSION` 3.27.1 → **3.28.0** (package.json/lock junto).
+- Pedido: "o hud pode ser todo reformulado, não funciona pra uma tela de celular, está cheio de botões; facilitar a
+  gameplay mobile e ajustar a posição dos botões".
+- Antes: losango no canto, ESQ perdido à esquerda, ESPECIAL e DEF no alto, e duas filas de comandos (DEF+△, N8-N8...) na
+  HUD que no toque não serviam — as habilidades pediam dois botões ao mesmo tempo.
+- Conferido no navegador em modo celular (844 × 390, 667 × 375 e tablet 1024 × 768): todos os botões de habilidade
+  soltam a habilidade (inclusive Rotura, ← + □, no Olhos Abertos), especial, esquiva, joystick flutuante, assistência
+  e troca na equipe; os botões se refazem após a transformação e a troca. Falta testar em aparelho de verdade.
+- Achado no caminho: o `node_modules/three` local estava com um arquivo corrompido (GLTFLoader.js com bytes binários);
+  `npm ci` resolveu. Os arquivos do repositório estavam íntegros.
+
 ## v3.27.1 — Baixe e Jogue
 
 - Versão: `VERSION` 3.27.0 → **3.27.1** (package.json/lock junto).

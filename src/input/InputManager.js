@@ -154,9 +154,14 @@ export class InputManager {
     // toque na tela (celular): botões e joystick virtuais do jogador 1
     const T = this.touch;
     if (i === 0 && T.active) {
-      for (const a of ACTIONS) if (T.held[a] || T.taps.has(a)) held[a] = true;
+      // mute: num quadro de botão de habilidade, a DEF segurada não conta (senão DEF + △ viraria outra habilidade)
+      for (const a of ACTIONS) if ((T.held[a] && !(T.mute && T.mute.includes(a))) || T.taps.has(a)) held[a] = true;
       if (Math.abs(T.moveX) > Math.abs(mx)) mx = T.moveX;
       if (Math.abs(T.moveY) > Math.abs(my)) my = T.moveY;
+      // nudge: direção de UM quadro (botão de habilidade □ + direção — frente/trás/lado em relação ao adversário)
+      if (T.nudge) { [mx, my] = T.nudge; source = 'touch'; }
+      T.nudge = null;
+      T.mute = null;
       if (T.moveX || T.moveY || T.taps.size || ACTIONS.some((a) => T.held[a])) source = 'touch';
       T.taps.clear();
     }

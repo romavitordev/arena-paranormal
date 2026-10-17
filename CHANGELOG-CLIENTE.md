@@ -2,6 +2,12 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.28.0 — Na Palma da Mão
+- CELULAR — CONTROLES NOVOS: um botão de ATAQUE grande no canto direito, com pulo, tiro, esquiva, carga e defesa em volta, e UM BOTÃO PARA CADA HABILIDADE do seu lutador + o ESPECIAL. É só tocar: o botão faz o comando sozinho (nada de apertar dois botões ao mesmo tempo). Cada botão mostra a recarga, apaga quando falta sanidade e brilha quando está pronto.
+- CELULAR — o joystick agora aparece onde o polegar encosta, em qualquer lugar da metade esquerda da tela.
+- CELULAR — HUD mais limpa: só os nomes e as barras no alto (as filas de comandos saíram), mais espaço para ver a luta. O △ brilha quando a transformação está pronta (segure), a ESQUIVA mostra as cargas e, na batalha em equipe, as assistências aparecem com o nome de quem vem.
+- Os botões se ajustam ao tamanho da tela (celular pequeno, comum ou tablet) e mudam sozinhos quando você troca de personagem ou se transforma.
+
 ## v3.27.1 — Baixe e Jogue
 - PÁGINA SOBRE / BAIXAR NOVA: mais direta e fácil — o botão principal já baixa a versão do seu aparelho (Windows, Android; no iPhone, jogar no navegador), com fotos reais do jogo ao lado de cada parte, os modos, o elenco, os controles e as perguntas mais comuns. Abre rápido até no celular.
 - DANTE — as cópias do Trinitá agora são vultos PRETOS de verdade (antes saíam acinzentadas); a franja ficou mais curta e deixa ver os olhos (os olhos pretos do Olhos Abertos aparecem); e a cena da transformação não estoura mais de luz branca.

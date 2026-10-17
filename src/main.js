@@ -844,7 +844,7 @@ const touch = touchDevice ? new TouchControls(input) : null;
 game.touch = touch;
 
 function tick(dt) {
-  if (touch) touch.sync(game.state, !!input.teamMode, game.state === 'mainmenu' && game.screen.menu, game.state === 'fight' && !!game.match && ['entrance', 'dialogue'].includes(game.match.phase));
+  if (touch) touch.sync(game.state, !!input.teamMode, game.state === 'mainmenu' && game.screen.menu, game.state === 'fight' && !!game.match && ['entrance', 'dialogue'].includes(game.match.phase), game.match && game.match.fighters ? game.match.fighters[input.netSlot || 0] : null);
   if (game.tutorial) game.tutorial.el.style.display = game.state === 'fight' ? '' : 'none';
   input.update(dt);
   if (input.netFrame) applyNetTaps();

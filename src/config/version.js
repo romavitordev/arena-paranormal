@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.27.1';
+export const VERSION = '3.28.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,17 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.28.0',
+    date: '2026-10-17',
+    title: 'Na Palma da Mão',
+    items: [
+      'CELULAR — CONTROLES NOVOS: um botão de ATAQUE grande no canto direito, com pulo, tiro, esquiva, carga e defesa em volta, e UM BOTÃO PARA CADA HABILIDADE do seu lutador + o ESPECIAL. É só tocar: o botão faz o comando sozinho (nada de apertar dois botões ao mesmo tempo). Cada botão mostra a recarga, apaga quando falta sanidade e brilha quando está pronto.',
+      'CELULAR — o joystick agora aparece onde o polegar encosta, em qualquer lugar da metade esquerda da tela.',
+      'CELULAR — HUD mais limpa: só os nomes e as barras no alto (as filas de comandos saíram), mais espaço para ver a luta. O △ brilha quando a transformação está pronta (segure), a ESQUIVA mostra as cargas e, na batalha em equipe, as assistências aparecem com o nome de quem vem.',
+      'Os botões se ajustam ao tamanho da tela (celular pequeno, comum ou tablet) e mudam sozinhos quando você troca de personagem ou se transforma.',
+    ],
+  },
   {
     v: '3.27.1',
     date: '2026-10-16',

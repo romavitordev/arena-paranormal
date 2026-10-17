@@ -1,6 +1,6 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.27.1 (revisado em 2026-10-16: o que já estava pronto no código saiu da lista; a
+**Versão de referência atual:** v3.28.0 (revisado em 2026-10-16: o que já estava pronto no código saiu da lista; a
 versão instalável já saiu na v3.25.0 e o adendo dela foi retirado)
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente

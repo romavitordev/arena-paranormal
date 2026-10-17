@@ -1,5 +1,26 @@
 # Changelog
 
+## v3.28.0 — 2026-10-17
+
+### Alterado
+- `src/ui/touchControls.js` refeito: ATAQUE (○) grande no canto direito; anel de dentro com × · □ · ESQ · △ · DEF; anel de
+  fora com o ESPECIAL e um botão por habilidade do lutador em campo (até 6, ordenadas pelo comando). Posições calculadas
+  em `layout()` na escala da tela (`scaleFor`: 0,8–1,35, desenho base 844 × 390), refeitas no `resize`.
+- Botão de habilidade = o comando dela num quadro (`CHORDS`: △+○, △+□, △+L2, △+×, DEF+△, DEF+×; □ + direção calcula
+  frente/trás/lado em relação ao adversário pela `cameraBasis`). Passa pelo mesmo caminho do controle — vale na partida
+  online sem mudar o pacote de rede.
+- Recarga, falta de sanidade, especial pronto/usado, etapas da carga, transformação pronta e cargas da esquiva
+  desenhados nos próprios botões (`paint()`); nomes encaixados medindo o texto (`fitLabel`, abrevia abaixo de 7,5 px).
+- Joystick flutuante: nasce sob o polegar na metade esquerda (`.t-zone`) e volta ao canto ao soltar.
+- Equipe: assistências com o nome de quem vem e troca (⇄), à esquerda, abaixo da HUD. Pausa ao lado do relógio.
+- `sync()` recebe o lutador deste aparelho (`fighters[input.netSlot || 0]`) e refaz os botões na troca e na transformação.
+- HUD no toque (`body.touch-ui`): sem a fila de habilidades, a linha de carga/esquiva, os buffs e as assistências do
+  painel; painéis com 36 vw.
+
+### Adicionado
+- `InputManager.touch.nudge` (direção de um quadro) e `touch.mute` (ignora a DEF segurada no quadro do botão de habilidade).
+- Chaves `touch.attack`, `touch.jump` e `touch.shot` nos 13 idiomas.
+
 ## v3.27.1 — 2026-10-16
 
 ### Alterado
