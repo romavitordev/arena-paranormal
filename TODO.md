@@ -6,6 +6,587 @@
 
 ---
 
+
+PRIORIDADE ATUAL DIA 18/10/26 ULTIMA UPD: ATUALIZAR O TODO COM TODAS ESSAS ADIÇÕES:
+
+"# ARENA PARANORMAL — DOCUMENTAÇÃO DA PRÓXIMA GRANDE ATUALIZAÇÃO
+
+## 1. Objetivo da atualização
+
+Esta atualização tem como objetivo ampliar o Arena Paranormal sem descaracterizar sua proposta original de jogo de luta 3D. O desenvolvimento será dividido em duas frentes principais:
+
+- **Melhorias no jogo de luta atual:** animações, modelos, especiais em equipe, câmera e interface de combate.
+- **Criação de um novo modo PvE:** dungeons, chefes, progressão, melhorias temporárias e permanentes, salvamento e possibilidade de jogar cooperativamente.
+
+O desenvolvimento deverá aproveitar os sistemas existentes sempre que possível. Antes de criar ou substituir qualquer sistema, será necessário analisar a arquitetura atual do jogo, seus personagens, as arenas, a inteligência artificial, a sincronização multiplayer e os mecanismos de salvamento.
+
+### Importante: separar o que será feito agora do que ficará para o futuro
+
+A criação do modo PvE e a implementação das primeiras dungeons fazem parte do escopo desta atualização.
+
+**A adição do Espreitador como personagem selecionável e jogável é uma possibilidade futura, não uma entrega obrigatória desta atualização.** Nesta etapa, ele poderá ser desenvolvido como chefe de uma dungeon, com comportamentos, animações e habilidades específicas para esse confronto. Sua versão jogável poderá ser planejada posteriormente, depois de o modo PvE estar estabelecido.
+
+O projeto também deverá ser preparado para receber novas dungeons e chefes em futuras atualizações, sem exigir a reconstrução do modo PvE a cada expansão.
+
+---
+
+## 2. Melhorias no jogo de luta atual
+
+### 2.1. Novas animações de movimentação
+
+Adicionar e aprimorar animações de movimentação para deixar os personagens mais naturais e responsivos durante as batalhas.
+
+As animações deverão respeitar o estilo de luta de cada personagem e ser compatíveis com os sistemas atuais de movimentação, ataques, esquivas e habilidades.
+
+### 2.2. Atualização dos modelos antigos
+
+Revisar os modelos 3D dos personagens antigos, identificando problemas visuais, diferenças de qualidade e oportunidades de melhoria.
+
+As alterações deverão preservar a identidade visual dos personagens e a compatibilidade com suas animações, habilidades e sistemas de combate.
+
+### 2.3. Melhoria dos especiais em equipe
+
+Aprimorar os ataques especiais realizados em conjunto, dando mais destaque às animações, à participação dos personagens envolvidos, aos efeitos visuais e à sensação de impacto.
+
+As melhorias deverão considerar a sincronização entre os personagens, a câmera e o momento em que o dano é aplicado.
+
+### 2.4. Melhorias na câmera de cutscenes
+
+Aprimorar os enquadramentos e movimentos da câmera durante as cenas especiais, ataques cinematográficos e transições.
+
+A câmera deverá valorizar os personagens e as ações importantes sem perder o controle da posição dos jogadores nem causar cortes bruscos ou enquadramentos inadequados.
+
+---
+
+## 3. Novo modo PvE — dungeons e chefes
+
+### 3.1. Conceito do modo
+
+O modo PvE será uma experiência de progressão baseada em dungeons, exploração, combate contra inimigos e confrontos contra chefes inspirados nas criaturas do Outro Lado.
+
+O jogador poderá iniciar uma campanha, escolher um personagem disponível e avançar por diferentes dungeons. Cada dungeon terá uma identidade própria, com cenário, ambientação, desafios e um chefe principal.
+
+A experiência deverá ter uma progressão inspirada em jogos como *Vampire Survivors*: durante uma tentativa, o jogador conquista melhorias temporárias e desenvolve uma combinação de poderes. Ao morrer, perde essa evolução temporária, mas mantém parte do progresso permanente conquistado.
+
+O objetivo é incentivar o jogador a aprender os padrões dos chefes, experimentar combinações de habilidades e tentar avançar cada vez mais longe.
+
+### 3.2. Formas de jogar
+
+O modo deverá ser planejado para funcionar em três formatos:
+
+- **Solo:** um jogador enfrenta a dungeon e seus desafios.
+- **Cooperativo local:** dois jogadores enfrentam os inimigos e o chefe juntos.
+- **Cooperativo online:** jogadores em uma mesma sessão compartilham a experiência de explorar e derrotar os chefes.
+
+No PvE cooperativo, os jogadores lutarão contra os desafios da dungeon. Não deverá ser utilizado o formato tradicional de batalha em equipe do jogo de luta atual como estrutura obrigatória desse modo.
+
+O cooperativo deverá ter regras próprias para inimigos, chefes, recompensas, progressão e sincronização. A implementação online precisa ser analisada com cuidado, pois o multiplayer de luta existente não garante, por si só, que já exista suporte para sincronizar uma dungeon inteira.
+
+### 3.3. Seleção de personagens
+
+Os jogadores poderão utilizar os personagens jogáveis disponíveis no jogo, respeitando as restrições específicas de cada dungeon.
+
+Criaturas do Outro Lado que forem utilizadas como chefes não deverão poder ser selecionadas pelos jogadores naquela dungeon enquanto isso permitiria escolher o próprio chefe ou quebrar a proposta do confronto.
+
+Essa restrição deverá ser definida por dungeon, evitando uma proibição global desnecessária de personagens que não sejam chefes naquele conteúdo.
+
+---
+
+## 4. Como as dungeons funcionarão
+
+### 4.1. Estrutura geral de uma dungeon
+
+Cada dungeon deverá funcionar como uma pequena experiência completa, e não apenas como uma arena com um chefe no centro.
+
+O fluxo pretendido será:
+
+1. O jogador entra em uma dungeon e conhece o ambiente.
+2. Explora o mapa, identifica caminhos e se prepara para o confronto.
+3. Caso sejam implementados inimigos menores, enfrenta esses adversários e pode obter recursos para sobreviver.
+4. Encontra a área ou o evento que inicia o confronto contra o chefe.
+5. Enfrenta o chefe, que deverá ter padrões de ataque, habilidades e comportamentos próprios.
+6. Após a vitória, recebe acesso à saída e pode coletar as recompensas.
+7. Atravessa a porta de saída para avançar para a próxima dungeon.
+
+A duração, o tamanho do mapa e a quantidade de desafios poderão variar de acordo com o chefe e com a proposta da dungeon.
+
+**A prioridade é fazer cada dungeon parecer um território pertencente à criatura que o domina.** O cenário, os obstáculos, a iluminação, os efeitos e os desafios deverão reforçar a identidade do chefe enfrentado.
+
+### 4.2. Mapas personalizados
+
+As dungeons deverão contar com mapas próprios, criados para o modo PvE. Não basta reutilizar as arenas tradicionais de luta e apenas colocar um chefe nelas.
+
+Cada mapa poderá ter:
+
+- Corredores, salas, passagens estreitas e áreas abertas.
+- Obstáculos e elementos de cenário que influenciem o combate.
+- Rotas que ajudem a criar tensão ou preparar o encontro com o chefe.
+- Elementos visuais que indiquem a presença e a influência da criatura.
+- Uma área apropriada para o confronto principal.
+- Uma saída que só seja liberada depois da vitória contra o chefe.
+
+Nem todas as dungeons precisam seguir a mesma estrutura. Algumas podem enfatizar exploração e tensão; outras podem ser mais diretas e focadas no combate. O importante é que cada uma tenha personalidade própria.
+
+### 4.3. Inimigos menores antes do chefe
+
+A presença de inimigos menores antes do chefe deverá ser avaliada durante o desenvolvimento. Essa mecânica é interessante porque pode transformar a dungeon em uma jornada com preparação, em vez de levar o jogador diretamente para uma luta isolada.
+
+Caso sejam implementados, esses inimigos deverão ser mais simples do que o chefe principal. Eles poderão testar a capacidade de combate do jogador, ocupar determinadas áreas do mapa e aumentar a tensão antes do confronto final.
+
+Entretanto, eles não deverão ser usados apenas para aumentar artificialmente a duração da dungeon. Sua quantidade, resistência e dano deverão ser adequados à progressão, especialmente no modo cooperativo.
+
+#### Drops de cura
+
+**Os inimigos menores deverão ter uma chance de deixar itens de cura, garantindo uma possibilidade de recuperação antes do chefe.**
+
+O sistema de drops deverá ser configurável, permitindo ajustar a probabilidade e a quantidade de itens sem alterar diretamente o código de cada inimigo.
+
+As regras pretendidas são:
+
+- Inimigos menores poderão deixar itens de cura ao serem derrotados.
+- A cura não deverá ser garantida a cada eliminação, mas a chance precisa ser relevante o suficiente para ter utilidade prática.
+- Os itens deverão aparecer em uma posição acessível, permitindo que o jogador os colete.
+- A quantidade de cura deverá ser equilibrada para ajudar na preparação sem eliminar a necessidade de jogar bem.
+- A dificuldade do chefe e o tamanho da dungeon deverão ser considerados ao ajustar as chances de drop.
+- No cooperativo, as regras de coleta e distribuição dos itens deverão ser definidas para evitar disputas injustas entre os jogadores.
+
+A cura antes do chefe é especialmente importante porque o jogador poderá chegar ao confronto com a vida reduzida após a exploração ou os combates anteriores.
+
+Se os testes indicarem que uma dungeon é excessivamente punitiva, deverão ser ajustados os drops, os desafios anteriores ou os recursos disponíveis. Não se deve depender exclusivamente de o jogador já possuir melhorias permanentes para conseguir sobreviver.
+
+### 4.4. Aleatoriedade e expansão futura
+
+Inicialmente, o desenvolvimento poderá começar com uma quantidade pequena de dungeons, suficiente para validar o funcionamento do modo PvE.
+
+**No futuro, quando houver várias dungeons disponíveis, a próxima dungeon poderá ser selecionada aleatoriamente após o jogador atravessar a porta de saída.**
+
+A ideia é aumentar a variedade entre tentativas, fazendo com que o jogador não enfrente necessariamente a mesma sequência de dungeons em todas as campanhas.
+
+O sistema deverá ser planejado para permitir:
+
+- Adicionar novas dungeons sem reconstruir a lógica de progressão.
+- Registrar quais dungeons estão disponíveis para seleção.
+- Definir requisitos, restrições e chefes de cada dungeon.
+- Selecionar aleatoriamente uma dungeon válida para a próxima etapa.
+- Evitar a seleção de conteúdo bloqueado, indisponível ou incompatível com o progresso atual.
+- Manter a progressão sincronizada entre os jogadores de uma sessão cooperativa.
+
+A aleatoriedade deverá respeitar a estrutura da campanha. Uma dungeon não poderá ser escolhida se o jogador ainda não tiver cumprido seus requisitos ou se ela não estiver habilitada para aquela etapa.
+
+Também será necessário avaliar a repetição de dungeons consecutivas. Caso a quantidade de opções permita, o sistema poderá priorizar dungeons diferentes da anterior.
+
+Não é necessário implementar uma aleatoriedade complexa antes de haver conteúdo suficiente. A primeira versão pode utilizar uma sequência controlada ou uma lista pequena de opções, desde que a arquitetura facilite a expansão futura.
+
+### 4.5. Dificuldade
+
+Os chefes deverão ser desafiadores mesmo na dificuldade Fácil. Isso não significa torná-los injustos, mas exigir que o jogador observe os padrões de ataque, escolha os momentos de atacar e utilize suas habilidades corretamente.
+
+A dificuldade poderá influenciar:
+
+- Dano e resistência dos inimigos.
+- Frequência, velocidade e combinação de ataques.
+- Comportamento e pressão exercida pelo chefe.
+- Recursos de recuperação disponíveis.
+- Quantidade e força dos inimigos menores.
+- Escalonamento de desafios no cooperativo.
+
+No multiplayer, a dificuldade deverá aumentar de maneira controlada para considerar a presença de mais de um jogador. Não se deve simplesmente multiplicar a vida do chefe sem avaliar o tempo de combate, a quantidade de ataques e a dificuldade de evitar o dano.
+
+O objetivo é que o cooperativo ofereça um desafio próprio, sem se tornar automaticamente mais fácil ou injustamente mais difícil.
+
+---
+
+## 5. Primeira dungeon: o território do Espreitador
+
+### 5.1. Papel do Espreitador
+
+O Espreitador será utilizado como referência para a primeira dungeon temática, caso essa seja a criatura escolhida para iniciar o desenvolvimento do modo PvE.
+
+Ele será tratado inicialmente como um chefe controlado pela inteligência artificial, e não como um personagem selecionável.
+
+**A criação do Espreitador como personagem jogável fica para uma atualização futura.** O desenvolvimento do chefe poderá aproveitar conceitos de suas habilidades, mas não deverá depender da conclusão de uma versão jogável completa.
+
+### 5.2. Conceito do mapa
+
+A dungeon deverá representar um território dominado pelo Espreitador, com sensação constante de vulnerabilidade e perseguição.
+
+O mapa poderá apresentar:
+
+- Corredores estreitos, salas conectadas e frestas.
+- Armários espalhados pelo cenário, relacionados à identidade da criatura.
+- Pontos de passagem que criem dúvidas sobre a rota mais segura.
+- Áreas de pouca visibilidade e elementos que indiquem a presença do chefe.
+- Um espaço final apropriado para a luta principal.
+
+As frestas e passagens deverão fazer parte do desenho do mapa, não apenas servir como decoração. Elas poderão criar caminhos alternativos, áreas de risco ou pontos de observação, desde que isso seja compatível com os sistemas de movimentação existentes.
+
+### 5.3. Etapas do confronto
+
+A dungeon poderá ser organizada em três momentos:
+
+**Etapa 1 — Exploração e tensão**
+
+O jogador começa a explorar o território e entende gradualmente a disposição do mapa. Caso existam inimigos menores, eles poderão aparecer nessa etapa, oferecendo combate e uma oportunidade de obter cura antes do chefe.
+
+**Etapa 2 — Perseguição e domínio do território**
+
+O Espreitador começa a demonstrar sua presença por meio de eventos, aparições ou ataques. Armários e passagens do mapa poderão participar da mecânica de perseguição, preparando o jogador para o confronto.
+
+Esses eventos deverão ser desenvolvidos com cuidado para não prender o jogador em sequências inevitáveis de dano. A ameaça precisa ser compreensível e oferecer oportunidades de reação.
+
+**Etapa 3 — Confronto contra o chefe**
+
+O jogador enfrenta o Espreitador diretamente. O chefe deverá utilizar habilidades compatíveis com sua identidade, com sinais visuais ou animações que permitam reconhecer ataques importantes.
+
+A luta deverá ter espaço suficiente para movimentação, esquiva e utilização das habilidades dos personagens escolhidos.
+
+As três etapas são uma proposta de estrutura, não uma exigência de que todas as dungeons futuras tenham exatamente o mesmo formato.
+
+---
+
+## 6. Recompensas, experiência e melhorias durante a dungeon
+
+### 6.1. Recompensa física após derrotar o chefe
+
+Quando o chefe for derrotado, deverá surgir um item de recompensa na região em que ele morreu.
+
+O jogador precisará ir até esse local e coletar a recompensa para receber a experiência ou os recursos correspondentes.
+
+A coleta deverá ser perceptível, com indicação visual e retorno na interface. Isso cria um pequeno momento de conclusão e evita que todas as recompensas sejam concedidas automaticamente sem interação.
+
+No cooperativo, o sistema deverá definir claramente se a recompensa será individual ou compartilhada, evitando que um jogador fique sem progresso por não conseguir alcançar o item a tempo.
+
+### 6.2. Evolução temporária durante a campanha
+
+Durante a dungeon, o jogador poderá ganhar experiência e subir de nível. Cada evolução poderá oferecer opções de melhoria, como:
+
+- Aumentar temporariamente a vida máxima.
+- Aumentar o dano de ataques ou habilidades.
+- Melhorar a defesa ou a capacidade de sobrevivência.
+- Melhorar a eficiência de energia.
+- Modificar o funcionamento de uma habilidade.
+- Criar sinergias entre habilidades e atributos.
+
+As escolhas deverão permitir estilos diferentes de jogo. Uma combinação poderá favorecer dano elevado, enquanto outra poderá priorizar sobrevivência ou uso frequente de habilidades.
+
+O sistema deverá começar simples, com um conjunto limitado de melhorias bem definidas. A quantidade de opções poderá crescer conforme novas dungeons e personagens forem adicionados.
+
+### 6.3. Sinergias
+
+Algumas melhorias poderão interagir entre si para produzir resultados mais interessantes do que aumentos isolados de atributos.
+
+Por exemplo, uma melhoria pode aumentar o dano de uma habilidade, enquanto outra reduz seu custo de energia. Quando combinadas, elas criam uma configuração especializada.
+
+As sinergias deverão ser legíveis na interface, e seus efeitos precisarão ser testados para evitar combinações que tornem os chefes triviais ou que quebrem o sistema de combate.
+
+### 6.4. Builds no cooperativo
+
+Cada jogador deverá desenvolver sua própria configuração temporária.
+
+Um jogador poderá focar em dano e outro em sobrevivência, por exemplo. As escolhas de um jogador não deverão substituir automaticamente as melhorias do outro.
+
+O balanceamento deverá considerar que os jogadores podem criar combinações complementares.
+
+---
+
+## 7. Morte e progressão permanente
+
+### 7.1. Consequências da morte
+
+A morte deverá encerrar a tentativa atual da dungeon ou da sequência de dungeons, conforme as regras da campanha.
+
+Ao morrer, o jogador perderá os níveis, a experiência não convertida e as melhorias temporárias obtidas naquela tentativa.
+
+**A morte não deverá apagar a campanha inteira nem os pontos de progressão permanente já conquistados.**
+
+Essa separação é essencial: cada tentativa oferece uma oportunidade de experimentar novas combinações, enquanto o progresso permanente permite que o jogador avance gradualmente ao longo de várias tentativas.
+
+As regras de derrota no cooperativo precisarão ser definidas durante a implementação. Por exemplo, será necessário decidir se a derrota de um jogador encerra a tentativa imediatamente ou se o outro poderá continuar e tentar revivê-lo.
+
+### 7.2. Pontos permanentes
+
+O jogador deverá conquistar pontos permanentes por meio da progressão, de chefes derrotados e de outros objetivos definidos pelo jogo.
+
+Esses pontos serão mantidos entre as tentativas e poderão ser gastos em uma árvore permanente de melhorias.
+
+A distribuição de pontos deverá recompensar o avanço real e evitar que a melhor estratégia seja repetir indefinidamente uma atividade trivial apenas para acumular recursos.
+
+### 7.3. Árvore permanente de melhorias
+
+A árvore permanente deverá ser simples e fácil de entender, com melhorias como:
+
+- Vida máxima.
+- Dano.
+- Defesa ou redução de dano.
+- Eficiência de energia.
+- Outros atributos que façam sentido para o sistema de combate.
+
+Cada melhoria deverá ter custos e limites definidos. A progressão permanente deve ajudar o jogador a evoluir, mas não substituir a necessidade de aprender os padrões dos chefes.
+
+Os pontos permanentes serão diferentes das melhorias temporárias: os primeiros permanecem salvos entre as tentativas; as segundas são perdidas quando a tentativa termina em morte.
+
+No cooperativo, os pontos permanentes deverão ser associados ao perfil individual de cada jogador, mesmo quando o avanço pela dungeon for compartilhado.
+
+---
+
+## 8. Sistema de salvamento e gerenciamento de campanha
+
+O modo PvE deverá ter um sistema de salvamento separado da lógica das partidas tradicionais de luta.
+
+O jogador deverá encontrar opções claras para:
+
+- **Continuar:** retomar a campanha salva, respeitando o estado que o sistema consegue recuperar com segurança.
+- **Nova campanha:** iniciar uma campanha separada ou substituir a atual somente após confirmação.
+- **Reiniciar campanha:** apagar o progresso da campanha selecionada e começar novamente.
+- **Apagar dados do PvE:** remover os dados do modo PvE sem apagar configurações ou outros dados do jogo que não estejam relacionados a ele.
+- **Exportar e importar backup:** avaliar a possibilidade de permitir que o jogador guarde uma cópia dos dados e os restaure posteriormente.
+
+O armazenamento local deverá ser analisado. IndexedDB pode ser uma opção adequada caso o volume e a estrutura dos dados justifiquem sua utilização, mas a escolha deve considerar a arquitetura existente.
+
+Os dados deverão distinguir:
+
+1. **Perfil:** informações permanentes de cada jogador, incluindo melhorias e pontos permanentes.
+2. **Campanha:** progresso geral, dungeons concluídas e regras de avanço.
+3. **Tentativa atual:** dungeon atual, vida, experiência, níveis e melhorias temporárias, quando for possível e desejável restaurar esse estado.
+
+O jogo deverá evitar perda acidental de dados, corrupção de salvamentos, duplicação de recompensas e incompatibilidades entre versões.
+
+No cooperativo online, será necessário definir qual sistema é responsável por validar e persistir o progresso compartilhado. Não se deve confiar apenas nos dados enviados pelos clientes para conceder recompensas permanentes.
+
+---
+
+## 9. Transição entre dungeons e cutscenes
+
+Após derrotar o chefe, a porta de saída da dungeon deverá ser liberada.
+
+A saída deverá ser visualmente identificável e poderá contar com efeitos ou animações que indiquem que o jogador concluiu o desafio.
+
+Ao atravessar a porta, deverá começar uma transição cinematográfica:
+
+1. A câmera passa para uma posição atrás do personagem.
+2. O personagem começa a caminhar por um túnel, corredor ou passagem.
+3. A câmera acompanha o movimento, criando a sensação de continuidade.
+4. Durante a transição, o jogo prepara e carrega a próxima dungeon.
+5. A nova área é apresentada e o controle volta ao jogador.
+
+A transição não deverá expor carregamentos abruptos nem deixar o jogador preso caso o carregamento falhe.
+
+No cooperativo, a transição deverá manter os jogadores sincronizados. O sistema precisará definir como lidar com quem atravessa a porta primeiro, quem ainda está coletando recompensas e o que acontece caso um participante fique para trás.
+
+A futura seleção aleatória de dungeons deverá acontecer de maneira compatível com essa transição, para que o jogador não veja uma área escolhida diferente daquela carregada para os demais participantes.
+
+---
+
+## 10. Interface do modo PvE
+
+### 10.1. Posicionamento da vida do jogador e do chefe
+
+A interface deverá ser adaptada para permitir que a vida do jogador e a vida do chefe fiquem visíveis simultaneamente.
+
+**A barra de vida do jogador deverá ser deslocada para o canto inferior esquerdo da tela. A barra de vida do chefe deverá ficar centralizada na parte superior.**
+
+A organização visual pretendida será:
+
+- **Canto inferior esquerdo:** vida do jogador e informações pessoais de combate necessárias.
+- **Centro superior:** nome do chefe e sua barra de vida.
+- **Demais áreas:** energia, habilidades, experiência, nível e informações contextuais, posicionadas sem sobrecarregar a tela.
+
+<escape>
+[ CANTO SUPERIOR ESQUERDO ]                    [ CANTO SUPERIOR DIREITO ]
+
+                       NOME DO CHEFE
+                    [ BARRA DE VIDA DO CHEFE ]
+
+
+
+                           ÁREA DE COMBATE
+
+
+
+[ VIDA DO JOGADOR ]                         [ ENERGIA / HABILIDADES ]
+CANTO INFERIOR ESQUERDO
+</escape>
+
+O esquema é apenas uma referência de posicionamento, não uma exigência visual definitiva.
+
+A barra do chefe deverá ser suficientemente destacada para que o jogador acompanhe sua vida durante o combate, sem cobrir informações importantes nem prejudicar a visão da arena.
+
+No cooperativo, será necessário avaliar como apresentar as informações de cada jogador sem duplicar excessivamente a interface. A solução deverá funcionar nas diferentes resoluções suportadas pelo jogo.
+
+### 10.2. Informações de progressão
+
+Durante a tentativa, a interface deverá informar de forma clara:
+
+- Vida e energia do jogador.
+- Nível e experiência temporários.
+- Melhorias temporárias selecionadas.
+- Vida do chefe durante o confronto.
+- Indicação de recompensas coletáveis.
+- Avisos de conclusão, saída liberada e mudança de dungeon.
+
+As informações devem aparecer quando forem relevantes, evitando preencher permanentemente a tela com elementos desnecessários.
+
+---
+
+## 11. Compatibilidade com a arquitetura atual
+
+Antes de implementar o novo modo, deverá ser feita uma análise dos sistemas existentes:
+
+- Combate e aplicação de dano.
+- Personagens, modelos e animações.
+- Inteligência artificial.
+- Arenas e carregamento de cenários.
+- Câmera e cutscenes.
+- Interface de usuário.
+- Partidas locais para dois jogadores.
+- Partidas contra a CPU.
+- Multiplayer online/LAN e sincronização.
+- Armazenamento e persistência de dados.
+
+O objetivo é reutilizar sistemas compatíveis, isolando as regras específicas do PvE quando necessário.
+
+A implementação deverá evitar duplicar sistemas de combate ou alterar o funcionamento das batalhas tradicionais sem necessidade.
+
+O multiplayer atual de luta deverá ser auditado antes de se assumir que suporta o cooperativo contra chefes. O PvE online precisará sincronizar corretamente inimigos, chefes, ataques, vida, itens, recompensas, transições e progresso da sessão.
+
+---
+
+## 12. Ordem sugerida de implementação
+
+A ordem abaixo prioriza uma base funcional e reduz o risco de desenvolver vários sistemas complexos ao mesmo tempo.
+
+### Etapa 1 — Auditoria e melhorias de combate
+
+- Ler README, TODO e changelog-admin.
+- Analisar a arquitetura e identificar os sistemas reutilizáveis.
+- Implementar e testar as melhorias de movimentação, modelos, especiais em equipe e câmera.
+- Ajustar a posição das barras de vida para o PvE sem prejudicar o modo de luta atual.
+
+### Etapa 2 — Protótipo de uma dungeon
+
+- Criar um mapa PvE próprio.
+- Definir o fluxo de entrada, exploração, chefe e saída.
+- Implementar o primeiro chefe com inteligência artificial.
+- Avaliar a presença de inimigos menores e implementar drops de cura.
+- Validar a experiência em solo antes de expandir o conteúdo.
+
+### Etapa 3 — Progressão temporária
+
+- Implementar experiência e evolução durante a tentativa.
+- Criar opções de melhorias temporárias.
+- Adicionar sinergias iniciais.
+- Implementar a coleta de recompensas após o chefe.
+
+### Etapa 4 — Progressão permanente e salvamentos
+
+- Criar a árvore permanente.
+- Separar dados de perfil, campanha e tentativa.
+- Implementar continuar, nova campanha e reiniciar com confirmação.
+- Testar a persistência e as regras de morte.
+
+### Etapa 5 — Transições e expansão de dungeons
+
+- Implementar a porta de saída.
+- Criar a cutscene de caminhada pelo corredor.
+- Preparar o carregamento de novas dungeons.
+- Estruturar o cadastro de dungeons para futuras expansões.
+- Quando houver opções suficientes, implementar a seleção aleatória da próxima dungeon.
+
+### Etapa 6 — Cooperativo local
+
+- Permitir que dois jogadores enfrentem juntos as dungeons.
+- Adaptar a interface para dois jogadores.
+- Definir regras de cura, coleta, derrota e recompensas.
+- Ajustar a dificuldade para o cooperativo.
+
+### Etapa 7 — Cooperativo online
+
+- Auditar e adaptar a sincronização existente.
+- Sincronizar chefes, inimigos, ataques, itens e transições.
+- Definir autoridade sobre o progresso e as recompensas.
+- Testar desconexões, reconexões e situações de falha.
+
+### Etapa 8 — Expansão e balanceamento
+
+- Adicionar novas dungeons e chefes.
+- Expandir as melhorias e sinergias.
+- Ajustar dificuldade, drops e progressão com base em testes.
+- Planejar o Espreitador como personagem jogável em uma atualização futura, caso essa prioridade seja mantida.
+
+A ordem poderá ser ajustada após a auditoria técnica, mas o projeto não deverá tentar implementar todas as funcionalidades simultaneamente.
+
+---
+
+## 13. Critérios de aceitação
+
+A atualização deverá ser considerada funcional quando os seguintes pontos aplicáveis estiverem concluídos e testados:
+
+### Jogo de luta
+
+- [ ] As melhorias de animações, modelos, especiais em equipe e câmera foram implementadas sem quebrar as batalhas existentes.
+- [ ] A interface foi ajustada sem prejudicar o modo de luta tradicional.
+
+### Dungeons e chefes
+
+- [ ] Existe pelo menos uma dungeon PvE funcional com mapa próprio.
+- [ ] O jogador consegue entrar, explorar, enfrentar o chefe e concluir a dungeon.
+- [ ] A presença de inimigos menores foi avaliada e, caso implementada, eles possuem uma chance configurável de deixar itens de cura antes do chefe.
+- [ ] A saída é liberada após a vitória.
+- [ ] A transição para a próxima dungeon funciona sem erros.
+- [ ] A estrutura permite adicionar novas dungeons futuramente.
+- [ ] A seleção aleatória fica prevista para quando houver conteúdo suficiente.
+
+### Progressão e salvamentos
+
+- [ ] As melhorias temporárias são perdidas conforme as regras da morte.
+- [ ] A progressão permanente permanece salva.
+- [ ] O jogador consegue iniciar, continuar e reiniciar uma campanha com segurança.
+- [ ] O salvamento não apaga dados não relacionados ao PvE.
+
+### Interface
+
+- [ ] A barra de vida do jogador fica no canto inferior esquerdo.
+- [ ] A barra de vida do chefe fica centralizada na parte superior.
+- [ ] As informações continuam legíveis durante o combate.
+
+### Cooperativo
+
+- [ ] As regras de progressão, cura e recompensas estão definidas.
+- [ ] A sincronização funciona no formato cooperativo efetivamente implementado.
+- [ ] O jogo trata falhas de conexão e transições de maneira previsível.
+
+### Escopo futuro
+
+- [ ] O Espreitador funciona como chefe conforme o escopo da dungeon.
+- [ ] Sua implementação como personagem selecionável não é tratada como requisito obrigatório desta atualização.
+
+---
+
+## 14. Diretrizes de desenvolvimento
+
+Antes de alterar os arquivos, consultar a documentação e o estado atual do repositório.
+
+Durante o desenvolvimento:
+
+- Não recriar o jogo do zero.
+- Não substituir sistemas existentes sem justificativa técnica.
+- Fazer alterações incrementais e compatíveis com a arquitetura atual.
+- Testar as funcionalidades existentes depois de mudanças importantes.
+- Atualizar o TODO e o changelog-admin de acordo com o progresso real.
+- Registrar a versão e o resumo das alterações no changelog destinado ao jogador ao concluir uma versão estável.
+- Seguir o fluxo de commit e push definido para o projeto.
+- Não marcar uma funcionalidade como concluída sem que ela tenha sido implementada e verificada.
+
+Quando uma decisão técnica depender de informações ausentes no código ou na documentação, investigar antes de escolher uma solução definitiva.
+
+## Resultado esperado
+
+O Arena Paranormal continuará sendo um jogo de luta 3D, mas passará a contar com um modo PvE próprio, estruturado em dungeons temáticas e confrontos contra chefes.
+
+A experiência combinará exploração, possibilidade de recuperação antes dos chefes, melhorias temporárias durante cada tentativa, progressão permanente entre tentativas, salvamentos seguros e transições cinematográficas.
+
+A arquitetura deverá permitir que novas dungeons sejam adicionadas ao longo do tempo e, futuramente, selecionadas aleatoriamente para aumentar a variedade. O Espreitador será desenvolvido inicialmente como chefe, deixando sua versão jogável para uma atualização posterior."
+
 # REGRA PRIORITÁRIA — RECUPERAÇÃO DA UPDATE, AUDITORIA E REVISÃO DO ELENCO
 
 ## 1. PRIMEIRA PRIORIDADE: RECUPERAR A ATUALIZAÇÃO INTERROMPIDA
