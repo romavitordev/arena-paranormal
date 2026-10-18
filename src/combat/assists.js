@@ -6,6 +6,7 @@ import { Animator } from '../anim/Animator.js';
 import { findSpotBehind, findFreeSpotNear } from './positioning.js';
 import { createMistZone, pickCurseElement, applyWeaponCurse } from './abilities.js';
 import { ELEMENTS } from '../config/elements.js';
+import { getForm } from '../characters/forms/index.js';
 
 // ASSISTÊNCIAS (batalha em equipe): o personagem chamado aparece por alguns segundos, faz UMA ação
 // que depende do contexto e vai embora. Não substitui o lutador principal.

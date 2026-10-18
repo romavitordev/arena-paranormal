@@ -50,6 +50,8 @@ export default {
     name: 'Skate Caótico',
     type: 'projectile',
     anim: 'throw_r',
+    hideProp: 'skate',
+    returnsProp: 'skate',
     origin: 'chest',
     windup: 0.24,
     recovery: 0.34,

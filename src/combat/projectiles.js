@@ -328,34 +328,20 @@ const VISUALS = {
     g.userData.tumble = spin;
     return g;
   },
-  skate(color) {
+  skate(color, ability = {}, owner = null) {
     const g = new THREE.Group();
     const spin = new THREE.Group();
-    // o Skate Caótico do modelo novo (o mesmo da mão do Xande), deitado: a lixa para cima, as rodas para baixo e o
-    // comprimento na direção do voo, girando em volta do meio
-    const model = chaosSkate();
-    if (model.userData.fromGlb) {
-      model.rotation.set(0, Math.PI / 2, Math.PI / 2, 'YXZ');
-      model.position.set(0, 0, 0.3);
-      spin.add(model);
-      const glowB = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.01, 0.7), glowMat(0x5aff6a, 0.35));
-      glowB.position.y = -0.03;
-      spin.add(glowB);
-      g.add(spin);
-      g.userData.spinY = spin;
-      return g;
-    }
-    const deck = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.03, 0.8), new THREE.MeshStandardMaterial({ color, roughness: 0.5 }));
-    spin.add(deck);
-    for (const z of [-0.26, 0.26]) for (const x of [-0.09, 0.09]) {
-      const wh = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.04, 8), new THREE.MeshStandardMaterial({ color: 0x3a3a3a }));
-      wh.rotation.z = Math.PI / 2;
-      wh.position.set(x, -0.04, z);
-      spin.add(wh);
-    }
-    const glow = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.01, 0.7), glowMat(0x5aff6a, 0.6));
-    glow.position.y = -0.025;
-    spin.add(glow);
+    // o Skate Caótico do modelo atual (o mesmo da mão do Xande): clona a peça da mão do dono ou instancia chaosSkate()
+    const prop = owner && owner.rig && owner.rig.props && owner.rig.props.skate;
+    const model = prop ? prop.clone(true) : chaosSkate();
+    model.visible = true;
+    // deitado: a lixa para cima, as rodas para baixo e o comprimento na direção do voo, girando em volta do meio
+    model.rotation.set(0, Math.PI / 2, Math.PI / 2, 'YXZ');
+    model.position.set(0, 0, 0.3);
+    spin.add(model);
+    const glowB = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.01, 0.7), glowMat(0x5aff6a, 0.35));
+    glowB.position.y = -0.03;
+    spin.add(glowB);
     g.add(spin);
     g.userData.spinY = spin;
     return g;
@@ -407,7 +393,7 @@ export class Projectiles {
       const oldest = mine[0];
       for (const q of this.list.filter((x) => x.owner === owner && x.volley === oldest)) this.remove(q, true);
     }
-    const mesh = (VISUALS[ability.visual] || VISUALS.bullet)(ability.color ?? 0xffffff, ability);
+    const mesh = (VISUALS[ability.visual] || VISUALS.bullet)(ability.color ?? 0xffffff, ability, owner);
     mesh.position.copy(origin);
     mesh.lookAt(origin.clone().add(dir));
     this.world.scene.add(mesh);
