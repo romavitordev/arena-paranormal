@@ -1,4 +1,4 @@
-# Arena Paranormal — protótipo (V2)
+# Arena Paranormal
 
 Jogo de luta 3D em arena com temática paranormal. Combate rápido e acessível, com
 movimentação livre, ataques direcionais, defesa, esquiva, habilidades por combinação de
