@@ -32,7 +32,7 @@ export default {
   chargeFx: { style: 'default', color: 0x7a7088 },
   // DESVIO IMPERTURBÁVEL (adaptação do tiro desviado na Mansão Leone): a esquiva dela é um passo curto e calmo, com o
   // rastro escuro — usa a esquiva normal do jogo (mesma invulnerabilidade curta, mesmas 4 cargas)
-  dodge: { style: 'calm', name: 'Desvio Imperturbável', distance: 3.4 },
+  dodge: { style: 'calm', name: 'Passo Imperturbável', distance: 3.4 },
 
   melee: {
     name: 'Bengala Ritualística',
@@ -112,6 +112,52 @@ export default {
       ai: { max: 8.5 },
     },
     {
+      // LODO QUE PRENDE (cânone: o Lodo Preto que sai do rosto dela e dos corpos em volta e forma a poça): a poça abre
+      // embaixo do alvo e o Lodo sobe em tentáculos que prendem e apertam (o mesmo ritual dos Tentáculos do Dante, mais
+      // fraco e mais rápido de recarregar — o Lodo dela é menos denso)
+      id: 'lodoPrende',
+      name: 'Lodo que Prende',
+      input: 'carga+ranged', // △ + □ / Y + X
+      type: 'lodoTentacles',
+      description: 'O Lodo escorre do rosto dela até o chão e brota embaixo do inimigo em tentáculos que prendem e apertam.',
+      energyCost: 25,
+      cooldown: 12,
+      range: 9,
+      radius: 1.8,
+      castTime: 0.55,
+      hold: 0.9,
+      damage: 52,
+      stun: 1.1,
+      color: 0x0a080c,
+    },
+    {
+      // SENTENÇA DO CHACAL (adaptação: a bengala de cabeça de chacal, onde o ritual está gravado): passo firme e a
+      // pancada de cima com a cabeça de chacal — a Morte fica no ferimento e o alvo não se cura por um tempo
+      id: 'sentencaChacal',
+      name: 'Sentença do Chacal',
+      input: 'block+jump', // R2 + × / RT + A
+      type: 'heavyBlow',
+      description: 'Um passo firme e a pancada de cima com a cabeça de chacal da bengala. A Morte fica no ferimento: o alvo não se cura por 8 s. Aguenta um golpe na preparação.',
+      energyCost: 25,
+      cooldown: 13,
+      anim: 'slash_v',
+      duration: 0.9,
+      armorFrom: 0.1,
+      impact: 0.36,
+      step: 5,
+      stepTime: 0.3,
+      track: true,
+      range: 2.4,
+      arc: 130,
+      damage: 58,
+      knockback: 2.2,
+      element: 'morte',
+      noHeal: 8,
+      whiffRecovery: 0.4,
+      hitSound: 'heavyPunch',
+      color: 0xd8b04a,
+    },
+    {
       // RITUAL DE DRENAGEM (adaptação inspirada em Nina: "sugou todo o meu tempo"): finca a bengala, a marca de Lodo
       // abre sob o alvo e os filamentos fecham — o corpo dele fica lento por pouco tempo (o mesmo efeito do Senhor do
       // Tempo do Deus da Morte, mais curto e mais fraco)
@@ -151,8 +197,8 @@ export default {
     type: 'sphinx',
     energyCost: 50,
     cooldown: 50,
-    duration: 14,
-    hp: 380,
+    duration: 35, // tempo de sobra para os enigmas das 3 marcas (o relógio para enquanto ela está paralisada)
+    hp: 480,
     color: LODO,
   },
 };

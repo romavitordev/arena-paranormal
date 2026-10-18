@@ -268,7 +268,7 @@ export class InkBeast extends Marionette {
 //    Errou → é devorado. Acertou → a Esfinge fica PARALISADA (e leva mais dano) e já perde um pedaço da vida.
 //  Garras: as mãos da frente, de perto.
 export const SPHINX = {
-  name: 'CARNIÇAL DA ESFINGE', hp: 380, duration: 14, speed: 4.6, radius: 0.85, height: 2.6, restY: 0,
+  name: 'CARNIÇAL DA ESFINGE', hp: 480, duration: 35, speed: 4.6, radius: 0.85, height: 2.6, restY: 0,
   element: 'morte', fxColor: 0x6a3488, poolColor: 0x0a080c, noPool: false,
   attacks: {
     claw: { windup: 0.32, active: 0.14, recovery: 0.42, range: 2.6, arc: 150, damage: 24, cd: 1.2, knockback: 2.5, sound: 'heavyPunch' },
@@ -349,9 +349,22 @@ export class SphinxGhoul extends Marionette {
 
   update(dt) {
     if (this.alive && this.state === 'chase' && !this.feared) this.amedrontar();
-    if (this.state === 'stunned' && this.stateT >= this.paralyzeT) this.setState('chase');
+    if (this.state === 'stunned') {
+      // PARALISADA: o relógio dela para (o tempo de matá-la não se perde) e as amarras roxas aparecem em volta
+      this.life += dt;
+      if (this.stateT >= this.paralyzeT) { this.setState('chase'); this.owner.notify && this.owner.notify('A ESFINGE VOLTOU A SE MEXER'); }
+      else if (Math.random() < 0.5) {
+        const a = Math.random() * Math.PI * 2;
+        this.world.fx.burst(new THREE.Vector3(this.pos.x + Math.sin(a) * 1.1, 0.2 + Math.random() * 2, this.pos.z + Math.cos(a) * 1.1), { count: 1, color: 0x9a5ac8, speed: 0.3, up: 0.6, life: 0.5, size: 0.14 });
+      }
+      if (this.stateT % 0.6 < dt) this.world.fx.ring(new THREE.Vector3(this.pos.x, 0.06, this.pos.z), { color: 0x9a5ac8, radius: 1.6, life: 0.5, inner: 0.8 });
+    }
+    if (this.atk && this.atk.name === 'riddle') this.life += dt; // o urro do enigma também não gasta o tempo dela
     return super.update(dt);
   }
+
+  // o nome na barra do topo mostra o estado dela
+  get barName() { return this.state === 'stunned' ? `${this.name} · PARALISADA` : this.name; }
 
   // AMEDRONTAR: o urro ao surgir deixa o alvo pasmo por um instante
   amedrontar() {
@@ -476,8 +489,10 @@ export class SphinxGhoul extends Marionette {
     this.atk = null;
     this.setState('stunned');
     this.paralyzeT = P.time;
-    victim.notify && victim.notify('ENIGMA RESOLVIDO — A ESFINGE ESTÁ PARALISADA', true);
-    this.owner.notify && this.owner.notify('RESPONDERAM O ENIGMA', true);
+    victim.notify && victim.notify('ACERTOU! ATAQUE A ESFINGE', true);
+    this.owner.notify && this.owner.notify('A ESFINGE ESTÁ PARALISADA', true);
+    this.world.audio.play('chainPull', { volume: 0.8, pitch: 0.7 });
+    this.world.fx.burst(new THREE.Vector3(this.pos.x, 1.4, this.pos.z), { count: 40, color: 0x9a5ac8, speed: 3, life: 0.6, size: 0.2 });
     // o dano do acerto não passa direto pela próxima marca (cada enigma vem da luta)
     const floor = this.marksLeft.length ? this.marksLeft[0] * this.maxHp + 1 : 1;
     const dmg = Math.min(this.maxHp * P.damage, Math.max(0, this.hp - floor));

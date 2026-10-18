@@ -21,9 +21,9 @@ export default {
     identity: 'O Portador do Trono: fica assim até o fim do round',
     tagline: 'Um novo começo.',
   },
-  stats: { moveSpeed: 8.0, size: 1.35, maxHealth: 2100 }, // Portador transformado: aguenta mais que o elenco (o número não aparece na tela)
+  stats: { moveSpeed: 8.0, size: 1.35, maxHealth: 1850 }, // Portador transformado: aguenta mais que o elenco (balanceamento v3.32: era 2100)
   // Regeneração (cânone: "quando fraco ou ferido"): mais rápida abaixo de 40% de vida e o dobro em cima das poças dele
-  regen: { every: 6, amount: 22, color: 0x7a0010, low: { below: 0.4, every: 3.5, amount: 34 }, onPool: 2 },
+  regen: { every: 7, amount: 17, color: 0x7a0010, low: { below: 0.4, every: 4.5, amount: 25 }, onPool: 2 }, // balanceamento v3.32 (era 22/6 s e 34/3,5 s)
   // animações próprias (anim/formClips.js); os nomes genéricos usados pelas habilidades também são trocados
   anims: { idle: 'db_idle', run: 'db_run', walk: 'db_run', walk_back: 'db_walk_back', strafe_L: 'db_strafe_L', strafe_R: 'db_strafe_R', dash: 'db_dash', charge: 'db_charge', concentrate: 'db_charge', victory: 'db_victory', block: 'db_block', block_hit: 'db_block_hit', point: 'db_point', throw_r: 'db_throw', powerup: 'db_powerup', dual_cross: 'db_cross', cast_up: 'db_powerup' },
   chargeFx: { style: 'default', color: 0xff2a3d },
@@ -187,7 +187,7 @@ export default {
   },
 
   passives: [
-    { type: 'lifesteal', ratio: 0.08 }, // o Diabo também se alimenta do sangue (0,12 → 0,08 na v2.2: 86% de vitórias como Diabo)
+    { type: 'lifesteal', ratio: 0.05 }, // o Diabo também se alimenta do sangue (0,12 → 0,08 na v2.2; 0,08 → 0,05 na v3.32: 100% de vitórias)
     { type: 'hatesElement', element: 'conhecimento', mult: 1.15 }, // odeia o Conhecimento ("Decepar Máscara")
   ],
 };

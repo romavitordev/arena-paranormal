@@ -72,6 +72,9 @@ export class HoloCopy {
       const b = d.props[key];
       if (!a || !b) continue;
       b.visible = a.visible;
+      // peça "de mentira" (a Kemi guarda as armas num grupo lógico que não é um nó 3D): só a visibilidade conta —
+      // antes isto travava o jogo (Eco Espiral do Dante na Fantasma da Kemi)
+      if (!a.isObject3D || !b.isObject3D) continue;
       // a peça mudou de encaixe no dono (ex.: a câmera foi para o quadril): leva junto
       const sock = Object.keys(so.sockets).find((k) => so.sockets[k] === a.parent);
       if (sock && d.sockets[sock] && b.parent !== d.sockets[sock]) d.sockets[sock].add(b);

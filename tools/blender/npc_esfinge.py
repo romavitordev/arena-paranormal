@@ -164,10 +164,12 @@ M = {
     'bone': material('osso_esfinge', '#c4b698', 0.6),
     'hole': material('lodo_orbita_esfinge', '#050407', 0.2),
     'purple': material('roxo_esfinge', '#6a3488', 0.45),
-    'wing': material('asa_esfinge', '#241c26', 0.7),
+    'wing': material('asa_esfinge', '#2c2030', 0.7),
+    'menesA': material('menes_preto_esfinge', '#18141c', 0.55),  # as listras da Menés
+    'menesB': material('menes_roxo_esfinge', '#6a3488', 0.5),
 }
 C = {k: Vector(hex_rgb(v)) for k, v in {
-    'bone': '#cbbd9f', 'bone2': '#9a8c74', 'flesh': '#3c3036', 'flesh2': '#2a2028', 'nemesA': '#1c1820', 'nemesB': '#5c2c78',
+    'bone': '#ddd0b4', 'bone2': '#a89880', 'flesh': '#5e4a54', 'flesh2': '#463840', 'gut': '#22161e',
     'purple': '#6a3488', 'stain': '#0c0a0e', 'hole': '#060508',
 }.items()}
 
@@ -182,9 +184,8 @@ def paint(p, sc):
     st = min(1.0, f.get('stain', 0) * 1.4)
     if g == 'bone':
         c = C['bone'].lerp(C['bone2'], max(0.0, min(1.0, 0.5 + n3(p, 9) * 0.8)))
-    elif g == 'nemes':
-        # as LISTRAS da Menés: faixas horizontais pretas e roxas
-        c = C['nemesB'] if math.sin(p[1] * 30) > 0.2 else C['nemesA']
+    elif g == 'gut':
+        c = C['gut']
     elif g == 'purple':
         c = C['purple']
     elif g == 'stain':
@@ -207,205 +208,274 @@ def drip(jnt, name, top, ln, r=0.022):
 
 
 # ================================================================ juntas
-legH = 0.95
-halfL = 0.72
+legH = 1.0
+halfL = 0.8
 body = joint('J_body', (0, 0, 0))
 torso = joint('J_torso', (0, legH, 0), body)
 
-# ================================================================ TRONCO: espinha, bacia, ombros e a barriga de carne (dentro das costelas)
+
+def smoothstep(a, b, x):
+    t = max(0.0, min(1.0, (x - a) / (b - a)))
+    return t * t * (3 - 2 * t)
+
+
+# ================================================================ TRONCO (silhueta de leão): peito fundo, ombros e ancas fortes; a barriga
+# escura fica dentro da gaiola de costelas
 S = Sculpt('torso')
-S.chain([(0, 0.06, -halfL), (0, 0.13, -0.3), (0, 0.16, 0.1), (0, 0.17, halfL * 0.8)], [0.07, 0.075, 0.08, 0.09], 'bone', step=0.6)
-S.ell((0, 0.02, -halfL + 0.04), (0.2, 0.13, 0.16), 'bone')  # bacia
+S.ell((0, -0.02, 0.56), (0.26, 0.3, 0.25), 'flesh')  # o peito fundo
 for s in (1, -1):
-    S.ell((s * 0.13, -0.02, -halfL + 0.06), (0.09, 0.13, 0.1), 'flesh')  # a anca (une a coxa)
-    S.ell((s * 0.17, 0.06, halfL * 0.72), (0.11, 0.17, 0.13), 'flesh', dir=(s * 0.3, 1, 0.2))  # ombro
-    S.ell((s * 0.12, 0.14, halfL * 0.6), (0.1, 0.03, 0.14), 'bone')  # escápula
-S.ell((0, -0.08, 0.06), (0.17, 0.17, 0.38), 'flesh')  # a barriga (o "estômago" cercado pelas costelas)
-S.ell((0, 0.04, halfL * 0.62), (0.2, 0.17, 0.2), 'flesh')  # o peito
-S.ell((0, -0.08, 0.1), (0.1, 0.1, 0.2), 'stain')  # mancha do Lodo na barriga
-for k in range(12):  # vértebras salientes no dorso
-    z = -halfL + 0.1 + k * 0.115
-    S.ell((0, 0.22 + 0.01 * math.sin(k), z), (0.035, 0.05, 0.03), 'bone')
-ot = S.build(torso, M['body'], 5200, disp=lambda p: 0.004 * n3(p, 14))
+    S.ell((s * 0.19, 0.06, 0.55), (0.13, 0.23, 0.17), 'flesh', dir=(s * 0.2, 1, 0.1))  # ombro (cobre o alto da pata)
+    S.ell((s * 0.13, 0.26, 0.5), (0.11, 0.03, 0.16), 'bone')  # escápula aparecendo
+    S.ell((s * 0.15, 0.02, -0.62), (0.15, 0.24, 0.22), 'flesh')  # anca
+    S.ell((s * 0.12, 0.22, -0.6), (0.06, 0.04, 0.11), 'bone')  # a crista da bacia
+S.chain([(0, 0.16, 0.5), (0, 0.2, 0.1), (0, 0.17, -0.35), (0, 0.12, -0.7)], [0.17, 0.12, 0.12, 0.15], 'flesh', step=0.6)  # o dorso
+S.ell((0, 0.08, -0.74), (0.19, 0.16, 0.15), 'flesh')  # garupa
+S.ell((0, -0.13, 0.02), (0.14, 0.14, 0.3), 'gut')  # o estômago (dentro das costelas)
+for k in range(14):  # vértebras salientes no dorso
+    z = -0.78 + k * 0.105
+    y = 0.28 + 0.04 * math.sin((k / 13) * math.pi)
+    S.ell((0, y, z), (0.032, 0.045, 0.03), 'bone')
+for s in (1, -1, 0):  # Lodo escorrendo pelos flancos (manchas)
+    S.chain([(s * 0.18, 0.2, 0.42), (s * 0.24, -0.05, 0.45), (s * 0.22, -0.25, 0.48)], 0.04, 'stain', step=0.6)
+S.build(torso, M['body'], 6000, disp=lambda p: 0.004 * n3(p, 12))
 
-# as COSTELAS em volta da barriga (gaiola aberta: dá para ver a carne lá dentro)
+# as COSTELAS: gaiola aberta em volta do estômago, presa ao dorso e ao esterno
 for i in range(8):
-    z = -0.3 + i * 0.105
-    w = 0.3 - abs(i - 3.5) * 0.018
+    z = -0.34 + i * 0.1
+    w = 0.29 - abs(i - 3.5) * 0.016
     for s in (1, -1):
-        pts = curve((s * 0.05, 0.16, z), (s * (w + 0.04), 0.06, z + 0.02), (s * (w - 0.06), -0.3, z + 0.05), 8)
-        pts.append((s * 0.05, -0.36, z + 0.07))
-        add(torso, f'rib{i}{s}', rod(pts, [0.024, 0.026, 0.026, 0.024, 0.022, 0.02, 0.018, 0.016, 0.014], seg=6), M['bone'])
-add(torso, 'sterno', rod([(0, -0.36, -0.25), (0, -0.38, 0.1), (0, -0.33, 0.5)], [0.03, 0.034, 0.03], seg=6), M['bone'])
-for i in range(7):  # o Lodo pingando da barriga e das costelas
-    drip(torso, f'dripB{i}', (random.uniform(-0.2, 0.2), -0.33, random.uniform(-0.25, 0.5)), random.uniform(0.12, 0.3))
+        pts = curve((s * 0.06, 0.22, z), (s * (w + 0.06), 0.06, z + 0.02), (s * (w - 0.05), -0.3, z + 0.04), 8)
+        pts.append((s * 0.05, -0.37, z + 0.06))
+        add(torso, f'rib{i}{s}', rod(pts, [0.028, 0.03, 0.03, 0.028, 0.026, 0.024, 0.021, 0.019, 0.016], seg=6), M['bone'])
+add(torso, 'sterno', rod([(0, -0.37, -0.3), (0, -0.39, 0.1), (0, -0.3, 0.42)], [0.032, 0.036, 0.032], seg=6), M['bone'])
+for i in range(5):
+    drip(torso, f'dripB{i}', (random.uniform(-0.15, 0.15), -0.36, random.uniform(-0.25, 0.4)), random.uniform(0.15, 0.32))
 
-# ================================================================ PESCOÇO: o enorme pescoço em forma de MENÉS e o COLAR DE CRÂNIOS
-neck = joint('J_neck', (0, 0.14, halfL * 0.82), torso)
+# ================================================================ PESCOÇO: coluna grossa de tendões que sobe do peito; o COLAR DE CRÂNIOS na base
+neck = joint('J_neck', (0, 0.22, 0.72), torso)
 Nk = Sculpt('neck')
-Nk.chain([(0, -0.05, -0.05), (0, 0.3, 0.1), (0, 0.6, 0.26), (0, 0.84, 0.38)], [0.17, 0.15, 0.13, 0.12], 'flesh', step=0.6)
-# a MENÉS: o toucado listrado — o pano liso que cobre o alto da cabeça, abre em leque achatado dos lados (como um capuz)
-# e cai em duas ABAS CHATAS e largas na frente dos ombros
-Nk.ell((0, 0.98, 0.26), (0.2, 0.13, 0.17), 'nemes')  # o alto (por cima e atrás do crânio)
-Nk.ell((0, 0.78, 0.12), (0.2, 0.3, 0.07), 'nemes')  # as costas do pano (achatado)
-Nk.ell((0, 0.5, 0.04), (0.17, 0.26, 0.06), 'nemes')
-for s in (1, -1):
-    Nk.ell((s * 0.24, 0.86, 0.24), (0.15, 0.2, 0.04), 'nemes', dir=(s * 0.45, 1, 0))  # o leque achatado do lado da cabeça
-    Nk.ell((s * 0.32, 0.6, 0.27), (0.11, 0.2, 0.035), 'nemes', dir=(s * 0.2, 1, 0.15))
-    for k in range(5):  # a ABA chata que desce na frente do ombro, alargando
-        Nk.ell((s * (0.3 - k * 0.006), 0.42 - k * 0.085, 0.3 + k * 0.012), (0.1 + k * 0.006, 0.07, 0.03), 'nemes')
-    Nk.ell((s * 0.27, -0.02, 0.36), (0.12, 0.03, 0.035), 'purple')  # a barra roxa da ponta da aba
-Nk.ell((0, 1.0, 0.42), (0.19, 0.05, 0.05), 'purple', dir=(1, 0, 0))  # a faixa roxa da testa da Menés
-Nk.build(neck, M['body'], 3600, res=0.011, disp=lambda p: 0.003 * n3(p, 16))
+Nk.chain([(0, -0.08, -0.06), (0, 0.3, 0.12), (0, 0.58, 0.24), (0, 0.8, 0.3)], [0.2, 0.16, 0.14, 0.13], 'flesh', step=0.6)
+for s in (1, -1):  # tendões
+    Nk.chain([(s * 0.08, 0.0, 0.05), (s * 0.07, 0.4, 0.2), (s * 0.05, 0.75, 0.32)], 0.04, 'flesh', step=0.6)
+Nk.chain([(0, 0.05, 0.15), (0, 0.45, 0.3), (0, 0.72, 0.38)], 0.03, 'stain', step=0.6)  # o Lodo que desce da boca
+Nk.build(neck, M['body'], 2400, res=0.011, disp=lambda p: 0.003 * n3(p, 16))
 
-# o COLAR DE CRÂNIOS na base do pescoço (crânios pequenos de osso e contas roxas)
 for i in range(11):
-    a = -1.25 + i * 0.25  # só na frente e nos lados (atrás fica a Menés)
-    cx, cz = math.sin(a) * 0.27, math.cos(a) * 0.22 + 0.06
-    cy = 0.12 - math.cos(a) * 0.05
-    add(neck, f'sk{i}', blob((cx, cy, cz), (0.045, 0.05, 0.042), 9, 7), M['bone'])
+    a = -1.3 + i * 0.26
+    cx, cz = math.sin(a) * 0.29, math.cos(a) * 0.24 + 0.04
+    cy = 0.1 - math.cos(a) * 0.05
+    add(neck, f'sk{i}', blob((cx, cy, cz), (0.05, 0.056, 0.047), 9, 7), M['bone'])
     nx, nz = math.sin(a), math.cos(a)
     for e in (1, -1):
-        ex = cx + nx * 0.035 + nz * e * 0.017
-        ez = cz + nz * 0.035 - nx * e * 0.017
-        add(neck, f'ske{i}{e}', blob((ex, cy + 0.008, ez), (0.012, 0.013, 0.008), 6, 4), M['hole'])
-    add(neck, f'bead{i}', blob((math.sin(a + 0.125) * 0.29, cy - 0.04, math.cos(a + 0.125) * 0.24 + 0.06), (0.018, 0.018, 0.018), 6, 5), M['purple'])
+        ex = cx + nx * 0.04 + nz * e * 0.019
+        ez = cz + nz * 0.04 - nx * e * 0.019
+        add(neck, f'ske{i}{e}', blob((ex, cy + 0.01, ez), (0.013, 0.015, 0.009), 6, 4), M['hole'])
+    add(neck, f'bead{i}', blob((math.sin(a + 0.13) * 0.31, cy - 0.045, math.cos(a + 0.13) * 0.26 + 0.04), (0.02, 0.02, 0.02), 6, 5), M['purple'])
+add(neck, 'cord', rod([(math.sin(-1.45 + t * 0.29) * 0.3, 0.1 - math.cos(-1.45 + t * 0.29) * 0.05, math.cos(-1.45 + t * 0.29) * 0.25 + 0.04) for t in range(11)], 0.012, seg=5), M['purple'])
 
 # ================================================================ CABEÇA: crânio humanoide, testa protuberante com chifre, dentes afiados
-head = joint('J_head', (0, 0.9, 0.46), neck)
+head = joint('J_head', (0, 0.84, 0.36), neck)
 head.scale = (1.25, 1.25, 1.25)
 Hd = Sculpt('head')
-Hd.ell((0, 0.06, -0.02), (0.15, 0.16, 0.16), 'bone')  # crânio
+Hd.ell((0, 0.06, -0.02), (0.15, 0.16, 0.16), 'bone')
 Hd.ell((0, 0.12, 0.1), (0.13, 0.08, 0.09), 'bone')  # a TESTA protuberante
-Hd.ell((0, -0.03, 0.1), (0.075, 0.05, 0.06), 'bone')  # maxila
+Hd.ell((0, -0.03, 0.1), (0.075, 0.05, 0.06), 'bone')
 for s in (1, -1):
-    Hd.ell((s * 0.09, 0.0, 0.08), (0.035, 0.03, 0.06), 'bone', dir=(0, 0, 1))  # zigomático
+    Hd.ell((s * 0.09, 0.0, 0.08), (0.035, 0.03, 0.06), 'bone', dir=(0, 0, 1))
     Hd.ell((s * 0.055, 0.04, 0.17), (0.045, 0.042, 0.05), 'hole', neg=True)  # órbita funda
-    Hd.ell((s * 0.1, -0.05, 0.07), (0.03, 0.04, 0.04), 'hole', neg=True)  # bochecha cavada
-    Hd.ell((s * 0.055, 0.03, 0.15), (0.055, 0.05, 0.03), 'stain')  # o Lodo em volta das órbitas
+    Hd.ell((s * 0.1, -0.05, 0.07), (0.03, 0.04, 0.04), 'hole', neg=True)
+    Hd.ell((s * 0.055, 0.03, 0.15), (0.055, 0.05, 0.03), 'stain')
     Hd.chain(curve((s * 0.055, 0.0, 0.17), (s * 0.06, -0.06, 0.17), (s * 0.065, -0.13, 0.14), 5), 0.018, 'stain', step=0.5)
-Hd.ell((0, -0.01, 0.18), (0.018, 0.028, 0.04), 'hole', neg=True)  # nariz
-Hd.ell((0, -0.08, 0.15), (0.075, 0.03, 0.06), 'hole', neg=True)  # a boca sem lábios
+Hd.ell((0, -0.01, 0.18), (0.018, 0.028, 0.04), 'hole', neg=True)
+Hd.ell((0, -0.08, 0.15), (0.075, 0.03, 0.06), 'hole', neg=True)
 Hd.build(head, M['body'], 2600, res=0.008, smooth=5, disp=lambda p: -0.003 * max(0.0, 0.08 - abs(n3(p, 22))) / 0.08)
-# o CHIFRE da testa (curvo para cima e para a frente)
 add(head, 'hornF', rod(curve((0, 0.15, 0.14), (0, 0.32, 0.19), (0, 0.44, 0.3), 8), [0.05, 0.045, 0.04, 0.034, 0.027, 0.02, 0.012, 0.003], seg=8), M['bone'])
-for k in range(4):  # anéis do chifre
+for k in range(4):
     t = 0.15 + k * 0.1
     add(head, f'hornR{k}', blob((0, 0.15 + t * 0.6, 0.15 + t * 0.15), (0.045 - k * 0.006, 0.012, 0.045 - k * 0.006), 8, 4), M['bone'])
-# DENTES de cima: afiados, compridos
 for i in range(10):
     x = -0.06 + i * 0.0133
     zf = 0.17 - (x / 0.07) ** 2 * 0.045
     add(head, f'toothU{i}', spike((x, -0.06, zf - 0.006), (x * 1.05, -0.115 - 0.012 * (i % 2), zf + 0.006), 0.009, seg=5), M['tooth'])
 
-# a MANDÍBULA, com a fileira de baixo e o CHIFRE DO QUEIXO (a "barba" do faraó)
+
+# ---------------------------------------------------------------- a MENÉS: superfície de pano de verdade (não bolhas), com listras nítidas
+def nemes():
+    """o toucado: capuz que cobre o alto e os lados do crânio, abre em leque nas têmporas, duas abas chatas caem na
+    frente dos ombros e um rabo de pano atrás. Listras horizontais pretas e roxas por face (material)."""
+    V, U, rows = [], [], []
+    R, C = 16, 30
+    top, bot = 0.25, -0.3
+    for r in range(R + 1):
+        v = r / R
+        y = top + (bot - top) * v
+        dome = math.sin(min(1.0, v / 0.2) * math.pi / 2)
+        rad = (0.192 * dome + 0.01) + 0.11 * smoothstep(0.2, 0.75, v)
+        amax = math.pi * (0.97 - 0.36 * smoothstep(0.08, 0.3, v))  # em cima cobre tudo; embaixo abre o rosto
+        row = []
+        for c in range(C + 1):
+            a = -amax + 2 * amax * c / C  # 0 = nuca
+            x = math.sin(a) * rad
+            z = -math.cos(a) * rad * 0.9 - 0.02 + 0.05 * dome
+            V.append((x, y, z))
+            U.append((c / C, v))
+            row.append(len(V) - 1)
+        rows.append(row)
+    F = [(rows[r][c], rows[r][c + 1], rows[r + 1][c + 1], rows[r + 1][c]) for r in range(R) for c in range(C)]
+    yl = [top + (bot - top) * r / R for r in range(R)]
+    stripe = [int((yl[r] - 0.3) / -0.055) % 2 for r in range(R) for c in range(C)]
+    # as ABAS: continuam da borda da frente para baixo, chatas e alargando
+    lap_edges = []
+    for s in (1, -1):
+        c0 = C if s > 0 else 0
+        base = rows[R][c0]
+        bx, by, bz = V[base]
+        n = 9
+        lrows = []
+        for i in range(n + 1):
+            t = i / n
+            y = by + 0.03 - t * 0.5
+            w = 0.07 + 0.05 * t
+            cx = bx * (1 - 0.15 * t)
+            cz = bz + 0.07 * math.sin(t * math.pi * 0.6)
+            lrows.append([len(V), len(V) + 1])
+            V.append((cx - w, y, cz)); U.append((0, t))
+            V.append((cx + w, y, cz)); U.append((1, t))
+        for i in range(n):
+            a0, a1 = lrows[i]
+            b0, b1 = lrows[i + 1]
+            F.append((a0, a1, b1, b0))
+            stripe.append(int(((by - (i + 0.5) / n * 0.48) - 0.3) / -0.055) % 2)
+        lap_edges.append([V[lrows[i][0 if s < 0 else 1]] for i in range(n + 1)])
+    # o rabo de pano atrás (a Menés juntada na nuca)
+    bk = rows[R][C // 2]
+    bx, by, bz = V[bk]
+    n = 6
+    trows = []
+    for i in range(n + 1):
+        t = i / n
+        w = 0.17 * (1 - 0.65 * t)
+        y = by - t * 0.3
+        z = bz - 0.03 * t
+        trows.append([len(V), len(V) + 1])
+        V.append((-w, y, z)); U.append((0, t))
+        V.append((w, y, z)); U.append((1, t))
+    for i in range(n):
+        a0, a1 = trows[i]
+        b0, b1 = trows[i + 1]
+        F.append((a1, a0, b0, b1))
+        stripe.append(int(((by - (i + 0.5) / n * 0.3) - 0.3) / -0.055) % 2)
+    # a borda da frente (emoldura o rosto) em roxo: segue a borda do capuz e desce pelas abas
+    edge = [V[rows[r][C]] for r in range(R + 1)][::-1] + [V[rows[r][0]] for r in range(R + 1)]
+    return [tuple(T(*q)) for q in V], F, U, stripe, edge  # a malha vai em coordenadas do Blender (como o rod)
+
+
+V, F, U, stripe, edge = nemes()
+for k, mat in ((0, M['menesA']), (1, M['menesB'])):
+    add(head, f'menes{k}', (V, [f for f, st in zip(F, stripe) if st == k], U), mat)
+add(head, 'menesEdge', rod([(p[0] * 1.03, p[1], p[2] + 0.01) for p in edge], 0.016, seg=6, caps=False), M['purple'])
+add(head, 'menesBand', rod([(math.sin(a) * 0.185, 0.17, -math.cos(a) * 0.17 + 0.03) for a in [math.pi * (0.62 + 0.76 * i / 14) for i in range(15)]], 0.018, seg=6), M['purple'])
+
+# a MANDÍBULA, a fileira de baixo e o CHIFRE DO QUEIXO (a "barba" do faraó)
 jaw = joint('J_jaw', (0, -0.1, 0.03), head)
 Jw = Sculpt('jaw')
 Jw.chain(curve((-0.1, 0.06, -0.06), (0, -0.05, 0.14), (0.1, 0.06, -0.06), 9), [0.02, 0.025, 0.028, 0.03, 0.032, 0.03, 0.028, 0.025, 0.02], 'bone', step=0.5)
 Jw.ell((0, -0.04, 0.11), (0.045, 0.035, 0.035), 'bone')
 Jw.build(jaw, M['body'], 700, res=0.006, smooth=2)
 add(jaw, 'hornC', rod(curve((0, -0.05, 0.12), (0, -0.2, 0.15), (0, -0.34, 0.24), 8), [0.034, 0.032, 0.03, 0.026, 0.021, 0.015, 0.009, 0.002], seg=8), M['bone'])
-for k in range(3):  # trançado da barba
+for k in range(3):
     add(jaw, f'beardR{k}', blob((0, -0.1 - k * 0.07, 0.13 + k * 0.025), (0.034 - k * 0.005, 0.012, 0.034 - k * 0.005), 8, 4), M['purple'])
 for i in range(9):
     x = -0.055 + i * 0.0137
     zj = 0.13 - (x / 0.065) ** 2 * 0.045
     add(jaw, f'toothD{i}', spike((x, 0.0, zj), (x * 1.05, 0.05 + 0.01 * (i % 2), zj + 0.006), 0.008, seg=5), M['tooth'])
 drip(jaw, 'dripJ', (0.03, -0.04, 0.12), 0.25, 0.02)
-drip(jaw, 'dripJ2', (-0.05, -0.02, 0.09), 0.18, 0.016)
 
-# ================================================================ PATAS: na frente MÃOS (dedos longos com garras); atrás, patas de osso
+# ================================================================ PATAS: grossas; na frente MÃOS grandes, atrás patas de osso
 upper, lower = legH * 0.5, legH * 0.5
-for name, s, z, front in (('FL', 1, halfL * 0.72, True), ('FR', -1, halfL * 0.72, True), ('BL', 1, -halfL + 0.06, False), ('BR', -1, -halfL + 0.06, False)):
-    x = s * (0.25 if front else 0.2)
-    leg = joint(f'J_leg{name}', (x, -0.02, z), torso)
-    U = Sculpt(f'thigh{name}')
+for name, s, z, front in (('FL', 1, 0.58, True), ('FR', -1, 0.58, True), ('BL', 1, -0.64, False), ('BR', -1, -0.64, False)):
+    x = s * (0.24 if front else 0.18)
+    leg = joint(f'J_leg{name}', (x, -0.04, z), torso)
+    U_ = Sculpt(f'thigh{name}')
     if front:
-        U.chain([(0, 0.06, 0), (0, -0.2, 0.01), (0, -upper + 0.02, 0)], [0.1, 0.078, 0.058], 'flesh', step=0.6)
-        U.chain([(s * 0.03, 0.0, -0.03), (s * 0.03, -upper + 0.04, -0.02)], 0.025, 'bone', step=0.6)  # o úmero aparecendo
+        U_.chain([(0, 0.1, 0), (0, -0.2, 0.01), (0, -upper + 0.03, 0)], [0.13, 0.1, 0.075], 'flesh', step=0.6)
+        U_.ell((0, -0.12, 0.04), (0.09, 0.15, 0.08), 'flesh')
     else:
-        U.chain([(0, 0.06, 0), (0, -0.2, -0.03), (0, -upper + 0.02, -0.02)], [0.11, 0.08, 0.055], 'flesh', step=0.6)
-        U.ell((s * 0.02, -0.12, 0.03), (0.07, 0.15, 0.06), 'flesh')
-    U.ell((0, -upper, 0), (0.05, 0.05, 0.05), 'bone')  # o joelho / cotovelo de osso
-    U.build(leg, M['body'], 900, res=0.01)
+        U_.chain([(0, 0.1, 0), (0, -0.2, -0.03), (0, -upper + 0.03, 0.02)], [0.15, 0.11, 0.075], 'flesh', step=0.6)
+        U_.ell((s * 0.02, -0.1, 0.04), (0.11, 0.2, 0.13), 'flesh')
+    U_.ell((0, -upper, -0.03), (0.06, 0.06, 0.06), 'bone')  # joelho / cotovelo de osso
+    U_.build(leg, M['body'], 1200, res=0.01)
     knee = joint(f'J_knee{name}', (0, -upper, 0), leg)
     L = Sculpt(f'shin{name}')
-    L.chain([(0, 0.0, 0), (0, -0.22, 0.01), (0, -lower + 0.06, 0.02)], [0.058, 0.05, 0.04], 'bone' if not front else 'flesh', step=0.6)
     if front:
-        # a MÃO apoiada no chão: palma e cinco dedos compridos para a frente
-        L.ell((0, -lower + 0.04, 0.07), (0.075, 0.03, 0.09), 'flesh')
+        L.chain([(0, 0.0, 0), (0, -0.22, 0.01), (0, -lower + 0.07, 0.02)], [0.08, 0.068, 0.058], 'flesh', step=0.6)
+        L.chain([(0, -0.05, -0.05), (0, -lower + 0.1, -0.03)], 0.026, 'bone', step=0.6)  # o osso do antebraço
+        L.ell((0, -lower + 0.045, 0.08), (0.095, 0.035, 0.11), 'flesh')  # a palma no chão
         for i in range(4):
-            a = (i - 1.5) * 0.28
-            x0 = math.sin(a) * 0.06
-            L.chain([(x0, -lower + 0.035, 0.13), (x0 * 1.4, -lower + 0.03, 0.21), (x0 * 1.6, -lower + 0.015, 0.27)], [0.02, 0.017, 0.013], 'flesh', step=0.5)
-        L.chain([(s * 0.07, -lower + 0.04, 0.05), (s * 0.12, -lower + 0.025, 0.12)], [0.022, 0.016], 'flesh', step=0.5)  # polegar
+            a = (i - 1.5) * 0.3
+            x0 = math.sin(a) * 0.075
+            L.chain([(x0, -lower + 0.04, 0.15), (x0 * 1.35, -lower + 0.034, 0.24), (x0 * 1.5, -lower + 0.02, 0.31)], [0.026, 0.022, 0.017], 'flesh', step=0.5)
+        L.chain([(s * 0.085, -lower + 0.045, 0.05), (s * 0.14, -lower + 0.03, 0.13)], [0.026, 0.02], 'flesh', step=0.5)
+        L.chain([(s * 0.02, -0.15, 0.06), (s * 0.03, -lower + 0.06, 0.1)], 0.02, 'stain', step=0.6)  # Lodo descendo
     else:
-        L.ell((0, -lower + 0.04, 0.05), (0.06, 0.035, 0.1), 'bone')
+        L.chain([(0, 0.0, 0.02), (0, -0.25, -0.06), (0, -lower + 0.07, -0.02)], [0.07, 0.05, 0.045], 'bone', step=0.6)
+        L.chain([(0, -0.02, -0.04), (0, -0.22, -0.08)], [0.06, 0.045], 'flesh', step=0.6)
+        L.ell((0, -lower + 0.045, 0.06), (0.075, 0.04, 0.12), 'bone')
         for i in range(3):
             a = (i - 1) * 0.35
-            L.chain([(math.sin(a) * 0.04, -lower + 0.03, 0.1), (math.sin(a) * 0.07, -lower + 0.02, 0.18)], [0.02, 0.014], 'bone', step=0.5)
-    L.build(knee, M['body'], 1100, res=0.008)
-    # garras
+            L.chain([(math.sin(a) * 0.05, -lower + 0.035, 0.12), (math.sin(a) * 0.08, -lower + 0.022, 0.21)], [0.024, 0.017], 'bone', step=0.5)
+    L.build(knee, M['body'], 1400, res=0.008)
     n = 4 if front else 3
     for i in range(n):
-        a = (i - (n - 1) / 2) * (0.28 if front else 0.35)
-        bx = math.sin(a) * (0.06 * 1.6 if front else 0.07)
-        bz = 0.27 if front else 0.18
-        add(knee, f'claw{i}', spike((bx, -lower + 0.02, bz - 0.01), (bx * 1.1, -lower - 0.005, bz + 0.07), 0.011, seg=5), M['tooth'])
-    if front:
-        drip(knee, 'dripH', (s * 0.03, -0.25, 0.04), 0.2, 0.018)
+        a = (i - (n - 1) / 2) * (0.3 if front else 0.35)
+        bx = math.sin(a) * (0.075 * 1.5 if front else 0.08)
+        bz = 0.31 if front else 0.21
+        add(knee, f'claw{i}', spike((bx, -lower + 0.022, bz - 0.01), (bx * 1.1, -lower - 0.004, bz + 0.08), 0.013, seg=5), M['tooth'])
 
-# ================================================================ CAUDA: longa, de vértebras, curvando para trás e para cima
-tail = joint('J_tail', (0, 0.07, -halfL - 0.02), torso)
+# ================================================================ CAUDA: grossa na base, de vértebras, curvando para trás e para cima
+tail = joint('J_tail', (0, 0.1, -halfL - 0.02), torso)
 Tl = Sculpt('tail')
-tp = curve((0, 0, 0), (0, -0.05, -0.55), (0, 0.4, -0.95), 12)
-Tl.chain(tp, [0.06 - i * 0.0045 for i in range(12)], 'flesh', step=0.6)
+tp = curve((0, 0, 0), (0, -0.08, -0.6), (0, 0.42, -1.05), 13)
+Tl.chain(tp, [0.08 - i * 0.0055 for i in range(13)], 'flesh', step=0.6)
 for i, p in enumerate(tp[:-1]):
-    Tl.ell((p[0], p[1] + 0.045 - i * 0.003, p[2]), (0.022, 0.03, 0.022), 'bone')
-Tl.build(tail, M['body'], 1000, res=0.008)
-add(tail, 'tailTip', spike(tp[-2], (0, 0.52, -1.05), 0.022, seg=6), M['bone'])
+    Tl.ell((p[0], p[1] + 0.055 - i * 0.003, p[2]), (0.024, 0.032, 0.024), 'bone')
+Tl.build(tail, M['body'], 1100, res=0.008)
+add(tail, 'tailTip', spike(tp[-2], (0, 0.55, -1.16), 0.024, seg=6), M['bone'])
 
-# ================================================================ ASAS RASGADAS de morcego (ossos e membrana com rasgos)
+# ================================================================ ASAS RASGADAS de morcego (grandes; rasgos só na borda e alguns furos)
 for s, name in ((1, 'L'), (-1, 'R')):
-    wing = joint(f'J_wing{name}', (s * 0.16, 0.2, halfL * 0.5), torso)
-    elbow = (s * 0.5, 0.62, -0.1)
-    wrist = (s * 0.9, 1.05, -0.38)
-    add(wing, 'arm', rod([(0, 0, 0), elbow, wrist], [0.035, 0.03, 0.022], seg=7), M['bone'])
-    add(wing, 'elbowK', blob(elbow, (0.035, 0.035, 0.035), 7, 5), M['bone'])
-    add(wing, 'thumb', spike(wrist, (s * 0.98, 1.22, -0.28), 0.016, seg=5), M['tooth'])
-    tips = [(s * 1.6, 0.95, -0.7), (s * 1.5, 0.35, -0.95), (s * 1.12, -0.05, -0.95), (s * 0.66, -0.1, -0.7)]
+    wing = joint(f'J_wing{name}', (s * 0.15, 0.26, 0.42), torso)
+    elbow = (s * 0.52, 0.66, -0.12)
+    wrist = (s * 0.95, 1.12, -0.42)
+    add(wing, 'arm', rod([(0, 0, 0), elbow, wrist], [0.042, 0.034, 0.025], seg=7), M['bone'])
+    add(wing, 'elbowK', blob(elbow, (0.04, 0.04, 0.04), 7, 5), M['bone'])
+    add(wing, 'thumb', spike(wrist, (s * 1.02, 1.3, -0.3), 0.018, seg=5), M['tooth'])
+    tips = [(s * 1.7, 1.02, -0.78), (s * 1.6, 0.38, -1.02), (s * 1.2, -0.04, -1.02), (s * 0.7, -0.1, -0.76)]
     for i, tpt in enumerate(tips):
-        mid = tuple(wrist[k] + (tpt[k] - wrist[k]) * 0.5 + (0, -0.04, 0)[k] for k in range(3))
-        add(wing, f'finger{i}', rod([wrist, mid, tpt], [0.018, 0.013, 0.005], seg=5), M['bone'])
-    # membrana: painéis entre o corpo/ dedos, uma grade com buracos e a borda rasgada
-    edges = [[(0, -0.05, -0.05), elbow, wrist]] + [[wrist, tpt] for tpt in tips] + [[(0, -0.05, -0.05), (s * 0.18, -0.2, -0.35)]]
+        mid = tuple(wrist[k] + (tpt[k] - wrist[k]) * 0.5 + (0, -0.05, 0)[k] for k in range(3))
+        add(wing, f'finger{i}', rod([wrist, mid, tpt], [0.02, 0.014, 0.005], seg=5), M['bone'])
     root = Vector((0, -0.05, -0.05))
-    anchors = [Vector(wrist)] + [Vector(t) for t in tips] + [Vector((s * 0.18, -0.2, -0.35))]
+    anchors = [Vector(wrist)] + [Vector(t) for t in tips]  # (sem o painel até o corpo: de lado virava uma lâmina)
     V, F, U = [], [], []
-    R = 6  # anéis do pulso até a borda
+    R = 7
     for pi in range(len(anchors) - 1):
         a0, a1 = anchors[pi], anchors[pi + 1]
         base = len(V)
-        # o painel liga o pulso (ou o corpo, no último) às pontas de dois dedos vizinhos
-        hub = Vector(wrist) if pi < len(anchors) - 2 else root
-        if pi == 0:
-            hub = Vector(elbow)
+        hub = Vector(elbow) if pi == 0 else (Vector(wrist) if pi < len(anchors) - 2 else root)
         cols = 6
         for r in range(R + 1):
             t = r / R
             for c in range(cols + 1):
                 u = c / cols
-                edge = a0.lerp(a1, u)
-                # a borda de fuga se curva para dentro entre os dedos (o recorte da asa de morcego)
-                sag = math.sin(u * math.pi) * 0.22 * t
-                p = hub.lerp(edge, t * (1 - sag))
-                p += Vector((0, -0.02, 0)) * math.sin(u * math.pi) * t
+                edge_p = a0.lerp(a1, u)
+                sag = math.sin(u * math.pi) * 0.2 * t
+                p = hub.lerp(edge_p, t * (1 - sag))
+                p += Vector((0, -0.03, 0)) * math.sin(u * math.pi) * t
                 V.append(tuple(T(p.x, p.y, p.z)))
                 U.append((u, t))
         for r in range(R):
             for c in range(cols):
-                # os RASGOS: alguns quadrados somem (mais perto da borda) e a borda fica irregular
-                hole = (r >= 2 and random.random() < 0.12 + 0.05 * r) or (r == R - 1 and random.random() < 0.35)
+                hole = (r == R - 1 and random.random() < 0.3) or (3 <= r < R - 1 and random.random() < 0.05)
                 if hole:
                     continue
                 a = base + r * (cols + 1) + c
@@ -413,9 +483,8 @@ for s, name in ((1, 'L'), (-1, 'R')):
     o = add(wing, 'membrane', (V, F, U), M['wing'])
     o.data.materials[0].use_backface_culling = False
 
-# o Lodo escorrendo pelo resto do corpo (ombros e pescoço)
-for i in range(4):
-    drip(neck, f'dripN{i}', (random.uniform(-0.15, 0.15), random.uniform(0.1, 0.4), 0.18), random.uniform(0.12, 0.25), 0.02)
+for i in range(3):
+    drip(neck, f'dripN{i}', (random.uniform(-0.12, 0.12), random.uniform(0.2, 0.45), 0.24), random.uniform(0.12, 0.22), 0.02)
 
 for objs in parts.values():
     for o in objs:

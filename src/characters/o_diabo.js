@@ -22,8 +22,8 @@ export default {
     tagline: 'Eu vim te oferecer um pacto.',
   },
   // a forma do Trono tem regeneração forte por ser o fim do round; o Diabo comum: tamanho padrão e a vida de Portador
-  stats: { moveSpeed: 8.0, maxHealth: 1800 }, // Portador das Relíquias: aguenta mais que o elenco (o número não aparece na tela)
-  regen: { every: 8, amount: 16, color: 0x7a0010, low: { below: 0.35, every: 5, amount: 24 }, onPool: 2 },
+  stats: { moveSpeed: 8.0, maxHealth: 1550 }, // Portador das Relíquias: aguenta mais que o elenco (balanceamento v3.32: era 1800)
+  regen: { every: 9, amount: 13, color: 0x7a0010, low: { below: 0.35, every: 6, amount: 19 }, onPool: 2 }, // balanceamento v3.32 (era 16/8 s e 24/5 s)
   // lutador desde o início: ganha os golpes com direção que a forma não tinha (frente, trás e lado)
   melee: {
     ...kit.melee,
@@ -45,7 +45,7 @@ export default {
     type: 'devilPact',
     form: 'diabo',
     duration: 0,
-    bonusHealth: 300,
+    bonusHealth: 150, // balanceamento v3.32 (era 300)
     color: 0xc01828,
   },
 };

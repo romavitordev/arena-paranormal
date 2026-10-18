@@ -5,7 +5,7 @@ import { RIDDLES } from '../config/riddles.js';
 // segundos para responder com Y / A / B / X (△ × ○ □). Errou ou deixou o tempo acabar → é DEVORADA (vai para dentro das
 // costelas, toma dano e cura a Esfinge — o Estômago). Acertou → a Esfinge fica PARALISADA por um tempo e toma dano.
 // Sorteio com Math.random: no online a simulação usa o sorteio com semente, então os dois veem o mesmo enigma.
-export const RIDDLE = { time: 10, resultTime: 1.3, cpuDelay: [2.6, 5.5], cpuRight: 0.5 };
+export const RIDDLE = { time: 10, resultTime: 0.9, cpuDelay: [2.6, 5.5], cpuRight: 0.5 };
 
 // ordem dos botões na tela (o losango do controle): Y em cima, X à esquerda, B à direita, A embaixo
 export const RIDDLE_KEYS = ['carga', 'ranged', 'physical', 'jump'];
@@ -109,6 +109,8 @@ export function finishRiddle(world) {
   world.riddle = null;
   world.ui && world.ui.riddle && world.ui.riddle(null);
   const { sphinx, victim } = r;
+  // quem respondeu volta livre (o Amedrontar ou o golpe de antes do enigma não continua depois dele)
+  if (victim.state === 'stun' || victim.state === 'hitstun') victim.setState('idle');
   if (!sphinx.alive || sphinx.state === 'die' || sphinx.state === 'leave') return;
   if (r.right) sphinx.riddleSolved(victim);
   else sphinx.riddleFailed(victim, r.chosen === null);

@@ -6,17 +6,19 @@ import { ROSTER } from '../characters/index.js';
 import { CpuController } from '../ai/CpuController.js';
 
 // focus: só os pares de um lutador (ex.: personagem novo contra todo o elenco). O resultado também fica em window.__balance.
-export async function runBalance({ fights = 4, maxTime = 150, ids = ROSTER.map((c) => c.id), arena, level = 'normal', focus = null } = {}) {
+// attackers: só as lutas em que estes são o P1 (divide a rodada entre várias abas; some os resultados depois)
+export async function runBalance({ fights = 4, maxTime = 150, ids = ROSTER.map((c) => c.id), arena, level = 'normal', focus = null, attackers = null } = {}) {
   const g = window.__game;
   const inp = g.input;
   const stats = Object.fromEntries(ids.map((id) => [id, { wins: 0, fights: 0, dealt: 0, taken: 0, rounds: 0, moves: {} }]));
   const matrix = Object.fromEntries(ids.map((a) => [a, Object.fromEntries(ids.map((b) => [b, 0]))]));
   const dt = 1 / 60;
   // progresso e parciais em window.__balanceProgress (dá para ler no meio de uma rodada longa)
-  const total = ids.reduce((n, a) => n + ids.filter((b) => b !== a && (!focus || a === focus || b === focus)).length, 0) * fights;
+  const total = ids.filter((a) => !attackers || attackers.includes(a)).reduce((n, a) => n + ids.filter((b) => b !== a && (!focus || a === focus || b === focus)).length, 0) * fights;
   const progress = { done: 0, total, last: '', stats, matrix, started: performance.now() };
   window.__balanceProgress = progress;
   for (const a of ids) {
+    if (attackers && !attackers.includes(a)) continue;
     for (const b of ids) {
       if (a === b) continue;
       if (focus && a !== focus && b !== focus) continue;
@@ -56,8 +58,8 @@ export async function runBalance({ fights = 4, maxTime = 150, ids = ROSTER.map((
         if (wa > wb) { stats[a].wins++; matrix[a][b]++; } else if (wb > wa) { stats[b].wins++; matrix[b][a]++; }
         progress.done++;
         progress.last = `${a} ${wa}×${wb} ${b}`;
-        // não trava a aba
-        await new Promise((r) => setTimeout(r, 0));
+        // não trava a aba (MessageChannel: aba em segundo plano não segura como o setTimeout)
+        await new Promise((r) => { const ch = new MessageChannel(); ch.port1.onmessage = () => r(); ch.port2.postMessage(0); });
       }
     }
   }

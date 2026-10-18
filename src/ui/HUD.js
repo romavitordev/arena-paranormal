@@ -240,7 +240,7 @@ export class HUD {
     this.vignette.classList.toggle('on', !!mar);
     this.npcBar.classList.toggle('on', !!mar);
     if (mar) {
-      this.npcBar.querySelector('b').textContent = `${mar.name} · ${mar.owner.def.name}`;
+      this.npcBar.querySelector('b').textContent = `${mar.barName || mar.name} · ${mar.owner.def.name}`;
       this.npcBar.querySelector('.fill').style.width = `${Math.max(0, mar.hp / mar.maxHp) * 100}%`;
       // as MARCAS do enigma (Carniçal da Esfinge): um traço em cada uma; apagam depois de usadas
       const marks = mar.cfg && mar.cfg.marks ? mar.cfg.marks : [];

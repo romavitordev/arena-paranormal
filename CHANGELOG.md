@@ -1,5 +1,40 @@
 # Changelog
 
+## v3.32.0 — O Enigma
+
+### Adicionado
+- Personagem **Nubi** (`src/characters/nubi.js`, Escriptas/Morte): modelo `tools/blender/char_nubi.py` →
+  `public/models/nubi.glb` (bengala de chacal no próprio modelo), texturas `face_nubi`/`face_nubi_open`, `skin_nubi`,
+  `skin_torso_nubi`, `cloak_nubi`, `hair_nubi`; clipes `idle_nubi`, `nubi_ritual`, `vic_nubi`; cena de agarrão; falas
+  com todo o elenco. Habilidade nova `calmEvade` (janela de 0,45 s; o golpe não especial vira Substituição grátis,
+  `damage.js`), visual de projétil `lodoMass`, esquiva `style: 'calm'`. Reaproveita `decadence`, `lodoTentacles`,
+  `heavyBlow`, `timeWarp` e `awakenMode` (que ganhou `face: [de, para]` e `eyeDrip`).
+- Especial `sphinx` (`combat/specials/sphinx.js`) e o NPC `SphinxGhoul` (`combat/beasts.js`, `SPHINX`): 480 de vida,
+  35 s (o relógio para na paralisia), `bossBar`, nunca trai a dona; `claw`, `leap` (arco de 2,2 m), `vomit` (poça com
+  buff `lodoWeak` ×0,7 dano/×0,8 velocidade), `devour` (`dragTick`: 34/s, cura a Esfinge), Amedrontar (0,8 s).
+  Modelo `tools/blender/npc_esfinge.py` → `public/npcs/esfinge.glb` (Menés como superfície com listras por material).
+- `combat/riddle.js` + `config/riddles.js` (52 enigmas populares reescritos): `world.riddle` congela a simulação e o
+  relógio; marcas da barra em 75/50/25%; resposta pelo `input.pressed` (lockstep), toque na resposta
+  (`hud.onRiddleTap`), CPU acerta 50%; sem repetir na partida e, fora do online, memória dos últimos vistos.
+- `config/balance.js` (`BALANCE`, `balanceOf`): multiplicador de dano causado/recebido por personagem, aplicado em
+  `applyHit` depois do `cpuEdge` (vale nas formas e nas invocações). `dev/balance.js`: opção `attackers` (divide a
+  rodada entre abas) e espera por `MessageChannel`.
+- Barra de Equipe (`COMBAT.teamGauge`: +6 por chamada de assistência, +3 por troca) e Especial em Equipe
+  (`COMBAT.teamSpecial`, △ △ △ ○ com a barra cheia; `Assist.callTeam`, `Fighter.tryTeamSpecial`); HUD `.bar.teamg`.
+- `Fighter.blockHealing(t)` / buff `noHeal`; `heavyBlow` aceita `track`, `stepTime`, `noHeal`.
+
+### Alterado
+- Kian: `erase` com `eraseBelow` 0,35 e `strongDamage` 380 (antes matava em qualquer vida); `kianScript` 45/0,5 s →
+  30/0,3 s. O Diabo: vida 1800 → 1550 (forma 2100 → 1850), regeneração 16/8 s → 13/9 s (ferido 24/5 → 19/6; forma
+  22/6 → 17/7 e 34/3,5 → 25/4,5), roubo de vida 0,08 → 0,05, Renascimento +300 → +150.
+- Cristino — Decepar: `impact` 0,3, `step` 7,5, `stepTime` 0,32, `track`, alcance 2,6, arco 150, `noHeal` 12.
+- HUD: a barra do topo vale para `isMarionette || bossBar`, com `barName` e as marcas do enigma. CPU: `calmEvade` só
+  como reação (`threat`).
+
+### Corrigido
+- `HoloCopy.copyPose` travava com peças que não são nó 3D (o grupo `stowed` da Kemi) — Eco Espiral do Dante × Kemi.
+- `sobre.css`: os passos numerados da página de download.
+
 ## v3.31.0 — 2026-10-17
 
 ### Alterado

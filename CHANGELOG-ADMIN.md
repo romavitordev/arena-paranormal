@@ -1,6 +1,13 @@
 # Registro administrativo de alterações
 
-## Próxima versão (em andamento) — Nubi, a Escripta
+## v3.32.0 — O Enigma
+
+- Versão: `VERSION` 3.31.0 → **3.32.0** (package.json/lock junto). Data: 2026-10-18.
+- Também nesta versão (pedidos de 2026-10-17): Decepar do Cristino mais fácil de acertar + "não poder se curar por
+  uns 15 s" (ficou 12 s); Barra de Equipe (F1) e Especial em Equipe simplificado △ △ △ ○ (F2) — "a barra está
+  aumentando muito, tem que ser algo não frequente" (+6 por chamada, +3 por troca); página de download com os passos
+  quebrados. As fases F3/F4 da equipe seguem documentadas no TODO.
+- Nubi, a Escripta:
 
 - Pedido: "Vamos adicionar uma nova personagem, uma escripta. Nubi" (com a ficha de implementação e a imagem de
   referência); especial **Carniçal da Esfinge**. Depois: "tem que ser uma invocação com barra de vida assim como a
@@ -23,7 +30,35 @@
   de dano), erro (mordida e Estômago curando a Esfinge), as marcas na barra; Nubi: Lodo da Morte, Decadência, Ritual
   de Drenagem, Desvio (0 de dano dentro da janela, dano normal fora dela e em especial), agarrão (70). `npm run check`,
   `npm test`, `npm run build` ok.
-- Falta: acabamento do modelo da Esfinge; testar o enigma numa partida online de verdade (dois aparelhos).
+- Ajustes pedidos depois do teste ("quem congela ao acertar é o player, o certo era a esfinge; ela não deveria sumir";
+  "a Nubi precisa de mais habilidades"; "a esfinge deve durar mais"; "transformação com olho preto"): a Esfinge dura
+  35 s com 480 de vida e o relógio dela PARA enquanto está paralisada ou no urro do enigma (antes, o tempo de 14 s
+  acabava durante a paralisia e ela afundava); a paralisia aparece nela (PARALISADA na barra, amarras roxas) e o aviso
+  da vítima virou "ACERTOU! ATAQUE A ESFINGE"; a pausa do resultado caiu de 1,3 para 0,9 s e quem respondeu volta
+  livre (atordoamento anterior limpo). Nubi ganhou **Lodo que Prende** (△+□, tentáculos de Lodo) e **Sentença do
+  Chacal** (R2+×, pancada da bengala, 8 s sem cura). Afinidade com a Morte troca o rosto por `face_nubi_open` (olho
+  inteiro preto, Lodo mais grosso) no close da transformação, com Lodo pingando do rosto; volta ao normal no fim do
+  round (conferido).
+- Modelo da Esfinge refeito (`npc_esfinge.py`): silhueta de leão (peito fundo, ombros e ancas fortes), patas grossas
+  com mãos grandes, a Menés como superfície de pano de verdade com listras pretas/roxas nítidas, abas nos ombros e
+  borda roxa emoldurando o crânio, asas maiores rasgadas só na borda, pele cinza-arroxeada legível no jogo. Revisado
+  no Blender pelo MCP (4 vistas) e na luta. A esquiva da Nubi virou "Passo Imperturbável" (o nome repetia o da
+  habilidade △+L2).
+- **Balanceamento geral** (pedido: "pode começar o balanceamento geral dos personagens antes de lançar"; não era feito
+  há muitas versões). Ferramenta: `src/dev/balance.js` (CPU × CPU, todos os 756 pares) agora divide a rodada entre
+  abas (`attackers`) e não é segurada pela aba em segundo plano; 4 rodadas em 6 abas. Alvo do TODO §34: 35%–65%.
+  Ajustes num lugar só, `src/config/balance.js` (multiplicador de dano causado/recebido por personagem, vale nas
+  formas e nas invocações), mais correções de kit onde o problema era de mecânica: **Inexistir** (Kian) só apaga quem
+  está com ≤35% da vida — antes matava na hora em qualquer vida; a **Escrita** do Kian detona com 30 de dano e 0,3 s
+  (era 45 e 0,5 s); **O Diabo** com menos vida (1550; forma 1850), regeneração e roubo de vida menores e +150 de vida
+  no Renascimento (era 300). A CPU passou a usar o Desvio Imperturbável só como reação.
+  Resultado: personagens fora de 35–65% por rodada 14 → 10 → 4 → 4, e os ajustes finais (O Diabo 74% → **51%**,
+  Nubi → **48%**, conferidos numa rodada focada de 54 lutas cada; Lírio, Veríssimo, Cristino e Aguiar subiram um
+  pouco pela média das rodadas 3 e 4). Uma rodada tem ruído de ±7% por personagem: os valores ficam em
+  `src/config/balance.js` com o histórico de cada um.
+- Bug encontrado pela telemetria: o **Eco Espiral** do Dante travava o jogo contra a **Kemi** (a cópia tentava copiar
+  um grupo lógico de armas que não é um nó 3D) — corrigido em `combat/holo.js`.
+- Falta: testar o enigma numa partida online de verdade (dois aparelhos) — registrado no TODO.
 
 ## v3.31.0 — Fios e Escritas
 

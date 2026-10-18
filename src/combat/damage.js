@@ -4,6 +4,7 @@ import { COMBAT } from '../config/combat.js';
 import { angleDiff, yawTo, DEG, distXZ } from '../core/util.js';
 import { elementMultiplier } from '../config/elements.js';
 import { weaknessMult } from './forms.js';
+import { balanceOf } from '../config/balance.js';
 
 // Pausa no impacto conforme o peso do golpe
 function hitstopFor(o, dealt) {
@@ -113,6 +114,11 @@ export function applyHit(world, attacker, victim, o) {
   // vantagem do nível Super Difícil (CpuController.attach): a CPU bate mais e aguenta mais, como um chefe
   if (attacker.cpuEdge) mult *= attacker.cpuEdge.dealt;
   if (victim.cpuEdge) mult *= victim.cpuEdge.taken;
+  // BALANCEAMENTO GERAL (config/balance.js): o ajuste fino de cada personagem
+  const balA = balanceOf(attacker);
+  const balV = balanceOf(victim);
+  if (balA && balA.dealt) mult *= balA.dealt;
+  if (balV && balV.taken) mult *= balV.taken;
   const attempted = Math.round(o.damage * mult);
   // passivas de peso: quem bate empurra/atordoa mais (Mão Pesada); quem apanha é empurrado menos (Casca Grossa)
   let kbMult = 1;

@@ -54,6 +54,8 @@ export function abilityUsePrior(a, f, opp, { distance, lowHp, opening, threat, l
   if ((a.type === 'healOverTime' || a.type === 'agingHeal') && f.health > f.maxHealth * 0.72) return 0;
   if (a.type === 'heavyProtection' && !threat && !lowHp && f.health > f.maxHealth * 0.6) return 0;
   if (a.type === 'demonAxe' && f.health < f.maxHealth * 0.45) return 0;
+  // Desvio Imperturbável (Nubi): é reação — só quando o golpe já vem (janela curta)
+  if (a.type === 'calmEvade') return threat ? 1.8 : 0;
 
   let prior = a.id === lastAbility ? 0.3 : 0.65;
   if (opening && !selfTarget) prior *= 2.5;
@@ -152,7 +154,7 @@ function sacrificeOk(f, opp) {
 const isModAbility = (a) => a.input.startsWith('block+') || a.input.startsWith('ranged+') || (a.input.startsWith('carga+') && a.input !== 'carga+jump');
 // tipos que não precisam do adversário perto (buffs, invocações, regras do jogo...)
 const SELF_TYPES = ['weaponState', 'blink', 'mistCloud', 'healOverTime', 'hatredTemple', 'shadowClones', 'heavyProtection', 'noiseScreen', 'selfBuff', 'gameRule',
-  'chaosRule', 'hostTime', 'hostAudience', 'hostButton', 'orphanGame', 'hostClones', 'whisperZone', 'shadowVeil', 'shuffle', 'deadlySpeedTrail', 'agingHeal'];
+  'chaosRule', 'hostTime', 'hostAudience', 'hostButton', 'orphanGame', 'hostClones', 'whisperZone', 'shadowVeil', 'shuffle', 'deadlySpeedTrail', 'agingHeal', 'calmEvade'];
 
 export class CpuController {
   constructor({ level = 'normal' } = {}) {

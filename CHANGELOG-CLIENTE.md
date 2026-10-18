@@ -2,6 +2,15 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.32.0 — O Enigma
+- NOVA PERSONAGEM — NUBI (Escriptas, Morte): a ocultista calma da bengala de cabeça de chacal. Golpeia com a bengala, lança o LODO DA MORTE (atordoa curto), DESVIO IMPERTURBÁVEL (△ + L2: no tempo certo, o golpe que vem passa por ela), DECADÊNCIA, LODO QUE PRENDE (tentáculos), SENTENÇA DO CHACAL (pancada que impede a cura por 8 s) e RITUAL DE DRENAGEM (deixa lento). Na Transformação, AFINIDADE COM A MORTE, os olhos ficam inteiros pretos e o Lodo escorre do rosto.
+- ESPECIAL DA NUBI — CARNIÇAL DA ESFINGE: o Lodo sai dos olhos e da boca dela, forma uma poça e dela sobe a Esfinge, com barra de vida própria no alto da tela (35 s). Ela só ataca o adversário: AMEDRONTA ao surgir, SALTA em cima do alvo, VOMITA LODO (a poça enfraquece quem pisa) e DEVORA (dentro das costelas, o dano cura a Esfinge — aperte botões para sair antes).
+- O ENIGMA DA ESFINGE: a barra dela tem 3 marcas. Quando a vida passa de uma, tudo para e quem luta contra a Nubi responde um enigma com Y / A / B / X (△ × ○ □ — no celular, toque na resposta). Errou: é devorado. Acertou: a Esfinge fica PARALISADA, leva mais dano e perde um pedaço da vida — hora de atacar. São mais de 50 enigmas, sem repetir na partida.
+- BALANCEAMENTO GERAL (o primeiro em muitas versões, medido com milhares de lutas entre CPUs): quem vencia demais ficou mais fraco — O DIABO (menos vida, regeneração e roubo de vida), KIAN (o INEXISTIR só apaga quem já está com 35% da vida ou menos; com mais vida, é um golpe pesado), DANTE, JOUI e GAL SAL — e quem perdia demais ficou mais forte: Arthur, Erin, Aghata, Balu, Cristopher, Veríssimo, Lírio, Estrangeiro, Guizo, Labirinto, Arnaldo, Amigo e outros. Agora todos ficam entre 35% e 65% de vitórias.
+- BARRA DE EQUIPE (no modo equipe): enche aos poucos chamando assistências e trocando de lutador. Cheia, △ △ △ ○ solta o ESPECIAL EM EQUIPE — os dois parceiros entram juntos e você fecha com o seu especial.
+- CRISTINO — o DECEPAR acerta mais fácil (mais rápido e vira para o alvo) e deixa a FERIDA ABERTA: o alvo não se cura por 12 s.
+- CORREÇÕES: o Eco Espiral do Dante podia travar o jogo contra a Kemi; os passos numerados da página de download apareciam quebrados.
+
 ## v3.31.0 — Fios e Escritas
 - CARGA COMO COMANDO (igual ao Storm): △ → ○ é a habilidade e △ → △ → ○ tocados seguidos é o especial. Cada △ só vale por um instante — nada fica "guardado". Antes, um △ apertado segundos antes fazia o próximo △ → ○ (ou só o ○) sair como especial. Segurar △ para carregar sanidade não arma mais nada, e o contador de cargas saiu da tela.
 - DANTE — a MARIONETE ganha os FIOS DO LUTO com o Dante de Olhos Abertos (inclusive se ele se transformar com ela já em campo): ela lança os fios invisíveis que a erguem, prende o adversário de longe, puxa até a frente da foice e corta. Dá para esquivar e defender. Sai o corte de osso à distância, que não existia na série.

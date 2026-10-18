@@ -75,6 +75,12 @@ export const erase = {
           opp.energy = 0; // a resistência consome toda a sanidade
           opp.notify('RESISTIU — SANIDADE CHEIA', true);
           world.fx.flash(opp.chestPos(), { color: 0xffffff, size: 4, life: 0.2 });
+        } else if (sp.eraseBelow && opp.health > opp.maxHealth * sp.eraseBelow) {
+          // ainda inteiro demais para deixar de existir (balanceamento v3.32): o Conhecimento arranca um pedaço dele
+          applyHit(world, f, opp, { damage: sp.strongDamage ?? 380, kind: 'special', reaction: false, ignoreInvuln: true, unblockable: true, color: sp.color, scale: 2.2, sound: 'heavyPunch' });
+          opp.notify('EXISTE DEMAIS PARA SER APAGADO', true);
+          world.fx.burst(opp.chestPos(), { count: 60, color: 0x8a8070, kind: 'smoke', speed: 3, life: 1.0, size: 0.3, jitter: 0.6 });
+          world.fx.flash(opp.chestPos(), { color: 0xfff2c8, size: 4, life: 0.2 });
         } else {
           // deixa de existir: vira pó
           const c = opp.chestPos();

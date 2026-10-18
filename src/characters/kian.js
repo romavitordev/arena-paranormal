@@ -159,7 +159,8 @@ export default {
   // Especial INEXISTIR: o corpo do alvo se enche de escrita, brilha por dentro e vira pó,
   // como se nunca tivesse existido. Corpo a corpo, 2 vezes por partida (não volta no round
   // seguinte), NÃO pode ser defendido — só esquivado. Com a sanidade (energia) cheia o alvo
-  // resiste: leva muito dano, mas não o suficiente para morrer.
+  // resiste: leva muito dano, mas não o suficiente para morrer. Só APAGA quem já está com 35% da vida ou menos; inteiro,
+  // leva 380 de dano (balanceamento v3.32).
   special: {
     name: 'Inexistir',
     banner: 'Inexistir',
@@ -170,6 +171,10 @@ export default {
     unblockable: true,
     dash: { speed: 24, maxTime: 0.4, contact: 1.6 },
     resistDamage: 450, // dano quando o alvo resiste com sanidade cheia (nunca mata)
+    // balanceamento v3.32: só APAGA quem já está com 35% da vida ou menos; inteiro, o alvo leva um golpe pesado
+    // (era a morte na hora em qualquer vida — 90% de vitórias na telemetria)
+    eraseBelow: 0.35,
+    strongDamage: 380,
     color: 0xffd88a,
   },
 
@@ -196,6 +201,6 @@ export default {
     { type: 'precognition' }, // Precognição: não é pego desprevenido (sem bônus de costas nem "surpreso")
     // A ESCRITA: o Conhecimento escreve no corpo de quem ele marca (os "Marcados"); cada golpe deixa uma marca e, com 5,
     // a escrita detona — dano de Conhecimento que não dá para defender e um atordoamento curto (kianPowers.js)
-    { type: 'kianScript', max: 5, burst: 45, stun: 0.5, time: 5 },
+    { type: 'kianScript', max: 5, burst: 30, stun: 0.3, time: 5 }, // balanceamento v3.32 (era 45 de dano e 0,5 s)
   ],
 };

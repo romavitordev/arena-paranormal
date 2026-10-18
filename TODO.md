@@ -1,6 +1,6 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.31.0 (revisado em 2026-10-16: o que já estava pronto no código saiu da lista; a
+**Versão de referência atual:** v3.32.0 (revisado em 2026-10-16: o que já estava pronto no código saiu da lista; a
 versão instalável já saiu na v3.25.0 e o adendo dela foi retirado)
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente
@@ -261,8 +261,12 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
 - [x] Modelo, texturas, golpes, Desvio Imperturbável, Decadência, Ritual de Drenagem, Afinidade com a Morte, agarrão, falas.
 - [x] Carniçal da Esfinge: invocação com barra de vida (não trai a Nubi), Amedrontar, Saltar, Vomitar Lodo, Estômago.
 - [x] Enigma nas 3 marcas da barra (75/50/25%): Y/A/B/X, 52 enigmas sem repetir; acertou = paralisa, errou = devorada.
-- [ ] Acabamento do modelo da Esfinge (pedido: "depois melhore o modelo"): proporções de leão, patas mais grossas, Menés
+- [x] Acabamento do modelo da Esfinge (pedido: "depois melhore o modelo"): proporções de leão, patas mais grossas, Menés
       lisa com listras nítidas, asas maiores e menos ruidosas; refazer a base e refinar pelo MCP.
+- [x] Ajustes do teste: Esfinge paralisada (não a vítima), 35 s com o relógio parado na paralisia, olhos pretos na
+      Transformação, Lodo que Prende e Sentença do Chacal.
+- [x] BALANCEAMENTO GERAL DOS PERSONAGENS (v3.32.0): 4 rodadas de telemetria, ajustes em `src/config/balance.js`.
+      Repetir a medição a cada personagem novo (`runBalance({ focus: 'id' })`) e a cada mudança grande de kit.
 - [ ] Testar o enigma numa partida online real (dois aparelhos) e no celular (toque nas respostas).
 
 # EQUIPE — BARRA DE EQUIPE E ESPECIAIS EM EQUIPE

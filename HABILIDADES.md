@@ -569,9 +569,13 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
   Fica imóvel por um instante, olhando: se um golpe ou tiro chegar nessa janela, ela desvia com um passo calmo, sem gastar esquiva. Não vale contra especiais.
 - **Decadência** — △ + ○ / Y + B · custo 25 · cooldown 10 s · dano 58 · alcance 9 m
   Espirais de Morte surgem em volta do alvo, apertam e ele DEFINHA (dano de Morte e uma decadência curta depois). Dá para esquivar quando as espirais fecham.
+- **Lodo que Prende** — △ + □ / Y + X · custo 25 · cooldown 12 s · dano 52 · alcance 9 m
+  O Lodo escorre do rosto dela até o chão e brota embaixo do inimigo em tentáculos que prendem e apertam.
+- **Sentença do Chacal** — R2 + × / RT + A · custo 25 · cooldown 13 s · dano 58 · alcance 2.4 m
+  Um passo firme e a pancada de cima com a cabeça de chacal da bengala. A Morte fica no ferimento: o alvo não se cura por 8 s. Aguenta um golpe na preparação.
 - **Ritual de Drenagem** — R2 + △ / RT + Y · custo 25 · cooldown 16 s · alcance 12 m
   Finca a bengala: a marca de Lodo abre embaixo do alvo e os filamentos fecham — ele fica LENTO por 2,5 s.
-- **Desvio Imperturbável** (esquiva própria) — invulnerável por undefined s · cooldown undefined s
+- **Passo Imperturbável** (esquiva própria) — invulnerável por undefined s · cooldown undefined s
 
 ### Especial: Carniçal da Esfinge
 
@@ -1088,7 +1092,7 @@ O alvo fica transtornado por 9 s: não defende e recebe mais dano; o Diabo se cu
 
 ### Transformação: Renascimento
 
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → transforma no Diabo até o fim do round (+300 de vida).
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → transforma no Diabo até o fim do round (+150 de vida).
 
 ---
 
