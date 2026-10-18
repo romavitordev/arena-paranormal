@@ -77,9 +77,9 @@ function fit() {
   camera.lookAt(0, 0.95, 0);
   // ?face → close nos rostos (para conferir os detalhes)
   if (new URLSearchParams(location.search).has('face')) {
-    const fd = Math.max(1.05, (shown.length === 1 ? 0.24 : shown.length * 0.68) / Math.tan(hfov / 2));
-    camera.position.set(0, 1.86, fd);
-    camera.lookAt(0, 1.82, 0);
+    const fd = Math.max(1.15, (shown.length === 1 ? 0.34 : shown.length * 0.68) / Math.tan(hfov / 2));
+    camera.position.set(0, 1.76, fd);
+    camera.lookAt(0, 1.72, 0);
   }
 }
 addEventListener('resize', fit);
