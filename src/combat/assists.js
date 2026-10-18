@@ -4,7 +4,7 @@ import { applyHit } from './damage.js';
 import { buildModel } from '../models/index.js';
 import { Animator } from '../anim/Animator.js';
 import { findSpotBehind, findFreeSpotNear } from './positioning.js';
-import { createMistZone } from './abilities.js';
+import { createMistZone, pickCurseElement, applyWeaponCurse } from './abilities.js';
 import { ELEMENTS } from '../config/elements.js';
 
 // ASSISTÊNCIAS (batalha em equipe): o personagem chamado aparece por alguns segundos, faz UMA ação
@@ -225,9 +225,23 @@ const ACTIONS = {
       return tl;
     },
   },
-  // XANDE: andando → Tela de Ruído no parceiro (escudo); parado → tacada por cima que faz sangrar
+  // XANDE: andando → AMALDIÇOA A ARMA DO PARCEIRO com o elemento que supera o adversário (a Leonora do Lírio, as facas, o
+  // punho de quem luta sem arma — combat/abilities.js applyWeaponCurse); parado → tacada por cima que faz sangrar
   xande: {
-    moving: (c) => buffOwner(c, 'concentrate', { type: 'noise', name: 'TELA DE RUÍDO (XANDE)', time: 6, shield: 80, shieldKinds: ['melee', 'ranged'], color: 0x7ad0ff }, 0x7ad0ff, 'TELA DE RUÍDO'),
+    moving: (c) => {
+      const tl = new Timeline();
+      c.as.face(c.owner);
+      c.as.play('concentrate', 0.6);
+      tl.add(0.35, () => {
+        if (c.owner.findBuff('curse')) { c.owner.notify('ARMA JÁ AMALDIÇOADA'); return; }
+        const el = pickCurseElement(c.owner, { adaptive: true });
+        const C = applyWeaponCurse(c.world, c.owner, el, { duration: 8, label: null });
+        c.world.fx.burst(c.owner.chestPos(), { count: 30, color: C.color, speed: 4, life: 0.5, size: 0.2 });
+        c.world.fx.ring(new THREE.Vector3(c.owner.pos.x, 0.06, c.owner.pos.z), { color: C.color, radius: 1.8, life: 0.4 });
+        c.world.audio.play('ritual', { volume: 0.5 });
+      });
+      return tl.end(0.75);
+    },
     still: (c) => {
       const tl = rushStrike(c, 'slash_v', [[0.4, 62]], 'heavyPunch', { knockback: 4 });
       tl.add(0.45, () => { if (c.opp.state !== 'ko') c.opp.applyBleed({ dps: 4, duration: 2.5 }, c.owner); });

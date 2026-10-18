@@ -416,7 +416,7 @@ for side in ('L', 'R'):
     b.add('sock' + side, tube(limb_rings(k.lerp(f, 0.66), k.lerp(f, 0.93), 0.062, 0.06, n=4, bulge=0.003), 14), sock, region='k' + side, subdiv=0)
     b.add('boot_top' + side, tube(limb_rings(k.lerp(f, 0.9), k.lerp(f, 1.0), 0.066, 0.068, n=1), 14), boots, region='k' + side, subdiv=0)
     b.add('boot_toe' + side, ellipsoid((f.x, f.y - 0.1 * H, f.z + 0.03 * H), (0.052 * H, 0.075 * H, 0.04 * H), 12, 8, theta_max=math.pi * 0.55), boots, region='foot' + side, subdiv=0)
-    b.add('sole' + side, box((f.x, f.y - 0.05 * H, f.z - 0.012 * H), (0.108 * H, 0.27 * H, 0.03 * H), bevel=0.006), sole, region='foot' + side, subdiv=0)
+    b.add('sole' + side, sole_part((f.x, f.y - 0.05 * H, f.z - 0.012 * H), (0.108 * H, 0.27 * H, 0.03 * H), bevel=0.006), sole, region='foot' + side, subdiv=0)
 for side in ('L', 'R'):
     b.add('leg_x' + side, merge(*[p for s_, p in leg_x if s_ == side]), strap_red, region='leg' + side, subdiv=0)
     b.add('leg_bands' + side, merge(*[p for s_, p in leg_bands if s_ == side]), strap_red, region='leg' + side, subdiv=0)

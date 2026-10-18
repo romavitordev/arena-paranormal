@@ -142,7 +142,7 @@ for side in ('L', 'R'):
     S.ell(f + Vector((0, 0.03 * H, 0.04 * H)), (0.05 * H, 0.05 * H, 0.05 * H))
     S.ell(f + Vector((0, -0.12 * H, 0.03 * H)), (0.05 * H, 0.05 * H, 0.03 * H))
     b.add('shoe' + side, S.mesh(res=0.008, smooth=3, target=700), shoe, region='k' + side, subdiv=0)
-    b.add('sole' + side, box((f.x, f.y - 0.045 * H, f.z - 0.012 * H), (0.112 * H, 0.27 * H, 0.022 * H), bevel=0.01), sole, region='k' + side, subdiv=0)
+    b.add('sole' + side, sole_part((f.x, f.y - 0.045 * H, f.z - 0.012 * H), (0.112 * H, 0.27 * H, 0.022 * H), bevel=0.01), sole, region='k' + side, subdiv=0)
 Hp = Sculpt()  # o quadril da calça, unindo as duas pernas
 Hp.ell(Vector((0, 0.0, hz - 0.03 * H)), (0.19 * H, 0.135 * H, 0.12 * H))
 Hp.ell(Vector((0, 0.04 * H, hz - 0.06 * H)), (0.17 * H, 0.12 * H, 0.1 * H))

@@ -1,5 +1,47 @@
 # Registro administrativo de alterações
 
+## v3.33.0 — O Ocultista
+
+- Versão: `VERSION` 3.32.0 → **3.33.0** (package.json/lock junto). Data: 2026-10-18.
+- Pedido: "pegue o modelo que faz mais tempo que não é atualizado e melhore-o com as tecnologias que temos agora, se
+  baseando de novo nas imagens do personagem, o mais próximo possível da imagem". O mais antigo era o do **Xande**
+  (`char_xande.py`, último ajuste em 2026-10-01, ainda na técnica básica de tubos).
+- Referência: a arte oficial de Sinais do Outro Lado (wiki "Alexandre", vista inteira e em detalhe no navegador do app —
+  o CDN de imagens bloqueia download por linha de comando) e o texto de aparência da wiki.
+- `tools/blender/char_xande.py` reescrito com a técnica atual (sculpt_lib): roupa a partir do corpo (`clothe`), cabelo
+  longo ondulado em metaballs (40 mechas fundidas, nascendo sob o boné, emoldurando o rosto e caindo no peito), peças
+  coladas na superfície por raio (BVH: suspensório em X, cinto, frascos, rádio, bolsas, broche dos Cinco, marcas do
+  boné), balaclava embolada, fones no pescoço, mangas cinza largas e a blusa preta arregaçada, bermuda com pregas, a
+  barra amarela de triângulos e as fitas, as JOELHEIRAS DE OLHO, correntes com elos de verdade (`chain_mesh`) no
+  antebraço direito e na canela esquerda, tênis de cano alto com lingueta e cadarço. Texturas novas `legs_xande`
+  (arranhões e mordidas nas canelas) e `trim_xande`. 37 mil faces, 2,1 MB (era 27 mil / 1,0 MB). O taco e o skate
+  continuam em código. Revisado no Blender pelo MCP (4 vistas) a cada etapa e no jogo (galeria e luta CPU × CPU sem erro).
+- Depois (pedido: "falta melhorar as armas dele, a textura das roupas, a do rosto, remodelar o skate/escudo; para todos
+  os personagens, melhorar os sapatos e principalmente as mãos"):
+  - **Mãos de todos** (`lib.py hand_part`): palma e dorso esculpidos + cada dedo em 3 falanges (tubo liso Catmull-Rom),
+    nós marcados e o polegar cruzando por cima — antes eram elipsoides colados. **Sapatos de todos** (`foot_part`): bico
+    redondo, calcanhar, peito do pé e sola reta (era uma caixa); as 12 solas em caixa dos personagens viraram
+    `sole_part` (contorno de pé com a borda chanfrada) e o pé descalço ganhou arco e 5 dedos (`bare_foot_part`).
+    Os 33 modelos refeitos e conferidos numa folha de contato (render de mãos e pés de todos).
+  - **Armas do Xande no Blender**: o taco (`npc_xande_bat.py`: madeira com veios, fita enrolada, arame farpado com as
+    farpas, pregos e a corrente no pomo) e o **Skate Caótico** refeito pela arte oficial (`npc_xande_skate.py`: guardas
+    de metal com rebites, lâminas serrilhadas, rodas vermelhas com espinhos dourados, a alça vermelha do escudo,
+    "OCULTO", o triângulo e o símbolo em relevo e as runas verdes). Carregados pelo `buildNpcModel`; o código antigo
+    fica de reserva. O skate arremessado usa o mesmo modelo.
+  - Texturas novas do Xande: rosto (limpo, olhos azuis, sombras suaves), camiseta (trama, dobras, gola canelada e a
+    estampa dos 3 triângulos com "oculto" — havia um `shirt_xande` antigo duplicado que sobrescrevia o novo, removido),
+    mangas, bermuda e balaclava com texturas próprias.
+- **Amaldiçoar Arma por elemento** (pedido: "o Xande é um ocultista que sabe amaldiçoar arma com diversos elementos,
+  para o elemento mais forte que o inimigo atual; uma textura para cada elemento"; "isso deve se aplicar a ele como
+  assistência também"): `curseWeapon` com `adaptive` escolhe o elemento que supera o adversário (Sangue → Morte,
+  Morte → Energia, Energia → Conhecimento, Conhecimento → Sangue; fora do ciclo, Sangue). Efeitos: Sangue sangra, Morte
+  apodrece e deixa lento, Conhecimento drena 6 de sanidade por golpe, Energia 30% de choque extra (14); os golpes da
+  arma amaldiçoada levam a vantagem do elemento. `weapons.js elementCoat` pinta uma textura por elemento (sangue
+  molhado, Lodo com espirais, sigilos dourados que pulsam, raios violeta que piscam) — vale para todos que amaldiçoam
+  (Aghata, Balu, Ferreiro com Morte, Guizo, Lírio). A **assistência do Xande andando** agora amaldiçoa a arma do
+  parceiro (`applyWeaponCurse`, as armas que estão nas mãos dele; sem arma, o efeito vale no punho) — conferido com a
+  Leonora do Lírio contra o Juan (Morte).
+
 ## v3.32.0 — O Enigma
 
 - Versão: `VERSION` 3.31.0 → **3.32.0** (package.json/lock junto). Data: 2026-10-18.

@@ -281,7 +281,7 @@ for side in ('L', 'R'):
     b.add('shinstraps' + side, merge(*sts), leather_dk, region='k' + side, subdiv=0)
     # sapato marrom
     b.add('shoe' + side, ellipsoid((f.x, f.y - 0.06 * H, f.z + 0.035 * H), (0.056 * H, 0.13 * H, 0.05 * H), 12, 8, theta_max=math.pi * 0.56), shoe, region='foot' + side, subdiv=0)
-    b.add('sole' + side, box((f.x, f.y - 0.06 * H, f.z - 0.006 * H), (0.115 * H, 0.27 * H, 0.03 * H), bevel=0.006), sole, region='foot' + side, subdiv=0)
+    b.add('sole' + side, sole_part((f.x, f.y - 0.06 * H, f.z - 0.006 * H), (0.115 * H, 0.27 * H, 0.03 * H), bevel=0.006), sole, region='foot' + side, subdiv=0)
 
 # ---------------------------------------------------------------- CABEÇA: cabelo longo jogado para trás + mecha laranja
 HR = (0.144 * H, 0.154 * H, 0.166 * H)

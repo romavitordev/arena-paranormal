@@ -102,6 +102,11 @@ export function applyHit(world, attacker, victim, o) {
   const element = ritual ? o.element || attacker.def.element : null;
   const E = COMBAT.elements;
   if (ritual) mult *= elementMultiplier(element, victim.def.element, E.advantage, E.disadvantage);
+  // a ARMA AMALDIÇOADA leva o elemento do ritual nos golpes físicos (o Xande escolhe o que supera o adversário)
+  else if (o.kind === 'melee' || o.kind === 'ranged') {
+    const cw = attacker.findBuff && attacker.findBuff('curse');
+    if (cw && cw.element) mult *= elementMultiplier(cw.element, victim.def.element, E.advantage, E.disadvantage);
+  }
   for (const p of victim.def.passives || []) {
     const P = PASSIVES[p.type];
     if (P && P.damageTakenMod) mult *= P.damageTakenMod({ attacker, victim, kind: o.kind, element, passive: p, world, o });
@@ -260,8 +265,27 @@ export function applyHit(world, attacker, victim, o) {
   if (o.kind === 'melee' || o.applyMeleePassives) runMeleePassives(world, attacker, victim, o, dealt, attempted);
 
   // arma amaldiçoada (Aghata): golpes físicos e a faca arremessada abrem sangramento
+  // (por elemento — abilities.js CURSE_ELEMENTS): Sangue sangra; Morte apodrece (dano contínuo) e deixa lento um
+  // instante; Conhecimento drena a sanidade; Energia às vezes descarrega um choque extra
   const curse = attacker.findBuff && attacker.findBuff('curse');
-  if (curse && (o.kind === 'melee' || o.kind === 'ranged') && victim.state !== 'ko') victim.applyBleed(curse.bleed, attacker);
+  if (curse && (o.kind === 'melee' || o.kind === 'ranged') && victim.state !== 'ko') {
+    if (curse.bleed) victim.applyBleed(curse.bleed, attacker);
+    if (curse.slow && victim.addBuff) {
+      const sb = victim.findBuff('curseSlow');
+      if (sb) sb.time = curse.slow.time;
+      else victim.addBuff({ type: 'curseSlow', name: 'APODRECENDO', time: curse.slow.time, duration: curse.slow.time, speedMult: curse.slow.mult });
+    }
+    if (curse.drain && victim.energy !== undefined) {
+      victim.energy = Math.max(0, victim.energy - curse.drain);
+      world.fx.burst(victim.chestPos(), { count: 4, color: 0xf2c230, speed: 1.2, up: 1, life: 0.4, size: 0.08 });
+    }
+    if (curse.shock && Math.random() < curse.shock.chance) {
+      const n = victim.takeDamage(curse.shock.damage);
+      world.fx.burst(victim.chestPos(), { count: 14, color: 0xc89aff, speed: 4, life: 0.25, size: 0.08 });
+      world.audio.play('chargeHum', { volume: 0.7, pitch: 2 });
+      world.onHit && world.onHit(attacker, victim, n, { kind: 'ability', ability: 'choque' });
+    }
+  }
   // golpe que corta fundo (ex.: machado do Mutilador) e estados que fazem sangrar (máscara do Aguiar)
   if (o.kind === 'melee' && victim.state !== 'ko' && o.strike && o.strike.bleed) victim.applyBleed(o.strike.bleed, attacker);
   // máscara do Mutilador: enquanto estiver com ela, TODO golpe do machado sangra — corpo a corpo e o machado na corda

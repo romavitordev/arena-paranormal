@@ -176,7 +176,7 @@ for side in ('L', 'R'):
         rings.append((p.x, p.y, p.z, r, r))
     b.add('pants' + side, tube(rings, 14), pants, region='leg' + side, subdiv=0)
     b.add('shoe' + side, ellipsoid((f.x, f.y - 0.05 * H, f.z + 0.025 * H), (0.046 * H, 0.12 * H, 0.036 * H), 12, 8, theta_max=math.pi * 0.6), shoe, region='foot' + side, subdiv=0)
-    b.add('sole' + side, box((f.x, f.y - 0.05 * H, f.z - 0.006 * H), (0.095 * H, 0.24 * H, 0.02 * H), bevel=0.005), shoe, region='foot' + side, subdiv=0)
+    b.add('sole' + side, sole_part((f.x, f.y - 0.05 * H, f.z - 0.006 * H), (0.095 * H, 0.24 * H, 0.02 * H), bevel=0.005), shoe, region='foot' + side, subdiv=0)
 
 # ---------------------------------------------------------------- CAPA marrom-escura até os pés, aberta na frente
 GAP = 0.13

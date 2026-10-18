@@ -2,7 +2,7 @@ import { COMBAT } from '../config/combat.js';
 import * as THREE from 'three';
 import { applyHit } from './damage.js';
 import { glowMat } from '../models/rig.js';
-import { knife, mutilatorAxe, baluAxe, demonMace } from '../models/weapons.js';
+import { knife, mutilatorAxe, baluAxe, demonMace, chaosSkate } from '../models/weapons.js';
 import { createMistZone } from './abilities.js';
 import { addBloodPool } from './bloodPools.js';
 import { inscribe } from './kianPowers.js';
@@ -331,6 +331,20 @@ const VISUALS = {
   skate(color) {
     const g = new THREE.Group();
     const spin = new THREE.Group();
+    // o Skate Caótico do modelo novo (o mesmo da mão do Xande), deitado: a lixa para cima, as rodas para baixo e o
+    // comprimento na direção do voo, girando em volta do meio
+    const model = chaosSkate();
+    if (model.userData.fromGlb) {
+      model.rotation.set(0, Math.PI / 2, Math.PI / 2, 'YXZ');
+      model.position.set(0, 0, 0.3);
+      spin.add(model);
+      const glowB = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.01, 0.7), glowMat(0x5aff6a, 0.35));
+      glowB.position.y = -0.03;
+      spin.add(glowB);
+      g.add(spin);
+      g.userData.spinY = spin;
+      return g;
+    }
     const deck = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.03, 0.8), new THREE.MeshStandardMaterial({ color, roughness: 0.5 }));
     spin.add(deck);
     for (const z of [-0.26, 0.26]) for (const x of [-0.09, 0.09]) {

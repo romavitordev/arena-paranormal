@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.32.0';
+export const VERSION = '3.33.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,18 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.33.0',
+    date: '2026-10-18',
+    title: 'O Ocultista',
+    items: [
+      'MODELO DO XANDE REFEITO PELA ARTE OFICIAL: reconstruído no Blender a partir da arte de Sinais do Outro Lado. Cabelos em mechas onduladas sob o boné, camiseta amarela canelada com os 3 triângulos e "oculto", bermuda de sarja com barra de triângulos, suspensórios em X com bolsas e frascos, balaclava cinza-esverdeada, fones de ouvido no pescoço, joelheiras com olhos, correntes 3D com elos reais e tênis de cano alto. Texturas com arranhões e marcas de mordida nas canelas.',
+      'ARMAS EM 3D NO BLENDER: Taco com arame farpado e pregos, e o Skate Caótico detalhado pela arte oficial (guardas de metal, lâminas serrilhadas, rodas com espinhos, alça de escudo e runas verdes) tanto na mão quanto no arremesso giratório. Novo Machado do Mutilador do Aguiar modelado no Blender.',
+      'MÃOS E PÉS DE TODOS OS 33 PERSONAGENS: mãos esculpidas com nós anatômicos e dedos em 3 falanges articuladas; sapatos e solas arredondadas e modeladas substituindo caixas rígidas, e pés descalços com arco e 5 dedos.',
+      'AMALDIÇOAR ARMA POR ELEMENTO: o Xande agora escolhe de forma adaptativa o elemento que supera o adversário atual no ciclo paranormal (Sangue supera Morte, Morte supera Energia, Energia supera Conhecimento, Conhecimento supera Sangue). Efeitos próprios por elemento (Sangue sangra, Morte apodrece e desacelera, Conhecimento drena sanidade/energia, Energia descarrega choques extras) com revestimento visual dinâmico e brilhante na arma.',
+      'ASSISTÊNCIA DO XANDE APRIMORADA: ao se mover durante a chamada de assistência, amaldiçoa a arma do parceiro com o elemento que supera o adversário atual.',
+    ],
+  },
   {
     v: '3.32.0',
     date: '2026-10-18',

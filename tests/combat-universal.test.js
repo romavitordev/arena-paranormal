@@ -30,3 +30,20 @@ test('elemental affinity cycle provides balanced advantage and disadvantage', ()
   assert.equal(COMBAT.elements.advantage, 1.15, '+15% de vantagem');
   assert.equal(COMBAT.elements.disadvantage, 0.85, '-15% de desvantagem');
 });
+
+test('adaptive weapon curse selects the element that overcomes the opponent', async () => {
+  const { pickCurseElement, CURSE_ELEMENTS } = await import('../src/combat/abilities.js');
+  assert.ok(CURSE_ELEMENTS.sangue && CURSE_ELEMENTS.morte && CURSE_ELEMENTS.conhecimento && CURSE_ELEMENTS.energia);
+
+  // Contra Conhecimento -> escolhe Sangue
+  assert.equal(pickCurseElement({ opponent: { def: { element: 'conhecimento' } } }, { adaptive: true }), 'sangue');
+  // Contra Energia -> escolhe Conhecimento
+  assert.equal(pickCurseElement({ opponent: { def: { element: 'energia' } } }, { adaptive: true }), 'conhecimento');
+  // Contra Morte -> escolhe Energia
+  assert.equal(pickCurseElement({ opponent: { def: { element: 'morte' } } }, { adaptive: true }), 'energia');
+  // Contra Sangue -> escolhe Morte
+  assert.equal(pickCurseElement({ opponent: { def: { element: 'sangue' } } }, { adaptive: true }), 'morte');
+  // Contra elemento fora do ciclo (ex: Medo) -> fallback para Sangue
+  assert.equal(pickCurseElement({ opponent: { def: { element: 'medo' } } }, { adaptive: true }), 'sangue');
+});
+

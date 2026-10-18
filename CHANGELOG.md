@@ -1,5 +1,24 @@
 # Changelog
 
+## v3.33.0 — O Ocultista
+
+### Adicionado
+- Modelo do **Xande** refeito pela arte oficial (`tools/blender/char_xande.py` → `public/models/xande.glb`): cabelos ondulados em metaballs, camiseta amarela canelada e estampa dos 3 triângulos com "oculto", bermuda de sarja com pregas e barra de triângulos, suspensórios em X, cinto com rádio e bolsas, balaclava, fones no pescoço, joelheiras de olho, correntes 3D com elos reais e tênis de cano alto. Texturas `face_xande`, `shirt_xande`, `sleeve_xande`, `shorts_xande`, `gaiter_xande`, `legs_xande` (arranhões e mordidas) e `trim_xande`.
+- Armas modeladas no Blender (`tools/blender/npc_*.py` → `public/npcs/*.glb`):
+  - Taco com arame farpado e pregos (`npc_xande_bat.py` → `xande_bat.glb`).
+  - Skate Caótico (`npc_xande_skate.py` → `xande_skate.glb`): guardas metálicas com rebites, lâminas serrilhadas, rodas com espinhos, alça de escudo e runas verdes; utilizado tanto nas mãos quanto no projétil arremessado.
+  - Machado do Mutilador (`npc_aguiar_axe.py` → `aguiar_axe.glb`): lâmina curva com fio gasto, contrapeso de ferro, empunhadura de couro e corda amarrada.
+- Anatomia refinada em todos os 33 modelos (`tools/blender/lib.py`):
+  - Mãos esculpidas (`hand_part`): palma e dorso modelados com dedos em 3 falanges articuladas, nós anatômicos e polegar sobreposto.
+  - Sapatos modelados (`foot_part`): formato orgânico com bico arredondado, peito do pé e calcanhar.
+  - Solas contornadas (`sole_part`) e pés descalços anatômicos com arco e 5 dedos (`bare_foot_part`).
+- Sistema de **Revestimento Elemental de Armas** (`src/models/weapons.js`, `elementCoat`): gera texturas procedurais com emissivo próprio para Sangue, Morte (lodo com espirais), Conhecimento (sigilos pulsantes) e Energia (raios piscantes).
+- Mecânica de **Amaldiçoar Arma por Elemento** adaptativa (`src/combat/abilities.js`, `applyWeaponCurse`, `pickCurseElement`):
+  - Xande seleciona automaticamente o elemento que supera a afinidade do oponente (Sangue → Morte → Energia → Conhecimento → Sangue).
+  - Efeitos em combate por elemento (`src/combat/damage.js`): Sangue aplica sangramento; Morte causa apodrecimento contínuo e lentidão momentânea; Conhecimento drena sanidade/energia da vítima; Energia descarrega choques elétricos extras com chance percentual.
+  - Golpes com armas amaldiçoadas herdam multiplicadores de vantagem/desvantagem elemental.
+- Assistência em movimento do Xande atualizada (`src/combat/assists.js`): amaldiçoa a arma do líder ativo com o elemento que supera o adversário atual.
+
 ## v3.32.0 — O Enigma
 
 ### Adicionado

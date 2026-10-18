@@ -73,18 +73,20 @@ export default {
 
   abilities: [
     {
+      // AMALDIÇOAR ARMA (cânone: o Xande amaldiçoa o taco com Sangue e com Conhecimento em Sinais do Outro Lado): como
+      // ocultista que amaldiçoa com vários elementos, escolhe sozinho o que SUPERA o adversário de agora
       id: 'amaldicoarTaco',
-      name: 'Amaldiçoar Arma com Sangue',
+      name: 'Amaldiçoar Arma',
       input: 'carga+ranged',
       type: 'curseWeapon',
-      description: 'O sangue sobe em espiral até o taco: por 8 s fica coberta de Sangue e todo golpe físico abre um sangramento.',
+      adaptive: true,
+      description: 'Amaldiçoa o taco por 8 s com o elemento que SUPERA o adversário (contra Sangue, Morte; contra Morte, Energia; contra Energia, Conhecimento; contra Conhecimento, Sangue). Sangue sangra, Morte apodrece e deixa lento, Conhecimento drena a sanidade, Energia solta choques — e os golpes levam a vantagem do elemento.',
       energyCost: 20,
       cooldown: 18,
       duration: 8,
       props: ['bat'],
       element: 'sangue',
       bleed: { dps: 4, duration: 3 },
-      color: 0xe0204a,
     },
     {
       id: 'polarizacao',

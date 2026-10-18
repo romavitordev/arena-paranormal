@@ -613,8 +613,8 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ### Habilidades
 
-- **Amaldiçoar Arma com Sangue** — △ + □ / Y + X · custo 20 · cooldown 18 s
-  O sangue sobe em espiral até o taco: por 8 s fica coberta de Sangue e todo golpe físico abre um sangramento.
+- **Amaldiçoar Arma** — △ + □ / Y + X · custo 20 · cooldown 18 s
+  Amaldiçoa o taco por 8 s com o elemento que SUPERA o adversário (contra Sangue, Morte; contra Morte, Energia; contra Energia, Conhecimento; contra Conhecimento, Sangue). Sangue sangra, Morte apodrece e deixa lento, Conhecimento drena a sanidade, Energia solta choques — e os golpes levam a vantagem do elemento.
 - **Polarização Caótica** — △ + ○ / Y + B · custo 30 · cooldown 12 s · alcance 11 m
   Aura magnética: o inimigo LONGE é atraído até ele; o inimigo PERTO é repelido para longe e cai.
 - **Tela de Ruído** — R2 + △ / RT + Y · custo 30 · cooldown 22 s

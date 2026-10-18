@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { part, toon, glowMat } from './rig.js';
+import { buildNpcModel } from './npcRig.js';
 
 // Armas PROVISÓRIAS. Convenção: empunhadura na origem, lâmina/cano apontando
 // para -Y local (continuação do braço) e "topo" da arma em +Z local.
@@ -458,6 +459,116 @@ export function bloodCoat(root) {
   };
 }
 
+// ARMA AMALDIÇOADA POR ELEMENTO: uma textura para cada elemento do Outro Lado (pintada uma vez e reaproveitada).
+//  - SANGUE: sangue molhado escuro com escorridos, coágulos e o reflexo úmido;
+//  - MORTE: o Lodo preto com as ESPIRAIS cinza (o símbolo da Morte) e o brilho molhado;
+//  - CONHECIMENTO: madeira/metal escurecido coberto de SIGILOS dourados que brilham;
+//  - ENERGIA: roxo profundo rachado por RAIOS violeta que piscam.
+// Cada uma traz o mapa de cor e o de brilho (as partes que acendem); a cobertura troca o material de cada peça e
+// devolve a função que desfaz.
+const ELEMENT_TEX = {};
+function paintCoat(el) {
+  if (ELEMENT_TEX[el]) return ELEMENT_TEX[el];
+  const mk = () => { const c = document.createElement('canvas'); c.width = 256; c.height = 256; return c; };
+  const col = mk(); const glo = mk();
+  const g = col.getContext('2d'); const e = glo.getContext('2d');
+  e.fillStyle = '#000'; e.fillRect(0, 0, 256, 256);
+  const R_ = Math.random;
+  const wander = (ctx, x0, step, jit) => { let x = x0; ctx.beginPath(); ctx.moveTo(x, -10); for (let y = 0; y <= 266; y += step) { x += (R_() - 0.5) * jit; ctx.lineTo(x, y); } ctx.stroke(); };
+  if (el === 'sangue') {
+    const grd = g.createLinearGradient(0, 0, 256, 0);
+    grd.addColorStop(0, '#3a0006'); grd.addColorStop(0.5, '#7a0414'); grd.addColorStop(1, '#3a0006');
+    g.fillStyle = grd; g.fillRect(0, 0, 256, 256);
+    g.lineCap = 'round';
+    g.strokeStyle = 'rgba(20,0,2,0.75)'; g.lineWidth = 7; for (let i = 0; i < 9; i++) wander(g, R_() * 256, 20, 16); // veias escuras
+    g.strokeStyle = 'rgba(190,14,40,0.9)'; g.lineWidth = 4; for (let i = 0; i < 12; i++) wander(g, R_() * 256, 18, 14); // escorridos
+    for (let i = 0; i < 22; i++) { // gotas penduradas e coágulos
+      const x = R_() * 256, y = R_() * 256, r = 3 + R_() * 6;
+      g.fillStyle = 'rgba(110,0,12,0.95)'; g.beginPath(); g.ellipse(x, y, r * 0.8, r * 1.4, 0, 0, Math.PI * 2); g.fill();
+      g.fillStyle = 'rgba(255,120,130,0.6)'; g.beginPath(); g.arc(x - r * 0.3, y - r * 0.5, r * 0.25, 0, Math.PI * 2); g.fill();
+    }
+    g.strokeStyle = 'rgba(255,110,125,0.55)'; g.lineWidth = 1.4; for (let i = 0; i < 8; i++) wander(g, R_() * 256, 24, 10); // reflexo molhado
+    e.strokeStyle = 'rgba(120,0,16,1)'; e.lineWidth = 4; for (let i = 0; i < 6; i++) wander(e, R_() * 256, 18, 14);
+  } else if (el === 'morte') {
+    g.fillStyle = '#0e0c10'; g.fillRect(0, 0, 256, 256);
+    for (let i = 0; i < 1400; i++) { g.fillStyle = `rgba(60,56,66,${R_() * 0.2})`; g.fillRect(R_() * 256, R_() * 256, 3, 2); }
+    // as espirais da Morte
+    for (let k = 0; k < 7; k++) {
+      const cx = R_() * 256, cy = R_() * 256, rr = 10 + R_() * 18;
+      for (const [ctx, c, w] of [[g, 'rgba(150,146,158,0.85)', 2.2], [e, 'rgba(120,116,128,1)', 2.2]]) {
+        ctx.strokeStyle = c; ctx.lineWidth = w; ctx.beginPath();
+        for (let a = 0; a < Math.PI * 5; a += 0.15) { const r = rr * (1 - a / (Math.PI * 5)); ctx.lineTo(cx + Math.cos(a) * r, cy + Math.sin(a) * r); }
+        ctx.stroke();
+      }
+    }
+    g.strokeStyle = 'rgba(120,118,130,0.35)'; g.lineWidth = 1.4; for (let i = 0; i < 10; i++) wander(g, R_() * 256, 22, 8); // brilho do Lodo escorrendo
+  } else if (el === 'conhecimento') {
+    const grd = g.createLinearGradient(0, 0, 256, 0);
+    grd.addColorStop(0, '#2a1c08'); grd.addColorStop(0.5, '#4a3412'); grd.addColorStop(1, '#2a1c08');
+    g.fillStyle = grd; g.fillRect(0, 0, 256, 256);
+    // fileiras de SIGILOS (traços retos, círculos e cruzes, como as escritas do Conhecimento)
+    for (let row = 0; row < 8; row++) {
+      for (let k = 0; k < 7; k++) {
+        const x = 12 + k * 36 + (row % 2) * 16, y = 18 + row * 32;
+        for (const [ctx, c] of [[g, '#f2c230'], [e, '#d8a020']]) {
+          ctx.strokeStyle = c; ctx.lineWidth = 2.4; ctx.beginPath();
+          const t = (row * 7 + k) % 4;
+          if (t === 0) { ctx.arc(x, y, 7, 0, Math.PI * 2); ctx.moveTo(x - 9, y); ctx.lineTo(x + 9, y); }
+          else if (t === 1) { ctx.moveTo(x - 7, y - 8); ctx.lineTo(x + 7, y + 8); ctx.moveTo(x + 7, y - 8); ctx.lineTo(x - 7, y + 8); ctx.moveTo(x, y - 10); ctx.lineTo(x, y + 10); }
+          else if (t === 2) { ctx.moveTo(x - 8, y + 7); ctx.lineTo(x, y - 8); ctx.lineTo(x + 8, y + 7); ctx.closePath(); }
+          else { ctx.moveTo(x - 8, y - 6); ctx.lineTo(x + 8, y - 6); ctx.moveTo(x - 4, y - 6); ctx.lineTo(x - 4, y + 8); ctx.moveTo(x + 4, y + 2); ctx.lineTo(x + 8, y + 8); }
+          ctx.stroke();
+        }
+      }
+    }
+  } else { // energia
+    g.fillStyle = '#180826'; g.fillRect(0, 0, 256, 256);
+    for (let i = 0; i < 900; i++) { g.fillStyle = `rgba(150,90,255,${R_() * 0.18})`; g.fillRect(R_() * 256, R_() * 256, 2, 2); }
+    // RAIOS ramificados
+    const bolt = (ctx, c, w) => {
+      ctx.strokeStyle = c; ctx.lineWidth = w; ctx.lineJoin = 'miter';
+      for (let i = 0; i < 7; i++) {
+        let x = R_() * 256, y = -10;
+        ctx.beginPath(); ctx.moveTo(x, y);
+        while (y < 266) { x += (R_() - 0.5) * 34; y += 10 + R_() * 18; ctx.lineTo(x, y); if (R_() < 0.2) { ctx.moveTo(x, y); ctx.lineTo(x + (R_() - 0.5) * 40, y + 20); ctx.moveTo(x, y); } }
+        ctx.stroke();
+      }
+    };
+    bolt(g, 'rgba(200,150,255,0.95)', 2.4);
+    bolt(e, 'rgba(190,120,255,1)', 3);
+  }
+  const mkTex = (c) => { const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(1, 2); return t; };
+  ELEMENT_TEX[el] = { map: mkTex(col), emissiveMap: mkTex(glo) };
+  return ELEMENT_TEX[el];
+}
+
+const COAT_LOOK = {
+  sangue: { roughness: 0.22, metalness: 0.15, emissive: 0xc0102a, emissiveIntensity: 0.55 },
+  morte: { roughness: 0.18, metalness: 0.1, emissive: 0x8a8494, emissiveIntensity: 0.6 },
+  conhecimento: { roughness: 0.5, metalness: 0.3, emissive: 0xffc830, emissiveIntensity: 1.6 },
+  energia: { roughness: 0.35, metalness: 0.2, emissive: 0xb070ff, emissiveIntensity: 1.8 },
+};
+
+// Reveste a arma com o ELEMENTO (sangue, morte, conhecimento, energia). Retorna { undo, mat } — mat para animar o
+// brilho (a Energia pisca). Elementos fora do ciclo (Medo, Tinta, Transmissão) usam o Sangue.
+export function elementCoat(root, el) {
+  const key = COAT_LOOK[el] ? el : 'sangue';
+  const tx = paintCoat(key);
+  const L = COAT_LOOK[key];
+  const mat = new THREE.MeshStandardMaterial({ map: tx.map, emissiveMap: tx.emissiveMap, color: 0xffffff, roughness: L.roughness, metalness: L.metalness, emissive: L.emissive, emissiveIntensity: L.emissiveIntensity });
+  mat.userData.keepEmissive = true;
+  mat.userData.baseGlow = L.emissiveIntensity;
+  const saved = [];
+  root.traverse((o) => {
+    if (!o.isMesh || o.userData.isOutline || o.material === mat) return;
+    if (o.material && o.material.side === THREE.BackSide) return;
+    if (!o.visible || (o.material && o.material.transparent)) return;
+    saved.push([o, o.material]);
+    o.material = mat;
+  });
+  return { mat, undo: () => { for (const [o, m] of saved) o.material = m; mat.dispose(); } };
+}
+
 // tubo ao longo de uma curva que vai afinando (r(t) = raio no ponto t de 0 a 1)
 export function taperedTube(curve, len, r, mat, seg = 24, radial = 7) {
   const geo = new THREE.TubeGeometry(curve, seg, 1, radial, false);
@@ -591,6 +702,10 @@ export function bloodClaw() {
 
 // Machado do Mutilador: cabo de madeira marrom e lâmina vermelha levemente triangular
 export function mutilatorAxe() {
+  // o modelo do Blender (tools/blender/npc_aguiar_axe.py, a partir da arte oficial): lâmina vermelha curva com o fio
+  // gasto, olho e contrapeso de ferro, cabo com a empunhadura de couro, a corda amarrada e o sangue escorrendo
+  const m = buildNpcModel('aguiar_axe', { outline: 0.006, noOutline: ['blood', 'rope', 'grip', 'edge'] });
+  if (m) return m.root;
   const g = new THREE.Group();
   const handle = part(new THREE.CylinderGeometry(0.022, 0.028, 0.72, 8), 0x6a4428);
   handle.position.y = -0.22;
@@ -682,6 +797,9 @@ export function antenna() {
 
 // Taco de baseball do Xande: madeira, fita na empunhadura, arame farpado e corrente até o braço
 export function barbedBat() {
+  // o modelo do Blender (tools/blender/npc_xande_bat.py): madeira, fita, arame farpado com as farpas, pregos e a corrente
+  const m = buildNpcModel('xande_bat', { outline: 0.006, noOutline: ['tape', 'wire', 'nail'] });
+  if (m) return m.root;
   const g = new THREE.Group();
   const wood = part(new THREE.CylinderGeometry(0.052, 0.024, 0.86, 10), 0x7a4a26);
   wood.position.y = -0.38;
@@ -893,6 +1011,10 @@ export function facaPredadora() {
 
 // Skate Caótico (na mão esquerda do Xande)
 export function chaosSkate() {
+  // o modelo do Blender (tools/blender/npc_xande_skate.py, a partir da arte oficial): guardas de metal, lâminas, rodas
+  // vermelhas com espinhos dourados, a alça do escudo, "OCULTO" no shape e as runas verdes
+  const m = buildNpcModel('xande_skate', { outline: 0.006, noOutline: ['rune', 'ink', 'rivet', 'spike'] });
+  if (m) { m.root.userData.fromGlb = true; return m.root; }
   const g = new THREE.Group();
   const deck = part(new THREE.BoxGeometry(0.03, 0.78, 0.22), 0xe8bc22);
   deck.position.y = -0.3;

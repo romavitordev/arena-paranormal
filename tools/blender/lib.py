@@ -539,29 +539,153 @@ def torso_part(sk, profile, seg=18, depth=0.62):
     return tube(rings, segments=seg)
 
 
+def _smooth_path(pts, k=4):
+    """Catmull-Rom pelos pontos (dobras redondas nos dedos)"""
+    P = [pts[0]] + list(pts) + [pts[-1]]
+    out = []
+    for i in range(1, len(P) - 2):
+        p0, p1, p2, p3 = P[i - 1], P[i], P[i + 1], P[i + 2]
+        for j in range(k):
+            t = j / k
+            out.append(0.5 * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t + (-p0 + 3 * p1 - 3 * p2 + p3) * t * t * t))
+    out.append(pts[-1])
+    return out
+
+
+def _smooth_r(rs, k=4):
+    out = []
+    for i in range(len(rs) - 1):
+        for j in range(k):
+            out.append(rs[i] + (rs[i + 1] - rs[i]) * j / k)
+    out.append(rs[-1])
+    return out
+
+
 def hand_part(sk, side, r=0.055, fist=True):
     """
-    Punho fechado: palma, fileira de 4 nós dos dedos embaixo, dedos dobrados do lado de dentro
-    (virado para o corpo) e o polegar por cima, na frente. fist=False: mão aberta simples.
+    MÃO (antes eram elipsoides colados): a palma e o dorso esculpidos numa forma só (metaballs) e cada DEDO separado,
+    em 3 falanges (tubo com as juntas arredondadas, os nós marcados), dobrados para dentro no punho fechado, o mínimo
+    menor; o POLEGAR cruza por cima do indicador, na frente. A palma aponta para o centro do corpo; a frente é -y.
+    fist=False: mão aberta relaxada (dedos juntos e levemente dobrados). r = "raio" da mão em metros.
     """
+    from sculpt_lib import Sculpt, rod as srod
     c = sk['hand' + side] + Vector((0, 0, -0.04 * sk.h))
-    if not fist:
-        return ellipsoid(c, (r * 0.75, r * 1.05, r * 1.35), seg=10, rings=8)
     inner = -1 if c.x > 0 else 1  # lado de dentro (palma) aponta para o centro do corpo
-    parts = [ellipsoid((c.x, c.y, c.z + r * 0.15), (r * 0.78, r * 1.0, r * 1.05), seg=10, rings=8)]
-    for i in range(4):
-        y = c.y + (i - 1.5) * r * 0.5
-        # nó do dedo (base do punho) e o dedo dobrado por dentro
-        parts.append(ellipsoid((c.x - inner * r * 0.05, y, c.z - r * 0.85), (r * 0.42, r * 0.27, r * 0.3), seg=8, rings=6))
-        parts.append(ellipsoid((c.x + inner * r * 0.45, y, c.z - r * 0.55), (r * 0.3, r * 0.25, r * 0.36), seg=8, rings=6))
-    # polegar: na frente, cruzando por cima dos dedos
-    parts.append(ellipsoid((c.x + inner * r * 0.35, c.y - r * 0.85, c.z - r * 0.35), (r * 0.42, r * 0.3, r * 0.28), seg=8, rings=6))
+    V = lambda x, y, z: Vector((c.x + inner * x * r, c.y + y * r, c.z + z * r))
+    S = Sculpt()
+    S.ell(V(0, 0, 0.9), (0.5 * r, 0.6 * r, 0.5 * r))  # o punho (liga ao antebraço)
+    S.ell(V(0.02, 0.0, 0.12), (0.4 * r, 0.88 * r, 0.8 * r))  # a palma / o dorso
+    S.ell(V(0.0, 0.0, -0.58), (0.38 * r, 0.86 * r, 0.24 * r))  # a fileira dos nós (base dos dedos)
+    S.ell(V(0.26, -0.52, 0.12), (0.28 * r, 0.3 * r, 0.48 * r))  # a eminência do polegar
+    pv, pf, _ = S.mesh(res=r * 0.08, smooth=2, target=420)
+    parts = [(pv, pf, [(0.5, 0.5)] * len(pv))]
+    fingers = [(-0.62, 0.2, 1.0), (-0.2, 0.21, 1.05), (0.22, 0.2, 1.0), (0.6, 0.175, 0.85)]  # indicador → mínimo
+
+    def capsule(pts, rs):
+        out = [srod(_smooth_path(pts, 3), _smooth_r(rs, 3), 7, caps=False)]
+        # só o nó da base do dedo (marca um pouco) e a ponta arredondados; as dobras ficam no próprio tubo
+        for n_ in (0, len(pts) - 1):
+            k_ = 1.08 if n_ == 0 else 1.0
+            out.append(ellipsoid(tuple(pts[n_]), (rs[n_] * k_,) * 3, seg=8, rings=5))
+        return out
+
+    for y, fr, ln in fingers:
+        fr *= r
+        if fist:
+            k = V(-0.08, y, -0.6)  # o nó do dedo
+            p1 = V(0.18, y, -0.6 - 0.3 * ln)  # falange 1: desce dobrando para dentro
+            p2 = V(0.5, y * 0.97, -0.56 - 0.24 * ln)  # falange 2: volta subindo pela palma
+            p3 = V(0.56, y * 0.94, -0.3)  # a ponta encostada na palma
+        else:
+            k = V(0.0, y * 0.92, -0.66)
+            p1 = V(0.08, y * 0.93, -0.66 - 0.5 * ln)
+            p2 = V(0.2, y * 0.94, -0.66 - 0.9 * ln)
+            p3 = V(0.34, y * 0.94, -0.66 - 1.18 * ln)
+        parts += capsule([k, p1, p2, p3], [fr * 1.05, fr, fr * 0.92, fr * 0.82])
+    if fist:
+        parts += capsule([V(0.3, -0.6, 0.05), V(0.5, -0.84, -0.32), V(0.66, -0.6, -0.66), V(0.68, -0.3, -0.74)], [0.26 * r, 0.24 * r, 0.21 * r, 0.18 * r])
+    else:
+        parts += capsule([V(0.3, -0.6, 0.05), V(0.42, -0.92, -0.32), V(0.5, -1.02, -0.66)], [0.25 * r, 0.21 * r, 0.17 * r])
     return merge(*parts)
 
 
-def foot_part(sk, side, length=0.24, width=0.1, height=0.075):
+def sole_part(center, size, bevel=0.0, n=28):
+    """SOLA arredondada no lugar de uma caixa (mesmos argumentos de box): o contorno de um pé — bico redondo e mais
+    largo, calcanhar redondo e um pouco mais estreito — com a borda chanfrada em cima."""
+    cx, cy, cz = center
+    w, ln, th = size
+    ring = []
+    for i in range(n):
+        a = i / n * TAU
+        x, y = math.cos(a), math.sin(a)
+        # superelipse (cantos cheios) e o calcanhar (y > 0, atrás) mais estreito
+        k = 2.6
+        r = (abs(x) ** k + abs(y) ** k) ** (-1 / k)
+        taper = 0.86 if y > 0 else 1.0
+        ring.append((x * r * w / 2 * taper, y * r * ln / 2))
+    ch = min(bevel or th * 0.35, th * 0.45)
+    inset = 1 - ch / max(w, 1e-6)
+    V, U = [], []
+    for z, k_ in ((cz - th / 2, 1.0), (cz + th / 2 - ch, 1.0), (cz + th / 2, inset)):
+        for (x, y) in ring:
+            V.append((cx + x * k_, cy + y * k_, z))
+            U.append((0.5 + x / max(w, 1e-6), 0.5 + y / max(ln, 1e-6)))
+    F = []
+    for r_ in range(2):
+        for i in range(n):
+            a, b_ = r_ * n + i, r_ * n + (i + 1) % n
+            F.append((a, b_, b_ + n, a + n))
+    V.append((cx, cy, cz - th / 2)); U.append((0.5, 0.5))
+    V.append((cx, cy, cz + th / 2)); U.append((0.5, 0.5))
+    bc, tc = len(V) - 2, len(V) - 1
+    for i in range(n):
+        F.append((bc, (i + 1) % n, i))
+        F.append((tc, 2 * n + i, 2 * n + (i + 1) % n))
+    return V, F, U
+
+
+def bare_foot_part(sk, side, scale=1.0):
+    """PÉ DESCALÇO esculpido (antes era um elipsoide): calcanhar, arco, a planta e os 5 dedos (o dedão maior)."""
+    from sculpt_lib import Sculpt
     f = sk['foot' + side]
-    return box((f.x, f.y - 0.05, f.z + height / 2 - 0.03), (width, length, height))
+    H = sk.h * scale
+    s = 1 if f.x > 0 else -1  # o dedão fica do lado de dentro
+    base = f.z - 0.012 * H
+    S = Sculpt()
+    S.chain([Vector((f.x, f.y + 0.04 * H, base + 0.03 * H)), Vector((f.x, f.y - 0.02 * H, base + 0.026 * H)), Vector((f.x - s * 0.006 * H, f.y - 0.1 * H, base + 0.018 * H))],
+            [0.036 * H, 0.04 * H, 0.04 * H], step=0.4)
+    S.ell(Vector((f.x, f.y + 0.005 * H, f.z + 0.02 * H)), (0.034 * H, 0.04 * H, 0.04 * H))  # o tornozelo/peito do pé
+    for k in range(5):  # do dedão (dentro) ao mínimo (fora)
+        x = f.x - s * (0.024 - k * 0.012) * H
+        ln = (0.034 if k == 0 else 0.028 - k * 0.003) * H
+        r = (0.0125 if k == 0 else 0.0095 - k * 0.0007) * H
+        y0 = f.y - (0.118 - k * 0.006) * H
+        S.chain([Vector((x, y0, base + 0.016 * H)), Vector((x - s * 0.002 * H * k, y0 - ln, base + 0.01 * H))], [r * 1.05, r], step=0.4)
+    v, fc, _ = S.mesh(res=0.0045 * H, smooth=2, target=900)
+    v = [(x, y, max(z, base - 0.004 * H)) for x, y, z in v]
+    return v, fc, [(0.5, 0.5)] * len(v)
+
+
+def foot_part(sk, side, length=0.24, width=0.1, height=0.075):
+    """
+    SAPATO esculpido (antes era uma caixa): bico arredondado e um pouco mais baixo, o calcanhar redondo, o peito do pé
+    subindo até o tornozelo e a SOLA reta embaixo (tudo uma forma só). Mesmas medidas de antes.
+    """
+    from sculpt_lib import Sculpt
+    f = sk['foot' + side]
+    bottom = f.z - 0.03
+    cy = f.y - 0.05  # o centro do sapato de antes
+    heel = Vector((f.x, cy + length * 0.36, bottom + height * 0.5))
+    ball = Vector((f.x, cy - length * 0.18, bottom + height * 0.42))
+    toe = Vector((f.x, cy - length * 0.42, bottom + height * 0.36))
+    S = Sculpt()
+    S.chain([heel, ball, toe], [width * 0.46, width * 0.52, width * 0.44], step=0.4)
+    S.ell(Vector((f.x, cy + length * 0.12, bottom + height * 0.85)), (width * 0.44, length * 0.22, height * 0.45))  # o peito do pé
+    S.ell(Vector((f.x, f.y, f.z + 0.01)), (width * 0.42, width * 0.42, height * 0.5))  # o cano baixo em volta do tornozelo
+    v, fc, _ = S.mesh(res=width * 0.06, smooth=2, target=900)
+    # a sola reta: nada passa do chão do sapato, e a borda de baixo fica marcada
+    v = [(x, y, max(z, bottom)) for x, y, z in v]
+    return v, fc, [(0.5, 0.5)] * len(v)
 
 
 # relevo do rosto (V4 — escultura): posições batem com a textura do rosto (textures.js: olhos em y≈0,47,
@@ -756,7 +880,7 @@ class Builder:
                     self.add('foot' + side, foot_part(sk, side, 0.24 * H, 0.1 * H, 0.075 * H), M.get('feet', M['skin']), region='k' + side)
                 elif feet == 'bare':
                     f = sk['foot' + side]
-                    self.add('foot' + side, ellipsoid((f.x, f.y - 0.045 * H, f.z + 0.015 * H), (0.048 * H, 0.11 * H, 0.04 * H), 10, 8), M.get('feet', M['skin']), region='k' + side)
+                    self.add('foot' + side, bare_foot_part(sk, side), M.get('feet', M['skin']), region='body', weight_fn=lambda p, s_=side: auto_weights(sk, p, 'k' + s_))
         return hc
 
     def merge_by_material(self):

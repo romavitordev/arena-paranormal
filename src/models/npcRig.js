@@ -14,6 +14,10 @@ export const NPC_MODELS = {
   javali_tinta: 'npcs/javali_tinta.glb', // os animais infectados pela Tinta (invocação do Amigo Imaginário)
   cao_tinta: 'npcs/cao_tinta.glb',
   esfinge: 'npcs/esfinge.glb', // o Carniçal da Esfinge (especial da Nubi)
+  // ARMAS feitas no Blender (peças rígidas, mesmo carregador): models/weapons.js usa o .glb e, sem ele, a versão em código
+  xande_bat: 'npcs/xande_bat.glb', // o taco com arame farpado do Xande
+  xande_skate: 'npcs/xande_skate.glb', // o Skate Caótico (escudo) do Xande
+  aguiar_axe: 'npcs/aguiar_axe.glb', // o machado do Mutilador Noturno
 };
 const loaded = {};
 

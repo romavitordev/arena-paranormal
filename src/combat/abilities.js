@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { BEATS } from '../config/elements.js';
 import { Timeline, yawTo, distXZ, forwardFromYaw, angleDiff, turnTowards, DEG } from '../core/util.js';
 import { COMBAT } from '../config/combat.js';
 import { findSpotBehind, findFreeSpotNear } from './positioning.js';
@@ -7,10 +8,70 @@ import { splitDamage } from './specials/common.js';
 import { hasPassive } from './passives.js';
 import { DanteClone, CLONE, BloodZombie } from './npcs.js';
 
+// ARMA AMALDIÇOADA: o que cada elemento faz nos golpes (lido em damage.js) e as cores
+export const CURSE_ELEMENTS = {
+  sangue: { label: 'SANGUE', color: 0xe0204a, drip: 0x9a0010, bleed: { dps: 4, duration: 3 } },
+  morte: { label: 'MORTE', color: 0x8a8494, drip: 0x16141a, bleed: { dps: 3, duration: 4, color: 0x2a2632 }, slow: { mult: 0.85, time: 1.2 } },
+  conhecimento: { label: 'CONHECIMENTO', color: 0xf2c230, drip: 0xf2c230, drain: 6 },
+  energia: { label: 'ENERGIA', color: 0xa865ff, drip: 0xc89aff, shock: { chance: 0.3, damage: 14 } },
+};
+
+// o elemento da maldição: a.adaptive escolhe o que SUPERA o adversário de agora (fora do ciclo: a.element)
+export function pickCurseElement(f, a = {}) {
+  let el = a.element || (a.adaptive ? 'sangue' : f.def.element) || 'sangue';
+  const opp = f.opponent;
+  if (a.adaptive && opp && opp.def) {
+    const foe = opp.baseForm && opp.baseForm.def ? opp.baseForm.def.element : opp.def.element;
+    const beater = Object.keys(BEATS).find((k) => BEATS[k] === foe);
+    if (beater) el = beater;
+  }
+  return CURSE_ELEMENTS[el] ? el : 'sangue';
+}
+
+// aplica a ARMA AMALDIÇOADA em `f` (habilidade ou assistência): cobre as armas com a textura do elemento e dá o buff
+// com os efeitos. props: nomes das armas; sem lista, usa as armas que estão nas mãos (a Leonora do Lírio, as facas...);
+// quem luta de mãos vazias recebe o efeito mesmo assim (o brilho fica no punho).
+export function applyWeaponCurse(world, f, el, { duration = 8, props = null, bleed = null, announce = true, label = null } = {}) {
+  const C = CURSE_ELEMENTS[el] || CURSE_ELEMENTS.sangue;
+  const hand = () => f.rig.sockets.handR.getWorldPosition(new THREE.Vector3());
+  let weapons = props ? props.map((n) => f.rig.props[n]).filter(Boolean) : [];
+  if (!props) {
+    const socks = [f.rig.sockets.handR, f.rig.sockets.handL].filter(Boolean);
+    weapons = Object.values(f.rig.props || {}).filter((p) => p && p.isObject3D && p.visible && socks.includes(p.parent));
+  }
+  const coats = weapons.map((w) => elementCoat(w, el));
+  const drip = world.fx.emitter({ rate: 18, follow: hand, particle: { color: C.drip, kind: el === 'morte' ? 'smoke' : undefined, speed: 0.4, spread: 0.2, life: 0.6, size: 0.12, gravity: el === 'energia' || el === 'conhecimento' ? -1 : 6 } });
+  if (announce) f.notify(label || `ARMA AMALDIÇOADA: ${C.label}`, true);
+  let flick = 0;
+  f.addBuff({
+    type: 'curse',
+    name: `ARMA AMALDIÇOADA (${C.label})`,
+    element: el,
+    bleed: el === 'sangue' ? (bleed || C.bleed) : C.bleed,
+    slow: C.slow,
+    drain: C.drain,
+    shock: C.shock,
+    time: duration,
+    duration,
+    onTick(dt) {
+      // a Energia pisca; o Conhecimento pulsa devagar
+      flick += dt;
+      for (const c of coats) {
+        const b = c.mat.userData.baseGlow;
+        if (el === 'energia') c.mat.emissiveIntensity = b * (Math.random() < 0.15 ? 2.2 : 0.7 + Math.random() * 0.5);
+        else if (el === 'conhecimento') c.mat.emissiveIntensity = b * (0.75 + 0.25 * Math.sin(flick * 4));
+      }
+      if (el === 'energia' && Math.random() < 0.08) world.fx.burst(hand(), { count: 2, color: 0xc89aff, speed: 2.5, life: 0.15, size: 0.06 });
+    },
+    onEnd() { drip.stop(); coats.forEach((c) => c.undo()); },
+  });
+  return C;
+}
+
 export { DanteClone }; // o Embaralhar do Dante (guizoAbilities.js) usa as cópias que lutam
 import { MATERIAL_TEXTURES } from '../models/textures.js';
 import { buildHuntingDog } from '../models/dog.js';
-import { bloodCoat } from '../models/weapons.js';
+import { bloodCoat, elementCoat } from '../models/weapons.js';
 import { addBloodPool, poolsOf, splatGeo } from './bloodPools.js';
 import { inscribe } from './kianPowers.js';
 import { AMIGO_TYPES } from './amigoPowers.js';
@@ -510,58 +571,40 @@ export const ABILITY_TYPES = {
     },
   },
 
-  // Amaldiçoar Arma (Sangue): a faca fica amaldiçoada e os acertos abrem sangramento.
+  // AMALDIÇOAR ARMA: a arma fica coberta pelo ELEMENTO do ritual (textura própria de cada um) e os golpes levam o efeito
+  // dele. a.adaptive (Xande, o ocultista que amaldiçoa com vários elementos): escolhe o elemento que SUPERA o do
+  // adversário de agora (Sangue → Morte, Morte → Energia, Energia → Conhecimento, Conhecimento → Sangue); contra quem
+  // está fora do ciclo usa a.element. Efeitos (damage.js): Sangue sangra; Morte apodrece (dano contínuo) e deixa lento
+  // por um instante; Conhecimento drena a sanidade; Energia às vezes descarrega um choque extra. Os golpes físicos da
+  // arma amaldiçoada também levam a vantagem do elemento.
   curseWeapon: {
     start(f, a, world) {
       if (f.findBuff('curse')) {
         f.notify('ARMA JÁ AMALDIÇOADA');
         return null;
       }
+      const el = pickCurseElement(f, a);
+      const C = CURSE_ELEMENTS[el] || CURSE_ELEMENTS.sangue;
+      const color = a.adaptive || !a.color ? C.color : a.color;
       const tl = new Timeline();
       f.vel.set(0, 0, 0);
       f.anim.play('concentrate', { restart: true, duration: 0.6 });
       world.audio.play('ritual', { volume: 0.5 });
       const hand = () => f.rig.sockets.handR.getWorldPosition(new THREE.Vector3());
-      // sangue subindo do chão em espiral até a faca
+      // o elemento sobe do chão em espiral até a arma
       const swirl = world.fx.emitter({
         rate: 90,
         follow: () => {
           const t = performance.now() / 120;
           return new THREE.Vector3(f.pos.x + Math.sin(t) * 0.7, f.pos.y + 0.2 + (t % 1) * 1.2, f.pos.z + Math.cos(t) * 0.7);
         },
-        particle: { color: a.color, speed: 0.8, up: 1.2, spread: 0.2, life: 0.5, size: 0.18 },
+        particle: { color, kind: el === 'morte' ? 'smoke' : undefined, speed: 0.8, up: 1.2, spread: 0.2, life: 0.5, size: 0.18 },
       });
       tl.add(0.5, () => {
         swirl.stop();
-        world.fx.burst(hand(), { count: 30, color: a.color, speed: 4, life: 0.5, size: 0.2 });
-        world.fx.flash(hand(), { color: a.color, size: 1.4, life: 0.15 });
-        const knives = (a.props || ['knife', 'knifeThrow']).map((n) => f.rig.props[n]).filter(Boolean);
-        // encanto de SANGUE: a arma fica coberta de sangue (mesmo material da Arma de Sangue do Arthur); outros
-        // elementos (ex.: Morte da Espada Consumidora) brilham na cor do ritual
-        const isBlood = (a.element || f.def.element) === 'sangue';
-        let uncoat = [];
-        const glow = (on) => knives.forEach((k) => k.traverse((o) => {
-          if (o.isMesh && o.material && o.material.emissive) {
-            o.material.emissive.set(on ? a.color : 0x000000);
-            o.material.emissiveIntensity = on ? 1.4 : 0;
-            o.material.userData.keepEmissive = on; // o "flash" de dano não apaga o brilho
-          }
-        }));
-        const tint = (on) => {
-          if (!isBlood) return glow(on);
-          if (on) uncoat = knives.map((k) => bloodCoat(k));
-          else { uncoat.forEach((u) => u()); uncoat = []; }
-        };
-        tint(true);
-        const drip = world.fx.emitter({ rate: 18, follow: hand, particle: { color: 0x9a0010, speed: 0.4, spread: 0.2, life: 0.6, size: 0.12, gravity: 6 } });
-        f.addBuff({
-          type: 'curse',
-          name: 'ARMA AMALDIÇOADA',
-          bleed: a.bleed,
-          time: a.duration,
-          duration: a.duration,
-          onEnd() { drip.stop(); tint(false); },
-        });
+        world.fx.burst(hand(), { count: 30, color, speed: 4, life: 0.5, size: 0.2 });
+        world.fx.flash(hand(), { color, size: 1.4, life: 0.15 });
+        applyWeaponCurse(world, f, el, { duration: a.duration, props: a.props || ['knife', 'knifeThrow'], bleed: a.bleed, announce: a.adaptive });
       });
       tl.end(0.6);
       return seqFrom(tl, { cancel: () => swirl.stop() });

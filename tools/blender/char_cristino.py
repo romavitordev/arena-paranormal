@@ -214,7 +214,7 @@ for side in ('L', 'R'):
         wraps.append(Vector((f.x + math.sin(a) * rr, f.y - math.cos(a) * rr * 0.95, z + 0.008 * math.sin(a * 0.5))))
     b.add('bandage' + side, rod(wraps, 0.017 * H, 6, flat=(outward((f.x, f.y)), 0.22)), bandage, region='leg' + side, subdiv=0)
     # alpercata: sola grossa e as tiras de couro cruzando o peito do pé e o calcanhar
-    b.add('sole' + side, box((f.x, f.y - 0.05 * H, f.z - 0.022 * H), (0.11 * H, 0.27 * H, 0.03 * H), bevel=0.01), sole, region='k' + side, subdiv=0)
+    b.add('sole' + side, sole_part((f.x, f.y - 0.05 * H, f.z - 0.022 * H), (0.11 * H, 0.27 * H, 0.03 * H), bevel=0.01), sole, region='k' + side, subdiv=0)
     st = []
     st.append(tube([(f.x - 0.052 * H, f.y - 0.08 * H, f.z, 0.012 * H, 0.005), (f.x, f.y - 0.1 * H, f.z + 0.042 * H, 0.012 * H, 0.005), (f.x + 0.052 * H, f.y - 0.08 * H, f.z, 0.012 * H, 0.005)], 6))
     st.append(tube([(f.x - 0.05 * H, f.y + 0.02 * H, f.z, 0.012 * H, 0.005), (f.x, f.y + 0.05 * H, f.z + 0.07 * H, 0.012 * H, 0.005), (f.x + 0.05 * H, f.y + 0.02 * H, f.z, 0.012 * H, 0.005)], 6))

@@ -95,7 +95,7 @@ b.add('jeans_hip', tube([(0, 0, hz - 0.13 * H, 0.19 * H, 0.15 * H), (0, 0, hz + 
 # ---------------- sapato social marrom (bico arredondado, sola escura)
 for side in ('L', 'R'):
     f = sk['foot' + side]
-    b.add('sole' + side, box((f.x, f.y - 0.05, f.z - 0.02), (0.108 * H, 0.27 * H, 0.025)), sole, region='k' + side, subdiv=0)
+    b.add('sole' + side, sole_part((f.x, f.y - 0.05, f.z - 0.02), (0.108 * H, 0.27 * H, 0.025)), sole, region='k' + side, subdiv=0)
 
 # ---------------- cabelo preto VOLUMOSO todo penteado para trás com gel (referências do usuário): massa fechada por
 # cima da cabeça (linha do cabelo alta na testa, sem cobrir as orelhas), topete alto na frente, nuca coberta e mechas

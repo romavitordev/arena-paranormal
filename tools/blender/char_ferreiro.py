@@ -262,7 +262,7 @@ for side in ('L', 'R'):
     b.add('kneecap' + side, ellipsoid((k.x, k.y - 0.088, k.z - 0.02), (0.058, 0.03, 0.062), 10, 8, theta_max=math.pi * 0.8), steel_dk, region='k' + side, subdiv=0)
     # meia preta e a chinela marrom (sola com tiras)
     b.add('sock' + side, ellipsoid((f.x, f.y - 0.06 * H, f.z + 0.035 * H), (0.058 * H, 0.13 * H, 0.05 * H), 12, 8), sock, region='foot' + side, subdiv=0)
-    b.add('sandal' + side, box((f.x, f.y - 0.065 * H, f.z - 0.012 * H), (0.13 * H, 0.3 * H, 0.03 * H), bevel=0.006), leather, region='foot' + side, subdiv=0)
+    b.add('sandal' + side, sole_part((f.x, f.y - 0.065 * H, f.z - 0.012 * H), (0.13 * H, 0.3 * H, 0.03 * H), bevel=0.006), leather, region='foot' + side, subdiv=0)
     tiras = [tube([(f.x, f.y - yy * H, f.z + 0.03 * H, 0.062 * H, 0.045 * H), (f.x, f.y - yy * H - 0.018 * H, f.z + 0.03 * H, 0.062 * H, 0.045 * H)], 12) for yy in (0.02, 0.12)]
     b.add('sandal_straps' + side, merge(*tiras), leather, region='foot' + side, subdiv=0)
 

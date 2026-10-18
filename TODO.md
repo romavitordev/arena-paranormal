@@ -1,7 +1,6 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.32.0 (revisado em 2026-10-16: o que já estava pronto no código saiu da lista; a
-versão instalável já saiu na v3.25.0 e o adendo dela foi retirado)
+**Versão de referência atual:** v3.33.0 (revisado em 2026-10-18: modelo do Xande refeito, armas e sapatos/mãos 3D, maldição elemental adaptativa)
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente
 
@@ -268,6 +267,13 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
 - [x] BALANCEAMENTO GERAL DOS PERSONAGENS (v3.32.0): 4 rodadas de telemetria, ajustes em `src/config/balance.js`.
       Repetir a medição a cada personagem novo (`runBalance({ focus: 'id' })`) e a cada mudança grande de kit.
 - [ ] Testar o enigma numa partida online real (dois aparelhos) e no celular (toque nas respostas).
+
+# MODELOS — PRÓXIMOS PASSOS
+
+- [x] Xande refeito pela arte oficial (modelo, texturas, taco e Skate Caótico no Blender); mãos e sapatos de todos.
+- [ ] **Lírio**: remodelar a LEONORA no Blender (como o taco e o skate do Xande) quando o Lírio for atualizado. Ela já
+      recebe a maldição do Xande pela assistência (Amaldiçoar Arma por elemento) — conferir a textura nela depois.
+- [ ] Os outros modelos mais antigos, em ordem de data (Aguiar, Fantasma, Kemi, Gal Sal, Kaiser, Balu...).
 
 # EQUIPE — BARRA DE EQUIPE E ESPECIAIS EM EQUIPE
 

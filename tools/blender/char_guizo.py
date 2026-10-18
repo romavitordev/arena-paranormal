@@ -283,7 +283,7 @@ for side in ('L', 'R'):
     b.add('pants_cuff' + side, tube(limb_rings(k.lerp(f, 0.66), k.lerp(f, 0.74), 0.076, 0.074, n=1), 14), pants, region='k' + side, subdiv=0)
     b.add('boot_shaft' + side, tube(limb_rings(k.lerp(f, 0.62), k.lerp(f, 0.98), 0.058, 0.056, n=3), 14), boot, region='k' + side, subdiv=0)
     b.add('boot_foot' + side, ellipsoid((f.x, f.y - 0.065 * H, f.z + 0.04 * H), (0.056 * H, 0.13 * H, 0.05 * H), 12, 8, theta_max=math.pi * 0.56), boot, region='foot' + side, subdiv=0)
-    b.add('sole' + side, box((f.x, f.y - 0.065 * H, f.z - 0.006 * H), (0.12 * H, 0.27 * H, 0.03 * H), bevel=0.006), sole, region='foot' + side, subdiv=0)
+    b.add('sole' + side, sole_part((f.x, f.y - 0.065 * H, f.z - 0.006 * H), (0.12 * H, 0.27 * H, 0.03 * H), bevel=0.006), sole, region='foot' + side, subdiv=0)
     xs = []
     for j in range(5):
         t0 = 0.66 + j * 0.06

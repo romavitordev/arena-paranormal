@@ -123,7 +123,7 @@ for side in ('L', 'R'):
         p = k.lerp(f, 0.58 + i * 0.075)
         xs.append(box((p.x, p.y - 0.056, p.z), (0.05, 0.006, 0.008)))
     b.add('laces' + side, merge(*xs), laces, region='k' + side, subdiv=0)
-    b.add('bootsole' + side, box((f.x, f.y - 0.04 * H, f.z - 0.012 * H), (0.1 * H, 0.23 * H, 0.03 * H), bevel=0.006), sole, region='k' + side, subdiv=0)
+    b.add('bootsole' + side, sole_part((f.x, f.y - 0.04 * H, f.z - 0.012 * H), (0.1 * H, 0.23 * H, 0.03 * H), bevel=0.006), sole, region='k' + side, subdiv=0)
 
 # brinco de pena (orelha esquerda)
 b.add('feather', cone((0.138 * H, 0.0, hc.z - 0.05), (0.14 * H, 0.0, hc.z - 0.17), 0.016, 5), feather, region='head', subdiv=0)

@@ -645,17 +645,97 @@ export const MATERIAL_TEXTURES = {
     mouth: { mouthW: 13, smile: 4, lip: 'rgba(190,90,90,0.45)' },
   }),
 
-  // ---------------- AGUIAR: barba feita (sombra), olhar duro, cicatriz pequena no queixo
+  // ---------------- AGUIAR (arte de Natal Macabro, sem a máscara): pele bronzeada, olhos escuros de pálpebra pesada,
+  // sobrancelhas grossas, a sombra da barba feita, meio sorriso de quem sabe mais do que diz e a cicatriz no queixo
   face_aguiar: face((g) => {
-    stubble(g, 'rgba(25,18,14,0.28)', 1100);
-    g.strokeStyle = '#a0685a'; g.lineWidth = 2.2; g.lineCap = 'round';
-    g.beginPath(); g.moveTo(CX - 22, 196); g.lineTo(CX - 12, 210); g.stroke();
+    stubble(g, 'rgba(25,18,14,0.2)', 1500, { y0: 140, y1: 222, w: 78 });
+    g.strokeStyle = '#8a5a4a'; g.lineWidth = 2; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(CX - 22, 198); g.lineTo(CX - 13, 211); g.stroke(); // a cicatriz no queixo
+    g.strokeStyle = 'rgba(240,200,180,0.45)'; g.lineWidth = 0.8;
+    g.beginPath(); g.moveTo(CX - 21, 198); g.lineTo(CX - 12, 210); g.stroke();
   }, {
-    skin: '#9a6644',
-    eye: { iris: '#3a2a20', irisLight: '#6a5040', tilt: 0.08 },
-    brow: { angry: 7, thick: 6.5, color: '#0e0d0f' },
-    mouth: { mouthW: 13, smile: -1 },
+    skin: '#a06a46',
+    before(g) {
+      for (const s of [-1, 1]) {
+        // olheiras e a sombra funda sob a sobrancelha (o olhar pesado)
+        const grd = g.createRadialGradient(CX + s * 33, EYE_Y + 10, 2, CX + s * 33, EYE_Y + 10, 20);
+        grd.addColorStop(0, 'rgba(70,35,25,0.32)'); grd.addColorStop(1, 'rgba(70,35,25,0)');
+        g.fillStyle = grd; g.beginPath(); g.ellipse(CX + s * 33, EYE_Y + 10, 21, 9, 0, 0, Math.PI * 2); g.fill();
+        const br = g.createRadialGradient(CX + s * 33, EYE_Y - 9, 2, CX + s * 33, EYE_Y - 9, 20);
+        br.addColorStop(0, 'rgba(60,30,20,0.28)'); br.addColorStop(1, 'rgba(60,30,20,0)');
+        g.fillStyle = br; g.beginPath(); g.ellipse(CX + s * 33, EYE_Y - 9, 22, 8, 0, 0, Math.PI * 2); g.fill();
+        // maçãs e o sulco do nariz até a boca
+        g.strokeStyle = 'rgba(90,45,30,0.25)'; g.lineWidth = 2;
+        g.beginPath(); g.moveTo(CX + s * 14, 148); g.quadraticCurveTo(CX + s * 22, 162, CX + s * 20, MOUTH_Y + 4); g.stroke();
+        g.fillStyle = 'rgba(90,45,30,0.18)';
+        g.beginPath(); g.ellipse(CX + s * 9, 140, 3.5, 16, s * 0.08, 0, Math.PI * 2); g.fill();
+      }
+    },
+    after(g) {
+      // a pálpebra de cima pesada (meio fechada) e o canto da boca puxado de um lado (o meio sorriso)
+      g.fillStyle = 'rgba(120,70,45,0.85)';
+      for (const s of [-1, 1]) {
+        g.beginPath(); g.ellipse(CX + s * 32, EYE_Y - 4, 15, 4.5, s * 0.06, Math.PI, Math.PI * 2); g.fill();
+        g.strokeStyle = 'rgba(30,15,10,0.7)'; g.lineWidth = 1.6;
+        g.beginPath(); g.moveTo(CX + s * 18, EYE_Y - 3); g.quadraticCurveTo(CX + s * 32, EYE_Y - 9, CX + s * 46, EYE_Y - 2); g.stroke();
+      }
+      g.strokeStyle = 'rgba(60,25,20,0.7)'; g.lineWidth = 1.6;
+      g.beginPath(); g.moveTo(CX + 12, MOUTH_Y); g.quadraticCurveTo(CX + 17, MOUTH_Y - 3, CX + 20, MOUTH_Y - 5); g.stroke();
+    },
+    eye: { iris: '#2a1a12', irisLight: '#5a3a28', tilt: 0.06 },
+    brow: { angry: 4, thick: 7, color: '#0e0b0c' },
+    mouth: { mouthW: 13, smile: 0 },
   }),
+  // a camiseta creme justa: malha, manchas de sujeira e de sangue seco (respingos) e a gola mais escura. A frente é o meio
+  // (u = 0,5); o pescoço é a parte de baixo da textura
+  shirt_aguiar: () => canvasTex(512, 256, (g) => {
+    g.fillStyle = '#ddd6c6'; g.fillRect(0, 0, 512, 256);
+    for (let i = 0; i < 2600; i++) { g.fillStyle = Math.random() < 0.5 ? 'rgba(255,255,245,0.06)' : 'rgba(90,70,50,0.06)'; g.fillRect(Math.random() * 512, Math.random() * 256, 2, 1); }
+    const side = g.createLinearGradient(0, 0, 512, 0);
+    side.addColorStop(0, 'rgba(90,70,50,0.22)'); side.addColorStop(0.3, 'rgba(90,70,50,0)'); side.addColorStop(0.7, 'rgba(90,70,50,0)'); side.addColorStop(1, 'rgba(90,70,50,0.22)');
+    g.fillStyle = side; g.fillRect(0, 0, 512, 256);
+    for (let i = 0; i < 18; i++) { // sujeira
+      g.fillStyle = `rgba(110,90,60,${0.06 + Math.random() * 0.08})`;
+      g.beginPath(); g.ellipse(Math.random() * 512, Math.random() * 256, 8 + Math.random() * 18, 5 + Math.random() * 10, Math.random(), 0, Math.PI * 2); g.fill();
+    }
+    for (let i = 0; i < 26; i++) { // respingos de sangue seco no peito e na barriga (frente)
+      const x = 200 + Math.random() * 112, y = 40 + Math.random() * 170;
+      g.fillStyle = `rgba(110,20,18,${0.35 + Math.random() * 0.35})`;
+      g.beginPath(); g.arc(x, y, 1 + Math.random() * 3.5, 0, Math.PI * 2); g.fill();
+    }
+    g.fillStyle = '#c4bba8'; g.fillRect(0, 244, 512, 12); // a gola
+  }, { wrap: true }),
+  // o colete vermelho (a jaqueta sem mangas): tecido gasto, as costuras mais escuras e manchas de sangue
+  vest_aguiar: () => canvasTex(512, 256, (g) => {
+    g.fillStyle = '#9a2420'; g.fillRect(0, 0, 512, 256);
+    for (let i = 0; i < 3000; i++) { g.fillStyle = Math.random() < 0.5 ? 'rgba(255,180,160,0.05)' : 'rgba(40,0,0,0.08)'; g.fillRect(Math.random() * 512, Math.random() * 256, 2, 1); }
+    for (let i = 0; i < 14; i++) { // o desbotado e o gasto
+      g.fillStyle = `rgba(190,90,70,${0.06 + Math.random() * 0.08})`;
+      g.beginPath(); g.ellipse(Math.random() * 512, Math.random() * 256, 16 + Math.random() * 30, 8 + Math.random() * 16, Math.random(), 0, Math.PI * 2); g.fill();
+    }
+    g.strokeStyle = 'rgba(50,8,6,0.55)'; g.lineWidth = 2; g.setLineDash([5, 3]);
+    for (const x of [128, 384, 60, 452]) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, 256); g.stroke(); }
+    g.setLineDash([]);
+    for (let i = 0; i < 10; i++) { // manchas de sangue escuro
+      g.fillStyle = `rgba(50,4,4,${0.25 + Math.random() * 0.25})`;
+      g.beginPath(); g.ellipse(Math.random() * 512, Math.random() * 256, 4 + Math.random() * 10, 3 + Math.random() * 7, Math.random(), 0, Math.PI * 2); g.fill();
+    }
+  }, { wrap: true }),
+  // o jeans cinza-esverdeado escuro: a sarja, o desbotado nas coxas, as costuras laterais e os vincos atrás do joelho
+  jeans_aguiar: () => canvasTex(256, 512, (g) => {
+    g.fillStyle = '#3e4840'; g.fillRect(0, 0, 256, 512);
+    g.strokeStyle = 'rgba(255,255,255,0.04)'; g.lineWidth = 1;
+    for (let k = -512; k < 512; k += 3) { g.beginPath(); g.moveTo(k, 0); g.lineTo(k + 512, 512); g.stroke(); }
+    const fade = g.createLinearGradient(0, 0, 256, 0);
+    fade.addColorStop(0.3, 'rgba(160,175,160,0)'); fade.addColorStop(0.5, 'rgba(160,175,160,0.16)'); fade.addColorStop(0.7, 'rgba(160,175,160,0)');
+    g.fillStyle = fade; g.fillRect(0, 60, 256, 220);
+    g.strokeStyle = 'rgba(200,170,110,0.35)'; g.setLineDash([4, 3]);
+    for (const x of [64, 192]) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, 512); g.stroke(); }
+    g.setLineDash([]);
+    g.strokeStyle = 'rgba(15,20,15,0.35)'; g.lineWidth = 2;
+    for (let i = 0; i < 6; i++) { const y = 250 + i * 9; g.beginPath(); g.moveTo(200, y); g.quadraticCurveTo(225, y + 4, 250, y); g.stroke(); } // vincos
+    for (let i = 0; i < 400; i++) { g.fillStyle = 'rgba(120,110,90,0.06)'; g.fillRect(Math.random() * 256, Math.random() * 512, 3, 2); }
+  }, { wrap: true }),
   // braços com várias cicatrizes
   arms_aguiar: () => canvasTex(256, 256, (g) => {
     g.fillStyle = '#9a6644'; g.fillRect(0, 0, 256, 256);
@@ -821,28 +901,130 @@ export const MATERIAL_TEXTURES = {
 
   // ---------------- XANDE: olhos azuis, rosto jovem; camiseta amarela com 3 triângulos e "oculto"
   face_xande: face((g) => {
-    stubble(g, 'rgba(120,90,50,0.15)', 500);
-    g.strokeStyle = 'rgba(160,80,70,0.6)'; g.lineWidth = 1.6; // arranhão de skate na bochecha
-    g.beginPath(); g.moveTo(CX + 50, 150); g.lineTo(CX + 62, 158); g.stroke();
+    // rosto jovem e limpo (a arte não tem barba): o arranhão de skate bem de leve na maçã do rosto
+    g.strokeStyle = 'rgba(170,90,80,0.35)'; g.lineWidth = 1.4;
+    g.beginPath(); g.moveTo(CX + 52, 150); g.lineTo(CX + 63, 157); g.stroke();
+    g.beginPath(); g.moveTo(CX + 50, 154); g.lineTo(CX + 58, 160); g.stroke();
   }, {
-    skin: '#e6bea2',
-    eye: { iris: '#3a7ac0', irisLight: '#7ab8f0', tilt: -0.04 },
-    brow: { angry: 1, thick: 3.5, color: '#6a4a24' },
-    mouth: { mouthW: 13, smile: 1 },
+    skin: '#e8c0a4',
+    before(g) {
+      // volumes suaves: sombra embaixo dos olhos (cansado, ouve música a noite inteira), o dorso do nariz e o queixo
+      for (const s of [-1, 1]) {
+        const grd = g.createRadialGradient(CX + s * 33, EYE_Y + 11, 2, CX + s * 33, EYE_Y + 11, 20);
+        grd.addColorStop(0, 'rgba(150,95,85,0.22)'); grd.addColorStop(1, 'rgba(150,95,85,0)');
+        g.fillStyle = grd; g.beginPath(); g.ellipse(CX + s * 33, EYE_Y + 11, 20, 9, 0, 0, Math.PI * 2); g.fill();
+        // as maçãs do rosto um pouco mais quentes
+        const ck = g.createRadialGradient(CX + s * 52, 150, 2, CX + s * 52, 150, 26);
+        ck.addColorStop(0, 'rgba(220,120,105,0.16)'); ck.addColorStop(1, 'rgba(220,120,105,0)');
+        g.fillStyle = ck; g.beginPath(); g.arc(CX + s * 52, 150, 26, 0, Math.PI * 2); g.fill();
+        // a lateral do nariz
+        g.fillStyle = 'rgba(160,100,85,0.16)';
+        g.beginPath(); g.ellipse(CX + s * 9, 140, 3.5, 16, s * 0.08, 0, Math.PI * 2); g.fill();
+      }
+      const ch = g.createRadialGradient(CX, 205, 4, CX, 205, 30);
+      ch.addColorStop(0, 'rgba(160,100,85,0.14)'); ch.addColorStop(1, 'rgba(160,100,85,0)');
+      g.fillStyle = ch; g.beginPath(); g.arc(CX, 205, 30, 0, Math.PI * 2); g.fill();
+    },
+    after(g) {
+      // a dobra da pálpebra de cima (olhar meio sonolento, sereno) e o contorno dos lábios mais rosado
+      g.strokeStyle = 'rgba(120,70,55,0.55)'; g.lineWidth = 1.5;
+      for (const s of [-1, 1]) {
+        g.beginPath(); g.moveTo(CX + s * 20, EYE_Y - 9); g.quadraticCurveTo(CX + s * 33, EYE_Y - 15, CX + s * 46, EYE_Y - 8); g.stroke();
+      }
+      g.fillStyle = 'rgba(190,105,95,0.35)';
+      g.beginPath(); g.ellipse(CX, MOUTH_Y + 5, 12, 3.6, 0, 0, Math.PI * 2); g.fill();
+    },
+    eye: { iris: '#3a78c4', irisLight: '#86c0f4', tilt: -0.03, lashes: true, w: 14, h: 6.5 },
+    brow: { angry: 0, thick: 3.2, color: '#6a4a26' },
+    mouth: { mouthW: 13, smile: 0 },
   }),
+  // camiseta amarela-mostarda: o tecido (trama e as dobras dos lados mais escuras), a gola canelada e a estampa preta
+  // dos 3 triângulos em pirâmide com "oculto" embaixo. A frente é o meio (u = 0,5); o pescoço é a parte de BAIXO da
+  // textura (o tubo do tronco vai do quadril ao pescoço): a estampa é desenhada de cabeça para baixo
   shirt_xande: () => canvasTex(512, 256, (g) => {
-    g.fillStyle = '#e8bc22'; g.fillRect(0, 0, 512, 256);
-    // frente do tronco = meio da textura (u ≈ 0,5)
-    g.fillStyle = '#141414';
-    const tri = (x, y, s) => { g.beginPath(); g.moveTo(x, y - s); g.lineTo(x + s * 0.9, y + s * 0.6); g.lineTo(x - s * 0.9, y + s * 0.6); g.closePath(); g.fill(); };
-    tri(256, 70, 26); tri(226, 118, 22); tri(286, 118, 22);
-    g.fillStyle = '#e8bc22';
-    tri(256, 76, 12); tri(226, 122, 9); tri(286, 122, 9);
-    g.fillStyle = '#141414'; g.font = 'bold 22px monospace'; g.textAlign = 'center';
-    g.fillText('oculto', 256, 168);
-    g.strokeStyle = 'rgba(120,90,10,0.35)'; g.lineWidth = 1;
-    for (let y = 0; y < 256; y += 6) { g.beginPath(); g.moveTo(0, y); g.lineTo(512, y); g.stroke(); }
+    g.fillStyle = '#d9ac22'; g.fillRect(0, 0, 512, 256);
+    for (let i = 0; i < 2600; i++) { // trama
+      g.fillStyle = Math.random() < 0.5 ? 'rgba(255,240,170,0.06)' : 'rgba(90,60,0,0.07)';
+      g.fillRect(Math.random() * 512, Math.random() * 256, 2, 1);
+    }
+    // dobras: lados (u ≈ 0 e 1, as costas e as laterais) mais escuros, e vincos verticais suaves
+    const side = g.createLinearGradient(0, 0, 512, 0);
+    side.addColorStop(0, 'rgba(110,70,0,0.25)'); side.addColorStop(0.25, 'rgba(110,70,0,0.0)');
+    side.addColorStop(0.75, 'rgba(110,70,0,0.0)'); side.addColorStop(1, 'rgba(110,70,0,0.25)');
+    g.fillStyle = side; g.fillRect(0, 0, 512, 256);
+    g.strokeStyle = 'rgba(120,80,0,0.12)'; g.lineWidth = 3;
+    for (const x of [150, 200, 318, 362]) { g.beginPath(); g.moveTo(x, 0); g.quadraticCurveTo(x + 8, 128, x - 4, 256); g.stroke(); }
+    // a gola canelada (em cima do tronco = embaixo da textura) e a barra (em cima da textura)
+    g.fillStyle = '#c49a1c'; g.fillRect(0, 244, 512, 12);
+    g.strokeStyle = 'rgba(80,50,0,0.35)'; g.lineWidth = 1;
+    for (let x = 0; x < 512; x += 4) { g.beginPath(); g.moveTo(x, 244); g.lineTo(x, 256); g.stroke(); }
+    g.fillStyle = 'rgba(110,70,0,0.3)'; g.fillRect(0, 0, 512, 5);
+    // a estampa (de cabeça para baixo na textura → direita no peito: o pescoço é a parte de baixo da textura)
+    g.save();
+    g.translate(256, 128); g.scale(1, -1); g.translate(-256, -128);
+    g.translate(0, -58); // sobe a estampa para o peito (o cinto e as tiras cobrem a barriga)
+    const tri = (x, y, sz, hollow) => {
+      g.beginPath(); g.moveTo(x, y - sz); g.lineTo(x + sz * 0.95, y + sz * 0.65); g.lineTo(x - sz * 0.95, y + sz * 0.65); g.closePath();
+      g.fillStyle = '#141210'; g.fill();
+      if (hollow) { g.beginPath(); g.moveTo(x, y - sz * 0.45); g.lineTo(x + sz * 0.45, y + sz * 0.33); g.lineTo(x - sz * 0.45, y + sz * 0.33); g.closePath(); g.fillStyle = '#d9ac22'; g.fill(); }
+    };
+    tri(256, 96, 26, true); tri(228, 140, 22, true); tri(284, 140, 22, true);
+    // o "oculto" à mão embaixo dos triângulos (o X das tiras de couro já cruza por cima, como na arte)
+    g.fillStyle = '#141210'; g.font = 'italic bold 32px Georgia, serif'; g.textAlign = 'center';
+    g.fillText('oculto', 256, 192);
+    // a tinta da estampa gasta (falhas claras)
+    for (let i = 0; i < 260; i++) { g.fillStyle = 'rgba(217,172,34,0.55)'; g.fillRect(196 + Math.random() * 120, 66 + Math.random() * 140, 2, 2); }
+    g.restore();
   }, { wrap: true }),
+  // as mangas cinza largas da camiseta: malha com a barra dobrada mais escura
+  sleeve_xande: () => canvasTex(128, 256, (g) => {
+    g.fillStyle = '#6e7066'; g.fillRect(0, 0, 128, 256);
+    for (let i = 0; i < 900; i++) { g.fillStyle = Math.random() < 0.5 ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.07)'; g.fillRect(Math.random() * 128, Math.random() * 256, 2, 1); }
+    g.fillStyle = 'rgba(30,32,28,0.35)'; g.fillRect(0, 238, 128, 18); // a barra (embaixo da manga)
+    g.strokeStyle = 'rgba(20,20,18,0.45)'; g.lineWidth = 1; g.setLineDash([3, 3]);
+    g.beginPath(); g.moveTo(0, 236); g.lineTo(128, 236); g.stroke(); g.setLineDash([]);
+  }, { wrap: true }),
+  // a bermuda preta: sarja (diagonais finas), a costura lateral e um pesponto
+  shorts_xande: () => canvasTex(256, 256, (g) => {
+    g.fillStyle = '#18181b'; g.fillRect(0, 0, 256, 256);
+    g.strokeStyle = 'rgba(255,255,255,0.035)'; g.lineWidth = 1;
+    for (let k = -256; k < 256; k += 4) { g.beginPath(); g.moveTo(k, 0); g.lineTo(k + 256, 256); g.stroke(); }
+    g.strokeStyle = 'rgba(255,255,255,0.12)'; g.setLineDash([4, 3]);
+    for (const x of [64, 192]) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, 256); g.stroke(); }
+    g.setLineDash([]);
+    for (let i = 0; i < 300; i++) { g.fillStyle = 'rgba(120,110,100,0.06)'; g.fillRect(Math.random() * 256, Math.random() * 256, 3, 2); } // poeira de skate
+  }, { wrap: true }),
+  // a balaclava cinza-esverdeada embolada: malha canelada com os triângulos brancos (wiki)
+  gaiter_xande: () => canvasTex(256, 128, (g) => {
+    g.fillStyle = '#5f6656'; g.fillRect(0, 0, 256, 128);
+    g.strokeStyle = 'rgba(0,0,0,0.16)'; g.lineWidth = 2;
+    for (let x = 0; x < 256; x += 5) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, 128); g.stroke(); }
+    g.fillStyle = 'rgba(235,235,225,0.75)';
+    for (let k = 0; k < 7; k++) { const x = 18 + k * 36, y = 40 + (k % 2) * 40; g.beginPath(); g.moveTo(x, y - 7); g.lineTo(x + 7, y + 5); g.lineTo(x - 7, y + 5); g.closePath(); g.fill(); }
+  }, { wrap: true, repeat: [3, 1] }),
+  // pernas: a pele clara com os arranhões das quedas de skate e as marcas de mordida de cachorro nas canelas (wiki)
+  legs_xande: () => canvasTex(256, 512, (g) => {
+    g.fillStyle = '#e6bea2'; g.fillRect(0, 0, 256, 512);
+    g.lineCap = 'round';
+    for (let i = 0; i < 12; i++) {
+      const x = Math.random() * 256;
+      const y = 260 + Math.random() * 200; // da canela para baixo
+      g.strokeStyle = `rgba(${160 + Math.random() * 40},${70 + Math.random() * 30},60,${0.2 + Math.random() * 0.25})`;
+      g.lineWidth = 1 + Math.random() * 1.6;
+      g.beginPath(); g.moveTo(x, y); g.lineTo(x + (Math.random() - 0.5) * 18, y + 10 + Math.random() * 22); g.stroke();
+    }
+    for (const [x, y] of [[70, 330], [190, 300]]) { // mordidas: pontinhos em arco
+      g.fillStyle = 'rgba(150,60,55,0.35)';
+      for (let k = 0; k < 7; k++) { const a = Math.PI * (0.15 + k * 0.12); g.beginPath(); g.arc(x + Math.cos(a) * 14, y + Math.sin(a) * 8, 1.6, 0, Math.PI * 2); g.fill(); }
+    }
+  }, { wrap: true }),
+  // a barra amarela da bermuda e das munhequeiras: uma fileira de triângulos pretos entre dois filetes
+  trim_xande: () => canvasTex(256, 32, (g) => {
+    g.fillStyle = '#e2b524'; g.fillRect(0, 0, 256, 32);
+    g.fillStyle = '#141414';
+    g.fillRect(0, 2, 256, 3); g.fillRect(0, 27, 256, 3);
+    for (let x = 0; x < 256; x += 21) { g.beginPath(); g.moveTo(x, 24); g.lineTo(x + 10, 8); g.lineTo(x + 20, 24); g.closePath(); g.fill(); }
+  }, { wrap: true, repeat: [3, 1] }),
 
   // ---------------- GUIZO (Sinais do Outro Lado): rosto fino, olhos castanho-avermelhados, sobrancelhas escuras
   // grossas, meio sorriso curioso (referência "Guizo rosto")

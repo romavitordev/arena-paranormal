@@ -2,6 +2,13 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.33.0 — O Ocultista
+- MODELO DO XANDE REFEITO PELA ARTE OFICIAL: reconstruído no Blender a partir da arte de Sinais do Outro Lado. Cabelos em mechas onduladas sob o boné, camiseta amarela canelada com os 3 triângulos e "oculto", bermuda de sarja com barra de triângulos, suspensórios em X com bolsas e frascos, balaclava cinza-esverdeada, fones de ouvido no pescoço, joelheiras com olhos, correntes 3D com elos reais e tênis de cano alto. Texturas com arranhões e marcas de mordida nas canelas.
+- ARMAS EM 3D NO BLENDER: Taco com arame farpado e pregos, e o Skate Caótico detalhado pela arte oficial (guardas de metal, lâminas serrilhadas, rodas com espinhos, alça de escudo e runas verdes) tanto na mão quanto no arremesso giratório. Novo Machado do Mutilador do Aguiar modelado no Blender.
+- MÃOS E PÉS DE TODOS OS 33 PERSONAGENS: mãos esculpidas com nós anatômicos e dedos em 3 falanges articuladas; sapatos e solas arredondadas e modeladas substituindo caixas rígidas, e pés descalços com arco e 5 dedos.
+- AMALDIÇOAR ARMA POR ELEMENTO: o Xande agora escolhe de forma adaptativa o elemento que supera o adversário atual no ciclo paranormal (Sangue supera Morte, Morte supera Energia, Energia supera Conhecimento, Conhecimento supera Sangue). Efeitos próprios por elemento (Sangue sangra, Morte apodrece e desacelera, Conhecimento drena sanidade/energia, Energia descarrega choques extras) com revestimento visual dinâmico e brilhante na arma.
+- ASSISTÊNCIA DO XANDE APRIMORADA: ao se mover durante a chamada de assistência, amaldiçoa a arma do parceiro com o elemento que supera o adversário atual.
+
 ## v3.32.0 — O Enigma
 - NOVA PERSONAGEM — NUBI (Escriptas, Morte): a ocultista calma da bengala de cabeça de chacal. Golpeia com a bengala, lança o LODO DA MORTE (atordoa curto), DESVIO IMPERTURBÁVEL (△ + L2: no tempo certo, o golpe que vem passa por ela), DECADÊNCIA, LODO QUE PRENDE (tentáculos), SENTENÇA DO CHACAL (pancada que impede a cura por 8 s) e RITUAL DE DRENAGEM (deixa lento). Na Transformação, AFINIDADE COM A MORTE, os olhos ficam inteiros pretos e o Lodo escorre do rosto.
 - ESPECIAL DA NUBI — CARNIÇAL DA ESFINGE: o Lodo sai dos olhos e da boca dela, forma uma poça e dela sobe a Esfinge, com barra de vida própria no alto da tela (35 s). Ela só ataca o adversário: AMEDRONTA ao surgir, SALTA em cima do alvo, VOMITA LODO (a poça enfraquece quem pisa) e DEVORA (dentro das costelas, o dano cura a Esfinge — aperte botões para sair antes).

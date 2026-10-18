@@ -82,7 +82,7 @@ for side in ('L', 'R'):
 for side in ('L', 'R'):
     k, f = sk['k' + side], sk['foot' + side]
     b.add('bootshaft' + side, tube(limb_rings(k.lerp(f, 0.5), f + Vector((0, 0, 0.05)), 0.058, 0.058, n=3), 12), M['feet'], region='k' + side)
-    b.add('bootsole' + side, box((f.x, f.y - 0.05, f.z - 0.022), (0.105 * H, 0.25 * H, 0.025)), material('sole', '#0e0e0e', 0.9), region='k' + side, subdiv=0)
+    b.add('bootsole' + side, sole_part((f.x, f.y - 0.05, f.z - 0.022), (0.105 * H, 0.25 * H, 0.025)), material('sole', '#0e0e0e', 0.9), region='k' + side, subdiv=0)
 
 # pulso direito: pulseira de espinhos + duas de nó (vinho e preta); relógio no esquerdo, virado para dentro
 wr = sk['handR'].lerp(sk['eR'], 0.12)
