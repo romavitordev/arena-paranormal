@@ -1,8 +1,10 @@
 # Registro administrativo de alterações
 
-## v3.33.0 — O Ocultista
+## v3.33.0 — O Ocultista e o Mutilador
 
 - Versão: `VERSION` 3.32.0 → **3.33.0** (package.json/lock junto). Data: 2026-10-18.
+- Modelos remodelados pelas artes oficiais: **Xande** (Sinais do Outro Lado) e **Aguiar / Mutilador Noturno** (Natal Macabro), além das armas no Blender e mãos/pés anatômicos de todos os 33 lutadores.
+- **Aguiar / Mutilador Noturno** (`tools/blender/char_aguiar.py` → `public/models/aguiar.glb`): musculatura aumentada e esculpida, cabelo preto ondulado até a nuca com mechas em Sculpt chain e mecha na testa, faixa de couro alta no pescoço, distintivo de delegado com corrente 3D em elos reais (`chain_mesh`), camiseta creme justa, colete vermelho esfiapado com gola levantada, suspensórios em X no cinto largo com tiras soltas penduradas, braçadeiras e munhequeiras com fivelas, jeans escuro rasgado nos joelhos com a pele aparecendo e tênis vermelhos/creme com esporas de roseta de ferro atrás. Machado do Mutilador modelado no Blender (`npc_aguiar_axe.py`).
 - Pedido: "pegue o modelo que faz mais tempo que não é atualizado e melhore-o com as tecnologias que temos agora, se
   baseando de novo nas imagens do personagem, o mais próximo possível da imagem". O mais antigo era o do **Xande**
   (`char_xande.py`, último ajuste em 2026-10-01, ainda na técnica básica de tubos).

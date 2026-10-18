@@ -1,9 +1,10 @@
 # Changelog
 
-## v3.33.0 — O Ocultista
+## v3.33.0 — O Ocultista e o Mutilador
 
 ### Adicionado
 - Modelo do **Xande** refeito pela arte oficial (`tools/blender/char_xande.py` → `public/models/xande.glb`): cabelos ondulados em metaballs, camiseta amarela canelada e estampa dos 3 triângulos com "oculto", bermuda de sarja com pregas e barra de triângulos, suspensórios em X, cinto com rádio e bolsas, balaclava, fones no pescoço, joelheiras de olho, correntes 3D com elos reais e tênis de cano alto. Texturas `face_xande`, `shirt_xande`, `sleeve_xande`, `shorts_xande`, `gaiter_xande`, `legs_xande` (arranhões e mordidas) e `trim_xande`.
+- Modelo do **Aguiar / Mutilador Noturno** refeito pela arte oficial (`tools/blender/char_aguiar.py` → `public/models/aguiar.glb`): corpo musculoso esculpido, cabelo preto ondulado até a nuca com mecha na testa, faixa de couro alta no pescoço, distintivo de delegado com corrente 3D, camiseta creme justa, colete vermelho esfiapado com gola levantada, suspensórios em X no cinto largo de couro com tiras soltas, braçadeiras e munhequeiras com fivelas, jeans escuro rasgado nos joelhos e tênis vermelhos com esporas de roseta de pontas de ferro atrás.
 - Armas modeladas no Blender (`tools/blender/npc_*.py` → `public/npcs/*.glb`):
   - Taco com arame farpado e pregos (`npc_xande_bat.py` → `xande_bat.glb`).
   - Skate Caótico (`npc_xande_skate.py` → `xande_skate.glb`): guardas metálicas com rebites, lâminas serrilhadas, rodas com espinhos, alça de escudo e runas verdes; utilizado tanto nas mãos quanto no projétil arremessado.

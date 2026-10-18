@@ -270,10 +270,10 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
 
 # MODELOS — PRÓXIMOS PASSOS
 
-- [x] Xande refeito pela arte oficial (modelo, texturas, taco e Skate Caótico no Blender); mãos e sapatos de todos.
+- [x] Xande e Aguiar refeitos pelas artes oficiais (modelos, texturas, machado, taco e skate no Blender); mãos e sapatos de todos.
 - [ ] **Lírio**: remodelar a LEONORA no Blender (como o taco e o skate do Xande) quando o Lírio for atualizado. Ela já
       recebe a maldição do Xande pela assistência (Amaldiçoar Arma por elemento) — conferir a textura nela depois.
-- [ ] Os outros modelos mais antigos, em ordem de data (Aguiar, Fantasma, Kemi, Gal Sal, Kaiser, Balu...).
+- [ ] Os outros modelos mais antigos, em ordem de data (Fantasma, Kemi, Gal Sal, Kaiser, Balu...).
 
 # EQUIPE — BARRA DE EQUIPE E ESPECIAIS EM EQUIPE
 
