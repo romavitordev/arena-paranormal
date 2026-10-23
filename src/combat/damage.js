@@ -150,7 +150,9 @@ export function applyHit(world, attacker, victim, o) {
       victim.guardBreak(); // golpe que quebra a defesa: dano cheio a seguir
     } else {
       const pb = (victim.def.defense && victim.def.defense.perfectBlock) || B.perfect;
-      if (pb && !victim.guardMoving && world.inputTime - victim.blockPressTime <= pb.window) {
+      // um estado ativo pode alargar a janela (ex.: a Afinidade com Precognição do Gal vê o golpe antes de ele vir)
+      const pbWin = Math.max(pb ? pb.window : 0, ...(victim.buffs || []).map((b) => b.perfectBlockWindow || 0));
+      if (pb && !victim.guardMoving && world.inputTime - victim.blockPressTime <= pbWin) {
         // Bloqueio Perfeito: nega o dano e abre janela de contra-ataque
         const p = victim.chestPos();
         world.fx.play('FX_PERFECT_BLOCK', p, { color: victim.def.energyColor, yaw: victim.yaw });

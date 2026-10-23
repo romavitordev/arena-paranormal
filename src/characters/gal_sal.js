@@ -184,9 +184,14 @@ export default {
     },
   ],
 
+  // INJUSTIÇA — a cena do cânone (Desconjuração, ep. 6): o Controle Mental faz Joui ajoelhar numa reverência forçada,
+  // o Gal diz "Injustiça, né? Muito prazer, eu sou a injustiça." e executa. Aqui: a corrente prende e puxa (dá para
+  // esquivar/defender; se errar, não há cena), o sigilo do Controle Mental faz o alvo AJOELHAR, e a execução é precisa —
+  // cada corte é sabido antes de acontecer (Bênção Maldita: o lampejo dourado marca o impacto) — até a cruz final com as
+  // correntes tensas, que derruba o alvo. Dano (250), custo e recarga iguais aos de antes; o dano cai em cada impacto.
   special: {
     name: 'Injustiça',
-    banner: 'Injustiça né?',
+    banner: 'Injustiça, né? Muito prazer, eu sou a injustiça.',
     type: 'cinematicCombo',
     energyCost: 50,
     cooldown: 14,
@@ -194,27 +199,38 @@ export default {
     sound: 'specialStart',
     // O especial NÃO aplica o dreno X/Y. Para ativar no futuro: applyMeleePassives: true
     applyMeleePassives: false,
-    approach: 'chain', // 1–3: lança a lâmina, prende e puxa
+    approach: 'chain', // lança a lâmina, prende e puxa
     chain: { speed: 55, range: 16 },
     prepare: { anim: 'charge_dual', time: 0.3, fx: 'bladeGlow' },
     hits: [
-      { t: 0.75, anim: 'dual_r', dur: 0.3, share: 0.12, fx: { kind: 'slash', tilt: 0.15, chain: 'R' }, sound: 'bladeHit', shot: 0 },
-      { t: 1.0, anim: 'dual_l', dur: 0.3, share: 0.12, fx: { kind: 'slash', tilt: -0.15, flip: true, chain: 'L' }, sound: 'bladeHit' },
-      { t: 1.27, anim: 'dual_spin', dur: 0.5, share: 0.16, fx: { kind: 'slash', wide: true }, sound: 'bladeHit', shot: 1 },
-      { t: 1.75, anim: 'chain_sweep', dur: 0.5, share: 0.2, fx: { kind: 'slash', big: true, chain: 'both' }, sound: 'bladeHit', shot: 2 },
-      { t: 2.35, anim: 'dual_cross', dur: 0.42, share: 0.4, fx: { kind: 'cross', big: true }, sound: 'slashFinal', final: true },
+      // o Controle Mental: o Gal aponta, o sigilo acende e o alvo ajoelha (sem dano)
+      { t: 0.1, noHit: true, anim: 'point', dur: 1.0, victimAnim: 'forced_kneel', sigil: true },
+      // a execução: três cortes no alvo ajoelhado, cada um anunciado pelo lampejo dourado
+      { t: 1.15, anim: 'dual_r', dur: 0.3, share: 0.15, foresee: true, victimAnim: 'forced_kneel', push: 0, fx: { kind: 'slash', tilt: 0.15, chain: 'R' }, sound: 'bladeHit', shot: 0 },
+      { t: 1.45, anim: 'dual_l', dur: 0.3, share: 0.15, foresee: true, victimAnim: 'forced_kneel', push: 0, fx: { kind: 'slash', tilt: -0.15, flip: true, chain: 'L' }, sound: 'bladeHit' },
+      { t: 1.78, anim: 'dual_both', dur: 0.4, share: 0.2, foresee: true, victimAnim: 'stagger', push: 0.1, fx: { kind: 'slash', big: true }, sound: 'bladeHit', shot: 1 },
+      // a cruz final com as duas correntes tensas: o alvo cai
+      { t: 2.3, anim: 'dual_cross', dur: 0.42, share: 0.5, foresee: true, fx: { kind: 'cross', big: true, chain: 'both' }, sound: 'slashFinal', final: true },
     ],
-    bannerAt: 0.05,
-    length: 3.2,
-    shots: 'flurry',
+    bannerAt: 0.55,
+    length: 3.1,
+    shots: 'control',
+    endReaction: { knockback: 3, lowLaunch: true },
   },
 
-  // DESPERTAR (Barra de Transformação cheia + vida baixa, segurando △) — cânone: Afinidade com Precognição — vê o golpe antes de ele vir. Até o fim do round.
+  // DESPERTAR (Barra de Transformação cheia + vida baixa, segurando △) — cânone (Calamidade): Afinidade com Precognição —
+  // defesa a mais contra golpes de perto E de longe (takenMult) e NÃO PODE MAIS SER PEGO DESPREVENIDO (a passiva
+  // precognition: sem bônus de costas nem "surpreso" depois de teletransportes). A antecipação também aparece no
+  // Bloqueio Perfeito: a janela abre um pouco mais (0,15 → 0,2 s). Velocidade +10% (era +15%: a força agora está na
+  // leitura da luta, não nos números). Até o fim do round.
   awakening: {
     name: 'Afinidade com Precognição',
     banner: 'Afinidade com Precognição',
     type: 'awakenMode',
-    mult: 1.1, takenMult: 0.85, speedMult: 1.15, aura: 'sigil', color: 0xffcf4a, heal: 0.1,
+    anim: 'charge_dual',
+    mult: 1.1, takenMult: 0.85, speedMult: 1.1, aura: 'sigil', color: 0xffcf4a, heal: 0.1,
+    passives: [{ type: 'precognition' }],
+    perfectBlockWindow: 0.2,
   },
 
   passives: [

@@ -94,6 +94,8 @@ export function specialSummary(c) {
       if (sp.meleeBleed) parts.push('todo golpe sangra');
       if (sp.bloodArmSide) parts.push('braço de sangue');
       if (sp.heal) parts.push(`cura ${Math.round(sp.heal * 100)}% na hora`);
+      if ((sp.passives || []).some((p) => p.type === 'precognition')) parts.push('não é pego desprevenido');
+      if (sp.perfectBlockWindow) parts.push(`Bloqueio Perfeito com janela de ${String(sp.perfectBlockWindow).replace('.', ',')} s`);
       return `desperta até o fim do round: ${parts.join(', ')}`;
     }
     default: return `${sp.damage ?? COMBAT.specialDamage} de dano`;

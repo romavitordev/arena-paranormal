@@ -18,7 +18,9 @@ export function computeDrain({ X, Y, dealt, energyRatio = 1.5 }) {
   return { heal, energyRemoved: heal * energyRatio };
 }
 
-export const hasPassive = (f, type) => !!(f && f.def && (f.def.passives || []).some((p) => p.type === type));
+// também vale a passiva concedida por um estado ativo (buff.passives — ex.: a Precognição do despertar do Gal)
+export const hasPassive = (f, type) => !!(f && f.def && ((f.def.passives || []).some((p) => p.type === type)
+  || (f.buffs || []).some((b) => b.passives && b.passives.some((p) => p.type === type))));
 
 export const PASSIVES = {
   // Joui: golpes vindos pelas costas do inimigo causam mais dano

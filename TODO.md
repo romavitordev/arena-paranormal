@@ -1469,19 +1469,27 @@ Referência inicial:
 
 ## GAL
 
-* [ ] Ereshkigal
-* [ ] Duas lâminas
-* [ ] Correntes
-* [ ] Corrente Giratória
-* [ ] Controle Mental
-* [ ] Perfect Block
-* [ ] Teleporte
-* [ ] Desviar Balas
-* [ ] Rejeitar Névoa
-* [ ] Arremesso
-* [ ] Mortal Speed
-* [ ] Passiva
+Conferido no código em 2026-10-22 (revisão da Ultimate e do despertar): os itens marcados existem no kit atual.
+* [x] Ereshkigal (Ativar Ereshkigal, trás + □)
+* [x] Duas lâminas (modelo Ereškigal no Blender, v3.34.0)
+* [x] Correntes (Corrente de Captura □, Corrente Gancho △ + □, puxão trás + ○)
+* [x] Corrente Giratória
+* [x] Controle Mental
+* [x] Perfect Block (`defense.perfectBlock`: 0,15 s, contra-ataque 0,7 s)
+* [x] Teleporte
+* [x] Desviar Balas (passiva `bulletDodge`)
+* [ ] Rejeitar Névoa — não existe no kit; a origem do pedido não foi encontrada na wiki (conferir antes de fazer)
+* [ ] Arremesso — a habilidade "Arremessar" da wiki (acertar e arremessar o alvo para longe) não tem golpe próprio
+* [x] Mortal Speed (Velocidade Mortal)
+* [x] Passiva (dreno X/Y enquanto a Ereshkigal está ativa)
 * [ ] Conferir controle de espaço
+* [x] **Ultimate Injustiça refeita pela cena do cânone** (2026-10-22): corrente → Controle Mental (o alvo ajoelha sob o
+  sigilo) → a fala inteira → 3 cortes "sabidos antes" (Bênção Maldita) → cruz final que derruba. Mesmo dano, custo e
+  recarga; dano em cada impacto; esquiva/defesa da corrente continuam valendo.
+* [x] **Despertar Afinidade com Precognição pela wiki** (2026-10-22): passa a dar a passiva Precognição (não é pego
+  desprevenido) e a janela do Bloqueio Perfeito vai a 0,2 s; velocidade +15% → +10%.
+* [ ] Destacar a venda (brilho dourado) na ativação do despertar — hoje a ativação usa a aura de sigilos padrão.
+* [ ] Testar a Injustiça e o despertar numa partida LAN/online (só foram testados no modo local e com CPU).
 * [x] **Cura que cobra sanidade deixa de ser passiva** (pedido do usuário, 2026-10-08): vira uma HABILIDADE que liga a
   cura do alvo + o roubo de sanidade por alguns segundos; fora dela, o físico do Gal é normal
 

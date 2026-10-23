@@ -12,6 +12,10 @@ import { HoloCopy } from '../holo.js';
 //
 // Fases: preparação → investida → (se encostar) cinematic com golpes → fim.
 // Dano total = sp.damage ?? COMBAT.specialDamage, dividido entre os golpes.
+// Opções por golpe (todas opcionais): victimAnim (a pose do alvo nesse golpe, ex.: 'forced_kneel'), sigil (o sigilo
+// do Controle Mental sobre a cabeça do alvo até o fim da cena), foresee (lampejo dourado no ponto do impacto um
+// instante antes — a Bênção Maldita do Gal), push (quanto empurra; padrão 0,18 / 0,6 no final).
+// sp.endReaction: { knockback, lowLaunch } — como o alvo sai da cena (padrão: lançado longe).
 
 const PREP_FX = {
   // Arthur: energia vermelha no antebraço e a Arma de Sangue surgindo
@@ -53,6 +57,16 @@ function buildShots(kind, f, opp, sp) {
     // aproximação no braço com a garra, depois no rosto (nome aparece), golpes
     shots.push(socketClose(f, () => f.rig.joints.eR.getWorldPosition(new THREE.Vector3()), { dur: 0.45, dist: 1.6, side: 0.9 }));
     shots.push(faceClose(f, { dur: firstHit - 0.45, from: 1.8, to: 1.2, side: -0.4 }));
+  } else if (kind === 'control') {
+    // o alvo dominado: por cima do ombro do Gal, olhando o alvo ajoelhar sob o sigilo, até o primeiro corte
+    const firstReal = (sp.hits.find((h) => !h.noHit) || sp.hits[0]).t;
+    shots.push(overShoulder(f, opp, { dur: firstReal * 0.55, back: 2.0, side: 2.2, height: 2.0, fov: 48 }));
+    shots.push(faceClose(f, { dur: firstReal * 0.45, from: 1.7, to: 1.25, side: 0.4 }));
+    const mid2 = finalHit - firstReal;
+    shots.push(twoShot(f, opp, { dur: mid2 * 0.6, dist: 3.6, push: 0.5, side: 1 }));
+    shots.push(lowAngle(f, { dur: mid2 * 0.4, dist: 3.0, side: 1.6 }));
+    shots.push(pullBack(f, opp, { dur: sp.length - finalHit + 0.1, from: 2.4, to: 5.5, height: 1.8, side: -1 }));
+    return shots;
   } else {
     shots.push(faceClose(f, { dur: firstHit, from: 2.0, to: 1.25, side: 0.45 }));
   }
@@ -82,7 +96,7 @@ export const cinematicCombo = {
   canStart: () => true,
   start(f, sp, world) {
     const total = sp.damage ?? COMBAT.specialDamage;
-    const parts = splitDamage(total, sp.hits.map((h) => h.share));
+    const parts = splitDamage(total, sp.hits.map((h) => (h.noHit ? 0 : h.share ?? 0))); // passo sem dano vale 0 (sem NaN)
     const prep = sp.prepare || { anim: 'charge', time: 0.3 };
     const dash = sp.dash || { speed: 22, maxTime: 0.45, contact: 1.7 };
     let phase = 'prepare';
@@ -141,13 +155,23 @@ export const cinematicCombo = {
       sp.hits.forEach((h, i) => {
         // momento de cena sem dano (ex.: o Colosso batendo um punho no outro antes da sequência)
         if (h.noHit) {
-          tl.add(h.t, () => f.anim.play(h.anim, { restart: true, duration: h.dur, blend: 0.04 }));
+          tl.add(h.t, () => {
+            f.anim.play(h.anim, { restart: true, duration: h.dur, blend: 0.04 });
+            if (h.victimAnim && opp.state !== 'ko') opp.anim.play(h.victimAnim, { restart: true, blend: 0.06 });
+            if (h.sigil) controlSigil(world, opp, sp, emitters);
+          });
           for (const b of h.beats || []) tl.add(h.t + b, () => beatFx(f, world, h, sp));
           return;
         }
         tl.add(h.t, () => {
           f.anim.play(h.anim, { restart: true, duration: h.dur, blend: 0.04 });
           world.audio.play('swing', { volume: 0.7 });
+          // o golpe já é sabido antes de acontecer: um lampejo dourado marca onde a lâmina vai entrar
+          if (h.foresee) {
+            const p = opp.chestPos();
+            world.fx.flash(p, { color: sp.color, size: 0.9, life: 0.1 });
+            world.fx.ring(p, { color: sp.color, radius: 0.45, life: 0.18, vertical: true, yaw: f.yaw + Math.PI / 2 });
+          }
         });
         tl.add(h.t + h.dur * 0.4, () => {
           applyHit(world, f, opp, {
@@ -168,10 +192,10 @@ export const cinematicCombo = {
             }
             world.audio.play('chainPull', { volume: 0.6 });
           }
-          if (opp.state !== 'ko') opp.anim.play(h.final ? 'launched' : 'hit', { restart: true, blend: 0.02 });
+          if (opp.state !== 'ko') opp.anim.play(h.victimAnim || (h.final ? 'launched' : 'hit'), { restart: true, blend: 0.02 });
           // empurra um pouco e acompanha
           const F2 = forwardFromYaw(f.yaw);
-          const push = h.final ? 0.6 : 0.18;
+          const push = h.push ?? (h.final ? 0.6 : 0.18);
           opp.pos.addScaledVector(F2, push);
           f.pos.addScaledVector(F2, push * 0.8);
           if (h.final) world.cameraRig.shake(0.6, 0.35);
@@ -315,7 +339,8 @@ export const cinematicCombo = {
             cleanup();
             world.endCinematic();
             if (opp.state !== 'ko') {
-              opp.react({ dir: forwardFromYaw(f.yaw), knockback: 8, hitstun: COMBAT.launchHitstun, launch: true });
+              const er = sp.endReaction || {};
+              opp.react({ dir: forwardFromYaw(f.yaw), knockback: er.knockback ?? 8, hitstun: COMBAT.launchHitstun, launch: true, lowLaunch: !!er.lowLaunch });
             }
             f.anim.play('idle', { blend: 0.15 });
             return true;
@@ -331,6 +356,16 @@ export const cinematicCombo = {
     };
   },
 };
+
+// CONTROLE MENTAL (Gal — Injustiça): o sigilo dourado sobre a cabeça do alvo, como na habilidade, até o fim da cena
+// (as partículas entram na lista de emissores do especial, que o cleanup para)
+function controlSigil(world, opp, sp, emitters) {
+  const head = () => opp.rig.joints.hd.getWorldPosition(new THREE.Vector3()).add(new THREE.Vector3(0, 0.45, 0));
+  world.fx.ring(head(), { color: sp.color, radius: 0.6, life: 0.6, vertical: false });
+  world.fx.flash(head(), { color: sp.color, size: 1.2, life: 0.15 });
+  emitters.push(world.fx.emitter({ rate: 34, follow: head, particle: { color: sp.color, speed: 0.3, spread: 0.3, life: 0.4, size: 0.12 } }));
+  world.audio.play('fearGaze', { pitch: 1.3 });
+}
 
 // PRISÃO DAS SOMBRAS (Magistrada): uma esfera de sombra em volta dos dois — por fora quase preta, por dentro os Sigilos
 // dourados girando (a "esfera de Conhecimento" da wiki onde ficam só os dois se enfrentando). Cresce no começo e gira

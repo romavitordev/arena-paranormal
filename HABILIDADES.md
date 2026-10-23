@@ -535,7 +535,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ### Transformação: Afinidade com Precognição
 
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +10% de dano, −15% de dano recebido, +15% de velocidade, cura 10% na hora.
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +10% de dano, −15% de dano recebido, +10% de velocidade, cura 10% na hora, não é pego desprevenido, Bloqueio Perfeito com janela de 0,2 s.
 
 ---
 

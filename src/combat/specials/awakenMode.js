@@ -25,6 +25,8 @@ import { swapFace } from './maskTransform.js';
 //   aura                'flame' | 'smoke' | 'sigil' | 'blood' (partículas em volta)
 //   face                [de, para]: troca a textura do rosto na hora do close (ex.: os olhos todos pretos da Nubi)
 //   eyeDrip             cor do Lodo que escorre do rosto enquanto durar
+//   passives            passivas que valem enquanto durar (ex.: [{ type: 'precognition' }] — lidas por hasPassive)
+//   perfectBlockWindow  janela do Bloqueio Perfeito enquanto durar (s; vale a maior entre esta e a do personagem)
 export const awakenMode = {
   canStart: (f) => !f.findBuff('awakened'),
   blockMsg: 'JÁ DESPERTOU',
@@ -91,7 +93,7 @@ function applyAwakening(f, sp, world, col, undoFace) {
     type: 'awakened', name: (sp.label || sp.name).toUpperCase(), time: Infinity, duration: Infinity,
     mult: sp.lowHealth ? sp.lowHealth.min : sp.mult, affects: sp.affects || ['melee', 'ranged', 'ability'], takenMult: sp.takenMult, speedMult: sp.speedMult,
     cdRate: sp.cdRate, energyRegenMult: sp.energyRegenMult, knockbackTakenMult: sp.knockbackTakenMult, unblockable: !!sp.unblockable, meleeBleed: sp.meleeBleed,
-    bloodArmor: !!sp.bloodArmSide, bloodArmSide: sp.bloodArmSide,
+    bloodArmor: !!sp.bloodArmSide, bloodArmSide: sp.bloodArmSide, passives: sp.passives, perfectBlockWindow: sp.perfectBlockWindow,
     onTick(dt) {
       if (f.state === 'ko') return;
       if (sp.lowHealth) {

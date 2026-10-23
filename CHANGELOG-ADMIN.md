@@ -2,6 +2,34 @@
 
 ## Próxima versão (em andamento)
 
+- **Gal Sal — Ultimate e despertar revistos pelo cânone** (pedido: `arena_paranormal_gal_sal_ultimate_transformacao.txt`).
+  - Auditoria antes de mexer: a Injustiça era o `cinematicCombo` genérico (corrente → 5 golpes de espadachim → lançado)
+    e o despertar só tinha números. A wiki "Gal" confirma: a fala inteira ("Injustiça, né? Muito prazer, eu sou a
+    injustiça.") vem logo depois do Controle Mental em Joui (ajoelha numa reverência forçada) e antes da execução de
+    Elizabeth; a Afinidade com Precognição (Calamidade) dá defesa a mais de perto e de longe e "não pode mais ser pego
+    desprevenido"; a Bênção Maldita Discente sabe o resultado dos próximos ataques; "O Realizador do Destino" é apelido
+    oficial (a proposta achava que não).
+  - **Injustiça** (`gal_sal.js`): a corrente prende e puxa como antes (esquiva/defesa continuam valendo; errar não abre
+    cena) → o sigilo do Controle Mental acende e o alvo AJOELHA (`forced_kneel`) → a fala inteira no banner → 3 cortes
+    com o lampejo dourado no ponto do impacto um instante antes (Bênção Maldita) → a cruz final com as duas correntes,
+    que DERRUBA o alvo (em vez de lançar longe). Dano 250, custo 50 e recarga 14 iguais; o dano cai em cada impacto
+    (15/15/20/50%). Câmera nova `shots: 'control'` (por cima do ombro, aberta para o alvo ajoelhado aparecer).
+  - `cinematicCombo.js` ganhou opções opcionais por golpe (`victimAnim`, `sigil`, `foresee`, `push`) e
+    `sp.endReaction`; quem não as usa não muda. Também passou a tratar o passo `noHit` como parte 0 do dano — sem
+    `share`, a divisão dava `NaN` no último golpe (pego no teste: a vida do alvo virava `null`).
+  - **Despertar Afinidade com Precognição**: agora dá a passiva `precognition` enquanto durar (`awakenMode`
+    `passives`, lida por `hasPassive`, que passou a considerar passivas de estados ativos) e alarga o Bloqueio Perfeito
+    para 0,2 s (`perfectBlockWindow`, lido em `damage.js`); velocidade +15% → +10%. Dano +10%, −15% de dano recebido
+    (a defesa é canônica) e cura de 10% ficam. A ficha de movimentos mostra os dois efeitos novos.
+  - Testado no jogo (CPU × CPU no modo local, passo a passo): acerto (dano 36/36/44/98 contra o Joui), alvo nocauteado
+    no meio da cena (termina no KO, sem travar), corrente longe demais (erra, sem cena), alvo defendendo (bloqueada,
+    como antes), esquiva no tempo certo (escapa); despertar: Precognição só durante o estado, aparar com 0,18 s funciona
+    e com 0,25 s vira defesa normal, sem despertar 0,18 s é defesa normal, e tudo some no round seguinte. Não testado:
+    partida LAN/online.
+  - Telemetria focada (`runBalance({ focus: 'gal_sal', fights: 1 })`, 54 lutas em 2 abas): **41%** de vitórias (48% como
+    P1, 33% como P2), antes 52% (v3.32.0). Dentro da faixa 35–65% e perto do ruído de uma rodada (±7%); sem ajuste em
+    `balance.js` nesta tarefa — rodar de novo na próxima rodada geral antes de mexer.
+
 - CI: as ações dos fluxos `release-apps.yml` e `deploy-pages.yml` foram para as versões atuais (checkout v7,
   setup-node v7, setup-java v6, upload-artifact v7, download-artifact v8, action-gh-release v3, configure-pages v6,
   upload-pages-artifact v5, deploy-pages v5) e o Node do build de 20 para 24 — some o aviso de Node 20 obsoleto e o
