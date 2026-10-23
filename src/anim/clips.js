@@ -14,6 +14,7 @@
 import { addFormClips } from './formClips.js';
 import { addVictoryClips } from './victoryClips.js';
 import { addCharClips } from './charClips.js';
+import { addIdleClips } from './idleClips.js';
 
 const k = (t, pose) => ({ t, pose });
 
@@ -566,5 +567,6 @@ CLIPS.walk_back = {
 addFormClips(CLIPS, k, mirrorPose);
 addVictoryClips(CLIPS, k);
 addCharClips(CLIPS, k);
+addIdleClips(CLIPS, k);
 
 export const JOINTS = ['hip', 'sp', 'hd', 'sL', 'eL', 'sR', 'eR', 'lL', 'kL', 'lR', 'kR'];

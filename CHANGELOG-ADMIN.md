@@ -2,6 +2,18 @@
 
 ## Próxima versão (em andamento)
 
+- **Esfinge mais perto da arte oficial** (`npc_esfinge.py`, pedido "a Esfinge não foi terminada ainda"): a pele e os
+  ossos saíram do lilás (lia como um cão roxo) para o verde-oliva escuro da arte; a Menés virou oliva com listras roxas
+  e ganhou o LEQUE de espinhos roxos em volta; o colar de crânios ficou maior, em duas fileiras; as asas têm membrana
+  roxa; a cauda ficou fina e longa com a ponta enrolada; as garras ficaram mais longas. Mesmas juntas (o
+  `SphinxGhoul` anima igual). A postura agachada da arte fica para o reajuste das animações.
+- **Posturas paradas próprias** (`src/anim/idleClips.js`, registrado no fim de `clips.js`): 18 idles novos para quem
+  dividia `idle_knife` (Aghata, Aguiar, Cristino, Fantasma, Jae, Juan, Kemi, Xande), `idle_katana` (Ferreiro, Joui,
+  Labirinto, Veríssimo) e `idle_fist` (Cristopher, Dalmo, Dante, Guizo Bombado, Kaiser, Kian). A galeria passou a usar o
+  `anims.idle` de cada ficha. Conferidos na galeria.
+- TODO: saíram os testes online (funcionam) e a velocidade das legendas (pedido do dono); entrou o **REAJUSTE DAS
+  ANIMAÇÕES** (importar animações de movimento gratuitas e de licença livre e redirecionar para o esqueleto do jogo).
+
 - **Página Sobre / Baixar (`sobre.html`) ampliada com a wiki** (pedido: "melhorar ela com base na wiki, exemplo: sistema
   de elementos e explicar como isso funciona no jogo"). Duas seções novas, com links no menu do topo:
   - **O universo**: quatro cartões "na série / no jogo": o Outro Lado e a Membrana, a Ordem e os ocultistas, rituais e

@@ -17,7 +17,7 @@ const RUST = 0xd0702c;
 
 export const CRISTINO_KIT = {
   stats: { moveSpeed: 7.5 },
-  anims: { idle: 'idle_knife', run: 'run', charge: 'charge', victory: 'vic_cristino', block: 'block' },
+  anims: { idle: 'idle_cristino', run: 'run', charge: 'charge', victory: 'vic_cristino', block: 'block' },
   chargeFx: { style: 'default', color: RUST },
   dodge: { style: 'default', distance: 4.6 },
 

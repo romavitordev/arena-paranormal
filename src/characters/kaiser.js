@@ -16,7 +16,7 @@ export default {
     tagline: 'Queimada, séria e perigosa.',
   },
   stats: { moveSpeed: 7.7, attackSpeed: 1.06 },
-  anims: { idle: 'idle_fist', run: 'run', charge: 'charge', victory: 'vic_kaiser', block: 'block' },
+  anims: { idle: 'idle_kaiser', run: 'run', charge: 'charge', victory: 'vic_kaiser', block: 'block' },
   chargeFx: { style: 'smoke', color: 0xa46bff },
   dodge: { style: 'default' },
 

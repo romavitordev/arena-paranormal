@@ -161,16 +161,17 @@ M = {
     'body': vcol_material('corpo_esfinge', 0.62),
     'lodo': material('lodo_esfinge', '#07060a', 0.12),  # Lodo Preto: preto molhado, brilhante
     'tooth': material('dente_esfinge', '#d6ccb2', 0.5),
-    'bone': material('osso_esfinge', '#c4b698', 0.6),
+    'bone': material('osso_esfinge', '#9c9880', 0.6),
     'hole': material('lodo_orbita_esfinge', '#050407', 0.2),
-    'purple': material('roxo_esfinge', '#6a3488', 0.45),
-    'wing': material('asa_esfinge', '#2c2030', 0.7),
-    'menesA': material('menes_preto_esfinge', '#18141c', 0.55),  # as listras da Menés
-    'menesB': material('menes_roxo_esfinge', '#6a3488', 0.5),
+    'purple': material('roxo_esfinge', '#7a3c9c', 0.45),
+    'wing': material('asa_esfinge', '#4a2860', 0.7),  # a membrana roxa das asas (arte oficial)
+    'menesA': material('menes_preto_esfinge', '#4a4836', 0.55),  # as listras da Menés: oliva escuro e roxo (arte oficial)
+    'menesB': material('menes_roxo_esfinge', '#5c3a6e', 0.5),
 }
 C = {k: Vector(hex_rgb(v)) for k, v in {
-    'bone': '#ddd0b4', 'bone2': '#a89880', 'flesh': '#5e4a54', 'flesh2': '#463840', 'gut': '#22161e',
-    'purple': '#6a3488', 'stain': '#0c0a0e', 'hole': '#060508',
+    # a pele e os ossos verde-oliva escuros da arte oficial (antes: lilás, que lia como um cão roxo)
+    'bone': '#aaa58a', 'bone2': '#77735e', 'flesh': '#555240', 'flesh2': '#3c3a2c', 'gut': '#15130f',
+    'purple': '#7a3c9c', 'stain': '#0c0a0e', 'hole': '#060508',
 }.items()}
 
 
@@ -260,11 +261,17 @@ for s in (1, -1):  # tendões
 Nk.chain([(0, 0.05, 0.15), (0, 0.45, 0.3), (0, 0.72, 0.38)], 0.03, 'stain', step=0.6)  # o Lodo que desce da boca
 Nk.build(neck, M['body'], 2400, res=0.011, disp=lambda p: 0.003 * n3(p, 16))
 
+# o COLAR DE CRÂNIOS: um cacho grande na base do pescoço (duas fileiras, como na arte)
+for i in range(7):
+    a = -0.9 + i * 0.3
+    add(neck, f'skB{i}', blob((math.sin(a) * 0.22, -0.02 - math.cos(a) * 0.04, math.cos(a) * 0.2 + 0.12), (0.06, 0.066, 0.056), 9, 7), M['bone'])
+    for e in (1, -1):
+        add(neck, f'skBe{i}{e}', blob((math.sin(a) * 0.22 + math.cos(a) * e * 0.022, -0.01 - math.cos(a) * 0.04, math.cos(a) * 0.2 + 0.17), (0.015, 0.018, 0.01), 6, 4), M['hole'])
 for i in range(11):
     a = -1.3 + i * 0.26
     cx, cz = math.sin(a) * 0.29, math.cos(a) * 0.24 + 0.04
     cy = 0.1 - math.cos(a) * 0.05
-    add(neck, f'sk{i}', blob((cx, cy, cz), (0.05, 0.056, 0.047), 9, 7), M['bone'])
+    add(neck, f'sk{i}', blob((cx, cy, cz), (0.064, 0.07, 0.06), 9, 7), M['bone'])
     nx, nz = math.sin(a), math.cos(a)
     for e in (1, -1):
         ex = cx + nx * 0.04 + nz * e * 0.019
@@ -374,6 +381,11 @@ V, F, U, stripe, edge = nemes()
 for k, mat in ((0, M['menesA']), (1, M['menesB'])):
     add(head, f'menes{k}', (V, [f for f, st in zip(F, stripe) if st == k], U), mat)
 add(head, 'menesEdge', rod([(p[0] * 1.03, p[1], p[2] + 0.01) for p in edge], 0.016, seg=6, caps=False), M['purple'])
+# o LEQUE de espinhos roxos em volta da Menés (na arte ela abre como uma gola de nervuras com pontas)
+for k, p in enumerate(edge[2:-2:2]):
+    d = Vector((p[0], p[1] - 0.0, 0)).normalized() if abs(p[0]) > 0.02 else Vector((0, 1, 0))
+    tip = (p[0] + d.x * 0.15, p[1] + d.y * 0.15, p[2] - 0.04)
+    add(head, f'menesSpine{k}', spike(p, tip, 0.022, seg=5), M['purple'])
 add(head, 'menesBand', rod([(math.sin(a) * 0.185, 0.17, -math.cos(a) * 0.17 + 0.03) for a in [math.pi * (0.62 + 0.76 * i / 14) for i in range(15)]], 0.018, seg=6), M['purple'])
 
 # a MANDÍBULA, a fileira de baixo e o CHIFRE DO QUEIXO (a "barba" do faraó)
@@ -430,17 +442,20 @@ for name, s, z, front in (('FL', 1, 0.58, True), ('FR', -1, 0.58, True), ('BL', 
         a = (i - (n - 1) / 2) * (0.3 if front else 0.35)
         bx = math.sin(a) * (0.075 * 1.5 if front else 0.08)
         bz = 0.31 if front else 0.21
-        add(knee, f'claw{i}', spike((bx, -lower + 0.022, bz - 0.01), (bx * 1.1, -lower - 0.004, bz + 0.08), 0.013, seg=5), M['tooth'])
+        add(knee, f'claw{i}', spike((bx, -lower + 0.022, bz - 0.01), (bx * 1.15, -lower - 0.004, bz + (0.16 if front else 0.12)), 0.014, seg=5), M['tooth'])  # garras longas (arte)
 
 # ================================================================ CAUDA: grossa na base, de vértebras, curvando para trás e para cima
 tail = joint('J_tail', (0, 0.1, -halfL - 0.02), torso)
 Tl = Sculpt('tail')
-tp = curve((0, 0, 0), (0, -0.08, -0.6), (0, 0.42, -1.05), 13)
-Tl.chain(tp, [0.08 - i * 0.0055 for i in range(13)], 'flesh', step=0.6)
+# fina e longa como na arte, com a ponta ENROLADA
+tp = curve((0, 0, 0), (0, -0.12, -0.75), (0, 0.18, -1.35), 13)
+Tl.chain(tp, [0.06 - i * 0.0032 for i in range(13)], 'flesh', step=0.6)
 for i, p in enumerate(tp[:-1]):
-    Tl.ell((p[0], p[1] + 0.055 - i * 0.003, p[2]), (0.024, 0.032, 0.024), 'bone')
-Tl.build(tail, M['body'], 1100, res=0.008)
-add(tail, 'tailTip', spike(tp[-2], (0, 0.55, -1.16), 0.024, seg=6), M['bone'])
+    Tl.ell((p[0], p[1] + 0.042 - i * 0.002, p[2]), (0.02, 0.026, 0.02), 'bone')
+Tl.build(tail, M['body'], 1000, res=0.007)
+ex, ey, ez = tp[-1]
+curl = [(0, ey + 0.13 - 0.13 * math.cos(t * 1.7 * math.pi) * (1 - 0.35 * t), ez - 0.13 * math.sin(t * 1.7 * math.pi) * (1 - 0.35 * t)) for t in [k / 14 for k in range(15)]]
+add(tail, 'tailCurl', rod(curl, [0.02 - 0.0012 * k for k in range(15)], seg=6), M['bone'])
 
 # ================================================================ ASAS RASGADAS de morcego (grandes; rasgos só na borda e alguns furos)
 for s, name in ((1, 'L'), (-1, 'R')):

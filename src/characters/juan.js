@@ -20,7 +20,7 @@ export default {
     tagline: 'Eu não quero morrer... eu quero um novo começo.',
   },
   stats: { moveSpeed: 7.6, attackSpeed: 0.92 }, // estava rápido demais (64%+ de vitórias): mais lento e combos mais cadenciados,
-  anims: { idle: 'idle_knife', run: 'run', charge: 'charge', victory: 'vic_juan', block: 'block' },
+  anims: { idle: 'idle_juan', run: 'run', charge: 'charge', victory: 'vic_juan', block: 'block' },
   chargeFx: { style: 'default', color: 0xc01828 },
   dodge: { style: 'default', distance: 5.2 },
 

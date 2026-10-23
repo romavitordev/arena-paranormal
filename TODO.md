@@ -858,9 +858,13 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
       lisa com listras nítidas, asas maiores e menos ruidosas; refazer a base e refinar pelo MCP.
 - [x] Ajustes do teste: Esfinge paralisada (não a vítima), 35 s com o relógio parado na paralisia, olhos pretos na
       Transformação, Lodo que Prende e Sentença do Chacal.
+- [~] **Terminar a Esfinge** (pedido de 2026-10-23): modelo aproximado da arte oficial ("Miniatura Carniçal da Esfinge
+      em Calamidade") — pele e ossos verde-oliva, Menés escura com listras roxas e o LEQUE de espinhos roxos, colar de
+      crânios em duas fileiras, asas de membrana roxa, cauda fina enrolada, garras longas. Falta: a POSTURA (na arte
+      ela fica agachada, réptil, com o peito alto; hoje as patas animadas em código a deixam em pé como um cão) —
+      junto do REAJUSTE DAS ANIMAÇÕES.
 - [x] BALANCEAMENTO GERAL DOS PERSONAGENS (v3.32.0): 4 rodadas de telemetria, ajustes em `src/config/balance.js`.
       Repetir a medição a cada personagem novo (`runBalance({ focus: 'id' })`) e a cada mudança grande de kit.
-- [ ] Testar o enigma numa partida online real (dois aparelhos) e no celular (toque nas respostas).
 
 # MODELOS — PRÓXIMOS PASSOS
 
@@ -1494,7 +1498,6 @@ Conferido no código em 2026-10-22 (revisão da Ultimate e do despertar): os ite
   **"O Realizador do Destino"** (apelido oficial do Gal; o poder continua sendo a Afinidade com Precognição).
 * [x] Destacar a venda (brilho dourado) na ativação do despertar: as marcas da venda acendem e pulsam enquanto durar
   (`awakenMode.glowMat`).
-* [ ] Testar a Injustiça e o despertar numa partida LAN/online (só foram testados no modo local e com CPU).
 * [x] **Cura que cobra sanidade deixa de ser passiva** (pedido do usuário, 2026-10-08): vira uma HABILIDADE que liga a
   cura do alvo + o roubo de sanidade por alguns segundos; fora dela, o físico do Gal é normal
 
@@ -2903,14 +2906,20 @@ genérico demais), com o motivo. Nenhum item é de balanceamento.
 
 * [ ] **Remapear teclas e botões** (hoje fixos em `config/controls.js`), salvo no navegador.
 * [x] **Falas:** opção de desligar as falas durante a luta (Opções › Partida › Falas na luta, 2026-10-22).
-* [ ] **Falas:** velocidade das legendas.
 
 ## Personagens e animação
 
 * [x] **Pose de vitória própria para o Arthur** (`vic_arthur`: a sniper apoiada no ombro; `victoryProp` mostra a arma
   na vitória). Correção da análise: a Lírio já tinha a dela (`victory_hammer`, a Leonora erguida).
-* [ ] **Idles próprios:** 5 personagens dividem `idle_knife`, 4 `idle_katana` e 3 `idle_fist`; a pose parada é o que
-  mais aparece (seleção, introdução, entre golpes) e devia mostrar a personalidade de cada um.
+* [ ] **REAJUSTE DAS ANIMAÇÕES** (pedido de 2026-10-23: "as animações do jogo já são antigas pro nível que está o
+  jogo"): importar animações de movimento GRATUITAS e de licença livre (ex.: Quaternius Universal Animation Library,
+  CC0; conferir a licença de cada pacote antes de usar), redirecionar para o esqueleto do jogo (`anim/clips.js` hoje é
+  todo feito à mão em poses-chave) e ajustar para o estilo da luta: andar, correr, pular, cair, esquiva, dash, idle,
+  levar golpe. Começar pela movimentação (é o que mais aparece) e manter as poses de golpe próprias de cada personagem.
+* [x] **Idles próprios** (2026-10-23, `anim/idleClips.js`): 18 posturas novas — os 8 que dividiam `idle_knife`, os 4 de
+  `idle_katana` e os 6 de `idle_fist` ganharam a sua (ex.: Jae agachada com o punhal perto do rosto, Xande com o taco no
+  ombro e o skate à frente, Joui no iaijutsu, Cristopher gingando na guarda de boxe, Kian sereno de braços abertos).
+  Ainda dividem: Balu e Lírio (`idle_hammer`), Erin e Gal Sal (`idle_dual`), Arnaldo e Magistrada (`idle_arnaldo`).
 
 ## Qualidade do código e testes
 

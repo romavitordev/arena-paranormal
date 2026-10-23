@@ -15,7 +15,7 @@ const DUST = 0xb8a890;
 
 export const CRISTOPHER_KIT = {
   stats: { moveSpeed: 7.2 },
-  anims: { idle: 'idle_fist', run: 'run', charge: 'charge_fists', victory: 'vic_cristopher', block: 'block' },
+  anims: { idle: 'idle_cristopher', run: 'run', charge: 'charge_fists', victory: 'vic_cristopher', block: 'block' },
   chargeFx: { style: 'fists', color: 0xffb070 },
   dodge: { style: 'default', distance: 4.4 },
 

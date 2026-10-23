@@ -28,7 +28,7 @@ export default {
     tagline: 'Olhos sempre abertos.',
   },
   stats: { moveSpeed: 7.8 },
-  anims: { idle: 'idle_katana', run: 'run', charge: 'charge', victory: 'vic_verissimo', block: 'block_weapon' },
+  anims: { idle: 'idle_verissimo', run: 'run', charge: 'charge', victory: 'vic_verissimo', block: 'block_weapon' },
   chargeFx: { style: 'default', color: BLUE },
   dodge: { style: 'default', distance: 4.4 },
   // defesa de veterano (bloqueou o Kian): janela de Bloqueio Perfeito maior e o atacante fica mais tempo aberto

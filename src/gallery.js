@@ -5,10 +5,8 @@ import { CLIPS } from './anim/clips.js';
 import { ROSTER } from './characters/index.js';
 
 // Página de visualização dos modelos e animações (ferramenta de desenvolvimento).
-const IDLE = {
-  kaiser: 'idle_fist', arthur: 'idle_onearm', joui: 'idle_katana',
-  aghata: 'idle_knife', gal_sal: 'idle_dual', kian: 'idle_fist',
-};
+// a postura parada de cada um vem da própria ficha (anims.idle); sem ficha, a guarda de punhos
+const IDLE = Object.fromEntries(ROSTER.map((c) => [c.model || c.id, (c.anims && c.anims.idle) || 'idle_fist']));
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(Math.min(2, devicePixelRatio));
@@ -45,7 +43,7 @@ const entries = shown.map((id, i) => {
   rig.root.position.x = (i - (shown.length - 1) / 2) * 1.35;
   scene.add(rig.root);
   const anim = new Animator(rig);
-  anim.play(IDLE[id]);
+  anim.play(IDLE[id] || 'idle_fist');
   return { id, rig, anim };
 });
 document.getElementById('labels').innerHTML = shown.map((id) => `<span>${(ROSTER.find((c) => c.id === id) || { name: id }).name}</span>`).join('');
@@ -53,7 +51,7 @@ document.getElementById('labels').innerHTML = shown.map((id) => `<span>${(ROSTER
 const sel = document.getElementById('anim');
 sel.innerHTML = '<option value="">(postura de cada um)</option>' + Object.keys(CLIPS).map((c) => `<option>${c}</option>`).join('');
 sel.onchange = () => {
-  for (const e of entries) e.anim.play(sel.value || IDLE[e.id], { restart: true });
+  for (const e of entries) e.anim.play(sel.value || IDLE[e.id] || 'idle_fist', { restart: true });
 };
 
 let yaw = 0.35;

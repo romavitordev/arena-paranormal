@@ -20,7 +20,7 @@ const STEEL = 0xd8d4dc;
 
 export const JAE_KIT = {
   stats: { moveSpeed: 8.3 },
-  anims: { idle: 'idle_knife', run: 'run', charge: 'charge', victory: 'vic_jae', block: 'block' },
+  anims: { idle: 'idle_jae', run: 'run', charge: 'charge', victory: 'vic_jae', block: 'block' },
   chargeFx: { style: 'blood', color: RED },
   dodge: { style: 'default', distance: 5.8 },
 
