@@ -1,5 +1,12 @@
 # Registro administrativo de alterações
 
+## Próxima versão (em andamento)
+
+- CI: as ações dos fluxos `release-apps.yml` e `deploy-pages.yml` foram para as versões atuais (checkout v7,
+  setup-node v7, setup-java v6, upload-artifact v7, download-artifact v8, action-gh-release v3, configure-pages v6,
+  upload-pages-artifact v5, deploy-pages v5) e o Node do build de 20 para 24 — some o aviso de Node 20 obsoleto e o
+  do setup-java v4.
+
 ## v3.34.0 — Faixas e Correntes
 
 - Versão: `VERSION` 3.33.0 → **3.34.0** (package.json/lock junto). Data: 2026-10-22.
