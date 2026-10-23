@@ -367,8 +367,14 @@ export class HUD {
     const el = this.bannerEl;
     const txt = el.querySelector('.txt');
     txt.textContent = name;
-    // frases mais longas ("Arma de Sangue!", "Injustiça né?") usam letra menor
-    txt.style.fontSize = name.length > 12 ? 'clamp(44px, 8.5vw, 110px)' : name.length > 9 ? 'clamp(54px, 10.5vw, 135px)' : '';
+    // o tamanho da letra sai da LARGURA real da tela (Bebas Neue com o espaçamento ocupa ~0,6 em por letra): numa
+    // linha se couber grande o bastante; se não, em duas linhas equilibradas (text-wrap: balance) com letra maior
+    const W = Math.min(window.innerWidth * 0.86, 1500);
+    const n = Math.max(4, name.length);
+    const cap = Math.min(120, window.innerHeight * 0.17);
+    let px = W / (n * 0.6);
+    if (px < 54 && name.includes(' ')) px = W / (Math.ceil(n / 2) * 0.6 + 1);
+    txt.style.setProperty('--bfs', `${Math.round(Math.max(30, Math.min(cap, px)))}px`);
     el.style.setProperty('--c', color);
     el.classList.remove('show');
     void el.offsetWidth;

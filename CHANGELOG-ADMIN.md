@@ -1,5 +1,26 @@
 # Registro administrativo de alterações
 
+## Próxima versão (em andamento)
+
+- **Gal — nomes:** a Ultimate passa a se chamar **"Injustiça né?"** (nome e banner; a fala inteira ficava enorme na
+  tela) e a transformação **"O Realizador do Destino"** (apelido oficial do Gal na wiki; o poder continua sendo a
+  Afinidade com Precognição). Substitui o pendente anterior, que trocava o nome da Ultimate.
+- **Banner do especial/transformação refeito** (`#banner` em `styles.css`, `HUD.banner`): a faixa e o texto ficam na
+  mesma célula de grade, então a faixa cresce com o texto; a inclinação é do conjunto; o tamanho da letra sai da
+  largura real da tela (~0,6 em por letra) com teto de 17% da altura, e nomes longos quebram em duas linhas
+  equilibradas (`text-wrap: balance`). Conferido no PC e no celular deitado (812×375) com "Injustiça né?",
+  "Afinidade com Precognição" e a fala inteira do Gal: tudo dentro da faixa.
+- **Gal — a venda brilha no despertar:** opção nova `glowMat` do `awakenMode` — clona o material (o espelho não muda),
+  usa a própria textura como emissivo (só as marcas douradas acendem), pulsa enquanto durar e devolve o original no
+  fim. Conferido no close.
+- **Contador de desempenho de dev** (`src/dev/perf.js`): FPS, tempo de quadro (média e pior), chamadas de desenho,
+  triângulos, geometrias e texturas na GPU, objetos na cena (contados 1×/s) e memória do JS. Liga com `?perf` na URL
+  (vale no celular e no site) ou F8 no `npm run dev`; o módulo só carrega quando pedido.
+- **Opções › Partida › Falas na luta (Ligadas/Desligadas)** (`SETTINGS.fightLines`, 13 idiomas): desligada, as falas
+  do meio da luta (provocações, vida baixa) não aparecem; entrada e vitória continuam. A escolha da fala continua
+  rodando e só a legenda some — ela usa o sorteio da simulação, e pular a escolha de um lado desencontraria uma
+  partida em rede. Conferido: ligada mostra, desligada esconde, o estado interno é igual nos dois casos.
+
 ## v3.35.0 — Eu Sou a Injustiça
 
 - Versão: `VERSION` 3.34.0 → **3.35.0** (package.json/lock junto). Data: 2026-10-22.

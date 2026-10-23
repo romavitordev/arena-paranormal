@@ -27,6 +27,8 @@ import { swapFace } from './maskTransform.js';
 //   eyeDrip             cor do Lodo que escorre do rosto enquanto durar
 //   passives            passivas que valem enquanto durar (ex.: [{ type: 'precognition' }] — lidas por hasPassive)
 //   perfectBlockWindow  janela do Bloqueio Perfeito enquanto durar (s; vale a maior entre esta e a do personagem)
+//   glowMat             trecho do nome do material que BRILHA na cor do estado (o próprio desenho da textura vira o
+//                       brilho: na venda do Gal, as marcas douradas acendem e o pano preto continua escuro); pulsa
 export const awakenMode = {
   canStart: (f) => !f.findBuff('awakened'),
   blockMsg: 'JÁ DESPERTOU',
@@ -49,6 +51,9 @@ export const awakenMode = {
     // o rosto muda no meio do close (a câmera está nele)
     let undoFace = null;
     if (sp.face) tl.add(0.45, () => { undoFace = swapFace(f.rig, sp.face[0], sp.face[1]); });
+    // o brilho acende no close (a câmera está no rosto)
+    let glow = null;
+    if (sp.glowMat) tl.add(0.45, () => { glow = glowMaterials(f.rig, sp.glowMat, col); });
     tl.add(0.35, () => world.showBanner(sp.banner || sp.name, f.def.color));
     tl.add(1.0, () => {
       world.fx.ring(new THREE.Vector3(f.pos.x, 0.06, f.pos.z), { color: col, radius: 5, life: 0.7 });
@@ -63,8 +68,9 @@ export const awakenMode = {
     const finish = () => {
       rise.stop();
       world.endCinematic();
-      applyAwakening(f, sp, world, col, undoFace);
+      applyAwakening(f, sp, world, col, undoFace, glow);
       undoFace = null;
+      glow = null;
     };
     return {
       update: (dt) => {
@@ -72,13 +78,13 @@ export const awakenMode = {
         if (done) finish();
         return done;
       },
-      cancel: () => { rise.stop(); world.endCinematic(); if (undoFace) { undoFace(); undoFace = null; } },
+      cancel: () => { rise.stop(); world.endCinematic(); if (undoFace) { undoFace(); undoFace = null; } if (glow) { glow.undo(); glow = null; } },
     };
   },
 };
 
-function applyAwakening(f, sp, world, col, undoFace) {
-  if (f.state === 'ko') { if (undoFace) undoFace(); return; }
+function applyAwakening(f, sp, world, col, undoFace, glow) {
+  if (f.state === 'ko') { if (undoFace) undoFace(); if (glow) glow.undo(); return; }
   // o Lodo escorrendo do rosto (olhos e boca) enquanto durar
   const drip = sp.eyeDrip !== undefined ? world.fx.emitter({ rate: 14, follow: () => f.rig.joints.hd.getWorldPosition(new THREE.Vector3()), particle: { color: sp.eyeDrip, kind: 'smoke', speed: 0.15, up: -1.2, spread: 0.08, life: 0.6, size: 0.12, gravity: 3 } }) : null;
   if (sp.heal) f.health = Math.min(f.maxHealth, f.health + f.maxHealth * sp.heal);
@@ -95,6 +101,7 @@ function applyAwakening(f, sp, world, col, undoFace) {
     cdRate: sp.cdRate, energyRegenMult: sp.energyRegenMult, knockbackTakenMult: sp.knockbackTakenMult, unblockable: !!sp.unblockable, meleeBleed: sp.meleeBleed,
     bloodArmor: !!sp.bloodArmSide, bloodArmSide: sp.bloodArmSide, passives: sp.passives, perfectBlockWindow: sp.perfectBlockWindow,
     onTick(dt) {
+      if (glow) glow.pulse(world.time);
       if (f.state === 'ko') return;
       if (sp.lowHealth) {
         const L = sp.lowHealth;
@@ -122,9 +129,35 @@ function applyAwakening(f, sp, world, col, undoFace) {
         if (armorClock >= sp.armorEvery && (f.armorHits || 0) < (sp.armorMax ?? 1)) { armorClock = 0; f.armorHits = (f.armorHits || 0) + 1; }
       }
     },
-    onEnd() { aura.stop(); if (drip) drip.stop(); if (undoFace) undoFace(); if (f.buffTint === tint) f.buffTint = null; },
+    onEnd() { aura.stop(); if (drip) drip.stop(); if (undoFace) undoFace(); if (glow) glow.undo(); if (f.buffTint === tint) f.buffTint = null; },
   });
   f.notify(`${(sp.label || sp.name).toUpperCase()}!`, true);
+}
+
+// acende os materiais cujo nome contém `part`: o material é CLONADO para este lutador (no espelho, o outro não muda) e o
+// próprio mapa vira o emissivo — só o que é claro na textura brilha. undo() devolve os materiais originais.
+function glowMaterials(rig, part, col) {
+  const swaps = [];
+  rig.root.traverse((o) => {
+    if (!o.isMesh) return;
+    const list = Array.isArray(o.material) ? o.material : [o.material];
+    if (!list.some((m) => m && m.name && m.name.includes(part) && m.emissive)) return;
+    const orig = o.material;
+    const next = list.map((m) => {
+      if (!(m && m.name && m.name.includes(part) && m.emissive)) return m;
+      const c = m.clone();
+      c.emissive = new THREE.Color(col);
+      if (c.map) c.emissiveMap = c.map;
+      c.emissiveIntensity = 0.9;
+      return c;
+    });
+    o.material = Array.isArray(orig) ? next : next[0];
+    swaps.push({ o, orig, mats: next.filter((m) => !list.includes(m)) });
+  });
+  return {
+    pulse(t) { for (const s of swaps) for (const m of s.mats) m.emissiveIntensity = 0.75 + 0.35 * Math.sin(t * 3); },
+    undo() { for (const s of swaps) { s.o.material = s.orig; s.mats.forEach((m) => m.dispose()); } swaps.length = 0; },
+  };
 }
 
 function auraEmitter(f, world, kind, col) {

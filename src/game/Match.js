@@ -294,7 +294,9 @@ export class Match {
     const state = this.battleDialogue;
     if (!state) return;
     const line = state.lines[state.index];
-    this.hud.subtitle(line || null);
+    // OPÇÕES › Falas na luta desligadas: a fala só não APARECE — a escolha continua igual (ela usa o sorteio da
+    // simulação; numa partida em rede pular a escolha de um lado desencontraria os dois computadores)
+    this.hud.subtitle(SETTINGS.fightLines ? line || null : null);
     if (line) state.remaining = Math.min(2.4, Math.max(1.6, 1.0 + line.text.length * 0.025));
   }
 

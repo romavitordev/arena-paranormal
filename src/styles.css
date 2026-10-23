@@ -168,14 +168,15 @@ html.vp-fix canvas#game, html.vp-fix #hud, html.vp-fix .screen, html.vp-fix #tou
 #callout.show { animation: callout 1.2s ease-out forwards; }
 @keyframes callout { 0% { opacity: 0; transform: scale(2.2); } 15% { opacity: 1; transform: scale(1); } 80% { opacity: 1; } 100% { opacity: 0; transform: scale(.95); } }
 
-/* nome cinematográfico do especial */
-#banner { position: absolute; left: 0; right: 0; top: 50%; height: 0; pointer-events: none; }
-#banner .stripe { position: absolute; left: -10%; right: -10%; top: -60px; height: 120px; background: linear-gradient(90deg, transparent, rgba(0,0,0,.85) 15%, rgba(0,0,0,.85) 85%, transparent); transform: skewY(-6deg) scaleX(0); transform-origin: left; }
-#banner .txt { position: absolute; left: 0; right: 0; top: -70px; text-align: center; font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 13vw, 160px); line-height: 140px; letter-spacing: .14em; color: var(--c, #fff); text-shadow: 4px 4px 0 #000, 0 0 40px var(--c, #fff); transform: skewY(-6deg); opacity: 0; }
+/* nome cinematográfico do especial: a faixa cresce com o texto (os dois na mesma célula da grade), o tamanho da letra
+   vem do HUD.banner pela largura real da tela e nomes longos quebram em duas linhas equilibradas */
+#banner { position: absolute; left: 0; right: 0; top: 50%; display: grid; place-items: center; transform: translateY(-50%) skewY(-6deg); pointer-events: none; overflow: hidden; padding: 10px 0; }
+#banner .stripe { grid-area: 1 / 1; align-self: stretch; justify-self: stretch; margin: 0 -10vw; background: linear-gradient(90deg, transparent, rgba(0,0,0,.85) 15%, rgba(0,0,0,.85) 85%, transparent); transform: scaleX(0); transform-origin: left; }
+#banner .txt { grid-area: 1 / 1; box-sizing: border-box; max-width: 94vw; padding: .14em 4vw .06em; text-align: center; font-family: 'Bebas Neue', sans-serif; font-size: var(--bfs, 96px); line-height: 1.02; letter-spacing: .1em; text-wrap: balance; overflow-wrap: anywhere; color: var(--c, #fff); text-shadow: 3px 3px 0 #000, 0 0 30px var(--c, #fff); opacity: 0; }
 #banner.show .stripe { animation: stripe 1.5s ease-out forwards; }
 #banner.show .txt { animation: bannerTxt 1.5s ease-out forwards; }
-@keyframes stripe { 0% { transform: skewY(-6deg) scaleX(0); } 15% { transform: skewY(-6deg) scaleX(1); } 85% { transform: skewY(-6deg) scaleX(1); opacity: 1; } 100% { transform: skewY(-6deg) scaleX(1); opacity: 0; } }
-@keyframes bannerTxt { 0% { opacity: 0; letter-spacing: .6em; } 18% { opacity: 1; letter-spacing: .14em; } 82% { opacity: 1; } 100% { opacity: 0; letter-spacing: .2em; } }
+@keyframes stripe { 0% { transform: scaleX(0); } 15% { transform: scaleX(1); } 85% { transform: scaleX(1); opacity: 1; } 100% { transform: scaleX(1); opacity: 0; } }
+@keyframes bannerTxt { 0% { opacity: 0; letter-spacing: .3em; } 18% { opacity: 1; letter-spacing: .1em; } 82% { opacity: 1; } 100% { opacity: 0; letter-spacing: .14em; } }
 
 #letterbox::before, #letterbox::after { content: ''; position: absolute; left: 0; right: 0; height: 0; background: #000; transition: height .25s; }
 #letterbox::before { top: 0; }

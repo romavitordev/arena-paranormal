@@ -21,7 +21,7 @@ import { validatePassives } from './combat/passives.js';
 import { Match } from './game/Match.js';
 import { CpuController } from './ai/CpuController.js';
 import { ARENAS, ARENA_ORDER, DEFAULT_ARENA, preloadArenas } from './arena/index.js';
-import { SETTINGS, cycleSetting, saveSettings, TIMER_OPTIONS, timerLabel, cpuLabel, LANGUAGE_OPTIONS, languageLabel, FX_OPTIONS, GFX_OPTIONS, gfxLabel, gfxProfile, autoGraphics } from './config/settings.js';
+import { SETTINGS, cycleSetting, saveSettings, TIMER_OPTIONS, timerLabel, cpuLabel, LANGUAGE_OPTIONS, languageLabel, FX_OPTIONS, LINES_OPTIONS, GFX_OPTIONS, gfxLabel, gfxProfile, autoGraphics } from './config/settings.js';
 import { TutorialMode } from './ui/Tutorial.js';
 import { VERSION } from './config/version.js';
 import { t, tAlert, setLanguage } from './i18n/index.js';
@@ -160,6 +160,7 @@ function toOptions(index = 0) {
     { ...pick('graphics', 'opt.gfx.label', GFX_OPTIONS, (v) => t('opt.gfx.' + v)), section: t('opt.sec.video'), desc: t('opt.desc.gfx', { auto: t('opt.gfx.' + autoGraphics()) }) },
     { ...pick('reduceFx', 'opt.fx.label', FX_OPTIONS, (v) => t(v ? 'opt.fx.reduced' : 'opt.fx.normal')), section: t('opt.sec.video'), desc: t('opt.desc.fx') },
     { ...pick('timer', 'opt.time.label', TIMER_OPTIONS, (v) => timerLabel(v)), section: t('opt.sec.match'), desc: t('opt.desc.time') },
+    { ...pick('fightLines', 'opt.lines.label', LINES_OPTIONS, (v) => t(v ? 'opt.lines.on' : 'opt.lines.off')), section: t('opt.sec.match'), desc: t('opt.desc.lines') },
     { ...pick('language', 'opt.lang.label', LANGUAGE_OPTIONS.map((l) => l.id), (v) => languageLabel(v)), section: t('opt.sec.lang'), desc: t('opt.desc.lang') },
   ];
   const scr = new OptionsScreen(screens, {
@@ -633,6 +634,13 @@ function placeVictoryLabels() {
 
 const clock = new THREE.Clock();
 let lastFrame = 0;
+
+// contador de desempenho de dev (dev/perf.js): ?perf na URL ou F8 no `npm run dev` — carregado só quando pedido
+let perf = null;
+const perfScene = () => (game.match && game.match.world ? game.match.world.scene : titleStage.scene);
+const loadPerf = () => import('./dev/perf.js').then((mod) => { perf = perf || mod.createPerf(renderer, perfScene); });
+if (new URLSearchParams(location.search).has('perf')) loadPerf();
+if (import.meta.env.DEV) addEventListener('keydown', (e) => { if (e.code === 'F8') { if (perf) perf.toggle(); else loadPerf(); } });
 function frame(now) {
   // limite de quadros da QUALIDADE GRÁFICA (60 no médio/baixo): tela de 120 Hz não desenha o dobro à toa
   const cap = gfxProfile().maxFps;
@@ -644,6 +652,7 @@ function frame(now) {
   // tela de vitória: a câmera se mexe (World.updateVictoryCam), os nomes acompanham
   if (game.match && game.match.world && game.match.world.victoryCam) placeVictoryLabels();
   render();
+  if (perf) perf.update(dt);
   requestAnimationFrame(frame);
 }
 

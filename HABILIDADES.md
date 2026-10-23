@@ -529,11 +529,11 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 - **Passiva — Desviar de Balas:** esquivar de um projétil não gasta carga
 - **Passiva:** o físico tira X de vida; o INIMIGO recupera Y (Y < X) e perde Y × 1.5 de sanidade (energia). O Injustiça não se cura.
 
-### Especial: Injustiça
+### Especial: Injustiça né?
 
 250 de dano · custo 50 · cooldown 14 s.
 
-### Transformação: Afinidade com Precognição
+### Transformação: O Realizador do Destino
 
 Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +10% de dano, −15% de dano recebido, +10% de velocidade, cura 10% na hora, não é pego desprevenido, Bloqueio Perfeito com janela de 0,2 s.
 

@@ -1488,7 +1488,10 @@ Conferido no código em 2026-10-22 (revisão da Ultimate e do despertar): os ite
   recarga; dano em cada impacto; esquiva/defesa da corrente continuam valendo.
 * [x] **Despertar Afinidade com Precognição pela wiki** (2026-10-22): passa a dar a passiva Precognição (não é pego
   desprevenido) e a janela do Bloqueio Perfeito vai a 0,2 s; velocidade +15% → +10%.
-* [ ] Destacar a venda (brilho dourado) na ativação do despertar — hoje a ativação usa a aura de sigilos padrão.
+* [x] **Nomes (pedido de 2026-10-22):** a Ultimate se chama **"Injustiça né?"** (banner curto) e a transformação
+  **"O Realizador do Destino"** (apelido oficial do Gal; o poder continua sendo a Afinidade com Precognição).
+* [x] Destacar a venda (brilho dourado) na ativação do despertar: as marcas da venda acendem e pulsam enquanto durar
+  (`awakenMode.glowMat`).
 * [ ] Testar a Injustiça e o despertar numa partida LAN/online (só foram testados no modo local e com CPU).
 * [x] **Cura que cobra sanidade deixa de ser passiva** (pedido do usuário, 2026-10-08): vira uma HABILIDADE que liga a
   cura do alvo + o roubo de sanidade por alguns segundos; fora dela, o físico do Gal é normal
@@ -2714,6 +2717,12 @@ Comportamentos:
 
 ## Indicadores
 
+* [x] **Banner do nome do especial/transformação refeito** (pedido de 2026-10-22; feito no mesmo dia: faixa cresce com o
+  texto, letra pela largura, duas linhas se precisar): hoje é só um texto por cima da tela
+  (`#banner` em `styles.css`, `HUD.banner`) e fica bugado — a fonte (até 160 px, linha de 140 px) sai para fora da faixa
+  preta de 120 px atrás, nomes longos não quebram nem cabem (o tamanho só cai por contagem de letras), o texto e a faixa
+  inclinam juntos e cortam nas bordas, e no celular ocupa a tela toda. Fazer a faixa crescer com o texto, limitar o
+  tamanho pela largura real, quebrar em duas linhas se precisar e manter o banner curto (ex.: "Injustiça né?").
 * [ ] SPECIAL
 * [ ] MISS
 * [ ] DODGED
@@ -2885,13 +2894,14 @@ genérico demais), com o motivo. Nenhum item é de balanceamento.
   `preloadArenas` (os 5 cenários, 16 MB). Baixar só no "Carregamento" os lutadores escolhidos (2, ou 6 na equipe) +
   as formas deles + o cenário, com cache; a seleção mostra os retratos/miniaturas.
 * [ ] **Comprimir os `.glb`** (meshopt ou Draco; texturas em KTX2/WebP). O maior é o Diabo (1,6 MB).
-* [ ] **Contador de desempenho de dev** (FPS, memória, objetos na cena) para medir cada cenário/personagem antes e
+* [x] **Contador de desempenho de dev** (feito em 2026-10-22: `src/dev/perf.js`, `?perf` ou F8 no dev) (FPS, memória, objetos na cena) para medir cada cenário/personagem antes e
   depois das otimizações acima.
 
 ## Opções e acessibilidade
 
 * [ ] **Remapear teclas e botões** (hoje fixos em `config/controls.js`), salvo no navegador.
-* [ ] **Falas:** velocidade das legendas e opção de desligar as falas durante a luta.
+* [x] **Falas:** opção de desligar as falas durante a luta (Opções › Partida › Falas na luta, 2026-10-22).
+* [ ] **Falas:** velocidade das legendas.
 
 ## Personagens e animação
 

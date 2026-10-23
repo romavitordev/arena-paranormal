@@ -190,8 +190,8 @@ export default {
   // cada corte é sabido antes de acontecer (Bênção Maldita: o lampejo dourado marca o impacto) — até a cruz final com as
   // correntes tensas, que derruba o alvo. Dano (250), custo e recarga iguais aos de antes; o dano cai em cada impacto.
   special: {
-    name: 'Injustiça',
-    banner: 'Injustiça, né? Muito prazer, eu sou a injustiça.',
+    name: 'Injustiça né?',
+    banner: 'Injustiça né?', // curto: a fala inteira não cabe na faixa do banner
     type: 'cinematicCombo',
     energyCost: 50,
     cooldown: 14,
@@ -224,13 +224,15 @@ export default {
   // Bloqueio Perfeito: a janela abre um pouco mais (0,15 → 0,2 s). Velocidade +10% (era +15%: a força agora está na
   // leitura da luta, não nos números). Até o fim do round.
   awakening: {
-    name: 'Afinidade com Precognição',
-    banner: 'Afinidade com Precognição',
+    // nome do estado: "O Realizador do Destino" (apelido oficial do Gal na wiki); o poder é a Afinidade com Precognição
+    name: 'O Realizador do Destino',
+    banner: 'O Realizador do Destino',
     type: 'awakenMode',
     anim: 'charge_dual',
     mult: 1.1, takenMult: 0.85, speedMult: 1.1, aura: 'sigil', color: 0xffcf4a, heal: 0.1,
     passives: [{ type: 'precognition' }],
     perfectBlockWindow: 0.2,
+    glowMat: 'blindfold', // as marcas douradas da venda acendem e pulsam enquanto durar
   },
 
   passives: [
