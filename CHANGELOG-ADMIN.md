@@ -1,5 +1,45 @@
 # Registro administrativo de alterações
 
+## Próxima versão (em andamento)
+
+- **Fantasma** (forma da Kemi; `tools/blender/char_fantasma.py` → `public/models/fantasma.glb`) remodelada pela arte e
+  pelo texto oficiais ("faixas que agora escondem seu rosto, deixando apenas seus olhos à mostra"). O script ficou
+  independente do antigo `kemi_common.py`: sobretudo de couro marrom feito a partir do corpo
+  (`clothe` + saia em `shell_grid` até acima do joelho), gola alta aberta em V, ombreiras e remendos escuros, botões,
+  faixa na cintura com nó e pontas, três facas curvas em bainhas, a alça do rifle, faixas em espiral nos antebraços e
+  cruzadas nas canelas, calça cargo, botas esculpidas com sola e cadarço, voltas de faixa coladas na cabeça por raio
+  (a volta da altura dos olhos só passa por trás, deixando a fresta à mostra) e os dreads loiros num rabo alto. As
+  orelhas antigas saíram (ficavam por cima das faixas). Texturas novas `coat_fantasma`, `pants_fantasma` e
+  `bandage_fantasma`; `face_fantasma` refeita (voltas de faixa com trama, fresta escura puída e olhos âmbar com
+  brilho). Revisado no Blender pelo MCP (4 vistas) e na galeria; check, 43 testes e build ok.
+
+- **Kemi** (`tools/blender/char_kemi.py` → `public/models/kemi.glb`) remodelada pelas artes oficiais "Arte de Kemi em
+  Hexatombe" (de frente e de costas): dreads loiros puxados do couro cabeludo para o rabo alto e caindo até o meio das
+  costas, com mechas soltas dos lados do rosto; argolas na orelha esquerda; top branco curto de alças largas com a
+  barra do decote e a faixa marrom por baixo do busto; barriga à mostra com o abdômen e o umbigo em relevo; mochila
+  preta (metaballs) com a tampa, as alças de couro claro pelos ombros e a tira cruzada; faixas coladas por raio no
+  braço esquerdo inteiro e no antebraço/mão direitos, com as pontas penduradas; calça cáqui larga com o cós dobrado e
+  dobras em relevo, bolsa de couro na coxa esquerda, faixas cruzadas na perna esquerda e no joelho direito; o casaco
+  marrom amarrado na cintura (nó no quadril esquerdo, pontas das mangas) caindo pelo lado direito e por trás até o meio
+  da canela, abotoado na borda, com a barra escura e sempre por cima da calça; coturnos cinza-escuros de cadarço com
+  sola marrom. O `kemi_common.py` foi removido (a Fantasma já era independente). Texturas novas `top_kemi`,
+  `pants_kemi` e `coat_kemi`. A sniper das costas da Kemi ficou mais afastada para passar por cima da mochila
+  (`models/props.js`). Revisado no Blender pelo MCP (4 vistas a cada etapa) e na galeria; check, 43 testes e build ok.
+
+- **Gal Sal** (`tools/blender/char_gal_sal.py` → `public/models/gal_sal.glb`) remodelado pelas artes oficiais de
+  Desconjuração ("Miniatura Gal em Desconjuração", "... em combate" e "Arte promocional - Gal"): o PONCHO agora cai de
+  verdade — o perfil de cada direção sai do pescoço, passa por cima dos ombros e dos braços (raio de cima) e cai na
+  vertical a partir da borda do corpo até a barra em ponta (frente/trás) e no cotovelo (lados), com a barra rasgada,
+  as dobras e nunca por dentro do corpo; decote em V aberto com a costura dourada em pontos; franja dourada de fios de
+  tamanhos diferentes; cabelo preto liso em metaballs repartido no meio (da testa à nuca), caindo na frente dos ombros
+  e pelas costas; venda por cima do cabelo com o nó e as pontas; gargantilha colada no pescoço; brinco pendurado na
+  orelha direita; correntes de elos reais (`chain_mesh`) enroladas nos antebraços; calça com dobras. As lâminas
+  **Ereškigal** foram modeladas no Blender (`npc_gal_blade.py` → `public/npcs/gal_blade.glb`): meia-lua de aço escuro
+  com as pontas para a frente, escrita cuneiforme dourada, empunhadura enrolada e guarda em anel; `sickleBlade`
+  (`models/weapons.js`) usa o .glb (a versão em código fica de reserva). Texturas novas `poncho_gal` (pano gasto com
+  remendos costurados) e `pants_inj`. Revisado no Blender pelo MCP (4 vistas a cada etapa) e na galeria; check,
+  43 testes e build ok.
+
 ## v3.33.0 — O Ocultista e o Mutilador
 
 - Versão: `VERSION` 3.32.0 → **3.33.0** (package.json/lock junto). Data: 2026-10-18.

@@ -252,6 +252,10 @@ export function knife() {
 
 // Lâmina longa curva do Injustiça (arco dos dois lados, empunhadura com aro dourado)
 export function sickleBlade() {
+  // o modelo do Blender (tools/blender/npc_gal_blade.py, a partir da arte oficial): a lâmina longa em meia-lua de aço
+  // escuro com as pontas para a frente, a escrita cuneiforme dourada, a empunhadura enrolada e a guarda em anel
+  const m = buildNpcModel('gal_blade', { outline: 0.005, noOutline: ['gold', 'edge'] });
+  if (m) return m.root;
   const g = new THREE.Group();
   const ring = part(new THREE.TorusGeometry(0.06, 0.012, 6, 16), 0xc9a24a, { mat: toon(0xc9a24a, { emissive: 0x3a2a08 }) });
   ring.rotation.y = Math.PI / 2;

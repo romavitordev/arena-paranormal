@@ -18,6 +18,7 @@ export const NPC_MODELS = {
   xande_bat: 'npcs/xande_bat.glb', // o taco com arame farpado do Xande
   xande_skate: 'npcs/xande_skate.glb', // o Skate Caótico (escudo) do Xande
   aguiar_axe: 'npcs/aguiar_axe.glb', // o machado do Mutilador Noturno
+  gal_blade: 'npcs/gal_blade.glb', // a Ereškigal, as lâminas em meia-lua do Gal
 };
 const loaded = {};
 

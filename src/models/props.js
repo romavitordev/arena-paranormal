@@ -332,7 +332,7 @@ function kemiProps(rig, ghost) {
   props.knife = k;
   const back = sniperFantasma({ drip: ghost });
   back.rotation.set(0, 0, 2.6);
-  back.position.set(0, -0.12, -0.11);
+  back.position.set(0, -0.12, ghost ? -0.11 : -0.16); // a Kemi tem a mochila nas costas: o rifle fica por cima dela
   back.scale.setScalar(0.78); // nas costas, sem passar muito da cabeça
   sockets.back.add(back);
   props.rifleBack = back;

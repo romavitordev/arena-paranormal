@@ -1509,6 +1509,51 @@ export const MATERIAL_TEXTURES = {
     brow: { angry: 3, thick: 4, color: '#2a1810' },
     mouth: { mouthW: 15, lip: 'rgba(60,30,26,0.6)' },
   }),
+  // o top branco curto: malha canelada, encardido de poeira e sangue seco
+  top_kemi: () => canvasTex(512, 256, (g) => {
+    const rnd = seeded(61);
+    g.fillStyle = '#e4ded0'; g.fillRect(0, 0, 512, 256);
+    g.strokeStyle = 'rgba(150,140,120,0.16)'; g.lineWidth = 1;
+    for (let x = 0; x < 512; x += 4) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, 256); g.stroke(); }
+    for (let i = 0; i < 18; i++) { // poeira e suor
+      g.fillStyle = `rgba(140,120,90,${0.06 + rnd() * 0.1})`;
+      g.beginPath(); g.ellipse(rnd() * 512, rnd() * 256, 10 + rnd() * 30, 6 + rnd() * 18, rnd() * 3, 0, Math.PI * 2); g.fill();
+    }
+    for (let i = 0; i < 8; i++) { // respingos de sangue seco
+      g.fillStyle = `rgba(110,30,24,${0.2 + rnd() * 0.25})`;
+      g.beginPath(); g.arc(rnd() * 512, rnd() * 256, 1.5 + rnd() * 3, 0, Math.PI * 2); g.fill();
+    }
+  }, { wrap: true }),
+  // a calça cáqui larga: sarja grossa, joelhos gastos, costuras e terra na barra
+  pants_kemi: () => canvasTex(256, 512, (g) => {
+    const rnd = seeded(83);
+    g.fillStyle = '#9c8c70'; g.fillRect(0, 0, 256, 512);
+    g.strokeStyle = 'rgba(255,245,220,0.06)'; g.lineWidth = 1;
+    for (let k = -512; k < 512; k += 3) { g.beginPath(); g.moveTo(k, 0); g.lineTo(k + 512, 512); g.stroke(); }
+    const knee = g.createRadialGradient(128, 300, 0, 128, 300, 70);
+    knee.addColorStop(0, 'rgba(210,195,160,0.25)'); knee.addColorStop(1, 'rgba(210,195,160,0)');
+    g.fillStyle = knee; g.fillRect(0, 220, 256, 160);
+    g.strokeStyle = 'rgba(60,48,32,0.45)'; g.lineWidth = 2; g.setLineDash([5, 3]);
+    for (const x of [64, 192]) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, 512); g.stroke(); }
+    g.setLineDash([]);
+    const dirt = g.createLinearGradient(0, 400, 0, 512);
+    dirt.addColorStop(0, 'rgba(70,52,34,0)'); dirt.addColorStop(1, 'rgba(70,52,34,0.4)');
+    g.fillStyle = dirt; g.fillRect(0, 400, 256, 112);
+    for (let i = 0; i < 24; i++) {
+      g.fillStyle = `rgba(80,62,40,${0.1 + rnd() * 0.15})`;
+      g.beginPath(); g.ellipse(rnd() * 256, rnd() * 512, 4 + rnd() * 14, 3 + rnd() * 8, rnd() * 3, 0, Math.PI * 2); g.fill();
+    }
+  }, { wrap: true }),
+  // o casaco de pano marrom amarrado na cintura: a trama, as dobras escuras e a barra suja
+  coat_kemi: () => canvasTex(512, 512, (g) => {
+    const rnd = leather(g, 512, 512, '#5c3c26', 19, { dark: '28,14,6', light: '150,100,64', marks: 60 });
+    g.strokeStyle = 'rgba(30,16,8,0.1)'; g.lineWidth = 1;
+    for (let k = 0; k < 512; k += 3) { g.beginPath(); g.moveTo(0, k); g.lineTo(512, k); g.stroke(); }
+    g.strokeStyle = 'rgba(190,150,100,0.35)'; g.lineWidth = 1.5; g.setLineDash([5, 4]);
+    for (const x of [8, 504]) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, 512); g.stroke(); }
+    g.setLineDash([]);
+    for (let i = 0; i < 1200; i++) { g.fillStyle = rnd() < 0.5 ? 'rgba(255,220,180,0.04)' : 'rgba(0,0,0,0.06)'; g.fillRect(rnd() * 512, rnd() * 512, 2, 2); }
+  }, { wrap: true }),
   // JAE (Park Jae-Yoon): pele clara, maquiagem preta esfumada forte em volta dos olhos escuros, batom vermelho e a pinta
   // falsa no queixo (lado esquerdo dela, x > 256) — referências "jae serio" e "jae rosto"
   face_jae: jaeFace(false),
@@ -1653,12 +1698,88 @@ export const MATERIAL_TEXTURES = {
   }, { wrap: true }),
   // A FANTASMA: rosto todo enfaixado; só os olhos âmbar numa fenda de escuridão
   face_fantasma: () => canvasTex(W, HT, (g) => {
-    g.fillStyle = '#ddd2ba'; g.fillRect(0, 0, W, HT);
-    g.strokeStyle = 'rgba(120,100,70,0.55)'; g.lineWidth = 2;
-    for (let y = 6; y < HT; y += 14) { g.beginPath(); g.moveTo(0, y); g.lineTo(W, y + 10); g.stroke(); }
-    g.fillStyle = '#060406'; g.fillRect(0, EYE_Y - 16, W, 30);
-    g.fillStyle = '#f0a020';
-    for (const s of [-1, 1]) { g.beginPath(); g.arc(CX + s * 32, EYE_Y, 4.5, 0, Math.PI * 2); g.fill(); }
+    const rnd = seeded(41);
+    g.fillStyle = '#d6cab0'; g.fillRect(0, 0, W, HT);
+    // as voltas de faixa sobrepostas, cada uma com a borda de cima sombreada e a trama fina
+    for (let y = -10; y < HT; y += 16) {
+      const tilt = (rnd() - 0.5) * 10;
+      g.fillStyle = `rgba(${200 + rnd() * 30},${188 + rnd() * 26},${160 + rnd() * 24},0.9)`;
+      g.beginPath(); g.moveTo(0, y); g.lineTo(W, y + tilt); g.lineTo(W, y + tilt + 15); g.lineTo(0, y + 15); g.fill();
+      g.strokeStyle = 'rgba(100,80,55,0.55)'; g.lineWidth = 2;
+      g.beginPath(); g.moveTo(0, y); g.lineTo(W, y + tilt); g.stroke();
+    }
+    g.strokeStyle = 'rgba(120,100,70,0.12)'; g.lineWidth = 1;
+    for (let x = 0; x < W; x += 3) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, HT); g.stroke(); }
+    for (let i = 0; i < 16; i++) { // sujeira e sangue velho
+      g.fillStyle = rnd() < 0.6 ? 'rgba(110,85,55,0.18)' : 'rgba(110,30,20,0.18)';
+      g.beginPath(); g.ellipse(rnd() * W, rnd() * HT, 6 + rnd() * 18, 4 + rnd() * 10, rnd() * 3, 0, Math.PI * 2); g.fill();
+    }
+    // a fenda dos olhos: escuridão com as bordas da faixa puídas e os olhos âmbar brilhando lá dentro
+    const slit = g.createLinearGradient(0, EYE_Y - 18, 0, EYE_Y + 16);
+    slit.addColorStop(0, 'rgba(6,4,6,0.3)'); slit.addColorStop(0.25, '#060406'); slit.addColorStop(0.8, '#060406'); slit.addColorStop(1, 'rgba(6,4,6,0.3)');
+    g.fillStyle = slit; g.fillRect(0, EYE_Y - 18, W, 34);
+    g.strokeStyle = 'rgba(200,185,155,0.7)'; g.lineWidth = 1;
+    for (let x = 0; x < W; x += 4) { // os fiapos soltos nas bordas da fenda
+      g.beginPath(); g.moveTo(x, EYE_Y - 16); g.lineTo(x + rnd() * 3, EYE_Y - 16 + rnd() * 6); g.stroke();
+      g.beginPath(); g.moveTo(x, EYE_Y + 14); g.lineTo(x + rnd() * 3, EYE_Y + 14 - rnd() * 5); g.stroke();
+    }
+    for (const s of [-1, 1]) {
+      const glow = g.createRadialGradient(CX + s * 32, EYE_Y, 0, CX + s * 32, EYE_Y, 14);
+      glow.addColorStop(0, 'rgba(255,190,60,0.55)'); glow.addColorStop(1, 'rgba(255,140,20,0)');
+      g.fillStyle = glow; g.fillRect(CX + s * 32 - 14, EYE_Y - 14, 28, 28);
+      g.fillStyle = '#f0a020'; g.beginPath(); g.ellipse(CX + s * 32, EYE_Y, 6, 4.5, 0, 0, Math.PI * 2); g.fill();
+      g.fillStyle = '#fff0c0'; g.beginPath(); g.arc(CX + s * 32 + 1.5, EYE_Y - 1.2, 1.4, 0, Math.PI * 2); g.fill();
+    }
+  }, { wrap: true }),
+  // o sobretudo de couro marrom gasto: vincos, arranhões claros, as costuras pespontadas e a barra mais escura
+  coat_fantasma: () => canvasTex(512, 512, (g) => {
+    const rnd = leather(g, 512, 512, '#5e3e27', 77, { dark: '30,16,8', light: '170,120,80', marks: 70 });
+    for (let i = 0; i < 40; i++) { // arranhões
+      const x = rnd() * 512, y = rnd() * 512, a = rnd() * Math.PI, l = 6 + rnd() * 20;
+      g.strokeStyle = `rgba(190,150,110,${0.15 + rnd() * 0.2})`; g.lineWidth = 1;
+      g.beginPath(); g.moveTo(x, y); g.lineTo(x + Math.cos(a) * l, y + Math.sin(a) * l); g.stroke();
+    }
+    g.strokeStyle = 'rgba(200,160,110,0.4)'; g.lineWidth = 1.5; g.setLineDash([5, 4]);
+    for (const x of [6, 250, 262, 506]) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, 512); g.stroke(); }
+    g.setLineDash([]);
+    const hem = g.createLinearGradient(0, 430, 0, 512);
+    hem.addColorStop(0, 'rgba(25,14,6,0)'); hem.addColorStop(1, 'rgba(25,14,6,0.45)');
+    g.fillStyle = hem; g.fillRect(0, 430, 512, 82);
+    for (let i = 0; i < 1500; i++) { g.fillStyle = rnd() < 0.5 ? 'rgba(255,220,180,0.04)' : 'rgba(0,0,0,0.06)'; g.fillRect(rnd() * 512, rnd() * 512, 2, 2); }
+  }, { wrap: true }),
+  // a calça cargo marrom: o tecido grosso, o joelho gasto, as costuras laterais e os bolsos
+  pants_fantasma: () => canvasTex(256, 512, (g) => {
+    const rnd = seeded(91);
+    g.fillStyle = '#4e3c2a'; g.fillRect(0, 0, 256, 512);
+    g.strokeStyle = 'rgba(255,230,190,0.05)'; g.lineWidth = 1;
+    for (let k = -512; k < 512; k += 3) { g.beginPath(); g.moveTo(k, 0); g.lineTo(k + 512, 512); g.stroke(); }
+    const knee = g.createRadialGradient(128, 300, 0, 128, 300, 70);
+    knee.addColorStop(0, 'rgba(150,120,85,0.22)'); knee.addColorStop(1, 'rgba(150,120,85,0)');
+    g.fillStyle = knee; g.fillRect(0, 220, 256, 160);
+    g.strokeStyle = 'rgba(30,20,10,0.5)'; g.lineWidth = 2;
+    for (const x of [64, 192]) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, 512); g.stroke(); }
+    g.strokeRect(20, 150, 40, 56); g.strokeRect(196, 150, 40, 56); // os bolsos laterais
+    g.beginPath(); g.moveTo(20, 164); g.lineTo(60, 164); g.moveTo(196, 164); g.lineTo(236, 164); g.stroke();
+    for (let i = 0; i < 20; i++) { // terra e poeira
+      g.fillStyle = `rgba(90,70,45,${0.12 + rnd() * 0.15})`;
+      g.beginPath(); g.ellipse(rnd() * 256, 300 + rnd() * 212, 4 + rnd() * 14, 3 + rnd() * 8, rnd() * 3, 0, Math.PI * 2); g.fill();
+    }
+  }, { wrap: true }),
+  // as faixas de pano (braços, canelas e cabeça): a trama, as bordas desfiadas e a sujeira
+  bandage_fantasma: () => canvasTex(256, 256, (g) => {
+    const rnd = seeded(23);
+    g.fillStyle = '#d8ccb2'; g.fillRect(0, 0, 256, 256);
+    g.strokeStyle = 'rgba(120,100,70,0.16)'; g.lineWidth = 1;
+    for (let k = 0; k < 256; k += 3) {
+      g.beginPath(); g.moveTo(k, 0); g.lineTo(k, 256); g.stroke();
+      g.beginPath(); g.moveTo(0, k); g.lineTo(256, k); g.stroke();
+    }
+    g.strokeStyle = 'rgba(95,75,50,0.45)'; g.lineWidth = 2;
+    for (let y = 0; y < 256; y += 32) { g.beginPath(); g.moveTo(0, y); g.lineTo(256, y + 2); g.stroke(); }
+    for (let i = 0; i < 22; i++) {
+      g.fillStyle = rnd() < 0.7 ? `rgba(120,95,60,${0.12 + rnd() * 0.18})` : `rgba(110,30,20,${0.12 + rnd() * 0.15})`;
+      g.beginPath(); g.ellipse(rnd() * 256, rnd() * 256, 5 + rnd() * 16, 3 + rnd() * 9, rnd() * 3, 0, Math.PI * 2); g.fill();
+    }
   }, { wrap: true }),
   face_juan: face((g) => {
     // olho esquerdo arrancado: órbita escura com cicatriz e sangue seco
@@ -1873,6 +1994,45 @@ export const MATERIAL_TEXTURES = {
     g.beginPath(); g.arc(256, 470, 22, 0, Math.PI * 2); g.moveTo(234, 470); g.lineTo(278, 470); g.moveTo(256, 448); g.lineTo(256, 492); g.stroke();
   }, { wrap: true }),
 
+  // o poncho do Gal: pano preto gasto, a trama, as manchas desbotadas, os remendos costurados e a barra mais clara
+  poncho_gal: () => canvasTex(512, 512, (g) => {
+    const rnd = seeded(55);
+    g.fillStyle = '#19171d'; g.fillRect(0, 0, 512, 512);
+    g.strokeStyle = 'rgba(255,255,255,0.035)'; g.lineWidth = 1;
+    for (let k = 0; k < 512; k += 3) {
+      g.beginPath(); g.moveTo(k, 0); g.lineTo(k, 512); g.stroke();
+      g.beginPath(); g.moveTo(0, k); g.lineTo(512, k); g.stroke();
+    }
+    for (let i = 0; i < 26; i++) { // o desbotado
+      g.fillStyle = `rgba(90,86,100,${0.05 + rnd() * 0.07})`;
+      g.beginPath(); g.ellipse(rnd() * 512, rnd() * 512, 20 + rnd() * 50, 10 + rnd() * 30, rnd() * 3, 0, Math.PI * 2); g.fill();
+    }
+    for (let i = 0; i < 6; i++) { // os remendos com a costura em pontos
+      const x = rnd() * 440, y = 60 + rnd() * 380, w = 30 + rnd() * 40, h = 24 + rnd() * 34;
+      g.fillStyle = 'rgba(8,8,10,0.55)'; g.fillRect(x, y, w, h);
+      g.strokeStyle = 'rgba(170,150,110,0.45)'; g.lineWidth = 1.5; g.setLineDash([4, 3]); g.strokeRect(x + 2, y + 2, w - 4, h - 4); g.setLineDash([]);
+    }
+    const hem = g.createLinearGradient(0, 440, 0, 512);
+    hem.addColorStop(0, 'rgba(110,100,90,0)'); hem.addColorStop(1, 'rgba(110,100,90,0.25)');
+    g.fillStyle = hem; g.fillRect(0, 440, 512, 72);
+  }, { wrap: true }),
+  // a calça preta do Gal: pano gasto, joelhos desbotados e a barra puída
+  pants_inj: () => canvasTex(256, 512, (g) => {
+    const rnd = seeded(37);
+    g.fillStyle = '#16151a'; g.fillRect(0, 0, 256, 512);
+    g.strokeStyle = 'rgba(255,255,255,0.04)'; g.lineWidth = 1;
+    for (let k = -512; k < 512; k += 3) { g.beginPath(); g.moveTo(k, 0); g.lineTo(k + 512, 512); g.stroke(); }
+    const knee = g.createRadialGradient(128, 300, 0, 128, 300, 70);
+    knee.addColorStop(0, 'rgba(90,88,100,0.22)'); knee.addColorStop(1, 'rgba(90,88,100,0)');
+    g.fillStyle = knee; g.fillRect(0, 220, 256, 160);
+    g.strokeStyle = 'rgba(60,58,70,0.6)'; g.lineWidth = 2;
+    for (const x of [64, 192]) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, 512); g.stroke(); }
+    for (let i = 0; i < 40; i++) { // a barra puída
+      const x = rnd() * 256;
+      g.strokeStyle = 'rgba(120,115,125,0.35)'; g.lineWidth = 1;
+      g.beginPath(); g.moveTo(x, 490); g.lineTo(x + rnd() * 4 - 2, 512); g.stroke();
+    }
+  }, { wrap: true }),
   // venda do Gal: pano preto com marcas douradas na frente (u = 0.5 é a frente do tubo)
   blindfold_gal: () => canvasTex(512, 64, (g) => {
     g.fillStyle = '#0d0c10'; g.fillRect(0, 0, 512, 64);

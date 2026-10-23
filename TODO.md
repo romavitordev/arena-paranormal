@@ -854,7 +854,10 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
 - [x] Xande e Aguiar refeitos pelas artes oficiais (modelos, texturas, machado, taco e skate no Blender); mãos e sapatos de todos.
 - [ ] **Lírio**: remodelar a LEONORA no Blender (como o taco e o skate do Xande) quando o Lírio for atualizado. Ela já
       recebe a maldição do Xande pela assistência (Amaldiçoar Arma por elemento) — conferir a textura nela depois.
-- [ ] Os outros modelos mais antigos, em ordem de data (Fantasma, Kemi, Gal Sal, Kaiser, Balu...).
+- [x] Fantasma remodelada pela arte oficial (sobretudo, faixas, facas, dreads; texturas novas).
+- [x] Kemi remodelada pela arte oficial (top, mochila, faixas, casaco amarrado, dreads; texturas novas).
+- [x] Gal Sal remodelado pela arte de Desconjuração (poncho com caimento real, cabelo, venda, correntes) e as lâminas Ereškigal no Blender.
+- [ ] Os outros modelos mais antigos, em ordem de data (Kaiser, Balu...).
 
 # EQUIPE — BARRA DE EQUIPE E ESPECIAIS EM EQUIPE
 
