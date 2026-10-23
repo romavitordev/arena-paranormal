@@ -1,5 +1,16 @@
 # Changelog
 
+## v3.36.0 — Na Faixa Certa
+
+### Adicionado
+- Opção **Falas na luta** (Opções › Partida; `SETTINGS.fightLines`, 13 idiomas): esconde as falas do meio da luta sem mudar a lógica (seguro na partida em rede).
+- Contador de desempenho de dev (`src/dev/perf.js`): `?perf` na URL ou F8 no `npm run dev`.
+- `awakenMode.glowMat`: materiais que acendem e pulsam no despertar (a venda do Gal).
+
+### Alterado
+- Banner do nome do especial/transformação (`#banner`, `HUD.banner`): faixa e texto na mesma célula (a faixa cresce com o texto), letra pela largura da tela, duas linhas equilibradas para nomes longos.
+- Gal: Ultimate "Injustiça né?" e transformação "O Realizador do Destino".
+
 ## v3.35.0 — Eu Sou a Injustiça
 
 ### Alterado

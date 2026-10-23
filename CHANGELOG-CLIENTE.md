@@ -2,6 +2,11 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.36.0 — Na Faixa Certa
+- NOME DO ESPECIAL NA TELA REFEITO: a faixa atrás do nome agora cresce junto com o texto, a letra se ajusta à largura da tela e nomes longos quebram em duas linhas — nada mais sai para fora da faixa, nem no celular.
+- GAL SAL — NOMES NOVOS: a Ultimate se chama "Injustiça né?" e a transformação, "O Realizador do Destino" (o apelido dele na série). No despertar, as marcas douradas da venda acendem e pulsam.
+- OPÇÕES › FALAS NA LUTA: dá para desligar as falas que aparecem no meio da luta (provocações e vida baixa). As falas de entrada e de vitória continuam.
+
 ## v3.35.0 — Eu Sou a Injustiça
 - GAL SAL — A INJUSTIÇA REFEITA PELA CENA DA SÉRIE: a corrente prende e puxa (ainda dá para esquivar ou defender), o sigilo do Controle Mental acende e o adversário AJOELHA, o Gal diz "Injustiça, né? Muito prazer, eu sou a injustiça." e executa: três cortes que ele já sabe antes de acontecer (um lampejo dourado marca cada impacto) e a cruz final com as duas correntes, que derruba. Mesmo dano, custo e recarga.
 - GAL SAL — AFINIDADE COM PRECOGNIÇÃO (despertar): agora ele não pode mais ser pego desprevenido (sem dano extra pelas costas nem susto depois de teleportes) e o Bloqueio Perfeito fica mais fácil de acertar. A velocidade extra caiu de 15% para 10%.

@@ -1,7 +1,8 @@
 # Registro administrativo de alterações
 
-## Próxima versão (em andamento)
+## v3.36.0 — Na Faixa Certa
 
+- Versão: `VERSION` 3.35.0 → **3.36.0** (package.json/lock junto). Data: 2026-10-22.
 - **Gal — nomes:** a Ultimate passa a se chamar **"Injustiça né?"** (nome e banner; a fala inteira ficava enorme na
   tela) e a transformação **"O Realizador do Destino"** (apelido oficial do Gal na wiki; o poder continua sendo a
   Afinidade com Precognição). Substitui o pendente anterior, que trocava o nome da Ultimate.

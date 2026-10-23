@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.35.0';
+export const VERSION = '3.36.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,16 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.36.0',
+    date: '2026-10-22',
+    title: 'Na Faixa Certa',
+    items: [
+      'NOME DO ESPECIAL NA TELA REFEITO: a faixa atrás do nome agora cresce junto com o texto, a letra se ajusta à largura da tela e nomes longos quebram em duas linhas — nada mais sai para fora da faixa, nem no celular.',
+      'GAL SAL — NOMES NOVOS: a Ultimate se chama "Injustiça né?" e a transformação, "O Realizador do Destino" (o apelido dele na série). No despertar, as marcas douradas da venda acendem e pulsam.',
+      'OPÇÕES › FALAS NA LUTA: dá para desligar as falas que aparecem no meio da luta (provocações e vida baixa). As falas de entrada e de vitória continuam.',
+    ],
+  },
   {
     v: '3.35.0',
     date: '2026-10-22',

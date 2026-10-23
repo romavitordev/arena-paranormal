@@ -1,6 +1,6 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.35.0 (revisado em 2026-10-22: Injustiça e despertar do Gal pelo cânone; antes, na v3.34.0, Fantasma, Kemi e Gal Sal refeitos pelas artes oficiais)
+**Versão de referência atual:** v3.36.0 (revisado em 2026-10-22: banner do especial refeito, nomes do Gal, opção Falas na luta, contador de desempenho)
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente
 
