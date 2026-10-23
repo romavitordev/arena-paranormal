@@ -1,15 +1,21 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.33.0 (revisado em 2026-10-18: modelo do Xande refeito, armas e sapatos/mãos 3D, maldição elemental adaptativa)
+**Versão de referência atual:** v3.34.0 (revisado em 2026-10-22: Fantasma, Kemi e Gal Sal refeitos pelas artes oficiais, lâminas Ereškigal no Blender, skate do Xande volta para a mão)
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente
 
 ---
 
 
-PRIORIDADE ATUAL DIA 18/10/26 ULTIMA UPD: ATUALIZAR O TODO COM TODAS ESSAS ADIÇÕES:
+# PRÓXIMA GRANDE ATUALIZAÇÃO — LUTA + MODO PvE (planejamento de 2026-10-18)
 
-"# ARENA PARANORMAL — DOCUMENTAÇÃO DA PRÓXIMA GRANDE ATUALIZAÇÃO
+**Estado em 2026-10-22 (v3.34.0):**
+- [~] 2.2 Modelos antigos: Xande e Aguiar (v3.33.0), Fantasma, Kemi e Gal Sal + as lâminas Ereškigal (v3.34.0) refeitos
+  pelas artes oficiais; próximos, em ordem de data: Kaiser, Balu... (ver *MODELOS — PRÓXIMOS PASSOS*).
+- [~] 2.3 Especiais em equipe: Barra de Equipe e Especial simplificado prontos (F1/F2); a tabela de ligações
+  `src/config/teamLinks.js` existe mas ainda não está ligada (F4, ver *EQUIPE*).
+- [ ] 2.1 Animações de movimentação, 2.4 câmera de cutscenes.
+- [ ] 3–14 Modo PvE (dungeons, Espreitador como chefe, progressão, salvamento, cooperativo): não iniciado.
 
 ## 1. Objetivo da atualização
 
@@ -585,9 +591,14 @@ O Arena Paranormal continuará sendo um jogo de luta 3D, mas passará a contar c
 
 A experiência combinará exploração, possibilidade de recuperação antes dos chefes, melhorias temporárias durante cada tentativa, progressão permanente entre tentativas, salvamentos seguros e transições cinematográficas.
 
-A arquitetura deverá permitir que novas dungeons sejam adicionadas ao longo do tempo e, futuramente, selecionadas aleatoriamente para aumentar a variedade. O Espreitador será desenvolvido inicialmente como chefe, deixando sua versão jogável para uma atualização posterior."
+A arquitetura deverá permitir que novas dungeons sejam adicionadas ao longo do tempo e, futuramente, selecionadas aleatoriamente para aumentar a variedade. O Espreitador será desenvolvido inicialmente como chefe, deixando sua versão jogável para uma atualização posterior.
 
 # REGRA PRIORITÁRIA — RECUPERAÇÃO DA UPDATE, AUDITORIA E REVISÃO DO ELENCO
+
+**Estado em 2026-10-22:** a recuperação (item 1) foi feita na revisão da v3.34.0 — os commits de 18/10 (skate do
+Xande voltando para a mão, enquadramento do close de rosto da galeria, README, `teamLinks.js` e este planejamento)
+conferidos contra o código; o import sem uso em `assists.js` saiu. A auditoria do elenco (item 2) segue pelos modelos
+mais antigos.
 
 ## 1. PRIMEIRA PRIORIDADE: RECUPERAR A ATUALIZAÇÃO INTERROMPIDA
 
@@ -916,8 +927,9 @@ A confirmar (o dono decide antes de entrar):
 - [x] **F2** △ △ △ ○ com a barra cheia → Especial em Equipe **simplificado** para todo mundo (+ a IA usando; no toque, o
   botão ESPECIAL vira o de equipe com a barra cheia). `abilities.js teamSpecial`, `COMBAT.teamSpecial` (bônus 100).
 - [ ] **F3** Transformação em equipe com a barra cheia (assistências transformadas até o fim do round).
-- [ ] **F4** `teamLinks.js` + a regra de prioridade + os primeiros especiais customizados (Mascarados, Joui/Kaiser/
-  Arthur, Cristopher/Kaiser).
+- [~] **F4** `teamLinks.js` + a regra de prioridade + os primeiros especiais customizados (Mascarados, Joui/Kaiser/
+  Arthur, Cristopher/Kaiser). A tabela e o `getTeamLink` (trio > grupo > dupla) já existem; falta ligá-los ao
+  Especial em Equipe e fazer as animações próprias.
 - [ ] Telas: mostrar na seleção da equipe quando o trio escolhido tem especial próprio.
 
 ---

@@ -1,5 +1,23 @@
 # Changelog
 
+## v3.34.0 — Faixas e Correntes
+
+### Adicionado
+- Modelo da **Kemi** refeito pela arte oficial (`tools/blender/char_kemi.py` → `public/models/kemi.glb`): dreads em rabo alto com mechas soltas, argolas, top curto com faixa, abdômen em relevo, mochila com alças, faixas coladas por raio no braço e nas pernas, calça cáqui com bolsa na coxa, casaco amarrado na cintura e coturnos. Texturas `top_kemi`, `pants_kemi` e `coat_kemi`.
+- Modelo da **Fantasma** refeito pela arte oficial (`tools/blender/char_fantasma.py`, agora independente): sobretudo de couro com gola alta e remendos, faixas na cabeça com a fresta dos olhos, facas, alça do rifle, faixas nos braços e canelas e dreads. Texturas `coat_fantasma`, `pants_fantasma` e `bandage_fantasma`; `face_fantasma` refeita.
+- Modelo do **Gal Sal** refeito pela arte de Desconjuração (`tools/blender/char_gal_sal.py`): poncho com caimento por perfil (por cima dos ombros e braços, queda vertical até a barra), decote em V dourado, franja, cabelo em metaballs, venda, brinco e correntes nos antebraços. Texturas `poncho_gal` e `pants_inj`.
+- Lâminas **Ereškigal** modeladas no Blender (`npc_gal_blade.py` → `public/npcs/gal_blade.glb`), usadas por `sickleBlade` (`src/models/weapons.js`).
+- `src/config/teamLinks.js`: tabela das ligações de lore e `getTeamLink` (trio > grupo > dupla) para os futuros Especiais em Equipe customizados (ainda não ligada).
+
+### Alterado
+- Xande: o Skate Caótico (□) usa `hideProp`/`returnsProp` — some da mão no arremesso e volta quando retorna; o projétil clona a peça da mão do dono (`src/combat/projectiles.js`).
+- A sniper das costas da Kemi fica mais afastada para passar por cima da mochila (`src/models/props.js`).
+- Galeria: o close de rosto (`?face`) ficou mais afastado e centralizado.
+- `kemi_common.py` removido (Kemi e Fantasma têm scripts próprios).
+
+### Corrigido
+- Import sem uso de `getForm` em `src/combat/assists.js`.
+
 ## v3.33.0 — O Ocultista e o Mutilador
 
 ### Adicionado

@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.33.0';
+export const VERSION = '3.34.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,18 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.34.0',
+    date: '2026-10-22',
+    title: 'Faixas e Correntes',
+    items: [
+      'MODELO DA KEMI REFEITO PELA ARTE OFICIAL: reconstruída no Blender a partir da arte de Hexatombe. Dreads loiros puxados para um rabo alto, com mechas soltas dos lados do rosto, e argolas na orelha. Top branco curto com a faixa marrom por baixo e a barriga à mostra. Mochila preta com alças de couro. Faixas no braço esquerdo inteiro, no antebraço direito e nas pernas. Calça cáqui larga com bolsa na coxa e o casaco marrom amarrado na cintura, caindo pelo lado direito. Coturnos de cadarço.',
+      'FANTASMA REFEITA PELA ARTE OFICIAL: o sobretudo de couro marrom abotoado com gola alta e remendos escuros. As faixas cobrem o rosto e deixam só a fresta dos olhos âmbar brilhando. Faixa amarrada na cintura, três facas curvas no peito, a alça do rifle, faixas cruzadas nos braços e nas canelas e os dreads num rabo alto. Novas texturas de couro gasto, calça e faixas encardidas.',
+      'GAL SAL REFEITO PELA ARTE DE DESCONJURAÇÃO: o poncho preto agora cai de verdade por cima dos ombros, com a barra rasgada, a franja dourada e o decote em V costurado em dourado. Cabelo preto liso repartido no meio, a venda por cima do cabelo com o nó atrás, brinco e correntes enroladas nos antebraços.',
+      'LÂMINAS EREŠKIGAL EM 3D: as lâminas do Gal Sal foram modeladas no Blender como na arte: longas meias-luas de aço escuro com as pontas para a frente, escrita cuneiforme dourada, empunhadura enrolada e guarda em anel.',
+      'XANDE — o Skate Caótico sai da mão quando é arremessado e só volta quando retorna, e o skate que voa é o mesmo da mão.',
+    ],
+  },
   {
     v: '3.33.0',
     date: '2026-10-18',

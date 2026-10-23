@@ -2,6 +2,13 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.34.0 — Faixas e Correntes
+- MODELO DA KEMI REFEITO PELA ARTE OFICIAL: reconstruída no Blender a partir da arte de Hexatombe. Dreads loiros puxados para um rabo alto, com mechas soltas dos lados do rosto, e argolas na orelha. Top branco curto com a faixa marrom por baixo e a barriga à mostra. Mochila preta com alças de couro. Faixas no braço esquerdo inteiro, no antebraço direito e nas pernas. Calça cáqui larga com bolsa na coxa e o casaco marrom amarrado na cintura, caindo pelo lado direito. Coturnos de cadarço.
+- FANTASMA REFEITA PELA ARTE OFICIAL: o sobretudo de couro marrom abotoado com gola alta e remendos escuros. As faixas cobrem o rosto e deixam só a fresta dos olhos âmbar brilhando. Faixa amarrada na cintura, três facas curvas no peito, a alça do rifle, faixas cruzadas nos braços e nas canelas e os dreads num rabo alto. Novas texturas de couro gasto, calça e faixas encardidas.
+- GAL SAL REFEITO PELA ARTE DE DESCONJURAÇÃO: o poncho preto agora cai de verdade por cima dos ombros, com a barra rasgada, a franja dourada e o decote em V costurado em dourado. Cabelo preto liso repartido no meio, a venda por cima do cabelo com o nó atrás, brinco e correntes enroladas nos antebraços.
+- LÂMINAS EREŠKIGAL EM 3D: as lâminas do Gal Sal foram modeladas no Blender como na arte: longas meias-luas de aço escuro com as pontas para a frente, escrita cuneiforme dourada, empunhadura enrolada e guarda em anel.
+- XANDE — o Skate Caótico sai da mão quando é arremessado e só volta quando retorna, e o skate que voa é o mesmo da mão.
+
 ## v3.33.0 — O Ocultista e o Mutilador
 - MODELO DO XANDE REFEITO PELA ARTE OFICIAL: reconstruído no Blender a partir da arte de Sinais do Outro Lado. Cabelos em mechas onduladas sob o boné, camiseta amarela canelada com os 3 triângulos e "oculto", bermuda de sarja com barra de triângulos, suspensórios em X com bolsas e frascos, balaclava cinza-esverdeada, fones de ouvido no pescoço, joelheiras com olhos, correntes 3D com elos reais e tênis de cano alto. Texturas com arranhões e marcas de mordida nas canelas.
 - MODELO DO AGUIAR REFEITO PELA ARTE OFICIAL: reconstruído no Blender a partir da arte de Natal Macabro (o Mutilador Noturno). Porte musculoso, cabelo preto ondulado esculpido até a nuca com mecha na testa, faixa de couro alta no pescoço, distintivo de delegado com corrente 3D, camiseta creme justa, colete vermelho esfiapado com gola levantada, suspensórios de couro cruzados em X no cinto largo com tiras soltas, braçadeiras e munhequeiras com fivelas, jeans escuro rasgado nos joelhos e tênis com esporas de roseta de pontas de ferro atrás.

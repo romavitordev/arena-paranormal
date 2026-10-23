@@ -1,7 +1,18 @@
 # Registro administrativo de alterações
 
-## Próxima versão (em andamento)
+## v3.34.0 — Faixas e Correntes
 
+- Versão: `VERSION` 3.33.0 → **3.34.0** (package.json/lock junto). Data: 2026-10-22.
+- Revisão dos commits de 18/10 feitos fora das sessões (pedido: "mexi em algumas coisas no jogo e na documentação"):
+  - `93f415f` — Xande: `hideProp`/`returnsProp: 'skate'` no □ (o motor já trata os dois no ataque à distância, como o
+    machado do Balu: `Fighter.hideRangedProps` e `Projectiles` ao terminar); o visual `skate` clona a peça da mão do
+    dono (`owner.rig.props.skate`) e cai em `chaosSkate()` sem ela. Correto. O import de `getForm` em `assists.js`
+    não era usado e saiu. `src/config/teamLinks.js` (tabela + `getTeamLink`) bate com a regra de prioridade do TODO,
+    mas ainda não está ligado a nada — registrado como F4 em andamento.
+  - `c1abe78` — galeria `?face`: câmera mais afastada e centralizada. `21bd324` — título do README sem "protótipo".
+  - `410138e` — o planejamento da próxima grande atualização (PvE, dungeons, Espreitador) e a REGRA PRIORITÁRIA foram
+    colados no TODO; virou a seção *PRÓXIMA GRANDE ATUALIZAÇÃO* (sem as aspas e a nota "atualizar o TODO"), com o
+    estado de cada item.
 - **Fantasma** (forma da Kemi; `tools/blender/char_fantasma.py` → `public/models/fantasma.glb`) remodelada pela arte e
   pelo texto oficiais ("faixas que agora escondem seu rosto, deixando apenas seus olhos à mostra"). O script ficou
   independente do antigo `kemi_common.py`: sobretudo de couro marrom feito a partir do corpo
