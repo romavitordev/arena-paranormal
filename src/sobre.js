@@ -21,45 +21,97 @@ document.getElementById(android ? 'dl-android' : ios ? 'dl-web' : 'dl-pc')?.clas
 // dentro do app instalado (Electron / Capacitor): avisa e mantém os downloads (servem para atualizar)
 if (/Electron/i.test(ua) || window.Capacitor) document.getElementById('no-app').classList.remove('hidden');
 
-// o elenco, agrupado por origem, montado dos próprios dados do jogo
+// os dados dos personagens: carregados uma vez, quando o elenco ou os elementos chegam perto da tela
+let rosterData = null;
+const loadRoster = () => (rosterData ??= import('./characters/index.js').then((m) => m.ROSTER));
+
+// os elementos: quem do elenco é de cada um (o texto é do HTML; aqui só entra a lista de nomes)
+let elementsDone = false;
+async function fillElements() {
+  if (elementsDone) return;
+  elementsDone = true;
+  const ROSTER = await loadRoster();
+  for (const card of document.querySelectorAll('#elements .element')) {
+    const names = ROSTER.filter((c) => c.element === card.dataset.el).map((c) => c.name);
+    if (names.length) card.querySelector('.el-who').textContent = `No elenco: ${names.join(', ')}.`;
+  }
+}
+
+// o elenco: um cartão por lutador (retrato pré-renderizado em public/sobre/elenco, gerado dos modelos do jogo), com
+// filtros por origem e por elemento — montado dos próprios dados do jogo
 const rosterEl = document.getElementById('roster');
 let rosterDone = false;
+const esc = (t) => String(t ?? '').replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]);
 async function buildRoster() {
   if (rosterDone) return;
   rosterDone = true;
-  const { ROSTER } = await import('./characters/index.js');
-  document.getElementById('roster-count').textContent = `${ROSTER.length} lutadores jogáveis, agrupados por origem.`;
-  const groups = new Map();
-  for (const c of ROSTER) {
-    if (!groups.has(c.origin)) groups.set(c.origin, []);
-    groups.get(c.origin).push(c);
-  }
+  const ROSTER = await loadRoster();
+  document.getElementById('roster-count').textContent = `${ROSTER.length} lutadores jogáveis: origem, elemento, arma, especial e transformação de cada um.`;
   const frag = document.createDocumentFragment();
-  for (const [origin, list] of groups) {
-    const g = document.createElement('div');
-    g.className = 'group';
-    const h = document.createElement('h3');
-    h.textContent = origin;
-    const box = document.createElement('div');
-    box.className = 'fighters';
-    for (const c of list) {
-      const E = ELEMENTS[c.element];
-      const el = E ? E.name : '';
-      const col = E ? E.color : '#948a90';
-      const s = document.createElement('span');
-      s.className = 'fighter';
-      s.style.setProperty('--c', col);
-      s.innerHTML = `<i aria-hidden="true"></i>${c.name}${el ? ` <small>· ${el}</small>` : ''}`;
-      box.appendChild(s);
-    }
-    g.append(h, box);
-    frag.appendChild(g);
+  for (const c of ROSTER) {
+    const E = ELEMENTS[c.element];
+    const card = document.createElement('article');
+    card.className = 'fcard';
+    card.dataset.origin = c.origin;
+    card.dataset.element = c.element || '';
+    card.style.setProperty('--c', E ? E.color : '#948a90');
+    const rows = [
+      ['Arma', c.info && c.info.weapon],
+      ['Especial', c.special && c.special.name],
+      ['Transformação', c.awakening && c.awakening.name],
+    ].filter(([, v]) => v);
+    card.innerHTML = `<div class="fpic"><img src="sobre/elenco/${esc(c.id)}.webp" width="240" height="320" loading="lazy" decoding="async" alt=""></div>
+      <div class="fbody">
+        <p class="fk">${esc(c.origin)}${E ? ` · <span>${esc(E.name)}</span>` : ''}</p>
+        <h3>${esc(c.name)}</h3>
+        ${c.info && c.info.tagline ? `<p class="ftag">“${esc(c.info.tagline)}”</p>` : ''}
+        <dl>${rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
+      </div>`;
+    frag.appendChild(card);
   }
   rosterEl.appendChild(frag);
+
+  // filtros: origem e elemento juntos (os dois "Todos" no começo); aria-pressed marca o escolhido
+  const sel = { origin: null, element: null };
+  const status = document.getElementById('roster-status');
+  const apply = () => {
+    let n = 0;
+    for (const card of rosterEl.children) {
+      const ok = (!sel.origin || card.dataset.origin === sel.origin) && (!sel.element || card.dataset.element === sel.element);
+      card.hidden = !ok;
+      if (ok) n++;
+    }
+    status.textContent = `${n} lutador${n === 1 ? '' : 'es'} na lista.`;
+  };
+  const chips = (box, key, values, label) => {
+    for (const v of [null, ...values]) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'chip';
+      b.textContent = v ? label(v) : 'Todos';
+      if (key === 'element' && v && ELEMENTS[v]) b.style.setProperty('--c', ELEMENTS[v].color);
+      b.setAttribute('aria-pressed', String(v === null));
+      b.addEventListener('click', () => {
+        sel[key] = v;
+        for (const o of box.children) o.setAttribute('aria-pressed', String(o === b));
+        apply();
+      });
+      box.appendChild(b);
+    }
+  };
+  const origins = [...new Set(ROSTER.map((c) => c.origin))];
+  const elements = Object.keys(ELEMENTS).filter((e) => ROSTER.some((c) => c.element === e));
+  chips(document.getElementById('f-origin'), 'origin', origins, (o) => o);
+  chips(document.getElementById('f-element'), 'element', elements, (e) => ELEMENTS[e].name);
+  document.getElementById('roster-filters').hidden = false;
 }
-if ('IntersectionObserver' in window) {
+const whenNear = (el, fn) => {
+  if (!el) return;
+  if (!('IntersectionObserver' in window)) { fn(); return; }
   const io = new IntersectionObserver((entries) => {
-    if (entries.some((e) => e.isIntersecting)) { io.disconnect(); buildRoster(); }
+    if (entries.some((e) => e.isIntersecting)) { io.disconnect(); fn(); }
   }, { rootMargin: '600px 0px' });
-  io.observe(rosterEl);
-} else buildRoster();
+  io.observe(el);
+};
+whenNear(document.getElementById('elements'), fillElements);
+whenNear(rosterEl, buildRoster);

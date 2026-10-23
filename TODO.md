@@ -15,7 +15,8 @@
 - [~] 2.3 Especiais em equipe: Barra de Equipe e Especial simplificado prontos (F1/F2); a tabela de ligações
   `src/config/teamLinks.js` existe mas ainda não está ligada (F4, ver *EQUIPE*).
 - [ ] 2.1 Animações de movimentação, 2.4 câmera de cutscenes.
-- [ ] 3–14 Modo PvE (dungeons, Espreitador como chefe, progressão, salvamento, cooperativo): não iniciado.
+- [ ] 3–14 Modo PvE, que vai se chamar **Outro Lado** (dungeons, Espreitador como chefe, progressão, salvamento,
+  cooperativo): não iniciado; já anunciado como "em desenvolvimento, sem data" na página Sobre.
 
 ## 1. Objetivo da atualização
 

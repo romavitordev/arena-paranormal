@@ -71,6 +71,8 @@
       <nav aria-label="Seções da página">
         <a href="#baixar">Baixar</a>
         <a href="#jogo">O jogo</a>
+        <a href="#universo">Universo</a>
+        <a href="#elementos">Elementos</a>
         <a href="#modos">Modos</a>
         <a href="#elenco">Elenco</a>
         <a href="#controles">Controles</a>
@@ -204,6 +206,132 @@
       </div>
     </section>
 
+    <!-- O UNIVERSO: o essencial da série (wiki "Ordem Paranormal") e onde cada coisa aparece no jogo -->
+    <section class="wrap block" id="universo" aria-labelledby="t-universo">
+      <h2 id="t-universo">O universo</h2>
+      <p class="sub">O básico de Ordem Paranormal para entender quem está lutando e por quê, e como isso entra no jogo.</p>
+      <div class="lore">
+        <article class="lore-card">
+          <p class="card-k">Na série</p>
+          <h3>O Outro Lado e a Membrana</h3>
+          <p>Existe uma dimensão de entidades insanas, o <b>Outro Lado</b>, separada da nossa realidade pela <b>Membrana</b>.
+            Tragédias, mortes e o medo das pessoas enfraquecem essa barreira, e é por onde as criaturas atravessam.</p>
+          <p class="in-game"><b>No jogo:</b> as arenas são lugares da série, como o Santo Berço, o Coliseu e o Orfanato Santa Menefreda.</p>
+        </article>
+        <article class="lore-card">
+          <p class="card-k">Na série</p>
+          <h3>Ordem e ocultistas</h3>
+          <p>A <b>Ordo Realitas</b> protege a Membrana e caça o paranormal. Do outro lado estão os ocultistas, que usam o Outro
+            Lado em proveito próprio e se reúnem em cultos, como os <b>Escriptas</b>, os <b>Mascarados</b> e os <b>Transtornados</b>.</p>
+          <p class="in-game"><b>No jogo:</b> o elenco é dividido por essas origens, e cada um traz as armas e os rituais da sua história.</p>
+        </article>
+        <article class="lore-card">
+          <p class="card-k">Na série</p>
+          <h3>Rituais e exposição paranormal</h3>
+          <p>Rituais são poderes do Outro Lado, cada um ligado a um elemento. Quanto mais alguém lida com o paranormal, maior a
+            sua <b>exposição paranormal</b>, e mais a mente dele é tomada pelo Outro Lado.</p>
+          <p class="in-game"><b>No jogo:</b> rituais são as habilidades e custam <b>sanidade</b>, a barra azul. Ela enche sozinha
+            e mais rápido segurando △. Com a vida baixa, o lutador desperta ou se transforma, como no cânone.</p>
+        </article>
+        <article class="lore-card">
+          <p class="card-k">Na série</p>
+          <h3>Marcados e Relíquias</h3>
+          <p>Os <b>Marcados</b> são escolhidos pelas Marcas, entidades de Medo, e só eles podem usar as quatro <b>Relíquias da
+            Calamidade</b>, uma por elemento:</p>
+          <ul class="relics">
+            <li><i style="--c: #e3263a" aria-hidden="true"></i><b>Trono</b> (Sangue): O Diabo</li>
+            <li><i style="--c: #f2c230" aria-hidden="true"></i><b>Máscara do Desespero</b> (Conhecimento): A Magistrada</li>
+            <li><i style="--c: #a865ff" aria-hidden="true"></i><b>Relíquia de Energia</b>: o Anfitrião (Arnaldo Fritz)</li>
+            <li><i style="--c: #a7a3ad" aria-hidden="true"></i><b>Parasita de Dimensões</b> (Morte): o Deus da Morte (Ferreiro)</li>
+          </ul>
+          <p class="in-game"><b>No jogo:</b> os Portadores aguentam mais dano que o resto do elenco. O Ferreiro e o Arnaldo só
+            ganham essa resistência depois de se transformar.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ELEMENTOS: o ciclo da série (wiki, páginas de cada elemento) e a regra do jogo (config/elements.js, combat/damage.js) -->
+    <section class="wrap block" id="elementos" aria-labelledby="t-elementos">
+      <h2 id="t-elementos">Elementos</h2>
+      <p class="sub">Tudo o que vem do Outro Lado pertence a um elemento. Cada elemento supera um outro e é superado por um
+        terceiro, e o Medo fica fora do ciclo.</p>
+      <div class="cycle-wrap">
+        <figure class="cycle">
+          <svg viewBox="0 0 320 320" role="img" aria-labelledby="cycle-t">
+            <title id="cycle-t">Ciclo dos elementos: Sangue supera Conhecimento, Conhecimento supera Energia, Energia supera Morte e Morte supera Sangue. O Medo, no centro, é neutro.</title>
+            <defs>
+              <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#948a90" /></marker>
+            </defs>
+            <g fill="none" stroke="#948a90" stroke-width="2" marker-end="url(#arr)">
+              <path d="M196 62 Q 248 82 258 124" />
+              <path d="M258 196 Q 248 238 196 258" />
+              <path d="M124 258 Q 72 238 62 196" />
+              <path d="M62 124 Q 72 82 124 62" />
+            </g>
+            <g class="node" style="--c: #e3263a"><circle cx="160" cy="52" r="40" /><text x="160" y="57">SANGUE</text></g>
+            <g class="node" style="--c: #f2c230"><circle cx="268" cy="160" r="40" /><text x="268" y="164" class="sm">CONHECIMENTO</text></g>
+            <g class="node" style="--c: #a865ff"><circle cx="160" cy="268" r="40" /><text x="160" y="273">ENERGIA</text></g>
+            <g class="node" style="--c: #a7a3ad"><circle cx="52" cy="160" r="40" /><text x="52" y="165">MORTE</text></g>
+            <g class="node fear" style="--c: #f4f1ff"><circle cx="160" cy="160" r="30" /><text x="160" y="165">MEDO</text></g>
+          </svg>
+          <figcaption>A seta aponta para o elemento que leva mais dano.</figcaption>
+        </figure>
+        <div class="rules">
+          <h3>Como funciona no jogo</h3>
+          <ul>
+            <li><b>Rituais</b> (habilidades e especiais) do elemento que supera o adversário causam <b>+15%</b> de dano; do
+              elemento que perde para ele, <b>−15%</b>.</li>
+            <li>Mesmo elemento, ou qualquer um contra o <b>Medo</b>: dano normal.</li>
+            <li>Golpes físicos e o ataque principal ficam fora do ciclo, a não ser com uma <b>arma amaldiçoada</b>. O Xande
+              amaldiçoa a arma com o elemento que supera o adversário: Sangue faz sangrar, Morte apodrece e deixa lento,
+              Conhecimento drena a sanidade e Energia solta choques.</li>
+            <li>A <b>Transmissão</b> (O Estrangeiro) e a <b>Tinta</b> (Amigo Imaginário) vêm dos Sinos de Tenebris, que unem
+              elementos opostos. No jogo elas ficam fora do ciclo e são neutras contra todos.</li>
+            <li>O elemento de cada lutador aparece ao lado do nome na luta e no elenco aqui embaixo.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="elements" id="elements">
+        <article class="element" style="--c: #e3263a" data-el="sangue">
+          <h3>Sangue</h3>
+          <p>A entidade dos sentimentos extremos: dor, fome, obsessão, paixão e violência. É a primeira a atravessar quando a
+            Membrana enfraquece.</p>
+          <p class="el-rel">Supera <b>Conhecimento</b> · leva mais dano de <b>Morte</b></p>
+          <p class="el-who"></p>
+        </article>
+        <article class="element" style="--c: #f2c230" data-el="conhecimento">
+          <h3>Conhecimento</h3>
+          <p>A entidade da consciência: descobrir, lembrar e registrar. Textos, sigilos e o dourado. Entendê-lo por inteiro
+            seria saber tudo do Outro Lado.</p>
+          <p class="el-rel">Supera <b>Energia</b> · leva mais dano de <b>Sangue</b></p>
+          <p class="el-who"></p>
+        </article>
+        <article class="element" style="--c: #a865ff" data-el="energia">
+          <h3>Energia</h3>
+          <p>A entidade do caos: o imprevisível, a transformação, a eletricidade, o fogo, a sorte e o azar. Não segue padrão
+            nenhum.</p>
+          <p class="el-rel">Supera <b>Morte</b> · leva mais dano de <b>Conhecimento</b></p>
+          <p class="el-who"></p>
+        </article>
+        <article class="element" style="--c: #a7a3ad" data-el="morte">
+          <h3>Morte</h3>
+          <p>A entidade do tempo, que mantém a cronologia: espirais, lodo preto, aceleração, desaceleração e envelhecimento.
+            Toda história precisa de um fim.</p>
+          <p class="el-rel">Supera <b>Sangue</b> · leva mais dano de <b>Energia</b></p>
+          <p class="el-who"></p>
+        </article>
+        <article class="element" style="--c: #f4f1ff" data-el="medo">
+          <h3>Medo</h3>
+          <p>A entidade do próprio Outro Lado, de onde vem todo o paranormal. O mais misterioso: o impossível, o infinito e o
+            desconhecido.</p>
+          <p class="el-rel">Neutro: não supera nem é superado</p>
+          <p class="el-who"></p>
+        </article>
+      </div>
+      <p class="note">Descrições resumidas da <a href="https://ordemparanormal.fandom.com/pt-br/wiki/Ocultismo">Ordem Paranormal Wiki</a>
+        (páginas Ocultismo, de cada elemento e Relíquias da Calamidade). Os números (+15% / −15%) são regras do jogo, não da série.</p>
+    </section>
+
     <!-- MODOS -->
     <section class="wrap block" id="modos" aria-labelledby="t-modos">
       <h2 id="t-modos">Modos</h2>
@@ -215,13 +343,32 @@
         <li><b>Online / LAN</b><span>Contra outra pessoa em outro aparelho: sala pública ou privada, ou entrada por código.</span></li>
         <li><b>Tutorial e Treino</b><span>Aprenda os golpes passo a passo e pratique combos num alvo parado.</span></li>
       </ol>
+      <article class="soon" aria-labelledby="t-outro-lado">
+        <p class="card-k">Em desenvolvimento · sem data</p>
+        <h3 id="t-outro-lado">Outro Lado</h3>
+        <p>Um modo novo, contra o Outro Lado em vez de outro lutador. Você escolhe um personagem do elenco e entra em
+          <b>masmorras temáticas</b>, cada uma com cenário e desafios próprios, inimigos menores e um <b>chefe</b> no fim. O
+          primeiro planejado é o território do <b>Espreitador</b>.</p>
+        <ul class="facts">
+          <li>Em cada tentativa você junta melhorias temporárias e monta uma combinação de poderes. Ao morrer, perde essas
+            melhorias e guarda parte do progresso permanente.</li>
+          <li>Dá para jogar sozinho, em dupla no mesmo aparelho ou online.</li>
+          <li>Campanha salva, com transições entre as masmorras.</li>
+          <li>Masmorras e chefes novos chegam aos poucos, em atualizações futuras.</li>
+        </ul>
+      </article>
     </section>
 
     <!-- ELENCO (montado pelos dados do jogo quando a seção chega na tela) -->
     <section class="wrap block" id="elenco" aria-labelledby="t-elenco">
       <h2 id="t-elenco">Elenco</h2>
-      <p class="sub" id="roster-count">Os lutadores jogáveis, agrupados por origem.</p>
-      <div class="roster" id="roster" aria-live="polite"></div>
+      <p class="sub" id="roster-count">Os lutadores jogáveis: origem, elemento, arma, especial e transformação de cada um.</p>
+      <div class="filters" id="roster-filters" hidden>
+        <div class="chips" role="group" aria-label="Filtrar por origem" id="f-origin"></div>
+        <div class="chips" role="group" aria-label="Filtrar por elemento" id="f-element"></div>
+      </div>
+      <p class="sr" id="roster-status" role="status" aria-live="polite"></p>
+      <div class="roster" id="roster"></div>
     </section>
 
     <!-- CONTROLES -->

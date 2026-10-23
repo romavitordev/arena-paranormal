@@ -113,6 +113,47 @@ details p { margin: 0 0 var(--s1); font-size: 15px; }
   .feature.flip img { order: 2; }
 }
 
+/* o universo: cartões de fio, "na série" em cima e "no jogo" embaixo, separados por um traço */
+.lore { display: grid; gap: var(--s3); }
+@media (min-width: 900px) { .lore { grid-template-columns: 1fr 1fr; } }
+.lore-card { display: flex; flex-direction: column; gap: var(--s1); padding: var(--s3); border: 1px solid var(--line); border-radius: 6px; }
+.lore-card h3 { margin: 0 0 var(--s1); }
+.lore-card p { margin: 0; font-size: 15px; }
+.lore-card b { color: var(--frost); font-weight: 600; }
+.lore-card .in-game { margin-top: auto; padding-top: var(--s2); border-top: 1px solid var(--line); color: var(--graphite); }
+.lore-card .in-game b { color: var(--ash); }
+.relics { list-style: none; margin: var(--s1) 0; padding: 0; display: grid; gap: 6px; font-size: 15px; }
+.relics li { position: relative; padding-left: 20px; } /* o ponto fica à esquerda e o texto corre normal (em flex, cada trecho virava um item) */
+.relics i { position: absolute; left: 0; top: .55em; width: 10px; height: 10px; border-radius: 50%; background: var(--c); }
+.element h3::before { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--c); flex: none; }
+
+/* elementos: o ciclo desenhado ao lado da regra do jogo; depois um cartão por elemento com a cor dele */
+.cycle-wrap { display: grid; gap: var(--s4); align-items: center; }
+@media (min-width: 900px) { .cycle-wrap { grid-template-columns: minmax(260px, 340px) 1fr; } }
+.cycle { margin: 0 auto; width: 100%; max-width: 340px; }
+.cycle svg { display: block; width: 100%; height: auto; }
+.cycle .node circle { fill: color-mix(in srgb, var(--c) 14%, var(--void)); stroke: var(--c); stroke-width: 2; }
+.cycle .node.fear circle { stroke-dasharray: 4 4; }
+.cycle .node text { fill: var(--frost); font: 400 18px/1 var(--display); letter-spacing: .04em; text-anchor: middle; }
+.cycle .node text.sm { font-size: 13.5px; letter-spacing: .02em; }
+.cycle figcaption { margin-top: var(--s1); text-align: center; font-size: 13px; color: var(--graphite); }
+.rules h3 { margin-bottom: var(--s2); }
+.rules ul { margin: 0; padding: 0; list-style: none; }
+.rules li { padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 15px; }
+.rules li:last-child { border-bottom: 0; }
+.rules b { color: var(--frost); font-weight: 600; }
+.elements { display: grid; gap: var(--s2); margin-top: var(--s4); }
+@media (min-width: 640px) { .elements { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1024px) { .elements { grid-template-columns: repeat(5, 1fr); } }
+.element { display: flex; flex-direction: column; gap: var(--s1); padding: var(--s2) var(--s2) var(--s3); border: 1px solid var(--line); border-top: 3px solid var(--c); border-radius: 6px; }
+.element h3 { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 26px; }
+.element h3::before { content: ''; }
+.element p { margin: 0; font-size: 14px; line-height: 1.5; }
+.element .el-rel { margin-top: auto; padding-top: var(--s1); color: var(--graphite); font-size: 13px; }
+.element .el-rel b { color: var(--frost); font-weight: 600; }
+.element .el-who { font-size: 13px; color: var(--ash); }
+.element .el-who:empty { display: none; }
+
 /* modos */
 .modes { list-style: none; counter-reset: m; margin: var(--s3) 0 0; padding: 0; display: grid; gap: 0 var(--s4); }
 @media (min-width: 900px) { .modes { grid-template-columns: 1fr 1fr; } }
@@ -121,13 +162,36 @@ details p { margin: 0 0 var(--s1); font-size: 15px; }
 .modes b { color: var(--frost); font-size: 17px; }
 .modes span { font-size: 15px; }
 
-/* elenco */
-.roster { display: grid; gap: var(--s3); }
-.group h3 { font-size: 22px; color: var(--ash); margin-bottom: var(--s1); }
-.fighters { display: flex; flex-wrap: wrap; gap: var(--s1); }
-.fighter { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px 0 10px; border: 1px solid var(--line); border-radius: 9999px; font-weight: 800; font-size: 13px; letter-spacing: .04em; color: var(--frost); }
-.fighter i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); flex: none; }
-.fighter small { font-weight: 600; color: var(--graphite); letter-spacing: 0; }
+/* o modo futuro (Outro Lado): cartão de fio com o acento carmesim */
+.soon { margin-top: var(--s4); padding: var(--s3); border: 1px solid var(--line); border-left: 3px solid var(--crimson); border-radius: 6px; display: grid; gap: var(--s1); }
+.soon h3 { margin: 0; font-size: 34px; }
+.soon p { margin: 0; max-width: 72ch; }
+.soon b { color: var(--frost); font-weight: 600; }
+
+/* elenco: filtros em pílula e um cartão por lutador (retrato + ficha); no celular o retrato fica à esquerda */
+.filters { display: grid; gap: var(--s1); margin: 0 0 var(--s3); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { min-height: 40px; padding: 0 14px; border: 1px solid var(--line); border-radius: 9999px; background: none; color: var(--ash); font: 600 13px/1 var(--body); cursor: pointer; }
+.chip:hover { border-color: var(--graphite); color: var(--frost); }
+.chip[aria-pressed="true"] { border-color: var(--c, var(--frost)); color: var(--frost); background: color-mix(in srgb, var(--c, #f4eff1) 14%, transparent); }
+.roster { display: grid; gap: var(--s2); }
+@media (min-width: 640px) { .roster { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); } }
+.fcard { display: grid; grid-template-columns: 104px 1fr; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.fcard[hidden] { display: none; }
+@media (min-width: 640px) { .fcard { grid-template-columns: 1fr; } }
+.fpic { background: radial-gradient(ellipse at 50% 30%, color-mix(in srgb, var(--c) 22%, transparent), transparent 70%), var(--surface); border-right: 1px solid var(--line); }
+@media (min-width: 640px) { .fpic { border-right: 0; border-bottom: 1px solid var(--line); } }
+.fpic img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 8%; aspect-ratio: 3 / 4; }
+@media (min-width: 640px) { .fpic img { aspect-ratio: 4 / 4; } }
+.fbody { padding: 12px 14px 14px; min-width: 0; }
+.fk { margin: 0 0 4px; font: 800 11px/1.3 var(--body); letter-spacing: .14em; text-transform: uppercase; color: var(--graphite); }
+.fk span { color: var(--c); }
+.fcard h3 { margin: 0 0 6px; font-size: 24px; }
+.ftag { margin: 0 0 10px; font-size: 14px; font-style: italic; color: var(--ash); }
+.fcard dl { margin: 0; display: grid; gap: 4px; font-size: 13px; line-height: 1.4; }
+.fcard dl div { display: grid; grid-template-columns: 96px 1fr; gap: 8px; }
+.fcard dt { color: var(--graphite); }
+.fcard dd { margin: 0; color: var(--frost); }
 
 /* controles: tabela com rolagem própria (nunca a página) */
 .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; margin-top: var(--s3); }

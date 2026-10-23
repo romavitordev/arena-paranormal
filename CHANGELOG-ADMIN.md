@@ -1,5 +1,28 @@
 # Registro administrativo de alterações
 
+## Próxima versão (em andamento)
+
+- **Página Sobre / Baixar (`sobre.html`) ampliada com a wiki** (pedido: "melhorar ela com base na wiki, exemplo: sistema
+  de elementos e explicar como isso funciona no jogo"). Duas seções novas, com links no menu do topo:
+  - **O universo**: quatro cartões "na série / no jogo": o Outro Lado e a Membrana, a Ordem e os ocultistas, rituais e
+    exposição paranormal (no jogo, a sanidade e o despertar), e os Marcados e as Relíquias da Calamidade (Trono, Máscara
+    do Desespero, Relíquia de Energia e Parasita de Dimensões, com o portador de cada uma no elenco).
+  - **Elementos**: o ciclo desenhado em SVG (Medo no centro, neutro), a regra do jogo ao lado (rituais +15% / −15%,
+    físico fora do ciclo salvo arma amaldiçoada, Transmissão e Tinta neutras) e um cartão por elemento com a descrição
+    resumida, quem supera e quem o supera, e "No elenco", preenchido pelos dados do jogo (`sobre.js` carrega o elenco uma
+    vez, quando os elementos ou o elenco chegam perto da tela).
+  - Fonte: as páginas Ocultismo, Sangue, Morte, Conhecimento, Energia, Medo e Relíquias da Calamidade da wiki, resumidas
+    com palavras próprias. A wiki confirma o ciclo do código (`config/elements.js`): Sangue supera Conhecimento, que supera
+    Energia, que supera Morte, que supera Sangue. Conferido no PC e no celular (375 px, sem rolagem lateral).
+- **Elenco da página refeito:** um cartão por lutador com retrato (28 `.webp` de ~9 KB em `public/sobre/elenco`,
+  renderizados uma vez dos modelos do jogo com `renderPortraits`), origem, elemento, frase, arma, especial e transformação,
+  e filtros por origem e por elemento (`aria-pressed`, contagem anunciada para leitor de tela).
+- **Modo futuro "Outro Lado"** explicado em Modos, marcado como em desenvolvimento e sem data (resumo do planejamento
+  PvE do TODO).
+- **Changelog corrigida:** a nota da v3.33.0 (no jogo e na CHANGELOG-CLIENTE) dizia o ciclo ao contrário ("Sangue supera
+  Morte..."); agora diz "Morte supera Sangue, Energia supera Morte, Conhecimento supera Energia, Sangue supera
+  Conhecimento". A CHANGELOG técnica passou a dizer a escolha do Xande sem ambiguidade ("contra Sangue usa Morte...").
+
 ## v3.36.0 — Na Faixa Certa
 
 - Versão: `VERSION` 3.35.0 → **3.36.0** (package.json/lock junto). Data: 2026-10-22.

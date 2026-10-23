@@ -55,7 +55,7 @@
   - Solas contornadas (`sole_part`) e pés descalços anatômicos com arco e 5 dedos (`bare_foot_part`).
 - Sistema de **Revestimento Elemental de Armas** (`src/models/weapons.js`, `elementCoat`): gera texturas procedurais com emissivo próprio para Sangue, Morte (lodo com espirais), Conhecimento (sigilos pulsantes) e Energia (raios piscantes).
 - Mecânica de **Amaldiçoar Arma por Elemento** adaptativa (`src/combat/abilities.js`, `applyWeaponCurse`, `pickCurseElement`):
-  - Xande seleciona automaticamente o elemento que supera a afinidade do oponente (Sangue → Morte → Energia → Conhecimento → Sangue).
+  - Xande seleciona automaticamente o elemento que supera a afinidade do oponente (contra Sangue usa Morte, contra Morte usa Energia, contra Energia usa Conhecimento, contra Conhecimento usa Sangue).
   - Efeitos em combate por elemento (`src/combat/damage.js`): Sangue aplica sangramento; Morte causa apodrecimento contínuo e lentidão momentânea; Conhecimento drena sanidade/energia da vítima; Energia descarrega choques elétricos extras com chance percentual.
   - Golpes com armas amaldiçoadas herdam multiplicadores de vantagem/desvantagem elemental.
 - Assistência em movimento do Xande atualizada (`src/combat/assists.js`): amaldiçoa a arma do líder ativo com o elemento que supera o adversário atual.
