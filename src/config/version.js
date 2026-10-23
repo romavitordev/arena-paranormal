@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.36.0';
+export const VERSION = '3.37.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,17 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.37.0',
+    date: '2026-10-23',
+    title: 'Em Movimento',
+    items: [
+      'ARMAS SEGURADAS DO JEITO CERTO: facas, espadas, katanas, machados, a Leonora, o taco e as lâminas do Gal agora atravessam o punho fechado — a lâmina sai por cima da mão e o cabo aparece embaixo, em vez de atravessar os dedos.',
+      'MOVIMENTO NOVO: corrida, caminhada, pulo, queda, dash, esquiva e o tranco ao levar golpe foram refeitos — o quadril e o tronco giram a cada passo, os braços balançam opostos às pernas e a cabeça fica firme olhando para a frente.',
+      'POSTURAS PRÓPRIAS: 18 lutadores que dividiam a mesma pose parada ganharam a sua — Jae agachada com o punhal perto do rosto, Xande com o taco no ombro e o skate à frente, Joui pronto para sacar a katana, Cristopher gingando na guarda de boxe, Kian sereno de braços abertos e outros.',
+      'CARNIÇAL DA ESFINGE MAIS FIEL À ARTE: pele e ossos verde-oliva, a Menés com o leque de espinhos roxos, o colar de crânios maior, asas roxas e a cauda fina enrolada.',
+    ],
+  },
   {
     v: '3.36.0',
     date: '2026-10-22',

@@ -1,6 +1,6 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.36.0 (revisado em 2026-10-22: banner do especial refeito, nomes do Gal, opção Falas na luta, contador de desempenho)
+**Versão de referência atual:** v3.37.0 (revisado em 2026-10-23: armas no punho, locomoção refeita, posturas próprias, Esfinge pela arte)
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente
 
@@ -17,7 +17,8 @@
 - [ ] 2.1 Animações de movimentação, 2.4 câmera de cutscenes.
 - [ ] 3–14 Modo PvE, que vai se chamar **Outro Lado** (dungeons, Espreitador como chefe, progressão, salvamento,
   cooperativo): não iniciado; já anunciado como "em desenvolvimento, sem data" na página Sobre.
-- [ ] arrumar posição das facas/espadas nas mãos dos personagens, analise, estão miradas pra frente atravessando os dedos, devem aparecer como sendo seguradas corretamente.
+- [x] arrumar posição das facas/espadas nas mãos dos personagens (feito em 2026-10-23: o cabo atravessa o punho fechado
+  — `inFist` em `models/props.js` —, a lâmina sai pelo lado do polegar e o pomo aparece embaixo).
 
 ## 1. Objetivo da atualização
 
@@ -2911,8 +2912,12 @@ genérico demais), com o motivo. Nenhum item é de balanceamento.
 
 * [x] **Pose de vitória própria para o Arthur** (`vic_arthur`: a sniper apoiada no ombro; `victoryProp` mostra a arma
   na vitória). Correção da análise: a Lírio já tinha a dela (`victory_hammer`, a Leonora erguida).
-* [ ] **REAJUSTE DAS ANIMAÇÕES** (pedido de 2026-10-23: "as animações do jogo já são antigas pro nível que está o
-  jogo"): importar animações de movimento GRATUITAS e de licença livre (ex.: Quaternius Universal Animation Library,
+* [~] **REAJUSTE DAS ANIMAÇÕES** — 1ª parte feita em 2026-10-23 (`anim/locomotionClips.js`): corrida, caminhada, pulo,
+  queda, dash, esquiva e reação a golpe refeitos à mão com ciclos de verdade (contato, absorção, passagem, impulso; giro
+  do quadril, contra-giro do tronco, cabeça estabilizada); a caminhada de costas e as das formas saem deles. FALTA a
+  importação de um pacote gratuito: precisa do OK do dono para o pacote escolhido (ex.: Quaternius Universal Animation
+  Library, CC0) — baixar arquivos de terceiros não é feito sem aprovação — e o redirecionamento para o esqueleto.
+  Pedido original (2026-10-23: "as animações do jogo já são antigas pro nível que está o jogo"): importar animações de movimento GRATUITAS e de licença livre (ex.: Quaternius Universal Animation Library,
   CC0; conferir a licença de cada pacote antes de usar), redirecionar para o esqueleto do jogo (`anim/clips.js` hoje é
   todo feito à mão em poses-chave) e ajustar para o estilo da luta: andar, correr, pular, cair, esquiva, dash, idle,
   levar golpe. Começar pela movimentação (é o que mais aparece) e manter as poses de golpe próprias de cada personagem.

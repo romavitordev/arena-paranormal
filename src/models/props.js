@@ -6,11 +6,26 @@ import { katana, scabbard, m4, sniper, guitarCase, bloodArm, knife, karambit, si
 // Armas e acessórios adicionados em código sobre os modelos do Blender.
 // Usam só `sockets`, `attach()` e `props`, que existem nos dois tipos de rig.
 
+// EMPUNHADURA (2026-10-23): no punho fechado dos modelos, o "buraco" por onde passa o cabo corre de frente para trás
+// (do indicador ao mínimo), perpendicular ao antebraço. As armas brancas eram giradas só ~−0,3 rad — quase alinhadas
+// com o antebraço — e a lâmina saía por dentro dos dedos. Agora o cabo atravessa o punho: a lâmina sai por cima (do
+// lado do polegar) e o pomo aparece embaixo; as pesadas (machado, marreta, taco, lança) inclinam um pouco menos.
+// FIST desce o cabo até o meio da mão (o socket fica no pulso). As armas de fogo já eram giradas assim (~−1,4).
+const GRIP = -1.35;
+const GRIP_HEAVY = -1.15;
+const FIST = -0.06;
+function inFist(obj, tilt = GRIP) {
+  obj.rotation.x = tilt;
+  obj.position.y += FIST;
+  return obj;
+}
+
 export function addKaiserProps(rig) {
   const { sockets, props } = rig;
   // faca karambit vermelha (cânone) na mão esquerda
   const kar = karambit();
-  kar.rotation.set(-0.35, Math.PI, 0.5);
+  kar.rotation.set(GRIP, Math.PI, 0.5);
+  kar.position.y += FIST;
   sockets.handL.add(kar);
   props.karambit = kar;
   const back = m4();
@@ -72,7 +87,7 @@ export function addArthurProps(rig) {
 export function addAghataProps(rig) {
   const { sockets, props } = rig;
   const blade = knife();
-  blade.rotation.x = -0.35;
+  inFist(blade);
   blade.scale.setScalar(1.15);
   sockets.handR.add(blade);
   props.knife = blade;
@@ -87,7 +102,8 @@ export function addErinProps(rig) {
   const { sockets, props } = rig;
   for (const s of ['R', 'L']) {
     const d = knife();
-    d.rotation.set(-0.35, s === 'L' ? Math.PI : 0, 0);
+    d.rotation.set(GRIP, s === 'L' ? Math.PI : 0, 0);
+    d.position.y += FIST;
     d.scale.setScalar(1.05);
     sockets['hand' + s].add(d);
     props['dagger' + s] = d;
@@ -114,7 +130,7 @@ export function addErinProps(rig) {
 export function addAguiarProps(rig) {
   const { sockets, props } = rig;
   const axe = mutilatorAxe();
-  axe.rotation.x = -0.25;
+  inFist(axe, GRIP_HEAVY);
   sockets.handR.add(axe);
   props.axe = axe;
   if (props.maskOn) rig.showProp('maskOn', false);
@@ -124,7 +140,7 @@ export function addAguiarProps(rig) {
 export function addLabirintoProps(rig) {
   const { sockets, props } = rig;
   const ant = antenna();
-  ant.rotation.x = -0.35;
+  inFist(ant, GRIP_HEAVY);
   ant.position.y = 0.05;
   sockets.handR.add(ant);
   props.antenna = ant;
@@ -147,12 +163,12 @@ export function addLabirintoProps(rig) {
 export function addLirioProps(rig) {
   const { sockets, props } = rig;
   const hammer = leonora();
-  hammer.rotation.x = -0.25;
+  inFist(hammer, GRIP_HEAVY);
   sockets.handR.add(hammer);
   props.leonora = hammer;
   const kn = knife();
   kn.visible = false;
-  kn.rotation.x = -0.3;
+  inFist(kn);
   sockets.handL.add(kn);
   props.knifeThrow = kn;
   // capacete azul com listra branca (pendurado no equipamento na arte): aparece na Proteção Pesada
@@ -178,11 +194,11 @@ export function addLirioProps(rig) {
 export function addBaluProps(rig) {
   const { sockets, props } = rig;
   const axe = baluAxe();
-  axe.rotation.x = -0.25;
+  inFist(axe, GRIP_HEAVY);
   sockets.handR.add(axe);
   props.axe = axe;
   const mace = demonMace();
-  mace.rotation.x = -0.25;
+  inFist(mace, GRIP_HEAVY);
   mace.visible = false;
   sockets.handR.add(mace);
   props.demonMace = mace;
@@ -192,7 +208,7 @@ export function addBaluProps(rig) {
 export function addFerreiroProps(rig) {
   const { sockets, props } = rig;
   const sword = espadaConsumidora();
-  sword.rotation.x = -0.25;
+  inFist(sword);
   sockets.handR.add(sword);
   props.sword = sword;
 }
@@ -201,7 +217,7 @@ export function addFerreiroProps(rig) {
 export function addJuanProps(rig) {
   const { sockets, props } = rig;
   const k = facaPredadora();
-  k.rotation.x = -0.3;
+  inFist(k);
   sockets.handR.add(k);
   props.knife = k;
   // ÓDIO DO DIABO (1ª transformação, a arte "pose ultimate"): escondidos até a cena — o antebraço direito vira sangue
@@ -264,7 +280,7 @@ export function addJuanOdioProps(rig) {
 export function addXandeProps(rig) {
   const { sockets, props } = rig;
   const bat = barbedBat();
-  bat.rotation.x = -0.3;
+  inFist(bat, GRIP_HEAVY);
   sockets.handR.add(bat);
   props.bat = bat;
   const sk = chaosSkate();
@@ -276,12 +292,13 @@ export function addXandeProps(rig) {
 export function addGalSalProps(rig) {
   const { sockets, props } = rig;
   const right = sickleBlade();
-  right.rotation.x = -0.3;
+  inFist(right);
   right.scale.setScalar(1.1);
   sockets.handR.add(right);
   props.bladeR = right;
   const left = sickleBlade();
-  left.rotation.set(-0.3, Math.PI, 0);
+  left.rotation.set(GRIP, Math.PI, 0);
+  left.position.y += FIST;
   left.scale.setScalar(1.1);
   sockets.handL.add(left);
   props.bladeL = left;
@@ -307,7 +324,7 @@ export function addKianProps(rig) {
   haze.rotation.y = Math.PI / 2;
   blade.add(haze);
   blade.add(new THREE.Mesh(new THREE.SphereGeometry(0.12, 10, 8), glowMat(0xffe2a8, 0.4)));
-  blade.rotation.x = -0.35;
+  inFist(blade);
   blade.visible = false;
   rig.sockets.handR.add(blade);
   rig.props.fearBlade = blade;
@@ -327,7 +344,7 @@ export function addKianCalamidadeProps(rig) {
 function kemiProps(rig, ghost) {
   const { sockets, props } = rig;
   const k = knife();
-  k.rotation.x = -0.3;
+  inFist(k);
   sockets.handR.add(k);
   props.knife = k;
   const back = sniperFantasma({ drip: ghost });
@@ -405,7 +422,7 @@ function tickWatch(watch, crazy) {
 export function addArnaldoProps(rig) {
   const { sockets, props } = rig;
   const sword = swordArnaldo();
-  sword.rotation.x = -0.25;
+  inFist(sword);
   sockets.handR.add(sword);
   props.sword = sword;
   const glasses = roundGlasses({ tint: 0xdde8f0, opacity: 0.22 });
@@ -521,7 +538,7 @@ function liveCable(rig, from, to, color) {
 export function addVerissimoProps(rig) {
   const { sockets, props } = rig;
   const sword = swordArnaldo();
-  sword.rotation.x = -0.25;
+  inFist(sword);
   sockets.handR.add(sword);
   props.sword = sword;
   const band = bandolier();
@@ -653,7 +670,7 @@ function etHead() {
 export function addGuizoProps(rig) {
   const { sockets, props } = rig;
   const k = guizoKnife();
-  k.rotation.x = -0.3;
+  inFist(k);
   sockets.handR.add(k);
   props.knife = k;
   // a câmera na mão esquerda, com a lente para a frente (no ataque ela vai para o quadril: def.grip)
@@ -733,7 +750,7 @@ function jaeDagger() {
 export function addJaeProps(rig) {
   const { sockets, props } = rig;
   const d = jaeDagger();
-  d.rotation.x = -0.3;
+  inFist(d);
   sockets.handR.add(d);
   props.knife = d;
   if (props.hoodUp) rig.showProp('hoodUp', false);
@@ -756,7 +773,7 @@ export function addJouiProps(rig) {
   sockets.hip.add(sheath);
   props.scabbard = sheath;
   const blade = katana();
-  blade.rotation.x = -0.45;
+  inFist(blade);
   sockets.handR.add(blade);
   props.katana = blade;
   if (props.maskSide) rig.showProp('maskSide', false);
@@ -903,7 +920,7 @@ export function addGuizoVelhoProps(rig) {
 export function addCristinoProps(rig, { rifle = false } = {}) {
   const { sockets, props } = rig;
   const knife = peixeira();
-  knife.rotation.x = -0.3;
+  inFist(knife);
   sockets.handR.add(knife);
   props.peixeira = knife;
   const gun = socadeira({ rifle });

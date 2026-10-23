@@ -2,6 +2,12 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.37.0 — Em Movimento
+- ARMAS SEGURADAS DO JEITO CERTO: facas, espadas, katanas, machados, a Leonora, o taco e as lâminas do Gal agora atravessam o punho fechado — a lâmina sai por cima da mão e o cabo aparece embaixo, em vez de atravessar os dedos.
+- MOVIMENTO NOVO: corrida, caminhada, pulo, queda, dash, esquiva e o tranco ao levar golpe foram refeitos — o quadril e o tronco giram a cada passo, os braços balançam opostos às pernas e a cabeça fica firme olhando para a frente.
+- POSTURAS PRÓPRIAS: 18 lutadores que dividiam a mesma pose parada ganharam a sua — Jae agachada com o punhal perto do rosto, Xande com o taco no ombro e o skate à frente, Joui pronto para sacar a katana, Cristopher gingando na guarda de boxe, Kian sereno de braços abertos e outros.
+- CARNIÇAL DA ESFINGE MAIS FIEL À ARTE: pele e ossos verde-oliva, a Menés com o leque de espinhos roxos, o colar de crânios maior, asas roxas e a cauda fina enrolada.
+
 ## v3.36.0 — Na Faixa Certa
 - NOME DO ESPECIAL NA TELA REFEITO: a faixa atrás do nome agora cresce junto com o texto, a letra se ajusta à largura da tela e nomes longos quebram em duas linhas — nada mais sai para fora da faixa, nem no celular.
 - GAL SAL — NOMES NOVOS: a Ultimate se chama "Injustiça né?" e a transformação, "O Realizador do Destino" (o apelido dele na série). No despertar, as marcas douradas da venda acendem e pulsam.

@@ -1,5 +1,20 @@
 # Changelog
 
+## v3.37.0 — Em Movimento
+
+### Adicionado
+- `src/anim/locomotionClips.js`: corrida, caminhada, pulo, queda, dash, esquiva e reação a golpe com fases de ciclo (contato, absorção, passagem, impulso), giro do quadril e contra-giro do tronco; meio ciclo espelhado. Substitui as definições antigas em `clips.js`.
+- `src/anim/idleClips.js`: 18 posturas paradas próprias (quem dividia `idle_knife`, `idle_katana` e `idle_fist`).
+- Página Sobre: seções O universo e Elementos, elenco com retratos (`public/sobre/elenco`) e filtros, e o modo futuro Outro Lado.
+
+### Alterado
+- `models/props.js`: `inFist` — as armas brancas de mão atravessam o punho fechado (lâmina do lado do polegar, pomo embaixo).
+- Carniçal da Esfinge (`npc_esfinge.py`): cores e detalhes pela arte oficial (verde-oliva, leque de espinhos, colar de crânios, asas roxas, cauda enrolada).
+- Galeria: usa o `anims.idle` de cada ficha.
+
+### Corrigido
+- Changelog da v3.33.0: o ciclo dos elementos estava escrito ao contrário.
+
 ## v3.36.0 — Na Faixa Certa
 
 ### Adicionado

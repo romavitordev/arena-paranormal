@@ -1,6 +1,23 @@
 # Registro administrativo de alterações
 
-## Próxima versão (em andamento)
+## v3.37.0 — Em Movimento
+
+- Versão: `VERSION` 3.36.0 → **3.37.0** (package.json/lock junto). Data: 2026-10-23.
+- **Empunhadura das armas** (`models/props.js`, pedido: "estão miradas pra frente atravessando os dedos"): no punho
+  fechado dos modelos o canal do cabo corre de frente para trás (do indicador ao mínimo), perpendicular ao antebraço;
+  as armas brancas eram giradas só ~−0,3 rad e a lâmina saía por dentro dos dedos. O ajudante novo `inFist` gira o cabo
+  para atravessar o punho (−1,35 rad; −1,15 nas pesadas: machados, marreta, taco, lança, maça) e o desce até o meio da
+  mão. Aplicado nas 22 armas brancas de mão (facas, adagas, karambit, katana, espadas, lâminas do Gal, Leonora, taco,
+  machados, Antena, peixeira, Faca Predadora e a lâmina do Medo do Kian). As armas de fogo já eram giradas assim;
+  a bengala da Nubi continua apontando para o chão. Conferido de perto (a lâmina sai do lado do polegar, o pomo embaixo)
+  e na galeria.
+- **Locomoção refeita** (`anim/locomotionClips.js`, 1ª parte do REAJUSTE DAS ANIMAÇÕES): corrida, caminhada, pulo,
+  queda, dash, esquiva e reação a golpe com as fases de verdade (contato, absorção, passagem, impulso), giro do quadril,
+  contra-giro do tronco, braços opostos às pernas e a cabeça desfazendo o giro; meio ciclo desenhado e o outro
+  espelhado (`mirrorPose`). `stride` igual (o pé não escorrega). A caminhada de costas e as locomoções das formas
+  continuam derivadas delas. As definições antigas saíram de `clips.js`. Conferido no jogo (corrida de lado em duas
+  fases do ciclo) e numa rodada CPU × CPU com 8 personagens sem erro. A importação de um pacote gratuito de animações
+  ficou para quando o dono aprovar o pacote (baixar arquivos de terceiros precisa do OK dele).
 
 - **Esfinge mais perto da arte oficial** (`npc_esfinge.py`, pedido "a Esfinge não foi terminada ainda"): a pele e os
   ossos saíram do lilás (lia como um cão roxo) para o verde-oliva escuro da arte; a Menés virou oliva com listras roxas
