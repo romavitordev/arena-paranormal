@@ -2,6 +2,10 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.35.0 — Eu Sou a Injustiça
+- GAL SAL — A INJUSTIÇA REFEITA PELA CENA DA SÉRIE: a corrente prende e puxa (ainda dá para esquivar ou defender), o sigilo do Controle Mental acende e o adversário AJOELHA, o Gal diz "Injustiça, né? Muito prazer, eu sou a injustiça." e executa: três cortes que ele já sabe antes de acontecer (um lampejo dourado marca cada impacto) e a cruz final com as duas correntes, que derruba. Mesmo dano, custo e recarga.
+- GAL SAL — AFINIDADE COM PRECOGNIÇÃO (despertar): agora ele não pode mais ser pego desprevenido (sem dano extra pelas costas nem susto depois de teleportes) e o Bloqueio Perfeito fica mais fácil de acertar. A velocidade extra caiu de 15% para 10%.
+
 ## v3.34.0 — Faixas e Correntes
 - MODELO DA KEMI REFEITO PELA ARTE OFICIAL: reconstruída no Blender a partir da arte de Hexatombe. Dreads loiros puxados para um rabo alto, com mechas soltas dos lados do rosto, e argolas na orelha. Top branco curto com a faixa marrom por baixo e a barriga à mostra. Mochila preta com alças de couro. Faixas no braço esquerdo inteiro, no antebraço direito e nas pernas. Calça cáqui larga com bolsa na coxa e o casaco marrom amarrado na cintura, caindo pelo lado direito. Coturnos de cadarço.
 - FANTASMA REFEITA PELA ARTE OFICIAL: o sobretudo de couro marrom abotoado com gola alta e remendos escuros. As faixas cobrem o rosto e deixam só a fresta dos olhos âmbar brilhando. Faixa amarrada na cintura, três facas curvas no peito, a alça do rifle, faixas cruzadas nos braços e nas canelas e os dreads num rabo alto. Novas texturas de couro gasto, calça e faixas encardidas.

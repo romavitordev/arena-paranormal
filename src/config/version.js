@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.34.0';
+export const VERSION = '3.35.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,15 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.35.0',
+    date: '2026-10-22',
+    title: 'Eu Sou a Injustiça',
+    items: [
+      'GAL SAL — A INJUSTIÇA REFEITA PELA CENA DA SÉRIE: a corrente prende e puxa (ainda dá para esquivar ou defender), o sigilo do Controle Mental acende e o adversário AJOELHA, o Gal diz "Injustiça, né? Muito prazer, eu sou a injustiça." e executa: três cortes que ele já sabe antes de acontecer (um lampejo dourado marca cada impacto) e a cruz final com as duas correntes, que derruba. Mesmo dano, custo e recarga.',
+      'GAL SAL — AFINIDADE COM PRECOGNIÇÃO (despertar): agora ele não pode mais ser pego desprevenido (sem dano extra pelas costas nem susto depois de teleportes) e o Bloqueio Perfeito fica mais fácil de acertar. A velocidade extra caiu de 15% para 10%.',
+    ],
+  },
   {
     v: '3.34.0',
     date: '2026-10-22',

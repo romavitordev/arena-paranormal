@@ -1,7 +1,8 @@
 # Registro administrativo de alterações
 
-## Próxima versão (em andamento)
+## v3.35.0 — Eu Sou a Injustiça
 
+- Versão: `VERSION` 3.34.0 → **3.35.0** (package.json/lock junto). Data: 2026-10-22.
 - **Gal Sal — Ultimate e despertar revistos pelo cânone** (pedido: `arena_paranormal_gal_sal_ultimate_transformacao.txt`).
   - Auditoria antes de mexer: a Injustiça era o `cinematicCombo` genérico (corrente → 5 golpes de espadachim → lançado)
     e o despertar só tinha números. A wiki "Gal" confirma: a fala inteira ("Injustiça, né? Muito prazer, eu sou a

@@ -1,5 +1,16 @@
 # Changelog
 
+## v3.35.0 — Eu Sou a Injustiça
+
+### Alterado
+- Gal Sal — especial **Injustiça** refeito pela cena do cânone (Controle Mental em Joui antes da execução): corrente → sigilo do Controle Mental e o alvo ajoelha (`forced_kneel`) → a fala inteira no banner → 3 cortes com lampejo antes do impacto (Bênção Maldita) → cruz final que derruba. Dano 250, custo 50 e recarga 14 mantidos; dano por impacto (15/15/20/50%).
+- `cinematicCombo`: opções opcionais por golpe `victimAnim`, `sigil`, `foresee`, `push`, além de `endReaction` e da câmera `shots: 'control'`.
+- Despertar **Afinidade com Precognição**: dá a passiva `precognition` enquanto dura (`awakenMode.passives`; `hasPassive` lê passivas de estados ativos) e alarga o Bloqueio Perfeito para 0,2 s (`perfectBlockWindow`); velocidade +15% → +10%.
+- CI: ações dos fluxos de apps e Pages nas versões atuais e build em Node 24.
+
+### Corrigido
+- `cinematicCombo`: um passo `noHit` sem `share` deixava o dano do último golpe em `NaN`.
+
 ## v3.34.0 — Faixas e Correntes
 
 ### Adicionado
