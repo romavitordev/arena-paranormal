@@ -17,6 +17,7 @@
 - [ ] 2.1 Animações de movimentação, 2.4 câmera de cutscenes.
 - [ ] 3–14 Modo PvE, que vai se chamar **Outro Lado** (dungeons, Espreitador como chefe, progressão, salvamento,
   cooperativo): não iniciado; já anunciado como "em desenvolvimento, sem data" na página Sobre.
+- [ ] arrumar posição das facas/espadas nas mãos dos personagens, analise, estão miradas pra frente atravessando os dedos, devem aparecer como sendo seguradas corretamente.
 
 ## 1. Objetivo da atualização
 
