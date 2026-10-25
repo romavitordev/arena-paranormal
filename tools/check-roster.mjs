@@ -97,7 +97,7 @@ ok(jaeX && jaeX.abilities.some((a) => a.type === 'shadowTrap' && a.blind > 0 && 
 const bal = get('balu');
 ok(bal && bal.origin === 'Ordo Realitas' && ['curseWeapon', 'demonAxe', 'caiDentro', 'selfBuff', 'heavyProtection'].every((t) => bal.abilities.some((a) => a.type === t)) && bal.ranged.boomerang && bal.ranged.returnsProp === 'axe' && bal.melee.ground && bal.melee.ground.otg && bal.grip.twoHand, 'Balu: pesado da Ordo Realitas, Amaldiçoar Arma, Machado Demônio (vida), Fala Imponente, 110%, Colete, machado que volta e Derrubar e Atacar');
 const banners = Object.fromEntries(ROSTER.map((c) => [c.id, c.special.banner]));
-ok(banners.gal_sal === 'Injustiça né?' && banners.kaiser === 'Cinerária!' && banners.joui === 'Shi no Kage!' && banners.aghata === 'Descarnar!' && banners.arthur === 'Solo do Abutre' && banners.kian === 'Inexistir', 'textos dos especiais na tela');
+ok(banners.gal_sal === 'Injustiça né?' && banners.kaiser === 'Cinerária!' && banners.joui === 'Execução das Sombras' && banners.aghata === 'Descarnar!' && banners.arthur === 'Solo do Abutre' && banners.kian === 'Inexistir', 'textos dos especiais na tela');
 ok(COMBAT.maxHealth === 1500 && COMBAT.maxEnergy === 100, 'vida 1500 e energia 100');
 // VIDA IGUAL PARA TODOS (1500, sem número na tela); os PORTADORES aguentam mais — Ferreiro e Arnaldo só transformados
 {
@@ -115,7 +115,7 @@ ok(COMBAT.startEnergy === 30 && COMBAT.energyRegen === 2.5 && COMBAT.chargeRate 
 ok(GAMEPAD_LAYOUT.block[0] === 7, 'defesa no RT / R2');
 ok(!GAMEPAD_LAYOUT.mod && GAMEPAD_LAYOUT.assist1[0] === 4 && GAMEPAD_LAYOUT.assist2[0] === 5, 'assistências no L1/LB e R1/RB (sem botão modificador)');
 ok(COMBAT.dodge.charges === 4 && COMBAT.dodge.damagePerCharge > 0, 'barra com 4 esquivas que recupera tomando dano');
-ok(ROSTER.find((c) => c.id === 'arthur').abilities[0].color === 0xa46bff, 'Rebirth roxo (os raios de Calamidade)');
+ok(ROSTER.find((c) => c.id === 'arthur').abilities[0].color === 0x3aff6a, 'Rebirth verde (a cor da HQ)');
 ok(!GAMEPAD_LAYOUT.lock, 'sem botão de travar câmera');
 ok(GAMEPAD_LAYOUT.dodge[0] === 6, 'esquiva no LT / L2 (separada da defesa)');
 
@@ -171,8 +171,22 @@ ok(mas.abilities.some((a) => a.type === 'teleportBehind' && a.input === 'carga+j
 const gaze = mas.abilities.find((a) => a.type === 'fearGaze');
 ok(gaze && gaze.stun <= 1 && gaze.cooldown >= 10, `Olhar do Desespero: atordoamento breve (${gaze && gaze.stun}s) e cooldown`);
 ok(mas.ranged.visual === 'shadow', 'Joui: □ é uma extensão de sombra');
-ok(mas.abilities.some((a) => a.id === 'pavorAnormal' && a.stun > 0) && ['oneByOne', 'precognition', 'iKnewIt'].every((t) => pas('joui', t)) && mas.awakening.passives.some((p) => p.type === 'disarmStrike'), 'Joui: Pavor Anormal, Um por Um, Precognição, Resistência Paranormal e Técnica Secreta (Desarmar)');
-ok(mas.special.type === 'teleportStrike', 'Joui: Corte Silencioso mantido');
+ok(mas.abilities.some((a) => a.id === 'pavorAnormal' && a.stun > 0) && ['oneByOne', 'precognition', 'iKnewIt'].every((t) => pas('joui', t)) , 'Joui: Pavor Anormal, Um por Um, Precognição e Resistência Paranormal');
+{
+  const sk = getForm('joui_shinokage');
+  ok(mas.awakening.type === 'maskTransform' && mas.awakening.form === 'joui_shinokage' && sk && sk.model === 'joui_shinokage', 'Joui: a Transformação é a forma Shi no Kage (fase final contra o Kian), com modelo/props próprios');
+  ok(!sk.abilities.some((a) => ['teleport', 'portalSombras'].includes(a.id)) && sk.ranged.visual !== 'shadow', 'Joui (Shi no Kage): sem os poderes da máscara (Teleporte das Sombras, Portal das Sombras, Sombra Rasteira)');
+  const dec = sk.abilities.find((a) => a.id === 'decepar');
+  ok(dec && dec.type === 'heavyBlow' && dec.bleed && dec.noHeal && dec.lowBonus, 'Joui (Shi no Kage): Decepar (sangra, ferida aberta, decapita na vida baixa)');
+  ok(sk.special.name === 'Shi no Kage' && sk.passives.some((p) => p.type === 'disarmStrike'), 'Joui (Shi no Kage): especial Shi no Kage e Técnica Secreta (Desarmar) passiva');
+  const mi = mas.abilities.find((a) => a.id === 'tomadoPeloOdio');
+  ok(mi && mi.type === 'selfBuff' && mi.meleeBleed && mi.redAura && !sk.abilities.some((a) => a.id === 'tomadoPeloOdio'), 'Joui mascarado: Tomado pelo Ódio (poderes da máscara, sangramento leve); não existe na forma sem máscara');
+  const kc = getForm('kian_calamidade');
+  ok(kc.abilities.some((a) => a.type === 'abductBeam') && kc.abilities.find((a) => a.id === 'laminaMedo').dying && kc.abilities.find((a) => a.id === 'teletransporte').cooldown < get('kian').abilities.find((a) => a.id === 'teletransporte').cooldown, 'Kian de Calamidade: kit próprio (Suspender, Lâmina que deixa MORRENDO, Teletransporte sem esforço)');
+  const rn = get('kian').abilities.find((a) => a.id === 'rejeitarNevoa');
+  ok(rn && rn.conjure > 0 && rn.radius > 0, 'Kian: Rejeitar Névoa pelo cânone (conjuração contínua na área, vale contra todos)');
+}
+ok(mas.special.type === 'teleportStrike', 'Joui mascarado: especial de sombra (Execução das Sombras)');
 
 // ---------------- Aghata ----------------
 const vam = get('aghata');
@@ -282,8 +296,8 @@ ok(dan && ['shuffle', 'lodoTentacles', 'agingHeal'].every((t) => dan.abilities.s
   const triA = ab && ab.abilities.find((a) => a.id === 'trinita');
   ok(tri && tri.fight && dan.awakening.type === 'maskTransform' && dan.awakening.scene === 'eyes' && dan.awakening.form === 'dante_aberto', 'Dante: as cópias do Trinitá lutam; a Transformação é Olhos Abertos (a cena dos olhos, forma dante_aberto)');
   ok(ab && ab.model === 'dante_aberto' && ['paradox', 'echoPain', 'decadence', 'agingHeal', 'lodoTentacles'].every((t) => ab.abilities.some((a) => a.type === t)) && triA && triA.copies === 4 && triA.recast
-    && ab.abilities.find((a) => a.type === 'agingHeal').noAging && ab.ranged.fromMouth && ab.ranged.variants.back.ability === 'rotura' && ab.special.ranged && ab.passives.some((p) => p.type === 'deathMarked'),
-  'Dante de Olhos Abertos: Decadência pela boca, Trinitá Aprimorado (4 cópias + troca de lugar), Paradoxo, Eco Espiral, Paradiso sem envelhecer, Rotura no ← + □, a Marionete com os Fios do Luto e Marcado pela Morte');
+    && ab.abilities.find((a) => a.type === 'agingHeal').heal > 0 && ab.ranged.fromMouth && ab.ranged.variants.back.ability === 'rotura' && ab.special.ranged && ab.passives.some((p) => p.type === 'deathMarked'),
+  'Dante de Olhos Abertos: Decadência pela boca, Trinitá Aprimorado (4 cópias + troca de lugar), Paradoxo, Eco Espiral, Paradiso mais forte, Rotura no ← + □, a Marionete com os Fios do Luto e Marcado pela Morte');
 }
 ok(dan && dan.special.type === 'marionette' && dan.special.duration <= 30 && dan.special.cooldown >= 30, 'Dante: especial Invocação da Marionete (NPC por tempo limitado, recarga alta)');
 ok(dan && allStrikes(dan).every((s) => !s.weapon), 'Dante: sem armas');

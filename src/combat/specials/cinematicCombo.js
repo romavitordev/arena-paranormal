@@ -18,6 +18,18 @@ import { HoloCopy } from '../holo.js';
 // sp.endReaction: { knockback, lowLaunch } — como o alvo sai da cena (padrão: lançado longe).
 
 const PREP_FX = {
+  // Joui com a Shi no Kage: saca a Relíquia de Energia (relâmpago roxo na mão esquerda) e os sigilos dourados da Shi no
+  // Kage acendem na direita
+  relicDraw(f, world) {
+    const hl = () => f.rig.sockets.handL.getWorldPosition(new THREE.Vector3());
+    const hr = () => f.rig.sockets.handR.getWorldPosition(new THREE.Vector3());
+    world.audio.play('slashFinal', { volume: 0.6, pitch: 0.7 });
+    world.fx.flash(hl(), { color: 0xb070ff, size: 1.6, life: 0.25 });
+    const e1 = world.fx.emitter({ rate: 80, follow: hl, particle: { color: 0xb070ff, speed: 1.4, spread: 0.5, life: 0.35, size: 0.16, jitter: 0.2 } });
+    const e2 = world.fx.emitter({ rate: 60, follow: hr, particle: { color: 0xffd27a, speed: 0.8, spread: 0.4, life: 0.5, size: 0.12 } });
+    const runes = world.fx.runes(() => f.chestPos(), { color: 0xffd27a, count: 6, radius: 0.8, size: 0.24 });
+    return [e1, e2, { stop: () => runes.stop() }];
+  },
   // Arthur: energia vermelha no antebraço e a Arma de Sangue surgindo
   forearmEnergy(f, world, sp) {
     const s = (sp.prepare && sp.prepare.arm) || 'R';

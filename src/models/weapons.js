@@ -140,6 +140,85 @@ export function katana() {
 
 // BAINHA (saya) do Joui: laca preta levemente curva, boca de chifre, ponteira de metal escuro e o SAGEO (cordão
 // vermelho) enrolado perto da boca com a laçada pendurada.
+// SHI NO KAGE ("Sombra da Morte") — a katana que a Magistrada dá ao Joui depois do ep. 9 de Calamidade (wiki "Joui
+// Jouki", Arsenal): lâmina PRETA, amaldiçoada com Conhecimento, com SIGILOS DE CONHECIMENTO DOURADOS que brilham na
+// lâmina. Mesma forma e empunhadura da katana dele (o Joui segura do mesmo jeito); cabo e tsuba escuros.
+export function shiNoKage() {
+  const g = katana();
+  const black = toon(0x121014, { emissive: 0x050405 });
+  const edge = toon(0x3a3640, { emissive: 0x0c0a10 });
+  g.traverse((o) => {
+    if (!o.isMesh || o.userData.isOutline) return;
+    const c = o.material && o.material.color && o.material.color.getHex();
+    if (c === 0x76808e) o.material = black; // corpo da lâmina
+    else if (c === 0xf6f9ff) o.material = edge; // o fio: cinza escuro, sem o brilho de aço
+    else if (c === 0xa0141c || c === 0x9a1018 || c === 0xe6e0d2) o.material = toon(0x1c1a1e); // trançado, tsuba e cabo
+  });
+  // os sigilos dourados ao longo da lâmina, nas duas faces (traços curtos como escrita cuneiforme)
+  const gold = glowMat(0xffd27a, 1);
+  const LEN = 0.84;
+  for (let i = 0; i < 9; i++) {
+    const y = -0.15 - i * (LEN - 0.12) / 9;
+    const curve = 0.05 * ((-y - 0.09) / LEN) ** 2; // acompanha a curvatura (sori) da lâmina
+    for (const side of [1, -1]) {
+      const strokes = i % 2 ? [[0, 0.0], [0.6, 0.012]] : [[-0.5, 0.0], [0.5, 0.0], [0, 0.014]];
+      for (const [rot, dy] of strokes) {
+        const s = new THREE.Mesh(new THREE.BoxGeometry(0.0015, 0.026, 0.008), gold);
+        s.position.set(side * 0.0045, y + dy, 0.018 + curve);
+        s.rotation.x = rot;
+        g.add(s);
+      }
+    }
+  }
+  // o brilho fraco que acompanha a lâmina (o Conhecimento)
+  const halo = new THREE.Mesh(new THREE.BoxGeometry(0.004, LEN, 0.05), glowMat(0xffd27a, 0.12));
+  halo.position.set(0, -0.09 - LEN / 2, 0.02);
+  g.add(halo);
+  return g;
+}
+
+// A RELÍQUIA DE ENERGIA sacada (a katana antiga do Joui depois que a Relíquia se assimilou a ela — wiki: "uma forma
+// brilhante similar a um sabre de luz"): cabo escuro e a lâmina de luz roxa com o halo. Só aparece no especial da forma.
+export function relicBlade() {
+  const g = new THREE.Group();
+  const grip = part(new THREE.CylinderGeometry(0.019, 0.018, 0.24, 10), 0x1c1a1e);
+  grip.position.y = 0.04;
+  g.add(grip);
+  const guard = part(new THREE.CylinderGeometry(0.045, 0.045, 0.012, 8), 0x2a2030);
+  guard.position.y = -0.085;
+  g.add(guard);
+  const LEN = 0.84;
+  const core = new THREE.Mesh(new THREE.BoxGeometry(0.012, LEN, 0.03), glowMat(0xf4e8ff, 1));
+  core.position.y = -0.09 - LEN / 2;
+  g.add(core);
+  const glow = new THREE.Mesh(new THREE.BoxGeometry(0.03, LEN + 0.02, 0.06), glowMat(0xb070ff, 0.55));
+  glow.position.copy(core.position);
+  g.add(glow);
+  const halo = new THREE.Mesh(new THREE.BoxGeometry(0.07, LEN + 0.06, 0.11), glowMat(0x8a40ff, 0.18));
+  halo.position.copy(core.position);
+  g.add(halo);
+  g.userData.tipLength = 0.93;
+  return g;
+}
+
+// A bainha que a Magistrada fez para conter a RELÍQUIA DE ENERGIA (a katana antiga do Joui): os Sigilos de Conhecimento
+// ROXOS brilhando ao longo dela (wiki "Joui Jouki", Arsenal de Calamidade)
+export function relicScabbard() {
+  const g = scabbard();
+  const purple = glowMat(0xb070ff, 1);
+  for (let i = 0; i < 7; i++) {
+    const t = (i + 1) / 8;
+    const s = new THREE.Mesh(new THREE.BoxGeometry(0.004, 0.03, 0.012), purple);
+    s.position.set(0.015, -0.86 * t, 0.05 * t * t + 0.004);
+    s.rotation.z = i % 2 ? 0.5 : -0.5;
+    g.add(s);
+    const s2 = s.clone();
+    s2.position.x = -0.015;
+    g.add(s2);
+  }
+  return g;
+}
+
 export function scabbard() {
   const g = new THREE.Group();
   const LEN = 0.86;

@@ -434,6 +434,14 @@ export const ABILITY_TYPES = {
           world.fx.burst(opp.chestPos(), { count: 30, color: 0x1a0610, kind: 'smoke', speed: 2, life: 1.0, size: 0.8, grow: 1 });
           world.fx.burst(opp.chestPos(), { count: 16, color: a.color, speed: 3, life: 0.6, size: 0.2 });
           opp.notify('DESESPERO', true);
+          // a.wither (Joui com a Shi no Kage — cânone do Olhar do Desespero: "paralisa... ou torna-o ESMORECIDO"): passada a
+          // paralisia, o alvo fica esmorecido — bate mais fraco por alguns segundos
+          if (a.wither) {
+            const old = opp.findBuff('withered');
+            if (old) old.time = a.wither.duration;
+            else opp.addBuff({ type: 'withered', name: 'ESMORECIDO', time: a.wither.duration, duration: a.wither.duration, mult: a.wither.mult, affects: ['melee', 'ranged', 'ability', 'special'] });
+            world.after(a.stun, () => { if (opp.state !== 'ko') opp.notify('ESMORECIDO', true); });
+          }
           world.onHit && world.onHit(f, opp, 0, { kind: 'ability', ability: a.id });
         }
       });
@@ -742,7 +750,16 @@ export const ABILITY_TYPES = {
         }
       });
       tl.end(a.vanishTime + (a.strike ? 0.45 : 0.15));
+      // a.recastWindow (Kian de Calamidade: ele se teleporta sem esforço): depois deste salto, um SEGUNDO sai de graça
+      // apertando de novo dentro da janela (Fighter.useAbility chama recast enquanto a habilidade recarrega)
+      if (a.recastWindow && !a._second) f.blinkRecast = { until: world.time + a.recastWindow, id: a.id };
       return seqFrom(tl, { cancel: () => f.setVisible(true), cancelable: () => tl.time > a.vanishTime + 0.02 });
+    },
+    recast(f, a, world) {
+      const r = f.blinkRecast;
+      if (!r || r.id !== a.id || world.time > r.until) return null;
+      f.blinkRecast = null;
+      return ABILITY_TYPES.blink.start(f, { ...a, _second: true }, world);
     },
   },
 
@@ -894,6 +911,15 @@ export const ABILITY_TYPES = {
               sound: 'fearBlade', color: a.color, scale: 2.2, dir: forwardFromYaw(f.yaw),
             });
             if (typeof res === 'number' && res > 0) world.fx.distort(opp.chestPos(), { color: a.color, radius: 2.6, life: 0.45 });
+            // a.dying (Kian de Calamidade — cânone: "ao perfurar um alvo deixa o mesmo MORRENDO no mesmo instante"):
+            // o alvo fica MORRENDO — sangra medo por alguns segundos e a sanidade dele não regenera
+            if (a.dying && typeof res === 'number' && res > 0 && opp.state !== 'ko') {
+              opp.applyBleed({ dps: a.dying.dps, duration: a.dying.duration, color: a.color }, f);
+              const old = opp.findBuff('dying');
+              if (old) old.time = a.dying.duration;
+              else opp.addBuff({ type: 'dying', name: 'MORRENDO', time: a.dying.duration, duration: a.dying.duration, noRegen: true });
+              opp.notify('MORRENDO', true);
+            }
           }
         }
       });
@@ -1123,6 +1149,15 @@ Object.assign(ABILITY_TYPES, {
           opp.addBuff({ type: 'deathMark', name: 'TOQUE DA MORTE', time: Infinity, duration: Infinity, mult: a.roundWeaken, affects: ['melee', 'ranged', 'ability', 'special'] });
           world.fx.ring(new THREE.Vector3(opp.pos.x, 0.06, opp.pos.z), { color: 0x8a8090, radius: 2.4, life: 0.6 });
         }
+        // a.drainAll (Kian de Calamidade — cânone: o corpo "tem praticamente a vida sugada"): a sanidade do alvo é
+        // sugada até zero e não regenera enquanto ele envelhece
+        if (a.drainAll) {
+          opp.energy = 0;
+          const ag = opp.findBuff('aging');
+          if (ag) ag.noRegen = true;
+          world.fx.chain(() => opp.chestPos(), () => f.rig.sockets.handR.getWorldPosition(new THREE.Vector3()), { color: 0x8a8090, life: 0.5 });
+          opp.notify('SANIDADE SUGADA', true);
+        }
         opp.notify('TOQUE DA MORTE', true);
       });
       tl.end(a.windup + a.recovery);
@@ -1306,7 +1341,62 @@ Object.assign(ABILITY_TYPES, {
     },
   },
 
-  // Kian — Rejeitar Névoa: enfraquece drasticamente os rituais na área.
+  // Joui (mascarado) — PORTAL DAS SOMBRAS (cânone, wiki "Joui Jouki", Calamidade: "um ritual que criava um portal pelas
+  // sombras; um objeto, como sua katana, seria transportado para sua mão"). Ele crava a katana na PRÓPRIA SOMBRA; um
+  // portal de sombra abre debaixo do adversário (o aviso: o disco escuro de borda vermelha, a.warn s) e a lâmina SOBE dele
+  // cortando e lançando — quem sair de cima a tempo escapa; depois a katana volta para a mão dele por outro portal.
+  shadowPortal: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      if (!opp || opp.state === 'ko') return null;
+      if (distXZ(f.pos, opp.pos) > a.range) { f.notify('LONGE DEMAIS'); return null; }
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play('slash_v', { restart: true, duration: 0.45 });
+      world.audio.play('teleport', { volume: 0.7, pitch: 0.8 });
+      const katana = f.rig.props.katana;
+      const mine = new THREE.Vector3(f.pos.x, 0, f.pos.z);
+      const spot = new THREE.Vector3(opp.pos.x, 0, opp.pos.z);
+      // 1) a lâmina afunda na sombra dele
+      tl.add(0.2, () => {
+        world.fx.shadowDisc(mine.clone().add(forwardFromYaw(f.yaw).multiplyScalar(0.7)), { radius: 0.8, life: 0.5, rim: a.color });
+        if (katana) f.rig.showProp('katana', false);
+        world.fx.burst(new THREE.Vector3(mine.x, 0.3, mine.z), { count: 18, color: 0x0a0608, kind: 'smoke', speed: 1.2, up: 0.6, life: 0.6, size: 0.5 });
+      });
+      // 2) o portal abre debaixo do adversário (onde ele ESTAVA) — dá para sair de cima
+      tl.add(0.25, () => world.fx.shadowDisc(spot, { radius: a.radius, life: a.warn + 0.45, rim: a.color, grow: true }));
+      // 3) a lâmina sobe do portal cortando
+      tl.add(0.25 + a.warn, () => {
+        const top = new THREE.Vector3(spot.x, 1.2, spot.z);
+        world.fx.slash(top, f.yaw + Math.PI / 2, { color: a.color, radius: 1.6, arc: 2.2, life: 0.3, width: 0.5, roll: 1.55 });
+        world.fx.burst(top, { count: 26, color: 0x0a0608, kind: 'smoke', speed: 3, up: 2, life: 0.6, size: 0.5 });
+        world.audio.play('slashFinal', { volume: 0.9 });
+        const inside = distXZ(opp.pos, spot) <= a.radius + opp.radius * 0.5;
+        if (!inside || opp.state === 'ko' || opp.state === 'dodge' || opp.isInvulnerable()) { f.notify('ERROU O PORTAL', true); return; }
+        applyHit(world, f, opp, { damage: a.damage, kind: 'ability', element: a.element, launch: true, high: true, hitstun: 0.9, knockback: 0.4, unblockable: true, color: a.color, sound: 'bladeHit', scale: 1.5, dir: new THREE.Vector3(0, 1, 0) });
+      });
+      // 4) a katana volta para a mão pelo portal
+      tl.add(0.6 + a.warn, () => {
+        if (katana) f.rig.showProp('katana', true);
+        world.fx.burst(f.rig.sockets.handR.getWorldPosition(new THREE.Vector3()), { count: 14, color: 0x0a0608, kind: 'smoke', speed: 1, life: 0.4, size: 0.3 });
+      });
+      tl.end(0.7 + a.warn);
+      return seqFrom(tl, { cancel: () => { if (katana) f.rig.showProp('katana', true); } });
+    },
+  },
+
+  // Kian — REJEITAR NÉVOA (cânone, wiki "Rituais": "em um raio de 20 metros a névoa é dissipada, fazendo com que todos
+  // os rituais nesse raio demorem muito mais para serem conjurados, e rituais de conjuração instantânea se tornam
+  // rituais de conjuração contínua"). Cria por a.duration s uma área de raio a.radius em volta de onde ele está:
+  //  - todo RITUAL (habilidade △/R2) que o adversário começar lá dentro vira CONJURAÇÃO CONTÍNUA: ele fica a.conjure s
+  //    parado conjurando (o sigilo aparece) antes do ritual sair, e um golpe nesse meio tempo INTERROMPE (a sanidade
+  //    gasta não volta) — Fighter.useAbility, `rejectMistFor`;
+  //  - o que sair de dentro sai enfraquecido (a.weaken, só rituais: `ritualWeak` em 'ability');
+  //  - a névoa da Kaiser (Baforada e Cinerária) que tocar a área se dissipa na hora (a interação do cânone com as
+  //    Máscaras/névoa continua).
+  // Não afeta golpes físicos, tiros comuns, o especial nem a Transformação (não são rituais conjurados) — contrajogo:
+  // sair da área, lutar sem rituais ou bater no Kian.
   rejectMist: {
     start(f, a, world) {
       const tl = new Timeline();
@@ -1314,27 +1404,81 @@ Object.assign(ABILITY_TYPES, {
       f.anim.play('charge_fists', { restart: true, duration: 0.6 });
       world.audio.play('blink', { pitch: 0.7 });
       tl.add(0.3, () => {
-        world.fx.ring(new THREE.Vector3(f.pos.x, 0.06, f.pos.z), { color: a.color, radius: a.radius, life: 0.6 });
+        if (f.rejectMistZone) f.rejectMistZone.end();
+        const c = new THREE.Vector3(f.pos.x, 0, f.pos.z);
+        world.fx.ring(new THREE.Vector3(c.x, 0.06, c.z), { color: a.color, radius: a.radius, life: 0.6 });
         world.fx.distort(f.chestPos(), { color: a.color, radius: a.radius * 0.6, life: 0.5 });
-        // dissipa as zonas paranormais do inimigo que estiverem na área
+        // a borda da área no chão (fica enquanto dura) e a névoa dourada se desfazendo para fora
+        const mat = new THREE.MeshBasicMaterial({ color: a.color, transparent: true, opacity: 0.0, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite: false });
+        const edge = new THREE.Mesh(new THREE.RingGeometry(a.radius - 0.18, a.radius, 64), mat);
+        edge.rotation.x = -Math.PI / 2;
+        edge.position.set(c.x, 0.05, c.z);
+        world.scene.add(edge);
+        const glyphs = world.fx.emitter({
+          rate: 26,
+          follow: () => { const ang = Math.random() * Math.PI * 2; return new THREE.Vector3(c.x + Math.sin(ang) * a.radius, 0.2 + Math.random() * 0.8, c.z + Math.cos(ang) * a.radius); },
+          particle: { color: a.color, speed: 0.3, up: 0.8, spread: 0.3, life: 0.9, size: 0.18 },
+        });
+        let t = 0;
         let cleared = 0;
-        for (const z of world.zones) {
-          if (z.owner === f || !z.alive) continue;
-          const zc = z.center();
-          if (Math.hypot(zc.x - f.pos.x, zc.z - f.pos.z) <= a.radius + (z.radius || 0)) {
-            if (z.end) z.end();
-            else z.alive = false;
-            cleared++;
-          }
-        }
+        const zone = world.addZone({ owner: f, center: () => c, radius: a.radius, rejectMist: { conjure: a.conjure ?? 0.7, color: a.color } });
+        zone.end = () => {
+          if (!zone.alive) return;
+          zone.alive = false;
+          glyphs.stop();
+          world.scene.remove(edge);
+          edge.geometry.dispose();
+          mat.dispose();
+          if (f.rejectMistZone === zone) f.rejectMistZone = null;
+        };
+        f.rejectMistZone = zone;
+        world.addTicker({
+          update(dt) {
+            if (!zone.alive) return true;
+            t += dt;
+            mat.opacity = Math.min(0.55, t * 3) * (t > a.duration - 0.5 ? Math.max(0, (a.duration - t) / 0.5) : 1);
+            // dissipa as zonas paranormais do inimigo que tocarem a área (a névoa da Kaiser)
+            for (const z of world.zones) {
+              if (z === zone || z.owner === f || !z.alive || z.rejectMist) continue;
+              const zc = z.center();
+              if (Math.hypot(zc.x - c.x, zc.z - c.z) <= a.radius + (z.radius || 0)) {
+                if (z.end) z.end();
+                else z.alive = false;
+                cleared++;
+                f.notify('NÉVOA REJEITADA', true);
+              }
+            }
+            // os rituais que saem de dentro saem enfraquecidos
+            for (const o of world.fighters || []) {
+              if (o === f || o.state === 'ko' || (o.team && o.team === f.team)) continue;
+              if (Math.hypot(o.pos.x - c.x, o.pos.z - c.z) > a.radius) continue;
+              const old = o.findBuff('ritualWeak');
+              if (old) old.time = 0.25;
+              else o.addBuff({ type: 'ritualWeak', name: 'RITUAIS ENFRAQUECIDOS', time: 0.25, duration: 0.25, mult: a.weaken, affects: ['ability'], silent: true });
+            }
+            if (t >= a.duration || f.state === 'ko') { zone.end(); return true; }
+            return false;
+          },
+          dispose() { zone.end(); },
+        });
         const opp = f.opponent;
         if (opp && opp.state !== 'ko' && distXZ(opp.pos, f.pos) <= a.radius) {
-          const old = opp.findBuff('ritualWeak');
-          if (old) old.time = a.duration;
-          else opp.addBuff({ type: 'ritualWeak', name: 'RITUAIS ENFRAQUECIDOS', time: a.duration, duration: a.duration, mult: a.weaken, affects: ['ability', 'ranged'] });
-          opp.notify('RITUAIS ENFRAQUECIDOS', true);
+          opp.notify('REJEITAR NÉVOA: RITUAIS LENTOS', true);
+          // a.dispel (Kian de Calamidade): os rituais que ele JÁ TEM ATIVOS se desfazem (estados de reforço: dano, defesa,
+          // velocidade, escudo, alcance). A Transformação e o reforço da equipe não são rituais e ficam.
+          if (a.dispel) {
+            let n = 0;
+            for (const bf of opp.buffs) {
+              if (bf.type === 'awakened' || bf.teamEmpower || bf.duration === Infinity || !(bf.time > 0)) continue;
+              const good = (bf.mult && bf.mult > 1) || (bf.takenMult && bf.takenMult < 1) || (bf.speedMult && bf.speedMult > 1) || bf.shield || bf.rangeBonus || (bf.atkSpeed && bf.atkSpeed > 1);
+              if (good) { bf.time = 0; n++; }
+            }
+            if (n) {
+              opp.notify('RITUAIS DESFEITOS', true);
+              world.fx.burst(opp.chestPos(), { count: 30, color: a.color, speed: 3, life: 0.6, size: 0.18 });
+            }
+          }
         }
-        if (cleared) f.notify('NÉVOA REJEITADA', true);
       });
       tl.end(0.6);
       return seqFrom(tl);
@@ -1491,6 +1635,18 @@ Object.assign(ABILITY_TYPES, {
       f.anim.play('breath', { restart: true, duration: 0.6 });
       world.audio.play(style === 'comfort' ? 'ritual' : 'smoke', { volume: 0.7, pitch: style === 'comfort' ? 1.3 : 1 });
       tl.add(0.3, () => {
+        // a.cleanse (Mateo do Joui com a Shi no Kage — cânone: o Envelhecimento Localizado ACELERA A CICATRIZAÇÃO da ferida):
+        // o tempo corre só ali e as feridas FECHAM — sangramento, MORRENDO, envelhecimento, queimadura, cegueira, surdez,
+        // ferida aberta e enfraquecimentos saem na hora
+        if (a.cleanse) {
+          let n = 0;
+          for (const bf of f.buffs) {
+            if (!(bf.time > 0) || !CLEANSE.has(bf.type)) continue;
+            bf.time = 0;
+            n++;
+          }
+          if (n) f.notify('FERIDAS FECHADAS', true);
+        }
         let given = 0;
         let ang = 0;
         const emitters = [];
@@ -2115,8 +2271,14 @@ Object.assign(ABILITY_TYPES, {
           hit = true;
           // a.downBonus (Decepar do Cristino): no alvo atordoado, agarrado ou puxado o golpe entra mais fundo
           const helpless = ['stun', 'grabbed', 'pulled'].includes(opp.state);
-          const dmg = a.downBonus && helpless ? Math.round(a.damage * a.downBonus) : a.damage;
+          let dmg = a.downBonus && helpless ? Math.round(a.damage * a.downBonus) : a.damage;
           if (a.downBonus && helpless) f.notify(a.downLabel || 'GOLPE CERTEIRO', true);
+          // a.lowBonus (Decepar do Joui — cânone: "se o dano for suficiente para matar, pode decapitar"): no alvo com a
+          // vida baixa (já "morrendo") o corte vai no pescoço
+          if (a.lowBonus && opp.health <= opp.maxHealth * a.lowBonus.below) {
+            dmg = Math.round(dmg * a.lowBonus.mult);
+            f.notify(a.lowBonus.label || 'DECAPITOU', true);
+          }
           // a.stun (Pressão Atmosférica do Dalmo): o alvo fica ATORDOADO no lugar em vez de ser lançado
           const res = applyHit(world, f, opp, {
             damage: dmg, kind: 'ability', element: a.element, knockback: a.knockback, hitstun: 1.0,
@@ -2593,12 +2755,24 @@ Object.assign(ABILITY_TYPES, {
       world.audio.play('fearGaze', { volume: 0.7, pitch: 0.8 });
       const spot = new THREE.Vector3(opp.pos.x, 0, opp.pos.z);
       const R = a.radius ?? 1.4;
+      // a.sigils (Kian — Levitação: Suspender): em vez do feixe de luz do Estrangeiro, os SIGILOS DE CONHECIMENTO sobem do
+      // chão em volta do alvo e giram em volta dele enquanto ele fica suspenso
+      if (a.sigils) {
+        const runes = world.fx.runes(() => new THREE.Vector3(spot.x, 0.4, spot.z), { color: a.color, count: 8, radius: R, size: 0.3 });
+        const glyphs = world.fx.emitter({ rate: 40, follow: () => { const ang = Math.random() * Math.PI * 2; return new THREE.Vector3(spot.x + Math.sin(ang) * R, 0.1, spot.z + Math.cos(ang) * R); }, particle: { color: a.color, speed: 0.2, up: 2.6, spread: 0.1, life: 0.8, size: 0.14 } });
+        world.after(a.windup, () => { runes.stop(); glyphs.stop(); });
+        world.after(a.windup + 0.05, () => {
+          if (opp.state === 'ko') return;
+          const held = world.fx.runes(() => opp.chestPos(), { color: a.color, count: 6, radius: 0.9, size: 0.28 });
+          world.after(a.drop ?? 0.65, () => held.stop());
+        });
+      }
       const beam = new THREE.Mesh(
         new THREE.CylinderGeometry(R * 0.55, R, 9, 24, 1, true),
         new THREE.MeshBasicMaterial({ color: a.color, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide }),
       );
       beam.position.set(spot.x, 4.5, spot.z);
-      world.scene.add(beam);
+      if (!a.sigils) world.scene.add(beam);
       let life = 0;
       world.addTicker({
         update(dt) {
@@ -2613,10 +2787,10 @@ Object.assign(ABILITY_TYPES, {
       for (let i = 0; i < 4; i++) tl.add(i * (a.windup / 4), () => world.fx.ring(new THREE.Vector3(spot.x, 0.07, spot.z), { color: a.color, radius: R, life: 0.25, inner: 0.82 }));
       tl.add(a.windup, () => {
         const inside = distXZ(opp.pos, spot) <= R + opp.radius * 0.5;
-        if (!inside || opp.state === 'ko' || opp.state === 'dodge' || opp.isInvulnerable()) { f.notify('ESCAPOU DA LUZ', true); return; }
+        if (!inside || opp.state === 'ko' || opp.state === 'dodge' || opp.isInvulnerable()) { f.notify(a.missLabel || 'ESCAPOU DA LUZ', true); return; }
         world.fx.distort(opp.chestPos(), { color: a.color, radius: 1.6, life: 0.35 });
         world.audio.play('teleport', { volume: 0.7, pitch: 0.6 });
-        opp.notify('ABDUZIDO', true);
+        opp.notify(a.hitLabel || 'ABDUZIDO', true); // a.hitLabel / a.missLabel: os textos de quem usa (Kian: SUSPENSO)
         applyHit(world, f, opp, { damage: Math.round(a.damage * 0.4), kind: 'ability', element: a.element, launch: true, high: true, hitstun: a.lift ?? 0.9, knockback: 0.2, unblockable: true, color: a.color, sound: 'impact', scale: 1.1, dir: forwardFromYaw(f.yaw) });
         // e cospe de volta no chão
         world.after(a.drop ?? 0.65, () => {
@@ -3366,7 +3540,15 @@ Object.assign(ABILITY_TYPES, {
         const trail = a.trail === false ? null : world.fx.emitter({ rate: 24, follow: () => f.chestPos(), particle: { color: a.color, speed: 0.4, spread: 0.4, life: 0.4, size: 0.16 } });
         if (a.refillDodges) f.dodges = Math.max(f.dodges, a.refillDodges);
         if (a.armor) f.armorHits = (f.armorHits || 0) + a.armor; // estabilidade: aguenta golpes sem recuar
-        f.addBuff({ type: a.buffType, name: a.label || a.name.toUpperCase(), time: a.duration, duration: a.duration, speedMult: a.speedMult, mult: a.damageMult, affects: a.affects, takenMult: a.takenMult, takenKinds: a.takenKinds, extraHit: a.extraHit, atkSpeed: a.atkSpeed, knockbackTakenMult: a.knockbackTakenMult, idleAnim: a.idleAnim, onEnd() { trail && trail.stop(); if (a.armor) f.armorHits = Math.max(0, (f.armorHits || 0) - a.armor); } });
+        // a.redAura (Joui — Tomado pelo Ódio): a aura vermelha dos Mascarados em volta do corpo enquanto dura, e o
+        // clarão vermelho ao ativar; a.meleeBleed: os golpes físicos fazem sangrar (damage.js)
+        const aura = a.redAura ? world.fx.emitter({ rate: 34, follow: () => f.chestPos(), particle: { color: a.redAura, speed: 1, up: 1.2, spread: 0.6, life: 0.55, size: 0.2 } }) : null;
+        if (a.redAura) {
+          world.fx.flash(f.chestPos(), { color: a.redAura, size: 2.2, life: 0.2 });
+          world.screenFlash && world.screenFlash('#3a0606', 0.12);
+          world.audio.play('maskOn', { volume: 0.6, pitch: 0.9 });
+        }
+        f.addBuff({ type: a.buffType, name: a.label || a.name.toUpperCase(), time: a.duration, duration: a.duration, speedMult: a.speedMult, mult: a.damageMult, affects: a.affects, takenMult: a.takenMult, takenKinds: a.takenKinds, extraHit: a.extraHit, atkSpeed: a.atkSpeed, knockbackTakenMult: a.knockbackTakenMult, idleAnim: a.idleAnim, meleeBleed: a.meleeBleed, onEnd() { trail && trail.stop(); aura && aura.stop(); if (a.armor) f.armorHits = Math.max(0, (f.armorHits || 0) - a.armor); } });
         f.notify(a.label || a.name.toUpperCase(), true);
       });
       tl.end(castT);
@@ -3374,6 +3556,51 @@ Object.assign(ABILITY_TYPES, {
     },
   },
 });
+
+// REJEITAR NÉVOA (Kian): o que não é ritual não passa pela conjuração contínua — técnicas de arma, granadas, armadilhas
+// mecânicas, golpes de força e o Especial em Equipe. `a.ritual === false` numa habilidade também tira ela da regra.
+const NOT_RITUAL = new Set(['throwProjectile', 'bearTrap', 'heavyBlow', 'sweepStrike', 'calmEvade', 'arenaGrab', 'stompQuake', 'arenaCounterStance', 'teamSpecial', 'rejectMist']);
+
+// os estados ruins que o Mateo (Joui com a Shi no Kage) fecha na hora
+const CLEANSE = new Set(['bleed', 'noHeal', 'dying', 'aging', 'burn', 'blind', 'deaf', 'ritualWeak', 'curseSlow', 'lodoWeak', 'withered', 'deathMark', 'impaled', 'grabSlow', 'chaosSlow']);
+
+// a área de Rejeitar Névoa de um ADVERSÁRIO em que f está agora (ou null)
+export function rejectMistFor(world, f, a) {
+  if (!a || a.ritual === false || NOT_RITUAL.has(a.type)) return null;
+  for (const z of world.zones || []) {
+    if (!z.alive || !z.rejectMist || z.owner === f || (z.owner && z.owner.team && z.owner.team === f.team)) continue;
+    const c = z.center();
+    if (Math.hypot(f.pos.x - c.x, f.pos.z - c.z) <= z.radius) return z;
+  }
+  return null;
+}
+
+// CONJURAÇÃO CONTÍNUA: f fica parado conjurando (o sigilo dourado gira em volta dele) por z.rejectMist.conjure s antes
+// de o ritual sair; um golpe cancela (cancelAction → cancel). Sai: chama start() e passa a sequência dele adiante.
+export function conjureSeq(f, z, start) {
+  const world = f.world;
+  const R = z.rejectMist;
+  f.vel.set(0, 0, 0);
+  f.anim.play('concentrate', { restart: true, duration: R.conjure });
+  world.audio.play('ritual', { volume: 0.5, pitch: 0.8 });
+  const runes = world.fx.runes(() => f.chestPos(), { color: R.color, count: 6, radius: 0.7, size: 0.26 });
+  f.notify('CONJURAÇÃO CONTÍNUA', true);
+  let t = 0;
+  return {
+    update(dt) {
+      t += dt;
+      if (t < R.conjure) return false;
+      runes.stop();
+      const seq = start();
+      if (seq) f.seq = seq; // o loop do Fighter mantém a sequência nova
+      return true;
+    },
+    cancel() {
+      runes.stop();
+      f.notify('RITUAL INTERROMPIDO', true);
+    },
+  };
+}
 
 // Zona de névoa da Kaiser (usada pela Baforada e pelo especial Cinerária)
 export function createMistZone(world, owner, o) {
@@ -3615,7 +3842,11 @@ Object.assign(ABILITY_TYPES, {
       tl.add(0.3, () => {
         if (f.shadowTrap) f.shadowTrap.remove();
         const F = forwardFromYaw(f.yaw);
-        const pos = new THREE.Vector3(f.pos.x + F.x * 1.6, 0, f.pos.z + F.z * 1.6);
+        // a.atTarget (Joui com a Shi no Kage): o Símbolo é riscado DEBAIXO do adversário (até a.atTarget m) — o aviso
+        // aparece e arma em 0,6 s (dá para sair de cima)
+        const opp0 = f.opponent;
+        const far = a.atTarget && opp0 && opp0.state !== 'ko' && distXZ(f.pos, opp0.pos) <= a.atTarget;
+        const pos = far ? new THREE.Vector3(opp0.pos.x, 0, opp0.pos.z) : new THREE.Vector3(f.pos.x + F.x * 1.6, 0, f.pos.z + F.z * 1.6);
         const mark = groundMark(world, pos, a.radius, a.color, 0.5);
         world.audio.play('grenadePin', { volume: 0.5 });
         let t = 0;

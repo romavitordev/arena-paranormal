@@ -1,9 +1,25 @@
 // VERSÃO PARA PC (Electron): abre o jogo numa janela própria, em tela cheia e sem internet.
 // O jogo é servido pelo protocolo app:// (e não file://) porque o fetch dos modelos .glb, sons e JSON não funciona
 // em file:// — o protocolo privilegiado se comporta como um site normal (https).
-const { app, BrowserWindow, protocol, net, shell, Menu } = require('electron');
+const { app, BrowserWindow, protocol, net, shell, Menu, session } = require('electron');
 const path = require('node:path');
+const fs = require('node:fs');
 const { pathToFileURL } = require('node:url');
+
+// Versão nova instalada por cima da antiga: limpa o cache do navegador e qualquer service worker/cache guardado, para
+// os modelos (.glb), sons e imagens virem do pacote novo (na v3.41.0 o Arthur e o Joui antigos continuavam aparecendo).
+// localStorage (opções, progresso da Torre, aprendizado da CPU) fica.
+async function clearOldCaches() {
+  const mark = path.join(app.getPath('userData'), 'versao-cache.txt');
+  let last = '';
+  try { last = fs.readFileSync(mark, 'utf8').trim(); } catch { /* primeira vez */ }
+  if (last === app.getVersion()) return;
+  try {
+    await session.defaultSession.clearCache();
+    await session.defaultSession.clearStorageData({ storages: ['serviceworkers', 'cachestorage'] });
+  } catch { /* sem cache para limpar */ }
+  try { fs.writeFileSync(mark, app.getVersion()); } catch { /* sem permissão: tenta de novo na próxima */ }
+}
 
 const DIST = path.join(__dirname, '..', 'dist');
 
@@ -36,8 +52,9 @@ function createWindow() {
   win.loadURL('app://jogo/index.html');
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   Menu.setApplicationMenu(null);
+  await clearOldCaches();
   protocol.handle('app', (request) => {
     let { pathname } = new URL(request.url);
     if (pathname.endsWith('/')) pathname += 'index.html';

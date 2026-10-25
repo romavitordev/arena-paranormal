@@ -124,16 +124,21 @@ export default {
       color: 0xb8aaff,
     },
     {
+      // cânone (wiki "Rituais"): no raio do ritual a névoa se dissipa e TODOS OS RITUAIS DEMORAM MUITO MAIS PARA SEREM
+      // CONJURADOS — os instantâneos viram conjuração contínua. Aqui: uma área em volta dele onde todo ritual do
+      // adversário precisa ser conjurado parado (e um golpe interrompe); vale contra o elenco inteiro. A névoa da Kaiser
+      // que tocar a área some na hora (a interação especial continua).
       id: 'rejeitarNevoa',
       name: 'Rejeitar Névoa',
       input: 'block+jump', // R2 + × / RT + A
       type: 'rejectMist',
-      description: 'Enfraquece drasticamente os rituais na área: dissipa névoas e zonas do inimigo e corta o dano dos rituais e do ataque principal dele por alguns segundos.',
+      description: 'Dissipa a névoa em volta dele por 6 s: dentro da área, todo ritual do adversário vira conjuração contínua (0,7 s parado, um golpe interrompe) e sai 25% mais fraco. A névoa da Kaiser some na hora.',
       energyCost: 25,
-      cooldown: 16,
-      radius: 7,
-      duration: 4,
-      weaken: 0.6,
+      cooldown: 18,
+      radius: 6,
+      duration: 6,
+      conjure: 0.7,
+      weaken: 0.75,
       color: 0xffd88a,
     },
     {
@@ -182,12 +187,14 @@ export default {
   // BARBA CRESCE (rala → cheia), as faixas aparecem nos antebraços e ele vira o Kian de Calamidade até o fim do round
   // (forms/kian_calamidade.js: golpes físicos atravessam a defesa — o Invólucro do Conhecimento — e tudo mais forte)
   awakening: {
-    name: 'Kian de Calamidade',
-    banner: 'Calamidade',
+    // nome: o título canônico dele — "aquele destinado a realizar a Calamidade" (wiki "Kian"; o tema da batalha contra
+    // ele em Calamidade se chama "Realizador da Calamidade")
+    name: 'Realizador da Calamidade',
+    banner: 'Realizador da Calamidade',
     type: 'maskTransform',
     scene: 'calamity',
     form: 'kian_calamidade',
-    formBanner: 'CALAMIDADE',
+    formBanner: 'REALIZADOR DA CALAMIDADE',
     swap: [['beard_s', false], ['beard_m', false], ['beard_f', true], ['wraps', true]],
     finalAnim: 'powerup',
     tint: 0xffd27a,

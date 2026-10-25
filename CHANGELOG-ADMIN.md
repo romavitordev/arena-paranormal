@@ -1,5 +1,30 @@
 # Registro administrativo de alterações
 
+## v3.42.0 — Sombra da Morte
+
+- Versão: `VERSION` 3.41.0 → **3.42.0** (package.json/lock junto). Data: 2026-10-26.
+- **Feedback do Vitor (TODO, 25/10/2026) sobre Kian e Joui**: auditoria primeiro (`docs/AUDITORIA-KIAN-JOUI.md`, wiki:
+  Kian, Rituais, Joui Jouki, A Magistrada), depois a implementação. Decisões e pedidos durante o trabalho:
+  - Rejeitar Névoa pelo texto do ritual (conjuração contínua no raio); vale contra todos; Kaiser preservada.
+  - Kian transformado: nome **"Realizador da Calamidade"** (pedido: o nome "Kian de Calamidade" estava ruim; título
+    canônico "destinado a realizar a Calamidade" / tema "Realizador da Calamidade") e kit próprio. Pedido "as habilidades
+    devem ser realmente melhores, não só %" → cada uma conferida contra a versão normal e com função nova.
+  - Joui transformado = fase final contra o Kian (pedido: "a transformação pode usar a katana Shi no Kage"), sem os
+    poderes da máscara; **Decepar** como o do Cristino (pedido); ultimate diferente e mais forte na forma (pedido);
+    a forma ficava mais fraca que o normal com o Tomado pelo Ódio → cortes +20%, ordem igual e velocidade maior
+    (medido: Balu 144 / 180 / 182, Kian 159 / 197 / 203).
+  - Joui mascarado: habilidade dos poderes da máscara sem a cena de pôr a máscara (pedido); nome **"Tomado pelo
+    Ódio"** (do dono). Portal das Sombras canônico no lugar do Corte das Sombras.
+- Arthur: Rebirth de volta ao **verde** (pedido: "são verdes, mudaram na HQ — cânone real").
+- A cura que envelhece não deixa mais o cabelo branco em **ninguém** (pedido); o cabelo branco fica só no Guizo velho e
+  no envelhecimento do Deus da Morte (outro código, intocado).
+- **Modelos velhos na v3.41.0** (pedido: "a 3.41.0 não está com os modelos novos"): o service worker guardava os `.glb`
+  num cache sem versão (`arena-arquivos`) e nunca apagava → agora `arena-arquivos-<versão>`; no PC o Electron limpa o
+  cache e os service workers quando a versão muda. Os pacotes da v3.41.0 foram gerados do commit certo (5512bd4).
+- Testes no jogo: transformação e volta (máscara, katana, Relíquia), cada habilidade nova, interrupção da conjuração,
+  Kaiser, ultimate (~250 × ~180, ~5,4 s), e 12 partidas CPU × CPU (difícil) sem erro nem estado preso. `npm run check`,
+  `npm test` (43) e `npm run build` passando.
+
 ## v3.41.0 — Lâmina de Sangue
 
 - Versão: `VERSION` 3.40.0 → **3.41.0** (package.json/lock junto). Data: 2026-10-26.

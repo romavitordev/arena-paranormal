@@ -313,6 +313,9 @@ export function applyHit(world, attacker, victim, o) {
   // Arma de Sangue (Arthur): a lâmina do próprio sangue faz o alvo sangrar
   const blade = attacker.findBuff && attacker.findBuff('bloodBlade');
   if (blade && o.kind === 'melee' && victim.state !== 'ko') victim.applyBleed(blade.bleed, attacker);
+  // buff.meleeBleed (ex.: o Tomado pelo Ódio do Joui — os poderes da máscara): enquanto dura, os golpes físicos fazem sangrar
+  const mb = attacker.buffs && attacker.buffs.find((b) => b.meleeBleed && b.time > 0);
+  if (mb && o.kind === 'melee' && dealt > 0 && victim.state !== 'ko') victim.applyBleed(mb.meleeBleed, attacker);
 
   // ECO ESPIRAL "Eco Dolor" (Dante — Olhos Abertos): o vulto do alvo repete cada golpe do Dante (danteAbilities.js)
   const eco = victim.findBuff && victim.findBuff('ecoDolor');

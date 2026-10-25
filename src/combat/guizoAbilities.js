@@ -11,7 +11,7 @@ import { HoloCopy } from './holo.js';
 //   ESPIRAIS DA PERDIÇÃO espirais no corpo do alvo deixam os movimentos lentos e atrapalham os ataques (−1d20)
 //   EMBARALHAR          cópias ilusórias realistas que imitam as ações dele (+ Defesa: o golpe pega numa cópia)
 //   VELOCIDADE MORTAL   distorce o tempo em volta: muito mais rápido (aqui, com rastros dele no ar)
-//   CICATRIZAÇÃO        acelera o tempo nas feridas: recupera vida, mas ENVELHECE (o cabelo fica grisalho)
+//   CICATRIZAÇÃO        acelera o tempo nas feridas: recupera vida
 const seqFrom = (tl, extra = {}) => ({ update: (dt) => tl.update(dt), ...extra });
 // celular / tela de toque: menos rastros (cada um é um modelo inteiro a mais na cena)
 const COARSE = typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches;
@@ -232,19 +232,12 @@ export const GUIZO_TYPES = {
     },
   },
 
-  // CICATRIZAÇÃO: o tempo corre nas feridas (a cura do jogo), mas cobra: o Guizo ENVELHECE — a cada uso o cabelo
-  // fica mais grisalho (ref. "Guizo velho"; até o fim da luta)
+  // CICATRIZAÇÃO: o tempo corre nas feridas (a cura do jogo). Até a v3.41.0 ela também ENVELHECIA quem usava (o cabelo
+  // ficava grisalho a cada uso — Guizo, Xande, Dante); o dono pediu para tirar isso de TODOS (2026-10-26): agora é só a
+  // cura, sem mudar o cabelo.
   agingHeal: {
     start(f, a, world) {
-      const seq = ABILITY_TYPES.healOverTime.start(f, a, world);
-      if (!seq) return null;
-      if (a.noAging) return seq; // Dante de Olhos Abertos: "aliado ao tempo", a cura não cobra mais a idade
-      world.after(0.6, () => {
-        f.ageLevel = Math.min(a.maxAge ?? 3, (f.ageLevel || 0) + 1);
-        ageHair(f, f.ageLevel / (a.maxAge ?? 3));
-        f.notify(f.ageLevel >= (a.maxAge ?? 3) ? 'ENVELHECEU DE VEZ' : 'ENVELHECEU UM POUCO', true);
-      });
-      return seq;
+      return ABILITY_TYPES.healOverTime.start(f, a, world);
     },
   },
 
@@ -277,17 +270,5 @@ export const GUIZO_TYPES = {
     },
   },
 };
-
-// deixa o cabelo (peça "hair") grisalho na proporção k (0 = vinho original, 1 = cinza)
-function ageHair(f, k) {
-  const hair = f.rig.props.hair;
-  if (!hair) return;
-  const grey = new THREE.Color(0xb4b0b0);
-  hair.traverse((o) => {
-    if (!o.isMesh || !o.material || o.userData.isOutline || !o.material.color) return;
-    if (!o.userData.ownHairMat) { o.material = o.material.clone(); o.userData.ownHairMat = true; o.userData.hairBase = o.material.color.clone(); }
-    o.material.color.copy(o.userData.hairBase).lerp(grey, k);
-  });
-}
 
 Object.assign(ABILITY_TYPES, GUIZO_TYPES);

@@ -60,7 +60,7 @@ export default {
       recast: true,
     },
     { ...byId.tentaculos, name: 'Tentáculos de Lodo', radius: 2.6, hold: 1.4, stun: 1.8, damage: 78, cooldown: 10 },
-    { ...byId.paradiso, name: 'Paradiso "Aliado ao Tempo"', description: 'Aliado ao tempo: acelera a cicatrização das feridas — recupera mais vida, e de olhos abertos não envelhece.', heal: 110, noAging: true, cooldown: 22 },
+    { ...byId.paradiso, name: 'Paradiso "Aliado ao Tempo"', description: 'Aliado ao tempo: acelera a cicatrização das feridas — recupera mais vida.', heal: 110, cooldown: 22 },
     {
       id: 'paradoxo',
       name: 'Paradoxo',

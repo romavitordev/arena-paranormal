@@ -114,24 +114,49 @@ export default {
       color: 0xd01830,
     },
     {
-      id: 'corteSombras',
-      name: 'Corte das Sombras',
+      // cânone (Calamidade, a fase da máscara): PORTAL DAS SOMBRAS — "um portal pelas sombras; um objeto, como sua katana,
+      // seria transportado para sua mão". No lugar do antigo Corte das Sombras (que era só proposta de jogo): ele crava a
+      // katana na própria sombra e ela SOBE de um portal debaixo do adversário, cortando e lançando para o alto.
+      id: 'portalSombras',
+      name: 'Portal das Sombras',
       input: 'carga+dodge', // △ + L2 / Y + LT
-      type: 'dashStrike',
-      description: 'Avança como uma sombra em linha reta e corta com a katana o primeiro que estiver no caminho.',
-      energyCost: 20,
-      cooldown: 10,
-      anim: 'dash_slash',
-      windup: 0.15,
-      distance: 9,
-      speed: 28,
-      range: 1.4,
-      recovery: 0.35,
-      damage: 70,
-      knockback: 5,
-      hitstun: 0.7,
+      type: 'shadowPortal',
+      description: 'Crava a katana na própria sombra: um portal de sombra abre debaixo do adversário e a lâmina sobe dele cortando e lançando para o alto (não dá para defender — saia de cima do portal). A katana volta para a mão por outro portal.',
+      energyCost: 22,
+      cooldown: 11,
+      range: 14,
+      radius: 1.3,
+      warn: 0.5,
+      damage: 72,
       element: 'conhecimento',
-      color: 0x2a1a3a,
+      color: 0xd01830,
+    },
+    {
+      // R2 + × TOMADO PELO ÓDIO (pedido de 2026-10-26; o nome é do dono — o Joui tomado pelo ódio, como na Mansão): ele já usa a máscara da Seita, mas ATIVA os poderes dela como
+      // os outros Mascarados fazem — sem a cena de pôr a máscara: entra na postura de saque, a aura vermelha dos
+      // Mascarados acende e por alguns segundos ele fica mais forte e mais rápido, e cada corte faz sangrar um pouco.
+      // Só no Joui mascarado (na forma Shi no Kage ele entregou a máscara).
+      id: 'tomadoPeloOdio',
+      name: 'Tomado pelo Ódio',
+      input: 'block+jump', // R2 + × / RT + A
+      type: 'selfBuff',
+      buffType: 'maskIntent',
+      label: 'TOMADO PELO ÓDIO',
+      description: 'Tomado pelo ódio, ativa os poderes da máscara: entra na postura de saque, a aura vermelha acende e por 6 s ele bate 20% mais forte, ataca e anda mais rápido, e cada corte faz o alvo sangrar de leve.',
+      energyCost: 25,
+      cooldown: 18,
+      duration: 6,
+      anim: 'counter_stance',
+      animTime: 0.6,
+      damageMult: 1.2,
+      affects: ['melee', 'ability'],
+      speedMult: 1.1,
+      atkSpeed: 1.1,
+      meleeBleed: { dps: 3, duration: 2.5 },
+      redAura: 0xff1a1a,
+      trail: false,
+      sound: 'carga',
+      color: 0xd01830,
     },
     {
       // cânone (Desconjuração, achado sob o corpo do Espreitador): o Símbolo de Conhecimento e Medo é desenhado no chão
@@ -153,9 +178,12 @@ export default {
     },
   ],
 
+  // ESPECIAL do Joui mascarado: some na própria sombra e surge golpeando pelas costas. (Até a v3.41.0 chamava "Shi no
+  // Kage", mas Shi no Kage é o nome da KATANA que ele só recebe depois de entregar a máscara — agora é o especial da
+  // Transformação; este passou a se chamar "Execução das Sombras", nome de jogo, não do cânone.)
   special: {
-    name: 'Shi no Kage',
-    banner: 'Shi no Kage!',
+    name: 'Execução das Sombras',
+    banner: 'Execução das Sombras',
     type: 'teleportStrike',
     energyCost: 50,
     cooldown: 14,
@@ -166,15 +194,24 @@ export default {
     sound: 'teleport',
   },
 
-  // DESPERTAR (Barra de Transformação cheia + vida baixa, segurando △) — cânone: Técnica Secreta "Desarmar" — o
-  // espadachim no auge, envolto nas sombras; as manobras saem livres e o finalizador arranca a arma da mão do alvo
-  // (fica sem o ataque à distância por uns segundos). Até o fim do round.
+  // TRANSFORMAÇÃO (Barra de Transformação cheia + vida baixa, segurando △) — "SHI NO KAGE": o Joui da FASE FINAL contra o
+  // Kian (depois do ep. 9 de Calamidade). Ele tira a máscara (entregou-a à Magistrada e perdeu os poderes dela) e luta
+  // com a Shi no Kage, a katana preta de Conhecimento com os sigilos dourados; a Relíquia de Energia fica na bainha de
+  // sigilos roxos. Kit próprio (forms/joui_shinokage.js): esgrima de Conhecimento, Corte de Conhecimento, Saque da
+  // Relíquia, DECEPAR (membro / decapitar) e o especial Shi no Kage. Até o fim do round. (Antes era o awakenMode
+  // "Técnica Secreta" — o mesmo kit com atributos maiores; o Desarmar virou passiva da forma.)
   awakening: {
-    name: 'Técnica Secreta',
-    banner: 'Técnica Secreta',
-    type: 'awakenMode',
-    mult: 1.15, speedMult: 1.15, cdRate: 1.2, aura: 'smoke', color: 0x1a1620, heal: 0.1,
-    passives: [{ type: 'disarmStrike', time: 4 }],
+    name: 'Shi no Kage',
+    banner: 'Shi no Kage',
+    type: 'maskTransform',
+    form: 'joui_shinokage',
+    formBanner: 'SHI NO KAGE',
+    anim: 'iai_slash',
+    tint: 0xffd27a,
+    sound: 'slashFinal',
+    duration: 0, // até o fim do round
+    bonusHealth: 80,
+    color: 0xffd27a,
   },
 
   passives: [

@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { glowMat, toon } from './rig.js';
 import { MATERIAL_TEXTURES } from './textures.js';
-import { katana, scabbard, m4, sniper, guitarCase, bloodArm, bloodBlade, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, roundGlasses, neonWraps, pulseEmitter, bandolier, bengala, mustache, socadeira, peixeira, spikedLantern, tenebrisPendant } from './weapons.js';
+import { katana, scabbard, shiNoKage, relicScabbard, relicBlade, m4, sniper, guitarCase, bloodArm, bloodBlade, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, roundGlasses, neonWraps, pulseEmitter, bandolier, bengala, mustache, socadeira, peixeira, spikedLantern, tenebrisPendant } from './weapons.js';
 
 // Armas e acessórios adicionados em código sobre os modelos do Blender.
 // Usam só `sockets`, `attach()` e `props`, que existem nos dois tipos de rig.
@@ -63,10 +63,10 @@ export function addArthurProps(rig) {
   // olhos amaldiçoados do Rebirth
   const eyes = new THREE.Group();
   for (const s of [-1, 1]) {
-    const e = new THREE.Mesh(new THREE.SphereGeometry(0.02, 8, 6), glowMat(0xa46bff, 1)); // os raios roxos de Calamidade
+    const e = new THREE.Mesh(new THREE.SphereGeometry(0.02, 8, 6), glowMat(0x3aff6a, 1)); // os raios verdes do Rebirth (a cor da HQ)
     e.position.set(s * 0.05, 0.175, 0.14);
     eyes.add(e);
-    const halo = new THREE.Mesh(new THREE.SphereGeometry(0.045, 8, 6), glowMat(0xa46bff, 0.35));
+    const halo = new THREE.Mesh(new THREE.SphereGeometry(0.045, 8, 6), glowMat(0x3aff6a, 0.35));
     halo.position.copy(e.position);
     eyes.add(halo);
   }
@@ -768,6 +768,27 @@ export function addJouiProps(rig) {
   sockets.handR.add(blade);
   props.katana = blade;
   if (props.maskSide) rig.showProp('maskSide', false);
+}
+
+// JOUI COM A SHI NO KAGE (a Transformação; a fase depois do ep. 9 de Calamidade): ele ENTREGOU a máscara à Magistrada —
+// as duas versões da máscara somem; na mão a Shi no Kage (preta, sigilos dourados) e no quadril a bainha com os sigilos
+// roxos que contém a Relíquia de Energia (a katana antiga)
+export function addJouiShinokageProps(rig) {
+  const { sockets, props } = rig;
+  for (const p of ['maskOn', 'maskSide']) if (props[p]) rig.showProp(p, false);
+  const sheath = relicScabbard();
+  sheath.rotation.set(0.9, 0, 0.35);
+  sockets.hip.add(sheath);
+  props.scabbard = sheath;
+  const blade = shiNoKage();
+  inFist(blade);
+  sockets.handR.add(blade);
+  props.katana = blade; // o mesmo nome do prop da katana: golpes, poses e o especial já mostram/escondem por ele
+  // a Relíquia de Energia sacada na mão ESQUERDA (só no especial Shi no Kage: as duas lâminas)
+  const relic = inFist(relicBlade());
+  sockets.handL.add(relic);
+  relic.visible = false;
+  props.relicBlade = relic;
 }
 
 // DALMO / COLOSSO (modelo próprio: tools/blender/char_dalmo.py). O ESCAFANDRO do Colosso fica em código para a cena da

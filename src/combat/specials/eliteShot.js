@@ -7,11 +7,11 @@ import { faceClose, overShoulder, socketClose, pullBack } from '../../camera/sho
 
 // SOLO DO ABUTRE (Arthur, Calamidade): as habilidades de atirador do cânone numa cena só —
 //   1. Treinado em Furtividade: some numa nuvem de fumaça (esconder-se é ação livre) e reaparece AJOELHADO, mirando;
-//   2. Rebirth (Amaldiçoar Arma com Energia): os olhos abrem e os RAIOS ROXOS sobem pelo braço até o rifle, que se cobre
+//   2. Rebirth (Amaldiçoar Arma com Energia): os olhos abrem e os RAIOS VERDES sobem pelo braço até o rifle, que se cobre
 //      de pequenas caveiras;
 //   3. Mira de Elite: a câmera vai para a mira — mirar e atirar no mesmo turno;
 //   4. Golpe de Sorte: o tiro sai CRÍTICO (a margem de crítico dele é o dobro) e atravessa o alvo com a descarga roxa.
-// sp.damage (padrão COMBAT.specialDamage), sp.color (o roxo do Rebirth), sp.critMult (o crítico), sp.showProp/hideProp.
+// sp.damage (padrão COMBAT.specialDamage), sp.color (o verde do Rebirth), sp.critMult (o crítico), sp.showProp/hideProp.
 export const eliteShot = {
   telegraph: () => ({ time: 0.8, anim: 'sniper_kneel', animDuration: 0.5, mark: 'laser' }),
   canStart(f, sp) {
@@ -22,7 +22,7 @@ export const eliteShot = {
   start(f, sp, world) {
     const opp = f.opponent;
     if (trySpecialBlock(world, f, opp, sp)) return { update: () => true, cancel() {} };
-    const color = sp.color ?? 0xa46bff;
+    const color = sp.color ?? 0x3aff6a;
     const show = (v) => {
       if (sp.showProp && f.rig.props[sp.showProp]) f.rig.showProp(sp.showProp, v);
       if (sp.hideProp && f.rig.props[sp.hideProp]) f.rig.showProp(sp.hideProp, !v);
@@ -59,7 +59,7 @@ export const eliteShot = {
           f.anim.play('sniper_kneel', { restart: true, duration: 0.4 });
           world.fx.burst(f.chestPos(), { count: 20, color: 0x2a2632, kind: 'smoke', speed: 1.2, life: 0.7, size: 0.7, grow: 1 });
         }
-        // 2 — Rebirth: os raios roxos sobem do chão pelo corpo até o rifle (com as caveiras)
+        // 2 — Rebirth: os raios verdes sobem do chão pelo corpo até o rifle (com as caveiras)
         if (t >= 0.9 && t < 2.1 && bolts < 26 && Math.random() < 0.55) {
           bolts++;
           const base = f.pos.clone().add(new THREE.Vector3((Math.random() - 0.5) * 0.6, 0.1, (Math.random() - 0.5) * 0.6));

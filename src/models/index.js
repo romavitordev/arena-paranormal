@@ -1,4 +1,4 @@
-import { addKaiserProps, addArthurProps, addJouiProps, addAghataProps, addGalSalProps, addKianProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps, addFerreiroProps, addJuanProps, addKemiProps, addFantasmaProps, addBaluProps, addErinCaosProps, addLabirintoElmoProps, addAguiarMutiladorProps, addArnaldoProps, addAnfitriaoProps, addVerissimoProps, addJaeProps, addJaeXProps, addDalmoProps, addColossoProps, addGuizoProps, addGuizoETProps, addKianCalamidadeProps, addJuanOdioProps, addMagistradaProps, addGuizoBombadoProps, addGuizoVelhoProps, addCristinoProps, addCristinoDesertorProps, addDanteProps, addDanteAbertoProps } from './props.js';
+import { addKaiserProps, addArthurProps, addJouiProps, addAghataProps, addGalSalProps, addKianProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps, addFerreiroProps, addJuanProps, addKemiProps, addFantasmaProps, addBaluProps, addErinCaosProps, addLabirintoElmoProps, addAguiarMutiladorProps, addArnaldoProps, addAnfitriaoProps, addVerissimoProps, addJaeProps, addJaeXProps, addDalmoProps, addColossoProps, addGuizoProps, addGuizoETProps, addKianCalamidadeProps, addJuanOdioProps, addMagistradaProps, addGuizoBombadoProps, addGuizoVelhoProps, addCristinoProps, addCristinoDesertorProps, addDanteProps, addDanteAbertoProps, addJouiShinokageProps } from './props.js';
 import { loadGLB, rigFromGLB } from './glbRig.js';
 import { preloadNpcModels } from './npcRig.js';
 
@@ -56,6 +56,7 @@ const MODEL_VARIANTS = {
   juan_odio: { base: 'juan', props: addJuanOdioProps }, // Ódio do Diabo: garras de sangue, capuz e o olho vermelho
   dante_aberto: { base: 'dante', props: addDanteAbertoProps }, // Olhos Abertos: olhos pretos, as faixas, as tatuagens e as orelhas pontudas
   cristino_desertor: { base: 'cristino', props: addCristinoDesertorProps }, // Tocado pela Coroa: rabiscos vermelhos e o rifle
+  joui_shinokage: { base: 'joui', props: addJouiShinokageProps }, // sem a máscara, com a Shi no Kage (fase final)
   kian_calamidade: { base: 'kian', props: addKianCalamidadeProps }, // a barba cheia e as faixas // Distorcer Aparência: o disfarce alienígena
 };
 

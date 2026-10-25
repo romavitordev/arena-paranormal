@@ -16,6 +16,7 @@ import guizoBombado from './guizo_bombado.js';
 import guizoVelho from './guizo_velho.js';
 import cristinoDesertor from './cristino_desertor.js';
 import danteAberto from './dante_aberto.js';
+import jouiShinokage from './joui_shinokage.js';
 
 export const FORMS = {};
 
@@ -28,4 +29,4 @@ export function getForm(id) {
   return FORMS[id];
 }
 
-[deusMorte, diabo, fantasma, labirintoElmo, aguiarMutilador, erinCaos, anfitriao, jaeX, colosso, guizoEt, kianCalamidade, juanOdio, guizoBombado, guizoVelho, cristinoDesertor, danteAberto].forEach(registerForm);
+[deusMorte, diabo, fantasma, labirintoElmo, aguiarMutilador, erinCaos, anfitriao, jaeX, colosso, guizoEt, kianCalamidade, juanOdio, guizoBombado, guizoVelho, cristinoDesertor, danteAberto, jouiShinokage].forEach(registerForm);

@@ -8,7 +8,7 @@ import { clamp, yawTo, turnTowards, forwardFromYaw, distXZ, angleDiff, DEG } fro
 import { applyHit } from './damage.js';
 import { findSubstitutionSpot, resolveBody } from './positioning.js';
 import { startChargeFx } from './chargeFx.js';
-import { ABILITY_TYPES } from './abilities.js';
+import { ABILITY_TYPES, rejectMistFor, conjureSeq } from './abilities.js';
 import './hostAbilities.js'; // registra as habilidades do Anfitrião em ABILITY_TYPES
 import './guizoAbilities.js'; // e as do Guizo (Embaralhar, Decadência, Espirais da Perdição...)
 import { detonateLanterns } from './cristinoAbilities.js'; // e as do Cristino (lampiões, fogo no chão)
@@ -550,6 +550,7 @@ export class Fighter {
   // troca a definição (personagem) deste lutador mantendo vida, sanidade, posição e placar
   applyDef(def, rig) {
     this.mount(false);
+    this._maskRevealed = undefined; // o modelo novo recebe o estado da máscara no próximo quadro (forma ↔ base)
     this.mountHolder = null;
     this.gripHome = null;
     this.gripSlot = null;
@@ -869,8 +870,9 @@ export class Fighter {
     } else {
       this.rig.setTint(0x000000, 0);
     }
-    // máscara (Joui): no rosto na luta, puxada para o lado nas cinematics e na vitória
-    if (this.rig.props.maskOn && this.rig.props.maskSide) {
+    // máscara (Joui): no rosto na luta, puxada para o lado nas cinematics e na vitória. def.noMask (Joui com a Shi no
+    // Kage: ele entregou a máscara) — não mexe, as duas ficam escondidas
+    if (this.rig.props.maskOn && this.rig.props.maskSide && !this.def.noMask) {
       const reveal = (this.world.cinematic && this.world.cinematic.actor === this) || (this.anim.currentName || '').startsWith('victory');
       if (reveal !== this._maskRevealed) {
         this._maskRevealed = reveal;
@@ -2750,6 +2752,17 @@ export class Fighter {
     const impl = ABILITY_TYPES[a.type];
     if (!impl) return;
     this.carga.stage = 0;
+    // REJEITAR NÉVOA do adversário (Kian): dentro da área o ritual vira conjuração contínua — paga e entra em recarga
+    // já, conjura parado e só então o ritual sai (um golpe no meio interrompe e o custo se perde)
+    const mist = rejectMistFor(this.world, this, a);
+    if (mist) {
+      this.payCost(cost, blood);
+      (this.lastAbilityUse || (this.lastAbilityUse = {}))[a.id] = this.world.time;
+      this.cooldowns[a.id] = a.cooldown;
+      this.setState('ability');
+      this.seq = conjureSeq(this, mist, () => impl.start(this, a, this.world));
+      return;
+    }
     const seq = impl.start(this, a, this.world);
     if (!seq) return; // falhou (ex.: sem posição/alvo válido) — não gasta nada
     this.payCost(cost, blood);

@@ -2,6 +2,16 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.42.0 — Sombra da Morte
+- JOUI — A TRANSFORMAÇÃO AGORA É "SHI NO KAGE": o Joui da fase final contra o Kian. Ele tira a máscara (entregou-a à Magistrada e perde os poderes dela) e luta com a SHI NO KAGE, a katana preta amaldiçoada com Conhecimento e os sigilos dourados; no quadril, a bainha de sigilos roxos que guarda a Relíquia de Energia. Kit próprio: cortes de Conhecimento mais fortes e rápidos, Corte de Conhecimento (□), Saque da Relíquia (△ + ×), DECEPAR (△ + L2: sangra, ferida aberta, e decapita quem está com a vida baixa), Mateo que fecha as feridas, Olhar do Desespero que deixa ESMORECIDO e o Pavor Anormal riscado debaixo do adversário.
+- JOUI — ULTIMATE "SHI NO KAGE" (só na transformação): ele saca a Relíquia de Energia na outra mão e luta com as duas lâminas — o sigilo de Conhecimento no alvo, cortes previstos, o Decepar que ajoelha e sangra e o X dourado e roxo. O Joui mascarado tem a dele: EXECUÇÃO DAS SOMBRAS (some na sombra e golpeia pelas costas).
+- JOUI MASCARADO: TOMADO PELO ÓDIO (R2 + ×) ativa os poderes da máscara — postura de saque, aura vermelha e 6 s mais forte e mais rápido, com cada corte fazendo sangrar. E o PORTAL DAS SOMBRAS (△ + L2): crava a katana na própria sombra e ela sobe de um portal debaixo do adversário.
+- KIAN — REJEITAR NÉVOA PELO CÂNONE: cria uma área em volta dele em que todo ritual do adversário vira CONJURAÇÃO CONTÍNUA — fica parado conjurando e um golpe interrompe — e sai mais fraco. Vale contra o elenco inteiro (a névoa da Kaiser continua sumindo na hora).
+- KIAN — A TRANSFORMAÇÃO AGORA É O "REALIZADOR DA CALAMIDADE", com kit próprio: Teletransporte com dois saltos seguidos, Levitação: Suspender (ergue o adversário entre sigilos e o arremessa no chão), Lâmina do Medo que deixa MORRENDO, Rejeitar Névoa que desfaz os rituais ativos do adversário, Toque da Morte que suga a sanidade e o Impacto Sigilar com mais marcas da Escrita.
+- ARTHUR: o Rebirth voltou a ser VERDE (a cor da HQ).
+- A cura que envelhece (Cicatrização do Guizo e do Xande, Paradiso do Dante) não deixa mais o cabelo branco.
+- Quem já tinha o jogo guardado no navegador (ou no PC) agora recebe os modelos novos a cada versão — na v3.41.0 o Arthur e o Joui antigos continuavam aparecendo.
+
 ## v3.41.0 — Lâmina de Sangue
 - ARTHUR — ARMA DE SANGUE NO BRAÇO CERTO: a lâmina de sangue agora nasce do punho DIREITO (o braço que ele tem), com o sangue enrolando o antebraço — antes ela aparecia no ombro do braço que ele perdeu. Enquanto dura, o físico dele vira uma sequência de cortes com a lâmina (corte, corte reverso, estocada e o talho que lança).
 - ARTHUR BATE COM O BRAÇO DIREITO: a sequência normal mistura os chutes com um soco de direita e uma cotovelada.

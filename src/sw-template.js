@@ -2,13 +2,15 @@
 // __VERSION__ e __SHELL__ e grava o resultado como sw.js na raiz do site.
 //  - Instalação: guarda a "casca" do jogo (index.html, scripts e estilos do build, manifesto e ícones): abre sem internet.
 //  - Modelos, cenários, sons e imagens: guardados na primeira vez que o jogo usa (não baixa os ~57 MB de uma vez no
-//    celular); depois vêm do aparelho. Os nomes dos arquivos do build mudam a cada versão, então nada fica velho.
+//    celular); depois vêm do aparelho. Os scripts do build mudam de nome a cada versão, mas os de public/ (modelos .glb,
+//    sons, imagens) NÃO — por isso o cache deles também leva a versão: versão nova apaga o antigo e baixa de novo o que
+//    for usado (na v3.41.0 o Arthur e o Joui novos não apareciam para quem já tinha o jogo guardado).
 //  - A página (index.html) e o aprendizado da CPU vêm primeiro da rede (versão nova chega na hora); sem rede, do aparelho.
 //  - Versão nova: o sw.js muda, instala a casca nova e apaga o que era da versão anterior.
 const VERSION = '__VERSION__';
 const SHELL = __SHELL__;
 const CACHE = `arena-${VERSION}`;
-const RUNTIME = 'arena-arquivos';
+const RUNTIME = `arena-arquivos-${VERSION}`;
 const FONTS = 'arena-fontes';
 
 self.addEventListener('install', (e) => {

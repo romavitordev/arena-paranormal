@@ -77,17 +77,18 @@ export default {
       name: 'Rebirth',
       input: 'carga+ranged', // △ + □ / Y + X
       type: 'weaponState',
-      // cânone (Calamidade, Amaldiçoar Arma com Energia): abre os olhos, os RAIOS ROXOS vazam e envolvem a arma com
-      // pequenas caveiras; os tiros saem com os raios roxos e dano de Energia (o verde era o Rebirth de Desconjuração)
-      description: 'Abre os olhos e os raios roxos de Energia envolvem o rifle com pequenas caveiras: os próximos tiros da sniper causam dano extra.',
+      // cânone (Amaldiçoar Arma com Energia): abre os olhos, os RAIOS vazam e envolvem a arma com pequenas caveiras; os
+      // tiros saem com os raios e dano de Energia. A cor é VERDE — a da HQ, o cânone que vale (a wiki chegou a descrever
+      // raios roxos em Calamidade; o dono pediu o verde da HQ, 2026-10-26)
+      description: 'Abre os olhos e os raios verdes de Energia envolvem o rifle com pequenas caveiras: os próximos tiros da sniper causam dano extra.',
       energyCost: 30,
       cooldown: 22,
       duration: 15, // segundos máximos do estado amaldiçoado
       shots: 3, // tiros fortalecidos
       bonusDamage: 75, // por tiro (110 → 185; era +60, buff v3.6)
-      color: 0xa46bff, // os raios ROXOS de Calamidade
+      color: 0x3aff6a, // os raios VERDES (a cor da HQ)
       element: 'energia',
-      projectile: { visual: 'cursedSniper', color: 0xa46bff, impactScale: 2.4, hitSound: 'clawHit', knockback: 7, hitstun: 0.6 },
+      projectile: { visual: 'cursedSniper', color: 0x3aff6a, impactScale: 2.4, hitSound: 'clawHit', knockback: 7, hitstun: 0.6 },
     },
     {
       id: 'templo',
@@ -177,7 +178,7 @@ export default {
 
   // SOLO DO ABUTRE — "O Guitarrista" que guarda o rifle na capa da guitarra, último dos Gaudérios Abutres e aprendiz
   // do atirador Aaron. As habilidades de atirador de Calamidade numa cena (specials/eliteShot.js): some na fumaça
-  // (Treinado em Furtividade), reaparece ajoelhado, o Rebirth amaldiçoa o rifle com os raios roxos, mira (Mira de Elite)
+  // (Treinado em Furtividade), reaparece ajoelhado, o Rebirth amaldiçoa o rifle com os raios verdes, mira (Mira de Elite)
   // e o tiro sai crítico (Golpe de Sorte). Dá para defender/esquivar na largada como os outros especiais.
   special: {
     name: 'Solo do Abutre',
@@ -189,7 +190,7 @@ export default {
     // damage: omitido → 250 (padrão)
     critMult: 1.1, // o crítico do Golpe de Sorte
     showProp: 'sniperHand',
-    color: 0xa46bff,
+    color: 0x3aff6a, // o verde do Rebirth
   },
 
   // DESPERTAR "OLHOS SEMPRE ABERTOS" (Barra de Transformação cheia + vida baixa, segurando △) — no cânone é ao abrir os

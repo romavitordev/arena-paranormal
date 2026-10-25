@@ -1,5 +1,26 @@
 # Changelog
 
+## v3.42.0 — Sombra da Morte
+
+### Adicionado
+- Forma `joui_shinokage` (Transformação do Joui, `maskTransform`): modelo `joui_shinokage` (variante do `joui` com `addJouiShinokageProps`), `noMask`, kit próprio e o especial `cinematicCombo` "Shi no Kage" com a Relíquia na mão esquerda (`prepare.showProp: 'relicBlade'`, `fx: 'relicDraw'`).
+- Props `shiNoKage()`, `relicScabbard()` e `relicBlade()` (`weapons.js`).
+- Tipos de habilidade `shadowPortal` (Portal das Sombras); opções novas: `heavyBlow.lowBonus`, `fearBlade.dying`, `fearGaze.wither`, `healOverTime.cleanse`, `deathTouch.drainAll`, `blink.recastWindow` (+ `recast`), `rejectMist.dispel`, `shadowTrap.atTarget/stun/label`, `abductBeam.sigils/hitLabel/missLabel`, `selfBuff.redAura/meleeBleed`; buff `meleeBleed` lido em `damage.js`.
+- Rejeitar Névoa pelo cânone: zona `rejectMist` + `rejectMistFor`/`conjureSeq` (conjuração contínua em `Fighter.useAbility`).
+- `docs/AUDITORIA-KIAN-JOUI.md`: auditoria código × cânone × proposta.
+
+### Alterado
+- Kian: transformação "Realizador da Calamidade" com kit próprio (`kian_calamidade.js`).
+- Joui: especial do mascarado renomeado para "Execução das Sombras"; Tomado pelo Ódio (R2 + ×); Portal das Sombras no lugar do Corte das Sombras.
+- Arthur: Rebirth verde (`0x3aff6a`).
+- `agingHeal`: só a cura (sem `ageHair`).
+- `specialHitFx`: `fx.color` e `fx.color2` por golpe.
+- `Fighter.applyDef` zera o estado da máscara; `def.noMask`.
+
+### Corrigido
+- Service worker: o cache de arquivos (`.glb`, sons, imagens) leva a versão — versão nova apaga o antigo (modelos velhos apareciam).
+- PC (Electron): limpa o cache do Chromium e service workers quando a versão do app muda.
+
 ## v3.41.0 — Lâmina de Sangue
 
 ### Adicionado

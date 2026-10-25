@@ -1,6 +1,6 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.41.0 (revisado em 2026-10-26: Arthur e Joui remodelados no Blender; Arma de Sangue no braço direito)
+**Versão de referência atual:** v3.42.0 (revisado em 2026-10-26: feedback de Kian e Joui — kits e transformações pelo cânone)
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente
 
@@ -9,10 +9,13 @@
 
 # PRÓXIMA GRANDE ATUALIZAÇÃO — LUTA + MODO PvE (planejamento de 2026-10-18)
 
-**Estado em 2026-10-26 (v3.41.0):**
+**Estado em 2026-10-26 (v3.42.0):**
 - [~] 2.2 Modelos antigos: Xande e Aguiar (v3.33.0), Fantasma, Kemi e Gal Sal + as lâminas Ereškigal (v3.34.0), Kaiser
   (v3.38.0), Balu e Lírio (v3.40.0), Arthur e Joui (v3.41.0) refeitos pelas artes oficiais; faltam os outros antigos
   (ver *MODELOS — PRÓXIMOS PASSOS*).
+- [x] Feedback de Kian e Joui (25/10/2026): auditoria, Rejeitar Névoa pelo cânone, transformações com kit próprio
+  (Realizador da Calamidade, Shi no Kage), ultimates diferentes no Joui, Tomado pelo Ódio, Portal das Sombras — v3.42.0
+  (ver *ANDAMENTO DO FEEDBACK*; faltam animações próprias).
 - [~] 2.3 Especiais em equipe: Barra de Equipe, Especial simplificado e Transformação em equipe prontos (F1/F2/F3); a tabela de ligações
   `src/config/teamLinks.js` existe mas ainda não está ligada (F4, ver *EQUIPE*).
 - [~] 2.1 Animações de movimentação: 1ª parte na v3.37.0 (corrida, caminhada, pulo, queda, dash, esquiva, reação e 18
@@ -155,6 +158,50 @@ Após a auditoria e, se autorizada/necessária, a implementação:
 
 ESCOPO ATUAL
 Este é um feedback. Kian e Joui são o foco inicial. Não considere o feedback global finalizado; outras observações do Vitor podem ser acrescentadas depois.
+
+ANDAMENTO DO FEEDBACK (2026-10-26 — auditoria completa em `docs/AUDITORIA-KIAN-JOUI.md`)
+- [x] Etapa 1 — auditoria do código e do cânone (wiki: Kian, Rituais, Joui Jouki, A Magistrada), com fatos do código,
+      fatos canônicos e propostas separados.
+- [x] Rejeitar Névoa pelo cânone ("todos os rituais no raio demoram muito mais para serem conjurados"): área de 6 s
+      onde todo ritual do adversário vira CONJURAÇÃO CONTÍNUA (0,7 s parado, um golpe interrompe) e sai 25% mais fraco;
+      vale contra todo o elenco; a névoa da Kaiser some na hora (interação preservada). Testado contra Arthur e Kaiser.
+- [x] Kian transformado com KIT PRÓPRIO, não só números — **Realizador da Calamidade** (nome canônico; antes "Kian de
+      Calamidade"): Teletransporte com DOIS SALTOS seguidos; Levitação: SUSPENDER (ergue e arremessa o adversário);
+      Lâmina do Medo que deixa MORRENDO (sangra e não regenera); Rejeitar Névoa que DESFAZ os rituais ativos do
+      adversário; Toque da Morte que SUGA A SANIDADE; Impacto Sigilar com 3 marcas da Escrita. Testado no jogo.
+- [x] Joui transformado = **Shi no Kage**, a fase final contra o Kian (decisão de fase explícita): sem a máscara (perde os
+      poderes dela), a Shi no Kage preta de sigilos dourados (prop novo) e a bainha da Relíquia de Energia (prop novo);
+      esgrima de Conhecimento, Corte de Conhecimento, Saque da Relíquia, **DECEPAR** (como o do Cristino: sangra, ferida
+      aberta; decapita na vida baixa), Mateo que FECHA AS FERIDAS, Olhar do Desespero que deixa ESMORECIDO, Pavor
+      Anormal riscado DEBAIXO do alvo, Técnica Secreta (Desarmar) passiva. Testado no jogo.
+- [x] Ultimate do Joui diferente nas duas versões: o mascarado tem a **Execução das Sombras** (golpe pelas costas saindo da
+      sombra; "Shi no Kage" é o nome da katana); a forma tem a **Shi no Kage** — saca a Relíquia de Energia na mão
+      esquerda e luta com as duas lâminas: sigilo de Conhecimento no alvo, cortes previstos, o Decepar que ajoelha e
+      sangra e o X dourado e roxo (~250 contra ~180 da versão normal, medido no jogo).
+- [x] Voltar à forma normal no fim do round sem estados presos (máscara, katana, Relíquia, habilidades) — testado.
+- [x] Joui mascarado: **Tomado pelo Ódio** (R2 + ×) — ativa os poderes da máscara como os outros Mascarados, sem a
+      cena de pôr a máscara: postura de saque, aura vermelha, 6 s com +20% de dano, mais velocidade e cortes que fazem
+      sangrar de leve (pedido de 2026-10-26). Testado: 88 → 109 na mesma sequência, o alvo sangra, some em 6 s.
+- [x] A forma Shi no Kage acima do Joui mascarado mesmo com o Tomado pelo Ódio ativo (pedido: "o normal não ficou mais forte
+      que a transformada?" — ficava): cortes da Shi no Kage +20%, a sequência na mesma ordem da normal, velocidade 9,3 /
+      1,28. Medido no jogo, sequência inteira: Balu 144 normal · 180 com o Tomado pelo Ódio · 182 forma; Kian 159 · 197 · 203. O
+      Decepar (o golpe que arranca) já era só da forma.
+- [x] A cura que envelhece (Cicatrização do Guizo e do Xande, Paradiso do Dante) NÃO deixa mais o cabelo branco — para
+      TODOS os personagens (pedido de 2026-10-26): o `agingHeal` é só a cura; a função `ageHair` saiu.
+- [x] HABILIDADES.md regerado (`npm run moves`); `npm run check`, `npm test` (43) e `npm run build` passando.
+- [ ] ANIMAÇÕES NOVAS: o kit novo usa as animações que já existiam (iai, cortes, `point`, `concentrate`). Faltam clipes
+      próprios (o iaijutsu duplo da Shi no Kage, a Lâmina do Medo com a melodia, a Escrita tomando o corpo).
+- [x] Joui mascarado: **Portal das Sombras** (cânone de Calamidade: "um portal pelas sombras; um objeto, como sua katana,
+      seria transportado para sua mão") no lugar do Corte das Sombras (que era proposta): crava a katana na sombra e ela
+      sobe de um portal debaixo do adversário, cortando e lançando; volta para a mão. Testado: acerta parado, erra quem sai.
+- [x] Suspender com visual próprio do Kian: os sigilos de Conhecimento sobem do chão e giram em volta do alvo suspenso
+      (antes era o feixe de luz do Estrangeiro); o texto é "SUSPENSO".
+- [~] Trocar as PROPOSTAS restantes por feitos canônicos onde houver: no Kian, a luta contra a Magistrada ("derrota a
+      Magistrada facilmente"); no Joui da Shi no Kage, o Corte de Conhecimento e o Saque da Relíquia continuam proposta
+      (a Relíquia na bainha é canônica, o golpe não).
+- [x] CPU com o kit novo (2026-10-26): 12 partidas CPU × CPU (difícil) — Kian e Joui, normais e transformados, contra
+      Kaiser, Arthur e Balu: nenhum erro, nenhum estado preso; a CPU usa Suspender, Rejeitar Névoa, Saque da Relíquia,
+      Decepar e Tomado pelo Ódio. (O especial Shi no Kage dura ~5,4 s e sempre termina.)
 
 ### 2.1. Novas animações de movimentação
 
@@ -1562,7 +1609,7 @@ Não criar barra separada de Exposição Paranormal sem nova decisão.
 * [x] Teleporte das Sombras
 * [x] Olhar do Desespero
 * [x] Shi no Kage
-* [ ] Máscara das Pessoas nas Sombras (ainda NÃO existe no kit)
+* [x] Máscara das Pessoas nas Sombras: o modelo usa a máscara e a habilidade **Tomado pelo Ódio** (R2 + ×) ativa os poderes dela; na forma Shi no Kage ele a entregou à Magistrada (v3.42.0)
 * [x] Coincidência Forçada
 * [x] Decepar
 * [x] +30% finisher abaixo de 20%

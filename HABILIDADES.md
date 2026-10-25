@@ -44,7 +44,7 @@ especial = Carga → Carga → ○ (custa 50, ofensivos causam 250, nunca hitkil
 ### Habilidades
 
 - **Rebirth** — △ + □ / Y + X · custo 30 · cooldown 22 s
-  Abre os olhos e os raios roxos de Energia envolvem o rifle com pequenas caveiras: os próximos tiros da sniper causam dano extra.
+  Abre os olhos e os raios verdes de Energia envolvem o rifle com pequenas caveiras: os próximos tiros da sniper causam dano extra.
 - **Ódio Incontrolável "Templo do Ódio"** — △ + ○ / Y + B · custo 15 · cooldown 20 s
   Corta a palma e sangra sobre o olho: ódio intenso por alguns segundos — físico mais forte e mais rápido, mas não consegue defender.
 - **Paralisia de Sangue "Dystopia"** — R2 + △ / RT + Y · custo 25 · cooldown 18 s · alcance 7 m
@@ -98,8 +98,10 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
   Recita o nome de Mateo e solta as cinzas sobre a ferida: o tempo corre só ali e ele recupera vida em instantes.
 - **Olhar do Desespero** — △ + ○ / Y + B · custo 25 · cooldown 12 s · alcance 8 m
   Encara o adversário e libera uma manifestação de medo: quem estiver à frente fica paralisado por um instante, vulnerável a combo.
-- **Corte das Sombras** — △ + L2 / Y + LT · custo 20 · cooldown 10 s · dano 70 · alcance 1.4 m
-  Avança como uma sombra em linha reta e corta com a katana o primeiro que estiver no caminho.
+- **Portal das Sombras** — △ + L2 / Y + LT · custo 22 · cooldown 11 s · dano 72 · alcance 14 m
+  Crava a katana na própria sombra: um portal de sombra abre debaixo do adversário e a lâmina sobe dele cortando e lançando para o alto (não dá para defender — saia de cima do portal). A katana volta para a mão por outro portal.
+- **Tomado pelo Ódio** — R2 + × / RT + A · custo 25 · cooldown 18 s
+  Tomado pelo ódio, ativa os poderes da máscara: entra na postura de saque, a aura vermelha acende e por 6 s ele bate 20% mais forte, ataca e anda mais rápido, e cada corte faz o alvo sangrar de leve.
 - **Pavor Anormal** — △ + □ / Y + X · custo 20 · cooldown 14 s · dano 25
   Risca no chão o Símbolo de Conhecimento e Medo: quem pisar nele toma dano de Conhecimento e fica paralisado de pavor.
 - **Passiva — Decepar:** finalizador +30% em quem está com menos de 20% de vida
@@ -107,13 +109,13 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 - **Passiva — Precognição:** não é pego desprevenido (sem bônus de costas nem susto de teleporte)
 - **Passiva — Resistente:** −7% de dano físico recebido
 
-### Especial: Shi no Kage
+### Especial: Execução das Sombras
 
 250 de dano · custo 50 · cooldown 14 s.
 
-### Transformação: Técnica Secreta
+### Transformação: Shi no Kage
 
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +15% de dano, +15% de velocidade, recargas 20% mais rápidas, cura 10% na hora.
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
 
 ---
 
@@ -200,7 +202,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 - **Tentáculos de Lodo** — △ + ○ / Y + B · custo 30 · cooldown 11 s · dano 70 · alcance 10 m
   Põe a mão no chão: tentáculos de Lodo Preto brotam embaixo do inimigo, prendem e comprimem.
 - **Cicatrização "Paradiso"** — R2 + △ / RT + Y · custo 30 · cooldown 26 s
-  Acelera o tempo nas feridas: recupera vida em instantes — mas envelhece. A névoa preta sai em espiral da boca dele.
+  Acelera o tempo nas feridas: recupera vida em instantes. A névoa preta sai em espiral da boca dele.
 - **Destruição Temporal "Rotura"** — △ + L2 / Y + LT · custo 25 · cooldown 14 s · dano 58 · alcance 9 m
   Concentra-se no Símbolo: espirais de Morte surgem em volta do alvo, apertam e ele APODRECE (dano de Morte e uma decomposição que continua). Dá para esquivar quando as espirais fecham.
 
@@ -476,8 +478,8 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
   Ergue a mão e as pedras do chão flutuam em volta dele; depois voam uma a uma contra o alvo (dá para defender ou sair da frente).
 - **Lâmina do Medo** — △ + ○ / Y + B · custo 40 · cooldown 25 s · dano 160 · alcance 2.8 m
   Manifesta uma lâmina translúcida de medo ao redor da mão para um golpe curto devastador que quebra a defesa. Errar deixa ele exposto.
-- **Rejeitar Névoa** — R2 + × / RT + A · custo 25 · cooldown 16 s
-  Enfraquece drasticamente os rituais na área: dissipa névoas e zonas do inimigo e corta o dano dos rituais e do ataque principal dele por alguns segundos.
+- **Rejeitar Névoa** — R2 + × / RT + A · custo 25 · cooldown 18 s
+  Dissipa a névoa em volta dele por 6 s: dentro da área, todo ritual do adversário vira conjuração contínua (0,7 s parado, um golpe interrompe) e sai 25% mais fraco. A névoa da Kaiser some na hora.
 - **Toque da Morte** — △ + L2 / Y + LT · custo 40 · cooldown 55 s · dano 30 · alcance 1.3 m
   Toca o alvo e o envelhece: ele definha e fica lento por alguns segundos e FRACO (−20% de dano) até o fim do round. Curtíssimo alcance, como o Inexistir — dá para esquivar. Recarga muito longa.
 - **Passiva — Precognição:** não é pego desprevenido (sem bônus de costas nem susto de teleporte)
@@ -486,7 +488,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 Corpo a corpo, 2x por partida, não pode ser defendido: o alvo vira pó. Escapa esquivando no contato; com a sanidade cheia resiste levando 450 de dano (nunca morre por isso). Custo 50.
 
-### Transformação: Kian de Calamidade
+### Transformação: Realizador da Calamidade
 
 Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
 
@@ -629,7 +631,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 - **Velocidade Mortal** — R2 + × / RT + A · custo 25 · cooldown 20 s
   Distorce o tempo em volta de si: por 6 s fica muito mais rápido, bate mais rápido, recupera as esquivas e deixa rastros dele no ar.
 - **Cicatrização** — △ + L2 / Y + LT · custo 30 · cooldown 26 s
-  Acelera o tempo nas feridas: recupera vida em instantes — mas envelhece.
+  Acelera o tempo nas feridas: recupera vida em instantes.
 - **Bloqueio Perfeito** — defender no instante exato (0.14 s) anula o dano e atordoa o atacante por 0.45 s
 
 ### Especial: Por Eles
@@ -680,7 +682,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 - **Espirais da Perdição** — R2 + × / RT + A · custo 25 · cooldown 14 s · dano 12 · alcance 11 m
   Marca o chão do alvo com um anel de espirais; se ele não sair, elas sobem pelo corpo: por 5 s fica LENTO e os golpes dele perdem força.
 - **Cicatrização** — ranged+back · custo 30 · cooldown 26 s
-  Acelera o tempo nas feridas: recupera vida em instantes — mas envelhece. A cada uso o cabelo fica mais grisalho.
+  Acelera o tempo nas feridas: recupera vida em instantes.
 
 ### Especial: Registro do Outro Lado
 

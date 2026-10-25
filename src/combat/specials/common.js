@@ -13,6 +13,9 @@ export function splitDamage(total, shares) {
 
 // Efeito visual de um golpe de especial, por tipo.
 export function specialHitFx(world, actor, target, fx = {}, color) {
+  // fx.color: a cor deste golpe (ex.: a Relíquia roxa no meio dos cortes dourados da Shi no Kage); fx.color2: a cor do
+  // segundo risco do 'cross'
+  color = fx.color ?? color;
   const c = target.chestPos();
   const yaw = actor.yaw;
   const big = !!fx.big;
@@ -22,7 +25,7 @@ export function specialHitFx(world, actor, target, fx = {}, color) {
       break;
     case 'cross':
       world.fx.slash(c, yaw, { color, radius: 1.8, roll: 0.8, life: 0.35, width: 0.45 });
-      world.fx.slash(c, yaw, { color, radius: 1.8, roll: -0.8, flip: true, life: 0.35, width: 0.45 });
+      world.fx.slash(c, yaw, { color: fx.color2 ?? color, radius: 1.8, roll: -0.8, flip: true, life: 0.35, width: 0.45 });
       break;
     case 'stab': {
       const f = forwardFromYaw(yaw);
