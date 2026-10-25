@@ -1,6 +1,6 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.42.0 (revisado em 2026-10-26: feedback de Kian e Joui — kits e transformações pelo cânone)
+**Versão de referência atual:** v3.43.0 (revisado em 2026-10-26: animações próprias de Kian e Joui, cena da Escrita, Leonora e efeito de Energia)
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente
 
@@ -9,13 +9,13 @@
 
 # PRÓXIMA GRANDE ATUALIZAÇÃO — LUTA + MODO PvE (planejamento de 2026-10-18)
 
-**Estado em 2026-10-26 (v3.42.0):**
+**Estado em 2026-10-26 (v3.43.0):**
 - [~] 2.2 Modelos antigos: Xande e Aguiar (v3.33.0), Fantasma, Kemi e Gal Sal + as lâminas Ereškigal (v3.34.0), Kaiser
   (v3.38.0), Balu e Lírio (v3.40.0), Arthur e Joui (v3.41.0) refeitos pelas artes oficiais; faltam os outros antigos
   (ver *MODELOS — PRÓXIMOS PASSOS*).
 - [x] Feedback de Kian e Joui (25/10/2026): auditoria, Rejeitar Névoa pelo cânone, transformações com kit próprio
-  (Realizador da Calamidade, Shi no Kage), ultimates diferentes no Joui, Tomado pelo Ódio, Portal das Sombras — v3.42.0
-  (ver *ANDAMENTO DO FEEDBACK*; faltam animações próprias).
+  (Realizador da Calamidade, Shi no Kage), ultimates diferentes no Joui, Tomado pelo Ódio, Portal das Sombras — v3.42.0;
+  animações próprias, cena da Escrita, Leonora e raios de Energia — v3.43.0 (ver *ANDAMENTO DO FEEDBACK*).
 - [~] 2.3 Especiais em equipe: Barra de Equipe, Especial simplificado e Transformação em equipe prontos (F1/F2/F3); a tabela de ligações
   `src/config/teamLinks.js` existe mas ainda não está ligada (F4, ver *EQUIPE*).
 - [~] 2.1 Animações de movimentação: 1ª parte na v3.37.0 (corrida, caminhada, pulo, queda, dash, esquiva, reação e 18
@@ -189,8 +189,18 @@ ANDAMENTO DO FEEDBACK (2026-10-26 — auditoria completa em `docs/AUDITORIA-KIAN
 - [x] A cura que envelhece (Cicatrização do Guizo e do Xande, Paradiso do Dante) NÃO deixa mais o cabelo branco — para
       TODOS os personagens (pedido de 2026-10-26): o `agingHeal` é só a cura; a função `ageHair` saiu.
 - [x] HABILIDADES.md regerado (`npm run moves`); `npm run check`, `npm test` (43) e `npm run build` passando.
-- [ ] ANIMAÇÕES NOVAS: o kit novo usa as animações que já existiam (iai, cortes, `point`, `concentrate`). Faltam clipes
-      próprios (o iaijutsu duplo da Shi no Kage, a Lâmina do Medo com a melodia, a Escrita tomando o corpo).
+- [x] EFEITO DE ENERGIA no impacto (pedido de 2026-10-26: "energia deveria ter raios e eletricidade em volta"): todo
+      golpe de Energia — rituais e especiais de quem é de Energia, tiros com elemento Energia (o Rebirth do Arthur, as Balas
+      Amaldiçoadas da Kaiser...) e a arma amaldiçoada de Energia — solta raios em zigue-zague em volta do corpo de quem
+      apanha (na cor do golpe e em branco), faíscas, um clarão e o estalo (`damage.js energyHitFx`).
+- [x] ANIMAÇÕES NOVAS (`src/anim/powerClips.js`, 2026-10-26): `relic_draw` (o Joui agacha com as duas mãos nos dois
+      cabos), `iai_double` (o X final das duas lâminas até o zanshin), `shadow_plunge` (crava a katana na sombra — Portal
+      das Sombras), `levitate_raise` (o Kian ergue a palma — Suspender) e `fear_pierce` (a lâmina junto do ouvido e a
+      estocada que perfura); e o efeito da MELODIA da Lâmina do Medo de Calamidade (anéis de som saindo da mão). Testado no
+      jogo: cada habilidade usa o clipe novo, sem erro.
+- [x] A ESCRITA TOMA O CORPO na Transformação "Realizador da Calamidade": pose nova `script_surge` (braços abrindo, a
+      cabeça para trás), os sigilos dourados sobem das mãos pelos braços até o peito e o rosto, e o corpo acende cada vez
+      mais até o clarão (a barba cresce e as faixas aparecem como antes). Testado: a forma entra e o brilho apaga no fim.
 - [x] Joui mascarado: **Portal das Sombras** (cânone de Calamidade: "um portal pelas sombras; um objeto, como sua katana,
       seria transportado para sua mão") no lugar do Corte das Sombras (que era proposta): crava a katana na sombra e ela
       sobe de um portal debaixo do adversário, cortando e lançando; volta para a mão. Testado: acerta parado, erra quem sai.
@@ -1032,8 +1042,9 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
 # MODELOS — PRÓXIMOS PASSOS
 
 - [x] Xande e Aguiar refeitos pelas artes oficiais (modelos, texturas, machado, taco e skate no Blender); mãos e sapatos de todos.
-- [ ] **Lírio**: remodelar a LEONORA no Blender (como o taco e o skate do Xande) quando o Lírio for atualizado. Ela já
-      recebe a maldição do Xande pela assistência (Amaldiçoar Arma por elemento) — conferir a textura nela depois.
+- [x] **Lírio**: a LEONORA remodelada no Blender pela arte oficial (`tools/blender/npc_leonora.py` → `public/npcs/leonora.glb`):
+      o tambor com a pata dourada nas duas faces, as cintas de ferro com os cravos, o tufo de pelo e o cabo com as faixas
+      pretas; a versão em código ficou de reserva. A maldição do Xande (Amaldiçoar Arma) continua pegando nela.
 - [x] Fantasma remodelada pela arte oficial (sobretudo, faixas, facas, dreads; texturas novas).
 - [x] Kemi remodelada pela arte oficial (top, mochila, faixas, casaco amarrado, dreads; texturas novas).
 - [x] Gal Sal remodelado pela arte de Desconjuração (poncho com caimento real, cabelo, venda, correntes) e as lâminas Ereškigal no Blender.

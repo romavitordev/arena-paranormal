@@ -16,6 +16,7 @@ export const NPC_MODELS = {
   esfinge: 'npcs/esfinge.glb', // o Carniçal da Esfinge (especial da Nubi)
   // ARMAS feitas no Blender (peças rígidas, mesmo carregador): models/weapons.js usa o .glb e, sem ele, a versão em código
   xande_bat: 'npcs/xande_bat.glb', // o taco com arame farpado do Xande
+  leonora: 'npcs/leonora.glb', // a Leonora, a marreta do Lírio (tools/blender/npc_leonora.py)
   xande_skate: 'npcs/xande_skate.glb', // o Skate Caótico (escudo) do Xande
   aguiar_axe: 'npcs/aguiar_axe.glb', // o machado do Mutilador Noturno
   gal_blade: 'npcs/gal_blade.glb', // a Ereškigal, as lâminas em meia-lua do Gal

@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.42.0';
+export const VERSION = '3.43.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,17 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.43.0',
+    date: '2026-10-26',
+    title: 'Escrita e Raios',
+    items: [
+      'ANIMAÇÕES PRÓPRIAS NOS PODERES DO KIAN E DO JOUI: o Joui leva as duas mãos aos dois cabos e saca a Relíquia de Energia na ultimate Shi no Kage, fecha com o X das duas lâminas e termina no zanshin, e crava a katana na própria sombra no Portal das Sombras. O Kian ergue a palma devagar no Suspender e leva a Lâmina do Medo ao ouvido (a melodia) antes da estocada.',
+      'KIAN — A ESCRITA TOMA O CORPO NA TRANSFORMAÇÃO: na cena do Realizador da Calamidade os braços abrem, a cabeça vai para trás e os sigilos sobem das mãos pelos braços, ombros e peito até o rosto, enquanto o corpo dele escurece.',
+      'LEONORA REFEITA NO BLENDER PELA ARTE OFICIAL: a marreta do Lírio agora tem a cabeça de tambor de madeira com a PATA DOURADA nas duas faces, as cintas de ferro cheias de cravos, o tufo de pelo branco e o cabo com as faixas pretas.',
+      'ENERGIA AGORA SOLTA RAIOS: todo golpe de Energia — rituais e especiais de quem é de Energia, tiros com Energia (o Rebirth do Arthur, as Balas Amaldiçoadas da Kaiser) e a arma amaldiçoada de Energia — solta raios e faíscas em volta de quem apanha, com o estalo da eletricidade.',
+    ],
+  },
   {
     v: '3.42.0',
     date: '2026-10-26',

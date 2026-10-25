@@ -254,6 +254,11 @@ export function applyHit(world, attacker, victim, o) {
   const scale = o.scale ?? (launch ? 1.5 : 1);
   world.fx.play(launch || scale >= 1.5 ? 'FX_HIT_HEAVY' : 'FX_HIT_SMALL', p, { color, scale });
   if (o.strike && o.strike.impactFx === 'smash') world.fx.play('FX_DUST', victim.pos, { scale: Math.min(1.6, scale) });
+  // o ELEMENTO no impacto (pedido de 2026-10-26: "energia deveria ter raios e eletricidade em volta"): rituais e tiros de
+  // Energia, e golpes com a arma amaldiçoada de Energia, soltam arcos elétricos em volta do corpo de quem apanha
+  const curseEl = (o.kind === 'melee' || o.kind === 'ranged') && attacker.findBuff && attacker.findBuff('curse');
+  const hitElement = o.element || (curseEl && curseEl.element) || ((o.kind === 'ability' || o.kind === 'special') ? attacker.def.element : null);
+  if (hitElement === 'energia') energyHitFx(world, victim, o.color ?? 0xc89aff, scale);
   if (otg) {
     victim.otgTaken = true;
     world.fx.play('FX_GROUND_SMASH', victim.pos, { scale: 0.9 });
@@ -290,7 +295,8 @@ export function applyHit(world, attacker, victim, o) {
   }
   // golpe que corta fundo (ex.: machado do Mutilador) e estados que fazem sangrar (máscara do Aguiar)
   if (o.kind === 'melee' && victim.state !== 'ko' && o.strike && o.strike.bleed) victim.applyBleed(o.strike.bleed, attacker);
-  // máscara do Mutilador: enquanto estiver com ela, TODO golpe do machado sangra — corpo a corpo e o machado na corda
+  // buff.meleeBleed: máscara do Mutilador (TODO golpe do machado sangra — corpo a corpo e o machado na corda) e o Tomado
+  // pelo Ódio do Joui (os poderes da máscara)
   if ((o.kind === 'melee' || o.kind === 'ranged') && victim.state !== 'ko') {
     const mb = (attacker.buffs || []).find((b) => b.meleeBleed);
     if (mb) victim.applyBleed(mb.meleeBleed, attacker);
@@ -313,9 +319,6 @@ export function applyHit(world, attacker, victim, o) {
   // Arma de Sangue (Arthur): a lâmina do próprio sangue faz o alvo sangrar
   const blade = attacker.findBuff && attacker.findBuff('bloodBlade');
   if (blade && o.kind === 'melee' && victim.state !== 'ko') victim.applyBleed(blade.bleed, attacker);
-  // buff.meleeBleed (ex.: o Tomado pelo Ódio do Joui — os poderes da máscara): enquanto dura, os golpes físicos fazem sangrar
-  const mb = attacker.buffs && attacker.buffs.find((b) => b.meleeBleed && b.time > 0);
-  if (mb && o.kind === 'melee' && dealt > 0 && victim.state !== 'ko') victim.applyBleed(mb.meleeBleed, attacker);
 
   // ECO ESPIRAL "Eco Dolor" (Dante — Olhos Abertos): o vulto do alvo repete cada golpe do Dante (danteAbilities.js)
   const eco = victim.findBuff && victim.findBuff('ecoDolor');
@@ -323,6 +326,32 @@ export function applyHit(world, attacker, victim, o) {
 
   world.onHit && world.onHit(attacker, victim, dealt, o);
   return dealt;
+}
+
+// arcos elétricos em volta do corpo (Energia): 3–5 raios curtos entre pontos aleatórios em volta do peito, faíscas e um
+// anel rápido; o estalo só de vez em quando (golpes rápidos não viram um zumbido contínuo)
+function energyHitFx(world, victim, color, scale = 1) {
+  const c = victim.chestPos();
+  const R = 0.45 + 0.15 * scale;
+  const pt = () => c.clone().add({ x: (Math.random() - 0.5) * R * 2, y: (Math.random() - 0.4) * R * 2.2, z: (Math.random() - 0.5) * R * 2 });
+  const n = 5 + Math.round(Math.min(3, scale * 1.5));
+  // cada raio é um zigue-zague de segmentos GROSSOS (fx.lightning é linha de 1 px e some à distância da câmera)
+  for (let i = 0; i < n; i++) {
+    const a0 = pt();
+    const b0 = pt();
+    const life = 0.14 + Math.random() * 0.08;
+    let prev = a0;
+    for (let s = 1; s <= 5; s++) {
+      const q = a0.clone().lerp(b0, s / 5);
+      if (s < 5) q.add({ x: (Math.random() - 0.5) * 0.22, y: (Math.random() - 0.5) * 0.22, z: (Math.random() - 0.5) * 0.22 });
+      world.fx.tracer(prev, q, { color: i % 2 ? 0xf4ecff : color, life, width: i % 2 ? 0.03 : 0.05 });
+      prev = q;
+    }
+  }
+  world.fx.flash(c, { color, size: 1.1 * scale, life: 0.12 });
+  world.fx.burst(c, { count: 16, color: 0xf4ecff, speed: 5, life: 0.25, size: 0.08, gravity: 4 });
+  world.fx.ring(c, { color, radius: 0.9 * scale, life: 0.18, vertical: true, yaw: Math.random() * Math.PI, inner: 0.88, opacity: 0.7 });
+  if (Math.random() < 0.5) world.audio.play('chargeHum', { volume: 0.35, pitch: 2.2 });
 }
 
 function runMeleePassives(world, attacker, victim, o, dealt, attempted) {

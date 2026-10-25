@@ -166,7 +166,7 @@ export default {
     damage: 430,
     color: GOLD,
     sound: 'slashFinal',
-    prepare: { anim: 'iai_slash', time: 0.75, fx: 'relicDraw', showProp: 'relicBlade', arm: 'L' },
+    prepare: { anim: 'relic_draw', time: 0.75, fx: 'relicDraw', showProp: 'relicBlade', arm: 'L' },
     dash: { speed: 30, maxTime: 0.45, contact: 2.0 },
     hits: [
       { t: 0.8, anim: 'slash_h', dur: 0.24, share: 0.08, fx: { kind: 'slash', tilt: 0.05 }, sound: 'blade', sigil: true, foresee: true },
@@ -177,7 +177,7 @@ export default {
       { t: 1.78, anim: 'slash_finisher', dur: 0.4, share: 0.16, fx: { kind: 'slash', roll: 1.5, big: true }, sound: 'slashFinal', victimAnim: 'forced_kneel', bleed: { dps: 8, duration: 5 }, push: 0.05 },
       { t: 2.3, anim: 'slash_up', dur: 0.3, share: 0.1, fx: { kind: 'slash', tilt: -1.2, color: RELIC }, sound: 'blade', foresee: true },
       // o X final: as duas lâminas cruzando
-      { t: 2.75, anim: 'iai_slash', dur: 0.5, share: 0.42, fx: { kind: 'cross', color: GOLD, color2: RELIC }, sound: 'slashFinal', final: true },
+      { t: 2.75, anim: 'iai_double', dur: 0.5, share: 0.42, fx: { kind: 'cross', color: GOLD, color2: RELIC }, sound: 'slashFinal', final: true },
     ],
     bannerAt: 0.25,
     length: 3.7,

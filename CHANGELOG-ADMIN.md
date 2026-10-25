@@ -1,5 +1,19 @@
 # Registro administrativo de alterações
 
+## v3.43.0 — Escrita e Raios
+
+- Versão: `VERSION` 3.42.0 → **3.43.0** (package.json/lock junto). Data: 2026-10-26.
+- **Animações próprias** (pendente do feedback de Kian e Joui: os kits novos usavam clipes emprestados): 6 clipes em
+  `src/anim/powerClips.js` ligados ao Shi no Kage, Portal das Sombras, Suspender, Lâmina do Medo e à transformação do Kian.
+- **Cena da Escrita** do Realizador da Calamidade: os sigilos sobem pelo corpo. Os tickers do mundo param na cinemática,
+  então a lógica ficou na timeline (`tl.each`).
+- **Leonora** remodelada no Blender pela arte oficial ("Marreta de Lírio em Sinais do Outro Lado"), revisada em 4 vistas;
+  testada no jogo (orientação, escala e a maldição do Xande continua pegando).
+- **Efeito de Energia** (pedido: "energia deveria ter raios e eletricidade em volta como efeito"): `energyHitFx` no
+  `applyHit`. O `fx.lightning` (linhas de 1 px) não aparecia; os raios são feitos de segmentos grossos de `tracer`.
+- Testes: partidas CPU × CPU sem erro, golpes de Energia conferidos na tela. `npm run check`, `npm test` (43) e
+  `npm run build` passando.
+
 ## v3.42.0 — Sombra da Morte
 
 - Versão: `VERSION` 3.41.0 → **3.42.0** (package.json/lock junto). Data: 2026-10-26.

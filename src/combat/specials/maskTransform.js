@@ -252,13 +252,44 @@ export const maskTransform = {
       // KIAN — de Desconjuração a CALAMIDADE: 1) concentra, a escrita do corpo acende · 2) a BARBA CRESCE em duas etapas
       // (rala → média → cheia), com um clarão dourado a cada uma · 3) as faixas se enrolam nos antebraços · 4) a luz
       // dourada explode e ele se ergue mais forte
-      f.anim.play('concentrate', { restart: true, duration: 1.2 });
+      // A ESCRITA TOMA O CORPO (2026-10-26): na pose `script_surge` os sigilos dourados SOBEM das mãos pelos antebraços e
+      // braços até o peito e o rosto, e o corpo acende cada vez mais (glowTint) até o clarão final
+      f.anim.play('script_surge', { restart: true, duration: 1.6 });
       lightTo = 4;
       world.cameraRig.playShots([
-        faceClose(f, { dur: 1.3, from: 1.7, to: 1.2, side: 0.3, height: hy - 0.1, fov: 36 }),
-        faceClose(f, { dur: 0.8, from: 1.4, to: 1.0, side: -0.25, height: hy - 0.05, fov: 34 }),
+        lowAngle(f, { dur: 1.1, dist: 2.6, side: 0.5 }),
+        faceClose(f, { dur: 1.0, from: 1.6, to: 1.1, side: 0.3, height: hy - 0.1, fov: 36 }),
         lowAngle(f, { dur: 1.0, dist: 3.0, side: 0.7 }),
       ]);
+      {
+        const J = (n) => () => (f.rig.joints[n] || f.rig.sockets[n]).getWorldPosition(new THREE.Vector3());
+        // os caminhos da escrita: mão → cotovelo → ombro → peito → cabeça, dos dois lados
+        const paths = ['R', 'L'].map((s) => [J('hand' + s), J('e' + s), J('s' + s), () => f.chestPos(), head]);
+        const crawlers = [];
+        for (const path of paths) {
+          let u = 0;
+          const at = () => {
+            const seg = Math.min(path.length - 2, Math.floor(u));
+            return path[seg]().lerp(path[seg + 1](), Math.min(1, u - seg));
+          };
+          const em = world.fx.emitter({ rate: 70, follow: at, particle: { color: tint, speed: 0.4, spread: 0.12, life: 0.7, size: 0.1 } });
+          const runes = world.fx.runes(at, { color: tint, count: 3, radius: 0.16, size: 0.14 });
+          crawlers.push({ em, runes, step: (dt) => { u = Math.min(path.length - 1, u + dt * 2.4); } });
+        }
+        // roda na linha do tempo da própria cena (no cinematic o mundo congela os tickers)
+        let last = 0;
+        let stopped = false;
+        const stopAll = () => { if (stopped) return; stopped = true; crawlers.forEach((c) => { c.em.stop(); c.runes.stop(); }); };
+        tl.each((tt) => {
+          const dt = Math.max(0, tt - last);
+          last = tt;
+          if (tt > 0.2 && tt < 1.95) crawlers.forEach((c) => c.step(dt));
+          if (tt < 2.6) f.glowTint = { color: tint, base: Math.min(0.45, tt * 0.25) };
+          else if (f.glowTint && f.glowTint.color === tint) f.glowTint = null;
+          if (tt >= 2.0) stopAll();
+        });
+        scrap.push(() => { stopAll(); if (f.glowTint && f.glowTint.color === tint) f.glowTint = null; });
+      }
       tl.add(0.25, () => world.showBanner(sp.banner || sp.name, f.def.color));
       const glow = (big) => {
         world.fx.flash(head(), { color: tint, size: big ? 1.6 : 1.1, life: 0.15 });

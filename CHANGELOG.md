@@ -1,5 +1,18 @@
 # Changelog
 
+## v3.43.0 — Escrita e Raios
+
+### Adicionado
+- `src/anim/powerClips.js` (registrado em `clips.js` por `addPowerClips`): `relic_draw`, `iai_double`, `shadow_plunge`, `levitate_raise`, `script_surge` e `fear_pierce`.
+- Opção `a.anim` em `fearBlade`, `abductBeam` e `shadowPortal`; `fearBlade.melody` (ondas da melodia no preparo).
+- `damage.js energyHitFx`: raios em zigue-zague (segmentos de `tracer`), clarão, faíscas, anel e som em todo golpe de Energia (elemento do golpe, da maldição da arma no físico/tiro, ou do personagem em ritual/especial).
+- `tools/blender/npc_leonora.py` → `public/npcs/leonora.glb` (+ `fonte/leonora.blend`); `npcRig` `leonora`.
+
+### Alterado
+- `maskTransform` (Kian, Realizador da Calamidade): clipe `script_surge`, câmera nova e a Escrita subindo das mãos ao rosto (`tl.each`), com `glowTint` escurecendo.
+- `weapons.js leonora()`: carrega o `.glb` do Blender; a versão em código fica de reserva.
+- `damage.js`: removido o bloco duplicado do `meleeBleed` (o do Mutilador já cobre).
+
 ## v3.42.0 — Sombra da Morte
 
 ### Adicionado

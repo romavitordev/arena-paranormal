@@ -59,12 +59,12 @@ export default {
         return {
           id: 'suspender', name: 'Levitação: Suspender', input: a.input, type: 'abductBeam',
           description: 'Ergue a mão: o círculo dourado marca o adversário e, se ele não sair de cima, sobe no ar preso e é arremessado no chão. Dá para escapar correndo ou esquivando.',
-          energyCost: 30, cooldown: 14, range: 11, radius: 1.5, windup: 0.6, damage: 90, lift: 0.9, drop: 0.7, element: 'conhecimento', color: GOLD, sigils: true, hitLabel: 'SUSPENSO', missLabel: 'ESCAPOU', // os sigilos de Conhecimento (não o feixe de luz)
+          energyCost: 30, cooldown: 14, range: 11, radius: 1.5, windup: 0.6, damage: 90, lift: 0.9, drop: 0.7, element: 'conhecimento', color: GOLD, sigils: true, anim: 'levitate_raise', hitLabel: 'SUSPENSO', missLabel: 'ESCAPOU', // os sigilos de Conhecimento (não o feixe de luz)
         };
       // FINALIZAÇÃO: a Lâmina do Medo de Calamidade deixa o alvo MORRENDO (sangra medo e não regenera sanidade)
       case 'laminaMedo':
         return {
-          ...a, name: 'Lâmina do Medo de Calamidade', damage: 170, cooldown: 18, energyCost: 35, dying: { dps: 14, duration: 6 },
+          ...a, name: 'Lâmina do Medo de Calamidade', damage: 170, cooldown: 18, energyCost: 35, dying: { dps: 14, duration: 6 }, anim: 'fear_pierce', melody: true,
           description: 'A lâmina translúcida com a melodia impossível: o golpe quebra a defesa e deixa o alvo MORRENDO — sangra medo por 6 s e não regenera sanidade.',
         };
       // CONTROLE: a área do Rejeitar Névoa é maior e dura mais

@@ -885,10 +885,23 @@ export const ABILITY_TYPES = {
       const tl = new Timeline();
       f.vel.set(0, 0, 0);
       if (opp && distXZ(f.pos, opp.pos) < 8) f.yaw = yawTo(f.pos, opp.pos);
-      f.anim.play('fear_blade', { restart: true, duration: a.duration });
+      f.anim.play(a.anim || 'fear_blade', { restart: true, duration: a.duration });
       world.audio.play('fearGaze', { volume: 0.6 });
       f.rig.showProp('fearBlade', true);
       const hand = () => f.rig.sockets.handR.getWorldPosition(new THREE.Vector3());
+      // a.melody (Kian de Calamidade — cânone: a lâmina "ecoa uma melodia impossível no ambiente"): enquanto prepara, anéis
+      // de som translúcidos saem da mão em ondas e a nota sobe em tom
+      if (a.melody) {
+        const waves = Math.max(3, Math.round(a.active[0] / 0.1));
+        for (let i = 0; i < waves; i++) {
+          tl.add((i / waves) * a.active[0], () => {
+            const p = hand();
+            world.fx.ring(p, { color: a.color, radius: 0.5 + i * 0.12, life: 0.45, vertical: true, yaw: f.yaw, inner: 0.9, opacity: 0.55 });
+            world.fx.ring(p, { color: a.color, radius: 0.4 + i * 0.1, life: 0.45, vertical: true, yaw: f.yaw + Math.PI / 2, inner: 0.9, opacity: 0.4 });
+            world.audio.play('fearGaze', { volume: 0.25, pitch: 1.4 + i * 0.12 });
+          });
+        }
+      }
       const aura = world.fx.emitter({ rate: 70, follow: hand, particle: { color: a.color, speed: 1, spread: 0.6, life: 0.4, size: 0.25 } });
       let hit = false;
       tl.each((time) => {
@@ -1353,7 +1366,7 @@ Object.assign(ABILITY_TYPES, {
       const tl = new Timeline();
       f.vel.set(0, 0, 0);
       f.yaw = yawTo(f.pos, opp.pos);
-      f.anim.play('slash_v', { restart: true, duration: 0.45 });
+      f.anim.play(a.anim || 'shadow_plunge', { restart: true, duration: 0.45 });
       world.audio.play('teleport', { volume: 0.7, pitch: 0.8 });
       const katana = f.rig.props.katana;
       const mine = new THREE.Vector3(f.pos.x, 0, f.pos.z);
@@ -2751,7 +2764,7 @@ Object.assign(ABILITY_TYPES, {
       const tl = new Timeline();
       f.vel.set(0, 0, 0);
       f.yaw = yawTo(f.pos, opp.pos);
-      f.anim.play('point', { restart: true, duration: a.windup + 0.2 });
+      f.anim.play(a.anim || 'point', { restart: true, duration: a.windup + 0.2 });
       world.audio.play('fearGaze', { volume: 0.7, pitch: 0.8 });
       const spot = new THREE.Vector3(opp.pos.x, 0, opp.pos.z);
       const R = a.radius ?? 1.4;

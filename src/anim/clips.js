@@ -15,6 +15,7 @@ import { addFormClips } from './formClips.js';
 import { addVictoryClips } from './victoryClips.js';
 import { addCharClips } from './charClips.js';
 import { addIdleClips } from './idleClips.js';
+import { addPowerClips } from './powerClips.js';
 import { locomotionClips } from './locomotionClips.js';
 
 const k = (t, pose) => ({ t, pose });
@@ -547,5 +548,6 @@ addFormClips(CLIPS, k, mirrorPose);
 addVictoryClips(CLIPS, k);
 addCharClips(CLIPS, k);
 addIdleClips(CLIPS, k);
+addPowerClips(CLIPS, k);
 
 export const JOINTS = ['hip', 'sp', 'hd', 'sL', 'eL', 'sR', 'eR', 'lL', 'kL', 'lR', 'kR'];

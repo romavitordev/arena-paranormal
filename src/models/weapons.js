@@ -943,6 +943,10 @@ export function barbedBat() {
 // duas faces e um tufo de pelo branco no encaixe (a arte da wiki). Cabo comprido com faixa preta enrolada,
 // empunhadura de couro e colar de ferro. Feita para parecer pesada.
 export function leonora() {
+  // o modelo do Blender (tools/blender/npc_leonora.py, pela arte oficial): o tambor com a pata dourada, as cintas de ferro
+  // com os cravos, o tufo de pelo e o cabo com as faixas pretas. O de baixo (em código) fica de reserva.
+  const m = buildNpcModel('leonora', { outline: 0.006, noOutline: ['fur', 'paw', 'wrap'] });
+  if (m) return m.root;
   const g = new THREE.Group();
   const woodDark = 0x6a4224;
   const woodHead = 0x8a5a32;

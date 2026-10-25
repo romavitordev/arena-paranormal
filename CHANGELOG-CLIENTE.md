@@ -2,6 +2,12 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.43.0 — Escrita e Raios
+- ANIMAÇÕES PRÓPRIAS NOS PODERES DO KIAN E DO JOUI: o Joui leva as duas mãos aos dois cabos e saca a Relíquia de Energia na ultimate Shi no Kage, fecha com o X das duas lâminas e termina no zanshin, e crava a katana na própria sombra no Portal das Sombras. O Kian ergue a palma devagar no Suspender e leva a Lâmina do Medo ao ouvido (a melodia) antes da estocada.
+- KIAN — A ESCRITA TOMA O CORPO NA TRANSFORMAÇÃO: na cena do Realizador da Calamidade os braços abrem, a cabeça vai para trás e os sigilos sobem das mãos pelos braços, ombros e peito até o rosto, enquanto o corpo dele escurece.
+- LEONORA REFEITA NO BLENDER PELA ARTE OFICIAL: a marreta do Lírio agora tem a cabeça de tambor de madeira com a PATA DOURADA nas duas faces, as cintas de ferro cheias de cravos, o tufo de pelo branco e o cabo com as faixas pretas.
+- ENERGIA AGORA SOLTA RAIOS: todo golpe de Energia — rituais e especiais de quem é de Energia, tiros com Energia (o Rebirth do Arthur, as Balas Amaldiçoadas da Kaiser) e a arma amaldiçoada de Energia — solta raios e faíscas em volta de quem apanha, com o estalo da eletricidade.
+
 ## v3.42.0 — Sombra da Morte
 - JOUI — A TRANSFORMAÇÃO AGORA É "SHI NO KAGE": o Joui da fase final contra o Kian. Ele tira a máscara (entregou-a à Magistrada e perde os poderes dela) e luta com a SHI NO KAGE, a katana preta amaldiçoada com Conhecimento e os sigilos dourados; no quadril, a bainha de sigilos roxos que guarda a Relíquia de Energia. Kit próprio: cortes de Conhecimento mais fortes e rápidos, Corte de Conhecimento (□), Saque da Relíquia (△ + ×), DECEPAR (△ + L2: sangra, ferida aberta, e decapita quem está com a vida baixa), Mateo que fecha as feridas, Olhar do Desespero que deixa ESMORECIDO e o Pavor Anormal riscado debaixo do adversário.
 - JOUI — ULTIMATE "SHI NO KAGE" (só na transformação): ele saca a Relíquia de Energia na outra mão e luta com as duas lâminas — o sigilo de Conhecimento no alvo, cortes previstos, o Decepar que ajoelha e sangra e o X dourado e roxo. O Joui mascarado tem a dele: EXECUÇÃO DAS SOMBRAS (some na sombra e golpeia pelas costas).
