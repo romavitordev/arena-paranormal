@@ -6,6 +6,7 @@ import { Animator } from '../anim/Animator.js';
 import { findSpotBehind, findFreeSpotNear } from './positioning.js';
 import { createMistZone, pickCurseElement, applyWeaponCurse } from './abilities.js';
 import { ELEMENTS } from '../config/elements.js';
+import { getForm } from '../characters/forms/index.js';
 
 // ASSISTÊNCIAS (batalha em equipe): o personagem chamado aparece por alguns segundos, faz UMA ação
 // que depende do contexto e vai embora. Não substitui o lutador principal.
@@ -493,7 +494,7 @@ export class Assist {
       hit: (dmg, opts = {}) => {
         if (opp.state === 'ko') return 0;
         const dir = new THREE.Vector3().subVectors(opp.pos, this.pos).setY(0).normalize();
-        return applyHit(w, o, opp, { damage: Math.round(dmg * ASSIST.damageMult), kind: 'ability', knockback: 3, element: this.def.element, dir, color: this.color, scale: 1.3, ...opts });
+        return applyHit(w, o, opp, { damage: Math.round(dmg * ASSIST.damageMult * (this.empowered ? this.empowered.mult : 1)), kind: 'ability', knockback: 3, element: this.def.element, dir, color: this.color, scale: 1.3, ...opts });
       },
     };
     this.active = (auto && acts.auto ? acts.auto : moving && !still ? acts.moving : acts.still)(ctx);
@@ -507,6 +508,29 @@ export class Assist {
     if (this.active) this.leave();
     this.cooldown = 0;
     return this.call({ still: true });
+  }
+
+  // TRANSFORMAÇÃO EM EQUIPE (F3): o líder se transformou com a Barra de Equipe cheia — quem tem FORMA no cânone
+  // (def.awakening.form: Dante → Olhos Abertos, Arnaldo → Anfitrião, Kemi → Fantasma...) passa a entrar com o modelo e a
+  // ficha da forma; quem só desperta (sem forma) entra com a aura e golpes mais fortes. Dura até o fim do round
+  // (reset) ou até virar o lutador em campo numa troca (revertEmpower).
+  empower(color) {
+    if (this.empowered) return;
+    const aw = this.def.awakening;
+    const form = aw && aw.form ? getForm(aw.form) : null;
+    this.empowered = { base: { def: this.def, rig: this.rig }, color: color ?? this.color, mult: form ? 1.15 : 1.25, form: form ? form.id : null };
+    if (form) this.takeOver(form, buildModel(form.model));
+  }
+
+  revertEmpower() {
+    const e = this.empowered;
+    if (!e) return;
+    if (this.active) this.leave();
+    this.empowered = null;
+    if (e.form) {
+      this.world.scene.remove(this.rig.root);
+      this.takeOver(e.base.def, e.base.rig);
+    }
   }
 
   poof() {
@@ -524,6 +548,11 @@ export class Assist {
     if (!this.active) return;
     const done = this.active.update(dt);
     this.anim.update(dt);
+    // a aura de quem entrou transformada pela equipe
+    if (this.empowered && Math.random() < 0.45) {
+      const c = this.chest();
+      this.world.fx.burst(new THREE.Vector3(c.x + (Math.random() - 0.5) * 0.7, c.y - 0.9 + Math.random() * 1.6, c.z + (Math.random() - 0.5) * 0.7), { count: 1, color: this.empowered.color, speed: 0.3, up: 1.2, life: 0.5, size: 0.13 });
+    }
     this.rig.root.position.copy(this.pos);
     this.rig.root.rotation.y = this.yaw;
     if (done) this.leave();
@@ -554,5 +583,6 @@ export class Assist {
     this.active = null;
     this.world.scene.remove(this.rig.root);
     this.cooldown = 0;
+    this.revertEmpower(); // a transformação em equipe vale só até o fim do round
   }
 }

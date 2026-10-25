@@ -32,6 +32,7 @@ export class HUD {
       <div id="callout"></div>
       <div id="subtitle"><b></b><span></span></div>
       <div id="banner"><div class="stripe"></div><div class="txt"></div></div>
+      <div id="teamCut"></div>
       <div id="flash"></div>`;
     this.panels = [root.querySelector('.panel.p1'), root.querySelector('.panel.p2')];
     this.timerEl = root.querySelector('#timer');
@@ -376,6 +377,35 @@ export class HUD {
     if (px < 54 && name.includes(' ')) px = W / (Math.ceil(n / 2) * 0.6 + 1);
     txt.style.setProperty('--bfs', `${Math.round(Math.max(30, Math.min(cap, px)))}px`);
     el.style.setProperty('--c', color);
+    el.classList.remove('show');
+    void el.offsetWidth;
+    el.classList.add('show');
+  }
+
+  // TRANSFORMAÇÃO EM EQUIPE: três painéis inclinados lado a lado (assistência 1, líder, assistência 2), cada um com o
+  // retrato aproximado no rosto sobre linhas verticais na cor do elemento, bordas pretas em diagonal e o nome embaixo;
+  // entram em sequência e somem juntos (~1,7 s). list = [{ id, name, color }]
+  teamCut(list) {
+    const el = this.root.querySelector('#teamCut');
+    if (!el) return;
+    el.innerHTML = '';
+    list.forEach((c, i) => {
+      const p = document.createElement('div');
+      p.className = 'tc-panel';
+      p.style.setProperty('--c', c.color);
+      p.style.animationDelay = `${i * 0.09}s`;
+      const src = (this.cutPortraits && this.cutPortraits[c.id]) || (this.portraits && this.portraits[c.id]);
+      if (src) {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = '';
+        p.appendChild(img);
+      }
+      const n = document.createElement('b');
+      n.textContent = c.name;
+      p.appendChild(n);
+      el.appendChild(p);
+    });
     el.classList.remove('show');
     void el.offsetWidth;
     el.classList.add('show');

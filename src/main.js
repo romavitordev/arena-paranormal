@@ -72,6 +72,7 @@ hud.onRiddleTap = (key, victim) => {
 const screens = document.getElementById('screens');
 // modelos do Blender carregam no início; os retratos são gerados depois
 const portraits = {};
+hud.portraits = portraits; // a cinemática da transformação em equipe usa os retratos (preenchidos depois do carregamento)
 const arenaThumbs = {}; // previews dos cenários (gerados depois dos retratos)
 let booted = false;
 // aprendizado da CPU (Super Difícil): o que vem com o jogo + o que este navegador já aprendeu
@@ -206,6 +207,9 @@ async function startMatch() {
   loading.progress(0.1);
   await frame();
   await frame();
+  // batalha em equipe: retratos SEM FUNDO dos integrantes para a cinemática da transformação em equipe (HUD.teamCut);
+  // os do menu têm o fundo colorido do time, que cobria o painel
+  hud.cutPortraits = game.mode.team && game.pick.teams ? renderPortraits(game.pick.teams.flat().filter(Boolean), renderer, { background: false }) : {};
   const match = new Match({
     renderer, audio, input, hud, mode: game.mode.kind === 'tutorial' ? 'training' : game.mode.kind === 'tower' ? 'cpu' : game.mode.kind === 'tournament' ? (game.mode.cpu ? 'cpu' : 'pvp') : game.mode.kind, teams: game.mode.team ? game.pick.teams : null, dialogue: game.mode.kind !== 'training' && game.mode.kind !== 'tutorial',
     defs: [p1, p2],

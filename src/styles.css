@@ -185,6 +185,18 @@ html.vp-fix canvas#game, html.vp-fix #hud, html.vp-fix .screen, html.vp-fix #tou
 #letterbox { position: absolute; inset: 0; }
 #letterbox.on ~ .panel, #hud.cine .panel, #hud.cine #center { opacity: .15; transition: opacity .2s; }
 #flash { position: absolute; inset: 0; opacity: 0; }
+/* transformação em equipe: o tríptico inclinado (retratos sobre linhas verticais na cor do elemento) */
+#teamCut { position: absolute; inset: 7vh -3vw; display: none; gap: 0; pointer-events: none; overflow: hidden; }
+#teamCut.show { display: flex; animation: tcOut 1.75s ease-in forwards; }
+.tc-panel { position: relative; flex: 1; margin: 0 -1.4vw; overflow: hidden; transform: skewX(-8deg); border-left: 1.1vw solid #050407; border-right: 1.1vw solid #050407;
+  background: radial-gradient(ellipse at 50% 35%, color-mix(in srgb, var(--c) 55%, transparent), transparent 70%), #0a0710; animation: tcIn .34s cubic-bezier(.2,.9,.3,1.15) backwards; }
+.tc-panel::before { content: ''; position: absolute; inset: -20% 0; background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--c) 85%, white 15%) 0 2px, transparent 2px 7px, color-mix(in srgb, var(--c) 45%, transparent) 7px 8px, transparent 8px 15px); opacity: .55; animation: tcRain .5s linear infinite; }
+.tc-panel img { position: absolute; left: 50%; top: 2%; height: 128%; transform: translateX(-50%) skewX(8deg); filter: contrast(1.15) saturate(1.1) drop-shadow(0 0 1.2vw color-mix(in srgb, var(--c) 70%, transparent)); }
+.tc-panel::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, color-mix(in srgb, var(--c) 30%, #050407) 100%); }
+.tc-panel b { position: absolute; z-index: 1; left: 0; right: 0; bottom: 4%; transform: skewX(8deg); text-align: center; font: 400 clamp(18px, 3vw, 40px)/1 'Bebas Neue', sans-serif; letter-spacing: .08em; color: #fff; text-shadow: 2px 2px 0 #000, 0 0 18px var(--c); }
+@keyframes tcIn { from { transform: skewX(-8deg) translateY(-110%); } to { transform: skewX(-8deg) translateY(0); } }
+@keyframes tcRain { from { transform: translateY(-6%); } to { transform: translateY(6%); } }
+@keyframes tcOut { 0%, 80% { opacity: 1; } 100% { opacity: 0; } }
 
 /* ---------------- telas ---------------- */
 .screen { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; touch-action: manipulation; background: radial-gradient(ellipse at center, rgba(40,20,70,.55), rgba(5,3,10,.95)); }

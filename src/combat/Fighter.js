@@ -511,6 +511,7 @@ export class Fighter {
     if (this.baseForm) { this.notify('TRANSFORMADO: NÃO PODE TROCAR'); return false; }
     if (!['idle', 'charging', 'block', 'dashing'].includes(this.state) || !this.onGround || this.world.cinematic) return false;
     const w = this.world;
+    as.revertEmpower(); // quem entra em campo volta à forma de base (a transformação em equipe é só das assistências)
     const newDef = as.def;
     const newRig = as.rig;
     const oldDef = this.def;
@@ -3046,6 +3047,17 @@ export class Fighter {
     this.world.screenFlash && this.world.screenFlash('#ffffff', 0.12);
     this.setState('special');
     this.seq = impl.start(this, aw, this.world);
+    // TRANSFORMAÇÃO EM EQUIPE (F3): com a Barra de Equipe cheia, as assistências se transformam junto (gasta a barra)
+    if (this.teamReady()) {
+      this.teamGauge = 0;
+      const col = aw.color ?? this.def.energyColor;
+      // a cinemática do tríptico (antes de as formas trocarem de modelo: o retrato é o de base de cada um)
+      const card = (d) => ({ id: d.baseId || d.id, name: d.name, color: (ELEMENTS[d.element] && ELEMENTS[d.element].color) || '#' + new THREE.Color(d.energyColor ?? 0xffffff).getHexString() });
+      if (this.world.ui && this.world.ui.teamCut) this.world.ui.teamCut([this.assists[0], { def: this.def }, this.assists[1]].filter(Boolean).map((x) => card(x.def)));
+      for (const as of this.assists) as.empower(col);
+      this.notify('TRANSFORMAÇÃO EM EQUIPE!', true);
+      this.world.fx.ring(this.pos.clone().setY(0.06), { color: 0xffd84a, radius: 3.2, life: 0.8 });
+    }
   }
 
   updatePulled(dt) {

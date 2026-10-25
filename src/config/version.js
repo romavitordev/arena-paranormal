@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.37.0';
+export const VERSION = '3.38.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,15 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.38.0',
+    date: '2026-10-25',
+    title: 'Todos Juntos',
+    items: [
+      'TRANSFORMAÇÃO EM EQUIPE: na batalha em equipe, com a Barra de Equipe cheia, transformar o líder leva a equipe junto — gasta a barra, entra uma cena de três painéis com os três lutadores e as assistências passam a entrar transformadas até o fim do round (Dante de Olhos Abertos, o Anfitrião, a Fantasma...). Quem não tem forma própria entra com a aura e golpes mais fortes.',
+      'KAISER REFEITA PELA ARTE OFICIAL: a versão queimada de Desconjuração — metade esquerda do rosto e do braço queimadas, olhos roxos, a gola alta canelada, o casacão claro aberto e cheio de buracos com as laterais roxas, faixas no braço direito e nas canelas, a alça com a Polaroid, a mochila e o cigarro.',
+    ],
+  },
   {
     v: '3.37.0',
     date: '2026-10-23',

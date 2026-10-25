@@ -2,6 +2,10 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.38.0 — Todos Juntos
+- TRANSFORMAÇÃO EM EQUIPE: na batalha em equipe, com a Barra de Equipe cheia, transformar o líder leva a equipe junto — gasta a barra, entra uma cena de três painéis com os três lutadores e as assistências passam a entrar transformadas até o fim do round (Dante de Olhos Abertos, o Anfitrião, a Fantasma...). Quem não tem forma própria entra com a aura e golpes mais fortes.
+- KAISER REFEITA PELA ARTE OFICIAL: a versão queimada de Desconjuração — metade esquerda do rosto e do braço queimadas, olhos roxos, a gola alta canelada, o casacão claro aberto e cheio de buracos com as laterais roxas, faixas no braço direito e nas canelas, a alça com a Polaroid, a mochila e o cigarro.
+
 ## v3.37.0 — Em Movimento
 - ARMAS SEGURADAS DO JEITO CERTO: facas, espadas, katanas, machados, a Leonora, o taco e as lâminas do Gal agora atravessam o punho fechado — a lâmina sai por cima da mão e o cabo aparece embaixo, em vez de atravessar os dedos.
 - MOVIMENTO NOVO: corrida, caminhada, pulo, queda, dash, esquiva e o tranco ao levar golpe foram refeitos — o quadril e o tronco giram a cada passo, os braços balançam opostos às pernas e a cabeça fica firme olhando para a frente.

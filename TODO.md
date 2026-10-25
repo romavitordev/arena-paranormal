@@ -1,6 +1,6 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.37.0 (revisado em 2026-10-23: armas no punho, locomoção refeita, posturas próprias, Esfinge pela arte)
+**Versão de referência atual:** v3.38.0 (revisado em 2026-10-25: Kaiser pela arte, transformação em equipe com o tríptico)
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente
 
@@ -12,7 +12,7 @@
 **Estado em 2026-10-22 (v3.34.0):**
 - [~] 2.2 Modelos antigos: Xande e Aguiar (v3.33.0), Fantasma, Kemi e Gal Sal + as lâminas Ereškigal (v3.34.0) refeitos
   pelas artes oficiais; próximos, em ordem de data: Kaiser, Balu... (ver *MODELOS — PRÓXIMOS PASSOS*).
-- [~] 2.3 Especiais em equipe: Barra de Equipe e Especial simplificado prontos (F1/F2); a tabela de ligações
+- [~] 2.3 Especiais em equipe: Barra de Equipe, Especial simplificado e Transformação em equipe prontos (F1/F2/F3); a tabela de ligações
   `src/config/teamLinks.js` existe mas ainda não está ligada (F4, ver *EQUIPE*).
 - [ ] 2.1 Animações de movimentação, 2.4 câmera de cutscenes.
 - [ ] 3–14 Modo PvE, que vai se chamar **Outro Lado** (dungeons, Espreitador como chefe, progressão, salvamento,
@@ -934,7 +934,10 @@ A confirmar (o dono decide antes de entrar):
   partida (`COMBAT.teamGauge`, `Fighter.addTeamGauge`).
 - [x] **F2** △ △ △ ○ com a barra cheia → Especial em Equipe **simplificado** para todo mundo (+ a IA usando; no toque, o
   botão ESPECIAL vira o de equipe com a barra cheia). `abilities.js teamSpecial`, `COMBAT.teamSpecial` (bônus 100).
-- [ ] **F3** Transformação em equipe com a barra cheia (assistências transformadas até o fim do round).
+- [x] **F3** Transformação em equipe com a barra cheia (2026-10-25): gasta a barra; quem tem forma entra com o modelo e a
+  ficha dela (Dante → Olhos Abertos...), quem só desperta entra com aura e +25% de dano; dura até o fim do round ou até
+  entrar em campo numa troca. Cinemática do tríptico (`HUD.teamCut`, referência do dono: três painéis inclinados com
+  linhas na cor de cada um).
 - [~] **F4** `teamLinks.js` + a regra de prioridade + os primeiros especiais customizados (Mascarados, Joui/Kaiser/
   Arthur, Cristopher/Kaiser). A tabela e o `getTeamLink` (trio > grupo > dupla) já existem; falta ligá-los ao
   Especial em Equipe e fazer as animações próprias.

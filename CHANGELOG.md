@@ -1,5 +1,14 @@
 # Changelog
 
+## v3.38.0 — Todos Juntos
+
+### Adicionado
+- Transformação em equipe (F3): `Fighter.startAwakening` com a Barra de Equipe cheia gasta a barra e chama `Assist.empower` nas duas assistências — com `awakening.form` a assistência troca para a forma (modelo e ficha), sem forma ganha aura e dano ×1,25 (forma ×1,15); `revertEmpower` no fim do round (`reset`) e na troca (`trySwitch`).
+- Cinemática do tríptico (`HUD.teamCut`, `#teamCut` em `styles.css`): três painéis inclinados com o retrato sem fundo (gerado no começo da partida em equipe), linhas verticais na cor do elemento e o nome.
+
+### Alterado
+- Kaiser remodelada pela arte de Desconjuração (`char_kaiser.py`), com texturas novas `jacket_kaiser`, `turtleneck_kaiser`, `pants_kaiser`, `skin_burn_kaiser` e `face_cineraria` revisto.
+
 ## v3.37.0 — Em Movimento
 
 ### Adicionado

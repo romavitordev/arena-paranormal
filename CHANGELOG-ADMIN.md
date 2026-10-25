@@ -1,6 +1,19 @@
 # Registro administrativo de alterações
 
-## Próxima versão (em andamento)
+## v3.38.0 — Todos Juntos
+
+- Versão: `VERSION` 3.37.0 → **3.38.0** (package.json/lock junto). Data: 2026-10-25.
+- **Transformação em equipe (F3 do TODO › EQUIPE)**, pedido "siga pra próxima upd, sem ser remodel": com a Barra de
+  Equipe cheia, a transformação do líder gasta a barra e transforma as assistências (`Assist.empower`): quem tem
+  `awakening.form` troca para a forma (modelo e ficha da forma; a ação genérica da assistência usa o kit dela) com dano
+  ×1,15; quem só desperta (`awakenMode`) ganha aura na cor do líder e dano ×1,25. Dura até o fim do round (`reset` chama
+  `revertEmpower`) ou até a assistência entrar em campo numa troca (`trySwitch` reverte antes). Conferido no jogo:
+  Kian líder com Dante e Arthur — o Dante virou `dante_aberto` (×1,15), o Arthur ficou com aura (×1,25), a barra zerou.
+- **Cinemática do tríptico** (referência do dono: três painéis inclinados com o personagem sobre linhas verticais
+  coloridas): `HUD.teamCut` monta assistência 1 / líder / assistência 2 com o retrato aproximado no rosto, as linhas
+  verticais animadas na cor do ELEMENTO de cada um, as divisórias pretas inclinadas e o nome; entram em sequência e
+  somem juntos (~1,75 s). Os retratos do menu têm o fundo colorido do time e cobriam o painel, então a partida em
+  equipe gera no começo retratos SEM fundo só dos 6 integrantes (`hud.cutPortraits`, `main.js`).
 
 - **Kaiser remodelada pela arte oficial** (`tools/blender/char_kaiser.py` → `public/models/kaiser.glb`; referência
   "Miniatura Kaiser 50% em Desconjuração" e o texto da wiki "Cesar Oliveira Cohen": depois do orfanato a metade esquerda
