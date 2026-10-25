@@ -1,5 +1,22 @@
 # Registro administrativo de alterações
 
+## v3.40.0 — Peso e Pelo
+
+- Versão: `VERSION` 3.39.0 → **3.40.0** (package.json/lock junto). Data: 2026-10-25.
+- **Balu e Lírio remodelados no Blender** (pedido: "Balu e Lirio precisam de remodel agora"; e a correção do dono: "voce
+  não usou o blender pra recriar... Não recriou da melhor maneira"). Desta vez com o ciclo do pipeline: script na técnica
+  atual, `.blend` fonte aberto no Blender pelo MCP com as cores de prévia, revisão em 4 vistas contra a arte e nova volta.
+  - **Balu** (miniatura "Antônio em Calamidade"): `char_balu.py` reescrito do zero — tronco largo com a barriga em
+    relevo, polo folgada com dobras e a barra por cima do cinto, gola larga em V e carcela, mangas curtas com a barra,
+    cinto com a fivela do Amuleto, jeans com dobras, mocassim com a tira, topete em metaballs (corrigido: estava em dois
+    andares e cobrindo a sobrancelha), bigode cheio, cavanhaque e sobrancelhas; sem a orelha direita (como antes).
+  - **Lírio** (miniatura de Sinais do Outro Lado): sobretudo com dobras verticais (`relief`) em vez do tubo liso, pelo em
+    tufos de metaball cinza (`fur_lirio`, para não mudar o `fur_white` do Ferreiro), ombreiras em 4 camadas sobrepostas,
+    duas tiras horizontais no peito com fivelas, e o cabelo refeito em metaballs (calota, alto armado, mechas jogadas
+    para trás até os ombros, cobrindo a nuca, e a mecha laranja por cima).
+- **Arthur e Joui**: o remodel de verdade (no Blender, na técnica atual) ficou para a próxima atualização; o esboço do
+  Arthur foi descartado e os modelos seguem os da v3.39.0.
+
 ## v3.39.0 — Olhos Sempre Abertos
 
 - Versão: `VERSION` 3.38.0 → **3.39.0** (package.json/lock junto). Data: 2026-10-25.

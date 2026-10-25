@@ -2,6 +2,10 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.40.0 — Peso e Pelo
+- BALU REFEITO PELA ARTE OFICIAL: modelado de novo no Blender a partir da miniatura de Calamidade — corpo grande e pesado com a barriga redonda empurrando a polo, a gola larga deitada e aberta em V com a carcela de dois botões, mangas curtas, o topete preto alto penteado para trás com gel, o bigode cheio, jeans azul-acinzentado e mocassim marrom.
+- LÍRIO REFEITO PELA ARTE OFICIAL: o sobretudo agora cai em dobras pesadas, o pelo da gola, das bordas e da barra ficou cinza e fofo, as ombreiras de couro em camadas cobrem o ombro e o braço, o peito ganhou mais tiras de couro e o cabelo loiro-escuro vem grosso e bagunçado, jogado para trás até os ombros, com a mecha laranja.
+
 ## v3.39.0 — Olhos Sempre Abertos
 - ARTHUR — PODERES FIÉIS A CALAMIDADE: o especial agora é o SOLO DO ABUTRE — ele some na fumaça, reaparece ajoelhado, o Rebirth amaldiçoa o rifle com os raios roxos e o tiro sai crítico. A transformação se chama OLHOS SEMPRE ABERTOS. A Arma de Sangue virou habilidade (R2 + ×): paga com o próprio sangue e a lâmina dá mais alcance e sangramento. Passivas novas: Golpe de Sorte (o tiro pode sair crítico) e Furtivo e Letal (de longe, a sniper dói mais). O Rebirth agora é roxo, como em Calamidade.
 - JOUI — PODERES DO CÂNONE: Pavor Anormal (△ + □) risca no chão o Símbolo de Conhecimento e Medo e paralisa quem pisar. Passivas novas: Um por Um (o finalizador devolve sanidade), Precognição (não é pego pelas costas e o corpo a corpo dói menos) e Resistência Paranormal (menos dano de Conhecimento). Na Técnica Secreta, o finalizador DESARMA: o adversário fica sem o ataque à distância por uns segundos.

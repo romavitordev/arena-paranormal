@@ -1,5 +1,12 @@
 # Changelog
 
+## v3.40.0 — Peso e Pelo
+
+### Alterado
+- Balu (`char_balu.py`) reescrito na técnica atual (sculpt_lib: polo e jeans a partir do corpo, barriga em relevo, gola e cinto colados por raio, topete, bigode e mocassins em metaballs) pela miniatura de Calamidade; gera `fonte/balu.blend`.
+- Lírio (`char_lirio.py`): sobretudo com dobras (`relief`), pelo em tufos de metaball (textura nova `fur_lirio`, cinza), ombreiras em camadas, tiras e fivelas no peito, cabelo refeito em metaballs (mechas jogadas para trás até os ombros, mecha laranja); gera `fonte/lirio.blend`.
+- `jeans_balu`: azul-acinzentado. Retratos da página Sobre do Balu e do Lírio regerados.
+
 ## v3.39.0 — Olhos Sempre Abertos
 
 ### Adicionado

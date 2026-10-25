@@ -1377,7 +1377,7 @@ export const MATERIAL_TEXTURES = {
     for (let i = 0; i < 6; i++) { const x = 20 + Math.random() * 216; g.beginPath(); g.moveTo(x, 0); g.bezierCurveTo(x + 20, 80, x - 20, 160, x + 10, 256); g.stroke(); }
   }, { wrap: true }),
   jeans_balu: () => canvasTex(256, 256, (g) => {
-    g.fillStyle = '#86a6c8'; g.fillRect(0, 0, 256, 256);
+    g.fillStyle = '#7f9aa8'; g.fillRect(0, 0, 256, 256); // azul acinzentado da miniatura de Calamidade
     // trama diagonal do jeans, desbotado no joelho, costura dourada
     g.strokeStyle = 'rgba(40,60,100,0.22)'; g.lineWidth = 1;
     for (let i = -256; i < 256; i += 4) { g.beginPath(); g.moveTo(i, 0); g.lineTo(i + 256, 256); g.stroke(); }
@@ -1462,6 +1462,12 @@ export const MATERIAL_TEXTURES = {
   fur_white: () => canvasTex(128, 128, (g) => {
     g.fillStyle = '#e8e4dc'; g.fillRect(0, 0, 128, 128);
     g.strokeStyle = 'rgba(150,140,128,0.45)'; g.lineWidth = 1;
+    for (let i = 0; i < 600; i++) { const x = Math.random() * 128; const y = Math.random() * 128; g.beginPath(); g.moveTo(x, y); g.lineTo(x + (Math.random() - 0.5) * 6, y + 4 + Math.random() * 5); g.stroke(); }
+  }, { wrap: true, repeat: [3, 2] }),
+  // pelo cinza-claro do sobretudo do Lírio (a miniatura de Sinais do Outro Lado)
+  fur_lirio: () => canvasTex(128, 128, (g) => {
+    g.fillStyle = '#d6d1c8'; g.fillRect(0, 0, 128, 128);
+    g.strokeStyle = 'rgba(120,112,102,0.5)'; g.lineWidth = 1;
     for (let i = 0; i < 600; i++) { const x = Math.random() * 128; const y = Math.random() * 128; g.beginPath(); g.moveTo(x, y); g.lineTo(x + (Math.random() - 0.5) * 6, y + 4 + Math.random() * 5); g.stroke(); }
   }, { wrap: true, repeat: [3, 2] }),
 

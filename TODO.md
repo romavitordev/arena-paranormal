@@ -1,6 +1,6 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.39.0 (revisado em 2026-10-25: Arthur e Joui pelo cânone e pela arte, retratos sem cabeça cortada)
+**Versão de referência atual:** v3.40.0 (revisado em 2026-10-25: Balu e Lírio remodelados no Blender pela arte)
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente
 
@@ -876,7 +876,8 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
 - [x] Kemi remodelada pela arte oficial (top, mochila, faixas, casaco amarrado, dreads; texturas novas).
 - [x] Gal Sal remodelado pela arte de Desconjuração (poncho com caimento real, cabelo, venda, correntes) e as lâminas Ereškigal no Blender.
 - [x] Kaiser remodelada pela arte de Desconjuração (versão queimada/50%: casaco do avesso, braço esquerdo queimado, faixas, olhos roxos).
-- [x] Arthur remodelado pela arte de Calamidade (meio-preso, colete preto com o brasão, alça da capa de guitarra, tênis de cano alto) e Joui pela de Calamidade (cabelo repartido, laterais raspadas, chinelos com meias) — v3.39.0, junto com os poderes refeitos pelo cânone.
+- [~] Arthur e Joui: na v3.39.0 só ajustes no script antigo (cores, cabelo, colete, tênis, chinelos). Falta o REMODEL de verdade no Blender, na técnica atual (sculpt_lib, como Kaiser/Balu), revisado pelo MCP em 4 vistas contra a miniatura de Calamidade — o dono apontou que ficou abaixo do padrão.
+- [x] Balu (miniatura de Calamidade) e Lírio (miniatura de Sinais do Outro Lado) remodelados no Blender — v3.40.0.
 - [x] Retratos com a cabeça cortada (Kian no tríptico): `renderPortraits` enquadra pela altura da cabeça — v3.39.0.
 - [ ] Os outros modelos mais antigos, em ordem de data: Anfitrião, Arnaldo e Veríssimo (06/10), depois Diabo e Kian (10/10)...
 

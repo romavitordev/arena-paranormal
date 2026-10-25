@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.39.0';
+export const VERSION = '3.40.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,15 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.40.0',
+    date: '2026-10-25',
+    title: 'Peso e Pelo',
+    items: [
+      'BALU REFEITO PELA ARTE OFICIAL: modelado de novo no Blender a partir da miniatura de Calamidade — corpo grande e pesado com a barriga redonda empurrando a polo, a gola larga deitada e aberta em V com a carcela de dois botões, mangas curtas, o topete preto alto penteado para trás com gel, o bigode cheio, jeans azul-acinzentado e mocassim marrom.',
+      'LÍRIO REFEITO PELA ARTE OFICIAL: o sobretudo agora cai em dobras pesadas, o pelo da gola, das bordas e da barra ficou cinza e fofo, as ombreiras de couro em camadas cobrem o ombro e o braço, o peito ganhou mais tiras de couro e o cabelo loiro-escuro vem grosso e bagunçado, jogado para trás até os ombros, com a mecha laranja.',
+    ],
+  },
   {
     v: '3.39.0',
     date: '2026-10-25',
