@@ -26,6 +26,17 @@ assets_src/kenney/kenney_nature-kit/Models/GLTF format/*.glb
 
 Depois: `node tools/blender/build.mjs santo_berco` (ou outro id de cenário).
 
+## Animações (CC0)
+
+Corrida, caminhada e queda do jogo vêm do **Universal Animation Library** de **Quaternius** (licença **CC0**), versão
+Standard grátis: https://quaternius.itch.io/universal-animation-library (`Universal Animation Library[Standard].zip`).
+Os dois `.glb` da pasta `Unreal-Godot` ficam em `assets_src/quaternius/universal-animation-library/` (fora do git) e
+viram `src/anim/ualClips.js` (esse vai para o git):
+
+```
+node tools/anim/retarget-ual.mjs assets_src/quaternius/universal-animation-library/UAL1_Standard.glb assets_src/quaternius/universal-animation-library/UAL1_Standard_RM.glb
+```
+
 ## Sons e texturas de efeitos (CC0)
 
 Efeitos sonoros e texturas de efeitos também vêm de pacotes CC0 do Kenney, extraídos aqui com o mesmo nome do zip:

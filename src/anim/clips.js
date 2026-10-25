@@ -16,6 +16,7 @@ import { addVictoryClips } from './victoryClips.js';
 import { addCharClips } from './charClips.js';
 import { addIdleClips } from './idleClips.js';
 import { addPowerClips } from './powerClips.js';
+import { UAL_CLIPS } from './ualClips.js';
 import { locomotionClips } from './locomotionClips.js';
 
 const k = (t, pose) => ({ t, pose });
@@ -520,6 +521,16 @@ CLIPS.block_hunch = { dur: 0.8, loop: true, keys: [k(0, { ...DM, sp: [0.55, 0, 0
 // a LOCOMOÇÃO nova (anim/locomotionClips.js) substitui corrida, caminhada, pulo, queda, dash, esquiva e reação a golpe
 // ANTES dos clipes derivados abaixo (walk_back sai da caminhada; as formas usam estes como base)
 Object.assign(CLIPS, locomotionClips(k, mirrorPose, GUARD));
+
+// 2.1 — MOVIMENTO IMPORTADO (Quaternius "Universal Animation Library", CC0; tools/anim/retarget-ual.mjs → ualClips.js):
+// a corrida, a caminhada e a queda passam a ser as do pacote (capturadas com ciclo completo). As feitas à mão ficam
+// como *_classic para comparar ou voltar. Pulo, dash, esquiva e a reação a golpe continuam os próprios: o tempo deles
+// é o da jogabilidade, e o Hit_Chest do pacote é um tranco fraco demais para luta (comparado na tela).
+Object.assign(CLIPS, UAL_CLIPS);
+for (const [name, ual] of [['run', 'ual_jog'], ['walk', 'ual_walk'], ['fall', 'ual_jump_loop']]) {
+  CLIPS[name + '_classic'] = CLIPS[name];
+  CLIPS[name] = CLIPS[ual];
+}
 
 // ---------- locomoção travada no adversário (V4 etapa 17: o pé não "patina" andando de lado/de costas)
 // guarda em cima, pernas fazendo o passo na direção certa

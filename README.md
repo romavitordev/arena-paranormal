@@ -229,6 +229,11 @@ lápides, móveis, ruas, carros — posicionadas por `tools/blender/kenney.py` (
 elementos únicos de cada lugar são feitos à mão (Símbolo Espiral, círculo ritual, estátuas, placas). Os kits ficam em
 `assets_src/kenney/` (fora do git; ver `assets_src/README.md`). Gerar: `node tools/blender/build.mjs <id>`.
 
+### Animações de movimento (pacote CC0)
+A corrida, a caminhada e a queda vêm do **Universal Animation Library** de **Quaternius** (CC0), redirecionadas para o
+esqueleto do jogo por `tools/anim/retarget-ual.mjs` → `src/anim/ualClips.js` (o pacote fica em `assets_src/`, fora do
+git). As feitas à mão continuam como `run_classic`, `walk_classic` e `fall_classic`.
+
 ### Sons
 Os sons são sintetizados na hora. Para usar arquivos, coloque-os em `public/sounds/` e liste
 em `SOUND_FILES` (`src/audio/AudioManager.js`) com o mesmo nome do som.

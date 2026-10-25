@@ -19,8 +19,9 @@
 - [x] 2.3 Especiais em equipe: Barra de Equipe, Especial simplificado, Transformação em equipe (F1/F2/F3) e os especiais
   com ligação na lore — Mascarados, Joui + Kaiser + Arthur, Cristopher + Kaiser (F4, ver *EQUIPE*). Novas ligações
   ficam "a confirmar" pelo dono.
-- [~] 2.1 Animações de movimentação: 1ª parte na v3.37.0 (corrida, caminhada, pulo, queda, dash, esquiva, reação e 18
-  posturas paradas próprias); falta importar o pacote de animações gratuito (ver *REAJUSTE DAS ANIMAÇÕES*).
+- [x] 2.1 Animações de movimentação: 1ª parte na v3.37.0 (corrida, caminhada, pulo, queda, dash, esquiva, reação e 18
+  posturas paradas próprias); 2ª parte (2026-10-26): pacote gratuito importado e redirecionado — corrida, caminhada e
+  queda (ver *REAJUSTE DAS ANIMAÇÕES*).
 - [ ] 2.4 Câmera de cutscenes.
 - [ ] 3–14 Modo PvE, que vai se chamar **Outro Lado** (dungeons, Espreitador como chefe, progressão, salvamento,
   cooperativo): não iniciado; já anunciado como "em desenvolvimento, sem data" na página Sobre.
@@ -3112,7 +3113,16 @@ genérico demais), com o motivo. Nenhum item é de balanceamento.
 
 * [x] **Pose de vitória própria para o Arthur** (`vic_arthur`: a sniper apoiada no ombro; `victoryProp` mostra a arma
   na vitória). Correção da análise: a Lírio já tinha a dela (`victory_hammer`, a Leonora erguida).
-* [~] **REAJUSTE DAS ANIMAÇÕES** — 1ª parte feita em 2026-10-23 (`anim/locomotionClips.js`): corrida, caminhada, pulo,
+* [x] **REAJUSTE DAS ANIMAÇÕES** — 2ª parte (2026-10-26, pacote aprovado pelo dono): Quaternius **Universal Animation
+  Library** (Standard, grátis, licença CC0 conferida no License.txt), baixado de quaternius.itch.io. O pacote NÃO vai
+  para o repositório; `tools/anim/retarget-ual.mjs` redireciona as animações para o esqueleto do jogo (giro de cada
+  osso desde a pose T da fonte, calibrado para o repouso do jogo; quadril e tronco medidos como segmento; passada tirada
+  do arquivo com root motion) e grava `src/anim/ualClips.js` (12 clipes `ual_*`: andar, trote, corrida, pulo, queda,
+  rolamento, reações, idle, agachado, morte). No jogo: `run` ← Jog_Fwd_Loop, `walk` ← Walk_Loop, `fall` ← Jump_Loop
+  (as feitas à mão ficam como `*_classic`); interpolação linear para clipes densos (`clip.linear`). Ficam os próprios:
+  pulo, dash, esquiva (tempo de jogabilidade) e a reação a golpe (o Hit_Chest do pacote é fraco demais — comparado na
+  tela). Conferido na tela: tronco igual ao da fonte (idle 2°, andar 5°, trote 23°), corrida casando a velocidade.
+  1ª parte feita em 2026-10-23 (`anim/locomotionClips.js`): corrida, caminhada, pulo,
   queda, dash, esquiva e reação a golpe refeitos à mão com ciclos de verdade (contato, absorção, passagem, impulso; giro
   do quadril, contra-giro do tronco, cabeça estabilizada); a caminhada de costas e as das formas saem deles. FALTA a
   importação de um pacote gratuito: precisa do OK do dono para o pacote escolhido (ex.: Quaternius Universal Animation

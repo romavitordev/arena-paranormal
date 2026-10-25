@@ -111,7 +111,10 @@ function sample(clip, t, out) {
   const a = keys[i];
   const b = keys[Math.min(i + 1, keys.length - 1)];
   const span = b.t - a.t;
-  const lt = span > 0 ? smooth(Math.min(1, Math.max(0, (t - a.t) / span))) : 1;
+  // clip.linear: clipes densos (importados, anim/ualClips.js) — a suavização por trecho faria o movimento "travar" a
+  // cada pose; os feitos à mão (poucas poses-chave) usam a curva suave
+  const u = span > 0 ? Math.min(1, Math.max(0, (t - a.t) / span)) : 1;
+  const lt = clip.linear ? u : smooth(u);
   out.h = (a.pose.h || 0) + ((b.pose.h || 0) - (a.pose.h || 0)) * lt;
   for (const j of JOINTS) {
     const va = a.pose[j] || ZERO;
