@@ -22,7 +22,7 @@
 - [x] 2.1 Animações de movimentação: 1ª parte na v3.37.0 (corrida, caminhada, pulo, queda, dash, esquiva, reação e 18
   posturas paradas próprias); 2ª parte (2026-10-26): pacote gratuito importado e redirecionado — corrida, caminhada e
   queda (ver *REAJUSTE DAS ANIMAÇÕES*).
-- [ ] 2.4 Câmera de cutscenes.
+- [x] 2.4 Câmera de cutscenes (2026-10-26): sem cortes bruscos e sem a câmera entrar no cenário — ver *2.4*.
 - [ ] 3–14 Modo PvE, que vai se chamar **Outro Lado** (dungeons, Espreitador como chefe, progressão, salvamento,
   cooperativo): não iniciado; já anunciado como "em desenvolvimento, sem data" na página Sobre.
 - [x] arrumar posição das facas/espadas nas mãos dos personagens (feito em 2026-10-23: o cabo atravessa o punho fechado
@@ -238,6 +238,15 @@ As melhorias deverão considerar a sincronização entre os personagens, a câme
 Aprimorar os enquadramentos e movimentos da câmera durante as cenas especiais, ataques cinematográficos e transições.
 
 A câmera deverá valorizar os personagens e as ações importantes sem perder o controle da posição dos jogadores nem causar cortes bruscos ou enquadramentos inadequados.
+
+- [x] Feito em 2026-10-26 (`camera/CameraRig.js`, vale para os 46 usos de `playShots` em 24 especiais e na cutscene do
+  agarrão): a cinemática ENTRA saindo de onde a câmera de luta estava (0,3 s); cada plano novo CHEGA num movimento
+  curto a partir do anterior (0,16 s; um plano pode pedir o corte seco com `cut: true` ou outro tempo com `blend`); se o
+  personagem do plano teleporta/atravessa, a câmera corre até ele (máx. 30 m/s) em vez de pular; no FIM volta à luta
+  da mesma posição e altura, com o olhar deslizando até os lutadores (antes pulava ~2 m); os planos não entram mais
+  dentro de casas/muralhas (o recuo contra os blocos sólidos agora vale na cinemática); plano com conta inválida não
+  leva a câmera para NaN. Medido quadro a quadro nos especiais dos 28 personagens: o maior salto caiu de 5,2 m para
+  ~1 m (só as transições rápidas), sem erro.
 
 ---
 

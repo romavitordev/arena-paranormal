@@ -31,6 +31,16 @@ export const CAMERA_CFG = {
   occluderOpacity: 0.28,
 };
 
+// transições da câmera de cutscenes (segundos): entrar na cinemática, de um plano para o outro, voltar à luta
+export const CUTSCENE = { enter: 0.3, between: 0.16, exit: 0.4, maxSpeed: 30 };
+const smoothstep = (t) => t * t * (3 - 2 * t);
+// leva `to` no máximo a CUTSCENE.maxSpeed (m/s) de `from` (altera `to`)
+function follow(from, to, dt) {
+  const d = from.distanceTo(to);
+  const max = CUTSCENE.maxSpeed * dt;
+  if (d > max) to.lerpVectors(from, to, Math.max(max / d, Math.min(1, dt * 12)));
+}
+
 export class CameraRig {
   constructor(camera, world) {
     this.camera = camera;
@@ -50,17 +60,30 @@ export class CameraRig {
     camera.fov = CAMERA_CFG.fov;
   }
 
+  // 2.4 — CÂMERA DE CUTSCENES: sem cortes bruscos. A cinemática começa saindo de onde a câmera de luta estava, cada
+  // plano novo chega num movimento curto e suave a partir de onde o anterior parou (um plano pode pedir o corte seco do
+  // cinema com `cut: true`, ou mudar a duração da transição com `blend`), e no fim a câmera volta à luta sem pular.
   playShots(shots) {
-    this.shots = { list: shots, i: 0, t: 0 };
+    this.shots = { list: shots, i: 0, t: 0, from: this.blendFrom(), blendT: 0, blendDur: shots[0] && shots[0].cut ? 0 : CUTSCENE.enter };
+    this.lookBack = null;
+  }
+
+  blendFrom() {
+    return { pos: this.pos.clone(), look: this.look.clone() };
   }
 
   stopShots() {
     if (this.shots) {
-      // volta para o enquadramento de luta a partir de onde a cinematic parou
+      // volta para o enquadramento de luta a partir de onde a cinematic parou: mesma posição (direção, distância e
+      // ALTURA tiradas dela) e o olhar desliza do ponto da cena até o meio dos lutadores
       const mid = this.midpoint(this.world.fighters);
       const d = v1.subVectors(this.pos, mid).setY(0);
       if (d.lengthSq() > 0.01) this.yaw = Math.atan2(d.x, d.z);
-      this.distance = clamp(d.length(), CAMERA_CFG.minDistance, CAMERA_CFG.maxDistance);
+      // sem limitar ao mínimo da luta aqui: o amortecimento leva até a distância certa (limitar fazia a câmera pular)
+      this.distance = Math.max(0.5, d.length());
+      this.height = this.pos.y - mid.y;
+      this.target.copy(mid);
+      this.lookBack = { from: this.look.clone(), t: 0 };
     }
     this.shots = null;
   }
@@ -134,12 +157,34 @@ export class CameraRig {
         s.t -= shot.dur;
         s.i++;
         shot = s.list[s.i];
+        // plano novo: parte de onde o anterior parou
+        s.from = this.blendFrom();
+        s.blendT = 0;
+        s.blendDur = shot.cut ? 0 : shot.blend ?? CUTSCENE.between;
       }
       if (shot) {
         const k = clamp(s.t / shot.dur, 0, 1);
-        this.pos.copy(shot.pos(k));
-        this.look.copy(shot.look(k));
-        this.clampToArena(this.pos);
+        // cópias: um plano pode devolver sempre o mesmo vetor (a mistura e o recuo mexem neles)
+        const p = shot.pos(k).clone();
+        const l = shot.look(k).clone();
+        // plano com conta inválida (personagem sumido): fica onde está em vez de ir para NaN
+        if (Number.isFinite(p.x + p.y + p.z) && Number.isFinite(l.x + l.y + l.z)) {
+          this.clampToArena(p);
+          this.avoidSolids(dt, l, p);
+          s.blendT += dt;
+          if (s.blendDur > 0 && s.blendT < s.blendDur) {
+            const e = smoothstep(s.blendT / s.blendDur);
+            p.lerpVectors(s.from.pos, p, e);
+            l.lerpVectors(s.from.look, l, e);
+          } else if (!shot.cut && dt > 0) {
+            // o personagem do plano TELEPORTOU/atravessou (Ato Final do Arnaldo): em vez de a câmera pular junto, ela
+            // corre até lá numa varrida rápida (velocidade máxima CUTSCENE.maxSpeed)
+            follow(this.pos, p, dt);
+            follow(this.look, l, dt);
+          }
+          this.pos.copy(p);
+          this.look.copy(l);
+        }
         cam.fov += ((shot.fov || 45) - cam.fov) * Math.min(1, dt * 10);
       }
     } else if (fighters.length === 2) {
@@ -173,6 +218,12 @@ export class CameraRig {
       this.clampToArena(this.pos);
       this.avoidSolids(dt);
       this.look.copy(this.target);
+      // saindo de uma cinemática: o olhar desliza do ponto da cena até os lutadores
+      if (this.lookBack && !snap) {
+        this.lookBack.t += dt / CUTSCENE.exit;
+        if (this.lookBack.t >= 1) this.lookBack = null;
+        else this.look.lerpVectors(this.lookBack.from, this.target, smoothstep(this.lookBack.t));
+      }
       // se a parede não deixa recuar, abre a lente para continuar enquadrando os dois
       const real = this.pos.distanceTo(this.target);
       const full = Math.hypot(this.distance, this.height);
@@ -211,15 +262,24 @@ export class CameraRig {
   // atrás dele, a câmera chega para a frente do obstáculo (a lente abre sozinha para continuar enquadrando)
   // O raio contra os blocos é caro (milhares de triângulos): é refeito 10x por segundo e a distância livre fica guardada
   // para os quadros do meio.
-  avoidSolids(dt = 1 / 60) {
+  // Na CINEMÁTICA (look/pos do plano): o mesmo, a partir do ponto que o plano olha — a câmera de um especial não entra
+  // mais dentro de casa/muralha; para na frente do bloco (raio refeito a cada quadro: o plano se move rápido).
+  avoidSolids(dt = 1 / 60, look = null, pos = this.pos) {
     const solids = this.world.arena && this.world.arena.solids;
     if (!solids || !solids.length) return;
-    const from = v1.copy(this.target);
-    from.y += 0.6;
-    const dir = new THREE.Vector3().subVectors(this.pos, from);
+    const from = v1.copy(look || this.target);
+    if (!look) from.y += 0.6;
+    const dir = new THREE.Vector3().subVectors(pos, from);
     const len = dir.length();
-    if (len < 1) return;
+    if (len < (look ? 0.6 : 1)) return;
     dir.divideScalar(len);
+    if (look) {
+      ray.set(from, dir);
+      ray.far = len;
+      const hit = ray.intersectObjects(solids, false)[0];
+      if (hit && hit.distance > 0.5) pos.copy(from).addScaledVector(dir, hit.distance - 0.3);
+      return;
+    }
     this.solidTimer = (this.solidTimer || 0) - dt;
     if (this.solidTimer <= 0) {
       this.solidTimer = 0.1;
