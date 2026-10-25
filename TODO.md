@@ -41,6 +41,118 @@ O projeto também deverá ser preparado para receber novas dungeons e chefes em 
 
 ## 2. Melhorias no jogo de luta atual
 
+ARENA PARANORMAL — FEEDBACK
+Auditoria e revisão de Kian e Joui: habilidades, transformações e fidelidade ao cânone
+Data: 25/10/2026
+
+IMPORTANTE
+Este documento reúne o feedback do Vitor até agora. NÃO é autorização para reconstruir os personagens do zero nem para alterar o balanceamento global. Antes de implementar, leia o código REAL da versão atual do repositório e a documentação existente. Não presuma que uma habilidade existe, não existe ou funciona de determinada maneira sem conferir a implementação.
+
+OBJETIVO GERAL
+Alguns personagens possuem transformações narrativamente importantes. Quando ativadas, essas formas devem representar suas versões mais poderosas e mudar de verdade o kit de habilidades: poderes, funções, efeitos, animações e possibilidades de combate. Não basta aumentar dano, velocidade ou resistência e manter as mesmas skills.
+
+Preservar o que já funciona, manter compatibilidade com o sistema de combate e fazer alterações localizadas. O foco é fidelidade ao cânone e identidade mecânica de cada forma.
+
+ETAPA 1 — AUDITORIA OBRIGATÓRIA DO REPOSITÓRIO
+1. Leia README.md, TODO.md, CHANGELOG-ADMIN.md, HABILIDADES.md e quaisquer documentos específicos sobre personagens/transformações.
+2. Localize os arquivos reais de Kian e Joui e todos os pontos que definem:
+   - kit normal e kit transformado;
+   - nomes, descrições, dano, custo de energia, cooldown e duração;
+   - condições de ativação, encerramento e retorno à forma normal;
+   - animações, VFX, hitboxes, telegraph, interrupções, invulnerabilidade e efeitos de status;
+   - Ultimate, passivas, IA/CPU e lógica de seleção de habilidade.
+3. Faça uma tabela de auditoria para cada personagem: habilidade atual, comportamento real no código, relação com o cânone, problema encontrado e recomendação.
+4. Diferencie claramente fatos do código, fatos canônicos e propostas de design. Não apresente ideias novas como se fossem habilidades oficiais.
+5. Não comece a implementar antes de concluir essa auditoria e conferir as referências canônicas.
+
+KIAN — PROBLEMAS E DIREÇÃO DE DESIGN
+Feedback do Vitor:
+- Kian está forte fisicamente e consegue fazer combos. Isso não é a prioridade principal da revisão.
+- As habilidades atuais não parecem suficientemente fiéis ao cânone; revisar principalmente a versão transformada, que deve representar Kian em Calamidade, na sua versão de maior poder.
+- A forma transformada precisa ter um kit próprio e claramente mais poderoso, centrado em rituais e manifestações de Conhecimento, e não ser apenas Kian normal com atributos aumentados.
+- Revisar também habilidades que se tornam pouco úteis em partidas normais.
+
+PONTO ESPECÍFICO: REJEITAR NÉVOA
+O feedback do jogador é que Rejeitar Névoa fica praticamente inútil quando não há um Kaiser como adversário.
+- Inspecione a implementação atual e identifique exatamente o que o poder faz, quais condições o ativam e por que depende do Kaiser.
+- Não mantenha uma habilidade situacional quase sem função em confrontos comuns sem avaliar alternativas.
+- Proponha uma função útil contra outros personagens, coerente com o ritual e com as regras já existentes. Exemplos de DIREÇÃO POSSÍVEL, não decisões fechadas: dissipar/neutralizar uma manifestação paranormal ativa, interromper ou enfraquecer um efeito sobrenatural específico, ou criar uma janela curta de proteção/negação contra um ataque paranormal.
+- Não invente uma mecânica genérica que contradiga o ritual. Defina alvos válidos, duração, alcance, custo, cooldown, feedback visual e contrajogo.
+- Se a interação exclusiva com Kaiser for importante para a fidelidade, preserve-a como interação especial, mas faça a habilidade continuar tendo utilidade equilibrada fora desse confronto.
+- Evite transformar a habilidade em um botão universal que anula qualquer skill. Teste contra personagens diferentes e documente as exceções.
+
+REFERÊNCIAS CANÔNICAS A INVESTIGAR PARA KIAN
+Verifique fontes confiáveis da wiki e/ou material canônico antes de fechar nomes e funções. Investigue, quando aplicável à fase escolhida, Inexistir, Teletransporte, Toque da Morte, Lâmina do Medo, Rejeitar Névoa e o domínio de Kian sobre rituais. Confirme a nomenclatura e o contexto de cada habilidade; não inclua automaticamente todas no jogo.
+A versão selecionada precisa ser explícita: Kian em Calamidade, com a condição de poderes correspondente à fase narrativa escolhida. Não misture fases contraditórias.
+
+Direção de gameplay para Kian transformado:
+- identidade de ocultista extremamente poderoso;
+- controle sobrenatural e manipulação de posição/estado do adversário;
+- rituais com funções distintas: controle, mobilidade, pressão e finalização;
+- efeitos visuais de Conhecimento/sigilos consistentes com o estilo visual já existente;
+- ultimate e transformação com apresentação própria, sem copiar literalmente cenas da série em todo golpe;
+- manter o combate físico atual onde ele funciona, sem deixar que ele seja a única parte interessante do personagem.
+
+JOUI — TRANSFORMAÇÃO E KATANA DA MAGISTRADA
+Feedback do Vitor:
+- Joui tem problema semelhante ao Kian: a forma transformada deve representar uma versão realmente mais poderosa, com kit diferente.
+- A transformação do Joui pode usar a katana recebida de Magistrada: Shi no Kage.
+- A transformação deve comunicar visual e mecanicamente que a arma e o conjunto de habilidades mudaram. Não basta trocar a aparência ou aumentar atributos.
+
+IMPORTANTE SOBRE AS FASES DO JOUI
+Investigue e diferencie corretamente:
+- Joui usando os poderes da máscara / fase da Seita das Máscaras;
+- Joui após deixar de ter a máscara e receber a Shi no Kage, a katana de Conhecimento concedida por Magistrada.
+Não misture automaticamente poderes da máscara com a fase posterior. A decisão de qual fase a transformação do jogo representa precisa ficar explícita e coerente com o cânone.
+
+DIREÇÃO DE DESIGN PARA A FORMA TRANSFORMADA DO JOUI
+- Usar a Shi no Kage como arma visual e mecânica da transformação, se isso se encaixar no sistema e no modelo já disponível.
+- A katana deve mudar os golpes, o alcance/ritmo e as animações de forma perceptível, respeitando o que os assets atuais permitem.
+- Priorizar esgrima técnica, cortes precisos, pressão ofensiva e movimentação ágil; não transformar Joui em um conjurador genérico.
+- Se a transformação escolhida for especificamente Joui Mascarado, o kit deve ser baseado na máscara e nos poderes correspondentes, incluindo o uso de sombras/teleporte apenas se a fonte canônica e a implementação justificarem.
+- Se a forma for Joui com Shi no Kage, não conceder automaticamente todos os poderes da máscara. Pode ser necessário tratar essas como fases/formas diferentes.
+- Verifique a existência de modelo, textura, katana e animações antes de propor assets novos. Reutilize os recursos existentes sempre que possível; não invente caminhos de arquivo.
+
+REFERÊNCIAS CANÔNICAS A INVESTIGAR PARA JOUI
+Confirme em fontes confiáveis:
+- a origem e o nome correto da katana Shi no Kage;
+- a relação da arma com Magistrada e Conhecimento;
+- quais poderes pertencem à fase da máscara e quais pertencem ao Joui posterior;
+- a nomenclatura e os feitos realmente mostrados em material canônico.
+Não apresente propostas de gameplay como se fossem poderes oficiais.
+
+CRITÉRIOS PARA A TRANSFORMAÇÃO DOS DOIS
+Uma transformação importante deve:
+1. Ter identidade visual inequívoca.
+2. Trocar ou modificar significativamente o kit de skills.
+3. Ter nomes e efeitos fiéis à versão narrativa escolhida.
+4. Fazer o jogador sentir que desbloqueou a versão mais poderosa daquele personagem.
+5. Ter animações, VFX, telegraphs, hitboxes e feedback legíveis.
+6. Continuar balanceada no contexto do jogo, sem resolver tudo com dano excessivo.
+7. Funcionar contra vários personagens e na CPU, não apenas em uma interação específica.
+8. Retornar ao estado normal corretamente ao terminar, sem deixar buffs, armas ou estados presos.
+
+TESTES OBRIGATÓRIOS
+- Testar transformação e retorno à forma normal.
+- Testar todas as habilidades novas e modificadas com energia suficiente e insuficiente.
+- Testar cooldown, interrupção, bloqueio, esquiva, acerto, erro e KO durante as animações.
+- Testar contra vários personagens, incluindo Kaiser para Rejeitar Névoa, e também adversários que não sejam Kaiser.
+- Verificar que a IA/CPU consegue escolher e executar as habilidades sem travar ou repeti-las de forma problemática.
+- Verificar que trocar de personagem, reiniciar partida ou terminar a luta não deixa efeitos residuais.
+- Rodar os testes/comandos existentes no projeto e relatar exatamente o que foi executado. Não afirmar que algo foi testado se não foi.
+
+DOCUMENTAÇÃO E ENTREGA
+Após a auditoria e, se autorizada/necessária, a implementação:
+- Atualize HABILIDADES.md com nomes, funções, custos e cooldowns reais.
+- Atualize TODO.md marcando apenas o que foi efetivamente concluído.
+- Atualize CHANGELOG-ADMIN.md com resumo das alterações e testes realizados.
+- Atualize README/versão por último, seguindo o fluxo existente do projeto.
+- Preserve o estilo e a arquitetura atuais; não faça refatoração ampla nem passe de balanceamento geral fora do escopo.
+- Apresente ao Vitor um resumo: o que estava errado, o que foi alterado, quais referências canônicas foram usadas, testes executados e limitações restantes.
+
+ESCOPO ATUAL
+Este é um feedback. Kian e Joui são o foco inicial. Não considere o feedback global finalizado; outras observações do Vitor podem ser acrescentadas depois.
+
 ### 2.1. Novas animações de movimentação
 
 Adicionar e aprimorar animações de movimentação para deixar os personagens mais naturais e responsivos durante as batalhas.
