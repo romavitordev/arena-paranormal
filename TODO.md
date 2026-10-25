@@ -9,12 +9,15 @@
 
 # PRÓXIMA GRANDE ATUALIZAÇÃO — LUTA + MODO PvE (planejamento de 2026-10-18)
 
-**Estado em 2026-10-22 (v3.34.0):**
-- [~] 2.2 Modelos antigos: Xande e Aguiar (v3.33.0), Fantasma, Kemi e Gal Sal + as lâminas Ereškigal (v3.34.0) refeitos
-  pelas artes oficiais; próximos, em ordem de data: Kaiser, Balu... (ver *MODELOS — PRÓXIMOS PASSOS*).
+**Estado em 2026-10-25 (v3.40.0):**
+- [~] 2.2 Modelos antigos: Xande e Aguiar (v3.33.0), Fantasma, Kemi e Gal Sal + as lâminas Ereškigal (v3.34.0), Kaiser
+  (v3.38.0), Balu e Lírio (v3.40.0) refeitos pelas artes oficiais; faltam Arthur e Joui no Blender e os outros antigos
+  (ver *MODELOS — PRÓXIMOS PASSOS*).
 - [~] 2.3 Especiais em equipe: Barra de Equipe, Especial simplificado e Transformação em equipe prontos (F1/F2/F3); a tabela de ligações
   `src/config/teamLinks.js` existe mas ainda não está ligada (F4, ver *EQUIPE*).
-- [ ] 2.1 Animações de movimentação, 2.4 câmera de cutscenes.
+- [~] 2.1 Animações de movimentação: 1ª parte na v3.37.0 (corrida, caminhada, pulo, queda, dash, esquiva, reação e 18
+  posturas paradas próprias); falta importar o pacote de animações gratuito (ver *REAJUSTE DAS ANIMAÇÕES*).
+- [ ] 2.4 Câmera de cutscenes.
 - [ ] 3–14 Modo PvE, que vai se chamar **Outro Lado** (dungeons, Espreitador como chefe, progressão, salvamento,
   cooperativo): não iniciado; já anunciado como "em desenvolvimento, sem data" na página Sobre.
 - [x] arrumar posição das facas/espadas nas mãos dos personagens (feito em 2026-10-23: o cabo atravessa o punho fechado
@@ -1285,13 +1288,13 @@ Evitar falas genéricas.
 
 ## Combo
 
-* [ ] Conferir escalonamento
-* [ ] Conferir limite
-* [ ] Conferir especiais
-* [ ] Conferir grabs
+* [x] Conferir escalonamento (`COMBAT.comboScaling` 100/100/90/80/72/65/58/50%)
+* [x] Conferir limite (piso de 50%)
+* [x] Conferir especiais (`comboScalingFloor.special` 75%)
+* [x] Conferir grabs (`comboScalingFloor.grab` 75%)
 * [ ] Conferir finalizadores
 * [ ] Conferir HUD
-* [ ] Evitar infinitos
+* [x] Evitar infinitos (`maxLaunchesPerCombo` 1 + anti-repetição)
 
 Referência inicial:
 
@@ -1320,10 +1323,10 @@ mínimo = 50%
 
 * [ ] Confirmar funcionamento durante stun
 * [ ] Confirmar interrupção de combo
-* [ ] Conferir deslocamento lateral
-* [ ] Evitar aparecer diretamente atrás por padrão
-* [ ] Conferir cargas
-* [ ] Conferir cooldown
+* [x] Conferir deslocamento lateral (passo curto para o lado — teste `positioning`)
+* [x] Evitar aparecer diretamente atrás por padrão (nunca nas costas do atacante — teste `positioning`)
+* [x] Conferir cargas (1 carga de esquiva — teste `combat-universal`)
+* [x] Conferir cooldown (1,2 s — `COMBAT.substitution`)
 * [ ] Testar com todo o elenco
 
 ---
@@ -1331,7 +1334,7 @@ mínimo = 50%
 # 12. GRAB / THROW TECH
 
 * [ ] Conferir dano
-* [ ] Conferir defesa
+* [x] Conferir defesa (Defesa + ○ no começo escapa — `COMBAT.grabTech`, teste `combat-universal`)
 * [ ] Conferir cenas
 * [ ] Conferir câmera
 * [ ] Criar/revisar variações individuais
@@ -1365,8 +1368,8 @@ Death God é **SPECIAL/ULT**, não grab.
 
 # 14. WAKEUP
 
-* [ ] Invulnerabilidade
-* [ ] Roll
+* [x] Invulnerabilidade (`COMBAT.wakeupInvuln` + invulnerável caído)
+* [x] Roll (× ou L2 logo depois de cair levanta rolando — `COMBAT.down`)
 * [ ] Ataque
 * [ ] Pressão justa
 * [ ] Evitar loops
@@ -1379,7 +1382,7 @@ Death God é **SPECIAL/ULT**, não grab.
 * [ ] ○
 * [ ] △
 * [ ] L2
-* [ ] Buffer durante recuperação
+* [x] Buffer durante recuperação (`COMBAT.inputBuffer` 0,12 s)
 * [ ] Evitar comandos acidentais
 * [ ] Conferir janela
 
@@ -1387,12 +1390,12 @@ Death God é **SPECIAL/ULT**, não grab.
 
 # 16. DEFESA
 
-* [ ] Defesa normal
-* [ ] Perfect Block
-* [ ] Resistência
-* [ ] Guard Break
+* [x] Defesa normal
+* [x] Perfect Block (`COMBAT.defense.perfect` 0,1 s + contra-atordoamento)
+* [x] Resistência (barra de defesa com regeneração)
+* [x] Guard Break (`guardCrush` / som `guardBreak`)
 * [ ] Golpe △+○
-* [ ] Consumo de defesa
+* [x] Consumo de defesa (`guardDamage` 0,9 por ponto bloqueado)
 * [ ] Interação com grabs
 * [ ] Evitar quebra injusta
 
@@ -1400,10 +1403,10 @@ Death God é **SPECIAL/ULT**, não grab.
 
 # 17. ANTI-REPETIÇÃO
 
-* [ ] Limite de lançamentos
-* [ ] Limite de projéteis
-* [ ] Redução por repetição
-* [ ] Proteção contra loops
+* [x] Limite de lançamentos (`maxLaunchesPerCombo`)
+* [x] Limite de projéteis (`maxVolleys` 2 no ar)
+* [x] Redução por repetição (`COMBAT.repeat`: 3ª vez seguida 70%)
+* [x] Proteção contra loops
 * [ ] Não prejudicar personagens dependentes de repetição
 
 ---
@@ -1414,10 +1417,10 @@ Todo especial de grande impacto deve possuir leitura clara.
 
 * [ ] Conferir todos os especiais
 * [ ] Conferir projéteis
-* [ ] Supernova
-* [ ] Em Nome do Caos
+* [x] Supernova (a Granada de Luz real pega o especial)
+* [x] Em Nome do Caos (mesma granada; errou, ela não se explode)
 * [ ] Especiais do Anfitrião
-* [ ] Flash Grenade
+* [x] Flash Grenade (Granada de Luz)
 * [ ] Conferir esquiva
 * [ ] Conferir interrupção quando aplicável
 * [ ] Evitar dano sem feedback
@@ -1428,24 +1431,24 @@ Todo especial de grande impacto deve possuir leitura clara.
 
 ## Geral
 
-* [ ] Barra
-* [ ] Condição
+* [x] Barra (Barra de Transformação `COMBAT.storm`)
+* [x] Condição (cheia + vida ≤ 35%)
 * [ ] Custo
-* [ ] Duração
+* [x] Duração (até o fim do round)
 * [ ] Animação
 * [ ] Câmera
 * [ ] Efeitos
-* [ ] Retorno
+* [x] Retorno (volta da forma no fim do round)
 * [ ] Vitória
 
 ## Formas
 
-* [ ] Fantasma
-* [ ] Mutilador
-* [ ] ???
-* [ ] Erin — Em Nome do Caos
-* [ ] Anfitrião
-* [ ] Juan — Portador do Trono
+* [x] Fantasma (forms/fantasma.js)
+* [x] Mutilador (forms/aguiar_mutilador.js)
+* [x] ??? (Capacete do ??? — forms/labirinto_elmo.js)
+* [x] Erin — Em Nome do Caos (forms/erin_caos.js)
+* [x] Anfitrião (forms/anfitriao.js)
+* [x] Juan — Portador do Trono (forms/diabo.js)
 * [ ] Outras formas
 
 ---
@@ -1497,7 +1500,7 @@ SANGUE
 ### Validação
 
 * [ ] Conferir rituais
-* [ ] Conferir cores
+* [x] Conferir cores (`config/elements.js`: Sangue vermelho, Conhecimento dourado, Energia roxo, Morte cinza)
 * [x] Conferir seleção (elemento aparece na seleção e na lista de golpes)
 * [ ] Conferir nomenclatura
 * [x] Não aplicar dano elemental universal
@@ -1527,25 +1530,25 @@ Não criar barra separada de Exposição Paranormal sem nova decisão.
 * [ ] Revisar Cinerária
 * [ ] Conferir duração
 * [ ] Revisar rituais
-* [ ] Avaliar Acácia
+* [x] Avaliar Acácia (no kit)
 * [ ] Avaliar Dissipar Espíritos
 * [ ] Revisar Resistência
 * [x] Desert Eagle
 * [x] Karambit
 * [x] Balas amaldiçoadas
 * [x] Nebulosa
-* [ ] Conferir visual
+* [x] Conferir visual (remodelada pela arte na v3.38.0)
 
 ---
 
 ## ARTHUR
 
 * [x] Conferir braço esquerdo
-* [ ] Revisar Arma de Sangue
+* [x] Revisar Arma de Sangue (v3.39.0: habilidade R2 + ×, paga 40 de vida, alcance e sangramento)
 * [x] Arma de Sangue deve consumir vida (passiva `bloodPrice`: sem sanidade, paga com vida)
-* [ ] Revisar Rebirth
-* [ ] Revisar crânios
-* [ ] Revisar raios
+* [x] Revisar Rebirth (v3.39.0: roxo de Calamidade, Energia)
+* [x] Revisar crânios (caveirinhas de energia no Rebirth)
+* [x] Revisar raios (raios roxos nos tiros)
 * [ ] Revisar Dystopia
 * [ ] Revisar Templo do Ódio
 * [x] Revisar sniper carregado (v3.14.0: laser com atraso e aviso — dá para desviar)
@@ -1573,12 +1576,12 @@ Não criar barra separada de Exposição Paranormal sem nova decisão.
 **Nome oficial: AGHATA**
 
 * [ ] Utilizar referência visual definida (remodel na técnica nova — §23.5)
-* [ ] Descarnar
+* [x] Descarnar (especial)
 * [ ] Livro
-* [ ] Faca
+* [x] Faca
 * [ ] Projétil de Sangue
-* [ ] Ritual de Leitura
-* [ ] Colar Encharcado de Sangue
+* [x] Ritual de Leitura (Leitura de Rituais)
+* [x] Colar Encharcado de Sangue (passiva `bloodNecklace`)
 * [ ] Conferir bleed
 * [ ] Conferir dano físico
 * [ ] Conferir resistência
@@ -1625,10 +1628,10 @@ Conferido no código em 2026-10-22 (revisão da Ultimate e do despertar): os ite
 
 ## DANTE
 
-* [ ] Tentáculos de Lodo
-* [ ] Decadência
-* [ ] Hold
-* [ ] Slow
+* [x] Tentáculos de Lodo
+* [x] Decadência
+* [x] Hold
+* [x] Slow
 * [ ] Conferir alcance
 * [ ] Conferir dano
 * [ ] Evitar loop
@@ -1637,24 +1640,24 @@ Conferido no código em 2026-10-22 (revisão da Ultimate e do despertar): os ite
 
 ## ERIN
 
-* [ ] Em Nome do Caos
-* [ ] Máscara de gás
-* [ ] Custo em vida
-* [ ] Sem barra de sanidade adicional
-* [ ] Cena de suicídio
-* [ ] Vitória caso o rival vá junto
-* [ ] Supernova
-* [ ] Black Hole
+* [x] Em Nome do Caos (forms/erin_caos.js)
+* [x] Máscara de gás
+* [x] Custo em vida (passiva `noSanity`)
+* [x] Sem barra de sanidade adicional (barra zerada e travada)
+* [x] Cena de suicídio (specials/kamikaze.js)
+* [x] Vitória caso o rival vá junto (`sacrificeWin`)
+* [x] Supernova
+* [x] Black Hole (Envelhecimento Localizado "Black Hole")
 * [ ] Cura
-* [ ] Telegraph
+* [x] Telegraph (Granada de Luz)
 
 ---
 
 ## AGUIAR
 
-* [ ] Máscara
-* [ ] Sangramento
-* [ ] Machado
+* [x] Máscara
+* [x] Sangramento
+* [x] Machado (remodelado no Blender (v3.33.0))
 * [ ] Cura
 * [ ] Efeitos próprios
 * [ ] IA
@@ -1663,10 +1666,10 @@ Conferido no código em 2026-10-22 (revisão da Ultimate e do despertar): os ite
 
 ## LABIRINTO
 
-* [ ] Tempestade Caótica
-* [ ] Raio contínuo
-* [ ] Rastreamento
-* [ ] Counterplay
+* [x] Tempestade Caótica (forms/labirinto_elmo.js)
+* [x] Raio contínuo (`beam`)
+* [x] Rastreamento (a ponta segue o alvo (`track` 6,5))
+* [x] Counterplay (um dash escapa do raio)
 * [ ] Identidade própria
 * [ ] Não aumentar força apenas por tier
 
@@ -1687,15 +1690,15 @@ Conferido no código em 2026-10-22 (revisão da Ultimate e do despertar): os ite
 * [ ] Revisar kit
 * [ ] Conferir dano
 * [ ] Conferir alcance
-* [ ] Conferir visual
+* [x] Conferir visual (remodelado no Blender na v3.40.0)
 * [ ] Conferir IA
 
 ---
 
 ## FERREIRO
 
-* [ ] Spiral Hypnosis
-* [ ] Tiros amaldiçoados
+* [x] Spiral Hypnosis
+* [x] Tiros amaldiçoados
 * [ ] Controle de distância
 * [ ] Dano
 * [ ] IA
@@ -1704,15 +1707,15 @@ Conferido no código em 2026-10-22 (revisão da Ultimate e do despertar): os ite
 
 ## JUAN / DIABO
 
-* [ ] Pacto
-* [ ] Lança de Sangue
-* [ ] Poças
-* [ ] Transporte
-* [ ] Hate
-* [ ] Regeneração
-* [ ] Blood Armor
+* [x] Pacto
+* [x] Lança de Sangue (forms/diabo.js)
+* [x] Poças
+* [x] Transporte
+* [x] Hate (`devilHate`)
+* [x] Regeneração (`regen` da forma)
+* [x] Blood Armor (Armadura de Sangue Diabólica)
 * [ ] Explosão do ombro
-* [ ] Portador do Trono
+* [x] Portador do Trono
 * [ ] Testar comeback
 
 Referências antigas de teste:
@@ -1740,16 +1743,16 @@ Vida da forma: 1250 → 1150
 
 ## BALU
 
-* [ ] Conferir modelo
+* [x] Conferir modelo (remodelado no Blender na v3.40.0)
 * [ ] Conferir animações
-* [ ] Machado
+* [x] Machado
 * [x] **Machado em Giro arremessa a arma que está na mão** (pedido do usuário, 2026-10-08): com o Machado
   Demônio ativo (machado virou clava/maça de sangue), o □ deve lançar a clava — hoje lança o machado comum
-* [ ] Blood Curse
-* [ ] Demon Axe
-* [ ] Imposing Voice
-* [ ] Resistência
-* [ ] Ataque de chão
+* [x] Blood Curse (Amaldiçoar Arma com Sangue)
+* [x] Demon Axe (Machado Demônio)
+* [x] Imposing Voice (Fala Imponente)
+* [x] Resistência (Colete Físico-Balístico)
+* [x] Ataque de chão (Derrubar e Atacar)
 * [ ] Coração de Urso
 * [ ] IA
 * [ ] Balanceamento
@@ -1774,34 +1777,34 @@ qualidade do Cristino / Cristopher / Dante v2 — um por vez, com o kit e as jun
 ## Personagens jogáveis
 
 * [ ] Aghata
-* [ ] Aguiar
+* [x] Aguiar (v3.33.0)
 * [ ] Amigo Imaginário
 * [ ] Arnaldo Fritz
 * [ ] Arthur Cervero
-* [ ] Balu
+* [x] Balu (v3.40.0)
 * [ ] Dalmo (e o Colosso)
 * [ ] Erin
 * [ ] O Estrangeiro
 * [ ] Ferreiro
-* [ ] Gal Sal
+* [x] Gal Sal (v3.34.0)
 * [ ] Guizo
 * [ ] Jae
 * [ ] Joui
-* [ ] Kaiser
-* [ ] Kemi
+* [x] Kaiser (v3.38.0)
+* [x] Kemi (v3.34.0)
 * [ ] Kian
 * [ ] Labirinto
 * [ ] Lírio
 * [ ] A Magistrada
 * [ ] O Diabo
 * [ ] Senhor Veríssimo
-* [ ] Xande
+* [x] Xande (v3.33.0)
 
 ## Formas com modelo próprio
 
 * [ ] O Anfitrião
 * [ ] O Portador do Trono (forma do Juan)
-* [ ] A Fantasma (forma da Kemi)
+* [x] A Fantasma (forma da Kemi) (v3.34.0)
 
 ## Invocações
 
