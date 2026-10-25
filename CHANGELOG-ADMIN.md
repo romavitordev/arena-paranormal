@@ -1,5 +1,22 @@
 # Registro administrativo de alterações
 
+## v3.44.0 — Laços de Equipe
+
+- Versão: `VERSION` 3.43.0 → **3.44.0** (package.json/lock junto). Data: 2026-10-26.
+- **Limpeza do projeto** (pedido: começar pela limpeza): varredura de código morto em todo `src`; build voltou a sair sem
+  aviso; versão compilada testada (menu → seleção → cenário → luta, galeria).
+- **F4 — Especiais em Equipe com ligação**: as três ligações e a tela da seleção. Pedidos durante o trabalho: o trio
+  Joui/Kaiser/Arthur não é a Equipe Abutres (essa é de Calamidade, sem o Kaiser) — virou **Força D** (Desconjuração,
+  conferido em `lore/`), com Thiago e Liz previstos; vão existir **várias versões do mesmo personagem** e especiais com
+  membros em comum → entradas por versão (`baseId`) e regra de desempate. Testado no jogo: as três ligações, a equipe
+  sem ligação e casos de versão com ligações de teste.
+- **2.1 — Animações** (pacote aprovado pelo dono): Quaternius Universal Animation Library Standard (CC0, License.txt
+  conferido), baixado de quaternius.itch.io e guardado em `assets_src/` (fora do git). Corrida, caminhada e queda
+  trocadas; a reação a golpe do pacote foi comparada na tela e ficou a antiga (fraca demais para luta).
+- **2.4 — Câmera de cutscenes**: transições, recuo no cenário e saída sem pulo; medido quadro a quadro nos especiais
+  dos 28 personagens (maior salto 5,2 m → ~1 m).
+- `npm run check`, `npm test` (43) e `npm run build` passando.
+
 ## v3.43.0 — Escrita e Raios
 
 - Versão: `VERSION` 3.42.0 → **3.43.0** (package.json/lock junto). Data: 2026-10-26.

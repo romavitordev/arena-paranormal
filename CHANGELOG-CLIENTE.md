@@ -2,6 +2,13 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.44.0 — Laços de Equipe
+- ESPECIAIS EM EQUIPE COM LIGAÇÃO NA LORE: na Batalha em Equipe, com a Barra de Equipe cheia, equipes ligadas no cânone têm o especial próprio. EXECUÇÃO DOS MASCARADOS (3 Mascarados na equipe: os seis aparecem em roda e golpeiam o alvo), FORÇA D (Arthur, Kaiser e Joui: o corte pelas costas, a rajada da M4 e o tiro do Rebirth) e A MURALHA E O DISPARO (Cristopher segura o alvo e o Kaiser, o filho, dispara). O líder fecha com o próprio especial.
+- A seleção da equipe mostra o nome do especial da ligação quando a equipe tem um.
+- ANIMAÇÕES DE MOVIMENTO NOVAS: a corrida, a caminhada e a queda agora vêm de animações capturadas de verdade (pacote gratuito e livre do Quaternius), adaptadas para o esqueleto do jogo.
+- CÂMERA DOS ESPECIAIS MAIS SUAVE: a cena entra e sai sem pulo, cada plano chega num movimento curto, a câmera acompanha quem teleporta em vez de saltar junto e não entra mais dentro de casas e muralhas.
+- Limpeza interna do projeto (código sem uso removido) e o jogo carrega em partes menores.
+
 ## v3.43.0 — Escrita e Raios
 - ANIMAÇÕES PRÓPRIAS NOS PODERES DO KIAN E DO JOUI: o Joui leva as duas mãos aos dois cabos e saca a Relíquia de Energia na ultimate Shi no Kage, fecha com o X das duas lâminas e termina no zanshin, e crava a katana na própria sombra no Portal das Sombras. O Kian ergue a palma devagar no Suspender e leva a Lâmina do Medo ao ouvido (a melodia) antes da estocada.
 - KIAN — A ESCRITA TOMA O CORPO NA TRANSFORMAÇÃO: na cena do Realizador da Calamidade os braços abrem, a cabeça vai para trás e os sigilos sobem das mãos pelos braços, ombros e peito até o rosto, enquanto o corpo dele escurece.

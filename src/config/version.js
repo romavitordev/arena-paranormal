@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.43.0';
+export const VERSION = '3.44.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,18 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.44.0',
+    date: '2026-10-26',
+    title: 'Laços de Equipe',
+    items: [
+      'ESPECIAIS EM EQUIPE COM LIGAÇÃO NA LORE: na Batalha em Equipe, com a Barra de Equipe cheia, equipes ligadas no cânone têm o especial próprio. EXECUÇÃO DOS MASCARADOS (3 Mascarados na equipe: os seis aparecem em roda e golpeiam o alvo), FORÇA D (Arthur, Kaiser e Joui: o corte pelas costas, a rajada da M4 e o tiro do Rebirth) e A MURALHA E O DISPARO (Cristopher segura o alvo e o Kaiser, o filho, dispara). O líder fecha com o próprio especial.',
+      'A seleção da equipe mostra o nome do especial da ligação quando a equipe tem um.',
+      'ANIMAÇÕES DE MOVIMENTO NOVAS: a corrida, a caminhada e a queda agora vêm de animações capturadas de verdade (pacote gratuito e livre do Quaternius), adaptadas para o esqueleto do jogo.',
+      'CÂMERA DOS ESPECIAIS MAIS SUAVE: a cena entra e sai sem pulo, cada plano chega num movimento curto, a câmera acompanha quem teleporta em vez de saltar junto e não entra mais dentro de casas e muralhas.',
+      'Limpeza interna do projeto (código sem uso removido) e o jogo carrega em partes menores.',
+    ],
+  },
   {
     v: '3.43.0',
     date: '2026-10-26',

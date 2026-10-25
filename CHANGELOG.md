@@ -1,5 +1,22 @@
 # Changelog
 
+## v3.44.0 — Laços de Equipe
+
+### Adicionado
+- `combat/teamSpecials.js`: coreografia dos Especiais em Equipe com ligação (golpe próprio por membro, convidados do grupo, `f.teamGuests`); `Assist.enter` / `Assist.perform`.
+- `config/teamLinks.js` ligado ao `teamSpecial`: grupos (`group` + `min`, `style`), trios e duplas; entradas por versão (`baseId`) e desempate (`priority` > tipo > especificidade > líder). Ligações: `mascarados`, `forca_d`, `cristopher_kaiser`.
+- Seleção da equipe: `teamLinkLine` (chave `sel.teamLink` nas 13 línguas); `HUD.teamCut(list, { quick })`.
+- `tools/anim/retarget-ual.mjs` → `src/anim/ualClips.js` (Quaternius Universal Animation Library, CC0); `clip.linear` no Animator.
+- `CameraRig`: `CUTSCENE` (entrada, troca de plano, saída, velocidade máxima), `shot.cut` / `shot.blend`.
+
+### Alterado
+- `run`, `walk` e `fall` usam os clipes importados (os antigos ficam como `*_classic`).
+- Câmera dos especiais: transições suaves, recuo contra blocos sólidos na cinemática, volta à luta sem pulo.
+- Build: chunks `modelos` e `especiais` (o `main` caiu de 878 para 532 kB, sem aviso).
+
+### Removido
+- Código sem uso: `TitleScreen` (+ `title.press` e o CSS `#title`), `watchChain`, `necktie`, `getCharacter`, `isArenaLoaded`, `learnedStats`, `VOLUME_CHANNELS`, `VOLUME_OPTIONS`, `volumeLabel`, `fxLabel`, `FX_NAMES`.
+
 ## v3.43.0 — Escrita e Raios
 
 ### Adicionado

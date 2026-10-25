@@ -1,6 +1,6 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.43.0 (revisado em 2026-10-26: animações próprias de Kian e Joui, cena da Escrita, Leonora e efeito de Energia)
+**Versão de referência atual:** v3.44.0 (revisado em 2026-10-26: limpeza, especiais em equipe com ligação, animações importadas e câmera de cutscenes)
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente
 
@@ -9,7 +9,7 @@
 
 # PRÓXIMA GRANDE ATUALIZAÇÃO — LUTA + MODO PvE (planejamento de 2026-10-18)
 
-**Estado em 2026-10-26 (v3.43.0):**
+**Estado em 2026-10-26 (v3.44.0):**
 - [~] 2.2 Modelos antigos: Xande e Aguiar (v3.33.0), Fantasma, Kemi e Gal Sal + as lâminas Ereškigal (v3.34.0), Kaiser
   (v3.38.0), Balu e Lírio (v3.40.0), Arthur e Joui (v3.41.0) refeitos pelas artes oficiais; faltam os outros antigos
   (ver *MODELOS — PRÓXIMOS PASSOS*).
@@ -1988,7 +1988,7 @@ Título:
 * [ ] Movimentação lateral
 * [ ] Zoom
 * [ ] Transformações
-* [ ] Especiais cinematográficos
+* [x] Especiais cinematográficos (v3.44.0: transições suaves, sem entrar no cenário)
 * [ ] Evitar atravessar cenário
 * [ ] Evitar esconder personagens
 * [ ] Equipe
