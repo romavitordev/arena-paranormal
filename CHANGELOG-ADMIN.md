@@ -1,5 +1,19 @@
 # Registro administrativo de alterações
 
+## Próxima versão (em andamento)
+
+- **Kaiser remodelada pela arte oficial** (`tools/blender/char_kaiser.py` → `public/models/kaiser.glb`; referência
+  "Miniatura Kaiser 50% em Desconjuração" e o texto da wiki "Cesar Oliveira Cohen": depois do orfanato a metade esquerda
+  do corpo queimada, o casaco do avesso cheio de buracos, olhos roxos com 50% de exposição). Gola alta canelada (relevo
+  no tronco + gola), casacão cinza-claro largo e ABERTO feito do corpo, bordas e laterais roxas, bolsos com aba, capuz
+  caído, manga direita até o cotovelo e a esquerda queimada (só a cava) com a PELE QUEIMADA do braço até o cotovelo,
+  faixas coladas por raio no antebraço/mão direitos e nas canelas, alça marrom transversal e a Polaroid branca e amarela,
+  mochila com alças roxas, tênis com a faixa roxa, cabelo em metaballs (calota + mechas, a franja sobre o olho direito,
+  ralo no lado queimado), argola na orelha direita e o cigarro. Materiais próprios (`*_kaiser`) para não mexer nas
+  texturas antigas `jacket`/`turtleneck`, usadas por outros. Texturas novas `jacket_kaiser` (avesso, fuligem, buracos
+  queimados), `turtleneck_kaiser`, `pants_kaiser` e `skin_burn_kaiser`; `face_cineraria` agora com os olhos roxos, sem
+  barba e sem a sobrancelha esquerda. Revisado no Blender pelo MCP (4 vistas) e na galeria.
+
 ## v3.37.0 — Em Movimento
 
 - Versão: `VERSION` 3.36.0 → **3.37.0** (package.json/lock junto). Data: 2026-10-23.

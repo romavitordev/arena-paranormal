@@ -558,11 +558,17 @@ function danteFace(open) {
 
 export const MATERIAL_TEXTURES = {
   // ---------------- KAISER: queimadura no lado ESQUERDO (x > 256)
+  // KAISER depois do orfanato (wiki): a metade ESQUERDA do rosto queimada, sem barba e sem a sobrancelha esquerda; com
+  // 50% de exposição os olhos ficaram roxos
   face_cineraria: face((g) => {
-    stubble(g, 'rgba(30,20,15,0.25)', 700);
+    // a sobrancelha esquerda (x > CX) sumiu na queimadura: a pele queimada cobre o lugar dela
+    g.fillStyle = '#9a4a32';
+    g.beginPath(); g.ellipse(CX + 22, EYE_Y - 20, 17, 7, 0, 0, Math.PI * 2); g.fill();
+    g.strokeStyle = 'rgba(40,12,8,0.6)'; g.lineWidth = 1.2;
+    for (let i = 0; i < 5; i++) { g.beginPath(); g.ellipse(CX + 12 + i * 5, EYE_Y - 20 + (i % 2) * 3, 4, 3, 0.4, 0, Math.PI * 2); g.stroke(); }
   }, {
     skin: '#c49478',
-    eye: { iris: '#2a2018', irisL: '#5a3a7a', irisLight: '#6a5040', bags: true, tilt: 0.05 },
+    eye: { iris: '#6a3aa8', irisLight: '#b48ae8', bags: true, tilt: 0.05 },
     brow: { angry: 5, thick: 5.5 },
     mouth: { mouthW: 14, smile: -1, smirk: 2 },
     before(g) {
@@ -594,6 +600,65 @@ export const MATERIAL_TEXTURES = {
       g.restore();
     },
   }),
+
+  // KAISER: o casacão cinza-claro DO AVESSO (as costuras para fora), sujo de fuligem, com BURACOS queimados de borda
+  // escura e a barra esfiapada
+  jacket_kaiser: () => canvasTex(512, 512, (g) => {
+    const rnd = seeded(175);
+    g.fillStyle = '#d2d0c6'; g.fillRect(0, 0, 512, 512);
+    for (let i = 0; i < 2600; i++) { g.fillStyle = rnd() < 0.5 ? 'rgba(255,255,255,0.05)' : 'rgba(60,58,52,0.06)'; g.fillRect(rnd() * 512, rnd() * 512, 2, 1); }
+    g.strokeStyle = 'rgba(120,116,104,0.5)'; g.lineWidth = 2; g.setLineDash([6, 4]);
+    for (const x of [64, 192, 320, 448]) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, 512); g.stroke(); } // as costuras do avesso
+    g.setLineDash([]);
+    for (let i = 0; i < 14; i++) { // fuligem
+      const grd = g.createRadialGradient(0, 0, 0, 0, 0, 1);
+      g.save(); g.translate(rnd() * 512, rnd() * 512); g.scale(20 + rnd() * 50, 14 + rnd() * 30);
+      grd.addColorStop(0, 'rgba(40,36,32,0.28)'); grd.addColorStop(1, 'rgba(40,36,32,0)');
+      g.fillStyle = grd; g.beginPath(); g.arc(0, 0, 1, 0, Math.PI * 2); g.fill(); g.restore();
+    }
+    for (let i = 0; i < 16; i++) { // os buracos queimados
+      const x = rnd() * 512, y = rnd() * 512, r = 5 + rnd() * 14;
+      g.fillStyle = 'rgba(70,40,24,0.75)'; g.beginPath(); g.ellipse(x, y, r * 1.35, r, rnd() * 3, 0, Math.PI * 2); g.fill();
+      g.fillStyle = '#121214'; g.beginPath(); g.ellipse(x, y, r, r * 0.7, rnd() * 3, 0, Math.PI * 2); g.fill();
+    }
+    const hem = g.createLinearGradient(0, 470, 0, 512);
+    hem.addColorStop(0, 'rgba(60,52,44,0)'); hem.addColorStop(1, 'rgba(60,52,44,0.35)');
+    g.fillStyle = hem; g.fillRect(0, 470, 512, 42);
+  }, { wrap: true }),
+  // a gola alta preta canelada (as nervuras verticais)
+  turtleneck_kaiser: () => canvasTex(256, 256, (g) => {
+    g.fillStyle = '#18181c'; g.fillRect(0, 0, 256, 256);
+    for (let x = 0; x < 256; x += 6) {
+      g.fillStyle = 'rgba(255,255,255,0.05)'; g.fillRect(x, 0, 3, 256);
+      g.fillStyle = 'rgba(0,0,0,0.25)'; g.fillRect(x + 3, 0, 1, 256);
+    }
+  }, { wrap: true }),
+  // a calça preta: sarja, joelhos gastos e a fuligem embaixo
+  pants_kaiser: () => canvasTex(256, 512, (g) => {
+    const rnd = seeded(29);
+    g.fillStyle = '#1c1c20'; g.fillRect(0, 0, 256, 512);
+    g.strokeStyle = 'rgba(255,255,255,0.035)'; g.lineWidth = 1;
+    for (let k = -512; k < 512; k += 3) { g.beginPath(); g.moveTo(k, 0); g.lineTo(k + 512, 512); g.stroke(); }
+    const knee = g.createRadialGradient(128, 300, 0, 128, 300, 70);
+    knee.addColorStop(0, 'rgba(90,90,100,0.2)'); knee.addColorStop(1, 'rgba(90,90,100,0)');
+    g.fillStyle = knee; g.fillRect(0, 220, 256, 160);
+    g.strokeStyle = 'rgba(70,70,80,0.6)'; g.lineWidth = 2;
+    for (const x of [64, 192]) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, 512); g.stroke(); }
+    for (let i = 0; i < 18; i++) { g.fillStyle = `rgba(60,50,40,${0.12 + rnd() * 0.15})`; g.beginPath(); g.ellipse(rnd() * 256, 340 + rnd() * 170, 4 + rnd() * 12, 3 + rnd() * 7, rnd() * 3, 0, Math.PI * 2); g.fill(); }
+  }, { wrap: true }),
+  // a pele QUEIMADA do braço esquerdo (as mesmas placas e rachaduras do rosto)
+  skin_burn_kaiser: () => canvasTex(256, 256, (g) => {
+    const rnd = seeded(66);
+    const grd = g.createLinearGradient(0, 0, 0, 256);
+    grd.addColorStop(0, '#9a4a32'); grd.addColorStop(1, '#b26a50');
+    g.fillStyle = grd; g.fillRect(0, 0, 256, 256);
+    for (let i = 0; i < 90; i++) {
+      const x = rnd() * 256, y = rnd() * 256, r = 4 + rnd() * 12;
+      g.fillStyle = rnd() < 0.5 ? 'rgba(110,40,28,0.55)' : 'rgba(210,140,110,0.35)';
+      g.beginPath(); g.ellipse(x, y, r, r * 0.7, rnd() * 3, 0, Math.PI * 2); g.fill();
+      g.strokeStyle = 'rgba(40,12,8,0.7)'; g.lineWidth = 1.2; g.stroke();
+    }
+  }, { wrap: true }),
 
   // ---------------- ARTHUR: heterocromia (direito castanho, esquerdo verde), cicatriz diagonal
   face_abutre: face((g) => {

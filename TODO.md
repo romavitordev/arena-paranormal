@@ -875,7 +875,8 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
 - [x] Fantasma remodelada pela arte oficial (sobretudo, faixas, facas, dreads; texturas novas).
 - [x] Kemi remodelada pela arte oficial (top, mochila, faixas, casaco amarrado, dreads; texturas novas).
 - [x] Gal Sal remodelado pela arte de Desconjuração (poncho com caimento real, cabelo, venda, correntes) e as lâminas Ereškigal no Blender.
-- [ ] Os outros modelos mais antigos, em ordem de data (Kaiser, Balu...).
+- [x] Kaiser remodelada pela arte de Desconjuração (versão queimada/50%: casaco do avesso, braço esquerdo queimado, faixas, olhos roxos).
+- [ ] Os outros modelos mais antigos, em ordem de data: Anfitrião, Arnaldo e Veríssimo (06/10), depois Arthur, Diabo, Joui e Kian (10/10)...
 
 # EQUIPE — BARRA DE EQUIPE E ESPECIAIS EM EQUIPE
 
