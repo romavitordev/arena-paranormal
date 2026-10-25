@@ -47,10 +47,40 @@ export const PASSIVES = {
       return victim.health <= victim.maxHealth * (passive.threshold ?? 0.2) ? passive.mult ?? 1.3 : 1;
     },
   },
+  // Joui — Um por Um: derrubou ou lançou um, já parte pro próximo — o finalizador que entra devolve sanidade
+  oneByOne: {
+    onMeleeHit({ attacker, strike, dealt, passive }) {
+      if (dealt > 0 && strike && strike.finisher && attacker.addEnergy) attacker.addEnergy(passive.energy ?? 8);
+    },
+  },
+  // Joui (despertar) — Técnica Secreta "Desarmar": o finalizador arranca a arma da mão; o alvo fica sem o ataque à
+  // distância por alguns segundos (precisa "recuperar a arma", como no cânone)
+  disarmStrike: {
+    onMeleeHit({ victim, strike, dealt, passive }) {
+      if (!(dealt > 0) || !strike || !strike.finisher || victim.state === 'ko' || !victim.cooldowns) return;
+      victim.cooldowns.ranged = Math.max(victim.cooldowns.ranged || 0, passive.time ?? 4);
+      victim.notify('DESARMADO', true);
+    },
+  },
   // O Diabo — Decepar Máscara: odeia o Conhecimento e jurou destruí-lo; bate mais forte em quem é desse elemento
   hatesElement: {
     damageMod({ victim, passive }) {
       return victim && victim.def && victim.def.element === passive.element ? passive.mult ?? 1.15 : 1;
+    },
+  },
+  // Arthur — Golpe de Sorte (Calamidade): a margem de crítico dobra; o tiro pode sair CRÍTICO
+  luckyStrike: {
+    damageMod({ attacker, kind, passive }) {
+      if (!(passive.kinds || ['ranged']).includes(kind) || Math.random() >= (passive.chance ?? 0.25)) return 1;
+      attacker.notify('CRÍTICO!', true);
+      return passive.mult ?? 1.5;
+    },
+  },
+  // Arthur — Furtivo e letal (Calamidade): com o rifle, de longe, o tiro furtivo causa mais dano
+  longShot: {
+    damageMod({ attacker, victim, kind, passive }) {
+      if (!(passive.kinds || ['ranged']).includes(kind) || !victim) return 1;
+      return Math.hypot(attacker.pos.x - victim.pos.x, attacker.pos.z - victim.pos.z) >= (passive.minDist ?? 10) ? passive.mult ?? 1.2 : 1;
     },
   },
   // Arthur — Preço de Sangue: sem sanidade, paga rituais e a Arma de Sangue com a própria vida (lido no Fighter)

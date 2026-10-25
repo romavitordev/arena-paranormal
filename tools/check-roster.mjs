@@ -19,6 +19,8 @@ const ok = (cond, msg) => {
   if (!cond) fails++;
 };
 const get = (id) => ROSTER.find((c) => c.id === id);
+const pas = (id, t) => (get(id).passives || []).some((p) => p.type === t);
+const abil = (id, t) => (get(id).abilities || []).some((a) => a.type === t);
 const allStrikes = (c) => [...c.melee.strikes, ...['forward', 'back', 'side', 'air', 'up', 'down'].map((k) => c.melee[k]).filter(Boolean)];
 
 // ---------------- base preservada ----------------
@@ -95,7 +97,7 @@ ok(jaeX && jaeX.abilities.some((a) => a.type === 'shadowTrap' && a.blind > 0 && 
 const bal = get('balu');
 ok(bal && bal.origin === 'Ordo Realitas' && ['curseWeapon', 'demonAxe', 'caiDentro', 'selfBuff', 'heavyProtection'].every((t) => bal.abilities.some((a) => a.type === t)) && bal.ranged.boomerang && bal.ranged.returnsProp === 'axe' && bal.melee.ground && bal.melee.ground.otg && bal.grip.twoHand, 'Balu: pesado da Ordo Realitas, Amaldiçoar Arma, Machado Demônio (vida), Fala Imponente, 110%, Colete, machado que volta e Derrubar e Atacar');
 const banners = Object.fromEntries(ROSTER.map((c) => [c.id, c.special.banner]));
-ok(banners.gal_sal === 'Injustiça né?' && banners.kaiser === 'Cinerária!' && banners.joui === 'Shi no Kage!' && banners.aghata === 'Descarnar!' && banners.arthur === 'Arma de Sangue!' && banners.kian === 'Inexistir', 'textos dos especiais na tela');
+ok(banners.gal_sal === 'Injustiça né?' && banners.kaiser === 'Cinerária!' && banners.joui === 'Shi no Kage!' && banners.aghata === 'Descarnar!' && banners.arthur === 'Solo do Abutre' && banners.kian === 'Inexistir', 'textos dos especiais na tela');
 ok(COMBAT.maxHealth === 1500 && COMBAT.maxEnergy === 100, 'vida 1500 e energia 100');
 // VIDA IGUAL PARA TODOS (1500, sem número na tela); os PORTADORES aguentam mais — Ferreiro e Arnaldo só transformados
 {
@@ -113,7 +115,7 @@ ok(COMBAT.startEnergy === 30 && COMBAT.energyRegen === 2.5 && COMBAT.chargeRate 
 ok(GAMEPAD_LAYOUT.block[0] === 7, 'defesa no RT / R2');
 ok(!GAMEPAD_LAYOUT.mod && GAMEPAD_LAYOUT.assist1[0] === 4 && GAMEPAD_LAYOUT.assist2[0] === 5, 'assistências no L1/LB e R1/RB (sem botão modificador)');
 ok(COMBAT.dodge.charges === 4 && COMBAT.dodge.damagePerCharge > 0, 'barra com 4 esquivas que recupera tomando dano');
-ok(ROSTER.find((c) => c.id === 'arthur').abilities[0].color === 0x3aff6a, 'Rebirth verde');
+ok(ROSTER.find((c) => c.id === 'arthur').abilities[0].color === 0xa46bff, 'Rebirth roxo (os raios de Calamidade)');
 ok(!GAMEPAD_LAYOUT.lock, 'sem botão de travar câmera');
 ok(GAMEPAD_LAYOUT.dodge[0] === 6, 'esquiva no LT / L2 (separada da defesa)');
 
@@ -151,7 +153,9 @@ ok(abu.oneArm && allStrikes(abu).every((s) => !twoArm.includes(s.anim)) && !twoA
 ok(abu.ranged.name === 'Sniper' && abu.ranged.damage === 110, 'Arthur: sniper mantida (110)');
 const reb = abu.abilities.find((a) => a.id === 'rebirth');
 ok(reb && reb.input === 'carga+ranged' && reb.type === 'weaponState' && reb.shots > 0 && reb.bonusDamage > 0, 'Rebirth: △+□, estado temporário da arma com tiros fortalecidos');
-ok(abu.special.name === 'Arma de Sangue', 'Arthur: especial ARMA DE SANGUE (nome correto)');
+ok(abu.special.name === 'Solo do Abutre' && abu.special.type === 'eliteShot', 'Arthur: especial SOLO DO ABUTRE (o tiro de elite)');
+ok(abu.awakening.name === 'Olhos Sempre Abertos', 'Arthur: transformação OLHOS SEMPRE ABERTOS');
+ok(abil('arthur', 'bloodBlade') && pas('arthur', 'luckyStrike') && pas('arthur', 'longShot'), 'Arthur: Arma de Sangue (habilidade), Golpe de Sorte e Furtivo e letal');
 ok(abu.ranged.chargeShot && abu.ranged.chargeShot.maxDamage > abu.ranged.chargeShot.minDamage, 'Arthur: sniper com tiro carregado (ajoelha, mais tempo = mais dano)');
 const legOnly = ['kick_low', 'kick_round', 'kick_front', 'spin_kick', 'knee', 'side_kick', 'air_kick', 'sway_kick'];
 ok(allStrikes(abu).every((s) => legOnly.includes(s.anim)), 'Arthur: golpes físicos só com chutes/joelhadas (não bate com o braço que não tem)');
@@ -165,6 +169,7 @@ ok(mas.abilities.some((a) => a.type === 'teleportBehind' && a.input === 'carga+j
 const gaze = mas.abilities.find((a) => a.type === 'fearGaze');
 ok(gaze && gaze.stun <= 1 && gaze.cooldown >= 10, `Olhar do Desespero: atordoamento breve (${gaze && gaze.stun}s) e cooldown`);
 ok(mas.ranged.visual === 'shadow', 'Joui: □ é uma extensão de sombra');
+ok(mas.abilities.some((a) => a.id === 'pavorAnormal' && a.stun > 0) && ['oneByOne', 'precognition', 'iKnewIt'].every((t) => pas('joui', t)) && mas.awakening.passives.some((p) => p.type === 'disarmStrike'), 'Joui: Pavor Anormal, Um por Um, Precognição, Resistência Paranormal e Técnica Secreta (Desarmar)');
 ok(mas.special.type === 'teleportStrike', 'Joui: Corte Silencioso mantido');
 
 // ---------------- Aghata ----------------
@@ -220,8 +225,6 @@ ok(get('xande').element === 'conhecimento', 'Xande: afinidade com Conhecimento')
 ok(get('verissimo').element === 'medo', 'Senhor Veríssimo: afinidade com Medo');
 
 // ---------------- Cânone e mecânicas (TODO 2026-10-01) ----------------
-const pas = (id, t) => (get(id).passives || []).some((p) => p.type === t);
-const abil = (id, t) => (get(id).abilities || []).some((a) => a.type === t);
 ok(pas('kian', 'precognition') && abil('kian', 'rejectMist'), 'Kian: Precognição + Rejeitar Névoa');
 ok(get('kian').melee.strikes.reduce((n, s) => n + s.damage, 0) <= 215, 'Kian: combo reduzido (≤ 215)');
 ok(new Set(get('kian').abilities.map((a) => a.id)).size === get('kian').abilities.length, 'Kian: habilidades sem id repetido');

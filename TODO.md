@@ -1,6 +1,6 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.38.0 (revisado em 2026-10-25: Kaiser pela arte, transformação em equipe com o tríptico)
+**Versão de referência atual:** v3.39.0 (revisado em 2026-10-25: Arthur e Joui pelo cânone e pela arte, retratos sem cabeça cortada)
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente
 
@@ -876,7 +876,9 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
 - [x] Kemi remodelada pela arte oficial (top, mochila, faixas, casaco amarrado, dreads; texturas novas).
 - [x] Gal Sal remodelado pela arte de Desconjuração (poncho com caimento real, cabelo, venda, correntes) e as lâminas Ereškigal no Blender.
 - [x] Kaiser remodelada pela arte de Desconjuração (versão queimada/50%: casaco do avesso, braço esquerdo queimado, faixas, olhos roxos).
-- [ ] Os outros modelos mais antigos, em ordem de data: Anfitrião, Arnaldo e Veríssimo (06/10), depois Arthur, Diabo, Joui e Kian (10/10)...
+- [x] Arthur remodelado pela arte de Calamidade (meio-preso, colete preto com o brasão, alça da capa de guitarra, tênis de cano alto) e Joui pela de Calamidade (cabelo repartido, laterais raspadas, chinelos com meias) — v3.39.0, junto com os poderes refeitos pelo cânone.
+- [x] Retratos com a cabeça cortada (Kian no tríptico): `renderPortraits` enquadra pela altura da cabeça — v3.39.0.
+- [ ] Os outros modelos mais antigos, em ordem de data: Anfitrião, Arnaldo e Veríssimo (06/10), depois Diabo e Kian (10/10)...
 
 # EQUIPE — BARRA DE EQUIPE E ESPECIAIS EM EQUIPE
 

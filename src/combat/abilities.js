@@ -1012,10 +1012,12 @@ Object.assign(ABILITY_TYPES, {
         const drip = world.fx.emitter({ rate: 35, follow: hand, particle: { color: a.color, speed: 0.4, spread: 0.15, life: 0.45, size: 0.14, gravity: 4 } });
         // a arma fica coberta de sangue (mesmo material da Arma de Sangue do Arthur)
         const uncoat = (a.props || ['knife', 'knifeThrow']).map((n) => f.rig.props[n]).filter((k) => k && k.traverse).map((k) => bloodCoat(k));
+        // a.showProp: a lâmina aparece por inteiro enquanto dura (Arthur: o braço de sangue no ombro que ele perdeu)
+        if (a.showProp && f.rig.props[a.showProp]) f.rig.showProp(a.showProp, true);
         f.addBuff({
           type: 'bloodBlade', name: 'ARMA DE SANGUE', time: a.duration, duration: a.duration,
           rangeBonus: a.rangeBonus, bleed: a.bleed,
-          onEnd() { drip.stop(); uncoat.forEach((u) => u()); },
+          onEnd() { drip.stop(); uncoat.forEach((u) => u()); if (a.showProp && f.rig.props[a.showProp]) f.rig.showProp(a.showProp, false); },
         });
       });
       tl.end(0.5);
@@ -3621,8 +3623,10 @@ Object.assign(ABILITY_TYPES, {
             world.fx.burst(new THREE.Vector3(pos.x, 0.4, pos.z), { count: 22, color: 0x0a0608, kind: 'smoke', speed: 3, up: 1.6, life: 0.9, size: 0.9, grow: 1 });
             const res = applyHit(world, f, opp, { damage: a.damage, kind: 'ability', element: a.element, knockback: 0.5, hitstun: 0.4, sound: 'bladeHit', color: a.color, pos: new THREE.Vector3(pos.x, 0.5, pos.z), unblockable: true });
             if (typeof res === 'number' && opp.state !== 'ko') {
-              blindFighter(world, opp, a.blind);
+              if (a.blind) blindFighter(world, opp, a.blind);
               if (a.deaf) deafFighter(world, opp, a.deaf); // X: cego e SURDO
+              // a.stun (Joui — Pavor Anormal): o Símbolo de Conhecimento e Medo paralisa quem pisa nele
+              if (a.stun) { opp.stun(a.stun, 'stagger'); opp.notify(a.label || 'PARALISADO', true); }
             }
             return false;
           },

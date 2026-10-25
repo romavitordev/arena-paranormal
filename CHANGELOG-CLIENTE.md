@@ -2,6 +2,12 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.39.0 — Olhos Sempre Abertos
+- ARTHUR — PODERES FIÉIS A CALAMIDADE: o especial agora é o SOLO DO ABUTRE — ele some na fumaça, reaparece ajoelhado, o Rebirth amaldiçoa o rifle com os raios roxos e o tiro sai crítico. A transformação se chama OLHOS SEMPRE ABERTOS. A Arma de Sangue virou habilidade (R2 + ×): paga com o próprio sangue e a lâmina dá mais alcance e sangramento. Passivas novas: Golpe de Sorte (o tiro pode sair crítico) e Furtivo e Letal (de longe, a sniper dói mais). O Rebirth agora é roxo, como em Calamidade.
+- JOUI — PODERES DO CÂNONE: Pavor Anormal (△ + □) risca no chão o Símbolo de Conhecimento e Medo e paralisa quem pisar. Passivas novas: Um por Um (o finalizador devolve sanidade), Precognição (não é pego pelas costas e o corpo a corpo dói menos) e Resistência Paranormal (menos dano de Conhecimento). Na Técnica Secreta, o finalizador DESARMA: o adversário fica sem o ataque à distância por uns segundos.
+- ARTHUR E JOUI REFEITOS PELA ARTE OFICIAL: o Arthur de Calamidade com o cabelo até os ombros meio-preso, mechas brancas, colete preto com o brasão dos Gaudérios Abutres, a alça da capa de guitarra no peito, calça com bolsos e amarrações e tênis de cano alto. O Joui com as laterais raspadas e o cabelo repartido caindo para os lados, de chinelo com meias.
+- RETRATOS SEM CABEÇA CORTADA: personagens mais altos (como o Kian) não ficam mais com a cabeça cortada no menu, na seleção, na tela de versus, na cena da transformação em equipe e na página Sobre.
+
 ## v3.38.0 — Todos Juntos
 - TRANSFORMAÇÃO EM EQUIPE: na batalha em equipe, com a Barra de Equipe cheia, transformar o líder leva a equipe junto — gasta a barra, entra uma cena de três painéis com os três lutadores e as assistências passam a entrar transformadas até o fim do round (Dante de Olhos Abertos, o Anfitrião, a Fantasma...). Quem não tem forma própria entra com a aura e golpes mais fortes.
 - KAISER REFEITA PELA ARTE OFICIAL: a versão queimada de Desconjuração — metade esquerda do rosto e do braço queimadas, olhos roxos, a gola alta canelada, o casacão claro aberto e cheio de buracos com as laterais roxas, faixas no braço direito e nas canelas, a alça com a Polaroid, a mochila e o cigarro.

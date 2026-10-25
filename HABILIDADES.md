@@ -43,21 +43,23 @@ especial = Carga → Carga → ○ (custa 50, ofensivos causam 250, nunca hitkil
 ### Habilidades
 
 - **Rebirth** — △ + □ / Y + X · custo 30 · cooldown 22 s
-  Energia paranormal percorre o corpo e amaldiçoa o rifle: os próximos tiros da sniper causam dano extra, com raios e runas.
+  Abre os olhos e os raios roxos de Energia envolvem o rifle com pequenas caveiras: os próximos tiros da sniper causam dano extra.
 - **Ódio Incontrolável "Templo do Ódio"** — △ + ○ / Y + B · custo 15 · cooldown 20 s
   Corta a palma e sangra sobre o olho: ódio intenso por alguns segundos — físico mais forte e mais rápido, mas não consegue defender.
 - **Paralisia de Sangue "Dystopia"** — R2 + △ / RT + Y · custo 25 · cooldown 18 s · alcance 7 m
   Mancha o símbolo com o próprio sangue, abre os olhos vermelhos e paralisa quem estiver à frente por um instante.
 - **Analisar Brecha** — △ + L2 / Y + LT · custo 20 · cooldown 16 s · alcance 14 m
   Estuda o adversário e acha uma brecha: por 7 s ele recebe 25% a mais de dano dos golpes físicos.
+- **Arma de Sangue** — R2 + × / RT + A · custo 0 · cooldown 18 s
+  Paga com o próprio sangue e projeta a lâmina de sangue no ombro que perdeu: por 8 s os golpes alcançam mais longe e fazem sangrar.
 
-### Especial: Arma de Sangue
+### Especial: Solo do Abutre
 
-250 de dano · custo 50 · cooldown 14 s.
+250 de dano · custo 50 · cooldown 16 s.
 
-### Transformação: Magnum Opus
+### Transformação: Olhos Sempre Abertos
 
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +20% de dano, −10% de dano recebido, braço de sangue, cura 10% na hora.
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +15% de dano (físico, habilidades, especial), −15% de dano recebido, cura 15% na hora.
 
 ---
 
@@ -97,8 +99,12 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
   Encara o adversário e libera uma manifestação de medo: quem estiver à frente fica paralisado por um instante, vulnerável a combo.
 - **Corte das Sombras** — △ + L2 / Y + LT · custo 20 · cooldown 10 s · dano 70 · alcance 1.4 m
   Avança como uma sombra em linha reta e corta com a katana o primeiro que estiver no caminho.
+- **Pavor Anormal** — △ + □ / Y + X · custo 20 · cooldown 14 s · dano 25
+  Risca no chão o Símbolo de Conhecimento e Medo: quem pisar nele toma dano de Conhecimento e fica paralisado de pavor.
 - **Passiva — Decepar:** finalizador +30% em quem está com menos de 20% de vida
 - **Passiva:** golpes físicos pelas costas causam +25%
+- **Passiva — Precognição:** não é pego desprevenido (sem bônus de costas nem susto de teleporte)
+- **Passiva — Resistente:** −7% de dano físico recebido
 
 ### Especial: Shi no Kage
 

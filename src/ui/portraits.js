@@ -51,6 +51,17 @@ export function renderPortraits(roster, renderer, { w = 300, h = 400, anim: anim
     anim.update(animTime);
     rig.root.rotation.y = turn;
     scene.add(rig.root);
+    // ENQUADRAMENTO pela altura real da cabeça (antes a câmera era fixa para todos e cortava a cabeça dos mais altos,
+    // como o Kian): o busto vai de um pouco acima da cabeça (cabelo, chifres) até a cintura
+    rig.root.updateMatrixWorld(true);
+    const hd = rig.joints && rig.joints.hd;
+    if (hd && !full) {
+      const headY = hd.getWorldPosition(new THREE.Vector3()).y;
+      const view = 2 * 3.6 * k * Math.tan(THREE.MathUtils.degToRad(cam.fov / 2)); // altura visível na distância da câmera
+      const yc = headY + 0.42 * k - view / 2; // o alto do quadro fica ~0,42 m acima do centro da cabeça (cabeças grandes, cabelo alto)
+      cam.position.set(0.9 * k, yc + 0.35 * k, 3.6 * k);
+      cam.lookAt(0, yc, 0);
+    }
     renderer.setRenderTarget(target);
     renderer.clear();
     renderer.render(scene, cam);

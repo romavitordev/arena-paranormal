@@ -11,6 +11,7 @@ import { devilPact } from './devilPact.js';
 import { devilDeal } from './devilDeal.js';
 import { ghostBands } from './ghostBands.js';
 import { spiralSnipe } from './spiralSnipe.js';
+import { eliteShot } from './eliteShot.js';
 import { awakenMode } from './awakenMode.js';
 import { ageGrab } from './ageGrab.js';
 import { maskTransform } from './maskTransform.js';
@@ -26,4 +27,4 @@ import { sphinx } from './sphinx.js';
 // Para criar um tipo novo: { canStart(f, sp, world), start(f, sp, world) → {update(dt)→done, cancel()} }
 // Se acerta à distância sem projétil, defina também telegraph(f, sp) → aviso antes de conectar (ver telegraph.js).
 
-export const SPECIALS = { sphinx, mistField, cinematicCombo, teleportStrike, ritual, erase, marionette, supernova, abyssMaze, santoPact, devilPact, devilDeal, ghostBands, spiralSnipe, awakenMode, ageGrab, maskTransform, kamikaze, hostGame, actFinal, mindTorture, inkRequiem, lanternCount };
+export const SPECIALS = { sphinx, mistField, cinematicCombo, teleportStrike, ritual, erase, marionette, supernova, abyssMaze, santoPact, devilPact, devilDeal, ghostBands, spiralSnipe, eliteShot, awakenMode, ageGrab, maskTransform, kamikaze, hostGame, actFinal, mindTorture, inkRequiem, lanternCount };

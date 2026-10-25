@@ -1,5 +1,19 @@
 # Changelog
 
+## v3.39.0 — Olhos Sempre Abertos
+
+### Adicionado
+- Especial `eliteShot` (`specials/eliteShot.js`): Solo do Abutre do Arthur — some na fumaça, reaparece ajoelhado, rastros roxos do Rebirth, laser de mira e o tiro crítico (`critMult`, elemento Energia).
+- Passivas `luckyStrike`, `longShot` (Arthur), `oneByOne` e `disarmStrike` (Joui); `runMeleePassives` também lê as passivas de `buff.passives`.
+- Habilidade Pavor Anormal do Joui: `shadowTrap` com `stun`/`label` (o `blind` passou a ser opcional).
+
+### Alterado
+- Arthur: Arma de Sangue virou habilidade (`bloodBlade` com `showProp`), transformação Olhos Sempre Abertos, Rebirth roxo (`0xa46bff`, Energia) e os olhos do Rebirth roxos.
+- Joui: passivas Precognição, `resistant` (corpo a corpo) e `iKnewIt` (Conhecimento); a Técnica Secreta ganha `disarmStrike`.
+- Modelos do Arthur (`char_arthur.py`, Calamidade) e do Joui (`char_joui.py`: cabelo e chinelos) refeitos pela arte oficial.
+- `renderPortraits`: enquadra pela altura da cabeça; retratos da página Sobre regerados.
+- `check-roster`: checagens do Arthur e do Joui pelo kit novo.
+
 ## v3.38.0 — Todos Juntos
 
 ### Adicionado

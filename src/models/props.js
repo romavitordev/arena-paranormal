@@ -72,10 +72,10 @@ export function addArthurProps(rig) {
   // olhos amaldiçoados do Rebirth
   const eyes = new THREE.Group();
   for (const s of [-1, 1]) {
-    const e = new THREE.Mesh(new THREE.SphereGeometry(0.02, 8, 6), glowMat(0x3aff6a, 1));
+    const e = new THREE.Mesh(new THREE.SphereGeometry(0.02, 8, 6), glowMat(0xa46bff, 1)); // os raios roxos de Calamidade
     e.position.set(s * 0.05, 0.175, 0.14);
     eyes.add(e);
-    const halo = new THREE.Mesh(new THREE.SphereGeometry(0.045, 8, 6), glowMat(0x3aff6a, 0.35));
+    const halo = new THREE.Mesh(new THREE.SphereGeometry(0.045, 8, 6), glowMat(0xa46bff, 0.35));
     halo.position.copy(e.position);
     eyes.add(halo);
   }

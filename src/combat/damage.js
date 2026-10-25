@@ -323,7 +323,9 @@ export function applyHit(world, attacker, victim, o) {
 }
 
 function runMeleePassives(world, attacker, victim, o, dealt, attempted) {
-  for (const passive of attacker.def.passives || []) {
+  // também as passivas de um estado ativo (buff.passives — ex.: a Técnica Secreta do despertar do Joui)
+  const fromBuffs = (attacker.buffs || []).flatMap((b) => b.passives || []);
+  for (const passive of [...(attacker.def.passives || []), ...fromBuffs]) {
     const P = PASSIVES[passive.type];
     if (P && P.onMeleeHit && !(o.strike && o.strike.noPassive)) {
       P.onMeleeHit({ attacker, victim, strike: o.strike || { damage: attempted }, dealt, attempted, passive, world });

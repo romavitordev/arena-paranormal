@@ -133,6 +133,24 @@ export default {
       element: 'conhecimento',
       color: 0x2a1a3a,
     },
+    {
+      // cânone (Desconjuração, achado sob o corpo do Espreitador): o Símbolo de Conhecimento e Medo é desenhado no chão
+      // e ativado ao pisar nele; a aura paralisa o alvo. Aqui ele risca o Símbolo à frente e quem pisar fica paralisado.
+      id: 'pavorAnormal',
+      name: 'Pavor Anormal',
+      input: 'carga+ranged', // △ + □ / Y + X
+      type: 'shadowTrap',
+      description: 'Risca no chão o Símbolo de Conhecimento e Medo: quem pisar nele toma dano de Conhecimento e fica paralisado de pavor.',
+      energyCost: 20,
+      cooldown: 14,
+      radius: 1.5,
+      damage: 25,
+      stun: 1.1,
+      label: 'PAVOR ANORMAL',
+      life: 14,
+      element: 'conhecimento',
+      color: 0xd01830,
+    },
   ],
 
   special: {
@@ -148,17 +166,28 @@ export default {
     sound: 'teleport',
   },
 
-  // DESPERTAR (Barra de Transformação cheia + vida baixa, segurando △) — cânone: Técnica Secreta — o espadachim no auge, envolto nas sombras. Até o fim do round.
+  // DESPERTAR (Barra de Transformação cheia + vida baixa, segurando △) — cânone: Técnica Secreta "Desarmar" — o
+  // espadachim no auge, envolto nas sombras; as manobras saem livres e o finalizador arranca a arma da mão do alvo
+  // (fica sem o ataque à distância por uns segundos). Até o fim do round.
   awakening: {
     name: 'Técnica Secreta',
     banner: 'Técnica Secreta',
     type: 'awakenMode',
     mult: 1.15, speedMult: 1.15, cdRate: 1.2, aura: 'smoke', color: 0x1a1620, heal: 0.1,
+    passives: [{ type: 'disarmStrike', time: 4 }],
   },
 
   passives: [
     { type: 'decepar', threshold: 0.2, mult: 1.3 }, // Decepar: finalizador +30% em quem está com menos de 20% de vida
     // golpes físicos pelas costas do inimigo (ex.: após o teleporte) causam +25%
     { type: 'backstab', mult: 1.25, kinds: ['melee'] },
+    // cânone: Um por Um — derrubou um, parte pro próximo como ação livre (o finalizador devolve sanidade)
+    { type: 'oneByOne', energy: 8 },
+    // cânone: Precognição — sente quem chega perto (+5 de defesa no curto alcance): não é pego pelas costas e o
+    // corpo a corpo dói um pouco menos
+    { type: 'precognition' },
+    { type: 'resistant', kinds: ['melee'], mult: 0.93 },
+    // cânone: Resistência Paranormal — portou a Máscara do Desespero; resiste a dano de Conhecimento
+    { type: 'iKnewIt', mult: 0.85 },
   ],
 };

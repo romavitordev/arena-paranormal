@@ -75,14 +75,17 @@ export default {
       name: 'Rebirth',
       input: 'carga+ranged', // △ + □ / Y + X
       type: 'weaponState',
-      description: 'Energia paranormal percorre o corpo e amaldiçoa o rifle: os próximos tiros da sniper causam dano extra, com raios e runas.',
+      // cânone (Calamidade, Amaldiçoar Arma com Energia): abre os olhos, os RAIOS ROXOS vazam e envolvem a arma com
+      // pequenas caveiras; os tiros saem com os raios roxos e dano de Energia (o verde era o Rebirth de Desconjuração)
+      description: 'Abre os olhos e os raios roxos de Energia envolvem o rifle com pequenas caveiras: os próximos tiros da sniper causam dano extra.',
       energyCost: 30,
       cooldown: 22,
       duration: 15, // segundos máximos do estado amaldiçoado
       shots: 3, // tiros fortalecidos
       bonusDamage: 75, // por tiro (110 → 185; era +60, buff v3.6)
-      color: 0x3aff6a, // energia VERDE com caveirinhas
-      projectile: { visual: 'cursedSniper', color: 0x3aff6a, impactScale: 2.4, hitSound: 'clawHit', knockback: 7, hitstun: 0.6 },
+      color: 0xa46bff, // os raios ROXOS de Calamidade
+      element: 'energia',
+      projectile: { visual: 'cursedSniper', color: 0xa46bff, impactScale: 2.4, hitSound: 'clawHit', knockback: 7, hitstun: 0.6 },
     },
     {
       id: 'templo',
@@ -132,42 +135,61 @@ export default {
       takenKinds: ['melee'],
       color: 0xd8a040,
     },
+    {
+      // cânone (Calamidade): "gastando 2 PV, projeta uma lâmina a partir do próprio sangue". Ele perdeu o braço
+      // esquerdo, então a lâmina nasce do ombro que falta; paga com a vida e os golpes ganham alcance e sangramento
+      // enquanto dura. (Antes era o especial; o especial agora é o Solo do Abutre.)
+      id: 'armaDeSangue',
+      name: 'Arma de Sangue',
+      input: 'block+jump', // R2 + × / RT + A
+      type: 'bloodBlade',
+      description: 'Paga com o próprio sangue e projeta a lâmina de sangue no ombro que perdeu: por 8 s os golpes alcançam mais longe e fazem sangrar.',
+      healthCost: 40,
+      energyCost: 0,
+      cooldown: 18,
+      duration: 8,
+      rangeBonus: 0.6,
+      bleed: { dps: 5, duration: 3 },
+      showProp: 'claw',
+      props: [],
+      color: 0xff1a30,
+    },
   ],
 
+  // SOLO DO ABUTRE — "O Guitarrista" que guarda o rifle na capa da guitarra, último dos Gaudérios Abutres e aprendiz
+  // do atirador Aaron. As habilidades de atirador de Calamidade numa cena (specials/eliteShot.js): some na fumaça
+  // (Treinado em Furtividade), reaparece ajoelhado, o Rebirth amaldiçoa o rifle com os raios roxos, mira (Mira de Elite)
+  // e o tiro sai crítico (Golpe de Sorte). Dá para defender/esquivar na largada como os outros especiais.
   special: {
-    name: 'Arma de Sangue',
-    banner: 'Arma de Sangue!',
-    type: 'cinematicCombo',
+    name: 'Solo do Abutre',
+    banner: 'Solo do Abutre',
+    type: 'eliteShot',
     energyCost: 50,
-    cooldown: 14,
-    // damage: omitido → COMBAT.specialDamage (250)
-    color: 0xff1a30,
-    sound: 'bloodClaw',
-    // o braço de sangue nasce no ombro ESQUERDO (o que ele perdeu) — os golpes saem dele
-    prepare: { anim: 'claw_raise_L', time: 0.75, showProp: 'claw', fx: 'forearmEnergy', arm: 'L' },
-    dash: { speed: 22, maxTime: 0.45, contact: 1.8 },
-    hits: [
-      { t: 0.95, anim: 'slash_h_L', dur: 0.32, share: 0.15, fx: { kind: 'claw', tilt: 0.1 }, sound: 'clawHit' },
-      { t: 1.28, anim: 'slash_h_back_L', dur: 0.32, share: 0.15, fx: { kind: 'claw', tilt: -0.2, flip: true }, sound: 'clawHit' },
-      { t: 1.62, anim: 'slash_d_L', dur: 0.36, share: 0.2, fx: { kind: 'claw', roll: 0.9 }, sound: 'clawHit' },
-      { t: 2.0, anim: 'slash_up_L', dur: 0.36, share: 0.2, fx: { kind: 'claw', roll: -1.0 }, sound: 'clawHit' },
-      { t: 2.55, anim: 'slash_v_L', dur: 0.4, share: 0.3, fx: { kind: 'claw', roll: 1.5, big: true }, sound: 'slashFinal', final: true },
-    ],
-    bannerAt: 0.25,
-    length: 3.4,
-    shots: 'claw',
-    hideProp: 'claw',
+    cooldown: 16,
+    range: 45,
+    // damage: omitido → 250 (padrão)
+    critMult: 1.1, // o crítico do Golpe de Sorte
+    showProp: 'sniperHand',
+    color: 0xa46bff,
   },
 
-  // DESPERTAR (Barra de Transformação cheia + vida baixa, segurando △) — cânone: Magnum Opus — a obra-prima do atirador; a Arma de Sangue nasce no ombro que ele perdeu e fica. Até o fim do round.
+  // DESPERTAR "OLHOS SEMPRE ABERTOS" (Barra de Transformação cheia + vida baixa, segurando △) — no cânone é ao abrir os
+  // olhos que os rituais vazam (Rebirth, Dystopia); aqui eles ficam abertos até o fim do round. Cânone: aos 50% de exposição ele se conecta
+  // com a Marca pelo SANGUE (Afinidade Elemental: vantagem em Força e nos rituais de Sangue; mechas brancas e caninos
+  // afiados) e tem o Sangue de Ferro (mais vida). "Magnum Opus" no cânone é uma habilidade SOCIAL (ser reconhecido como
+  // artista), por isso saiu daqui. Até o fim do round.
   awakening: {
-    name: 'Magnum Opus',
-    banner: 'Magnum Opus',
+    name: 'Olhos Sempre Abertos',
+    banner: 'Olhos Sempre Abertos',
     type: 'awakenMode',
-    mult: 1.2, takenMult: 0.9, bloodArmSide: 'L', aura: 'blood', color: 0xff1a30, heal: 0.1,
+    mult: 1.15, affects: ['melee', 'ability', 'special'], takenMult: 0.85, aura: 'blood', color: 0xff1a30, heal: 0.15,
   },
 
   passives: [
     { type: 'bloodPrice', hpPerPoint: 1.5, minHealth: 0.15 }, // sem sanidade, paga rituais com a própria vida (cânone: a Arma de Sangue gasta PV)
+    // cânone (Calamidade): Golpe de Sorte — a margem de crítico dobra (16 a 20): os tiros podem sair críticos
+    { type: 'luckyStrike', kinds: ['ranged'], chance: 0.25, mult: 1.5 },
+    // cânone: Furtivo e Letal — com o rifle, de longe, o ataque furtivo dói mais
+    { type: 'longShot', kinds: ['ranged'], minDist: 10, mult: 1.2 },
   ],
 };

@@ -5,8 +5,9 @@ Referências (mascarado corpo inteiro / poses / especial / SÉRIO / desenho):
   túnica de gola chinesa cinza com fechos vermelhos; corda bege no pescoço com nó;
   corda vermelha grossa na cintura com pontas soltas; capuz caído com borda vermelha;
   mangas do casaco até o cotovelo; faixas escuras no antebraço; luvas sem dedos;
-  calça larga cinza presa na canela; botas tipo tabi pretas;
-  cabelo preto liso com franja reta; cicatriz em X na bochecha esquerda (textura face_mascarado);
+  calça larga cinza presa na canela; CHINELOS COM MEIAS (o cânone de Desconjuração e Calamidade);
+  cabelo preto RASPADO nas laterais e maior no topo, repartido no meio e caindo para os lados em mechas (a miniatura
+  de Calamidade); cicatriz em X na bochecha esquerda (textura face_mascarado);
   máscara escura estilo oni com marcas vermelhas e fendas brilhantes.
 A máscara tem duas versões (prop_maskOn no rosto / prop_maskSide puxada para o lado, mostrando o
 rosto). O jogo mostra só UMA de cada vez.
@@ -28,7 +29,7 @@ M = {
     'arm': material('tunic', '#3e3d42', 0.85),
     'hand': material('gloves', '#141416', 0.7),
     'legs': material('pants', '#3a3a3f', 0.9),
-    'feet': material('boots', '#18181a', 0.7),
+    'feet': material('socks', '#232327', 0.9),  # meias escuras (calça os chinelos por cima)
 }
 coat = material('coat', '#26252a', 0.9)
 red = material('trim_red', '#8a1018', 0.7)
@@ -39,6 +40,8 @@ wrapm = material('wraps', '#2a2a2e', 0.9)
 hairm = material('hair', '#0e0e10', 0.6)
 maskm = material('mask', '#1c1b1f', 0.45)
 glow = material('eyeglow', '#ffffff', 0.5, emission='#ffffff', strength=3)
+sandal = material('sandal', '#cfccc4', 0.8)
+sandal_strap = material('sandal_strap', '#2c2c30', 0.7)
 
 hc = b.body(M, [(-0.12, 0.165), (0.0, 0.165), (0.18, 0.16), (0.38, 0.21), (0.5, 0.222), (0.6, 0.12), (0.66, 0.07)],
             leg_r=(0.1, 0.085, 0.07))
@@ -53,7 +56,18 @@ for side in ('L', 'R'):
     e, h = sk['e' + side], sk['hand' + side]
     b.add('wrap' + side, tube(limb_rings(e.lerp(h, 0.35), e.lerp(h, 0.92), 0.06, 0.052, n=4), 12), wrapm, region='arm' + side)
     k, f = sk['k' + side], sk['foot' + side]
-    b.add('shinwrap' + side, tube(limb_rings(k.lerp(f, 0.55), f + Vector((0, 0, 0.07)), 0.06, 0.056, n=3), 12), M['feet'], region='k' + side)
+    b.add('shinwrap' + side, tube(limb_rings(k.lerp(f, 0.55), f + Vector((0, 0, 0.07)), 0.06, 0.056, n=3), 12), wrapm, region='k' + side)
+    # chinelo: solado claro e a tira em V entre os dedos, por cima da meia
+    # medidas do pé do Builder (lib.foot_part: comprimento 0,24·H, largura 0,1·H, sola em f.z - 0,03, centro em f.y - 0,05)
+    H = -sk['toe' + side].y / 0.14
+    L, W, bot, cy = 0.24 * H, 0.1 * H, f.z - 0.03, f.y - 0.05
+    yc, ylen = cy + (-0.06 * L + 0.02 * W) / 2, 0.78 * L + 0.9 * W + 0.012
+    b.add('sandal' + side, box((f.x, yc, bot - 0.006), (1.04 * W + 0.012, ylen, 0.016), bevel=0.005), sandal, region='foot' + side, subdiv=0)
+    # a tira em V: dos dois lados do pé, sobe pelo peito do pé e desce entre os dedos
+    toe_y, top_z = cy - 0.3 * L, bot + 0.42 * 0.075 * H + 0.5 * W
+    b.add('sandal_strap' + side, merge(*[tube([(f.x + s_ * 0.5 * W, cy - 0.05 * L, bot + 0.01, 0.01, 0.007), (f.x + s_ * 0.3 * W, toe_y, top_z - 0.01, 0.01, 0.007),
+                                               (f.x, toe_y - 0.05, top_z - 0.015, 0.009, 0.007), (f.x, toe_y - 0.09, bot + 0.04, 0.006, 0.005)], 5) for s_ in (1, -1)]),
+          sandal_strap, region='foot' + side, subdiv=0)
 
 # ---------------- casaco longo aberto com debrum vermelho
 gap = 0.08
@@ -127,14 +141,28 @@ for i, c in enumerate(cols * 2):
 for c in set(cols):
     b.add('bracelet' + c[1:], merge(*[p for cc, p in beads if cc == c]), material('bead' + c[1:], c, 0.5), region='eL', subdiv=0)
 
-# ---------------- cabelo preto liso com franja reta
-b.add('hair_cap', hair_cap((hc.x, hc.y + 0.006, hc.z + 0.014), (0.147, 0.157, 0.168), front=0.3, side=0.45, back=0.62), hairm, region='head')
-b.add('hair_back', ellipsoid((hc.x, hc.y + 0.05, hc.z - 0.03), (0.144, 0.12, 0.14), 16, 10, theta_max=math.pi * 0.72, phi=(0.68, 1.32)), hairm, region='head')
-for i in range(7):
-    x = -0.096 + i * 0.032
-    b.add(f'fringe{i}', cone((x, -0.135, hc.z + 0.13), (x * 1.04, -0.152, hc.z + 0.08), 0.026, 6), hairm, region='head', subdiv=0)
+# ---------------- cabelo: laterais RASPADAS (sombra curta rente) e o topo maior, repartido no meio, caindo para os
+# lados em mechas grossas que passam da sobrancelha (a miniatura de Calamidade)
+shaved = material('hair_shaved', '#2a2628', 0.9)
+b.add('hair_shaved', hair_cap((hc.x, hc.y + 0.004, hc.z + 0.004), (0.146, 0.156, 0.166), front=0.2, side=0.5, back=0.64), shaved, region='head')
+b.add('hair_top', ellipsoid((hc.x, hc.y + 0.01, hc.z + 0.05), (0.152, 0.164, 0.135), 18, 8, theta_max=math.pi * 0.36), hairm, region='head')
+HC_, HR_ = Vector((hc.x, hc.y + 0.008, hc.z + 0.01)), (0.15, 0.16, 0.17)
+
+
+def on_head(gam, e, k=1.07):
+    # ponto na casca da cabeça: gam = ângulo a partir da frente (para o lado), e = ângulo a partir do topo
+    return HC_ + Vector((math.sin(gam) * math.sin(e) * HR_[0], -math.cos(gam) * math.sin(e) * HR_[1], math.cos(e) * HR_[2])) * k
+
+
+locks = []
 for s in (1, -1):
-    b.add(f'sideburn{s}', cone((s * 0.13, -0.05, hc.z + 0.08), (s * 0.135, -0.06, hc.z - 0.04), 0.03, 6), hairm, region='head', subdiv=0)
+    for j in range(6):
+        # da risca no meio, cada mecha desce colada na cabeça para o lado (as da frente cobrem a testa e passam da
+        # sobrancelha; as de trás cobrem a lateral até a altura da orelha), terminando em ponta
+        gam = s * (0.12 + j * 0.3)
+        pts = [on_head(gam * 0.3, 0.12), on_head(gam * 0.7, 0.55, 1.08), on_head(gam, 1.0 - j * 0.03, 1.08), on_head(gam * 1.05, 1.32 - j * 0.07, 1.05)]
+        locks.append(tube([(p.x, p.y, p.z, r, r * 0.75) for p, r in zip(pts, (0.034, 0.032, 0.022, 0.004))], 6))
+b.add('hair_locks', merge(*locks), hairm, region='head', subdiv=0)
 
 # ---------------- máscara oni: só a frente do rosto, com relevo de nariz/sobrancelha
 def mask_parts(fn):

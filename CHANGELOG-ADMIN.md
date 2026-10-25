@@ -1,5 +1,31 @@
 # Registro administrativo de alterações
 
+## v3.39.0 — Olhos Sempre Abertos
+
+- Versão: `VERSION` 3.38.0 → **3.39.0** (package.json/lock junto). Data: 2026-10-25.
+- **Retratos cortados** (pedido: "alguns personagens ficam meio cortados... como kian nessa cinematic"): a câmera fixa
+  do `renderPortraits` cortava as cabeças altas. Agora mede a altura do osso da cabeça e enquadra por ela (margem de
+  0,42 acima). Vale para menu, seleção, versus, tríptico da equipe e os 28 retratos da página Sobre (regerados).
+- **Arthur pelo cânone de Calamidade** (wiki "Arthur Cervero"): o especial virou o tiro de elite `eliteShot` —
+  Treinado em Furtividade (some na fumaça), reaparece ajoelhado, Rebirth com os raios roxos, Mira de Elite e Golpe de
+  Sorte (crítico ×1,1). Nome pedido pelo dono "algo que realmente seja do Arthur": **Solo do Abutre** ("O Guitarrista"
+  que guarda o rifle na capa da guitarra, último dos Gaudérios Abutres). Transformação renomeada para **Olhos Sempre
+  Abertos** (nome do dono). Arma de Sangue (2 PV no cânone) passou a habilidade R2 + × (40 de vida, 8 s, alcance +0,6
+  e sangramento). Passivas Golpe de Sorte (25% de crítico ×1,5 no tiro) e Furtivo e letal (≥ 10 m, ×1,2). Rebirth roxo
+  e de Energia. Testado no jogo: especial 319 de dano contra a Kaiser e termina limpo; Arma de Sangue cobra 40 e mostra
+  a lâmina.
+- **Joui pelo cânone** (wiki "Joui Jouki"): Pavor Anormal (Desconjuração) como armadilha △ + □ — 25 de dano de
+  Conhecimento e 1,1 s de paralisia; Um por Um (finalizador +8 de sanidade), Precognição, Resistência Paranormal
+  (`iKnewIt` ×0,85) e +5 de defesa no curto alcance (`resistant` ×0,93); a Técnica Secreta (despertar) ganha o
+  Desarmar: o finalizador trava o ataque à distância do alvo por 4 s. Testado: a armadilha paralisou, o Desarmar
+  avisou "DESARMADO" e travou o □ por 4 s.
+- **Remodelos pela arte oficial** (pedido "faltou remodel do arthur e joui"): Arthur pela miniatura de Calamidade —
+  cabelo até os ombros meio-preso com rabinho, mechas brancas largas, colete preto fechado com bolsos e o brasão
+  (escudo com asas) do lado esquerdo, a alça da capa de guitarra cruzando o peito, sem os suspensórios, calça com
+  bolsos grandes e amarrações, tênis de cano alto com cadarço e solado claros. Joui pela miniatura de Calamidade —
+  laterais raspadas, o topo repartido no meio caindo para os lados (mechas presas à casca da cabeça), chinelos com
+  meias (cânone) no lugar das botas.
+
 ## v3.38.0 — Todos Juntos
 
 - Versão: `VERSION` 3.37.0 → **3.38.0** (package.json/lock junto). Data: 2026-10-25.
