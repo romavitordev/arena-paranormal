@@ -9,6 +9,7 @@ import { moveListHTML, specialSummary } from './moves.js';
 import { VERSION, VERSION_LABEL, CHANGELOG, formatVersion } from '../config/version.js';
 import { t, getLanguage } from '../i18n/index.js';
 import { roundKey } from '../game/tournament.js';
+import { getTeamLink } from '../config/teamLinks.js';
 
 // Telas fora da luta. Todas recebem as entradas normalizadas dos dois jogadores.
 // Fluxo: Título → Menu principal (P1 VS P2 / P1 VS CPU / Opções) → Personagens →
@@ -207,16 +208,6 @@ export class HomeScreen {
   dispose() { this.el.remove(); }
 }
 
-export class TitleScreen {
-  constructor(root) {
-    this.el = el(root, 'screen', 'title', `<h1>ARENA<br>PARANORMAL</h1><p>${t('title.press')}</p>`);
-  }
-  update(input) {
-    return input.keyPressedOnce('Enter') || input.players.some((x) => startGo(x, input) || confirm(x));
-  }
-  dispose() { this.el.remove(); }
-}
-
 // Menu vertical genérico. options: [{ id, label: string | () => string, disabled? }]
 // jogadores que podem mexer num menu (todos, ou só o dono)
 const controllers = (input, owner) => (owner === null || owner === undefined ? input.players : [input.players[owner]]);
@@ -396,6 +387,19 @@ export class SelectScreen {
     return this.cpu ? (this.ready[0] ? 1 : 0) : -1;
   }
 
+  // ESPECIAL EM EQUIPE COM LIGAÇÃO (F4, config/teamLinks.js): a equipe escolhida (ou a que está sendo escolhida, com o
+  // personagem do cursor) tem especial próprio na lore → mostra o nome dele na placa
+  teamLinkLine(p) {
+    // as fichas (não os ids): versões do mesmo personagem contam pela baseId
+    const defs = this.picks[p].map((i) => ROSTER[i]);
+    const cur = ROSTER[this.cursor[p]];
+    if (!this.ready[p] && defs.length < 3 && !defs.includes(cur)) defs.push(cur);
+    const link = getTeamLink(defs);
+    if (!link) return '';
+    const done = getTeamLink(this.picks[p].map((i) => ROSTER[i])) === link;
+    return `<div class="teamlink${done ? ' on' : ''}" style="--c:#${link.color.toString(16).padStart(6, '0')}"><small>${t('sel.teamLink')}</small><b>${link.name}</b></div>`;
+  }
+
   render() {
     const act = this.activeSide();
     for (let p = 0; p < 2; p++) {
@@ -420,7 +424,7 @@ export class SelectScreen {
       const teamLine = this.team ? `<div class="teampicks">${[t('sel.leader'), t('sel.assist1'), t('sel.assist2')].map((lab, k) => {
         const c2 = this.picks[p][k] !== undefined ? ROSTER[this.picks[p][k]] : null;
         return `<span class="${c2 ? 'on' : ''}"><small>${lab}</small><b style="color:${c2 ? c2.color : 'inherit'}">${c2 ? c2.name : '—'}</b></span>`;
-      }).join('')}</div>` : '';
+      }).join('')}</div>${this.teamLinkLine(p)}` : '';
       this.plates[p].innerHTML = `
         <div class="pn" style="color:${front.color}">${front.name}</div>
         <div class="po">${front.origin} · <span style="color:${ELEMENTS[front.element].color}">${ELEMENTS[front.element].name}</span></div>

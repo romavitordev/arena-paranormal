@@ -27,7 +27,6 @@ export const CPU_LEVELS = [
   { id: 'superhard', label: 'SUPER DIFÍCIL' },
 ];
 export const ROUND_OPTIONS = [1, 2, 3];
-export const VOLUME_OPTIONS = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 export const FX_OPTIONS = [false, true];
 export const LINES_OPTIONS = [true, false];
 export const GFX_OPTIONS = ['auto', 'high', 'medium', 'low'];
@@ -78,9 +77,7 @@ function load() {
   }
 }
 
-export const volumeLabel = (v = SETTINGS.volume) => (v ? `${v}%` : '🔇');
 export const gfxLabel = (v = SETTINGS.graphics) => (v === 'auto' ? `${t('opt.gfx.auto')} (${t('opt.gfx.' + autoGraphics())})` : t('opt.gfx.' + v));
-export const fxLabel = (v = SETTINGS.reduceFx) => t(v ? 'opt.fx.reduced' : 'opt.fx.normal');
 export const timerLabel = (v = SETTINGS.timer) => (v ? `${v}s` : t('settings.timer.infinite'));
 export const cpuLabel = (id = SETTINGS.cpuLevel) => t('cpu.' + (CPU_LEVELS.find((l) => l.id === id) || CPU_LEVELS[1]).id);
 export const languageLabel = (id = SETTINGS.language) => {

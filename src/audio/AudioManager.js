@@ -10,7 +10,6 @@ const BASE = (typeof import.meta !== 'undefined' && import.meta.env && import.me
 //   ui    os sons dos menus (navegar, confirmar, negar)
 //   hum   o zumbido da Carga de Poder (o som contínuo enquanto segura △)
 //   sfx   todo o resto: golpes, rituais, explosões, falas sonoras dos especiais
-export const VOLUME_CHANNELS = ['master', 'sfx', 'ui', 'hum'];
 const UI_SOUNDS = new Set(['select', 'confirm', 'denied', 'back', 'move']);
 
 export class AudioManager {

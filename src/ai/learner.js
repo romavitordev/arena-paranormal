@@ -232,11 +232,5 @@ export function saveLearned(now = performance.now(), force = false) {
   }
 }
 
-export function learnedStats() {
-  let cells = 0;
-  for (const id in data.tables) for (const k in data.tables[id]) cells += Object.keys(data.tables[id][k]).length;
-  return { games: data.games || 0, characters: Object.keys(data.tables).filter((k) => k !== '_all').length, cells };
-}
-
 // para o servidor de desenvolvimento e testes
 export { mergeInto as _mergeInto };

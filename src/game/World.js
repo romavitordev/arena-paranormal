@@ -253,7 +253,7 @@ export class World {
     this.roundNo = (this.roundNo || 0) + 1; // a IA que aprende fecha o round quando muda
     this.clearTickers();
     this.clearNpcs();
-    for (const f of this.fighters || []) if (f.assists) for (const a of f.assists) a.reset();
+    for (const f of this.fighters || []) { if (f.assists) for (const a of f.assists) a.reset(); if (f.teamGuests) { for (const a of f.teamGuests) a.reset(); f.teamGuests = null; } }
     this.zones.length = 0;
     this.timers.length = 0;
     this.endCinematic();
@@ -351,7 +351,7 @@ export class World {
       }
       for (let i = this.zones.length - 1; i >= 0; i--) if (!this.zones[i].alive) this.zones.splice(i, 1);
       for (const f of this.fighters) f.update(dt);
-      for (const f of this.fighters) if (f.assists) for (const a of f.assists) a.update(dt);
+      for (const f of this.fighters) if (f.assists) for (const a of f.assists) a.update(dt); for (const f of this.fighters) if (f.teamGuests) for (const a of f.teamGuests) a.update(dt); // convidados do Especial em Equipe (teamSpecials.js)
       for (const n of this.npcs) n.update(dt);
       for (let i = this.npcs.length - 1; i >= 0; i--) if (!this.npcs[i].alive) this.npcs.splice(i, 1);
       this.separate();
@@ -384,7 +384,7 @@ export class World {
   dispose() {
     this.clearTickers();
     this.clearNpcs();
-    for (const f of this.fighters || []) if (f.assists) for (const a of f.assists) a.reset();
+    for (const f of this.fighters || []) { if (f.assists) for (const a of f.assists) a.reset(); if (f.teamGuests) { for (const a of f.teamGuests) a.reset(); f.teamGuests = null; } }
     this.endCinematic();
     this.audio.stopAllLoops();
     this.projectiles.clear();

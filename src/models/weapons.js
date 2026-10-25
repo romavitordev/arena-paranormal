@@ -1587,16 +1587,6 @@ export function neonWraps(radius, length, count = 4) {
   return g;
 }
 
-// corrente de ouro do relógio de bolso: do botão do colete até o bolso (Arnaldo)
-export function watchChain() {
-  const path = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(-0.04, 0, 0),
-    new THREE.Vector3(0.02, -0.05, 0.01),
-    new THREE.Vector3(0.08, -0.04, 0),
-  ]);
-  return part(new THREE.TubeGeometry(path, 12, 0.004, 4, false), 0xd4a640, { outline: false });
-}
-
 // óculos redondos de lente rosa-avermelhada (Arnaldo, como nas referências do usuário)
 export function roundGlasses({ tint = 0xff5a7a, opacity = 0.6 } = {}) {
   const g = new THREE.Group();
@@ -1627,19 +1617,6 @@ export function mustache(color = 0xb8b4ac) {
   goatee.rotation.x = Math.PI;
   goatee.position.set(0, -0.06, -0.005);
   g.add(goatee);
-  return g;
-}
-
-// gravata (no socket do peito): nó + corpo
-export function necktie(color) {
-  const g = new THREE.Group();
-  const knot = part(new THREE.BoxGeometry(0.035, 0.03, 0.02), color, { outline: false });
-  g.add(knot);
-  const body = part(new THREE.ConeGeometry(0.032, 0.26, 4), color, { outline: false });
-  body.rotation.set(Math.PI, Math.PI / 4, 0);
-  body.scale.set(1, 1, 0.35);
-  body.position.y = -0.14;
-  g.add(body);
   return g;
 }
 

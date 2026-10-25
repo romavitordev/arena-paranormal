@@ -188,6 +188,7 @@ html.vp-fix canvas#game, html.vp-fix #hud, html.vp-fix .screen, html.vp-fix #tou
 /* transformação em equipe: o tríptico inclinado (retratos sobre linhas verticais na cor do elemento) */
 #teamCut { position: absolute; inset: 7vh -3vw; display: none; gap: 0; pointer-events: none; overflow: hidden; }
 #teamCut.show { display: flex; animation: tcOut 1.75s ease-in forwards; }
+#teamCut.show.quick { animation-duration: .9s; }
 .tc-panel { position: relative; flex: 1; margin: 0 -1.4vw; overflow: hidden; transform: skewX(-8deg); border-left: 1.1vw solid #050407; border-right: 1.1vw solid #050407;
   background: radial-gradient(ellipse at 50% 35%, color-mix(in srgb, var(--c) 55%, transparent), transparent 70%), #0a0710; animation: tcIn .34s cubic-bezier(.2,.9,.3,1.15) backwards; }
 .tc-panel::before { content: ''; position: absolute; inset: -20% 0; background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--c) 85%, white 15%) 0 2px, transparent 2px 7px, color-mix(in srgb, var(--c) 45%, transparent) 7px 8px, transparent 8px 15px); opacity: .55; animation: tcRain .5s linear infinite; }
@@ -204,8 +205,6 @@ html.vp-fix canvas#game, html.vp-fix #hud, html.vp-fix .screen, html.vp-fix #tou
 @keyframes screenEnter { from { opacity: 0; filter: blur(8px); transform: scale(1.015); } to { opacity: 1; filter: none; transform: none; } }
 .screen-enter { animation: screenEnter .28s ease-out both; }
 @media (prefers-reduced-motion: reduce) { .screen-enter { animation-duration: .01ms; } }
-#title h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 12vw, 150px); margin: 0; letter-spacing: .08em; text-shadow: 6px 6px 0 #000, 0 0 50px #a46bff; text-align: center; line-height: .9; }
-#title p { color: var(--muted); letter-spacing: .2em; font-weight: 800; animation: blink 1s infinite alternate; }
 @keyframes blink { to { opacity: .35; } }
 
 #select h2 { font-family: 'Bebas Neue', sans-serif; font-size: 44px; margin: 0 0 10px; letter-spacing: .1em; text-shadow: 3px 3px 0 #000; }
@@ -543,6 +542,10 @@ table.moves td span { display: block; color: var(--muted); font-size: 12px; marg
 .plate .pt { font-size: 12px; font-style: italic; color: var(--muted); margin-top: 2px; }
 .plate.ok .pn::after { content: ' ✔'; color: #3ad17a; font-size: .6em; vertical-align: middle; }
 .plate.p2 .teampicks { justify-content: flex-end; }
+.teamlink { display: inline-flex; flex-direction: column; margin: 0 0 6px; padding: 3px 10px; border: 1px dashed var(--c); border-radius: 4px; opacity: .6; }
+.teamlink.on { border-style: solid; opacity: 1; box-shadow: 0 0 14px color-mix(in srgb, var(--c) 55%, transparent); }
+.teamlink small { font-size: 9px; letter-spacing: .1em; color: var(--c); }
+.teamlink b { font-family: 'Bebas Neue', sans-serif; font-size: 18px; font-weight: 400; letter-spacing: .06em; color: #fff; text-shadow: 0 0 10px var(--c); }
 .sel-center .startbtn { pointer-events: auto; margin-top: 10px; }
 #select .hint { grid-column: 1 / -1; justify-self: center; margin-top: 0; font-size: 11px; line-height: 1.5; }
 @media (max-width: 760px) {
@@ -739,6 +742,9 @@ body.touch-capable #select { padding-top: max(58px, calc(env(safe-area-inset-top
   .plate .teampicks span { min-width: 0; padding: 1px 5px; flex-direction: row; gap: 4px; align-items: baseline; }
   .plate .teampicks small { font-size: 7px; white-space: nowrap; }
   .plate .teampicks b { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .plate .teamlink { margin: 3px 0 0; padding: 1px 5px; max-width: 100%; }
+  .plate .teamlink small { font-size: 7px; }
+  .plate .teamlink b { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .sel-center .startbtn { margin-top: 6px; padding: 6px 18px; font-size: 22px; letter-spacing: .2em; }
   .sel-center .startbtn small { display: none; }
 }

@@ -7,8 +7,6 @@ import { createMistZone } from './abilities.js';
 import { addBloodPool } from './bloodPools.js';
 import { inscribe } from './kianPowers.js';
 
-const UP = new THREE.Vector3(0, 1, 0);
-
 // Gerencia projéteis (balas, faca arremessada, ondas de corte, ondas de impacto).
 // A aparência vem de `visual` na definição do ataque; a lógica é a mesma para todos.
 

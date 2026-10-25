@@ -80,6 +80,9 @@ export default defineConfig({
         manualChunks: (id) => {
           if (id.includes('node_modules/three')) return 'three';
           if (/[\/]src[\/](characters|anim)[\/]/.test(id)) return 'personagens';
+          // modelos feitos em código (rig, armas, acessórios) e os especiais: crescem a cada personagem novo
+          if (/[\/]src[\/]models[\/]/.test(id)) return 'modelos';
+          if (/[\/]src[\/]combat[\/]specials[\/]/.test(id)) return 'especiais';
           // textos (falas de introdução/vitória/batalha e traduções): dados que crescem a cada personagem, fora do motor
           if (/[\/]src[\/](config[\/]dialogues\.js|i18n[\/])/.test(id)) return 'textos';
           return undefined;

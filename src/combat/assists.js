@@ -297,7 +297,7 @@ function genericActions(def) {
 }
 
 // a assistência atira com o ataque principal dela (count tiros, dano por tiro já com o multiplicador de assistência)
-function shoot(c, anim, count, damage, sound) {
+export function shoot(c, anim, count, damage, sound) {
   const tl = new Timeline();
   c.as.face(c.opp);
   c.as.play(anim, 0.4 + count * 0.1 + 0.3);
@@ -403,7 +403,7 @@ function ritualCuts(c, color, damage, label) {
   return tl.end(1.15);
 }
 
-function rushStrike(c, anim, hits, sound, extra = {}) {
+export function rushStrike(c, anim, hits, sound, extra = {}) {
   const tl = new Timeline();
   tl.add(0.05, () => {
     // aparece colado no inimigo (como um avanço)
@@ -483,13 +483,26 @@ export class Assist {
     const want = o.pos.clone().addScaledVector(side, 1.6).addScaledVector(fwd, -0.6);
     const spot = findFreeSpotNear(w.arena, want.x, want.z, { radius: 0.5, others: [{ x: o.pos.x, z: o.pos.z, r: 0.6 }, { x: opp.pos.x, z: opp.pos.z, r: 0.6 }] });
     this.pos.set(spot ? spot.x : want.x, 0, spot ? spot.z : want.z);
+    const ctx = this.enter(opp);
+    this.active = (auto && acts.auto ? acts.auto : moving && !still ? acts.moving : acts.still)(ctx);
+    this.autoCall = auto;
+    this.update(0);
+    return true;
+  }
+
+  // entra em campo (já posicionada em this.pos) e devolve o contexto das ações
+  enter(opp, { quiet = false } = {}) {
+    const o = this.owner;
+    const w = this.world;
     this.face(opp);
     w.scene.add(this.rig.root);
     this.rig.root.visible = true;
     this.poof();
-    w.audio.play('teleport', { volume: 0.7 });
-    o.notify(`${this.def.name}!`, true);
-    const ctx = {
+    if (!quiet) {
+      w.audio.play('teleport', { volume: 0.7 });
+      o.notify(`${this.def.name}!`, true);
+    }
+    return {
       as: this, owner: o, opp, world: w, def: this.def, color: this.color,
       hit: (dmg, opts = {}) => {
         if (opp.state === 'ko') return 0;
@@ -497,8 +510,27 @@ export class Assist {
         return applyHit(w, o, opp, { damage: Math.round(dmg * ASSIST.damageMult * (this.empowered ? this.empowered.mult : 1)), kind: 'ability', knockback: 3, element: this.def.element, dir, color: this.color, scale: 1.3, ...opts });
       },
     };
-    this.active = (auto && acts.auto ? acts.auto : moving && !still ? acts.moving : acts.still)(ctx);
-    this.autoCall = auto;
+  }
+
+  // ESPECIAL EM EQUIPE COM LIGAÇÃO (combat/teamSpecials.js): entra num ponto escolhido e faz o golpe da ligação
+  // (script(ctx) → Timeline). Entra mesmo recarregando; quem é só convidado (membro do grupo fora da equipe) usa
+  // { guest: true } e não deixa recarga.
+  perform(script, { at = null, quiet = false, guest = false } = {}) {
+    const opp = this.owner.opponent;
+    if (!opp || opp.state === 'ko') return false;
+    if (this.active) this.leave();
+    this.cooldown = 0;
+    if (at) this.pos.set(at.x, 0, at.z);
+    else {
+      const o = this.owner;
+      const fwd = new THREE.Vector3().subVectors(opp.pos, o.pos).setY(0).normalize();
+      const side = new THREE.Vector3(-fwd.z, 0, fwd.x).multiplyScalar(this.slot === 0 ? 1 : -1);
+      const want = o.pos.clone().addScaledVector(side, 1.6).addScaledVector(fwd, -0.6);
+      const spot = findFreeSpotNear(this.world.arena, want.x, want.z, { radius: 0.5, others: [{ x: o.pos.x, z: o.pos.z, r: 0.6 }, { x: opp.pos.x, z: opp.pos.z, r: 0.6 }] });
+      this.pos.set(spot ? spot.x : want.x, 0, spot ? spot.z : want.z);
+    }
+    this.active = script(this.enter(opp, { quiet }));
+    this.guest = guest;
     this.update(0);
     return true;
   }
@@ -563,7 +595,7 @@ export class Assist {
     this.active = null;
     this.poof();
     this.world.scene.remove(this.rig.root);
-    this.cooldown = ASSIST.cooldown * (this.autoCall && this.def.assistAuto ? this.def.assistAuto.cooldownMult : 1);
+    this.cooldown = this.guest ? 0 : ASSIST.cooldown * (this.autoCall && this.def.assistAuto ? this.def.assistAuto.cooldownMult : 1);
     this.autoCall = false;
   }
 

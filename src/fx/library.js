@@ -97,5 +97,3 @@ export const FX_LIBRARY = {
     if (kind === 'ring') fx.ring(v.set(pos.x, 0.06, pos.z), { color, radius: 2, life: 0.4 });
   },
 };
-
-export const FX_NAMES = Object.keys(FX_LIBRARY);

@@ -74,6 +74,7 @@ import { buildHuntingDog } from '../models/dog.js';
 import { bloodCoat, elementCoat } from '../models/weapons.js';
 import { addBloodPool, poolsOf, splatGeo } from './bloodPools.js';
 import { inscribe } from './kianPowers.js';
+import { scheduleTeamParts, linkCards } from './teamSpecials.js';
 import { AMIGO_TYPES } from './amigoPowers.js';
 import { ExistidoMorte, InkBeast } from './beasts.js';
 import { inkSplash } from '../fx/inkFx.js';
@@ -281,14 +282,18 @@ export const ABILITY_TYPES = {
       f.yaw = yawTo(f.pos, opp.pos);
       f.invuln = Math.max(f.invuln, TS.leader + 0.3);
       f.anim.play('concentrate', { restart: true, duration: TS.leader });
-      world.showBanner('Especial em Equipe!', f.def.color);
+      // F4: com LIGAÇÃO na lore (config/teamLinks.js) a coreografia muda (combat/teamSpecials.js); sem, o simplificado
+      const parts = scheduleTeamParts(tl, f, world, TS);
+      const link = parts.link;
+      world.showBanner(link ? link.banner : 'Especial em Equipe!', link ? link.color : f.def.color);
       world.audio.play('specialStart', { volume: 0.9 });
-      world.fx.ring(f.pos.clone().setY(0.06), { color: 0xffd84a, radius: 2.8, life: 0.7 });
+      world.fx.ring(f.pos.clone().setY(0.06), { color: link ? link.color : 0xffd84a, radius: 2.8, life: 0.7 });
+      if (link && world.ui && world.ui.teamCut) {
+        world.ui.teamCut(linkCards(link, f).map((d) => ({ id: d.id, name: d.name, color: '#' + new THREE.Color(d.energyColor ?? link.color).getHexString() })), { quick: true });
+      }
       const h0 = opp.health;
       let last = h0;
       let caught = false;
-      tl.add(0.05, () => f.assists[0] && f.assists[0].callTeam());
-      tl.add(TS.second, () => f.assists[1] && f.assists[1].callTeam());
       tl.each((t) => {
         // pegou: atordoado a cada golpe até o especial do líder (não foge entre as partes)
         if (opp.health < last && opp.state !== 'ko') {
@@ -307,10 +312,11 @@ export const ABILITY_TYPES = {
         // o especial do líder entra inteiro (sem a escala de combo das partes das assistências): especial + bônus
         opp.comboHits = 0;
         f.pendingTeamSpecial = true;
-        if (caught) f.notify('ESPECIAL EM EQUIPE!', true);
+        if (caught) f.notify(link ? `${link.name}!` : 'ESPECIAL EM EQUIPE!', true);
       });
+      tl.add(TS.leader - 0.02, () => parts.cleanup());
       tl.end(TS.leader);
-      return seqFrom(tl);
+      return seqFrom(tl, { cancel: () => parts.cleanup() });
     },
   },
   // ------------------------------------------------------------------ JOUI

@@ -22,10 +22,6 @@ export async function preloadArena(cfg) {
   return cache[cfg.id];
 }
 
-export function isArenaLoaded(id) {
-  return !!cache[id];
-}
-
 export function createGLBArena(cfg) {
   const colliders = [];
   const boxes = [];

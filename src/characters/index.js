@@ -67,7 +67,3 @@ export function applyAttackSpeed(def) {
   return def;
 }
 ROSTER.forEach(applyAttackSpeed);
-
-export function getCharacter(id) {
-  return ROSTER.find((c) => c.id === id);
-}

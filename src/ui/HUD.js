@@ -385,7 +385,8 @@ export class HUD {
   // TRANSFORMAÇÃO EM EQUIPE: três painéis inclinados lado a lado (assistência 1, líder, assistência 2), cada um com o
   // retrato aproximado no rosto sobre linhas verticais na cor do elemento, bordas pretas em diagonal e o nome embaixo;
   // entram em sequência e somem juntos (~1,7 s). list = [{ id, name, color }]
-  teamCut(list) {
+  // opts.quick: versão curta (Especial em Equipe com ligação), para não esconder os golpes
+  teamCut(list, { quick = false } = {}) {
     const el = this.root.querySelector('#teamCut');
     if (!el) return;
     el.innerHTML = '';
@@ -407,6 +408,7 @@ export class HUD {
       el.appendChild(p);
     });
     el.classList.remove('show');
+    el.classList.toggle('quick', quick);
     void el.offsetWidth;
     el.classList.add('show');
   }

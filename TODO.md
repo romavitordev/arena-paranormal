@@ -16,8 +16,9 @@
 - [x] Feedback de Kian e Joui (25/10/2026): auditoria, Rejeitar Névoa pelo cânone, transformações com kit próprio
   (Realizador da Calamidade, Shi no Kage), ultimates diferentes no Joui, Tomado pelo Ódio, Portal das Sombras — v3.42.0;
   animações próprias, cena da Escrita, Leonora e raios de Energia — v3.43.0 (ver *ANDAMENTO DO FEEDBACK*).
-- [~] 2.3 Especiais em equipe: Barra de Equipe, Especial simplificado e Transformação em equipe prontos (F1/F2/F3); a tabela de ligações
-  `src/config/teamLinks.js` existe mas ainda não está ligada (F4, ver *EQUIPE*).
+- [x] 2.3 Especiais em equipe: Barra de Equipe, Especial simplificado, Transformação em equipe (F1/F2/F3) e os especiais
+  com ligação na lore — Mascarados, Joui + Kaiser + Arthur, Cristopher + Kaiser (F4, ver *EQUIPE*). Novas ligações
+  ficam "a confirmar" pelo dono.
 - [~] 2.1 Animações de movimentação: 1ª parte na v3.37.0 (corrida, caminhada, pulo, queda, dash, esquiva, reação e 18
   posturas paradas próprias); falta importar o pacote de animações gratuito (ver *REAJUSTE DAS ANIMAÇÕES*).
 - [ ] 2.4 Câmera de cutscenes.
@@ -1097,13 +1098,18 @@ ataca antes).
 
 ### Ligações (a tabela vai para `src/config/teamLinks.js`)
 Confirmadas pelo pedido:
-- [ ] **Joui + Kaiser + Arthur** — especial de trio.
-- [ ] **Cristopher + Kaiser** — especial de dupla.
-- [ ] **Mascarados** (Dalmo, Aguiar, Jae, Kemi, Labirinto, Juan) — especial de grupo com 3 ou mais na equipe (aparecem
-  todos os membros).
+- [x] **Joui + Kaiser + Arthur** — virou o grupo **FORÇA D** (a equipe de Desconjuração; pedido do dono: a Equipe Abutres
+  é a de Calamidade, sem o Kaiser). Vale com 3 da equipe; Thiago e Liz entram quando estiverem no elenco. Joui surge
+  atrás e corta, Kaiser a rajada de Balas Amaldiçoadas, Arthur o tiro do Rebirth (verde); o líder fecha com o especial.
+- [x] **Cristopher + Kaiser** — especial de dupla "A Muralha e o Disparo": o terceiro ataca primeiro, o Cristopher dá a
+  ombrada e SEGURA o alvo e o Kaiser (o filho) dispara.
+- [x] **Mascarados** (Dalmo, Aguiar, Jae, Kemi, Labirinto, Juan) — especial de grupo com 3 ou mais na equipe: os seis
+  aparecem em roda em volta do alvo (os de fora da equipe entram como convidados) e golpeiam um após o outro.
 A confirmar (o dono decide antes de entrar):
 - [ ] Outras duplas/trios da Ordo Realitas (ex.: a Equipe Abutres de Calamidade), Escriptas (Kian + Gal Sal) e os
   Portadores (são inimigos entre si — provavelmente nenhuma ligação).
+- [ ] **Equipe Abutres** (Calamidade): ligação própria com as versões de Calamidade, quando elas estiverem no jogo
+  (o dono confirma os membros).
 - **Os Cinco** (Xande, Guizo, Lírio): grupo incompleto no elenco — **sem especial de grupo** até todos estarem no jogo.
 
 ### Fases
@@ -1115,10 +1121,15 @@ A confirmar (o dono decide antes de entrar):
   ficha dela (Dante → Olhos Abertos...), quem só desperta entra com aura e +25% de dano; dura até o fim do round ou até
   entrar em campo numa troca. Cinemática do tríptico (`HUD.teamCut`, referência do dono: três painéis inclinados com
   linhas na cor de cada um).
-- [~] **F4** `teamLinks.js` + a regra de prioridade + os primeiros especiais customizados (Mascarados, Joui/Kaiser/
-  Arthur, Cristopher/Kaiser). A tabela e o `getTeamLink` (trio > grupo > dupla) já existem; falta ligá-los ao
-  Especial em Equipe e fazer as animações próprias.
-- [ ] Telas: mostrar na seleção da equipe quando o trio escolhido tem especial próprio.
+- [x] **F4** (2026-10-26) `teamLinks.js` ligado ao Especial em Equipe com a regra do TODO (grupo > trio > dupla; duas
+  duplas → a do líder) e os três primeiros especiais customizados (`combat/teamSpecials.js`): banner e painéis da
+  ligação (versão curta, para não esconder os golpes), golpe próprio de cada membro, o líder fecha com o especial dele e
+  o dano é o mesmo de qualquer Especial em Equipe. Testado: as três ligações + a equipe sem ligação (simplificado).
+  **Versões do mesmo personagem** (pedido): uma versão nova é uma ficha com `baseId`; na ligação, `'kaiser'` vale para
+  qualquer versão e `'kaiser_calamidade'` só para ela; duas versões na mesma equipe contam como um membro; com várias
+  ligações valendo, ganha `priority` > grupo/trio/dupla > a mais específica > a do líder (testado com ligações de teste).
+- [x] Telas: a placa da seleção da equipe mostra "ESPECIAL EM EQUIPE · <nome>" (tracejado enquanto o cursor completa a
+  ligação, cheio quando ela está escolhida), no PC e no celular.
 
 ---
 
@@ -1127,7 +1138,7 @@ A confirmar (o dono decide antes de entrar):
 ## Git
 
 * [x] Procurar arquivos temporários
-* [ ] Procurar código morto
+* [x] Procurar código morto
 * [x] Procurar imports antigos
 * [x] Procurar arquivos duplicados
 * [x] Corrigir referências quebradas
@@ -1150,6 +1161,14 @@ A confirmar (o dono decide antes de entrar):
 > Conferido na versão estável (2026-10-08): nada temporário versionado; imports sem uso removidos; build sem aviso
 > (textos num chunk próprio); versão compilada testada: menu → batalha → vitória → revanche → menu → treinamento.
 > "Procurar código morto" (funções sem uso) fica para depois.
+>
+> Código morto (2026-10-26, depois da v3.43.0): varredura de todo `src` (arquivos que nenhuma página/ferramenta alcança,
+> exports sem uso, declarações locais sem uso). Removidos: `TitleScreen` (+ a chave `title.press` nas 13 línguas e o CSS
+> `#title`), `watchChain`, `necktie`, `getCharacter`, `isArenaLoaded`, `learnedStats`, `VOLUME_CHANNELS`,
+> `VOLUME_OPTIONS`, `volumeLabel`, `fxLabel`, `FX_NAMES` e o `UP` de `projectiles.js`. Ficam de propósito: `src/dev/*`
+> (ferramentas do console), `sw-template.js` (lido pelo `vite.config.js`) e `teamLinks.js` (a F4). O build voltou a sair
+> sem aviso: o `main` tinha 878 kB → chunks `modelos` e `especiais` (main 532 kB); versão compilada testada (menu →
+> seleção → cenário → luta, galeria) sem erro no console.
 
 # 4. ARNALDO FRITZ / O ANFITRIÃO / SENHOR VERÍSSIMO
 
