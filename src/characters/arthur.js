@@ -21,12 +21,14 @@ export default {
   chargeFx: { style: 'forearm', color: 0xff2a3d },
   dodge: { style: 'default' },
 
+  // o braço DIREITO bate junto com os chutes (soco e cotovelada de um braço só); o esquerdo não existe
   melee: {
     name: 'Combate de um braço',
     strikes: [
       { name: 'Chute baixo', anim: 'kick_low', dur: 0.32, active: [0.1, 0.19], damage: 36, range: 1.9, arc: 100, knockback: 0.9, lunge: 1.3, sound: 'swing', hitSound: 'kick' },
+      { name: 'Soco de direita', anim: 'onearm_punch', dur: 0.3, active: [0.09, 0.17], damage: 38, range: 1.6, arc: 90, knockback: 1.0, lunge: 1.3, sound: 'swing', hitSound: 'heavyPunch' },
       { name: 'Joelhada', anim: 'knee', dur: 0.34, active: [0.1, 0.2], damage: 42, range: 1.7, arc: 100, knockback: 1.0, lunge: 1.4, sound: 'swing', hitSound: 'heavyPunch' },
-      { name: 'Chute circular', anim: 'kick_round', dur: 0.4, active: [0.13, 0.25], damage: 46, range: 1.9, arc: 140, knockback: 1.2, lunge: 1.1, sound: 'swing', hitSound: 'kick' },
+      { name: 'Cotovelada', anim: 'onearm_elbow', dur: 0.34, active: [0.1, 0.2], damage: 44, range: 1.5, arc: 110, knockback: 1.2, lunge: 1.2, sound: 'swing', hitSound: 'heavyPunch' },
       { name: 'Chute giratório', anim: 'spin_kick', dur: 0.6, active: [0.22, 0.38], damage: 60, range: 2.0, arc: 160, lunge: 1.8, finisher: 'launch', sound: 'swing', hitSound: 'heavyPunch' },
     ],
 
@@ -136,23 +138,40 @@ export default {
       color: 0xd8a040,
     },
     {
-      // cânone (Calamidade): "gastando 2 PV, projeta uma lâmina a partir do próprio sangue". Ele perdeu o braço
-      // esquerdo, então a lâmina nasce do ombro que falta; paga com a vida e os golpes ganham alcance e sangramento
-      // enquanto dura. (Antes era o especial; o especial agora é o Solo do Abutre.)
+      // cânone (Calamidade): "gastando 2 PV, projeta uma lâmina a partir do próprio sangue". A lâmina nasce do punho
+      // DIREITO (o braço que ele tem) e, enquanto dura, o físico deixa os chutes e vira a sequência de CORTES com ela
+      // (`melee` abaixo): paga com a vida, alcança mais longe e faz sangrar. (Antes era o especial; o especial agora é
+      // o Solo do Abutre.)
       id: 'armaDeSangue',
       name: 'Arma de Sangue',
       input: 'block+jump', // R2 + × / RT + A
       type: 'bloodBlade',
-      description: 'Paga com o próprio sangue e projeta a lâmina de sangue no ombro que perdeu: por 8 s os golpes alcançam mais longe e fazem sangrar.',
+      description: 'Paga com o próprio sangue e projeta uma lâmina de sangue do punho direito: por 8 s o físico vira cortes com ela, que alcançam mais longe e fazem sangrar.',
       healthCost: 40,
       energyCost: 0,
       cooldown: 18,
       duration: 8,
-      rangeBonus: 0.6,
+      rangeBonus: 0.4,
       bleed: { dps: 5, duration: 3 },
-      showProp: 'claw',
+      showProp: 'bloodBlade',
       props: [],
       color: 0xff1a30,
+      // os CORTES com a lâmina de sangue — só o braço direito (as animações de faca de uma mão)
+      melee: {
+        name: 'Lâmina de Sangue',
+        strikes: [
+          { name: 'Corte de sangue', anim: 'knife_1', dur: 0.3, active: [0.09, 0.17], damage: 38, range: 2.0, arc: 120, knockback: 1.0, lunge: 1.3, sound: 'blade', hitSound: 'clawHit', trail: { color: 0xff1a30, tilt: 0.05 } },
+          { name: 'Corte reverso', anim: 'knife_2', dur: 0.3, active: [0.09, 0.17], damage: 40, range: 2.0, arc: 120, knockback: 1.1, lunge: 1.2, sound: 'blade', hitSound: 'clawHit', trail: { color: 0xff1a30, flip: true } },
+          { name: 'Estocada de sangue', anim: 'thrust', dur: 0.34, active: [0.11, 0.21], damage: 44, range: 2.3, arc: 60, knockback: 1.6, lunge: 1.5, sound: 'blade', hitSound: 'clawHit', trail: { color: 0xff1a30 } },
+          { name: 'Talho de sangue', anim: 'knife_final', dur: 0.5, active: [0.17, 0.3], damage: 62, range: 2.2, arc: 140, lunge: 2.0, finisher: 'launch', sound: 'slashFinal', hitSound: 'clawHit', impactScale: 1.6, trail: { color: 0xff1a30, roll: 1.2, big: true } },
+        ],
+        up: { name: 'Corte ascendente', anim: 'slash_up', dur: 0.42, active: [0.13, 0.25], damage: 42, range: 2.1, arc: 120, lunge: 0.9, finisher: 'launchHigh', launcher: true, sound: 'swing', hitSound: 'clawHit', trail: { color: 0xff1a30, tilt: -1.2 } },
+        down: { name: 'Corte descendente', anim: 'knife_3', dur: 0.44, active: [0.15, 0.26], damage: 46, range: 2.1, arc: 120, lunge: 1, finisher: 'knockdown', sound: 'swing', hitSound: 'clawHit', impactScale: 1.4, trail: { color: 0xff1a30, roll: 1.4 } },
+        forward: { name: 'Avanço cortante', anim: 'dash_slash', dur: 0.42, active: [0.12, 0.24], damage: 44, range: 2.1, arc: 120, knockback: 2.6, motion: [{ t: [0, 0.22], fwd: 4.4, stopClose: true }], sound: 'blade', hitSound: 'clawHit', trail: { color: 0xff1a30, wide: true } },
+        back: { name: 'Esquiva e corte', anim: 'knife_evade', dur: 0.5, active: [0.28, 0.38], damage: 44, range: 2.0, arc: 110, knockback: 2.6, iframes: [0, 0.22], motion: [{ t: [0, 0.16], back: 2.0 }, { t: [0.18, 0.32], fwd: 2.2, stopClose: true }], sound: 'blade', hitSound: 'clawHit', trail: { color: 0xff1a30 } },
+        side: { name: 'Corte lateral', anim: 'knife_2', dur: 0.34, active: [0.1, 0.2], damage: 40, range: 2.0, arc: 140, knockback: 2.2, motion: [{ t: [0, 0.22], side: 2.4 }], sound: 'blade', hitSound: 'clawHit', trail: { color: 0xff1a30, tilt: 0.2 } },
+        air: { name: 'Corte aéreo', anim: 'air_knife', dur: 0.38, active: [0.12, 0.28], damage: 40, range: 2.0, arc: 110, knockback: 3, slam: 15, vertical: 2.2, sound: 'blade', hitSound: 'clawHit', trail: { color: 0xff1a30, roll: 1.2 } },
+      },
     },
   ],
 

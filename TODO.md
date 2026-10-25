@@ -1,6 +1,6 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.40.0 (revisado em 2026-10-25: Balu e Lírio remodelados no Blender pela arte)
+**Versão de referência atual:** v3.41.0 (revisado em 2026-10-26: Arthur e Joui remodelados no Blender; Arma de Sangue no braço direito)
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente
 
@@ -9,9 +9,9 @@
 
 # PRÓXIMA GRANDE ATUALIZAÇÃO — LUTA + MODO PvE (planejamento de 2026-10-18)
 
-**Estado em 2026-10-25 (v3.40.0):**
+**Estado em 2026-10-26 (v3.41.0):**
 - [~] 2.2 Modelos antigos: Xande e Aguiar (v3.33.0), Fantasma, Kemi e Gal Sal + as lâminas Ereškigal (v3.34.0), Kaiser
-  (v3.38.0), Balu e Lírio (v3.40.0) refeitos pelas artes oficiais; faltam Arthur e Joui no Blender e os outros antigos
+  (v3.38.0), Balu e Lírio (v3.40.0), Arthur e Joui (v3.41.0) refeitos pelas artes oficiais; faltam os outros antigos
   (ver *MODELOS — PRÓXIMOS PASSOS*).
 - [~] 2.3 Especiais em equipe: Barra de Equipe, Especial simplificado e Transformação em equipe prontos (F1/F2/F3); a tabela de ligações
   `src/config/teamLinks.js` existe mas ainda não está ligada (F4, ver *EQUIPE*).
@@ -991,7 +991,8 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
 - [x] Kemi remodelada pela arte oficial (top, mochila, faixas, casaco amarrado, dreads; texturas novas).
 - [x] Gal Sal remodelado pela arte de Desconjuração (poncho com caimento real, cabelo, venda, correntes) e as lâminas Ereškigal no Blender.
 - [x] Kaiser remodelada pela arte de Desconjuração (versão queimada/50%: casaco do avesso, braço esquerdo queimado, faixas, olhos roxos).
-- [~] Arthur e Joui: na v3.39.0 só ajustes no script antigo (cores, cabelo, colete, tênis, chinelos). Falta o REMODEL de verdade no Blender, na técnica atual (sculpt_lib, como Kaiser/Balu), revisado pelo MCP em 4 vistas contra a miniatura de Calamidade — o dono apontou que ficou abaixo do padrão.
+- [x] Arthur e Joui remodelados no Blender na técnica atual (sculpt_lib), revisados pelo MCP em 4 vistas contra as miniaturas de Calamidade — v3.41.0.
+- [x] Arma de Sangue do Arthur no punho DIREITO (o braço que ele tem) e o físico vira cortes com a lâmina enquanto dura; o físico normal usa o braço direito (soco e cotovelada) — v3.41.0.
 - [x] Balu (miniatura de Calamidade) e Lírio (miniatura de Sinais do Outro Lado) remodelados no Blender — v3.40.0.
 - [x] Retratos com a cabeça cortada (Kian no tríptico): `renderPortraits` enquadra pela altura da cabeça — v3.39.0.
 - [ ] Os outros modelos mais antigos, em ordem de data: Anfitrião, Arnaldo e Veríssimo (06/10), depois Diabo e Kian (10/10)...
@@ -1544,7 +1545,7 @@ Não criar barra separada de Exposição Paranormal sem nova decisão.
 ## ARTHUR
 
 * [x] Conferir braço esquerdo
-* [x] Revisar Arma de Sangue (v3.39.0: habilidade R2 + ×, paga 40 de vida, alcance e sangramento)
+* [x] Revisar Arma de Sangue (v3.39.0: habilidade R2 + ×, paga 40 de vida, alcance e sangramento; v3.41.0: a lâmina nasce do punho direito e o físico vira cortes)
 * [x] Arma de Sangue deve consumir vida (passiva `bloodPrice`: sem sanidade, paga com vida)
 * [x] Revisar Rebirth (v3.39.0: roxo de Calamidade, Energia)
 * [x] Revisar crânios (caveirinhas de energia no Rebirth)
@@ -1780,7 +1781,7 @@ qualidade do Cristino / Cristopher / Dante v2 — um por vez, com o kit e as jun
 * [x] Aguiar (v3.33.0)
 * [ ] Amigo Imaginário
 * [ ] Arnaldo Fritz
-* [ ] Arthur Cervero
+* [x] Arthur Cervero (v3.41.0)
 * [x] Balu (v3.40.0)
 * [ ] Dalmo (e o Colosso)
 * [ ] Erin
@@ -1789,7 +1790,7 @@ qualidade do Cristino / Cristopher / Dante v2 — um por vez, com o kit e as jun
 * [x] Gal Sal (v3.34.0)
 * [ ] Guizo
 * [ ] Jae
-* [ ] Joui
+* [x] Joui (v3.41.0)
 * [x] Kaiser (v3.38.0)
 * [x] Kemi (v3.34.0)
 * [ ] Kian

@@ -1,5 +1,21 @@
 # Registro administrativo de alterações
 
+## v3.41.0 — Lâmina de Sangue
+
+- Versão: `VERSION` 3.40.0 → **3.41.0** (package.json/lock junto). Data: 2026-10-26.
+- **Arma de Sangue no braço certo** (pedido: "o arthur estava colocando a arma de sangue no braço que ele não tem. Era
+  pra ser no braço que ele tem, e nem estava usando esse braço pra bater na animação, apenas chutava"): o braço de sangue
+  no ombro esquerdo (`claw`, `bloodArm`) saiu do Arthur; entra a lâmina `bloodBlade` no punho direito, e a habilidade
+  troca o físico pela sequência de cortes (`a.melee`) enquanto dura — testado: cortes saem, 128 de dano em 3 golpes na
+  Kaiser, e no fim volta ao "Combate de um braço" com a lâmina escondida. O físico normal do Arthur passa a ter o soco
+  de direita (`onearm_punch`) e a cotovelada (`onearm_elbow`) entre os chutes.
+- **Arthur e Joui remodelados no Blender** (o pendente da v3.39.0): os dois scripts reescritos na técnica atual e
+  revisados pelo MCP em 4 vistas contra as miniaturas de Calamidade. Arthur: colete fechado (cava só do lado direito,
+  o esquerdo fecha porque não tem braço), a calça subindo até o cinto, bolsos colados na coxa, barba e bigode refeitos
+  pela altura da boca, o cabelo cobrindo as orelhas. Joui: casaco de cima a partir do tronco + a saia longa com dobras e
+  o forro vermelho recuado (não vaza), mangas até o cotovelo, capuz, a risca no meio do cabelo (metaball negativa) e a
+  nuca raspada; as duas máscaras (`prop_maskOn`/`prop_maskSide`) seguem como antes.
+
 ## v3.40.0 — Peso e Pelo
 
 - Versão: `VERSION` 3.39.0 → **3.40.0** (package.json/lock junto). Data: 2026-10-25.

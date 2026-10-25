@@ -1014,10 +1014,27 @@ Object.assign(ABILITY_TYPES, {
         const uncoat = (a.props || ['knife', 'knifeThrow']).map((n) => f.rig.props[n]).filter((k) => k && k.traverse).map((k) => bloodCoat(k));
         // a.showProp: a lâmina aparece por inteiro enquanto dura (Arthur: o braço de sangue no ombro que ele perdeu)
         if (a.showProp && f.rig.props[a.showProp]) f.rig.showProp(a.showProp, true);
+        // a.melee (Arthur): enquanto dura, o físico vira a sequência de cortes com a lâmina (troca a ficha só deste
+        // lutador; volta no fim — se ele se transformou no meio, a forma nova fica como está)
+        let bladeDef = null;
+        const prevDef = f.def;
+        if (a.melee) {
+          bladeDef = { ...f.def, melee: a.melee };
+          f.def = bladeDef;
+          f.combo && (f.combo.chain = -1);
+        }
         f.addBuff({
           type: 'bloodBlade', name: 'ARMA DE SANGUE', time: a.duration, duration: a.duration,
           rangeBonus: a.rangeBonus, bleed: a.bleed,
-          onEnd() { drip.stop(); uncoat.forEach((u) => u()); if (a.showProp && f.rig.props[a.showProp]) f.rig.showProp(a.showProp, false); },
+          onEnd() {
+            drip.stop();
+            uncoat.forEach((u) => u());
+            if (a.showProp && f.rig.props[a.showProp]) f.rig.showProp(a.showProp, false);
+            if (bladeDef && f.def === bladeDef) {
+              f.def = prevDef;
+              f.combo && (f.combo.chain = -1);
+            }
+          },
         });
       });
       tl.end(0.5);

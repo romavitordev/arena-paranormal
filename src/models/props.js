@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { glowMat, toon } from './rig.js';
 import { MATERIAL_TEXTURES } from './textures.js';
-import { katana, scabbard, m4, sniper, guitarCase, bloodArm, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, roundGlasses, neonWraps, pulseEmitter, bandolier, bengala, mustache, socadeira, peixeira, spikedLantern, tenebrisPendant } from './weapons.js';
+import { katana, scabbard, m4, sniper, guitarCase, bloodArm, bloodBlade, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, roundGlasses, neonWraps, pulseEmitter, bandolier, bengala, mustache, socadeira, peixeira, spikedLantern, tenebrisPendant } from './weapons.js';
 
 // Armas e acessórios adicionados em código sobre os modelos do Blender.
 // Usam só `sockets`, `attach()` e `props`, que existem nos dois tipos de rig.
@@ -55,20 +55,11 @@ export function addArthurProps(rig) {
   rifle.visible = false;
   props.sniperHand = rifle;
   rig.muzzle = rifle.userData.muzzle;
-  // Arma de Sangue: braço de sangue no lugar do braço esquerdo (escondido até o especial)
-  const wp = (j) => rig.joints[j].getWorldPosition(new THREE.Vector3());
-  const upperLen = wp('sL').distanceTo(wp('eL'));
-  const arm = bloodArm(upperLen, upperLen * 0.95);
-  rig.attach('sL', arm.upper);
-  rig.attach('eL', arm.fore);
-  // as duas partes ligam/desligam juntas
-  const claw = {
-    get visible() { return arm.upper.visible; },
-    set visible(v) { arm.upper.visible = v; arm.fore.visible = v; },
-    traverse(fn) { arm.upper.traverse(fn); arm.fore.traverse(fn); },
-  };
-  claw.visible = false;
-  props.claw = claw;
+  // Arma de Sangue: a lâmina de sangue nasce do punho DIREITO — o braço que ele tem (escondida até a habilidade)
+  const blade = inFist(bloodBlade());
+  sockets.handR.add(blade);
+  blade.visible = false;
+  props.bloodBlade = blade;
   // olhos amaldiçoados do Rebirth
   const eyes = new THREE.Group();
   for (const s of [-1, 1]) {

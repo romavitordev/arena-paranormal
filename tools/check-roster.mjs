@@ -157,8 +157,10 @@ ok(abu.special.name === 'Solo do Abutre' && abu.special.type === 'eliteShot', 'A
 ok(abu.awakening.name === 'Olhos Sempre Abertos', 'Arthur: transformação OLHOS SEMPRE ABERTOS');
 ok(abil('arthur', 'bloodBlade') && pas('arthur', 'luckyStrike') && pas('arthur', 'longShot'), 'Arthur: Arma de Sangue (habilidade), Golpe de Sorte e Furtivo e letal');
 ok(abu.ranged.chargeShot && abu.ranged.chargeShot.maxDamage > abu.ranged.chargeShot.minDamage, 'Arthur: sniper com tiro carregado (ajoelha, mais tempo = mais dano)');
-const legOnly = ['kick_low', 'kick_round', 'kick_front', 'spin_kick', 'knee', 'side_kick', 'air_kick', 'sway_kick'];
-ok(allStrikes(abu).every((s) => legOnly.includes(s.anim)), 'Arthur: golpes físicos só com chutes/joelhadas (não bate com o braço que não tem)');
+const oneArmOk = ['kick_low', 'kick_round', 'kick_front', 'spin_kick', 'knee', 'side_kick', 'air_kick', 'sway_kick', 'onearm_punch', 'onearm_elbow'];
+ok(allStrikes(abu).every((s) => oneArmOk.includes(s.anim)) && allStrikes(abu).some((s) => s.anim.startsWith('onearm')), 'Arthur: chutes e o braço DIREITO (soco e cotovelada de um braço); nunca o braço que não tem');
+const blade = abu.abilities.find((a) => a.id === 'armaDeSangue');
+ok(blade && blade.showProp === 'bloodBlade' && blade.melee && blade.melee.strikes.length >= 3, 'Arthur: Arma de Sangue nasce do punho direito e troca o físico pelos cortes com a lâmina');
 ok(abu.anims.grab === 'grab_onearm', 'Arthur: agarrão com um braço só');
 
 // ---------------- Joui ----------------

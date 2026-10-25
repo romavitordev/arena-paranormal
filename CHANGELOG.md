@@ -1,5 +1,16 @@
 # Changelog
 
+## v3.41.0 — Lâmina de Sangue
+
+### Adicionado
+- `weapons.js bloodBlade()`: a lâmina de sangue do Arthur no punho direito (prop `bloodBlade`, com `inFist`).
+- Habilidade `bloodBlade` aceita `a.melee`: troca a ficha do físico do lutador enquanto dura e devolve no fim (se ele não se transformou no meio).
+
+### Alterado
+- Arthur: a Arma de Sangue usa o prop `bloodBlade` (no lugar do braço de sangue `claw` no ombro esquerdo) e a sequência de cortes com as animações de faca de uma mão; o físico normal ganha `onearm_punch` e `onearm_elbow`.
+- `char_arthur.py` e `char_joui.py` reescritos na técnica atual (sculpt_lib), revisados no Blender pelo MCP; geram `fonte/arthur.blend` e `fonte/joui.blend`. Retratos da página Sobre regerados.
+- `check-roster`: o Arthur pode usar o braço direito (soco/cotovelada de um braço) e a Arma de Sangue precisa nascer do punho direito com a sequência própria.
+
 ## v3.40.0 — Peso e Pelo
 
 ### Alterado

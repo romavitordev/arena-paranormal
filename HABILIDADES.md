@@ -26,9 +26,10 @@ especial = Carga → Carga → ○ (custa 50, ofensivos causam 250, nunca hitkil
 | Comando | Golpe | Dano | Alcance | Observações |
 |---|---|---|---|---|
 | ○ 1 | Chute baixo | 36 | 1.9 m |  |
-| ○ 2 | Joelhada | 42 | 1.7 m |  |
-| ○ 3 | Chute circular | 46 | 1.9 m |  |
-| ○ 4 | Chute giratório | 60 | 2 m | finalizador: lança |
+| ○ 2 | Soco de direita | 38 | 1.6 m |  |
+| ○ 3 | Joelhada | 42 | 1.7 m |  |
+| ○ 4 | Cotovelada | 44 | 1.5 m |  |
+| ○ 5 | Chute giratório | 60 | 2 m | finalizador: lança |
 | Frente + ○ | Chute de avanço | 42 | 2 m |  |
 | Trás + ○ | Esquiva corporal | 44 | 1.6 m | invulnerável no começo |
 | Lado + ○ | Chute lateral | 40 | 1.9 m |  |
@@ -51,7 +52,7 @@ especial = Carga → Carga → ○ (custa 50, ofensivos causam 250, nunca hitkil
 - **Analisar Brecha** — △ + L2 / Y + LT · custo 20 · cooldown 16 s · alcance 14 m
   Estuda o adversário e acha uma brecha: por 7 s ele recebe 25% a mais de dano dos golpes físicos.
 - **Arma de Sangue** — R2 + × / RT + A · custo 0 · cooldown 18 s
-  Paga com o próprio sangue e projeta a lâmina de sangue no ombro que perdeu: por 8 s os golpes alcançam mais longe e fazem sangrar.
+  Paga com o próprio sangue e projeta uma lâmina de sangue do punho direito: por 8 s o físico vira cortes com ela, que alcançam mais longe e fazem sangrar.
 
 ### Especial: Solo do Abutre
 

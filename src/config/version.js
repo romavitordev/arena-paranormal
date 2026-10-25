@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.40.0';
+export const VERSION = '3.41.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,17 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.41.0',
+    date: '2026-10-26',
+    title: 'Lâmina de Sangue',
+    items: [
+      'ARTHUR — ARMA DE SANGUE NO BRAÇO CERTO: a lâmina de sangue agora nasce do punho DIREITO (o braço que ele tem), com o sangue enrolando o antebraço — antes ela aparecia no ombro do braço que ele perdeu. Enquanto dura, o físico dele vira uma sequência de cortes com a lâmina (corte, corte reverso, estocada e o talho que lança).',
+      'ARTHUR BATE COM O BRAÇO DIREITO: a sequência normal mistura os chutes com um soco de direita e uma cotovelada.',
+      'ARTHUR REFEITO NO BLENDER PELA ARTE DE CALAMIDADE: cabelo até os ombros meio-preso com as mechas brancas, barba grisalha cheia e o bigode castanho, colete preto fechado com bolsos e o brasão dos Gaudérios Abutres, a alça da capa de guitarra, a manga vazia presa, calça com bolsos e amarrações e tênis de cano alto.',
+      'JOUI REFEITO NO BLENDER PELA ARTE DE CALAMIDADE: laterais raspadas e o cabelo repartido no meio caindo para os lados, o casaco longo aberto com a borda e o forro vermelhos e dobras de verdade, a gola chinesa com os fechos vermelhos, a corda de forca no pescoço, a corda vermelha trançada na cintura com as laçadas, faixas nos braços e nas canelas, e chinelos com meias.',
+    ],
+  },
   {
     v: '3.40.0',
     date: '2026-10-25',

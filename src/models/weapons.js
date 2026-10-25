@@ -603,6 +603,40 @@ function bloodStrand(len, r0, r1, turns, offset, phase, mat, wobble = 0.35) {
   return taperedTube(new THREE.CatmullRomCurve3(pts), len, (t) => r0 + (r1 - r0) * t, mat);
 }
 
+// Arma de Sangue do ARTHUR (cânone: "gastando 2 PV, projeta uma lâmina a partir do próprio sangue"): a lâmina longa e
+// curva de sangue nasce do punho DIREITO — o braço que ele tem — e feixes de sangue enrolam o antebraço. Mesmo espaço
+// da faca: a lâmina sai para -Y (o `inFist` vira o cabo dentro do punho e a lâmina sai por cima do polegar).
+export function bloodBlade(len = 0.66) {
+  const mat = bloodMaterial();
+  const g = new THREE.Group();
+  const blade = new THREE.Mesh(extrude(bladeShape(len, 0.085, 0.1, 0.22), 0.016), mat);
+  blade.position.y = -0.05;
+  blade.rotation.y = Math.PI / 2;
+  blade.userData.outline = true;
+  g.add(blade);
+  // a massa de sangue no punho, de onde a lâmina brota
+  const root = new THREE.Mesh(new THREE.SphereGeometry(0.05, 12, 10), mat);
+  root.scale.set(1, 1.3, 1);
+  root.position.y = -0.02;
+  root.userData.outline = true;
+  g.add(root);
+  // feixes que sobem enrolando o antebraço (o sangue sai da mão e corre braço acima)
+  for (let i = 0; i < 4; i++) {
+    const s = bloodStrand(0.24, 0.016, 0.006, 0.6 + (i % 2) * 0.2, 0.045, (i / 4) * Math.PI * 2, mat, 0.2);
+    s.rotation.x = Math.PI; // sobe (do punho para o cotovelo)
+    s.position.y = 0.03;
+    g.add(s);
+  }
+  // espinhos pequenos nas costas da lâmina
+  for (let i = 0; i < 3; i++) {
+    const sp = bloodSpike(0.08 + i * 0.02, 0.012, 0.03, mat);
+    sp.position.set(0, -0.14 - i * 0.14, -0.035);
+    sp.rotation.x = -2.2;
+    g.add(sp);
+  }
+  return g;
+}
+
 // espinho/garra de sangue curvado
 export function bloodSpike(len, r, bend, mat) {
   const pts = [];
