@@ -1333,6 +1333,13 @@ export const MATERIAL_TEXTURES = {
     g.beginPath(); g.moveTo(200, 512); g.lineTo(256, 332); g.lineTo(312, 512); g.stroke();
     g.fillStyle = 'rgba(80,80,90,0.5)';
     for (const x of [150, 330]) g.fillRect(x, 208, 46, 4);
+    // o RISCADO DE GIZ do colete (Calamidade): listras claras finas na vertical, fora do V da camisa
+    g.strokeStyle = 'rgba(150,150,160,0.32)'; g.lineWidth = 1.5;
+    for (let x = 6; x < 512; x += 14) {
+      g.beginPath(); g.moveTo(x, 0);
+      const inV = x > 200 && x < 312;
+      g.lineTo(x, inV ? 332 + Math.abs(x - 256) * (180 / 56) : 512); g.stroke(); // para na borda do V
+    }
   }, { wrap: true }),
   shirt_verissimo: () => canvasTex(256, 256, (g) => {
     g.fillStyle = '#efece6'; g.fillRect(0, 0, 256, 256);
@@ -1343,9 +1350,12 @@ export const MATERIAL_TEXTURES = {
       g.beginPath(); g.moveTo(x, 0); g.bezierCurveTo(x + 20, 90, x - 20, 170, x + 8, 256); g.stroke();
     }
   }, { wrap: true }),
+  // calça escura RISCADA (Calamidade) com o vinco
   pants_verissimo: () => canvasTex(256, 256, (g) => {
-    g.fillStyle = '#34405a'; g.fillRect(0, 0, 256, 256);
-    g.strokeStyle = 'rgba(20,26,40,0.45)'; g.lineWidth = 2;
+    g.fillStyle = '#2a2a30'; g.fillRect(0, 0, 256, 256);
+    g.strokeStyle = 'rgba(140,140,150,0.28)'; g.lineWidth = 1;
+    for (let x = 4; x < 256; x += 10) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, 256); g.stroke(); }
+    g.strokeStyle = 'rgba(10,10,14,0.5)'; g.lineWidth = 2;
     for (const x of [64, 192]) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, 256); g.stroke(); }
   }, { wrap: true }),
   // polo VERDE-CLARA (o desenho de Calamidade, base do modelo): dobras sombreadas, carcela com botões e a abertura em V

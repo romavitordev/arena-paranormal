@@ -147,19 +147,6 @@ for side in ('L', 'R'):
     b.add('arm' + side, tube(rings, 16), arms_m, region='arm' + side, subdiv=0)
     b.add('delt' + side, ellipsoid((s.x + sx * 0.005 * H, s.y, s.z - 0.02 * H), (0.088 * H, 0.094 * H, 0.08 * H), 16, 12), arms_m, region='arm' + side, subdiv=0)
     b.add('hand' + side, hand_part(sk, side, 0.07), arms_m, region='e' + side)
-    # FAIXAS (Calamidade): do meio do antebraço até a mão, com as pontas soltas caindo
-    wr = [tube(limb_rings(e.lerp(h, t), e.lerp(h, t + 0.09), 0.08 - t * 0.016, 0.079 - t * 0.016, n=1), 14) for t in (0.28, 0.4, 0.52, 0.64, 0.76, 0.88)]
-    b.add('prop_wraps_arm' + side, merge(*wr), wrap, region='e' + side, subdiv=0)
-    c = h + Vector((0, 0, -0.04 * H))
-    b.add('prop_wraps_fist' + side, ellipsoid((c.x, c.y, c.z + 0.012), (0.068, 0.082, 0.07), 10, 8), wrap, region='e' + side, subdiv=0)
-    tails = []
-    for k in range(2):
-        # pontas curtas, saindo do punho para FORA e caindo (não apontam para cima quando ele ergue o punho)
-        p0 = e.lerp(h, 0.82) + Vector((sx * 0.06, 0.02 - 0.04 * k, 0.0))
-        pts = [p0, p0 + Vector((sx * 0.03, 0.01, -0.03 * H)), p0 + Vector((sx * 0.04, 0.012 + 0.01 * k, -0.07 * H))]
-        tails.append(rod(pts, [0.013, 0.01, 0.006], 4))
-    b.add('prop_wraps_tails' + side, merge(*tails), wrap, region='e' + side, subdiv=0)
-b.group('prop_wraps')
 
 # ---------------------------------------------------------------- CALÇA cinza-escura e PÉS descalços escritos
 b.add('pants_hip', grid(lambda u, v: torso_pt((u - 0.5) * TAU, 0.05 - v * 0.27, 1.0, 0.01), 32, 4), pants, region='torso', subdiv=0)
@@ -180,40 +167,193 @@ for side in ('L', 'R'):
     toes = [ellipsoid((f.x + (i - 1.5) * 0.017 * H, f.y - 0.16 * H, f.z + 0.012 * H), (0.009 * H, 0.014 * H, 0.009 * H), 6, 4) for i in range(4)]
     b.add('toes' + side, merge(*toes), arms_m, region='foot' + side, subdiv=0)
 
-# ---------------------------------------------------------------- CABEÇA: cabelo curto rente e as barbas da Transformação
-HR = (0.143 * H, 0.153 * H, 0.166 * H)
-HC = Vector((hc.x, hc.y + 0.006, hc.z + 0.01))
-# cabelo raspado curto (referências "desconjurado", "desconjurado sério", "desconjurado pose"): uma calota rente com a
-# linha da testa marcada e um pouco mais de volume no alto
-b.add('hair_short', hair_cap((HC.x, HC.y, HC.z + 0.004 * H), (HR[0] * 1.015, HR[1] * 1.02, HR[2] * 1.03), front=0.26, side=0.4, back=0.58), hairm, region='head')
+
+# ================================================================ TÉCNICA ATUAL (sculpt_lib) por cima do corpo base (que guarda os UVs das texturas
+# das linhas e da escrita): MÚSCULOS em relevo, a calça com dobras, o AFRO esculpido, as barbas e as faixas espirais
+from sculpt_lib import Sculpt, ridge, n3, outward, relief
+from sculpt_lib import rod as srod
+from mathutils.bvhtree import BVHTree
 
 
-def beard_mesh(name, thick, chin, cheek, mat_):
-    """barba que acompanha a mandíbula: sobe pelas costeletas até a frente da orelha, contorna o queixo e deixa a boca
-    à mostra. thick = espessura; chin = quanto o queixo desce; cheek = até onde sobe na bochecha."""
-    nu, nv = 28, 6
-    def pt(u, v):
-        # u: de uma costeleta à outra passando pelo queixo; v: da borda de cima (bochecha) à de baixo (sob a mandíbula)
-        a = (u - 0.5) * math.pi * 1.25           # ângulo em volta do rosto (0 = queixo/frente)
-        side = abs(math.sin(a))
-        # (o rosto é mapeado pelo ângulo: boca ≈ hc.z − 0,081 H, queixo ≈ − 0,128 H, nariz ≈ − 0,023 H)
-        top_z = hc.z - 0.105 * H + side ** 1.5 * (cheek + 0.03 * H)  # na frente começa ABAIXO do lábio; nos lados sobe pela bochecha
-        bot_z = hc.z - 0.165 * H - (1 - side) * chin + side * 0.06 * H
-        z = top_z + (bot_z - top_z) * v
-        # raio da cabeça nessa altura (encolhe embaixo — o queixo) + a espessura da barba
-        k = max(0.25, 1 - ((hc.z - z) / (0.17 * H)) ** 2) ** 0.5
-        rx = HR[0] * (0.78 + 0.2 * k) + thick * (0.5 + 0.5 * math.sin(v * math.pi))
-        ry = HR[1] * (0.74 + 0.2 * k) + thick * (0.5 + 0.5 * math.sin(v * math.pi)) + (1 - side) * chin * 0.15
-        return Vector((hc.x + math.sin(a) * rx, hc.y - math.cos(a) * ry, z))
-    b.add(name, grid(pt, nu, nv), mat_, region='head', subdiv=0)
+def part(name):
+    return next(o for o in b.parts if o.name == name)
 
 
-beard_mesh('prop_beard_m', 0.006 * H, 0.01 * H, 0.02 * H, beard)    # crescendo
-beard_mesh('prop_beard_f', 0.014 * H, 0.04 * H, 0.04 * H, beard)    # cheia (Calamidade)
-mus = [rod([Vector((s_ * 0.004 * H, hc.y - 0.148 * H, hc.z - 0.058 * H)), Vector((s_ * 0.034 * H, hc.y - 0.138 * H, hc.z - 0.068 * H)), Vector((s_ * 0.05 * H, hc.y - 0.122 * H, hc.z - 0.1 * H))], [0.011 * H, 0.012 * H, 0.009 * H], 6) for s_ in (1, -1)]
-b.add('prop_beard_f_mustache', merge(*mus), beard, region='head', subdiv=0)
-b.add('prop_beard_m_mustache', merge(*[rod([Vector((s_ * 0.004 * H, hc.y - 0.148 * H, hc.z - 0.058 * H)), Vector((s_ * 0.034 * H, hc.y - 0.138 * H, hc.z - 0.068 * H))], [0.006 * H, 0.006 * H], 5) for s_ in (1, -1)]), beard, region='head', subdiv=0)
+def W(reg):
+    return lambda p: auto_weights(sk, p, reg)
+
+
+HEAD = lambda p: {'hd': 1.0}
+_bvh = {}
+
+
+def bvh(name):
+    if name not in _bvh:
+        o = part(name)
+        dg = bpy.context.evaluated_depsgraph_get()
+        me = bpy.data.meshes.new_from_object(o.evaluated_get(dg))
+        me.transform(o.matrix_world)
+        bm = bmesh.new()
+        bm.from_mesh(me)
+        _bvh[name] = BVHTree.FromBMesh(bm)
+        bm.free()
+        bpy.data.meshes.remove(me)
+    return _bvh[name]
+
+
+def surf(name, origin, direction, off=0.0):
+    hit = bvh(name).ray_cast(Vector(origin), Vector(direction).normalized())
+    return None if hit[0] is None else hit[0] + hit[1] * off
+
+
+def bump(p, c, r, amp):
+    d2 = ((p.x - c[0]) / r[0]) ** 2 + ((p.y - c[1]) / r[1]) ** 2 + ((p.z - c[2]) / r[2]) ** 2
+    return amp * math.exp(-d2 * 2.2)
+
+
+def muscles(p):
+    """peitoral, abdômen em seis gomos com a linha alba, oblíquos e as costas (dorsais e a coluna)"""
+    v = 0.0
+    if p.y < 0.02 * H:  # frente
+        for s in (1, -1):
+            v += bump(p, (s * 0.1 * H, -0.18 * H, hz + 0.46 * H), (0.09 * H, 0.2 * H, 0.06 * H), 0.016 * H)  # peitoral
+            v += bump(p, (s * 0.15 * H, -0.12 * H, hz + 0.2 * H), (0.04 * H, 0.2 * H, 0.1 * H), 0.006 * H)   # oblíquos
+            for z in (0.13, 0.21, 0.29):
+                v += bump(p, (s * 0.036 * H, -0.15 * H, hz + z * H), (0.03 * H, 0.2 * H, 0.03 * H), 0.008 * H)  # gomos
+        if hz + 0.08 * H < p.z < hz + 0.4 * H:
+            v -= 0.006 * H * math.exp(-(p.x / (0.008 * H)) ** 2)  # linha alba
+        if abs(p.x) < 0.17 * H:
+            v -= 0.006 * H * math.exp(-((p.z - hz - 0.395 * H) / (0.012 * H)) ** 2)  # sob o peitoral
+    else:  # costas
+        for s in (1, -1):
+            v += bump(p, (s * 0.12 * H, 0.14 * H, hz + 0.4 * H), (0.08 * H, 0.2 * H, 0.14 * H), 0.012 * H)  # dorsais
+        if p.z > hz + 0.1 * H:
+            v -= 0.006 * H * math.exp(-(p.x / (0.01 * H)) ** 2)  # a coluna
+    return v
+
+
+def densify(o, levels=2):
+    """subdivide a peça (mantém o UV) para o relevo dos músculos ter vértices onde aparecer"""
+    md = o.modifiers.new('dens', 'SUBSURF')
+    md.levels = levels
+    md.render_levels = levels
+    bpy.context.view_layer.objects.active = o
+    for x in bpy.context.selected_objects:
+        x.select_set(False)
+    o.select_set(True)
+    bpy.ops.object.modifier_apply(modifier=md.name)
+
+
+densify(part('torso'), 1)
+relief(part('torso'), muscles)
+for side in ('L', 'R'):
+    densify(part('arm' + side), 1)
+    s_, e_, h_ = sk['s' + side], sk['e' + side], sk['hand' + side]
+    bc = s_.lerp(e_, 0.55)
+    fc = e_.lerp(h_, 0.25)
+    relief(part('arm' + side), lambda p, bc=bc, fc=fc: bump(p, (bc.x, bc.y - 0.04 * H, bc.z), (0.06 * H, 0.06 * H, 0.09 * H), 0.012 * H)
+           + bump(p, (fc.x, fc.y, fc.z), (0.07 * H, 0.07 * H, 0.08 * H), 0.007 * H))
+
+# ================================================================ FAIXAS (Calamidade): espiral colada do cotovelo aos nós dos dedos e as duas
+# pontas soltas caindo do pulso
+for side in ('L', 'R'):
+    e_, h_ = sk['e' + side], sk['hand' + side]
+    sx = 1 if side == 'L' else -1
+    ax = (h_ - e_).normalized()
+    u = ax.orthogonal().normalized()
+    v = ax.cross(u)
+    wr = []
+    for i in range(241):
+        t = i / 240
+        c = e_.lerp(h_ + ax * 0.06 * H, 0.08 + 0.92 * t)
+        a = t * 13.0 * TAU
+        d = u * math.cos(a) + v * math.sin(a)
+        q = surf('arm' + side, c + d * 0.4 * H, -d, 0.002 * H) or surf('hand' + side, c + d * 0.4 * H, -d, 0.002 * H)
+        if q:
+            wr.append(q)
+    if len(wr) > 3:
+        b.add('prop_wraps_arm' + side, srod(wr, 0.014 * H, 5, caps=False, flat=(lambda p, e_=e_, ax=ax: (p - e_ - ax * (p - e_).dot(ax)), 0.85)), wrap, region='body', weight_fn=W('e' + side), subdiv=0)
+    tails = []
+    for k in range(2):
+        p0 = e_.lerp(h_, 0.86) + Vector((sx * 0.055 * H, (0.015 - 0.03 * k) * H, 0.0))
+        pts = [p0, p0 + Vector((sx * 0.025 * H, 0.008 * H, -0.06 * H)), p0 + Vector((sx * 0.035 * H, 0.012 * H, -0.13 * H - 0.03 * k * H))]
+        tails.append(srod(pts, [0.012 * H, 0.01 * H, 0.006 * H], 4, flat=(outward((e_.x, e_.y)), 0.3)))
+    b.add('prop_wraps_tails' + side, merge(*tails), wrap, region='body', weight_fn=W('e' + side), subdiv=0)
+b.group('prop_wraps')
+
+# ================================================================ a CALÇA cinza: as dobras
+for side in ('L', 'R'):
+    relief(part('pants' + side), lambda p: 0.005 * H * (ridge(p.z / H * 16 + n3(p, 9) * 1.6, 2) - 0.4))
+relief(part('pants_hip'), lambda p: 0.004 * H * (ridge(p.z / H * 16 + n3(p, 9) * 1.4, 2) - 0.4))
+
+# ================================================================ o AFRO curto e arredondado (Desconjuração e Calamidade)
+HCv = Vector((hc.x, hc.y, hc.z))
+
+
+def on_head(a, el, off):
+    """a = ângulo a partir da frente (+ = lado esquerdo dele, +x), el = elevação a partir do equador"""
+    d = Vector((math.sin(a) * math.cos(el), -math.cos(a) * math.cos(el), math.sin(el)))
+    return surf('head', HCv + d * 0.6 * H, -d, off)
+
+
+D = Sculpt()
+for i in range(30):
+    for j in range(12):
+        a = (i / 30 - 0.5) * TAU
+        el = -0.35 + 1.9 * j / 11
+        if math.cos(a) > 0.5 and el < 0.72:
+            continue  # testa e rosto (a linha do cabelo reta na testa)
+        if el < 0.12 and math.cos(a) > -0.3:
+            continue  # dos lados vai até o alto da orelha
+        if el < -0.12 and math.cos(a) > -0.8:
+            continue
+        # o volume: mais alto em cima e atrás (o afro arredondado), rente dos lados e na testa
+        off = (0.012 + 0.03 * max(0.0, math.sin(el)) + 0.012 * max(0.0, -math.cos(a))) * H
+        q = on_head(a, el, off)
+        if q:
+            D.ell(q, (0.034 * H, 0.034 * H, 0.032 * H))
+afro_disp = lambda p: 0.003 * H * (n3(p, 260) * 0.8 + ridge(n3(p, 90) * 9, 2) - 0.4)  # o crespo
+b.add('hair_afro', D.mesh(res=0.0045, smooth=2, disp=afro_disp, target=5000), hairm, region='body', weight_fn=HEAD, subdiv=0)
+
+
+# ================================================================ as BARBAS da Transformação: média (crescendo) e cheia (Calamidade)
+def beard_sculpt(name, off, r, chin_drop, mus_r):
+    B = Sculpt()
+    for i in range(19):
+        a = (i / 18 - 0.5) * 2.75
+        for el in (-0.24, -0.38, -0.52, -0.66, -0.8):
+            if abs(a) < 0.34 and el > -0.56:
+                continue  # a boca
+            if abs(a) < 0.72 and el > -0.36:
+                continue  # as maçãs do rosto
+            q = on_head(a, el, off)
+            if q:
+                B.ell(q, (r, r, r * 0.9))
+    for s in (1, -1):
+        for el in (-0.1, 0.05):
+            q = on_head(s * 1.25, el, off)
+            if q:
+                B.ell(q, (r * 0.85, r * 0.85, r))
+    chin = on_head(0.0, -0.82, off + 0.006 * H)
+    if chin and chin_drop > 0:
+        B.chain([chin, chin + Vector((0, -0.01 * H, -chin_drop))], [r * 1.3, r * 0.8], step=0.5)
+    b.add(name, B.mesh(res=0.004, smooth=2, disp=lambda p: 0.002 * H * (ridge(p.x / H * 140 + p.z / H * 40 + n3(p, 40), 2) - 0.4), target=2600), beard, region='body', weight_fn=HEAD, subdiv=0)
+    Mu = Sculpt()
+    for s in (1, -1):
+        pts = [on_head(s * a, el, off + 0.008 * H) for a, el in ((0.03, -0.36), (0.16, -0.38), (0.28, -0.46), (0.32, -0.56))]
+        pts = [q for q in pts if q]
+        if len(pts) > 1:
+            Mu.chain(pts, [mus_r, mus_r * 1.1, mus_r * 0.8, mus_r * 0.5][:len(pts)], step=0.45)
+    b.add(name + '_mustache', Mu.mesh(res=0.0035, smooth=2, target=900), beard, region='body', weight_fn=HEAD, subdiv=0)
+
+
+beard_sculpt('prop_beard_m', 0.0, 0.016 * H, 0.0, 0.008 * H)  # crescendo: rente
+beard_sculpt('prop_beard_f', 0.01 * H, 0.03 * H, 0.05 * H, 0.015 * H)  # cheia e densa (Calamidade)
 b.group('prop_beard_m')
 b.group('prop_beard_f')
 
 b.export(OUT)
+
+src = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fonte')
+os.makedirs(src, exist_ok=True)
+bpy.ops.wm.save_as_mainfile(filepath=os.path.join(src, 'kian.blend'), check_existing=False)

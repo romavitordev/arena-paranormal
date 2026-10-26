@@ -21,7 +21,6 @@ hz = sk['hips'].z
 
 skin = material('skin_o_diabo', '#a8262a', 0.7)
 horn = material('horn_o_diabo', '#d8ccb0', 0.6)
-horn_dk = material('horn_o_diabo_dk', '#9a8c74', 0.7)
 robe = material('robe_o_diabo', '#1a1516', 0.9)
 robe_in = material('robe_o_diabo_in', '#2a0a0e', 0.9)
 red = material('trim_o_diabo', '#8a1418', 0.8)
@@ -140,21 +139,19 @@ for s_ in (1, -1):
     base = HC + Vector((s_ * HR[0] * 0.95, 0.01 * H, 0.0))
     b.add(f'ear{s_}', merge(cone(tuple(base), tuple(base + Vector((s_ * 0.1 * H, 0.03 * H, 0.05 * H))), 0.03 * H, 6)), skin, region='head', subdiv=0)
 
-# CHIFRES altos, curvados para trás e anelados (bege), saindo do alto da testa
-horn_rings = []
+# CHIFRES altos (Miniatura O Diabo em Calamidade): saem do alto da testa quase retos para cima, abrindo um pouco e
+# curvando para trás na ponta; ESCULPIDOS com os anéis em relevo e afinando até a ponta (sculpt_lib)
+from sculpt_lib import Sculpt, ridge, n3, relief
 for s_ in (1, -1):
     pts, rad = [], []
-    for k in range(10):
-        t = k / 9
-        p = HC + Vector((s_ * (0.06 + 0.05 * t) * H, (-0.07 + 0.3 * t ** 1.6) * H, (0.12 + 0.28 * t - 0.05 * t * t) * H))
-        pts.append(p)
-        rad.append((0.034 * (1 - t) ** 0.9 + 0.003) * H)
-    b.add(f'horn{s_}', rod(pts, rad, 8), horn, region='head', subdiv=0)
-    for k in range(1, 8):
-        t = k / 9
-        q = pts[k]
-        horn_rings.append(rod([q - (pts[k + 1] - q).normalized() * 0.006 * H, q + (pts[k + 1] - q).normalized() * 0.006 * H], [rad[k] * 1.12] * 2, 8))
-b.add('horn_ridges', merge(*horn_rings), horn_dk, region='head', subdiv=0)
+    for k in range(12):
+        t = k / 11
+        pts.append(HC + Vector((s_ * (0.055 + 0.035 * t) * H, (-0.06 + 0.12 * t ** 2.2) * H, (0.13 + 0.42 * t) * H)))
+        rad.append((0.03 * (1 - t) ** 0.85 + 0.004) * H)
+    Hn = Sculpt()
+    Hn.chain(pts, rad, step=0.3)
+    base_z = pts[0].z
+    b.add(f'horn{s_}', Hn.mesh(res=0.0028, smooth=2, disp=lambda p, bz=base_z: 0.004 * H * ridge((p.z - bz) / H * 95, 3), target=1400), horn, region='head', subdiv=0)
 
 # ---------------------------------------------------------------- MANTO PRETO com CAPUZ (os chifres atravessam) e os
 # frisos vermelhos descendo pela frente e nas mangas
@@ -167,7 +164,7 @@ def hood_pt(u, v):
     return p
 
 
-b.add('hood', grid(hood_pt, 26, 10), robe, region='head', subdiv=0)
+b.add('hood', grid(hood_pt, 52, 20), robe, region='head', subdiv=0)
 b.add('hood_in', grid(lambda u, v: HC + (hood_pt(u, v) - HC) * 0.97, 26, 10, flip=True), robe_in, region='head', subdiv=0)
 b.add('hood_trim', merge(*[rod([hood_pt(eu, v / 10) for v in range(11)], [0.008 * H] * 11, 5) for eu in (0.0, 1.0)]), red, region='head', subdiv=0)
 
@@ -186,8 +183,10 @@ def robe_pt(u, v, out=1.0):
         p.x *= 1 + (-0.16 - z) * 0.2
         p.y *= 1 + (-0.16 - z) * 0.24
     # barra rasgada em pontas
-    if v > 0.96:
-        p.z -= (0.02 + 0.03 * (math.sin(u * 60) * 0.5 + 0.5)) * H
+    if v > 0.9:
+        # pontas e rasgos de tamanhos diferentes (a barra esfiapada da miniatura)
+        tear = (math.sin(u * 47) * 0.5 + 0.5) * (math.sin(u * 13 + 1.7) * 0.5 + 0.5)
+        p.z -= (v - 0.9) / 0.1 * (0.02 + 0.09 * tear) * H
     return Vector((p.x * out, p.y * out, p.z))
 
 
@@ -198,8 +197,8 @@ def robe_weights(p):
     return {'chest': max(0.0, 1 - w_leg - w_hip), 'hips': w_hip, 'l' + side: w_leg}
 
 
-b.add('robe', grid(lambda u, v: robe_pt(u, v), 44, 22), robe, region='torso', weight_fn=robe_weights, subdiv=0)
-b.add('robe_in', grid(lambda u, v: robe_pt(u, v, 0.985), 44, 22, flip=True), robe_in, region='torso', weight_fn=robe_weights, subdiv=0)
+b.add('robe', grid(lambda u, v: robe_pt(u, v), 120, 50), robe, region='torso', weight_fn=robe_weights, subdiv=0)
+b.add('robe_in', grid(lambda u, v: robe_pt(u, v, 0.985), 120, 50, flip=True), robe_in, region='torso', weight_fn=robe_weights, subdiv=0)
 # frisos vermelhos: as duas bordas da frente e duas listras paralelas descendo do peito
 trims = [rod([robe_pt(eu, v / 22, 1.012) for v in range(23)], [0.009 * H] * 23, 5) for eu in (0.0, 1.0)]
 for off in (0.05, 0.95):
@@ -222,13 +221,21 @@ for side in ('L', 'R'):
     fr = [(q.x, q.y, q.z, r, r) for q, r in ((e.lerp(h, t), 0.04 - 0.006 * t) for t in (0.4, 0.95))]
     b.add('wrist' + side, tube(fr, 10), skin, region='e' + side, subdiv=0)
     b.add('hand' + side, hand_part(sk, side, 0.05), skin, region='e' + side)
+    # os DEDOS LONGOS vermelhos, curvados, terminando nas GARRAS escuras (a mão aberta da miniatura)
     ax = (h - e).normalized()
-    claws = []
+    Fg = Sculpt()
+    Cl = Sculpt()
     for k in range(5):
-        off = Vector((sx * (k - 2) * 0.013 * H, (k - 2) * 0.005 * H, 0))
-        base = h + ax * 0.055 * H + off
-        claws.append(cone(tuple(base), tuple(base + ax * 0.08 * H + Vector((0, -0.03 * H, 0))), 0.008 * H, 5))
-    b.add('claws' + side, merge(*claws), claw_m, region='e' + side, subdiv=0)
+        off = Vector((sx * (k - 2) * 0.014 * H, (k - 2) * 0.006 * H, 0))
+        if k == 0:
+            off += Vector((sx * -0.01 * H, -0.02 * H, 0.02 * H))  # o polegar
+        base = h + ax * 0.045 * H + off
+        mid = base + ax * 0.055 * H + Vector((0, -0.012 * H, 0))
+        tip = mid + ax * 0.045 * H + Vector((0, -0.025 * H, 0))
+        Fg.chain([base, mid, tip], [0.011 * H, 0.009 * H, 0.007 * H], step=0.4)
+        Cl.chain([tip, tip + ax * 0.035 * H + Vector((0, -0.025 * H, 0))], [0.0065 * H, 0.0015 * H], step=0.35)
+    b.add('fingers' + side, Fg.mesh(res=0.0028, smooth=2, target=900), skin, region='e' + side, subdiv=0)
+    b.add('claws' + side, Cl.mesh(res=0.0022, smooth=1, target=500), claw_m, region='e' + side, subdiv=0)
 
 # ---------------------------------------------------------------- PERNAS finas e PÉS de garras (aparecem embaixo do manto)
 for side in ('L', 'R'):
@@ -243,10 +250,32 @@ for side in ('L', 'R'):
         rings.append((p.x, p.y, p.z, r, r))
     b.add('leg' + side, tube(rings, 12), skin, region='leg' + side, subdiv=0)
     b.add('foot' + side, ellipsoid((f.x, f.y - 0.05 * H, f.z + 0.025 * H), (0.045 * H, 0.1 * H, 0.03 * H), 10, 8), skin, region='foot' + side, subdiv=0)
-    toes = []
-    for t in (-1, 0, 1):
-        base = Vector((f.x + t * 0.025 * H, f.y - 0.13 * H, f.z + 0.02 * H))
-        toes.append(cone(tuple(base), tuple(base + Vector((t * 0.01 * H, -0.06 * H, -0.02 * H))), 0.012 * H, 5))
-    b.add('toes' + side, merge(*toes), claw_m, region='foot' + side, subdiv=0)
+    # os DEDOS dos pés longos e vermelhos, com as garras escuras arranhando o chão
+    Tg = Sculpt()
+    Tc = Sculpt()
+    for t in (-1.5, -0.5, 0.5, 1.5):
+        base = Vector((f.x + t * 0.022 * H, f.y - 0.12 * H, f.z + 0.02 * H))
+        tip = base + Vector((t * 0.012 * H, -0.07 * H, -0.012 * H))
+        Tg.chain([base, tip], [0.013 * H, 0.009 * H], step=0.4)
+        Tc.chain([tip, tip + Vector((t * 0.004 * H, -0.035 * H, -0.012 * H))], [0.007 * H, 0.0015 * H], step=0.35)
+    b.add('toes' + side, Tg.mesh(res=0.003, smooth=2, target=600), skin, region='foot' + side, subdiv=0)
+    b.add('toeClaws' + side, Tc.mesh(res=0.0022, smooth=1, target=400), claw_m, region='foot' + side, subdiv=0)
+
+
+# ---------------------------------------------------------------- o PANO com dobras de verdade (sculpt_lib relief): o manto cai em pregas
+# verticais que abrem para baixo, o capuz e as mangas largas amassados
+def part(name):
+    return next(o for o in b.parts if o.name == name)
+
+
+relief(part('robe'), lambda p: (0.004 + 0.012 * max(0.0, min(1.0, (hz - p.z) / (0.8 * H)))) * H * (ridge(math.atan2(p.x, -p.y) * 7 + n3(p, 4) * 1.5, 2) - 0.3))
+relief(part('hood'), lambda p: 0.005 * H * (ridge(math.atan2(p.x, p.y) * 6 + p.z / H * 8 + n3(p, 8), 2) - 0.4))
+for side in ('L', 'R'):
+    relief(part('sleeve' + side), lambda p: 0.005 * H * (ridge(p.z / H * 14 + n3(p, 8) * 1.5, 2) - 0.4))
+    relief(part('sleeve_lo' + side), lambda p: 0.006 * H * (ridge(p.z / H * 12 + n3(p, 8) * 1.5, 2) - 0.4))
 
 b.export(OUT)
+
+src = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fonte')
+os.makedirs(src, exist_ok=True)
+bpy.ops.wm.save_as_mainfile(filepath=os.path.join(src, 'o_diabo.blend'), check_existing=False)

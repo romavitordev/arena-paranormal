@@ -11,7 +11,8 @@
 
 **Estado em 2026-10-26 (v3.44.0):**
 - [~] 2.2 Modelos antigos: Xande e Aguiar (v3.33.0), Fantasma, Kemi e Gal Sal + as lâminas Ereškigal (v3.34.0), Kaiser
-  (v3.38.0), Balu e Lírio (v3.40.0), Arthur e Joui (v3.41.0) refeitos pelas artes oficiais; faltam os outros antigos
+  (v3.38.0), Balu e Lírio (v3.40.0), Arthur e Joui (v3.41.0), Arnaldo, Anfitrião, Veríssimo, Kian e O Diabo (2026-10-26)
+  refeitos pelas artes oficiais; faltam os outros antigos
   (ver *MODELOS — PRÓXIMOS PASSOS*).
 - [x] Feedback de Kian e Joui (25/10/2026): auditoria, Rejeitar Névoa pelo cânone, transformações com kit próprio
   (Realizador da Calamidade, Shi no Kage), ultimates diferentes no Joui, Tomado pelo Ódio, Portal das Sombras — v3.42.0;
@@ -23,6 +24,15 @@
   posturas paradas próprias); 2ª parte (2026-10-26): pacote gratuito importado e redirecionado — corrida, caminhada e
   queda (ver *REAJUSTE DAS ANIMAÇÕES*).
 - [x] 2.4 Câmera de cutscenes (2026-10-26): sem cortes bruscos e sem a câmera entrar no cenário — ver *2.4*.
+- [ ] **EM BREVE (pedido de 2026-10-26): CENÁRIO NOVO + EQUIPE VAMPIROS.** Um cenário novo — pode ser o **interior da
+  Igreja dos Vampiros de Hexatombe** (a Igreja de Sangue, ep. 9) — que entra junto com um **personagem novo de uma
+  equipe nova, os VAMPIROS: Raziel**. Antes de começar: levantar o Raziel e a igreja na wiki/HQ (`lore/`, arte
+  oficial), o kit pelo cânone (o braço do Raziel já aparece na lore do Cristino, ep. 9), o modelo no Blender (sculpt_lib),
+  o cenário no Blender (kits CC0 + peças próprias) e a nova origem/equipe "Vampiros" na seleção, nas ligações de equipe
+  e na CPU.
+  **O CENÁRIO (notas do dono):** buscar as referências visuais em CENAS DOS EPISÓDIOS de Hexatombe; é só o INTERIOR (mais
+  fácil). Igreja GÓTICA; a PORTA trancada; o ambiente cheio da NÉVOA DA MEMBRANA; iluminada pela LUA VERMELHA DE SANGUE
+  (entrando pelos vitrais/janelas). São só pontos de partida — confirmar e completar ao pesquisar.
 - [ ] 3–14 Modo PvE, que vai se chamar **Outro Lado** (dungeons, Espreitador como chefe, progressão, salvamento,
   cooperativo): não iniciado; já anunciado como "em desenvolvimento, sem data" na página Sobre.
 - [x] arrumar posição das facas/espadas nas mãos dos personagens (feito em 2026-10-23: o cabo atravessa o punho fechado
@@ -1064,7 +1074,36 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
 - [x] Arma de Sangue do Arthur no punho DIREITO (o braço que ele tem) e o físico vira cortes com a lâmina enquanto dura; o físico normal usa o braço direito (soco e cotovelada) — v3.41.0.
 - [x] Balu (miniatura de Calamidade) e Lírio (miniatura de Sinais do Outro Lado) remodelados no Blender — v3.40.0.
 - [x] Retratos com a cabeça cortada (Kian no tríptico): `renderPortraits` enquadra pela altura da cabeça — v3.39.0.
-- [ ] Os outros modelos mais antigos, em ordem de data: Anfitrião, Arnaldo e Veríssimo (06/10), depois Diabo e Kian (10/10)...
+- [x] **Arnaldo** remodelado no Blender na técnica atual (sculpt_lib) pela "Arte do Arnaldo em Desconjuração" e a miniatura
+      de Desconjuração, revisado pelo MCP em 4 vistas e no jogo (2026-10-26): o casacão escuro até o joelho, aberto, com as
+      lapelas e a gola virada e o forro vinho; colete marrom com os botões e a corrente de ouro; colarinho branco e a
+      gravata vermelha colada no peito; mangas compridas com o punho da camisa; calça com vinco; sapatos sociais pretos;
+      o cabelo castanho volumoso penteado de lado (risca à direita, cobrindo o alto das orelhas e a nuca) e a barba cheia
+      com o bigode. Os óculos redondos, a espada e o relógio continuam em código. (`tools/blender/arnaldo_common.py`, que
+      agora também salva `fonte/<id>.blend`.)
+- [x] **Anfitrião** remodelado pela "Miniatura O Anfitrião em Calamidade" (2026-10-26): o corpo e as roupas novas do Arnaldo
+      (as mesmas roupas, como no cânone) e a cabeça refeita na técnica atual — a MÁSCARA lisa e escura cobrindo a cabeça,
+      o SÍMBOLO DO ANFITRIÃO gravado em luz (círculo duplo com as runas, o triângulo), as LENTES redondas rosa acesas, o
+      FILTRO canelado no queixo com a mangueira até o peito e as runas acesas, e as MANGUEIRAS CANELADAS (cinza, rosa e azul)
+      que saem do alto, emolduram a máscara e descem pelas costas. Revisado pelo MCP em 4 vistas e no jogo.
+- [x] **Veríssimo** remodelado pela "Miniatura Senhor Veríssimo em Calamidade" (2026-10-26, `char_verissimo.py` na técnica
+      atual): o cabelo grisalho volumoso penteado para trás, a barba curta com o bigode e o cavanhaque, o colete escuro
+      RISCADO DE GIZ abotoado, a camisa branca de gola aberta com as mangas arregaçadas até o cotovelo, a gravata azul
+      afrouxada, a calça escura riscada (antes azulada, da época de Desconjuração) e os sapatos pretos. Revisado pelo MCP
+      em 4 vistas e no jogo.
+- [x] **Kian** (2026-10-26) pelas miniaturas "Kian marcado em Desconjuração" e "Kian em Calamidade": o corpo base (que guarda
+      os UVs das linhas douradas e da escrita) ganhou a técnica atual — MÚSCULOS em relevo (peitoral, seis gomos com a
+      linha alba, oblíquos, dorsais, bíceps), o AFRO curto e arredondado esculpido (antes uma calota raspada), as BARBAS da
+      Transformação esculpidas (média e a cheia densa de Calamidade, com o bigode), as FAIXAS em espiral rentes do cotovelo
+      aos nós dos dedos com as pontas soltas e as dobras da calça. Os nomes das peças (beard_m, beard_f, wraps) seguem os
+      mesmos. Revisado pelo MCP e no jogo, normal e Calamidade (1,9 MB).
+- [x] **O Diabo** (2026-10-26) pela "Miniatura O Diabo em Calamidade": os CHIFRES altos esculpidos com os anéis em relevo,
+      os DEDOS longos vermelhos com as GARRAS escuras (mãos e pés), o manto, o capuz e as mangas com DOBRAS de verdade e a
+      barra rasgada. Revisado pelo MCP e no jogo.
+- [ ] **O Portador do Trono** (`char_diabo.py`, a Transformação do Diabo/Juan): ainda na técnica antiga — refazer pela
+      "Arte Completa Cinematic O Portador do Trono" (coroa de espinhos, asas de braços, quatro braços, pernas de bode).
+- [ ] Os outros que ainda não usam a técnica atual (`char_*.py` sem `sculpt_lib`, conferido em 2026-10-26): Aghata, Amigo,
+      Dalmo, Erin, Estrangeiro, Ferreiro, Guizo, Jae, Labirinto, Magistrada e Manancial (fora o Portador do Trono acima).
 
 # EQUIPE — BARRA DE EQUIPE E ESPECIAIS EM EQUIPE
 
