@@ -1,6 +1,6 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.44.0 (revisado em 2026-10-26: limpeza, especiais em equipe com ligação, animações importadas e câmera de cutscenes)
+**Versão de referência atual:** v3.45.0 (revisado em 2026-10-26: Banquete de Sangue — Raziel, cenário Igreja Antiga, modelo 3D atual do Skate Caótico no arremesso do Xande, segurança de props e inclusão do plano de reformulação de animações e auditoria canônica)
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente
 
@@ -9,7 +9,7 @@
 
 # PRÓXIMA GRANDE ATUALIZAÇÃO — LUTA + MODO PvE (planejamento de 2026-10-18)
 
-**Estado em 2026-10-26 (v3.44.0):**
+**Estado em 2026-10-26 (v3.45.0):**
 - [~] 2.2 Modelos antigos: Xande e Aguiar (v3.33.0), Fantasma, Kemi e Gal Sal + as lâminas Ereškigal (v3.34.0), Kaiser
   (v3.38.0), Balu e Lírio (v3.40.0), Arthur e Joui (v3.41.0), Arnaldo, Anfitrião, Veríssimo, Kian e O Diabo (2026-10-26)
   refeitos pelas artes oficiais; faltam os outros antigos
@@ -23,7 +23,14 @@
 - [x] 2.1 Animações de movimentação: 1ª parte na v3.37.0 (corrida, caminhada, pulo, queda, dash, esquiva, reação e 18
   posturas paradas próprias); 2ª parte (2026-10-26): pacote gratuito importado e redirecionado — corrida, caminhada e
   queda (ver *REAJUSTE DAS ANIMAÇÕES*).
+- [ ] **MELHORIA GERAL DE TODAS AS ANIMAÇÕES (pedido de 2026-10-26):** Todas as animações de movimento, ataques básicos,
+  combos, finalizadores, esquivas e habilidades de todos os personagens precisam ser melhoradas e retrabalhadas. Buscar
+  referências da internet (jogos de luta consagrados como Naruto Storm, Guilty Gear, Tekken, além de coreografias de artes
+  marciais e animes de ação) para trazer muito mais impacto, fluidez, peso e naturalidade (ver *2.1*).
 - [x] 2.4 Câmera de cutscenes (2026-10-26): sem cortes bruscos e sem a câmera entrar no cenário — ver *2.4*.
+- [ ] 2.5 Auditoria de fidelidade ao cânone de todos os personagens (Capítulo Complementar v3.44.0/v3.45.0): prioridade
+  imediata em Raziel e sua forma O Verdadeiro Raziel (RZ-01 a RZ-09: Turno Extra, Sede Incontrolável, Banquete Bestial
+  diferenciado, etc.), seguido de revisão sistemática de fidelidade dos 28 personagens do elenco (§3.1 a §3.30).
 - [ ] **EM BREVE (pedido de 2026-10-26): CENÁRIO NOVO + EQUIPE VAMPIROS.** Um cenário novo — pode ser o **interior da
   Igreja dos Vampiros de Hexatombe** (a Igreja de Sangue, ep. 9) — que entra junto com um **personagem novo de uma
   equipe nova, os VAMPIROS: Raziel**. Antes de começar: levantar o Raziel e a igreja na wiki/HQ (`lore/`, arte
@@ -261,11 +268,15 @@ ANDAMENTO DO FEEDBACK (2026-10-26 — auditoria completa em `docs/AUDITORIA-KIAN
       Kaiser, Arthur e Balu: nenhum erro, nenhum estado preso; a CPU usa Suspender, Rejeitar Névoa, Saque da Relíquia,
       Decepar e Tomado pelo Ódio. (O especial Shi no Kage dura ~5,4 s e sempre termina.)
 
-### 2.1. Novas animações de movimentação
+### 2.1. Novas animações de movimentação e melhoria geral de todas as animações
 
 Adicionar e aprimorar animações de movimentação para deixar os personagens mais naturais e responsivos durante as batalhas.
 
 As animações deverão respeitar o estilo de luta de cada personagem e ser compatíveis com os sistemas atuais de movimentação, ataques, esquivas e habilidades.
+
+- [ ] **Melhoria geral de todas as animações do jogo (pedido de 2026-10-26):** todas as animações de movimento (corrida, caminhada, esquivas, dash, pulo, transições), ataques normais, sequências de combo, finalizadores e habilidades precisam ser aprimoradas para maior fluidez, impacto e naturalidade.
+- [ ] **Pesquisa e uso de referências visuais da internet:** buscar referências de alta qualidade em jogos de luta consagrados (Naruto Storm, Guilty Gear, Tekken, Street Fighter), coreografias de artes marciais reais e cenas de ação em animes para guiar o timing, arcos de movimento (anticipation, follow-through, peso e inércia).
+- [ ] **Polimento individual por estilo de combate:** garantir que cada combatente tenha animações fiéis ao seu estilo e personalidade narrativa (ex.: agilidade e esgrima de Joui, brutalidade pesada de Balu e Aguiar, técnica militar de Kaiser e Veríssimo, loucura caótica de Xande e Anfitrião, elegância sobrenatural de Kian).
 
 ### 2.2. Atualização dos modelos antigos
 
@@ -293,6 +304,327 @@ A câmera deverá valorizar os personagens e as ações importantes sem perder o
   dentro de casas/muralhas (o recuo contra os blocos sólidos agora vale na cinemática); plano com conta inválida não
   leva a câmera para NaN. Medido quadro a quadro nos especiais dos 28 personagens: o maior salto caiu de 5,2 m para
   ~1 m (só as transições rápidas), sem erro.
+
+### 2.5. Capítulo Complementar — Auditoria de Fidelidade ao Cânone de Todos os Personagens (v3.44.0 / v3.45.0)
+
+**Data de elaboração:** 26/10/2026  
+**Escopo:** complemento à vistoria de personagens da v3.44.0/v3.45.0. Não substitui o TODO existente, não invalida tarefas marcadas como concluídas e não autoriza rebalanceamento geral.  
+**Prioridade imediata:** Raziel e sua forma **O Verdadeiro Raziel**; depois, revisão sistemática dos demais personagens do elenco.
+
+#### Objetivo
+Revisar os personagens comparando três fontes que devem ficar separadas no relatório:
+1. **Implementação real:** o que os arquivos do jogo executam de fato.
+2. **Cânone narrativo:** o que aparece nos episódios oficiais, artes e materiais oficiais.
+3. **Cânone mecânico:** regras de *Ordem Paranormal RPG*, incluindo *Sobrevivendo ao Horror*, quando aplicáveis.
+
+A wiki comunitária é um índice e uma ferramenta para localizar fatos e cenas, não a autoridade final. Quando houver divergência, dar prioridade ao material oficial e aos episódios; anotar a divergência em vez de inventar uma conciliação. Não copiar literalmente as regras de mesa se elas não funcionarem em um jogo de luta: registrar a regra original e explicar a adaptação de gameplay.
+
+#### 1. Processo obrigatório para cada personagem
+Antes de propor alterações:
+- [ ] Conferir o código atual e listar todos os kits: base, forma(s), passivas, especial, agarrão, armas, assistências, efeitos de status e interações de equipe.
+- [ ] Confirmar em quais arquivos estão definidos os golpes, animações, hitboxes, dano, cooldown, custo de energia, VFX, IA/CPU, HUD e transformações.
+- [ ] Consultar a página da wiki do personagem, as páginas das habilidades/elementos/trilhas relacionadas e as referências indicadas nelas.
+- [ ] Verificar as cenas relevantes nos episódios oficiais. Registrar episódio, cena e timestamp quando possível; não inventar timestamp se não foi conferido.
+- [ ] Para poderes que vêm do RPG, consultar a descrição mecânica no livro/suplemento. Se o texto integral não estiver disponível legalmente, não reconstruir regras detalhadas de memória: usar a descrição pública e marcar a incerteza.
+- [ ] Criar uma tabela: **habilidade atual → comportamento real no código → referência canônica → divergência → proposta → impacto técnico → teste de aceite**.
+- [ ] Marcar cada conclusão como uma destas categorias:
+  - **CONFIRMADO:** aparece em fonte oficial ou descrição mecânica identificável.
+  - **ADAPTAÇÃO:** efeito criado para traduzir a habilidade para combate em tempo real.
+  - **PROPOSTA NÃO CANÔNICA:** ideia nova de gameplay; nunca a descrever como poder oficial.
+  - **INCERTO:** a fonte consultada não permite confirmar.
+- [ ] Só depois da auditoria, propor mudanças. Não remover habilidade existente sem explicar o que entra no lugar.
+- [ ] Depois de qualquer implementação, atualizar este TODO, `CHANGELOG-ADMIN.md`, `HABILIDADES.md` e os documentos de versão pertinentes; executar `npm run check`, `npm test` e `npm run build`, e realizar testes visuais.
+
+---
+
+#### 2. Raziel — Conclusão da pesquisa de cânone e plano de melhoria
+
+##### 2.1 Referências para consulta
+- **Episódios oficiais de Hexatombe:**
+  - Episódio 7 — "Consequências": https://www.youtube.com/watch?v=K_c2VdmPuLg
+  - Episódio 8 — "Culpa": https://www.youtube.com/watch?v=-7prXUHT8OM
+  - Episódio 9 — "Banho de Sangue": https://www.youtube.com/watch?v=p5alZam12ss
+- **Páginas de referência comunitária:**
+  - Raziel: https://ordemparanormal.fandom.com/wiki/Raziel
+  - Vampiros: https://ordemparanormal.fandom.com/wiki/Vampiros
+  - Monstruosos: https://ordemparanormal.fandom.com/wiki/Monstruosos
+  - *Sobrevivendo ao Horror*: https://ordemparanormal.fandom.com/wiki/Ordem_Paranormal_RPG%3A_Sobrevivendo_ao_Horror
+
+A página de Raziel aponta o episódio 7 como sua aparição completa, o episódio 8 como parte de sua história e o episódio 9 como o confronto final. O episódio 9 é a principal referência visual/comportamental para a forma verdadeira. A wiki cita por volta de **5h12m15s** para a fala do banquete no episódio 9. O TODO da v3.44.0 também aponta cenas da igreja por volta de 4h55, 5h05, 5h20, 6h10 e 6h50 para a construção da arena.
+
+##### 2.2 Identidade canônica que o jogo deve preservar
+Raziel é descrito como **Combatente da trilha Monstruoso, afinidade com Sangue**, líder dos Vampiros. Ele alterna duas faces que não devem ser tratadas como simples troca de roupa:
+- **Forma base — predador aristocrático:** postura controlada, fala educada e teatral, inteligência tática e violência súbita. Rápido e fisicamente dominante sem agir como um bruto desorientado o tempo todo.
+- **O Verdadeiro Raziel — bestialidade exposta:** depois de sofrer ferimentos graves, rasga as vestes e passa a agir com muito mais agressividade, gritos e perda de controle. Ataca alvos ao alcance, devora vítimas vulneráveis e fica mais brutal. Ainda conserva reações emocionais e algum direcionamento: não deve virar uma IA aleatória que só corre sem conseguir lutar.
+
+A forma base é a tradução de sua ficha mais ritualística/elegante; a forma verdadeira deve se concentrar em ataques diretos, pressão, mordida, resistência e devoração. Não tratar a forma verdadeira apenas como a mesma lista de golpes com multiplicadores maiores.
+
+##### 2.3 Evidências narrativas e consequências para o kit
+| Evidência em Hexatombe / material de referência | Tradução recomendada para o jogo | Limite da interpretação |
+|---|---|---|
+| Raziel é líder dos Vampiros e consegue derrubar Harpia com um golpe. | Golpes físicos pesados e reação de impacto convincente; força como identidade do personagem. | Não significa que todo golpe deva causar dano extremo ou quebrar qualquer defesa. |
+| Ele entra no incêndio do circo e continua avançando, mas a narrativa indica que ainda sente o dano. | Pode ter postura destemida e avançar sob pressão; usar resistência geral de Endurecer Sangue quando ativado. | **Não conceder imunidade a fogo** com base nessa cena. Ele sente o dano. |
+| Avança sobre Henri em velocidade descrita como um vulto; agarra-o e morde-o duas vezes. | A Mordida deve ter aproximação curta/rápida, agarrão claro, duas mordidas e cura. | Evitar teleporte literal se a referência só sustenta velocidade extrema. |
+| Uma facada de Henri parece não detê-lo; Raziel usa Endurecer Sangue. | Endurecer Sangue é a ferramenta defensiva principal: resistência temporária, crosta visual de sangue e reação de impacto reduzida. | Resistência não deve ser invulnerabilidade; permitir contrajogo, fim de duração e interrupções coerentes. |
+| Maldição Sanguínea apodrece o sangue do alvo e o deixa Abalado, com penalidade de −1 dado para testes durante a cena; pode ser resistida. | Manter o ritual como debuff relevante, com duração/recarga legíveis e possibilidade de resistência ou redução por defesa. | Como o jogo não usa testes por dados, mapear explicitamente −1 dado para um efeito de gameplay; não afirmar que o debuff atual equivale perfeitamente à regra. |
+| Bote Retalhador causa dano enorme; se o alvo esquiva, ainda recebe metade, até 105 na descrição da wiki. | Preservar a regra especial de raspão em esquiva, restrita ao alcance e arco do bote. Dar telegraph suficiente para que o golpe seja forte, mas legível. | O valor 105 é uma referência de ficha, não obrigação de copiar literalmente para o balanceamento do jogo. |
+| Turno Extra permite realizar duas ações/turnos por rodada na descrição mecânica. | Traduzir a economia de ações para um jogo em tempo real: janela limitada para golpe/ação adicional após acerto, ou cancelamento especial de recuperação. | `attackSpeed: 1.12` sozinho **não** implementa uma ação extra. Não criar ataques extras infinitos nem retirar todo o contrajogo. |
+| No estado bestial, quando vê um corpo morrendo próximo, Raziel não consegue se controlar e o devora. | Sede Incontrolável deve ser contextual e característica da forma verdadeira: identificar alvo vulnerável próximo, entrar numa animação de devoração, causar dano/consumir uma oportunidade e recuperar vida. | Não aplicar a corpos já em KO se a lógica de combate não suporta interação pós-KO; a ação deve acontecer antes do encerramento definitivo e não prolongar artificialmente o round. |
+| Na luta da igreja, após sofrer dano grave e um tiro na cabeça, ele rasga as roupas e revela a forma verdadeira; devora Cindy e Maria quando estão morrendo. | A transformação deve ter apresentação própria e mudar o comportamento. Pode ser ativada pelo jogador; se houver gatilho automático por vida, ele precisa ser opcional/consistente com as regras de transformação do jogo. Sede Incontrolável deve priorizar alvos vulneráveis. | Não exigir a reprodução literal do evento da cena em toda partida. A forma é uma tradução jogável, não uma cutscene obrigatória. |
+| Cristino arranca um braço de Raziel e ele continua tentando atacar Remi antes de Juan finalizá-lo. | A forma verdadeira pode continuar ofensiva mesmo sob pressão e demonstrar ferimentos sem perder a capacidade de lutar. | Desmembramento permanente não é necessário em partidas normais; pode ficar restrito à cinemática/efeito especial. |
+| Raziel devora vítimas e, ao final, Juan o mata e devora sua cabeça. | Especial de banquete deve comunicar agarrão, mordida e recuperação de vida. Uma interação especial com Juan pode ser considerada, mas apenas como conteúdo opcional e aprovado pelo dono. | Não dar imortalidade, ressurreição ou devoração universal ao Raziel com base no fato de ser vampiro. |
+
+##### 2.4 Auditoria do código atual e tarefas propostas para Raziel
+O código atual já contém `src/characters/raziel.js`, `src/characters/forms/raziel_verdadeiro.js`, `src/combat/razielAbilities.js` e clipes próprios em `src/anim/razielClips.js`. Não recomeçar o personagem do zero.
+
+- [ ] **RZ-01 — Turno Extra:** Rever a implementação atual (a passiva está representada apenas por `attackSpeed: 1.12`). Escolher e documentar uma adaptação real de ação extra para combate em tempo real (ex.: janela limitada para golpe/ação adicional após acerto com cooldown interno). Limitar a uma oportunidade por janela/cooldown para não encadear infinitos. Testar jogador, CPU, bloqueio, esquiva, combo, interrupção e fim de round.
+- [ ] **RZ-02 — Sede Incontrolável:** Implementar a condição de alvo vulnerável/morrendo próximo apenas na forma verdadeira. Adicionar indicação visual/sonora breve e uma ação de devoração legível. Definir raio, limiar de vida/estado, duração, cura e recarga com base no balanceamento existente. Fazer a CPU usar a mecânica com prioridade contextual sem ficar presa tentando devorar um alvo fora de alcance. Testar KO, interrupção, alvo protegido, multiplayer e encerramento da luta.
+- [ ] **RZ-03 — Diferenciar Banquete de Sangue e Banquete Bestial:** O especial da forma verdadeira não deve apenas herdar a sequência do especial base mudando cor e dano. Base: encenação de anfitrião/predador controlado, agarrão e mordidas com drenagem. Forma verdadeira: início explosivo, garras/rasgos, mordida/devorar como centro e finalização visual mais animalesca. Se não existir mecânica segura de execução contextual, aplicar dano fixo em cinemática brutal. Testar interrupção, invulnerabilidade, KO e duração da cutscene.
+- [ ] **RZ-04 — Revisar Rasgo de Sangue:** O projétil em meia-lua é uma adaptação de gameplay, não uma habilidade canônica confirmada. Decidir explicitamente entre (A) mantê-lo como licença de gameplay, documentada como adaptação; ou (B) substituí-lo por uma investida rápida de garras (dash/bote frontal), que comunica melhor a velocidade de vulto e o combate direto do episódio. Preservar o botão e função de gameplay do golpe; testar alcance, bloqueio, esquiva e combos.
+- [ ] **RZ-05 — Maldição Sanguínea:** Manter a penalidade de −1 dado como a referência do RPG e documentar a tradução para combate em tempo real. A implementação atual de dano inicial + `ABALADO` + redução de dano causado + aumento de dano recebido é uma adaptação; verificar se o efeito é compreensível e não excessivo. Rever duração, resistência, defesa, substituição de estado e encerramento de round.
+- [ ] **RZ-06 — Endurecer Sangue:** Confirmar visualmente a crosta de sangue sobre a roupa e a leitura clara de defesa temporária. Testar dano físico, paranormal, agarrões, especiais, interrupções e fim de duração. Não converter a resistência em imunidade a todos os efeitos.
+- [ ] **RZ-07 — Forma verdadeira como kit próprio:** Preservar os golpes de base que ainda fazem sentido, mas dar função mecânica distinta à forma: pressão física, aproximação rápida, cura por mordida/devoração e punição de oponentes vulneráveis. Não depender apenas de aumento de atributos, sangramento e cor de VFX. Revisar se Endurecer Sangue precisa permanecer no kit transformado. Validar retorno à forma normal/round seguinte e troca das peças visuais `prop_up`/`prop_true`.
+- [ ] **RZ-08 — Afinidade com Sangue e ficha do Monstruoso:** Registrar que Raziel é um Combatente Monstruoso com afinidade em Sangue. Não transformar Afinidade Elemental numa habilidade genérica sem função; usá-la para orientar a identidade de rituais e resistências. Não importar para o jogo todas as penalidades de interpretação e progressão do RPG sem decisão explícita.
+- [ ] **RZ-09 — Validação final de Raziel:** Testar base e forma verdadeira contra pelo menos um personagem de cada perfil (rápido, tanque, zoner, agarrador e ritualista). Testar CPU × CPU e jogador × CPU. Verificar hitboxes, câmera, animações, VFX, barra de vida, energia e cooldown. Verificar se o especial não trava o oponente após interrupção/KO. Atualizar documentações e testes.
+
+---
+
+#### 3. Auditoria de fidelidade — Elenco completo, personagem por personagem
+
+Para cada personagem, produzir a análise `habilidade atual → código real → fonte/cena → divergência → proposta → teste`, com links e timestamps conferidos:
+
+- [ ] **3.1 Arthur Cervero (`src/characters/arthur.js`):**
+  - Conferir se a animação corporal respeita a regra de um braço em todos os golpes, esquivas, vitória, especial e transformação.
+  - Confirmar que o rifle é o centro do kit de longo alcance e que golpes corpo a corpo são opções de emergência.
+  - Comparar Rebirth com a arma amaldiçoada e seus efeitos de Energia na fase correta; distinguir a versão de Desconjuração da de Calamidade.
+  - Verificar se Templo do Ódio representa o ritual e não um buff sem custo/risco; definir como a fúria se traduz sem suicídio de IA.
+  - A forma Olhos Sempre Abertos deve ter mudança visual e mecânica legível.
+  - Testar mira, alcance, hitboxes do rifle, interrupção do especial, colisão com cenário e golpes de um braço.
+
+- [ ] **3.2 Joui Jouki (`src/characters/joui.js`; forma `forms/joui_shinokage.js`):**
+  - Conferir a fase exata de cada poder de sombra, máscara e katana.
+  - A transformação Shi no Kage deve usar a katana da Magistrada apenas se a referência temporal e narrativa confirmar a associação desejada; não misturar o kit da máscara com a fase da nova katana.
+  - Confirmar o efeito e o nome de cada ritual, especialmente Envelhecimento Localizado e Portal das Sombras.
+  - Separar mobilidade de sombra, corte físico e controle por medo em funções diferentes.
+  - Testar troca de forma, modelo/arma, cancelamento de teleporte, distância máxima, ataques aéreos e retorno de round.
+
+- [ ] **3.3 Kaiser (`src/characters/kaiser.js`):**
+  - Confirmar quais armas aparecem em cada fase e não alternar entre M4, Desert Eagle e karambit sem transição visual.
+  - Separar disparo balístico, bala amaldiçoada e ritual de área. Cada um deve ter telegraph, alcance e resposta diferentes.
+  - Verificar a fidelidade visual de Cinerária/névoa e Acácia, evitando que o efeito de Energia vire explosão roxa genérica.
+  - Auditar a interação com Rejeitar Névoa do Kian: responder aos efeitos compatíveis sem anular todo o kit da Kaiser.
+  - Testar munição, cadência, recarga/cooldown, bloqueio, projéteis simultâneos e câmera.
+
+- [ ] **3.4 Dante (`src/characters/dante.js`; forma `forms/dante_aberto.js`):**
+  - Conferir nome e efeito de cada ritual por fase; evitar que Decadenza, Paradiso e Rotura sejam confundidos como “lodo que causa dano”.
+  - Diferenciar debuff/doença, controle de espaço, cura e especial temporal por animação, som e resposta do adversário.
+  - Verificar se Invocação: A Marionete pertence à versão/fase correta e se sua execução representa a fonte.
+  - A forma Olhos Abertos deve ter kit coerente com a mudança de fase, não só multiplicadores de dano.
+  - Testar duração de efeitos, cura, hitboxes dos tentáculos e leitura visual em cenários escuros.
+
+- [ ] **3.5 Erin Parker (`src/characters/erin.js`; forma `forms/erin_caos.js`):**
+  - Conferir o efeito de cada granada e manter diferenças reais de área, tempo de detonação e contrajogo.
+  - Distinguir Bênção Maldita (visão/previsão) da cura de Black Hole; não transformar ambos em projéteis de dano.
+  - Verificar a forma Em Nome do Caos na cena de origem: mudança de postura, poder, visual e intenção.
+  - Confirmar se o amuleto elétrico deve atuar como reação ao ser atingida.
+  - Testar explosões perto de ambos os jogadores, autocolisão, bloqueio, esquiva e tempo de detonação.
+
+- [ ] **3.6 Aghata (`src/characters/aghata.js`):**
+  - Confirmar o que demonstra em cada campanha/fase e quais poderes pertencem à ficha de RPG.
+  - Diferenciar leitura/análise de ritual, preparação de arma e dano direto.
+  - Verificar se Passagem de Conhecimento muda uma condição do combate ou só causa dano; descrição, VFX e efeito devem coincidir.
+  - Documentar qual habilidade se amplia na forma expandida.
+  - Testar legibilidade de sigilos, custo de energia, interrupção e variedade de ataques.
+
+- [ ] **3.7 Gal Sal (`src/characters/gal_sal.js`):**
+  - Confirmar se cada habilidade está ligada ao personagem, à arma Ereškigal ou a um ritual.
+  - Verificar a regra especial de “cura invertida”: quem recupera vida, quem perde energia e se o HUD corresponde ao código.
+  - Distinguir puxão, captura, controle mental e teletransporte.
+  - Confirmar a forma Realizador do Destino e comportamento próprio além de atributos.
+  - Testar correntes em alvos no ar, bloqueio, esquiva, limites de distância e cancelamento de captura.
+
+- [ ] **3.8 Nubi (`src/characters/nubi.js`):**
+  - Conferir a cena da Mansão Leone e separar o ritual do Carniçal da Esfinge dos ataques comuns de lodo.
+  - Verificar se Desvio Imperturbável comunica antecipação/percepção alterada, em vez de esquiva instantânea sem leitura.
+  - Distinguir aprisionamento, drenagem, decadência e invocação em funções e animações.
+  - Revisar a classificação elemental para não deduzir apenas pela cor do VFX.
+  - Testar invocação, colisão da criatura, alcance da bengala e duração do lodo.
+
+- [ ] **3.9 Xande / Alexandre (`src/characters/xande.js`):**
+  - Conferir se o skate aparece como ferramenta de mobilidade e ataque de modo consistente, sem sumiço/teleporte sem animação.
+  - Diferenciar Polarização Caótica de Tela de Ruído por função e efeito visual; confirmar elemento e ritual de cada um.
+  - Verificar a passiva Gladiador Paranormal e adaptação da recuperação de recurso sem gerar energia infinita.
+  - Confirmar coerência entre cicatrização, velocidade e ataques com o taco.
+  - Testar trajetória do skate arremessado, retorno à mão, colisão, hitbox do taco e cancelamento aéreo.
+
+- [ ] **3.10 Guizo (`src/characters/guizo.js`; formas ET, bombado e velho):**
+  - Confirmar o que cada forma representa na narrativa e não tratar ET, bombado e velho como simples skins se houver habilidades diferentes.
+  - A câmera deve fazer parte da identidade visual/comportamental sem ocupar a mão da faca de modo impossível.
+  - Verificar se Invadir Mente, Embaralhar e Espirais da Perdição têm efeitos distintos.
+  - Se as formas bombado/velho multiplicam dano e reduzem cooldown, avaliar suficiência da variação sem inventar poderes sem fonte.
+  - Testar troca de forma, escala, hitbox e animação da faca com a câmera.
+
+- [ ] **3.11 Lírio Tellini (`src/characters/lirio.js`):**
+  - Confirmar a modelagem exata da Leonora e como as miniaturas amaldiçoadas aparecem durante os ataques.
+  - Diferenciar proteção/absorção de dano de superarmadura: resistir sem ignorar todos os ataques.
+  - Verificar se Amarras de Sangue controla o alvo com duração, escape e telegraph.
+  - Compensar lentidão e curta distância com impacto real sem invulnerabilidade absoluta.
+  - Testar empurrão, agarrões, ataques aéreos, superarmadura e proteção de aliado.
+
+- [ ] **3.12 Balu (`src/characters/balu.js`):**
+  - Conferir a transformação do machado: a arma comum deve virar a maça-estrela de sangue na habilidade correta.
+  - Distinguir Fala Imponente (pressão/controle), 110% (esforço físico) e Colete (defesa balística).
+  - Verificar custo em sangue/vida associado ao Machado Demônio se presente na fonte.
+  - A personalidade protetora deve aparecer em postura, reação e defesa.
+  - Testar armadura contra tiros, corpo a corpo, agarrões e visual antes/depois da maldição.
+
+- [ ] **3.13 Cristino (`src/characters/cristino.js`; forma `forms/cristino_desertor.js`):**
+  - Conferir ordem de uso das armas: espingarda carregada pela boca tem ritmo diferente de arma moderna.
+  - Diferenciar lampiões como controle/preparação de área em vez de simples granada.
+  - Validar a corda e deslocamento em relação às cenas sem conceder teleporte não mostrado.
+  - Verificar mudança de kit na forma Desertor e se o rifle altera o ritmo e a distância preferencial.
+  - Testar munição/cooldown, explosão, corda, troca de forma e hitboxes da peixeira.
+
+- [ ] **3.14 Cristopher Cohen (`src/characters/cristopher.js`):**
+  - Confirmar movimentos de dublê/luta coreografada: quedas, rolamentos e agarrões legíveis.
+  - A Muralha e Último Sacrifício devem ter função defensiva e protetora clara, não apenas dano alto.
+  - Conferir relação entre Último Sacrifício e Kaiser (ataque conjunto, assistência ou cena independente).
+  - Evitar transformar o personagem num tanque genérico sem as técnicas de dublê.
+  - Testar agarrões, rolamentos, proteção, invulnerabilidade e especial conjunto.
+
+- [ ] **3.15 Dalmo Magno (`src/characters/dalmo.js`; forma `forms/colosso.js`):**
+  - Conferir velocidade menor compensada por alcance e impacto.
+  - Golpes de Arena deve recompensar combate corpo a corpo sem gerar ataques infinitos.
+  - A Glória Era Viciante precisa refletir a sede de arena de forma mecânica/narrativa coerente.
+  - Na forma Colosso, confirmar escala, câmera, alcance e hitbox sem desalinhar colisão.
+  - Testar agarrões, atropelamento, pressão e limites da arena.
+
+- [ ] **3.16 Jonas Aguiar (`src/characters/aguiar.js`; forma `forms/aguiar_mutilador.js`):**
+  - Distinguir Aguiar sem máscara do Mutilador Noturno; não misturar poderes entre as duas fases.
+  - Confirmar o machado arremessado pela corda com trajetória legível e puxão evitável.
+  - Armadilha de Urso e Cães de Caça devem controlar e pressionar o espaço com funções distintas.
+  - Validar elemento Sangue com a fonte oficial.
+  - Testar armadilhas no cenário, limite de armadilhas, puxão e troca de forma no round.
+
+- [ ] **3.17 Park Jae-Yoon (`src/characters/jae.js`; forma `forms/jae_x.js`):**
+  - Confirmar distinção entre Jae sem máscara e X/Capuz de X com mudança de comportamento.
+  - Furtividade deve criar janela tática curta com aviso sonoro/visual e resposta, sem invisibilidade injusta.
+  - Diferenciar punhaladas rápidas, arremesso e ataque surpresa em alcance e recuperação.
+  - Confirmar pronome e nome consistentes na UI (Jae, X, Park Jae-Yoon).
+  - Testar furtividade contra CPU, lock-on, ataque pelas costas e esquiva.
+
+- [ ] **3.18 Kemi (`src/characters/kemi.js`; forma `forms/fantasma.js`):**
+  - Separar rifle de precisão, revólver, faca e Pistola Transtornada em funções distintas.
+  - Confirmar se Sede de Vingança pertence à Kemi, à Lena ou à condição do corpo utilizado.
+  - A forma A Fantasma deve alterar o padrão de luta de modo coerente com as faixas e o papel de assassina.
+  - Verificar tempo de reação na mira e contrajogo justo.
+  - Testar distância máxima, colisão do projétil, execução e troca de modelo.
+
+- [ ] **3.19 Labirinto (`src/characters/labirinto.js`; forma `forms/labirinto_elmo.js`):**
+  - Conferir identidade do capacete antes de nomear a forma (manter "???" se não confirmado).
+  - Diferenciar Rajada Caótica, Labirinto Mental, Mapa Sanguíneo e Capturar Momento.
+  - Validar a função narrativa de cada poder com cenas em vez de apenas pacote genérico de Energia.
+  - Garantir antena na mão correta em ataques, bloqueios, corrida e especial.
+  - Testar zonas, efeitos temporais, câmera e retorno de forma.
+
+- [ ] **3.20 Juan / Henri (`src/characters/juan.js`; forma `forms/juan_odio.js`):**
+  - Conferir cronologia e nomenclatura: Henri/Juan, Ódio do Diabo, pacto e Portador do Trono.
+  - Verificar custo físico do pacto, sangue como recurso e progressão de forma.
+  - Diferenciar Faca Predadora (dreno), Vínculo (controle), Perturbação (mental) e Descarnar (físico).
+  - Confirmar ativação e duração da transformação por round.
+  - Testar transições, regeneração, especial e consistência com o personagem O Diabo.
+
+- [ ] **3.21 O Diabo (`src/characters/o_diabo.js`; forma `forms/diabo.js`):**
+  - Separar a entidade O Diabo selecionável da transformação de Juan; manter semelhanças mecânicas sem copiar identidade integralmente.
+  - Conferir se Renascimento é transformação/estado e como funciona o retorno.
+  - Verificar escala corporal, garras, chifres, manto e hitboxes.
+  - Distinguir agressividade, agarrão, regeneração e pactos sem imunidades ilimitadas.
+  - Testar espelhamento contra Juan transformado e transições.
+
+- [ ] **3.22 Ferreiro / Deus da Morte (`src/characters/ferreiro.js`; forma `forms/deus_morte.js`):**
+  - Confirmar condição de transformação e relação entre sanidade, tempo e morte com regra visível.
+  - Diferenciar Espada Consumidora, lodo, hipnose e mananciais.
+  - No Deus da Morte, ajustar escala de hitbox, câmera, distância e vulnerabilidade; confirmar fraquezas elementais com fonte confiável.
+  - Evitar que tamanho e regeneração criem luta sem contrajogo.
+  - Testar transformação por morte, reset de round e fraquezas.
+
+- [ ] **3.23 Arnaldo Fritz / O Anfitrião (`src/characters/arnaldo.js`; forma `forms/anfitriao.js`):**
+  - Separar esgrima teatral de Arnaldo do kit de caos/tempo do Anfitrião.
+  - Conferir relógio/relíquia na transição e duração da forma por round.
+  - Validar atração/repulsão do Emissor de Pulsos com leitura direcional clara.
+  - Anfitrião com animações e especial próprios, sem ser apenas espada com efeitos de Energia.
+  - Testar transição, efeitos de atração, colisão e retorno de round.
+
+- [ ] **3.24 Senhor Veríssimo (`src/characters/verissimo.js`):**
+  - Diferenciar a esgrima disciplinada de Veríssimo da teatralidade de Arnaldo, apesar da mesma espada.
+  - Inteligência Estratégica deve refletir comando e abertura tática.
+  - Conferir Segredo de Veríssimo e Olhos Sempre Abertos com a fonte.
+  - Limitar liderança para evitar loops de ações extras com assistências/CPU.
+  - Testar interceptação, proteção de aliado e combate solo.
+
+- [ ] **3.25 O Estrangeiro (`src/characters/estrangeiro.js`):**
+  - Confirmar poderes próprios versus adaptações; justificar presença sem inventar posse de Relíquia se não houver fonte.
+  - Diferenciar Comandar (controle), Oblívio (apagamento), Aparição (deslocamento) e Abdução (transporte).
+  - Confirmar visual da máscara, fios, capa e proporções.
+  - Fornecer contrajogo ao controle mental (telegraph, duração, escape).
+  - Testar abdução em bordas, câmera, interrupção e fim de round.
+
+- [ ] **3.26 Amigo Imaginário (`src/characters/amigo.js`):**
+  - Distinguir tentáculo físico, tinta/derreter, aprisionamento, dissolução e efeitos do Sino.
+  - Confirmar vínculo com Barnabé, Tipora e o sino.
+  - O especial Todo Mundo Vai Morrer deve representar o horror/escala da criatura.
+  - Conferir animação irregular/assimétrica do corpo e tentáculos sem atravessar o chão.
+  - Testar agarrão, dissolução, colisão e leitura em cenários escuros.
+
+- [ ] **3.27 A Magistrada (`src/characters/magistrada.js`):**
+  - Confirmar uso das máscaras e controle coerente.
+  - Diferenciar Dimensão das Sombras, Mão das Sombras e controle mental.
+  - Verificar Dispersão de Dano (quem recebe, limite e contrajogo).
+  - Conferir forma Saber Tudo é Perder Tudo sem ser mero buff de atributos.
+  - Testar controle de alvo, absorção/redistribuição de dano e reset de round.
+
+- [ ] **3.28 Kian (`src/characters/kian.js`; forma `forms/kian_calamidade.js`):**
+  - Reaproveitar `docs/AUDITORIA-KIAN-JOUI.md` e conferir poderes por fase.
+  - Rejeitar Névoa com utilidade ampla contra efeitos compatíveis sem anular tudo.
+  - Distinguir teletransporte, levitação, combate físico e rituais.
+  - Forma Realizador da Calamidade com kit e presença visual coerentes.
+  - Testar contra Kaiser e personagens sem névoa para balanceamento consistente.
+
+- [ ] **3.29 Raziel (`src/characters/raziel.js`; forma `forms/raziel_verdadeiro.js`):**
+  - Seguir o plano RZ-01 a RZ-09: Turno Extra, Sede Incontrolável, Banquete Bestial diferenciado, investida de garras no lugar de projétil ou licença documentada, Endurecer Sangue com crosta visual, e kit bestial exclusivo.
+  - Testes com CPU, jogador, alvos críticos, esquiva e finalizadores.
+
+- [ ] **3.30 Revisão final cruzada — Formas, elementos e documentação:**
+  - Comparar `src/characters/forms/index.js` com `src/characters/index.js`; garantir registro de todas as formas sem aliases confusos.
+  - Classificar cada forma: transformação temporária, estado narrativo, chefe, entidade separada ou skin.
+  - Conferir `element` e `energyColor` contra fontes canônicas (cor não comprova elemento).
+  - Verificar correspondência exata em `HABILIDADES.md` (nomes, efeitos, custos e durações).
+  - Revisão visual dos modelos, armas, roupas, poses e silhueta.
+  - Executar testes e atualizar `CHANGELOG-ADMIN.md`, `TODO.md` e versões.
+
+---
+
+#### 4. Regras para preservar a qualidade do jogo
+- **Fidelidade não é cópia literal:** uma ação de turno do RPG pode virar uma janela de cancelamento ou uma ação contextual, desde que a intenção original seja preservada e a adaptação esteja documentada.
+- **Não criar imunidades a partir de uma única cena:** resistir, continuar lutando ou avançar não significa ser imune.
+- **Não transformar todo poder em dano:** rituais, controle, defesa, mobilidade, pressão, suporte e condição contextual devem continuar diferentes.
+- **Transformação importante exige identidade própria:** novos golpes, regras de uso, animações e/ou interação; não só dano/velocidade/vida.
+- **Oponentes vulneráveis não são necessariamente alvos em KO:** qualquer devoração contextual deve ser executada antes do estado terminal e respeitar o fluxo de combate.
+- **Não alterar o balanceamento global nesta etapa:** primeiro implementar as lacunas canônicas aprovadas; depois medir dano, duração e taxa de vitória.
+- **Não remover o que já funciona sem substituição aprovada.** Se uma habilidade for uma licença de gameplay, pode permanecer, desde que seja identificada como adaptação.
+- **O jogador decide o que vira escopo:** propostas de novas habilidades, interações de equipe e especiais canônicos precisam de aprovação antes de implementação.
+
+#### 5. Referências e fontes
+- [Raziel — Ordem Paranormal Wiki](https://ordemparanormal.fandom.com/wiki/Raziel)
+- [Vampiros — Ordem Paranormal Wiki](https://ordemparanormal.fandom.com/wiki/Vampiros)
+- [Monstruosos — Ordem Paranormal Wiki](https://ordemparanormal.fandom.com/wiki/Monstruosos)
+- [Sobrevivendo ao Horror — Ordem Paranormal Wiki](https://ordemparanormal.fandom.com/wiki/Ordem_Paranormal_RPG%3A_Sobrevivendo_ao_Horror)
+- [Hexatombe, episódio 7 — "Consequências" (canal oficial)](https://www.youtube.com/watch?v=K_c2VdmPuLg)
+- [Hexatombe, episódio 8 — "Culpa" (canal oficial)](https://www.youtube.com/watch?v=-7prXUHT8OM)
+- [Hexatombe, episódio 9 — "Banho de Sangue" (canal oficial)](https://www.youtube.com/watch?v=p5alZam12ss)
+- [Site oficial de Ordem Paranormal](https://ordemparanormal.com.br/)
+
+**Ordem de execução sugerida:** RZ-01 e RZ-02 → RZ-03 → RZ-04 e RZ-05 → RZ-06 e RZ-07 → testes RZ-09 → auditoria individual do elenco nos grupos prioritários.
 
 ---
 

@@ -1416,6 +1416,7 @@ export class Fighter {
     const M = this.def.mount;
     const prop = M && this.rig.props[M.prop];
     if (!prop || !!this.riding === on) { if (!on) this.riding = false; return; }
+    if (on && !prop.visible) return; // se a montaria estiver arremessada / invisível, não sobe até ela voltar
     if (!this.mountHolder) {
       // suporte deitado no chão, alinhado com a frente do personagem
       this.mountHolder = new THREE.Group();
@@ -2278,6 +2279,7 @@ export class Fighter {
     this.cooldowns.ranged = r.cooldown;
     this.cooldownMax.ranged = r.cooldown;
     r = { ...r, volley: (this.volleySeq = (this.volleySeq || 0) + 1) };
+    this.activeRanged = r;
     this.setState('ranged');
     this.vel.x = 0;
     this.vel.z = 0;
@@ -2411,6 +2413,7 @@ export class Fighter {
     }
     this.cooldowns.ranged = base.cooldown;
     this.cooldownMax.ranged = base.cooldown;
+    this.activeRanged = base;
     this.setState('ranged');
     this.vel.x = 0;
     this.vel.z = 0;
@@ -2551,6 +2554,21 @@ export class Fighter {
       this.world.fx.distort(this.rig.sockets.handR.getWorldPosition(new THREE.Vector3()), { color: r.color, radius: 1.2, life: 0.3 });
       this.world.cameraRig.shake(0.2, 0.15);
     }
+  }
+
+  // Restaura ou esconde props ao término do disparo ou cancelamento
+  hideRangedProps() {
+    const r = this.activeRanged || this.def.ranged;
+    if (r) {
+      if (r.showProp) this.rig.showProp(r.showProp, false);
+      if (r.hideProp) {
+        const hasFlying = this.world?.projectiles?.list?.some((p) => p.owner === this && p.ability?.returnsProp === r.hideProp);
+        if (!r.returnsProp || !hasFlying) {
+          this.rig.showProp(r.hideProp, true);
+        }
+      }
+    }
+    this.activeRanged = null;
   }
 
   // ------------------------------------------------ Defesa + ○: agarrão (não defensável, só esquivável)

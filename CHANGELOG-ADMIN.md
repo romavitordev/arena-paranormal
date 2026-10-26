@@ -1,5 +1,35 @@
 # Registro administrativo de alterações
 
+## v3.45.0 — Banquete de Sangue
+
+- Versão: `VERSION` 3.44.0 → **3.45.0** (package.json/lock junto). Data: 2026-10-26.
+- **Novo Personagem: Raziel (`src/characters/raziel.js`)**:
+  - Nova equipe jogável **Vampiros** (tema vermelho-sangue).
+  - Modelo 3D (`public/models/raziel.glb` via `char_raziel.py`): casacão escuro até o chão com forro e gola alta vermelha, dragonas com franjas, jabô com pedra vermelha, laços e correntes, cabeça descarnada sem olhos com o estigma da Coroa de Espinhos, dentes pontiagudos e garras longas.
+  - Kit canônico:
+    - Bote Retalhador com mecânica de raspão (`grazeOnDodge`: quem esquiva ainda leva metade do dano);
+    - Mordida Vampírica (`vampireBite`: aproximação, agarra, desfere duas mordidas e cura vida);
+    - Endurecer Sangue (crosta de sangue que reduz o dano sofrido);
+    - Maldição Sanguínea (`bloodCurse`: debuff `ABALADO` reduzindo ataque e defesa do alvo);
+    - Rasgo de Sangue (□) e passiva Turno Extra.
+  - Especial: **Banquete de Sangue** (investida veloz, agarrão e mordida com drenagem de vida e fala canônica).
+  - Transformação: **O Verdadeiro Raziel** (`forms/raziel_verdadeiro.js`): o mesmo `.glb` com troca de peças (`prop_up` off, `prop_true` on) exibindo costelas abertas, braços descarnados até o osso e língua bestial; mobilidade aprimorada, sede incontrolável, Devorar e Banquete Bestial.
+  - Falas de intro contra Cristino, Juan, Jae, Labirinto e Dalmo; falas de vitória contra todo o elenco.
+- **Novo Cenário: Igreja Antiga (`public/arenas/igreja.glb`, id `igreja`)**:
+  - Interior gótico da Igreja de Sangue de Hexatombe (ep. 9 "Banho de Sangue").
+  - Arquitetura com nave de pilares entalhados, arcos ogivais, vitrais vermelhos iluminados pela lua de sangue.
+  - Altar com retábulo dourado e trono, Serafim Vermelho decapitado, Dama da Culpa com o leque de espinhos e pedra de sangue, símbolo de Sangue entalhado no lugar da cruz, porta trancada com correntes e cadeado, mesa do banquete macabro (toalha manchada, candelabros, taças), anzóis e névoa da Membrana.
+- **Skate Caótico no Projétil do Xande**:
+  - `VISUALS.skate` em `src/combat/projectiles.js` atualizado para clonar dinamicamente o modelo 3D atual do skate (`owner.rig.props.skate` ou `chaosSkate()` com mesh GLB detalhado, lâminas curvas, rodas vermelhas com espinhos e runas verdes do Caos), sem recorrer à geometria primitiva em caixa antiga.
+  - O skate é ocultado da mão ao ser arremessado (`hideProp: 'skate'`) e restaurado ao retornar (`returnsProp: 'skate'`).
+  - Salvaguarda na montaria (`mount(on)` em `Fighter.js` impede subir no skate enquanto ele estiver em voo/arremessado).
+  - Implementado o método `hideRangedProps()` e registro de `activeRanged` em `Fighter.js`, garantindo limpeza e restauração de props em ataques à distância e charge shots.
+- **Testes Unitários**:
+  - Criado `tests/team-links.test.js` cobrindo o detector de ligações de equipe (*Mascarados*, *Força D*, *Cristopher + Kaiser*) e as propriedades de arremesso do *Skate Caótico*.
+- **Planejamento no TODO**:
+  - Incorporado o **Capítulo Complementar de Auditoria de Fidelidade ao Cânone** (§2.5) com plano de refinamento do Raziel (RZ-01 a RZ-09) e auditoria sistemática de todos os 28 personagens do elenco (§3.1 a §3.30).
+  - Adicionada a meta de melhoria geral de todas as animações (§2.1) com base em referências de jogos de luta e animes.
+
 ## v3.44.0 — Laços de Equipe
 
 - Versão: `VERSION` 3.43.0 → **3.44.0** (package.json/lock junto). Data: 2026-10-26.

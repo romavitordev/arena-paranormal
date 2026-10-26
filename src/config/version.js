@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.44.0';
+export const VERSION = '3.45.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,21 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.45.0',
+    date: '2026-10-26',
+    title: 'Banquete de Sangue — Raziel e a Igreja Antiga',
+    items: [
+      'NOVO PERSONAGEM JOGÁVEL: RAZIEL (NOVA EQUIPE "VAMPIROS"): Líder dos Vampiros de Hexatombe, Combatente Monstruoso de Sangue. Modelo 3D fiel com o casacão aristocrático até o chão, gola alta vermelha, dragonas com franjas, jabô com pedra vermelha, cabeça descarnada sem olhos com o estigma da Coroa de Espinhos, dentes pontiagudos e garras ensanguentadas.',
+      'KIT CANÔNICO DO RAZIEL: Bote Retalhador (quem tenta esquivar ainda leva metade do dano de raspão), Mordida Vampírica (agarra, morde duas vezes e recupera vida), Endurecer Sangue (crosta de sangue que reduz o dano recebido), Maldição Sanguínea (apodrece o sangue do alvo deixando-o ABALADO com dano e defesa menores), Rasgo de Sangue (□) e Turno Extra.',
+      'ESPECIAL: BANQUETE DE SANGUE: "Eu espero que vocês aproveitem esse banquete" — avança como um vulto, agarra o adversário e devora seu sangue curando vida.',
+      'TRANSFORMAÇÃO: "O VERDADEIRO RAZIEL": Rasga as roupas superiores revelando o peito descarnado com as costelas à mostra, os braços rasgados até o osso e a língua comprida; fica muito mais rápido e agressivo, com Sede Incontrolável, Devorar e o Banquete Bestial.',
+      'NOVO CENÁRIO: IGREJA ANTIGA (HEXATOMBE): O interior gótico da Igreja de Sangue dos Vampiros (ep. 9). Nave com pilares entalhados e arcos, vitrais ogivais iluminados pela lua vermelha de sangue, a grande mesa do banquete macabro (toalha manchada, candelabros e taças), o altar com o retábulo dourado e o trono, o Serafim Vermelho decapitado, a Dama da Culpa com o leque de espinhos, a porta trancada com correntes e cadeado, anzóis e a névoa rubra da Membrana.',
+      'SKATE CAÓTICO ATUALIZADO NO ARREMESSO: Quando Xande arremessa o Skate Caótico (□), o projétil agora renderiza o modelo 3D atual completo (lixa amarela, guardas de metal, lâminas curvas laterais, rodas vermelhas com espinhos e runas verdes de Energia), em vez da caixa geométrica provisória antiga. O skate sai da mão ao ser lançado e retorna ao finalizar, e o Xande não pode montar enquanto o skate estiver em voo.',
+      'SISTEMA DE COMBATE E PROPS: Implementado o método hideRangedProps e controle de activeRanged no Fighter, garantindo retorno seguro de armas e adereços sem erros de execução.',
+      'PLANEJAMENTO E AUDITORIA NO TODO: Incorporado o Capítulo Complementar de Auditoria de Fidelidade ao Cânone para Raziel e todo o elenco, além do plano de reformulação geral de todas as animações com referências de jogos de luta (Naruto Storm, Tekken, Guilty Gear) e animes.',
+    ],
+  },
   {
     v: '3.44.0',
     date: '2026-10-26',

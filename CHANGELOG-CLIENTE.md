@@ -2,6 +2,21 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.45.0 — Banquete de Sangue
+- NOVO PERSONAGEM: RAZIEL (VAMPIROS): O líder dos Vampiros de Hexatombe entra na arena! Combatente Monstruoso com afinidade em Sangue. Visual fiel com casacão aristocrático preto até o chão, forro e gola alta vermelha, dragonas com franjas, jabô e pedra vermelha, cabeça descarnada sem olhos com o estigma da Coroa de Espinhos cravado na testa, dentes pontiagudos de fera e garras letais.
+- KIT DE SANGUE CANÔNICO:
+  - Bote Retalhador (salto veloz em que até quem tenta esquivar leva metade do dano de raspão);
+  - Mordida Vampírica (agarra a presa, morde duas vezes e bebe seu sangue para curar a própria vida);
+  - Endurecer Sangue (cobre o corpo com uma crosta de sangue endurecido que amortece os golpes);
+  - Maldição Sanguínea (apodrece o sangue do adversário, deixando-o ABALADO com dano e defesa diminuídos);
+  - Rasgo de Sangue (□) e Turno Extra (passiva de agilidade vampírica).
+- TRANSFORMAÇÃO "O VERDADEIRO RAZIEL": Ao despertar com a Barra de Transformação cheia, ele rasga as roupas e liberta a fera — costelas à mostra, braços dilacerados até o osso e língua comprida. Ganha velocidade avassaladora, frenesi, sede de sangue incontrolável e golpes bestiais.
+- ESPECIAL "BANQUETE DE SANGUE": "Eu espero que vocês aproveitem esse banquete" — investida brutal em velocidade extrema, agarra e devora o sangue do oponente recuperando grande quantidade de vida.
+- NOVO CENÁRIO: IGREJA ANTIGA (HEXATOMBE): O interior gótico da Igreja dos Vampiros (episódio 9, "Banho de Sangue"). Vitrais ogivais iluminados pela lua vermelha de sangue, pilares entalhados, mesa do banquete macabro com candelabros e toalha ensanguentada, altar com retábulo dourado e o trono, Serafim Vermelho decapitado, Dama da Culpa com o leque de espinhos, porta reforçada com correntes e cadeado, anzóis no teto e a névoa rubra da Membrana.
+- SKATE CAÓTICO ATUALIZADO NO ARREMESSO: O golpe à distância "Skate Caótico" (□) do Xande agora arremessa o modelo 3D atual completo (lixa amarela, guardas de metal, lâminas laterais, rodas vermelhas com espinhos e runas verdes do Caos), em vez da antiga caixa geométrica. O skate sai da mão e volta ao término, e o sistema impede subir no skate enquanto ele estiver em voo.
+- MELHORIAS DE COMBATE E SEGURANÇA: Corrigida a restauração de armas e props após ataques de projéteis e charge shots através do novo método hideRangedProps.
+- EXPANSÃO DO TODO: Adicionado o planejamento de melhoria de todas as animações do jogo com base em referências de jogos de luta e animes, além do Capítulo Complementar de Auditoria Canônica do elenco.
+
 ## v3.44.0 — Laços de Equipe
 - ESPECIAIS EM EQUIPE COM LIGAÇÃO NA LORE: na Batalha em Equipe, com a Barra de Equipe cheia, equipes ligadas no cânone têm o especial próprio. EXECUÇÃO DOS MASCARADOS (3 Mascarados na equipe: os seis aparecem em roda e golpeiam o alvo), FORÇA D (Arthur, Kaiser e Joui: o corte pelas costas, a rajada da M4 e o tiro do Rebirth) e A MURALHA E O DISPARO (Cristopher segura o alvo e o Kaiser, o filho, dispara). O líder fecha com o próprio especial.
 - A seleção da equipe mostra o nome do especial da ligação quando a equipe tem um.
