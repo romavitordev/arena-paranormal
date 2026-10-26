@@ -2286,6 +2286,14 @@ Object.assign(ABILITY_TYPES, {
         if (!opp || opp.state === 'ko') return;
         const d = distXZ(f.pos, opp.pos) - opp.radius;
         const inArc = Math.abs(angleDiff(f.yaw, yawTo(f.pos, opp.pos))) <= (a.arc * DEG) / 2;
+        // a.grazeOnDodge (Bote Retalhador do Raziel — cânone: "se o alvo conseguir desviar, toma metade"): quem está
+        // esquivando (invulnerável) dentro do alcance ainda leva a fração do golpe
+        if (a.grazeOnDodge && d <= a.range && inArc && opp.isInvulnerable()) {
+          hit = true;
+          const res = applyHit(world, f, opp, { damage: Math.round(a.damage * a.grazeOnDodge), kind: 'ability', element: a.element, knockback: a.knockback * 0.5, hitstun: 0.4, ignoreInvuln: true, sound: a.hitSound || 'heavyPunch', scale: 1.4, dir: F.clone() });
+          if (typeof res === 'number') f.notify('PEGOU DE RASPÃO', true);
+          return;
+        }
         if (d <= a.range && inArc && Math.abs(opp.pos.y - f.pos.y) < 1.6) {
           hit = true;
           // a.downBonus (Decepar do Cristino): no alvo atordoado, agarrado ou puxado o golpe entra mais fundo

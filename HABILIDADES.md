@@ -1056,6 +1056,50 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ---
 
+## RAZIEL
+
+*O líder dos Vampiros e anfitrião da Ceia na Igreja Antiga — por baixo das vestes, a verdadeira forma* · arma: Garras, a Mordida e os rituais de Sangue
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Garra | 24 | 2 m |  |
+| ○ 2 | Garra de volta | 24 | 2 m |  |
+| ○ 3 | Rasgo cruzado | 30 (2 acertos) | 2 m |  |
+| ○ 4 | Retalhar | 52 | 2.2 m | finalizador: lança |
+| Frente + ○ | Como um vulto | 34 | 2.2 m |  |
+| Trás + ○ | Recua e rasga | 30 (2 acertos) | 2.1 m | invulnerável no começo |
+| Lado + ○ | Garra em giro | 30 | 2.1 m |  |
+| No ar + ○ | Garras do alto | 36 | 2 m | desce com impacto |
+| ↑ + ○ (no combo) | Garra de baixo | 38 | 2 m | finalizador: lança alto (combo aéreo) |
+| ↓ + ○ (no combo) | Esmagar | 44 | 2 m | finalizador: derruba |
+
+### Principal (□ / X): Rasgo de Sangue
+
+- Dano 26 · alcance 16 m · cooldown 1.8 s · custo 0
+
+### Habilidades
+
+- **Bote Retalhador** — △ + ○ / Y + B · custo 30 · cooldown 12 s · dano 92 · alcance 2.8 m
+  Agacha, salta sobre o adversário e desce rasgando com as duas garras: o golpe mais forte dele, que faz sangrar. Quem ESQUIVA ainda toma METADE (como na ficha). Aguenta um golpe na preparação; se errar, fica exposto.
+- **Mordida** — △ + □ / Y + X · custo 20 · cooldown 9 s · dano 28 · alcance 1.7 m
+  Dá o bote curto e, se alcança, segura pelo pescoço e morde duas vezes: tira vida, faz sangrar e CURA o Raziel com o sangue que bebe.
+- **Endurecer Sangue** — R2 + △ / RT + Y · custo 25 · cooldown 16 s
+  Endurece o próprio sangue numa crosta rígida por cima das vestes: por 6 s recebe bem menos dano de tudo e aguenta golpes sem recuar.
+- **Maldição Sanguínea** — △ + L2 / Y + LT · custo 25 · cooldown 14 s · dano 18 · alcance 13 m
+  Aponta e APODRECE o sangue do adversário: ele fica ABALADO por 8 s (bate 20% mais fraco e apanha 12% mais). Quem estiver defendendo resiste a metade do tempo.
+
+### Especial: Banquete de Sangue
+
+250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: O Verdadeiro Raziel
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
+
+---
+
 ## O DIABO
 
 *O Portador da Relíquia de Sangue: regenera, bebe o sangue derramado e oferece pactos* · arma: Quatro braços com garras

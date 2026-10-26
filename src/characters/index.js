@@ -26,6 +26,7 @@ import estrangeiro from './estrangeiro.js';
 import amigo from './amigo.js';
 import cristino from './cristino.js';
 import cristopher from './cristopher.js';
+import raziel from './raziel.js';
 
 // Elenco jogável, na ordem da tela de seleção — AGRUPADO POR EQUIPE/TEMPORADA (a grade tem 3 colunas × 5 linhas por
 // página, então cada grupo ocupa linhas inteiras):
@@ -43,6 +44,7 @@ export const ROSTER = [
   xande, guizo, lirio, // Os Cinco (Sinais do Outro Lado) — o Guizo do lado do melhor amigo
   dalmo, aguiar, jae, kemi, labirinto, juan, // Mascarados (Hexatombe) — o Juan talvez vá para os "Sacrifícios" no futuro
   cristino, // Transtornados (Hexatombe) — o cangaceiro que não queria jogar o jogo
+  raziel, // Vampiros (Hexatombe) — o líder; Alvira, Velisar, Zéfero e Sabara entram depois
   oDiabo, magistrada, arnaldo, ferreiro, estrangeiro, amigo, // Portadores das Relíquias (Sangue, Conhecimento, Energia, Morte) + o Estrangeiro e o Amigo Imaginário
 ];
 

@@ -33,6 +33,42 @@
   **O CENÁRIO (notas do dono):** buscar as referências visuais em CENAS DOS EPISÓDIOS de Hexatombe; é só o INTERIOR (mais
   fácil). Igreja GÓTICA; a PORTA trancada; o ambiente cheio da NÉVOA DA MEMBRANA; iluminada pela LUA VERMELHA DE SANGUE
   (entrando pelos vitrais/janelas). São só pontos de partida — confirmar e completar ao pesquisar.
+  - [x] **CENÁRIO "Igreja Antiga"** (2026-10-26, `tools/blender/arena_igreja.py` → `public/arenas/igreja.glb`, id `igreja`, na
+        seleção de cenários). Referências: o modelo 3D da igreja usado no próprio RPG (wiki "Igreja Antiga": interior, vista
+        de cima, Dama da Culpa, área dos anzóis), a cinemática da Ceia dos Vampiros e QUADROS DO EPISÓDIO (Hexatombe ep. 9
+        "Banho de Sangue", YouTube p5alZam12ss: 4h55 a entrada com os pilares entalhados, 5h05 o altar com o retábulo
+        dourado e o trono, 5h20 a nave vista de cima, 6h10 a luta com as arandelas e os balcões, 6h50 a rosácea com o símbolo).
+        Feito à mão: a nave com os pilares e os arcos, as galerias com os balcões, as janelas ogivais com os vitrais
+        vermelhos, as nervuras de madeira do teto, a mesa do banquete (toalha manchada, candelabros, taças, cadeiras de
+        encosto pontiagudo), o altar (retábulo dourado com o trono, o Serafim Vermelho decapitado, a Dama da Culpa com o
+        leque de espinhos e a pedra vermelha, o SÍMBOLO DE SANGUE aceso no lugar da cruz — wiki "Sangue"), a porta TRANCADA com correntes e cadeado, a rosácea
+        com o símbolo de sangue, os anzóis com correntes, bancos quebrados e entulho. A névoa da membrana (vermelho-escura, mais densa no
+        altar e na porta) e a luz da lua de sangue ficam na config. Testado no jogo.
+  - [x] **RAZIEL** (2026-10-26, kit aprovado pelo dono) — jogável, equipe nova **Vampiros** (cor vermelho-sangue, na
+        seleção depois dos Transtornados e no título). Modelo `tools/blender/char_raziel.py` → `public/models/raziel.glb`
+        (técnica atual, revisado no Blender e no jogo): o casacão até o chão com a gola alta vermelha por dentro, as
+        dragonas com franjas, o jabô e a pedra vermelha, as correntes e os laços, a cabeça descarnada sem olhos com o
+        estigma aceso e os dentes, garras e pés descalços; a TRANSFORMAÇÃO "O Verdadeiro Raziel" é o mesmo .glb trocando as
+        peças (prop_up some; prop_true mostra a ferida com as costelas, os braços rasgados até o osso e a língua).
+        Kit: Garras (físico), Rasgo de Sangue (□), Bote Retalhador (heavyBlow com `grazeOnDodge`: quem esquiva toma
+        metade), Mordida (`vampireBite`: segura, morde duas vezes e cura), Endurecer Sangue (crosta de sangue, menos dano),
+        Maldição Sanguínea (`bloodCurse`: ABALADO), Turno Extra (ataca mais rápido), especial Banquete de Sangue (as
+        mordidas curam: `h.drain` no cinematicCombo); na forma: Devorar, Frenesi e o Banquete Bestial. Agarrão próprio
+        (garras + mordida), falas de introdução (cenas do cânone com Cristino, Juan, Jae, Labirinto e Dalmo) e de vitória
+        contra os 28. Testado: cada golpe, o raspão na esquiva, a transformação e 4 partidas CPU × CPU sem erro.
+        Proposta original (para referência): líder dos Vampiros, Sangue, Combatente (trilha Monstruoso), 1,90 m, rápido "como um vulto".
+        Visual (arte de Hexatombe): a cabeça careca descarnada sem olhos nem nariz, a boca de fera com os dentes amarelos e
+        o estigma da Coroa de Espinhos cortado na testa; o casacão preto/vermelho até o chão de ombros altos com a gola alta
+        e rígida, o forro vermelho, os laços dourados e correntes no peito, o lenço com a pedra vermelha; garras longas;
+        descalço com unhas pontudas; tudo manchado de sangue.
+        Kit: físico de GARRAS e MORDIDA (a mordida suga vida); ENDURECER SANGUE (resistência a todo dano por alguns
+        segundos, a crosta de sangue por cima da roupa); BOTE RETALHADOR (o bote enorme; quem esquiva toma metade);
+        MALDIÇÃO SANGUÍNEA (apodrece o sangue do alvo: ABALADO, dano e defesa menores); TURNO EXTRA (passiva: às vezes um
+        golpe a mais / ação extra); especial "BANQUETE DE SANGUE" (agarra, morde e bebe, curando — "Eu espero que vocês
+        aproveitem esse banquete"); TRANSFORMAÇÃO "O VERDADEIRO RAZIEL" (rasga a parte de cima das roupas: o corpo
+        descarnado com as costelas à mostra e os braços rasgados até o osso, a língua comprida; descontrolado, mais rápido
+        e forte, SEDE INCONTROLÁVEL: devora quem está morrendo e se cura).
+        Equipe nova "Vampiros" (Alvira, Velisar, Zéfero, Sabara quando entrarem).
 - [ ] 3–14 Modo PvE, que vai se chamar **Outro Lado** (dungeons, Espreitador como chefe, progressão, salvamento,
   cooperativo): não iniciado; já anunciado como "em desenvolvimento, sem data" na página Sobre.
 - [x] arrumar posição das facas/espadas nas mãos dos personagens (feito em 2026-10-23: o cabo atravessa o punho fechado

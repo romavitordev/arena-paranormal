@@ -186,13 +186,18 @@ export const cinematicCombo = {
           }
         });
         tl.add(h.t + h.dur * 0.4, () => {
-          applyHit(world, f, opp, {
+          const dealt = applyHit(world, f, opp, {
             damage: parts[i], kind: 'special', reaction: false, ignoreInvuln: true,
             sound: h.sound, color: sp.color, scale: h.final ? 2 : 1.2,
             applyMeleePassives: !!sp.applyMeleePassives,
             strike: sp.applyMeleePassives ? { damage: parts[i], heal: Math.floor(parts[i] * 0.3) } : undefined,
           });
           specialHitFx(world, f, opp, h.fx, sp.color);
+          // h.drain (o Banquete de Sangue do Raziel): a mordida cura uma fração do que tirou
+          if (h.drain && typeof dealt === 'number' && dealt > 0) {
+            f.health = Math.min(f.maxHealth, f.health + Math.round(dealt * h.drain));
+            world.fx.burst(f.chestPos(), { count: 10, color: 0xff3040, speed: 1.2, up: 1.4, life: 0.5, size: 0.12 });
+          }
           if (h.bleed && opp.state !== 'ko') opp.applyBleed(h.bleed, f); // ex.: Hemorragia Severa (Juan)
           if (h.fx && h.fx.chain) {
             // correntes aparecem fisicamente durante o golpe

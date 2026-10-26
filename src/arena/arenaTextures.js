@@ -482,6 +482,71 @@ export const ARENA_TEXTURES = {
     g.font = 'bold 64px Impact, sans-serif'; g.textAlign = 'center'; g.fillStyle = 'rgba(230,230,240,0.85)';
     g.fillText('TV VARMINHO', s / 2, s * 0.86);
   }),
+  // ---------------- Igreja Antiga (a base dos Vampiros em Hexatombe)
+  // alvenaria escura de blocos grandes, encardida, com escorridos de sangue velho
+  church_stone: () => tex(512, 3, (g, s) => {
+    g.fillStyle = '#2a2624'; g.fillRect(0, 0, s, s);
+    const rows = 8;
+    const h = s / rows;
+    for (let r = 0; r < rows; r++) {
+      let x = r % 2 ? -rnd(20, 60) : 0;
+      while (x < s) {
+        const w = rnd(90, 150);
+        const k = rnd(0.78, 1.1);
+        g.fillStyle = `rgb(${92 * k | 0},${84 * k | 0},${80 * k | 0})`;
+        g.fillRect(x + 3, r * h + 3, w - 6, h - 6);
+        x += w;
+      }
+    }
+    noise(g, s, ['#000', '#3a3430', '#8a8078'], 7000, [1, 5], 0.3);
+    for (let i = 0; i < 9; i++) { // escorridos de sangue velho
+      const x = rnd(0, s);
+      const grd = g.createLinearGradient(0, rnd(0, s * 0.5), 0, s);
+      grd.addColorStop(0, 'rgba(90,10,10,0.55)');
+      grd.addColorStop(1, 'rgba(90,10,10,0)');
+      g.fillStyle = grd;
+      g.fillRect(x, 0, rnd(3, 9), s);
+    }
+  }),
+  // piso de lajes grandes, rachadas
+  church_floor: () => tex(512, 4, (g, s) => {
+    g.fillStyle = '#1e1a18'; g.fillRect(0, 0, s, s);
+    const n = 4;
+    for (let r = 0; r < n; r++) {
+      for (let c = 0; c < n; c++) {
+        const k = rnd(0.75, 1.05);
+        g.fillStyle = `rgb(${74 * k | 0},${68 * k | 0},${64 * k | 0})`;
+        g.fillRect(c * s / n + 4, r * s / n + 4, s / n - 8, s / n - 8);
+      }
+    }
+    noise(g, s, ['#000', '#5a524c', '#3a0a0a'], 6000, [1, 6], 0.3);
+    g.strokeStyle = 'rgba(0,0,0,0.6)'; g.lineWidth = 2;
+    for (let i = 0; i < 10; i++) { g.beginPath(); let x = rnd(0, s), y = rnd(0, s); g.moveTo(x, y); for (let j = 0; j < 5; j++) { x += rnd(-30, 30); y += rnd(-30, 30); g.lineTo(x, y); } g.stroke(); }
+  }),
+  // o VITRAL vermelho: os vidros em losango e o chumbo escuro (a luz da lua de sangue atravessa)
+  stained_blood: () => tex(256, 0.9, (g, s) => {
+    g.fillStyle = '#1a0404'; g.fillRect(0, 0, s, s);
+    const n = 6;
+    for (let r = 0; r < n; r++) {
+      for (let c = 0; c < n; c++) {
+        const k = rnd(0.6, 1.0);
+        g.fillStyle = `rgb(${255 * k | 0},${(30 + 40 * Math.random()) * k | 0},${20 * k | 0})`;
+        const cx = (c + 0.5) * s / n;
+        const cy = (r + 0.5) * s / n;
+        const d = s / n / 2 - 4;
+        g.beginPath(); g.moveTo(cx, cy - d); g.lineTo(cx + d, cy); g.lineTo(cx, cy + d); g.lineTo(cx - d, cy); g.closePath(); g.fill();
+      }
+    }
+  }, { glow: 1.6 }),
+  table_cloth: () => tex(256, 1.5, (g, s) => {
+    g.fillStyle = '#d8d0c4'; g.fillRect(0, 0, s, s);
+    noise(g, s, ['#b8ae9e', '#efe8dc'], 2000, [1, 3], 0.3);
+    for (let i = 0; i < 6; i++) { g.fillStyle = `rgba(110,10,10,${rnd(0.2, 0.5)})`; g.beginPath(); g.arc(rnd(0, s), rnd(0, s), rnd(6, 30), 0, Math.PI * 2); g.fill(); }
+  }),
+  seraph_stone: () => tex(256, 2, (g, s) => {
+    g.fillStyle = '#5a2424'; g.fillRect(0, 0, s, s);
+    noise(g, s, ['#2a0a0a', '#8a3a34', '#000'], 5000, [1, 4], 0.35);
+  }),
 };
 
 function crate(color) {

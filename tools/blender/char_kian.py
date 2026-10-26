@@ -31,7 +31,7 @@ skin = material('skin_kian', '#4e3426', 0.75)
 pants = material('pants_desc', '#3a3836', 0.9)
 waist = material('waistband', '#2a2a2e', 0.8)
 wrap = material('wraps_desc', '#dcd6c8', 0.95)
-hairm = material('hair_afro', '#121010', 0.9)
+hairm = material('hair_short', '#121010', 0.9)
 beard = material('beard_desc', '#2a1c16', 0.85)
 
 M = {
@@ -286,7 +286,7 @@ for side in ('L', 'R'):
     relief(part('pants' + side), lambda p: 0.005 * H * (ridge(p.z / H * 16 + n3(p, 9) * 1.6, 2) - 0.4))
 relief(part('pants_hip'), lambda p: 0.004 * H * (ridge(p.z / H * 16 + n3(p, 9) * 1.4, 2) - 0.4))
 
-# ================================================================ o AFRO curto e arredondado (Desconjuração e Calamidade)
+# ================================================================ o cabelo CURTO e rente (Desconjuração e Calamidade)
 HCv = Vector((hc.x, hc.y, hc.z))
 
 
@@ -307,13 +307,14 @@ for i in range(30):
             continue  # dos lados vai até o alto da orelha
         if el < -0.12 and math.cos(a) > -0.8:
             continue
-        # o volume: mais alto em cima e atrás (o afro arredondado), rente dos lados e na testa
-        off = (0.012 + 0.03 * max(0.0, math.sin(el)) + 0.012 * max(0.0, -math.cos(a))) * H
+        # RENTE (pedido do dono: ele não tem black power): as bolas ficam com o centro DENTRO da cabeça e só a casca fina
+        # sai para fora — o cabelo raspado curto das referências "desconjurado", com um pouco mais de volume no alto
+        off = (-0.026 + 0.008 * max(0.0, math.sin(el))) * H
         q = on_head(a, el, off)
         if q:
-            D.ell(q, (0.034 * H, 0.034 * H, 0.032 * H))
-afro_disp = lambda p: 0.003 * H * (n3(p, 260) * 0.8 + ridge(n3(p, 90) * 9, 2) - 0.4)  # o crespo
-b.add('hair_afro', D.mesh(res=0.0045, smooth=2, disp=afro_disp, target=5000), hairm, region='body', weight_fn=HEAD, subdiv=0)
+            D.ell(q, (0.032 * H, 0.032 * H, 0.03 * H))
+short_disp = lambda p: 0.0012 * H * (n3(p, 300) * 0.8 - 0.2)  # o crespo bem curto
+b.add('hair_short', D.mesh(res=0.004, smooth=2, disp=short_disp, target=4000), hairm, region='body', weight_fn=HEAD, subdiv=0)
 
 
 # ================================================================ as BARBAS da Transformação: média (crescendo) e cheia (Calamidade)

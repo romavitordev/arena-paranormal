@@ -203,6 +203,9 @@ export const GRAB_SCENES = {
   jae_x: scene({ ...S('knife_1'), fx: { kind: 'slash' }, sound: 'bladeHit' }, { ...S('knife_3'), fx: { kind: 'stab' }, sound: 'bladeHit' }, { anim: 'dual_cross', fx: 'shadow', sound: 'slashFinal', bleed: { dps: 5, duration: 2.5 } }),
   fantasma: scene({ ...S('knife_1'), fx: { kind: 'slash' }, sound: 'bladeHit' }, { ...S('shoulder_bash'), fx: { kind: 'punch' }, sound: 'punch' }, { anim: 'thrust', fx: 'bands', sound: 'sniper' }),
   cristino_desertor: scene({ ...S('knife_1'), fx: { kind: 'slash' }, sound: 'bladeHit' }, { ...S('thrust'), fx: { kind: 'stab' }, sound: 'bladeHit' }, { anim: 'knife_final', fx: 'throat', sound: 'slashFinal', bleed: { dps: 5, duration: 3 } }),
+  // RAZIEL: as duas garras e a MORDIDA no pescoço (bebe o sangue); na forma verdadeira devora mais fundo
+  raziel: scene({ ...S('db_claw_r'), fx: { kind: 'claw' }, sound: 'clawHit' }, { ...S('db_claw_l'), fx: { kind: 'claw', flip: true }, sound: 'clawHit' }, { anim: 'raziel_bite', fx: 'consume', sound: 'clawHit', bleed: { dps: 4, duration: 2.5 } }),
+  raziel_verdadeiro: scene({ ...S('db_claw_r'), fx: { kind: 'claw' }, sound: 'clawHit' }, { ...S('db_cross'), fx: { kind: 'claw', flip: true }, sound: 'clawHit' }, { anim: 'raziel_bite', fx: 'consume', sound: 'bloodClaw', bleed: { dps: 5, duration: 3 } }),
   deus_morte: scene({ ...S('dm_slap', 0.34), fx: { kind: 'smash' }, sound: 'heavyPunch' }, { ...S('dm_hook', 0.34), fx: { kind: 'smash' }, sound: 'heavyPunch' }, { anim: 'dm_smash', fx: 'crush', sound: 'heavyPunch' }),
 };
 GRAB_SCENES.kian_calamidade = GRAB_SCENES.kian; // a forma de Calamidade agarra igual (só mais forte)

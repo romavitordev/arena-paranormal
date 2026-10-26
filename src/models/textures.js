@@ -2637,6 +2637,83 @@ export const MATERIAL_TEXTURES = {
       g.beginPath(); g.ellipse(rnd() * w, rnd() * h, 4 + rnd() * 16, 3 + rnd() * 10, rnd() * 3, 0, Math.PI * 2); g.fill();
     }
   }, { wrap: true }),
+
+  // ---------------------------------------------------------------- RAZIEL (Vampiros, Hexatombe)
+  // o rosto DESCARNADO: carne rosada com as fibras e as cicatrizes, sem olhos nem nariz (só as covas fundas), e o
+  // ESTIGMA da Coroa de Espinhos cortado na testa, brilhando vermelho (cinemática "O Verdadeiro Raziel"). A boca de fera
+  // (gengiva e dentes) é esculpida no modelo.
+  face_raziel: () => canvasTex(W, HT, (g) => {
+    g.fillStyle = '#c4847c'; g.fillRect(0, 0, W, HT);
+    const rnd = seeded(390);
+    // as fibras e manchas de carne viva
+    for (let i = 0; i < 260; i++) {
+      g.strokeStyle = rnd() < 0.5 ? `rgba(120,30,34,${0.12 + rnd() * 0.2})` : `rgba(240,190,180,${0.1 + rnd() * 0.15})`;
+      g.lineWidth = 0.8 + rnd() * 1.6;
+      const x = rnd() * W, y = rnd() * HT;
+      g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + (rnd() - 0.5) * 20, y + 10, x + (rnd() - 0.5) * 12, y + 24 + rnd() * 20); g.stroke();
+    }
+    // as cicatrizes do crânio (riscos escuros)
+    g.strokeStyle = 'rgba(70,10,14,0.65)'; g.lineWidth = 2.4; g.lineCap = 'round';
+    for (let i = 0; i < 16; i++) { const x = rnd() * W, y = rnd() * 90; g.beginPath(); g.moveTo(x, y); g.lineTo(x + (rnd() - 0.5) * 50, y + 10 + rnd() * 30); g.stroke(); }
+    // onde seriam os olhos: covas fundas e escuras, cobertas de cicatriz
+    for (const sx of [-1, 1]) {
+      const gr = g.createRadialGradient(CX + sx * 32, EYE_Y + 4, 2, CX + sx * 32, EYE_Y + 4, 22);
+      gr.addColorStop(0, 'rgba(60,8,12,0.85)'); gr.addColorStop(1, 'rgba(60,8,12,0)');
+      g.fillStyle = gr; g.beginPath(); g.ellipse(CX + sx * 32, EYE_Y + 4, 24, 14, 0, 0, Math.PI * 2); g.fill();
+      g.strokeStyle = 'rgba(90,16,20,0.7)'; g.lineWidth = 2;
+      g.beginPath(); g.moveTo(CX + sx * 16, EYE_Y + 2); g.lineTo(CX + sx * 48, EYE_Y + 8); g.stroke();
+    }
+    // sem nariz: as duas fendas
+    g.fillStyle = 'rgba(50,6,10,0.85)';
+    for (const sx of [-1, 1]) { g.beginPath(); g.ellipse(CX + sx * 6, NOSE_Y, 3, 7, sx * 0.3, 0, Math.PI * 2); g.fill(); }
+    // o ESTIGMA da Coroa de Espinhos: o traço curvo de espinhos cortado na testa, vermelho e aceso
+    g.strokeStyle = '#ff2a30'; g.lineWidth = 5; g.shadowColor = '#ff1020'; g.shadowBlur = 10;
+    g.beginPath(); g.moveTo(CX - 46, EYE_Y - 30); g.quadraticCurveTo(CX - 10, EYE_Y - 74, CX + 30, EYE_Y - 40); g.quadraticCurveTo(CX + 50, EYE_Y - 22, CX + 36, EYE_Y - 8); g.stroke();
+    g.beginPath(); g.moveTo(CX + 2, EYE_Y - 56); g.lineTo(CX - 4, EYE_Y - 12); g.stroke();
+    for (const [x, y, a] of [[-36, -40, -0.8], [-18, -56, -1.2], [14, -54, -2.0], [32, -38, -2.6], [-2, -32, -1.6], [40, -18, 0.6]]) {
+      g.beginPath(); g.moveTo(CX + x, EYE_Y + y); g.lineTo(CX + x + Math.cos(a) * 14, EYE_Y + y + Math.sin(a) * 14); g.stroke();
+    }
+    g.shadowBlur = 0;
+    // sangue escorrendo do estigma
+    g.fillStyle = 'rgba(140,10,18,0.6)';
+    for (const x of [-30, 6, 34]) g.fillRect(CX + x, EYE_Y - 10, 3, 30 + rnd() * 20);
+  }),
+  // o tronco DESCARNADO (aparece na Verdadeira Forma): músculos à mostra, cortes fundos e sangue seco
+  skin_raziel_torso: () => canvasTex(512, 512, (g, w, h) => {
+    g.fillStyle = '#9a4844'; g.fillRect(0, 0, w, h); // carne viva (mais escura que o rosto)
+    const rnd = seeded(905);
+    for (let i = 0; i < 520; i++) {
+      g.strokeStyle = rnd() < 0.55 ? `rgba(120,24,30,${0.15 + rnd() * 0.25})` : `rgba(235,180,170,${0.12 + rnd() * 0.15})`;
+      g.lineWidth = 1 + rnd() * 2.2;
+      const x = rnd() * w, y = rnd() * h;
+      g.beginPath(); g.moveTo(x, y); g.lineTo(x + (rnd() - 0.5) * 14, y + 18 + rnd() * 30); g.stroke();
+    }
+    for (let i = 0; i < 12; i++) { // os cortes fundos
+      g.strokeStyle = 'rgba(80,6,12,0.85)'; g.lineWidth = 3 + rnd() * 4;
+      const x = rnd() * w, y = rnd() * h;
+      g.beginPath(); g.moveTo(x, y); g.lineTo(x + (rnd() - 0.5) * 80, y + (rnd() - 0.5) * 60); g.stroke();
+    }
+    for (let i = 0; i < 18; i++) { g.fillStyle = `rgba(110,10,16,${0.2 + rnd() * 0.3})`; g.beginPath(); g.ellipse(rnd() * w, rnd() * h, 8 + rnd() * 30, 6 + rnd() * 20, rnd() * 3, 0, Math.PI * 2); g.fill(); }
+  }, { wrap: true }),
+  // o CASACÃO: preto-avermelhado, mais vermelho embaixo, gasto nas bordas e MANCHADO de sangue
+  coat_raziel: () => canvasTex(512, 512, (g, w, h) => {
+    const gr = g.createLinearGradient(0, 0, 0, h);
+    gr.addColorStop(0, '#2a1014'); gr.addColorStop(1, '#4a1218');
+    g.fillStyle = gr; g.fillRect(0, 0, w, h);
+    const rnd = seeded(77);
+    for (let x = 0; x < w; x += 6) { g.fillStyle = `rgba(0,0,0,${0.08 + rnd() * 0.1})`; g.fillRect(x, 0, 2, h); }
+    for (let i = 0; i < 26; i++) { // as manchas e escorridos de sangue
+      g.fillStyle = `rgba(${120 + rnd() * 60 | 0},10,18,${0.25 + rnd() * 0.35})`;
+      const x = rnd() * w, y = rnd() * h;
+      g.beginPath(); g.ellipse(x, y, 10 + rnd() * 34, 6 + rnd() * 20, rnd() * 3, 0, Math.PI * 2); g.fill();
+      g.fillRect(x - 2, y, 4, 20 + rnd() * 60);
+    }
+  }, { wrap: true }),
+  pants_raziel: () => canvasTex(256, 256, (g, w, h) => {
+    g.fillStyle = '#1c181c'; g.fillRect(0, 0, w, h);
+    const rnd = seeded(13);
+    for (let i = 0; i < 10; i++) { g.fillStyle = `rgba(110,10,16,${0.25 + rnd() * 0.3})`; g.beginPath(); g.ellipse(rnd() * w, rnd() * h, 6 + rnd() * 18, 4 + rnd() * 12, rnd() * 3, 0, Math.PI * 2); g.fill(); }
+  }, { wrap: true }),
 };
 
 function paintKianSigils(g, color) {

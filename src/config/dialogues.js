@@ -28,9 +28,10 @@ export const CHARACTER_NAMES = {
   amigo: 'Amigo Imaginário',
   cristino: 'Cristino',
   cristopher: 'Cristopher',
+  raziel: 'Raziel',
 };
 
-export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto', jae_x: 'jae', colosso: 'dalmo', guizo_et: 'guizo', kian_calamidade: 'kian', juan_odio: 'juan', guizo_bombado: 'guizo', guizo_velho: 'guizo', cristino_desertor: 'cristino', dante_aberto: 'dante' };
+export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto', jae_x: 'jae', colosso: 'dalmo', guizo_et: 'guizo', kian_calamidade: 'kian', juan_odio: 'juan', guizo_bombado: 'guizo', guizo_velho: 'guizo', cristino_desertor: 'cristino', dante_aberto: 'dante', raziel_verdadeiro: 'raziel' };
 
 export const INTRO_IDS = Object.keys(CHARACTER_NAMES);
 const INTRO_HOOKS = {
@@ -62,6 +63,7 @@ const INTRO_HOOKS = {
   amigo: 'o sino',
   cristino: 'a socadeira',
   cristopher: 'esses punhos de dublê',
+  raziel: 'essas garras',
 };
 
 const INTRO_OPENERS = {
@@ -94,6 +96,7 @@ const INTRO_OPENERS = {
   amigo: (other, hook) => `(${hook} ecoa de dentro da criatura) ...${other}... quer brincar... no quadro?`,
   cristino: (other, hook) => `Não é pessoal, ${other}. Larga ${hook} e sai do meu caminho.`,
   cristopher: (other, hook) => `HEY, ${other}! Bonito ${hook}! Mas aqui é cena de ação, e eu faço as minhas sem dublê!`,
+  raziel: (other, hook) => `${other}. Desculpe a entrada sem convite. Pode deixar ${hook} na mesa — o banquete é por minha conta.`,
 };
 
 const INTRO_REPLIES = {
@@ -125,6 +128,7 @@ const INTRO_REPLIES = {
   amigo: (other, hook) => `(a tinta pinga no chão) ...${hook} já tocou, ${other}... ninguém lembra de quando parou.`,
   cristino: (other, hook) => `${hook}... Eu já vi coisa pior no mato, ${other}. Fala menos.`,
   cristopher: (other, hook) => `${hook}? Já caí de prédio por menos, ${other}! Vem, que o tio aguenta!`,
+  raziel: (other, hook) => `${hook}... Que gentileza, ${other}. Eu já sinto o gosto do seu sangue daqui.`,
 };
 
 const INTRO_EXCHANGES = {
@@ -170,6 +174,28 @@ const INTRO_EXCHANGES = {
   'cristopher+kian': [
     { starter: 'kian', line: 'Eu lembro de você. Você estava lá quando tentaram me apagar.', response: 'cristopher', responseLine: 'E voltei vivo pra contar, primeiro ocultista!' },
     { starter: 'cristopher', line: 'Você devia estar morto, cara!', response: 'kian', responseLine: 'Devia. Muita gente devia.' },
+  ],
+  // RAZIEL (Hexatombe): o Circo (ep. 7: decapitou o Franco, quase estripou o Dalmo, mordeu o Henri) e a guerra na Igreja
+  // Antiga (ep. 9: devorou a Maria, atravessou o Remi, o Cristino cortou o braço dele e o Juan o finalizou)
+  'cristino+raziel': [
+    { starter: 'raziel', line: 'O senhor desceu do telhado sem ser convidado. Que falta de modos.', response: 'cristino', responseLine: 'Não é pessoal. Só quero o seu braço.' },
+    { starter: 'cristino', line: 'Eu odeio gente barulhenta. Você grita demais.', response: 'raziel', responseLine: 'E o senhor corta demais. Vamos ver quem acaba primeiro.' },
+  ],
+  'juan+raziel': [
+    { starter: 'raziel', line: 'Henri. O gosto da sua carne ainda está na minha boca.', response: 'juan', responseLine: 'Então lembra dele. Porque hoje quem morde sou eu.' },
+    { starter: 'juan', line: 'Eu hesitei uma vez em descarnar você.', response: 'raziel', responseLine: 'E ainda assim obedeceu a Ele. Que triste, Henri.' },
+  ],
+  'jae+raziel': [
+    { starter: 'raziel', line: 'Você estava sentada à minha mesa, menina. Lembra do vinho?', response: 'jae', responseLine: 'Shh... lembro do gosto. Era sangue.' },
+    { starter: 'jae', line: 'Você me devorou na igreja.', response: 'raziel', responseLine: 'E foi uma refeição esplêndida. Vamos repetir?' },
+  ],
+  'labirinto+raziel': [
+    { starter: 'raziel', line: 'O senhor das mãos que tocam. Atravessei o seu estômago uma vez.', response: 'labirinto', responseLine: 'E eu fiz a Cleo explodir na sua frente. Estamos quites?' },
+    { starter: 'labirinto', line: 'Todo labirinto tem um centro. O seu é só fome.', response: 'raziel', responseLine: 'Fome é o que me trouxe até aqui. E o que vai me levar embora.' },
+  ],
+  'dalmo+raziel': [
+    { starter: 'dalmo', line: 'Você quase me estripou no circo, vampiro!', response: 'raziel', responseLine: 'Quase. Foi falta de educação minha. Hoje eu termino o serviço.' },
+    { starter: 'raziel', line: 'O grandalhão do circo. Ainda de pé?', response: 'dalmo', responseLine: 'Grande e de pé, neném. Vem que eu te mostro a arena.' },
   ],
   // CRISTINO (Hexatombe): a caça ao Quibungo com a Jae e o Labirinto, o Pomba sequestrado, a promessa e o fim pelo Juan
   'cristino+jae': [
@@ -2215,6 +2241,69 @@ const VICTORY_CRISTOPHER = {
 };
 for (const [w, m] of Object.entries(VICTORY_CRISTOPHER)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
 
+// RAZIEL (Vampiros, Hexatombe): falas de vitória dele contra cada um e de cada um contra ele
+const VICTORY_RAZIEL = {
+  raziel: {
+    kaiser: ['Fumaça não esconde o cheiro do seu sangue, Cesar.','Respire, rapaz. O banquete ainda nem começou.'],
+    arthur: ['Um braço só. Sobra mais para a mesa.','Belo instrumento, motoqueiro. Toque algo para a ceia.'],
+    joui: ['Rápido. Mas eu sou um vulto, Joui.','Sua máscara não esconde o gosto do medo.'],
+    dante: ['Palavras bonitas, padre. O sangue é mais sincero.','O seu teatro acabou. O meu banquete não.'],
+    erin: ['Explosões não me assustam, menina. Eu já ardi inteiro.','Que barulho. Agora, silêncio à mesa.'],
+    aghata: ['Rituais de Sangue... para mim? Que gentil.','O seu grimório não ensina a fugir.'],
+    balu: ['Tanta carne. Hoje teremos fartura.','O machado era pesado. A queda, mais ainda.'],
+    verissimo: ['A Ordo manda os velhos agora? Que deselegante.','Anote no relatório: o anfitrião venceu.'],
+    cristopher: ['Um armário de carne. Que generoso.','Proteja o seu filho agora, se puder.'],
+    kian: ['Você previu o meu bote? Não previu o gosto.','A Escrita não salva ninguém da fome.'],
+    gal_sal: ['Correntes não seguram quem já foi devorado pelo Sangue.','Justiça? À mesa, só existe apetite.'],
+    nubi: ['A Morte não me apressa, chacal.','Silenciosa até no fim. Aprecio isso.'],
+    xande: ['Moleque barulhento. O sangue jovem é o mais doce.','Tacada forte. Garras mais.'],
+    guizo: ['Desligue a câmera. Ninguém filma a ceia.','Grave isto: o anfitrião sempre vence.'],
+    lirio: ['Grande e lento. Como um banquete deve ser.','A sua marreta tem nome. Você agora é só carne.'],
+    dalmo: ['O grandalhão do circo. Desta vez eu terminei.','Toda arena acaba num prato, Colosso.'],
+    aguiar: ['O senhor também gosta de sangue, delegado. Que afinidade.','Seu machado conhece a carne. A minha boca também.'],
+    jae: ['Shh... a refeição terminou, menina.','Esplêndida, como da última vez.'],
+    kemi: ['Silenciosa e certeira. Mas eu não tenho olhos para mirar.','Contrato cumprido. O meu era com a fome.'],
+    labirinto: ['Tocar em mim não explode nada, senhor.','Eu atravessei o seu estômago uma vez. Eu me lembro do caminho.'],
+    juan: ['O gosto da sua carne continua o melhor, Henri.','Desta vez o sino não tocou para salvar você.'],
+    cristino: ['O senhor queria o meu braço. Fique com a derrota.','Desça do telhado da próxima vez pela porta. É mais educado.'],
+    o_diabo: ['Pactos são para quem tem fome de poder. A minha é só de sangue.','O Sangue reconhece o seu senhor. E ainda assim eu venci.'],
+    magistrada: ['O Equilíbrio não sacia a fome.','Saber tudo e ainda assim sangrar. Que triste.'],
+    arnaldo: ['Bravo, senhor. O último ato foi meu.','Feche a cortina. O jantar está servido.'],
+    ferreiro: ['A sua espada consome. Eu devoro.','Até a Morte sangra à minha mesa.'],
+    estrangeiro: ['Ninguém vai lembrar de você. Eu vou lembrar do gosto.','Seu sinal se calou. A ceia continua.'],
+    amigo: ['Tinta. Que decepção para o paladar.','O sino tocou. Ninguém foi poupado.'],
+  },
+  kaiser: { raziel: ['A névoa queima até quem não tem pele.','Engasga na fumaça, vampiro.'] },
+  arthur: { raziel: ['Rebirth na cabeça. Agora dorme.','Sem olhos e ainda me viu chegar? Não viu.'] },
+  joui: { raziel: ['Um vulto contra uma sombra. A sombra corta primeiro.','Sua boca é grande. Seu fim foi rápido.'] },
+  dante: { raziel: ['O Sangue também tem fim. Amém.','Que personagem trágico. Que final merecido.'] },
+  erin: { raziel: ['KABOOM! Churrasco de vampiro!','Fogo resolve tudo, até sem pele!'] },
+  aghata: { raziel: ['Eu conheço os rituais de Sangue melhor que você.','Mais um monstro para o grimório.'] },
+  balu: { raziel: ['Banquete? Eu trago a sobremesa: machadada!','Hahaha! Que sorrisão, hein!'] },
+  verissimo: { raziel: ['O líder dos Vampiros. Caso encerrado.','Olhos abertos, Raziel. Ah, você não tem.'] },
+  cristopher: { raziel: ['Ninguém morde a minha equipe!','Fica no chão, dentuço!'] },
+  kian: { raziel: ['Eu vi a sua fome antes do bote.','A Escrita registrou: o vampiro caiu.'] },
+  gal_sal: { raziel: ['Preso como um animal. É o que você é.','A justiça também tem dentes.'] },
+  nubi: { raziel: ['A Morte espera até os famintos.','Calma. Até o Sangue se cansa.'] },
+  xande: { raziel: ['Tacada no meio da boca!','Pelos meus amigos, vampiro!'] },
+  guizo: { raziel: ['Gravei um VAMPIRO DE VERDADE! Mano!','Não morde, não morde! ...Venci?'] },
+  lirio: { raziel: ['A Leonora quebra até dente de vampiro.','Banquete? Comeu marretada.'] },
+  dalmo: { raziel: ['Hoje quem estripa sou eu, neném!','A revanche do circo!'] },
+  aguiar: { raziel: ['Ha ha... carne por carne, vampiro.','O predador aqui sou eu.'] },
+  jae: { raziel: ['Shh... agora quem foi devorado foi você.','Pela Maria. E pelo vinho.'] },
+  kemi: { raziel: ['Um tiro na cabeça. Igual a Lena.','Alvo abatido. Sem olhos, sem mira, sem chance.'] },
+  labirinto: { raziel: ['Toquei. Agora explode.','Você me atravessou uma vez. Não duas.'] },
+  juan: { raziel: ['Igual na igreja. Até a cabeça.','Ele mandou. Eu obedeci.'] },
+  cristino: { raziel: ['Faltou um braço. Agora falta o resto.','Não é pessoal, vampiro.'] },
+  o_diabo: { raziel: ['Todo Sangue volta para mim, Raziel.','Que vampiro obediente. Ajoelhe.'] },
+  magistrada: { raziel: ['O Equilíbrio cobra a fome também.','Eu sei como esta história termina. Termina assim.'] },
+  arnaldo: { raziel: ['Que vilão! Que final! Bravo!','Fecham-se as cortinas para o vampiro.'] },
+  ferreiro: { raziel: ['Até um vampiro tem idade, garoto.','Santo Berço não se curva à fome.'] },
+  estrangeiro: { raziel: ['Ninguém vai lembrar do líder dos Vampiros.','Interessante. A fome também esquece.'] },
+  amigo: { raziel: ['...o vampiro... virou pintura...','...mais uma boca... no quadro...'] },
+};
+for (const [w, m] of Object.entries(VICTORY_RAZIEL)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
+
 // NUBI (Escriptas): falas originais do jogo, dela contra cada um e de cada um contra ela
 const VICTORY_NUBI = {
   nubi: {
@@ -2532,7 +2621,7 @@ export const BATTLE_REPLIES = {
   },
 };
 
-const DIALOGUE_BASE_IDS = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', juan_odio: 'juan', guizo_bombado: 'guizo', guizo_velho: 'guizo', cristino_desertor: 'cristino', dante_aberto: 'dante' };
+const DIALOGUE_BASE_IDS = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', juan_odio: 'juan', guizo_bombado: 'guizo', guizo_velho: 'guizo', cristino_desertor: 'cristino', dante_aberto: 'dante', raziel_verdadeiro: 'raziel' };
 
 export function battleLines(speakerId, opponentId, event) {
   const lines = BATTLE_DIALOGUES[event];

@@ -167,3 +167,45 @@ export const ACAMPAMENTO = {
   ],
   camera: { radius: 24, maxY: 15 },
 };
+
+// IGREJA ANTIGA (Hexatombe): a base dos Vampiros, só o INTERIOR (o modelo 3D do próprio RPG). A porta está trancada; a
+// NÉVOA DA MEMBRANA enche a nave e a LUA VERMELHA DE SANGUE entra pelos vitrais e tinge tudo; velas na mesa do banquete
+// e no altar (a Dama da Culpa e o Serafim decapitado).
+export const IGREJA = {
+  id: 'igreja',
+  name: 'Igreja Antiga',
+  glb: 'arenas/igreja.glb',
+  bounds: {
+    rects: [
+      { minX: -9.4, maxX: 9.4, minZ: -13.3, maxZ: 13.3 }, // a nave e os corredores (o altar e a porta ficam de fora)
+    ],
+  },
+  spawns: [{ x: -3.2, z: 3.0 }, { x: 3.2, z: 3.0 }],
+  sky: 0x0a0204,
+  skyGradient: [[0, '#050102'], [0.6, '#1a0406'], [1, '#2a0608']],
+  fog: { color: 0x1a0406, density: 0.012 },
+  lights: [
+    { type: 'hemi', sky: 0xa05a5a, ground: 0x3a1410, intensity: 1.25 },
+    { type: 'ambient', color: 0x4a2224, intensity: 0.4 },
+    { type: 'point', color: 0xff5a3a, intensity: 40, distance: 24, decay: 1.4, pos: [0, 7, 3] }, // a luz vermelha que enche a nave
+    // a lua de sangue entrando pelos vitrais do lado direito
+    { type: 'dir', color: 0xff4a3a, intensity: 2.8, pos: [16, 20, 6], shadow: true, area: 30 },
+    { type: 'point', color: 0xff2a1a, intensity: 30, distance: 16, decay: 1.6, pos: [0, 8, -15] }, // o altar e o símbolo de sangue
+    { type: 'point', color: 0xff2a1a, intensity: 14, distance: 12, pos: [-8.5, 7, 0] },
+    { type: 'point', color: 0xff2a1a, intensity: 14, distance: 12, pos: [8.5, 7, 0] },
+    { type: 'point', color: 0xff2a1a, intensity: 10, distance: 10, pos: [-8.5, 7, -9] },
+    { type: 'point', color: 0xff2a1a, intensity: 10, distance: 10, pos: [8.5, 7, 9] },
+    { type: 'point', color: 0xffa050, intensity: 14, distance: 8, pos: [0, 2.0, -8.5], flicker: true }, // as velas do banquete
+    { type: 'point', color: 0xffa050, intensity: 8, distance: 6, pos: [-4, 3.2, -13.6], flicker: true },
+    { type: 'point', color: 0xffa050, intensity: 8, distance: 6, pos: [4, 3.2, -13.6], flicker: true },
+    { type: 'point', color: 0xffb060, intensity: 7, distance: 8, pos: [0, 6.5, -15.8] }, // o retábulo dourado
+    { type: 'point', color: 0xff7a3a, intensity: 6, distance: 6, pos: [-5.6, 3.3, 0], flicker: true }, // as arandelas
+    { type: 'point', color: 0xff7a3a, intensity: 6, distance: 6, pos: [5.6, 3.3, 0], flicker: true },
+    { type: 'point', color: 0xff7a3a, intensity: 6, distance: 6, pos: [-5.6, 3.3, 8], flicker: true },
+    { type: 'point', color: 0xff7a3a, intensity: 6, distance: 6, pos: [5.6, 3.3, -8], flicker: true },
+  ],
+  // a névoa da membrana: baixa, vermelho-escura, girando devagar pela nave e mais densa no fundo e na porta trancada
+  mist: { color: 0x6a1018, count: 22, center: [0, 0], inner: 6, radius: 10, height: 1.2, size: 5, opacity: 0.16, swirl: 0.02, banks: [{ at: [0, -14], radius: 6, count: 10, y: 0.8, height: 3, size: 7, opacity: 0.28 }, { at: [0, 12.5], radius: 5, count: 8, y: 0.6, height: 2.5, size: 6, opacity: 0.26 }] },
+  particles: { color: 0xff6a5a, count: 160, area: 20, height: 9, rise: 0.04, drift: 0.25, size: 0.04, opacity: 0.5, center: [0, 0, -1] }, // poeira na luz vermelha
+  camera: { rect: { minX: -9.6, maxX: 9.6, minZ: -15.5, maxZ: 13.4 }, maxY: 9.5 },
+};

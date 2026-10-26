@@ -13,6 +13,7 @@ import './hostAbilities.js'; // registra as habilidades do Anfitrião em ABILITY
 import './guizoAbilities.js'; // e as do Guizo (Embaralhar, Decadência, Espirais da Perdição...)
 import { detonateLanterns } from './cristinoAbilities.js'; // e as do Cristino (lampiões, fogo no chão)
 import './cristopherAbilities.js'; // e a do Cristopher (o carro de dublê)
+import './razielAbilities.js'; // e a do Raziel (Mordida e Maldição Sanguínea)
 import './danteAbilities.js'; // e as do Dante de Olhos Abertos (Paradoxo, Eco Espiral)
 import { SPECIALS } from './specials/index.js';
 import { telegraphFor, startTelegraph, updateTelegraph, stopTelegraph, telegraphMissed, TELEGRAPH } from './specials/telegraph.js';

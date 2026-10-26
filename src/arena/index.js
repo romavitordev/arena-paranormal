@@ -1,8 +1,8 @@
 import { createGLBArena, preloadArena } from './glbArena.js';
-import { ORFANATO, SUVACO, COLISEU, SANTO_BERCO, RUINAS, ACAMPAMENTO } from './configs.js';
+import { ORFANATO, SUVACO, COLISEU, SANTO_BERCO, RUINAS, ACAMPAMENTO, IGREJA } from './configs.js';
 
 // cenários do Blender carregados no início do jogo
-const GLB_ARENAS = { orfanato: ORFANATO, suvaco: SUVACO, coliseu: COLISEU, santo_berco: SANTO_BERCO, ruinas: RUINAS, acampamento: ACAMPAMENTO };
+const GLB_ARENAS = { orfanato: ORFANATO, suvaco: SUVACO, coliseu: COLISEU, santo_berco: SANTO_BERCO, ruinas: RUINAS, acampamento: ACAMPAMENTO, igreja: IGREJA };
 export async function preloadArenas() {
   await Promise.all(Object.values(GLB_ARENAS).map((cfg) => preloadArena(cfg).catch((e) => {
     console.warn('Cenário indisponível:', cfg.id, e);
@@ -64,7 +64,15 @@ export const ARENAS = {
     thumbCamera: { pos: [6, 3.2, 13], look: [-2, 2.5, -20] }, // a fogueira com a van e a torre ao fundo
     create: () => createGLBArena(ACAMPAMENTO),
   },
+  igreja: {
+    name: 'Igreja Antiga',
+    description: 'A base dos Vampiros em Hexatombe: a nave gótica trancada, a mesa do banquete, a Dama da Culpa no altar, a névoa da membrana e a lua de sangue nos vitrais.',
+    colors: ['#1a0406', '#2a2220', '#ff2a1a'],
+    available: true,
+    thumbCamera: { pos: [0, 3.2, 11], look: [0, 4, -16] }, // a nave até o altar
+    create: () => createGLBArena(IGREJA),
+  },
 };
 
-export const ARENA_ORDER = ['orfanato', 'suvaco', 'coliseu', 'santo_berco', 'ruinas', 'acampamento'];
+export const ARENA_ORDER = ['orfanato', 'suvaco', 'coliseu', 'santo_berco', 'ruinas', 'acampamento', 'igreja'];
 export const DEFAULT_ARENA = 'ruinas';

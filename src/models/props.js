@@ -1045,3 +1045,15 @@ export function addDanteAbertoProps(rig) {
     o.material = swapped.get(o.material);
   });
 }
+
+// RAZIEL (Vampiros): tudo vem do modelo (garras, dentes, o casaco); a forma verdadeira é o mesmo .glb trocando as peças
+export function addRazielProps(rig) {
+  if (rig.props.true) rig.showProp('true', false); // o corpo rasgado só aparece na transformação
+}
+
+// O VERDADEIRO RAZIEL: rasgou a parte de cima das roupas — some o casaco de cima, a gola, o jabô, as correntes, e aparecem
+// a ferida com as costelas, os braços rasgados até o osso e a língua
+export function addRazielVerdadeiroProps(rig) {
+  if (rig.props.up) rig.showProp('up', false);
+  if (rig.props.true) rig.showProp('true', true);
+}

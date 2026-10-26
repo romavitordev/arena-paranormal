@@ -16,6 +16,7 @@ import { addVictoryClips } from './victoryClips.js';
 import { addCharClips } from './charClips.js';
 import { addIdleClips } from './idleClips.js';
 import { addPowerClips } from './powerClips.js';
+import { addRazielClips } from './razielClips.js';
 import { UAL_CLIPS } from './ualClips.js';
 import { locomotionClips } from './locomotionClips.js';
 
@@ -560,5 +561,6 @@ addVictoryClips(CLIPS, k);
 addCharClips(CLIPS, k);
 addIdleClips(CLIPS, k);
 addPowerClips(CLIPS, k);
+addRazielClips(CLIPS, k); // o Raziel (Vampiros)
 
 export const JOINTS = ['hip', 'sp', 'hd', 'sL', 'eL', 'sR', 'eR', 'lL', 'kL', 'lR', 'kR'];
