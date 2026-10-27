@@ -86,7 +86,7 @@ export const RAZIEL_KIT = {
       track: true,
       range: 2.8,
       arc: 150,
-      damage: 92,
+      damage: 84, // 92 → 84 (v3.47.0)
       knockback: 2.2,
       bleed: { dps: 5, duration: 3 },
       grazeOnDodge: 0.5,
@@ -172,7 +172,7 @@ export const RAZIEL_KIT = {
   },
 
   passives: [
-    { type: 'lifesteal', ratio: 0.08 }, // o gosto pelo sangue: cada garra devolve um pouco de vida
+    { type: 'lifesteal', ratio: 0.05 }, // o gosto pelo sangue: cada garra devolve um pouco de vida (0,08 → 0,05: v3.47.0, ganhava 9 de 10)
     // TURNO EXTRA (duas ações por rodada): o finalizador do combo que entra abre 2 s em que a próxima habilidade não
     // entra em recarga (uma vez a cada 10 s)
     { type: 'extraTurn', window: 2, cooldown: 10, color: CRIMSON },

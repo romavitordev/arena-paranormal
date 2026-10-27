@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.46.0';
+export const VERSION = '3.47.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,22 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.47.0',
+    date: '2026-10-27',
+    title: 'Menus e Combos',
+    items: [
+      'MENU PRINCIPAL NOVO: as opções em seções — LUTAR, PRATICAR e JOGO —, a descrição num cartão ao lado e as opções de jogo mais discretas. Cabe tudo na tela, inclusive no celular.',
+      'OUTRO LADO (EM BREVE): o modo PvE já aparece no menu com o selo EM BREVE. Ao escolher, um aviso conta o que vem por aí: dungeons no território das criaturas, chefes, evolução durante a campanha e cooperativo.',
+      'TORNEIO DE CARA NOVA: a montagem ganhou o visual do menu (cartas com a cor de cada vaga — dourado para humano, azul para CPU — e as regras num painel só), e a chave, o fundo roxo.',
+      'LUTAS DA CPU NO TORNEIO: escolha como as lutas só entre CPUs se resolvem — SORTEIO (na hora, só o resultado), RODAR (a luta inteira acontece de verdade, acelerada, e você vê só quem venceu, com a vida dos dois ao vivo) ou ASSISTIR (a luta inteira na tela).',
+      'CORREÇÃO NO TORNEIO: pelo controle ou teclado, agora dá para chegar a todas as regras (antes ◀ ▶ só mudavam o Tempo).',
+      'LIMITE DE COMBO: nenhum combo prende mais de 3 segundos ou 12 golpes seguidos — quem apanha ESCAPA DO COMBO com um instante invulnerável. A CPU também usa a Substituição para sair de combos longos.',
+      'RAZIEL BALANCEADO: rouba menos vida com as garras (e na forma verdadeira) e o Bote Retalhador bate um pouco menos.',
+      'MANANCIAIS REFEITOS: os filhos do Ferreiro pelas miniaturas oficiais e pela HQ — pálidos e esquálidos, as costelas à mostra, as orelhas pontudas, os olhos fundos e pretos, o cabelo preto comprido e só trapos escuros, com o Símbolo Espiral no peito.',
+      'ANIMAÇÕES COM MAIS IMPACTO (1ª leva): os socos, ganchos, chutes, joelhadas e cortes de faca de boa parte do elenco agora carregam antes do golpe, passam do ponto no impacto e voltam com peso.',
+    ],
+  },
   {
     v: '3.46.0',
     date: '2026-10-26',

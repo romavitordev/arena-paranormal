@@ -310,7 +310,9 @@ export class CpuController {
     }
 
     // ---- escapes
-    if (f.state === 'hitstun' && f.dodges > 1 && f.cooldowns.substitution <= 0 && Math.random() < L.subst * k) {
+    // Substituição: guarda uma carga de esquiva, mas num combo que já vai longe (4+ acertos) gasta a última também
+    const longCombo = (f.comboHits || 0) >= 4;
+    if (f.state === 'hitstun' && (f.dodges > 1 || (longCombo && f.dodges > 0)) && f.cooldowns.substitution <= 0 && Math.random() < L.subst * k * (longCombo ? 2.5 : 1)) {
       this.tap('dodge');
       return out;
     }

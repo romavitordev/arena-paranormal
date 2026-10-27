@@ -115,7 +115,7 @@ export default {
     length: 3.7,
   },
   passives: [
-    { type: 'lifesteal', ratio: 0.2 }, // Sede Incontrolável: as garras bebem bem mais
+    { type: 'lifesteal', ratio: 0.14 }, // Sede Incontrolável: as garras bebem bem mais (0,2 → 0,14: v3.47.0)
     ...base.passives.filter((p) => p.type === 'extraTurn' || p.type === 'elementalAffinity'), // Turno Extra e Afinidade continuam
     { type: 'predator', mult: 1.2, threshold: 0.3 }, // Predador: +20% em quem está vulnerável ou morrendo
   ],

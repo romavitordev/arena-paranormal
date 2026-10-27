@@ -99,6 +99,10 @@ export const COMBAT = {
   comboScaling: [1, 1, 0.9, 0.8, 0.72, 0.65, 0.58, 0.5],
   comboScalingFloor: { special: 0.75, grab: 0.75 }, // especial e agarrão nunca caem abaixo disso
   maxLaunchesPerCombo: 1, // depois do 1º lançamento, novos "lançamentos" viram empurrão
+  // ---- Limite de combo (todos): passou de `time` s ou `hits` acertos seguidos, os golpes param de segurar e quem apanha
+  // escapa com um instante invulnerável (antes os combos chegavam a 5–7 s de hitstun direto). Especial e agarrão contam,
+  // mas não são cortados no meio
+  comboBreak: { time: 3.0, hits: 12, iframes: 0.5 },
   // ---- Pausa no impacto por peso do golpe ----
   hitstopBy: { light: 0.04, medium: 0.055, heavy: 0.075, launch: 0.11 },
   // ---- Elementos: ciclo Sangue > Conhecimento > Energia > Morte > Sangue (Medo neutro) ----

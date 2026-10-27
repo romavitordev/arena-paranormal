@@ -216,6 +216,11 @@ async function startMatch() {
     arenaId: game.arenaId || DEFAULT_ARENA,
     onEnd: ({ winner, def, loser, team }) => {
       if (game.mode.kind === 'tournament' && game.tourMatch) game.tourMatch.winner = winner; // lado que venceu (0/1)
+      // torneio com as Lutas da CPU = RODAR: sem tela de vitória — volta para a chave mostrando quem venceu
+      if (game.tourRun) {
+        match.world.after(0.3, () => { if (game.match === match && game.tourRun) finishTourRun(winner); });
+        return;
+      }
       // tempo contado pela simulação (e não pelo relógio): na LAN a tela de vitória abre no mesmo quadro nos dois
       match.world.after(0.4, () => {
         if (game.state !== 'fight' || game.match !== match) return;
@@ -497,7 +502,50 @@ function toTourBracket(last = null) {
   endMatch();
   setOverlay(null, null);
   const next = last ? null : nextMatch(game.tour);
-  setScreen('tbracket', new TournamentScreen(screens, { tour: game.tour, portraits, next, autos: game.tourAutos, sim: isCpuMatch(game.tour, next), last }));
+  setScreen('tbracket', new TournamentScreen(screens, { tour: game.tour, portraits, next, autos: game.tourAutos, sim: isCpuMatch(game.tour, next), last, cpuFights: game.tourCfg.cpuFights }));
+}
+
+// LUTAS DA CPU = RODAR: a luta de verdade (o mesmo motor, CPU × CPU) acelerada atrás de um painel "lutando…" com a vida dos
+// dois; no fim volta para a chave mostrando quem venceu (sem a tela de vitória)
+const TOUR_RUN_SPEED = 10;
+function startTourRun() {
+  game.tourRun = true;
+  startTourMatch();
+}
+
+function tourRunPanel() {
+  if (game.tourRunEl) return game.tourRunEl;
+  const m = game.tourMatch;
+  const P = game.tour.participants;
+  const [a, b] = m.swapped ? [P[m.match.b], P[m.match.a]] : [P[m.match.a], P[m.match.b]];
+  const side = (p, k) => `<div class="tr-f ${k}" style="--c:${p.defs[0].color}"><img src="${portraits[p.defs[0].id] || ''}" alt=""><b>${p.name}</b><small>${p.defs.map((d) => d.name).join(' · ')}</small><div class="tr-hp"><i></i></div><em class="tr-wins"></em></div>`;
+  const e = document.createElement('div');
+  e.className = 'screen';
+  e.id = 'tourrun';
+  e.innerHTML = `<div class="tr-box"><div class="tr-tag">${t('tour.running')}</div>${side(a, 'a')}<div class="tr-vs">VS</div>${side(b, 'b')}<div class="tr-skip">${t('tour.run_skip', { back: 'B/○ · Esc' })}</div></div>`;
+  screens.appendChild(e);
+  game.tourRunEl = e;
+  return e;
+}
+
+function updateTourRunPanel() {
+  const e = tourRunPanel();
+  const fs = game.match.fighters;
+  e.querySelectorAll('.tr-hp i').forEach((bar, i) => { bar.style.width = `${Math.max(0, (fs[i].health / fs[i].maxHealth) * 100)}%`; });
+  e.querySelectorAll('.tr-wins').forEach((w, i) => { w.textContent = '◆'.repeat(game.match.wins[i]) || ''; });
+}
+
+function closeTourRun() {
+  game.tourRun = false;
+  if (game.tourRunEl) { game.tourRunEl.remove(); game.tourRunEl = null; }
+}
+
+function finishTourRun(winnerSide) {
+  closeTourRun();
+  const m = game.tourMatch;
+  const sides = m.swapped ? [m.match.b, m.match.a] : [m.match.a, m.match.b];
+  setWinner(game.tour, m.r, m.m, sides[winnerSide]);
+  toTourBracket({ r: m.r, m: m.m, winner: sides[winnerSide] });
 }
 
 function simTourMatch() {
@@ -1014,7 +1062,9 @@ function tick(dt) {
     case 'tbracket': {
       const c = game.screen.update(input);
       if (c === 'move') audio.play('select');
-      else if (c === 'fight') { audio.play('confirm'); startTourMatch(); }
+      else if (c === 'fight' || c === 'watch') { audio.play('confirm'); startTourMatch(); }
+      else if (c === 'run') { audio.play('confirm'); startTourRun(); }
+      else if (c === 'quicksim') { audio.play('ready'); simTourMatch(); }
       else if (c === 'clash') audio.play('bladeHit');
       else if (c === 'simdone') { audio.play('ready'); simTourMatch(); }
       else if (c === 'next') toTourBracket();
@@ -1066,6 +1116,19 @@ function tick(dt) {
       updateLan();
       break;
     case 'fight':
+      // torneio, Lutas da CPU = RODAR: a luta corre acelerada atrás do painel; voltar (B/Esc) pula para o sorteio
+      if (game.tourRun) {
+        hud.show(false);
+        if (input.keyPressedOnce('Escape') || input.players.some((p) => p.humanPressed && (p.humanPressed.block || p.humanPressed.start))) {
+          closeTourRun();
+          endMatch();
+          simTourMatch();
+          break;
+        }
+        for (let k = 0; k < TOUR_RUN_SPEED && game.tourRun && game.match; k++) game.match.update(dt);
+        if (game.tourRun && game.match) updateTourRunPanel();
+        break;
+      }
       const pauser = input.players.findIndex((p) => (!p.cpu && p.pressed.start) || (p.humanPressed && p.humanPressed.start && (p.cpu || p._virtual)));
       // treino: Select reinicia a posição
       if (game.match.training && input.players[0].humanPressed && input.players[0].humanPressed.select) game.match.resetTraining();

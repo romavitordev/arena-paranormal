@@ -1,6 +1,6 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.46.0 (revisado em 2026-10-26: Sede Incontrolável — Raziel revisto pelo cânone, RZ-01 a RZ-09, barra de sangue da forma verdadeira, auditoria 3.1 do Arthur e correção do hideRangedProps)
+**Versão de referência atual:** v3.47.0 (revisado em 2026-10-27: Menus e Combos — menu principal em seções com o Outro Lado "em breve", Torneio novo com as Lutas da CPU (sorteio/rodar/assistir), limite de combo, Raziel balanceado, Mananciais refeitos e a 1ª leva da melhoria das animações)
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente
 
@@ -9,7 +9,7 @@
 
 # PRÓXIMA GRANDE ATUALIZAÇÃO — LUTA + MODO PvE (planejamento de 2026-10-18)
 
-**Estado em 2026-10-26 (v3.46.0):**
+**Estado em 2026-10-27 (v3.47.0):**
 - [~] 2.2 Modelos antigos: Xande e Aguiar (v3.33.0), Fantasma, Kemi e Gal Sal + as lâminas Ereškigal (v3.34.0), Kaiser
   (v3.38.0), Balu e Lírio (v3.40.0), Arthur e Joui (v3.41.0), Arnaldo, Anfitrião, Veríssimo, Kian e O Diabo (2026-10-26)
   refeitos pelas artes oficiais; faltam os outros antigos
@@ -23,7 +23,10 @@
 - [x] 2.1 Animações de movimentação: 1ª parte na v3.37.0 (corrida, caminhada, pulo, queda, dash, esquiva, reação e 18
   posturas paradas próprias); 2ª parte (2026-10-26): pacote gratuito importado e redirecionado — corrida, caminhada e
   queda (ver *REAJUSTE DAS ANIMAÇÕES*).
-- [ ] **MELHORIA GERAL DE TODAS AS ANIMAÇÕES (pedido de 2026-10-26):** Todas as animações de movimento, ataques básicos,
+- [~] **MELHORIA GERAL DE TODAS AS ANIMAÇÕES** — 1ª leva na v3.47.0 (`anim/strikePolish.js`): os 15 golpes genéricos
+  (jab, direto, ganchos, gancho de baixo, soco pesado, os chutes, joelhada, soco de um braço, cortes de faca) ganharam
+  antecipação, passagem (overshoot) e peso na volta, com o acerto no mesmo instante de antes. Próximas levas: combos e
+  finalizadores próprios, esquivas, habilidades. Pedido original (2026-10-26): Todas as animações de movimento, ataques básicos,
   combos, finalizadores, esquivas e habilidades de todos os personagens precisam ser melhoradas e retrabalhadas. Buscar
   referências da internet (jogos de luta consagrados como Naruto Storm, Guilty Gear, Tekken, além de coreografias de artes
   marciais e animes de ação) para trazer muito mais impacto, fluidez, peso e naturalidade (ver *2.1*).
@@ -83,7 +86,19 @@
         e forte, SEDE INCONTROLÁVEL: devora quem está morrendo e se cura).
         Equipe nova "Vampiros" (Alvira, Velisar, Zéfero, Sabara quando entrarem).
 - [ ] 3–14 Modo PvE, que vai se chamar **Outro Lado** (dungeons, Espreitador como chefe, progressão, salvamento,
-  cooperativo): não iniciado; já anunciado como "em desenvolvimento, sem data" na página Sobre.
+  cooperativo): não iniciado; já anunciado como "em desenvolvimento, sem data" na página Sobre. Na v3.47.0 entrou só a
+  opção OUTRO LADO no menu principal (selo EM BREVE e aviso ao escolher), como pedido.
+- [x] **Menu principal em seções** (v3.47.0): LUTAR / PRATICAR / JOGO, Outro Lado com EM BREVE, descrição em cartão ao
+  lado (telas grandes), opções de JOGO menores, lista que rola em telas baixas.
+- [x] **Limite de combo e balanceamento** (v3.47.0): `COMBAT.comboBreak` (3 s ou 12 acertos → ESCAPOU DO COMBO, 0,5 s
+  invulnerável; especial e agarrão não são cortados); a CPU usa a Substituição num combo longo mesmo com 1 carga. Raziel:
+  roubo de vida 8% → 5% (forma 20% → 14%), Bote Retalhador 92 → 84 — de 9 em 10 vitórias para 6 em 10; hitstun máximo
+  de ~7 s para ~3,5 s na maioria das lutas.
+- [x] **Torneio** (v3.47.0): montagem com o visual novo (cantos cortados, faixa de cor por tipo de vaga, número da vaga,
+  regras num painel só) e a regra **LUTAS DA CPU**: SORTEIO (como antes, só o resultado), RODAR (a luta de verdade
+  acelerada atrás do painel "lutando…" com a vida dos dois; mostra só quem venceu) ou ASSISTIR (a luta inteira na tela).
+  Corrigido: nas regras ◀ ▶ mudavam o valor e não dava para chegar às outras regras pelo controle (agora ◀ ▶ escolhem e
+  A/× muda o valor). A chave ganhou o fundo roxo do menu.
 - [x] arrumar posição das facas/espadas nas mãos dos personagens (feito em 2026-10-23: o cabo atravessa o punho fechado
   — `inFist` em `models/props.js` —, a lâmina sai pelo lado do polegar e o pomo aparece embaixo).
 

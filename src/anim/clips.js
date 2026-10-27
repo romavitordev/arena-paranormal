@@ -19,6 +19,7 @@ import { addPowerClips } from './powerClips.js';
 import { addRazielClips } from './razielClips.js';
 import { UAL_CLIPS } from './ualClips.js';
 import { locomotionClips } from './locomotionClips.js';
+import { polishStrikes, POLISHED_STRIKES } from './strikePolish.js';
 
 const k = (t, pose) => ({ t, pose });
 
@@ -554,6 +555,9 @@ CLIPS.walk_back = {
   ...CLIPS.walk, axis: 'back',
   keys: CLIPS.walk.keys.map((key) => ({ t: 1 - key.t, pose: { ...key.pose, ...GUARD_TOP } })).reverse(),
 };
+
+// 1ª leva da melhoria geral das animações (anim/strikePolish.js): antecipação, passagem e peso nos golpes genéricos
+polishStrikes(CLIPS, k, GUARD, POLISHED_STRIKES);
 
 // animações próprias das formas (Deus da Morte e Diabo)
 addFormClips(CLIPS, k, mirrorPose);

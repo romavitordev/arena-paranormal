@@ -1,5 +1,22 @@
 # Changelog
 
+## v3.47.0 — Menus e Combos
+
+### Adicionado
+- `HomeScreen`: opções com `group` (`play` / `practice` / `game` → títulos `.hsec`) e `soon` (selo `.badge` + aviso `.hsoon`); opção `pve` (Outro Lado). Chaves `menu.sec.*`, `menu.pve*`, `menu.soon*` nos 13 idiomas.
+- Torneio: `cfg.cpuFights` (`quick` | `run` | `watch`), pílula LUTAS DA CPU; `TournamentScreen({ cpuFights })` com `run` / `watch` / `quicksim`; `startTourRun` / `finishTourRun` em `main.js` (a luta real em `TOUR_RUN_SPEED` = 10× atrás de `#tourrun`). Chaves `tour.cpu_fights`, `tour.cf_*`, `tour.watch`, `tour.run`, `tour.running`, `tour.run_skip`, `tour.cpu_vs_cpu`.
+- `COMBAT.comboBreak` ({ time: 3, hits: 12, iframes: 0.5 }) em `applyHit` (`victim.comboStart`).
+- `anim/strikePolish.js` (`polishStrikes`, `POLISHED_STRIKES`): antecipação, passagem e volta nos 15 golpes genéricos.
+
+### Alterado
+- Visual do menu principal (coluna em seções + cartão de descrição), da montagem do torneio (`#tsetup`) e da chave (`#tbracket`).
+- CPU: Substituição com a última carga em combo de 4+ acertos.
+- Raziel: `lifesteal` 0,08 → 0,05 (forma 0,2 → 0,14); Bote Retalhador 92 → 84.
+- Manancial: `char_manancial.py` na técnica atual; texturas `face_manancial` e `skin_manancial_torso` (saem `gown_manancial` / `pants_manancial`).
+
+### Corrigido
+- Montagem do torneio: ◀ ▶ só mudavam o valor nas regras e o controle não chegava às outras (agora ◀ ▶ navegam e A/× muda).
+
 ## v3.46.0 — Sede Incontrolável
 
 ### Adicionado

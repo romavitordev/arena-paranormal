@@ -2,6 +2,17 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.47.0 — Menus e Combos
+- MENU PRINCIPAL NOVO: opções em seções (LUTAR, PRATICAR, JOGO), descrição num cartão ao lado; cabe tudo na tela, inclusive no celular.
+- OUTRO LADO (EM BREVE): o modo PvE já aparece no menu com o selo EM BREVE e um aviso do que vem aí.
+- TORNEIO DE CARA NOVA: montagem com cartas na cor de cada vaga e regras num painel só; a chave com o fundo roxo do menu.
+- LUTAS DA CPU NO TORNEIO: SORTEIO (só o resultado), RODAR (a luta inteira de verdade, acelerada, mostrando só quem venceu) ou ASSISTIR (a luta inteira na tela).
+- CORREÇÃO NO TORNEIO: pelo controle/teclado dá para chegar a todas as regras.
+- LIMITE DE COMBO: nenhum combo prende mais de 3 s ou 12 golpes — quem apanha escapa com um instante invulnerável; a CPU também usa a Substituição em combos longos.
+- RAZIEL BALANCEADO: menos roubo de vida e Bote Retalhador um pouco mais fraco.
+- MANANCIAIS REFEITOS pelas miniaturas oficiais e pela HQ: pálidos, esquálidos, orelhas pontudas, olhos pretos, cabelo preto comprido e trapos.
+- ANIMAÇÕES COM MAIS IMPACTO (1ª leva): socos, chutes, joelhadas e cortes de faca carregam antes, passam do ponto no impacto e voltam com peso.
+
 ## v3.46.0 — Sede Incontrolável: o Raziel completo
 - RAZIEL REVISTO PELO CÂNONE: o kit inteiro do líder dos Vampiros foi conferido com a ficha e o episódio 9 de Hexatombe.
 - TURNO EXTRA DE VERDADE: o finalizador do combo que acerta deixa a próxima habilidade (em até 2 s) sair sem recarga — as duas ações por rodada da ficha (uma vez a cada 10 s).

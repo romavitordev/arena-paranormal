@@ -1,5 +1,15 @@
 # Registro administrativo de alterações
 
+## v3.47.0 — Menus e Combos
+
+- Versão: `VERSION` 3.46.0 → **3.47.0** (package.json/lock junto). Data: 2026-10-27. A troca de versão também renova o cache de modelos do service worker (`arena-arquivos-<versão>`): sem ela, quem já tinha a v3.46.0 continuava vendo os Mananciais antigos.
+- **Menu principal:** seções LUTAR / PRATICAR / JOGO, opção OUTRO LADO com EM BREVE e aviso (pedido do dono: o PvE fica só a opção com o popup por enquanto); cartão de descrição ao lado; testado no teclado (Enter, ▼×4, Enter abre, Esc fecha) e em 375×812.
+- **Torneio:** visual novo; LUTAS DA CPU (sorteio / rodar / assistir) testadas: RODAR — a luta corre a 10× atrás do painel e volta à chave com "CPU 1 VENCEU"; ASSISTIR — a final CPU × CPU na tela; PULAR → sorteio. Correção da navegação das regras pelo controle.
+- **Combos:** limite de 3 s / 12 acertos (`comboBreak`); CPU usa a Substituição em combo longo. Bateria de 10 partidas CPU × CPU do Raziel contra 5 perfis: hitstun máximo caiu de ~7 s para ~3,5 s na maioria, 0–12 escapes por partida, sem erro.
+- **Raziel balanceado:** roubo de vida 0,08 → 0,05 (forma 0,2 → 0,14), Bote 92 → 84: de 9/10 para 6/10 vitórias na mesma bateria.
+- **Mananciais refeitos** (commit 162d942, entram nesta versão).
+- **Animações (1ª leva):** `strikePolish.js` em 15 golpes genéricos; validado (sem NaN, cotovelos/joelhos sem inverter, acerto no mesmo instante).
+
 ## v3.46.0 — Sede Incontrolável
 
 - Versão: `VERSION` 3.45.0 → **3.46.0** (package.json/lock junto). Data: 2026-10-26.

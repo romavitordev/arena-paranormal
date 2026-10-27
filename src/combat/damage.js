@@ -200,6 +200,7 @@ export function applyHit(world, attacker, victim, o) {
     if (shield.shield <= 0) { shield.time = 0; victim.notify('TELA ROMPIDA', true); }
   }
   const dealt = victim.takeDamage(incoming);
+  if (!victim.comboHits) victim.comboStart = world.time; // começo do combo (para o limite de combo)
   victim.comboHits = (victim.comboHits || 0) + 1;
   victim.comboDamage = (victim.comboDamage || 0) + dealt;
 
@@ -223,6 +224,18 @@ export function applyHit(world, attacker, victim, o) {
   if (reaction && victim.def.poise && victim.comboHits > victim.def.poise.hits && !o.grab && o.kind !== 'special') {
     reaction = false;
     if (victim.comboHits === victim.def.poise.hits + 1) { victim.notify('INABALÁVEL', true); world.fx.play('FX_BLOCK', victim.chestPos(), { color: 0x6a6670 }); }
+  }
+  // LIMITE DE COMBO (todos): combo longo demais não segura mais — quem apanha escapa, invulnerável por um instante
+  const CB = COMBAT.comboBreak;
+  if (reaction && CB && !o.grab && o.kind !== 'special' && victim.state !== 'ko' && victim.health > 0
+    && (victim.comboHits > CB.hits || world.time - (victim.comboStart ?? world.time) > CB.time)) {
+    reaction = false;
+    victim.invuln = Math.max(victim.invuln || 0, CB.iframes);
+    if ((victim.state === 'hitstun' || victim.state === 'stun') && victim.onGround) { victim.launched = false; victim.setState('idle'); }
+    victim.comboHits = 0;
+    victim.comboLaunches = 0;
+    world.fx.ring(victim.chestPos(), { color: 0xffffff, radius: 1.4, life: 0.3 });
+    victim.notify('ESCAPOU DO COMBO', true);
   }
   // resistência DURANTE golpes pesados (victim.superArmor): um golpe pequeno não cancela um golpe pesado já avançado.
   // Golpes fortes, lançamentos, agarrões, quebras de defesa e especiais continuam interrompendo.

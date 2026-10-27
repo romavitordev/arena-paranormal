@@ -1083,7 +1083,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ### Habilidades
 
-- **Bote Retalhador** — △ + ○ / Y + B · custo 30 · cooldown 12 s · dano 92 · alcance 2.8 m
+- **Bote Retalhador** — △ + ○ / Y + B · custo 30 · cooldown 12 s · dano 84 · alcance 2.8 m
   Agacha, salta sobre o adversário e desce rasgando com as duas garras: o golpe mais forte dele, que faz sangrar. Quem ESQUIVA ainda toma METADE (como na ficha). Aguenta um golpe na preparação; se errar, fica exposto.
 - **Mordida** — △ + □ / Y + X · custo 20 · cooldown 9 s · dano 28 · alcance 1.7 m
   Dá o bote curto e, se alcança, segura pelo pescoço e morde duas vezes: tira vida, faz sangrar e CURA o Raziel com o sangue que bebe.

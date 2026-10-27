@@ -65,17 +65,20 @@ const VS_OPTIONS = (prefix, team) => [
   { id: `${prefix}:cvc`, label: t('vs.cvc'), desc: t('vs.cvc.desc') },
 ];
 // textos no idioma atual: montado a cada HomeScreen (trocar o idioma nas OPÇÕES e voltar já mostra traduzido)
+// group: a seção do menu principal (LUTAR / PRATICAR / JOGO; as de JOGO aparecem menores). soon: ainda não abre —
+// mostra o aviso "em breve" (o Outro Lado, modo PvE do TODO §3–14)
 const homeOptions = () => [
-  { id: 'solo', label: t('menu.solo'), desc: t('menu.solo.desc'), sub: VS_OPTIONS('solo', false) },
-  { id: 'team', label: t('menu.team'), desc: t('menu.team.desc'), sub: VS_OPTIONS('team', true) },
-  { id: 'tower', label: t('menu.tower'), desc: t('menu.tower.desc') },
-  { id: 'tournament', label: t('menu.tournament'), desc: t('menu.tournament.desc') },
-  { id: 'lan', label: t('menu.lan'), desc: t('menu.lan.desc') },
-  { id: 'tutorial', label: t('menu.tutorial'), desc: t('menu.tutorial.desc') },
-  { id: 'training', label: t('menu.training'), desc: t('menu.training.desc') },
-  { id: 'news', label: t('menu.news'), desc: t('menu.news.desc', { v: VERSION_LABEL }) },
-  { id: 'options', label: t('menu.options'), desc: t('menu.options.desc') },
-  { id: 'about', label: t('menu.about'), desc: t('menu.about.desc') },
+  { id: 'solo', group: 'play', label: t('menu.solo'), desc: t('menu.solo.desc'), sub: VS_OPTIONS('solo', false) },
+  { id: 'team', group: 'play', label: t('menu.team'), desc: t('menu.team.desc'), sub: VS_OPTIONS('team', true) },
+  { id: 'tower', group: 'play', label: t('menu.tower'), desc: t('menu.tower.desc') },
+  { id: 'tournament', group: 'play', label: t('menu.tournament'), desc: t('menu.tournament.desc') },
+  { id: 'pve', group: 'play', label: t('menu.pve'), desc: t('menu.pve.desc'), soon: true },
+  { id: 'lan', group: 'play', label: t('menu.lan'), desc: t('menu.lan.desc') },
+  { id: 'tutorial', group: 'practice', label: t('menu.tutorial'), desc: t('menu.tutorial.desc') },
+  { id: 'training', group: 'practice', label: t('menu.training'), desc: t('menu.training.desc') },
+  { id: 'news', group: 'game', label: t('menu.news'), desc: t('menu.news.desc', { v: VERSION_LABEL }) },
+  { id: 'options', group: 'game', label: t('menu.options'), desc: t('menu.options.desc') },
+  { id: 'about', group: 'game', label: t('menu.about'), desc: t('menu.about.desc') },
 ];
 
 export class HomeScreen {
@@ -101,10 +104,13 @@ export class HomeScreen {
         <div class="hlist"></div>
         <div class="hdesc"></div>
       </div>
+      <div class="hsoon" hidden><div class="hsoon-box"><span class="hsoon-tag">${t('menu.soon')}</span><h3></h3><p>${t('menu.soon.text')}</p><div class="hsoon-ok">${t('menu.soon.ok')}</div></div></div>
       <div class="ver">${VERSION_LABEL}</div>
       <div class="foot">${touchOnly ? `<span>${t('menu.foot_touch')}</span>` : `<span>${t('menu.foot_confirm', { ok: OK, back: BACK })}</span><span>${t('menu.foot_keys')}</span>`}</div>`);
     this.desc = this.el.querySelector('.hdesc');
     this.listEl = this.el.querySelector('.hlist');
+    this.soonEl = this.el.querySelector('.hsoon');
+    this.soonEl.addEventListener('click', (e) => { e.stopPropagation(); this.closeSoon = true; });
     this.home = homeOptions();
     this.list = this.home;
     this.parent = null;
@@ -148,8 +154,15 @@ export class HomeScreen {
   // monta as opções da lista atual (menu principal ou submenu)
   buildList() {
     this.visibleList = this.touchOnly ? this.list.filter((o) => !o.id.endsWith(':pvp')) : this.list;
+    // no menu principal, o título de cada seção (não é selecionável) antes da primeira opção dela
+    let group = null;
     this.listEl.innerHTML = (this.parent ? `<div class="hcrumb">${this.parent.label}</div>` : '')
-      + this.visibleList.map((o) => `<div class="hopt" data-id="${o.id}"><span class="mk">◆</span>${o.label}${o.sub ? ' ▸' : ''}</div>`).join('');
+      + this.visibleList.map((o) => {
+        const head = o.group && o.group !== group ? `<div class="hsec">${t('menu.sec.' + o.group)}</div>` : '';
+        group = o.group;
+        const cls = `hopt${o.group === 'game' ? ' small' : ''}${o.soon ? ' soon' : ''}`;
+        return `${head}<div class="${cls}" data-id="${o.id}"><span class="mk">◆</span>${o.label}${o.sub ? ' <i class="arr">▸</i>' : ''}${o.soon ? `<em class="badge">${t('menu.soon')}</em>` : ''}</div>`;
+      }).join('');
     this.opts = [...this.listEl.querySelectorAll('.hopt')];
     this.opts.forEach((o, i) => {
       // destaque ao passar o MOUSE (só mouse: no celular, mudar a tela no "hover" fazia o navegador engolir o 1º toque —
@@ -163,6 +176,13 @@ export class HomeScreen {
   // escolher uma opção: abre submenu ou devolve o id
   choose(i) {
     const o = this.visibleList[i];
+    if (o.soon) {
+      // ainda não abre: o aviso "em breve" por cima do menu (fecha com confirmar, voltar ou um toque)
+      this.soonEl.querySelector('h3').textContent = o.label;
+      this.soonEl.hidden = false;
+      this.soonOpen = true;
+      return 'move';
+    }
     if (o.sub) {
       this.parent = o;
       this.list = o.sub;
@@ -176,6 +196,7 @@ export class HomeScreen {
   render() {
     if (!this.opts) return;
     this.opts.forEach((o, i) => o.classList.toggle('on', i === this.index));
+    if (this.menu && this.opts[this.index]) this.opts[this.index].scrollIntoView({ block: 'nearest' }); // a lista rola em telas baixas
     this.desc.textContent = this.visibleList[this.index] ? this.visibleList[this.index].desc : '';
   }
 
@@ -186,6 +207,13 @@ export class HomeScreen {
       const go = this.tapped || input.keyPressedOnce('Enter') || input.players.some((x) => startGo(x, input) || confirm(x));
       this.tapped = false;
       if (go) { this.setMenu(true); return 'start'; }
+      return null;
+    }
+    if (this.soonOpen) {
+      const close = this.closeSoon || input.keyPressedOnce('Enter') || input.keyPressedOnce('Escape') || input.players.some((p) => confirm(p) || back(p) || startGo(p, input));
+      this.closeSoon = false;
+      this.clicked = undefined;
+      if (close) { this.soonOpen = false; this.soonEl.hidden = true; return 'move'; }
       return null;
     }
     if (this.clicked !== undefined) {
@@ -965,7 +993,8 @@ export class TournamentSetupScreen {
     this.stages = stages;
     this.portraits = portraits;
     // grade de foco: linha 0 formato | 1–2 vagas | 3 regras | 4 começar
-    this.grid = [['format'], ['s0', 's1', 's2', 's3'], ['s4', 's5', 's6', 's7'], ['timer', 'rounds', 'cpuLevel', 'stage'], ['go']];
+    this.grid = [['format'], ['s0', 's1', 's2', 's3'], ['s4', 's5', 's6', 's7'], ['timer', 'rounds', 'cpuLevel', 'stage', 'cpuFights'], ['go']];
+    if (!cfg.cpuFights) cfg.cpuFights = 'quick';
     this.pos = focus || [1, 0];
     this.el = el(root, 'screen', 'tsetup', '');
     this.render();
@@ -1002,7 +1031,7 @@ export class TournamentSetupScreen {
     const pill = (k, label, value) => `<div class="ts-pill ${focus === k ? 'on-focus' : ''}" data-k="${k}"><small>${label}</small><b><i data-dir="-1">◀</i> ${value} <i data-dir="1">▶</i></b></div>`;
     // dica de controle conforme o que está selecionado (só o que dá para fazer ali)
     const hint = focus[0] === 's' ? (c.slots[Number(focus.slice(1))].type === 'empty' ? t('tour.hint_add', { ok: OK }) : t('tour.hint_slot', { ok: OK, rand: RAND }))
-      : focus === 'format' ? t('tour.hint_format', { ok: OK }) : focus === 'go' ? t('tour.hint_go', { ok: OK }) : t('tour.hint_rule');
+      : focus === 'format' ? t('tour.hint_format', { ok: OK }) : focus === 'go' ? t('tour.hint_go', { ok: OK }) : t('tour.hint_rule', { ok: OK });
     this.el.innerHTML = `
       <div class="ts-head"><h2>${t('menu.tournament')}</h2><div class="ts-count"><b>${this.active}</b> ${t('tour.count')}</div></div>
       <div class="ts-step"><span>1</span>${t('tour.format')}</div>
@@ -1010,7 +1039,8 @@ export class TournamentSetupScreen {
       <div class="ts-step"><span>2</span>${t('tour.count')}</div>
       <div class="ts-grid">${c.slots.map(card).join('')}</div>
       <div class="ts-step"><span>3</span>${t('tour.rules')}</div>
-      <div class="ts-rules">${pill('timer', t('cfg.time'), timerLabel())}${pill('rounds', t('settings.rounds'), SETTINGS.rounds)}${pill('cpuLevel', t('settings.difficulty'), cpuLabel())}${pill('stage', t('tour.stage'), stage.name)}</div>
+      <div class="ts-rules">${pill('timer', t('cfg.time'), timerLabel())}${pill('rounds', t('settings.rounds'), SETTINGS.rounds)}${pill('cpuLevel', t('settings.difficulty'), cpuLabel())}${pill('stage', t('tour.stage'), stage.name)}${pill('cpuFights', t('tour.cpu_fights'), t('tour.cf_' + c.cpuFights))}
+        <div class="ts-pill-note">${t('tour.cf_' + c.cpuFights + '_desc')}</div></div>
       <div class="ts-go ${this.active >= 2 ? '' : 'off'} ${focus === 'go' ? 'on-focus' : ''}" data-k="go">${this.active >= 2 ? `${t('ui.start')} ▶` : t('tour.need2')}</div>
       <div class="ts-hint"><span class="ts-hint-now">${hint}</span><span>${t('tour.hint_nav', { back: BACK })}</span></div>`;
     this.el.querySelectorAll('[data-k]').forEach((e) => {
@@ -1049,6 +1079,10 @@ export class TournamentSetupScreen {
     else if (k === 'stage') {
       const i = this.stages.findIndex((x) => x.id === c.stage);
       c.stage = this.stages[(i + dir + this.stages.length) % this.stages.length].id;
+    } else if (k === 'cpuFights') {
+      // LUTAS DA CPU: sorteio (só o resultado) → rodar a luta inteira sem mostrar → assistir a luta
+      const order = ['quick', 'run', 'watch'];
+      c.cpuFights = order[(order.indexOf(c.cpuFights) + dir + order.length) % order.length];
     }
     // trocar solo/equipe apaga as escolhas (o número de lutadores muda)
     if (k === 'format') c.slots.forEach((s) => { s.defs = null; });
@@ -1088,8 +1122,9 @@ export class TournamentSetupScreen {
     for (const p of input.players) {
       if (p.menu.up) return this.move(-1, 0);
       if (p.menu.down) return this.move(1, 0);
-      // nas regras ◀ ▶ mudam o valor; no resto andam
-      const onRule = this.pos[0] === 3 || this.pos[0] === 0;
+      // no FORMATO (um item só) ◀ ▶ trocam o valor; no resto andam — nas regras, A/× gira o valor (antes ◀ ▶ mudavam o
+      // valor também nas regras e não dava para sair do TEMPO para as outras pelo controle)
+      const onRule = this.pos[0] === 0;
       if (p.menu.left) return onRule ? this.act(-1) : this.move(0, -1);
       if (p.menu.right) return onRule ? this.act(1) : this.move(0, 1);
       if (random(p) && this.focus[0] === 's' && this.cfg.slots[Number(this.focus.slice(1))].type !== 'empty') return `pick:${this.focus.slice(1)}`;
@@ -1110,7 +1145,10 @@ export class TournamentSetupScreen {
 export class TournamentScreen {
   // sim: a próxima luta é só de CPU — o painel mostra o duelo animado e a tela devolve 'clash' (som) e 'simdone';
   // last: { r, m, winner } da luta que acabou de ser decidida — mostra quem venceu e quem caiu e devolve 'next'
-  constructor(root, { tour, portraits, next = null, autos = new Set(), sim = false, last = null }) {
+  // cpuFights ('quick' | 'run' | 'watch'): nas lutas só de CPU, 'quick' sorteia (o duelo animado); 'run' e 'watch' mostram
+  // o VS com RODAR LUTA / ASSISTIR (a luta de verdade) e PULAR (sorteio)
+  constructor(root, { tour, portraits, next = null, autos = new Set(), sim = false, last = null, cpuFights = 'quick' }) {
+    if (sim && cpuFights !== 'quick') { this.cpuPlay = cpuFights; sim = false; }
     this.tour = tour;
     this.t0 = performance.now();
     const P = tour.participants;
@@ -1196,10 +1234,12 @@ export class TournamentScreen {
     } else {
       const a = P[next.match.a];
       const b = P[next.match.b];
-      opts = [['fight', t('tour.fight')], ['quit', t('tour.quit')]];
+      opts = this.cpuPlay
+        ? [[this.cpuPlay, t(this.cpuPlay === 'watch' ? 'tour.watch' : 'tour.run')], ['quicksim', t('tour.skip')], ['quit', t('tour.quit')]]
+        : [['fight', t('tour.fight')], ['quit', t('tour.quit')]];
       const fighter = (p, side) => `<div class="tv-f ${side}" style="--c:${p.defs[0].color}"><img src="${portraits[p.defs[0].id] || ''}" alt=""><b>${p.name}</b><small>${p.defs.map((d) => d.name).join(' · ')}</small></div>`;
       const sides = a.human && b.human ? `<p class="tv-sides">${t('tour.sides', { a: a.name, b: b.name })}</p>` : '';
-      panel = `<div class="tv-panel"><div class="tv-round">${t('tour.next')} · ${roundName(next.r)}</div>${fighter(a, 'l')}<div class="tv-vs">VS</div>${fighter(b, 'r')}${sides}</div>`;
+      panel = `<div class="tv-panel"><div class="tv-round">${t('tour.next')} · ${roundName(next.r)}${this.cpuPlay ? ` · ${t('tour.cpu_vs_cpu')}` : ''}</div>${fighter(a, 'l')}<div class="tv-vs">VS</div>${fighter(b, 'r')}${sides}</div>`;
     }
     this.opts = opts;
     this.index = 0;
