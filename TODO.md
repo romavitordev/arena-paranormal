@@ -1619,7 +1619,7 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
         falas (intro e vitória contra o elenco), a CPU, o check e os testes no jogo.
       - [x] **EQUIPES DUPLAS (2026-10-27)**: `teams` no personagem = outras equipes além da `origin` (que decide o grupo na seleção e a cor do retrato); aparecem como etiquetas extras no cartão, na ficha, nos golpes e no filtro da página Sobre (`config/teams.js defTeams`). Marcados: Celestine (Portadores + Ordo Calamitas), Arnaldo (Portadores + Ordo Realitas), Henri (Mascarados + Escriptas), Juan Portador (Portadores + Mascarados). A equipe Luzidios saiu (não existe no jogo).
       - [ ] **ORDO CALAMITAS**: Gaius, Amalia, Cornelius... (grupo próprio entre os Portadores e as Relíquias).
-      - [ ] **O MODELO DAS MÁSCARAS** que a Magistrada chama (os membros da Seita das Máscaras) — refazer na técnica atual
+      - [x] **O MODELO DAS MÁSCARAS** (feito em 2026-10-27: modelo próprio `tools/blender/char_seita.py` → `public/models/seita.glb` — túnica branca longa com as regiões pretas, capuz, pelerine, forca no pescoço, corda na cintura e os Símbolos tatuados nos antebraços, como na wiki; as máscaras em 3D, uma por membro: Nathaniel, riscada de vermelho, preta e a do sorriso — `weapons.js seitaMask`) que a Magistrada chama (os membros da Seita das Máscaras) — refazer na técnica atual
         (pedido de 2026-10-27).
 - [ ] **PARA DEPOIS (2026-10-27) — SKIN do ANFITRIÃO do ARNALDO ≠ ANFITRIÃO base:** o Anfitrião que sai da
       transformação do Arnaldo terá uma skin diferente do Anfitrião selecionável das Relíquias — mesmas habilidades, só o

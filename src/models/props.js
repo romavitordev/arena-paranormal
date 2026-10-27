@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { glowMat, toon } from './rig.js';
 import { MATERIAL_TEXTURES } from './textures.js';
-import { katana, scabbard, shiNoKage, relicScabbard, relicBlade, m4, sniper, guitarCase, bloodArm, bloodForearmBlade, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, roundGlasses, neonWraps, pulseEmitter, bandolier, bengala, mustache, socadeira, peixeira, spikedLantern, tenebrisPendant, chainHatchet, despairMask } from './weapons.js';
+import { katana, scabbard, shiNoKage, relicScabbard, relicBlade, m4, sniper, guitarCase, bloodArm, bloodForearmBlade, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, roundGlasses, neonWraps, pulseEmitter, bandolier, bengala, mustache, socadeira, peixeira, spikedLantern, tenebrisPendant, chainHatchet, despairMask, seitaMask, SEITA_MASKS } from './weapons.js';
 
 // Armas e acessórios adicionados em código sobre os modelos do Blender.
 // Usam só `sockets`, `attach()` e `props`, que existem nos dois tipos de rig.
@@ -1106,6 +1106,19 @@ export function addCelestineProps(rig) {
 export function addCelestineMagistradaProps(rig) {
   addCelestineProps(rig); // a variante troca as peças da base: as machadinhas e a Máscara vêm de lá
   rig.showProp('despairMask', true);
+}
+
+// MEMBRO DA SEITA DAS MÁSCARAS (as invocações da Magistrada): as máscaras ficam todas no rosto, escondidas — quem invoca
+// mostra uma por membro (abilities.js summonMasks), cada um com a sua
+export function addSeitaProps(rig) {
+  const { sockets, props } = rig;
+  for (const kind of SEITA_MASKS) {
+    const m = seitaMask(kind);
+    m.position.set(0, -0.02, -0.02);
+    m.visible = false;
+    sockets.mouth.add(m);
+    props['mask_' + kind] = m;
+  }
 }
 
 export function addRazielProps(rig) {

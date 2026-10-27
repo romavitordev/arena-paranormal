@@ -69,9 +69,8 @@ export function applyWeaponCurse(world, f, el, { duration = 8, props = null, ble
 }
 
 export { DanteClone }; // o Embaralhar do Dante (guizoAbilities.js) usa as cópias que lutam
-import { MATERIAL_TEXTURES } from '../models/textures.js';
 import { buildHuntingDog } from '../models/dog.js';
-import { bloodCoat, elementCoat } from '../models/weapons.js';
+import { bloodCoat, elementCoat, SEITA_MASKS } from '../models/weapons.js';
 import { addBloodPool, poolsOf, splatGeo } from './bloodPools.js';
 import { inscribe } from './kianPowers.js';
 import { scheduleTeamParts, linkCards } from './teamSpecials.js';
@@ -2895,12 +2894,7 @@ Object.assign(ABILITY_TYPES, {
       f.vel.set(0, 0, 0);
       f.anim.play('cast_up', { restart: true, duration: 0.7 });
       world.audio.play('fearGaze', { volume: 0.7, pitch: 0.6 });
-      const masks = ['mask_seita_nathaniel', 'mask_seita_riscos', 'mask_seita_negra'];
-      const tex = {};
-      const maskTex = (k) => {
-        if (!tex[k]) { const t = MATERIAL_TEXTURES[k](); tex[k] = t.isTexture ? t : t.map; tex[k].flipY = false; tex[k].needsUpdate = true; }
-        return tex[k];
-      };
+      const masks = SEITA_MASKS; // o Nathaniel primeiro
       tl.add(0.4, () => {
         const base = opp ? opp.pos : f.pos;
         const back = Math.atan2(f.pos.x - base.x, f.pos.z - base.z);
@@ -2915,16 +2909,10 @@ Object.assign(ABILITY_TYPES, {
           const mask = masks[i % masks.length];
           const npc = new DanteClone(f, world, i, a.duration, {
             hp: a.hp, damageMult: 1, element: 'conhecimento', rise: true, strikes: a.strikes,
-            restyle(m) {
-              const mat = m.material;
-              const n = mat.name || '';
-              if (n.includes('cape_magistrada_in')) mat.color.set(0x141214);
-              else if (n.includes('cape_magistrada')) mat.color.set(0xe8e4dc); // a túnica branca
-              else if (n.includes('scarf_magistrada')) mat.color.set(0x1a181c); // o tecido preto por cima
-              else if (n.includes('gold_magistrada')) mat.color.set(0x2a2628);
-              else if (n.includes('face_magistrada')) { mat.map = maskTex(mask); mat.needsUpdate = true; }
-            },
-            setup(rig) { if (rig.props.cane) rig.showProp('cane', false); },
+            // modelo próprio (tools/blender/char_seita.py): túnica branca com as regiões pretas, capuz, forca e corda
+            model: 'seita',
+            restyle() {}, // sem o tom de clone: as cores são as da túnica
+            setup(rig) { rig.showProp('mask_' + mask, true); },
           });
           npc.isSeita = true;
           npc.pos.set(spot.x, 0, spot.z);

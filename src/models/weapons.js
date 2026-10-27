@@ -1475,6 +1475,65 @@ export function despairMask() {
   return g;
 }
 
+// MÁSCARAS DA SEITA (wiki "Seita das Máscaras"): cada membro tem a sua — branca, preta ou riscada de vermelho. A do
+// NATHANIEL: branca, o coração dourado invertido no alto, estrelas de quatro pontas em volta dos olhos e lágrimas pretas.
+// Mesmo mapa da Máscara do Desespero (meia-esfera: u = de um lado ao outro, centro 128; v = de cima para baixo).
+export const SEITA_MASKS = ['nathaniel', 'riscos', 'negra', 'sorriso'];
+const seitaTex = {};
+function seitaTexture(kind) {
+  if (seitaTex[kind]) return seitaTex[kind];
+  const c = document.createElement('canvas');
+  c.width = 256;
+  c.height = 256;
+  const x = c.getContext('2d');
+  const dark = kind === 'negra';
+  const ink = dark ? '#d8d4cc' : '#121014';
+  x.fillStyle = dark ? '#1c1a1e' : '#eeebe4';
+  x.fillRect(0, 0, 256, 256);
+  // os olhos: fendas vazadas
+  x.fillStyle = dark ? '#000' : '#0a0808';
+  for (const s of [-1, 1]) { x.beginPath(); x.ellipse(128 + s * 34, 112, 15, 8, s * 0.12, 0, Math.PI * 2); x.fill(); }
+  if (kind === 'nathaniel') {
+    x.fillStyle = '#d0a040'; // o coração dourado invertido
+    x.beginPath(); x.moveTo(128, 30); x.bezierCurveTo(100, 46, 106, 74, 120, 72); x.lineTo(128, 64); x.lineTo(136, 72); x.bezierCurveTo(150, 74, 156, 46, 128, 30); x.fill();
+    x.strokeStyle = ink; x.lineWidth = 2.5;
+    for (const s of [-1, 1]) {
+      const ex = 128 + s * 34;
+      x.beginPath();
+      for (let i = 0; i < 8; i++) { const a = (i / 8) * Math.PI * 2; const r = i % 2 ? 9 : 24; x[i ? 'lineTo' : 'moveTo'](ex + Math.cos(a) * r, 112 + Math.sin(a) * r); }
+      x.closePath(); x.stroke();
+      x.fillStyle = ink; x.beginPath(); x.moveTo(ex - 4, 134); x.quadraticCurveTo(ex, 176, ex + 4, 134); x.fill(); // a lágrima preta
+    }
+  } else if (kind === 'riscos') {
+    x.strokeStyle = '#a01820'; x.lineCap = 'round';
+    for (let i = 0; i < 6; i++) { const px = 70 + i * 24; x.lineWidth = 3 + (i % 2) * 2; x.beginPath(); x.moveTo(px, 30 + (i % 3) * 18); x.lineTo(px + 14 - (i % 2) * 20, 240 - (i % 3) * 22); x.stroke(); }
+    x.fillStyle = ink; x.fillRect(110, 172, 36, 4); // a boca: um corte reto
+  } else if (kind === 'negra') {
+    x.strokeStyle = ink; x.lineWidth = 2;
+    for (const s of [-1, 1]) { x.beginPath(); x.moveTo(128 + s * 18, 100); x.lineTo(128 + s * 60, 86); x.stroke(); } // sobrancelhas riscadas
+    x.beginPath(); x.moveTo(128, 30); x.lineTo(128, 82); x.stroke();
+  } else {
+    // o SORRISO: branca, sem nariz, o sorriso largo e fino de orelha a orelha
+    x.strokeStyle = ink; x.lineWidth = 4; x.lineCap = 'round';
+    x.beginPath(); x.moveTo(78, 160); x.quadraticCurveTo(128, 206, 178, 160); x.stroke();
+    for (let i = 0; i < 7; i++) { const px = 92 + i * 12; const py = 160 + Math.sin(((i + 1) / 8) * Math.PI) * 22; x.lineWidth = 2; x.beginPath(); x.moveTo(px, py - 7); x.lineTo(px, py + 7); x.stroke(); }
+  }
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  seitaTex[kind] = t;
+  return t;
+}
+
+export function seitaMask(kind = 'nathaniel') {
+  const g = new THREE.Group();
+  const shell = new THREE.Mesh(new THREE.SphereGeometry(0.118, 22, 14, 0, Math.PI, 0, Math.PI), new THREE.MeshToonMaterial({ map: seitaTexture(kind), color: 0xffffff }));
+  shell.scale.set(1, 1.24, 0.82);
+  shell.position.set(0, 0.03, -0.03);
+  shell.userData.outline = true;
+  g.add(shell);
+  return g;
+}
+
 export function gasMask(glow = 0x7aff9a) {
   const g = new THREE.Group();
   const RUBBER = 0x15171a;

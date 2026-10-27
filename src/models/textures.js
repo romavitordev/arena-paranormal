@@ -2224,29 +2224,6 @@ export const MATERIAL_TEXTURES = {
       g.beginPath(); g.moveTo(x - 3, bot); g.lineTo(x + 3, bot); g.lineTo(x, bot - 9); g.fill();
     }
   }),
-  // MÁSCARAS DA SEITA (as invocações da Magistrada): cada membro tem a sua (wiki "Seita das Máscaras") — o Símbolo da
-  // Máscara do Desespero fica do lado de dentro. A do NATHANIEL: branca, o coração dourado invertido no alto, estrelas
-  // de quatro pontas em volta dos olhos e lágrimas pretas caindo. As outras: branca riscada de vermelho e a preta.
-  ...Object.fromEntries([['nathaniel', '#eeebe4', '#2a2228'], ['riscos', '#e4e0d8', '#2a2228'], ['negra', '#1c1a1e', '#d8d4cc']].map(([k, base, ink]) => [`mask_seita_${k}`, () => canvasTex(W, HT, (g) => {
-    g.fillStyle = '#4a2e22'; g.fillRect(0, 0, W, HT); // pele em volta (as laterais ficam sob o capuz/tranças)
-    g.fillStyle = base; g.beginPath(); g.ellipse(CX, 130, 76, 106, 0, 0, Math.PI * 2); g.fill();
-    g.strokeStyle = '#141214'; g.lineWidth = 3; g.stroke();
-    g.fillStyle = '#0c0a0c';
-    for (const sx of [-1, 1]) { g.beginPath(); g.ellipse(CX + sx * 30, EYE_Y, 12, 7, 0, 0, Math.PI * 2); g.fill(); }
-    if (k === 'nathaniel') {
-      g.fillStyle = '#d0a040'; // coração dourado invertido
-      g.beginPath(); g.moveTo(CX, 46); g.bezierCurveTo(CX - 26, 62, CX - 22, 86, CX - 8, 84); g.lineTo(CX, 78); g.lineTo(CX + 8, 84); g.bezierCurveTo(CX + 22, 86, CX + 26, 62, CX, 46); g.fill();
-      g.strokeStyle = ink; g.lineWidth = 2;
-      for (const sx of [-1, 1]) {
-        const ex = CX + sx * 30;
-        g.beginPath(); for (let i = 0; i < 8; i++) { const a = (i / 8) * Math.PI * 2; const r = i % 2 ? 9 : 22; g[i ? 'lineTo' : 'moveTo'](ex + Math.cos(a) * r, EYE_Y + Math.sin(a) * r); } g.closePath(); g.stroke();
-        g.fillStyle = ink; g.beginPath(); g.moveTo(ex - 3, EYE_Y + 22); g.quadraticCurveTo(ex, EYE_Y + 48, ex + 3, EYE_Y + 22); g.fill(); // a lágrima preta
-      }
-    } else {
-      g.strokeStyle = k === 'riscos' ? '#a01820' : ink; g.lineWidth = 3;
-      for (let i = 0; i < 5; i++) { const x = CX - 50 + i * 25; g.beginPath(); g.moveTo(x, 50 + (i % 2) * 20); g.lineTo(x + 10, 200 - (i % 3) * 20); g.stroke(); }
-    }
-  })])),
   face_estrangeiro: () => canvasTex(W, HT, (g) => {
     g.fillStyle = '#8a8c88'; g.fillRect(0, 0, W, HT);
     const grd = g.createRadialGradient(CX, 110, 10, CX, 120, 150);
