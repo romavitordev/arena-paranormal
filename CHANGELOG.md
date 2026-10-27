@@ -1,5 +1,19 @@
 # Changelog
 
+## v3.49.0 — Celestine e a Máscara do Desespero
+
+### Adicionado
+- `characters/celestine.js` (Portadores, `teams: ['Ordo Calamitas']`) e a forma `forms/celestine_magistrada.js` (`...magistrada` com o modelo da Celestine); modelo `tools/blender/char_celestine.py` → `public/models/celestine.glb`; `weapons.js` `chainHatchet` e `despairMask`; `props.js` `addCelestineProps` / `addCelestineMagistradaProps`; texturas `face_celestine` e `shirt_celestine`; visual `hatchet` dos projéteis; cenas de agarrão; falas contra o elenco inteiro.
+- `specials/realityRewrite.js` (Reescrever a Realidade); passivas `trueConjuring` (custo × mult em `abilityCost`) e `dethroneHost`.
+- Campo `teams` no personagem + `config/teams.js defTeams`: etiquetas extras no cartão da seleção (`.tm i`), na placa, na ficha de golpes e no filtro da página Sobre.
+- Modelo `tools/blender/char_seita.py` → `public/models/seita.glb` + `weapons.js seitaMask` / `SEITA_MASKS` + `props.js addSeitaProps`.
+
+### Alterado
+- Magistrada: `awakening` `realityRewrite` (sai a transformação inventada).
+- `summonMasks`: `DanteClone` com o modelo `seita` e a máscara de cada membro (saem as texturas `mask_seita_*`).
+- `TEAM_COLORS`: Relíquias `#d63c8c`, `Ordo Calamitas` `#4a62e0`; sai `Luzidios`.
+- `main.js`: os retratos dos vilões das Torres são gerados ANTES do elenco (o Anfitrião e o Deus da Morte selecionáveis ficam com a cor da equipe).
+
 ## v3.48.0 — Portadores e Relíquias
 
 ### Adicionado

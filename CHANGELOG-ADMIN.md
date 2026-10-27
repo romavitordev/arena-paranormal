@@ -1,5 +1,15 @@
 # Registro administrativo de alterações
 
+## v3.49.0 — Celestine e a Máscara do Desespero
+
+- Versão: `VERSION` 3.48.0 → **3.49.0** (package.json/lock junto). Data: 2026-10-27. Reúne os commits 557eb3e, fa60ee0 e fe06547.
+- **Pesquisa na wiki (pedido do dono):** faltava uma Portadora de Conhecimento e a transformação da Magistrada não era canônica. Plano registrado no TODO ("Distribuição pelo cânone").
+- **Magistrada:** Reescrever a Realidade testado (vida 450 → 987, sanidade 100, sangramento limpo, recargas zeradas, buff do adversário apagado); Conjuração Verdadeira (Olhar 25 → 19); Destronar o Anfitrião (127 de dano contra 94 no Kaiser).
+- **Celestine (pedido do dono: Ordo Calamitas, que vira a Magistrada com os mesmos poderes e outra aparência):** testada no jogo — combo 154, □ puxa até 1,5 m e a machadinha volta, as 4 habilidades, especial 245, Transformação com a Máscara e as machadinhas; CPU × CPU contra a Magistrada sem erro. Fica nos Portadores logo depois do Ferreiro (pedido do dono); o grupo Ordo Calamitas recebe Gaius, Amalia, Cornelius depois. Pendente: retrato da página Sobre.
+- **Equipes duplas (pedido do dono):** Celestine, Arnaldo (Aniquiladores, Ordo Realitas), Henri (Escripta da Desconjuração) e Juan Portador (Mascarados). Luzidios removida (o dono: a equipe não existe no jogo).
+- **Seita das Máscaras:** modelo próprio conferido no jogo de perto (túnica branca predominante, faixas pretas, forca e cinto de corda colados ao corpo, as máscaras 3D por membro).
+- **Retratos:** o Anfitrião e o Deus da Morte da seleção saíam sem a cor das Relíquias (o retrato de vilão das Torres, com o mesmo id, era gerado depois) — corrigido.
+
 ## v3.48.0 — Portadores e Relíquias
 
 - Versão: `VERSION` 3.47.0 → **3.48.0** (package.json/lock junto). Data: 2026-10-27. Inclui o commit do dono "3.48.0 snapshot 1 teste" (09fb45e: equipes, Henri, Arma de Sangue no antebraço, selos da tela inicial).

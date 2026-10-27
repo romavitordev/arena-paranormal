@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.48.0';
+export const VERSION = '3.49.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,19 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.49.0',
+    date: '2026-10-27',
+    title: 'Celestine e a Máscara do Desespero',
+    items: [
+      'NOVA LUTADORA — CELESTINE: a guerreira da ORDO CALAMITAS (Calamidade), Portadora da Relíquia de Conhecimento. Luta com DUAS MACHADINHAS ligadas por uma corrente: combo duplo rápido, □ arremessa a machadinha que crava e PUXA, Corrente Giratória, Código (decifra a guarda), Investida Rebelde (quebra a defesa), Endorfina e o especial DUELO FINAL. Nada Pessoal: +20% de dano pelas costas.',
+      'TRANSFORMAÇÃO DA CELESTINE: ela veste a MÁSCARA DO DESESPERO e vira CELESTINE, A MAGISTRADA — os mesmos poderes da Magistrada das Relíquias, com a aparência dela.',
+      'A MAGISTRADA PELO CÂNONE: sem a transformação inventada. A Barra agora é REESCREVER A REALIDADE (recupera 30% da vida, sanidade cheia, tira tudo de ruim dela, zera as recargas e apaga os fortalecimentos do adversário) + CONJURAÇÃO VERDADEIRA (habilidades 25% mais baratas) e DESTRONAR O ANFITRIÃO (+30% de dano nele).',
+      'SEITA DAS MÁSCARAS REFEITA: os membros que a Magistrada chama ganharam modelo próprio — túnica branca longa com as partes pretas, capuz, a corda de forca no pescoço, a corda na cintura e os Símbolos tatuados nos braços. Cada um com a sua máscara: a do Nathaniel, a riscada de vermelho, a preta e a do sorriso.',
+      'EQUIPES DUPLAS: quem é de duas equipes mostra as duas etiquetas na seleção e na ficha — Celestine (Portadores e Ordo Calamitas), Arnaldo (Portadores e Ordo Realitas), Henri (Mascarados e Escriptas) e Juan (Portadores e Mascarados).',
+      'CORES DAS EQUIPES: as Relíquias agora são MAGENTA (cor só delas) e o Anfitrião e o Deus da Morte da seleção ganharam o fundo da equipe, igual às outras Relíquias. A Ordo Calamitas estreia em azul-real.',
+    ],
+  },
   {
     v: '3.48.0',
     date: '2026-10-27',

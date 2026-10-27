@@ -1,6 +1,6 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.48.0 (revisado em 2026-10-27: Portadores e Relíquias — equipes novas (Portadores, Relíquias, Outro Lado), Henri e o Juan Portador, Relíquias selecionáveis, Arma de Sangue no antebraço, Foto com Flash do Kaiser, Manancial de longe, CPU com inteligência única e o Botão do Anfitrião)
+**Versão de referência atual:** v3.49.0 (revisado em 2026-10-27: Celestine e a Máscara do Desespero — Celestine (Portadores / Ordo Calamitas) e a forma Celestine, a Magistrada, a Magistrada canônica (Reescrever a Realidade), a Seita das Máscaras refeita, equipes duplas e as cores das Relíquias)
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente
 
@@ -9,7 +9,7 @@
 
 # PRÓXIMA GRANDE ATUALIZAÇÃO — LUTA + MODO PvE (planejamento de 2026-10-18)
 
-**Estado em 2026-10-27 (v3.48.0):**
+**Estado em 2026-10-27 (v3.49.0):**
 - [~] 2.2 Modelos antigos: Xande e Aguiar (v3.33.0), Fantasma, Kemi e Gal Sal + as lâminas Ereškigal (v3.34.0), Kaiser
   (v3.38.0), Balu e Lírio (v3.40.0), Arthur e Joui (v3.41.0), Arnaldo, Anfitrião, Veríssimo, Kian e O Diabo (2026-10-26)
   refeitos pelas artes oficiais; faltam os outros antigos

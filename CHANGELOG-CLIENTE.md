@@ -2,6 +2,14 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.49.0 — Celestine e a Máscara do Desespero
+- NOVA LUTADORA — CELESTINE (Portadores / Ordo Calamitas): duas machadinhas na corrente; □ crava e puxa; Corrente Giratória, Código, Investida Rebelde, Endorfina e o especial Duelo Final.
+- Transformação: veste a Máscara do Desespero e vira CELESTINE, A MAGISTRADA (os poderes da Magistrada, com a aparência dela).
+- A MAGISTRADA PELO CÂNONE: a Barra é REESCREVER A REALIDADE (vida, sanidade, recargas e os buffs do adversário apagados) + Conjuração Verdadeira e Destronar o Anfitrião.
+- SEITA DAS MÁSCARAS REFEITA: túnica branca com partes pretas, capuz, forca, corda na cintura, braços tatuados e uma máscara diferente para cada membro.
+- EQUIPES DUPLAS: Celestine, Arnaldo, Henri e Juan mostram as duas equipes.
+- Relíquias em MAGENTA; Anfitrião e Deus da Morte com o fundo certo na seleção; Ordo Calamitas em azul-real.
+
 ## v3.48.0 — Portadores e Relíquias
 - NOVAS EQUIPES: PORTADORES (Juan, Arnaldo, Ferreiro), RELÍQUIAS (O Diabo, O Deus da Morte, A Magistrada, O Anfitrião) e OUTRO LADO (O Estrangeiro, o Amigo Imaginário).
 - COMECE JÁ COMO A RELÍQUIA: O Deus da Morte, O Anfitrião e o Juan (Portador) também na seleção. As transformações continuam: Henri → Juan → Portador do Trono, Arnaldo → Anfitrião, Ferreiro → Deus da Morte.
