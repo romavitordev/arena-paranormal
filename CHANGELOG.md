@@ -1,5 +1,30 @@
 # Changelog
 
+## v3.46.0 — Sede Incontrolável
+
+### Adicionado
+- Raziel (plano RZ-01 a RZ-09 do TODO): passivas `extraTurn` (Turno Extra), `elementalAffinity` com `element`/`resist` (Afinidade com Sangue) e `predator` (forma verdadeira).
+- `razielAbilities.js`: `tongueLash` (Língua: agarrão à distância não defensável) e `thirst` no `vampireBite` (Sede Incontrolável).
+- `cinematicCombo`: opção `gore` por golpe (Banquete Bestial com roteiro próprio).
+- `dashStrike`: opção `bleed`; `ranged.aiRange` lido pela CPU (□ que é investida usado de longe).
+- `bloodArmor.js`: variante `bright` (`def.brightBloodArmor`).
+- HUD: barra `.hb-vampire` (`hpBar: { style: 'vampire' }`).
+- Arthur: `ritual: true` nas habilidades, buff `noRituals` no Templo do Ódio e passiva `bloodAffinity` na Olhos Sempre Abertos (rituais de Sangue sem custo de vida, lido em `payHealth`).
+- `tests/raziel.test.js`.
+
+### Alterado
+- Raziel: □ Rasgo de Sangue (projétil) → Vulto Retalhador (`dashStrike`); Maldição Sanguínea 8 s/+12% → 6 s/+10% com gotejamento; na forma, Endurecer Sangue → Língua.
+
+### Corrigido
+- `Fighter`: o v3.45.0 deixou dois `hideRangedProps` (o segundo ignorava o `propLock` da maça do Machado Demônio); juntados num só, com `activeRanged`.
+
+## v3.45.0 — Banquete de Sangue
+
+### Adicionado
+- Raziel (equipe nova Vampiros) com a forma O Verdadeiro Raziel, e o cenário Igreja Antiga (`igreja`).
+- Skate Caótico do Xande arremessado com o modelo atual; `activeRanged`/`hideRangedProps` no `Fighter`.
+- `tests/team-links.test.js`.
+
 ## v3.44.0 — Laços de Equipe
 
 ### Adicionado

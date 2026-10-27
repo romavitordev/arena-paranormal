@@ -77,6 +77,7 @@ export default {
       name: 'Rebirth',
       input: 'carga+ranged', // △ + □ / Y + X
       type: 'weaponState',
+      ritual: true, // Amaldiçoar Arma com Energia
       // cânone (Amaldiçoar Arma com Energia): abre os olhos, os RAIOS vazam e envolvem a arma com pequenas caveiras; os
       // tiros saem com os raios e dano de Energia. A cor é VERDE — a da HQ, o cânone que vale (a wiki chegou a descrever
       // raios roxos em Calamidade; o dono pediu o verde da HQ, 2026-10-26)
@@ -95,7 +96,9 @@ export default {
       name: 'Ódio Incontrolável "Templo do Ódio"',
       input: 'carga+physical', // △ + ○ / Y + B
       type: 'hatredTemple',
-      description: 'Corta a palma e sangra sobre o olho: ódio intenso por alguns segundos — físico mais forte e mais rápido, mas não consegue defender.',
+      ritual: true,
+      // cânone (Calamidade): +1 dado no ataque e no dano corpo a corpo; o afetado NÃO conjura rituais e precisa atacar
+      description: 'Corta a palma e sangra sobre o olho: ódio intenso por alguns segundos — físico mais forte e mais rápido, mas não consegue defender nem conjurar rituais.',
       energyCost: 15,
       healthCost: 30,
       cooldown: 20,
@@ -109,6 +112,7 @@ export default {
       name: 'Paralisia de Sangue "Dystopia"',
       input: 'block+carga', // R2 + △ / RT + Y
       type: 'bloodParalysis',
+      ritual: true,
       description: 'Mancha o símbolo com o próprio sangue, abre os olhos vermelhos e paralisa quem estiver à frente por um instante.',
       energyCost: 25,
       healthCost: 15,
@@ -147,6 +151,7 @@ export default {
       name: 'Arma de Sangue',
       input: 'block+jump', // R2 + × / RT + A
       type: 'bloodBlade',
+      ritual: true,
       description: 'Paga com o próprio sangue e projeta uma lâmina de sangue do punho direito: por 8 s o físico vira cortes com ela, que alcançam mais longe e fazem sangrar.',
       healthCost: 40,
       energyCost: 0,
@@ -193,16 +198,19 @@ export default {
     color: 0x3aff6a, // o verde do Rebirth
   },
 
-  // DESPERTAR "OLHOS SEMPRE ABERTOS" (Barra de Transformação cheia + vida baixa, segurando △) — no cânone é ao abrir os
-  // olhos que os rituais vazam (Rebirth, Dystopia); aqui eles ficam abertos até o fim do round. Cânone: aos 50% de exposição ele se conecta
-  // com a Marca pelo SANGUE (Afinidade Elemental: vantagem em Força e nos rituais de Sangue; mechas brancas e caninos
-  // afiados) e tem o Sangue de Ferro (mais vida). "Magnum Opus" no cânone é uma habilidade SOCIAL (ser reconhecido como
-  // artista), por isso saiu daqui. Até o fim do round.
+  // DESPERTAR "OLHOS SEMPRE ABERTOS" (Barra de Transformação cheia + vida baixa, segurando △) — o nome é do jogo: no
+  // cânone é ao ABRIR OS OLHOS que os rituais vazam (Rebirth, Dystopia); aqui eles ficam abertos até o fim do round.
+  // Cânone: aos 50% de exposição ele se conecta com a Marca pelo SANGUE (Afinidade Elemental: vantagem em Força e em todos
+  // os rituais de Sangue) e, em Calamidade, conjura rituais de Sangue "sem necessitar de ingredientes" → aqui o Templo, a
+  // Dystopia e a Arma de Sangue NÃO custam vida (passiva bloodAffinity); e o Sangue de Ferro (mais vida). As mechas
+  // brancas NÃO vêm da afinidade (Sobrevivendo ao Horror: são manifestação do Medo), por isso não entram aqui.
+  // "Magnum Opus" no cânone é uma habilidade SOCIAL (ser reconhecido como artista), por isso saiu daqui.
   awakening: {
     name: 'Olhos Sempre Abertos',
     banner: 'Olhos Sempre Abertos',
     type: 'awakenMode',
     mult: 1.15, affects: ['melee', 'ability', 'special'], takenMult: 0.85, aura: 'blood', color: 0xff1a30, heal: 0.15,
+    passives: [{ type: 'bloodAffinity' }],
   },
 
   passives: [

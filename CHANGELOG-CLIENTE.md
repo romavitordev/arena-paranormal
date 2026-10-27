@@ -2,6 +2,23 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.46.0 — Sede Incontrolável: o Raziel completo
+- RAZIEL REVISTO PELO CÂNONE: o kit inteiro do líder dos Vampiros foi conferido com a ficha e o episódio 9 de Hexatombe.
+- TURNO EXTRA DE VERDADE: o finalizador do combo que acerta deixa a próxima habilidade (em até 2 s) sair sem recarga — as duas ações por rodada da ficha (uma vez a cada 10 s).
+- VULTO RETALHADOR (□): o Raziel não atira, ele se move como um vulto — investida de 10 m que termina num X de garras que faz sangrar.
+- MALDIÇÃO SANGUÍNEA MAIS CLARA: ABALADO por 6 s (bate 20% mais fraco, apanha 10% mais) e o alvo pinga sangue podre.
+- ENDURECER SANGUE VISÍVEL: a crosta brilha sobre o casacão; corta 40% do dano e aguenta 3 golpes sem recuar.
+- AFINIDADE COM SANGUE: rituais de Sangue do Raziel +10%, e ele resiste a 15% dos rituais de Sangue dos outros.
+- O VERDADEIRO RAZIEL COM KIT PRÓPRIO:
+  - LÍNGUA (puxa o adversário de até 6,5 m para as garras; não dá para defender, só esquivar);
+  - VULTO BESTIAL (□ mais rápido e mais forte);
+  - PREDADOR (+20% em quem está atordoado, caído ou morrendo);
+  - SEDE INCONTROLÁVEL (o Devorar em quem está abaixo de 30% vai mais longe, morde mais fundo e bebe tudo).
+- BANQUETE BESTIAL PRÓPRIO: ruge e explode em sangue, frenesi de garras, devora de joelhos e termina rasgando e jogando no chão.
+- BARRA DE VIDA DE SANGUE no Verdadeiro Raziel: vermelho coagulado, veias pulsando e gotas escorrendo.
+- ARTHUR PELO CÂNONE: sob o Templo do Ódio não conjura rituais; de Olhos Sempre Abertos, o Templo, a Dystopia e a Arma de Sangue não custam vida.
+- CORREÇÃO: a maça do Machado Demônio do Balu voltava para a mão na hora errada.
+
 ## v3.45.0 — Banquete de Sangue
 - NOVO PERSONAGEM: RAZIEL (VAMPIROS): O líder dos Vampiros de Hexatombe entra na arena! Combatente Monstruoso com afinidade em Sangue. Visual fiel com casacão aristocrático preto até o chão, forro e gola alta vermelha, dragonas com franjas, jabô e pedra vermelha, cabeça descarnada sem olhos com o estigma da Coroa de Espinhos cravado na testa, dentes pontiagudos de fera e garras letais.
 - KIT DE SANGUE CANÔNICO:

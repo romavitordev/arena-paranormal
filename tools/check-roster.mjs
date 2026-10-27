@@ -151,6 +151,11 @@ const abu = get('arthur');
 const twoArm = ['jab', 'hook_l', 'dual_r', 'dual_l', 'dual_alt', 'dual_cross', 'dual_both', 'dual_spin', 'shove', 'block', 'shoot_rifle', 'charge'];
 ok(abu.oneArm && allStrikes(abu).every((s) => !twoArm.includes(s.anim)) && !twoArm.includes(abu.anims.block), 'Arthur: nenhum golpe/defesa usa um segundo braço');
 ok(abu.ranged.name === 'Sniper' && abu.ranged.damage === 110, 'Arthur: sniper mantida (110)');
+const bladeMelee = abu.abilities.find((a) => a.id === 'armaDeSangue').melee;
+ok(allStrikes({ melee: bladeMelee }).every((s) => !twoArm.includes(s.anim)), 'Arthur: os cortes da Arma de Sangue também são de um braço');
+ok(['rebirth', 'templo', 'dystopia', 'armaDeSangue'].every((id) => abu.abilities.find((a) => a.id === id).ritual) && !abu.abilities.find((a) => a.id === 'analisarBrecha').ritual,
+  'Arthur: rituais marcados (o Templo do Ódio impede conjurá-los); Analisar Brecha é habilidade, não ritual');
+ok((abu.awakening.passives || []).some((p) => p.type === 'bloodAffinity'), 'Arthur: Olhos Sempre Abertos com a Afinidade com Sangue (rituais de Sangue sem custo de vida)');
 const reb = abu.abilities.find((a) => a.id === 'rebirth');
 ok(reb && reb.input === 'carga+ranged' && reb.type === 'weaponState' && reb.shots > 0 && reb.bonusDamage > 0, 'Rebirth: △+□, estado temporário da arma com tiros fortalecidos');
 ok(abu.special.name === 'Solo do Abutre' && abu.special.type === 'eliteShot', 'Arthur: especial SOLO DO ABUTRE (o tiro de elite)');

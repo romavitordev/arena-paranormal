@@ -46,6 +46,7 @@ export function abilityUsePrior(a, f, opp, { distance, lowHp, opening, threat, l
   if (!selfTarget && (opp.state === 'downed' || opp.isInvulnerable?.())) return 0;
   if (a.hpCost && f.health - a.hpCost < f.maxHealth * 0.2) return 0;
   if (a.ai?.when === 'opening' && !opening) return 0;
+  if (a.ritual && f.buffs?.some((b) => b.noRituals)) return 0; // Templo do Ódio: não conjura rituais
   if (a.ai?.when === 'far' && distance < (a.ai.min || 4)) return 0;
   if (a.ai?.when === 'hurt' && !lowHp && f.health >= f.maxHealth * 0.6) return 0;
 

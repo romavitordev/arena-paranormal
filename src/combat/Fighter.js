@@ -2756,6 +2756,8 @@ export class Fighter {
 
   useAbility(a) {
     if (this.meleeLocked()) return;
+    // Templo do Ódio (cânone): sob o ódio não se conjura ritual
+    if (a.ritual && this.buffs.some((b) => b.noRituals)) { this.notify('ÓDIO: NÃO CONJURA RITUAIS'); return; }
     if (this.cooldowns[a.id] > 0) {
       // recast: a habilidade tem um segundo uso enquanto recarrega (Trinitá Aprimorado: trocar de lugar com uma cópia)
       const re = a.recast && ABILITY_TYPES[a.type] && ABILITY_TYPES[a.type].recast;

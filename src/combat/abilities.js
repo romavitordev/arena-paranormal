@@ -81,6 +81,12 @@ import { inkSplash } from '../fx/inkFx.js';
 
 // Paga um custo em vida (rituais de Sangue) sem nunca se matar
 function payHealth(f, n) {
+  // AFINIDADE COM SANGUE (Arthur de Olhos Sempre Abertos, cânone de Calamidade: rituais de Sangue "sem necessitar de
+  // ingredientes"): o próprio sangue não é mais gasto
+  if (hasPassive(f, 'bloodAffinity')) {
+    f.world.fx.burst(f.chestPos(), { count: 8, color: 0xff1a30, speed: 1.5, up: 1, life: 0.4, size: 0.12 });
+    return 0;
+  }
   const paid = Math.min(n, Math.max(0, f.health - 1));
   f.health -= paid;
   f.world.fx.burst(f.chestPos(), { count: 12, color: 0x9a0010, speed: 2, life: 0.6, size: 0.18, gravity: 7 });
@@ -1087,7 +1093,8 @@ Object.assign(ABILITY_TYPES, {
     },
   },
 
-  // Arthur — Ódio Incontrolável "Templo do Ódio": força sobre-humana temporária, mas não defende.
+  // Arthur — Ódio Incontrolável "Templo do Ódio": força sobre-humana temporária. Cânone (Calamidade): o afetado "não pode
+  // conjurar rituais" e precisa atacar — aqui não defende (noBlock) nem conjura rituais (noRituals); atirar e bater pode.
   hatredTemple: {
     start(f, a, world) {
       const target = a.target || f; // a assistência pode aplicar em outro lutador
@@ -1108,7 +1115,7 @@ Object.assign(ABILITY_TYPES, {
         target.buffTint = { color: a.color, base: 0.18 };
         target.addBuff({
           type: 'hatred', name: 'ÓDIO', time: a.duration, duration: a.duration,
-          mult: a.damageMult, affects: ['melee'], speedMult: a.speedMult, noBlock: true,
+          mult: a.damageMult, affects: ['melee'], speedMult: a.speedMult, noBlock: true, noRituals: true,
           onEnd() { veins.stop(); if (target.buffTint && target.buffTint.color === a.color) target.buffTint = prevTint || null; },
         });
         target.notify('ÓDIO INCONTROLÁVEL', true);

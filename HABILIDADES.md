@@ -46,7 +46,7 @@ especial = Carga → Carga → ○ (custa 50, ofensivos causam 250, nunca hitkil
 - **Rebirth** — △ + □ / Y + X · custo 30 · cooldown 22 s
   Abre os olhos e os raios verdes de Energia envolvem o rifle com pequenas caveiras: os próximos tiros da sniper causam dano extra.
 - **Ódio Incontrolável "Templo do Ódio"** — △ + ○ / Y + B · custo 15 · cooldown 20 s
-  Corta a palma e sangra sobre o olho: ódio intenso por alguns segundos — físico mais forte e mais rápido, mas não consegue defender.
+  Corta a palma e sangra sobre o olho: ódio intenso por alguns segundos — físico mais forte e mais rápido, mas não consegue defender nem conjurar rituais.
 - **Paralisia de Sangue "Dystopia"** — R2 + △ / RT + Y · custo 25 · cooldown 18 s · alcance 7 m
   Mancha o símbolo com o próprio sangue, abre os olhos vermelhos e paralisa quem estiver à frente por um instante.
 - **Analisar Brecha** — △ + L2 / Y + LT · custo 20 · cooldown 16 s · alcance 14 m

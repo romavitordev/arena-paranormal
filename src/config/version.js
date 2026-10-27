@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.45.0';
+export const VERSION = '3.46.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,25 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.46.0',
+    date: '2026-10-26',
+    title: 'Sede Incontrolável — o Raziel completo',
+    items: [
+      'RAZIEL REVISTO PELO CÂNONE: o kit inteiro do líder dos Vampiros foi conferido com a ficha e o episódio 9 de Hexatombe e ficou mais fiel e mais dele.',
+      'TURNO EXTRA DE VERDADE: quando o finalizador do combo acerta, a próxima habilidade (em até 2 s) sai sem entrar em recarga — as duas ações por rodada da ficha. Uma vez a cada 10 s.',
+      'VULTO RETALHADOR (□): o Raziel não atira — ele se move como um vulto. O □ agora é uma investida de 10 m que termina num X de garras que faz sangrar (no lugar da meia-lua de sangue).',
+      'MALDIÇÃO SANGUÍNEA MAIS CLARA: o alvo fica ABALADO por 6 s (bate 20% mais fraco e apanha 10% mais) e pinga sangue podre enquanto durar.',
+      'ENDURECER SANGUE VISÍVEL: a crosta de sangue agora brilha por cima do casacão vermelho; corta 40% do dano e aguenta 3 golpes sem recuar (o agarrão ainda pega).',
+      'AFINIDADE COM SANGUE: os rituais de Sangue do Raziel batem 10% mais forte e ele resiste a 15% dos rituais de Sangue dos outros.',
+      'O VERDADEIRO RAZIEL COM KIT PRÓPRIO: a fera não se protege — no lugar do Endurecer Sangue entra a LÍNGUA, que dispara até 6,5 m, enrola o adversário e o puxa para as garras (não dá para defender, só esquivar). O □ vira o VULTO BESTIAL e a passiva PREDADOR dá +20% em quem está atordoado, caído ou morrendo.',
+      'SEDE INCONTROLÁVEL: na forma verdadeira, o Devorar em quem está abaixo de 30% da vida vai mais longe, morde mais fundo e bebe tudo o que tira.',
+      'BANQUETE BESTIAL PRÓPRIO: o especial da forma verdadeira ganhou cena nova — ruge e explode em sangue, avança mais rápido que um vulto, frenesi de garras, devora o adversário de joelhos e termina rasgando e jogando no chão.',
+      'BARRA DE VIDA DE SANGUE: O Verdadeiro Raziel tem barra própria, vermelho-sangue coagulado, com as veias pulsando e gotas de sangue escorrendo.',
+      'ARTHUR PELO CÂNONE: sob o Templo do Ódio ele não conjura rituais (tiro e chutes continuam) e, de Olhos Sempre Abertos, a Afinidade com Sangue faz o Templo, a Dystopia e a Arma de Sangue não custarem vida.',
+      'CORREÇÃO: a maça do Machado Demônio do Balu voltava para a mão na hora errada depois de um arremesso.',
+    ],
+  },
   {
     v: '3.45.0',
     date: '2026-10-26',

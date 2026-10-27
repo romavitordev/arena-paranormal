@@ -1,5 +1,23 @@
 # Registro administrativo de alterações
 
+## v3.46.0 — Sede Incontrolável
+
+- Versão: `VERSION` 3.45.0 → **3.46.0** (package.json/lock junto). Data: 2026-10-26.
+- **Revisão do v3.45.0 (feito por outra IA):** dois `hideRangedProps` no `Fighter.js` — o segundo, declarado depois, sobrescrevia o primeiro e perdia o `propLock` (maça do Machado Demônio do Balu). Juntados num só que usa `activeRanged` e mantém o `propLock`. O `CHANGELOG.md` técnico não tinha a v3.45.0: entrada incluída.
+- **Raziel — plano RZ-01 a RZ-09 (TODO §2.5):**
+  - RZ-01 Turno Extra: passiva `extraTurn` (finalizador → janela de 2 s; a próxima habilidade não entra em recarga; recarga interna 10 s, zera no round).
+  - RZ-02 Sede Incontrolável: `thirst` no Devorar (alvo < 30%: +1,6 m de bote, ×1,4, dreno 100%); prioridade na CPU só com o alvo no alcance.
+  - RZ-03 Banquete Bestial com roteiro próprio no `cinematicCombo` (+ opção `gore`), `endReaction.lowLaunch`.
+  - RZ-04 □ Rasgo de Sangue (projétil sem base na ficha) → Vulto Retalhador (`dashStrike` 10 m, `bleed`, `aiRange`).
+  - RZ-05 Maldição Sanguínea: 6 s, +10% dano recebido, gotejamento com `onEnd`, renova sem acumular.
+  - RZ-06 Endurecer Sangue: crosta `bright`; testado −40%, 3 golpes de armadura, agarrão ainda pega.
+  - RZ-07 forma com kit próprio: Língua (`tongueLash`, `unblockable`), Vulto Bestial, passiva `predator`.
+  - RZ-08 Afinidade com Sangue: `elementalAffinity` ganhou `element` e `resist` (Kaiser/Nubi sem mudança).
+  - RZ-09: 10 partidas CPU × CPU contra 5 perfis, sem erro/NaN/cena travada. Para o balanceamento: Raziel venceu 9 de 10; combos longos (5–7 s de hitstun) no motor.
+  - Barra `hb-vampire` na forma verdadeira.
+- **Auditoria 3.1 Arthur (TODO §3.1):** Templo do Ódio com `noRituals` (cânone: o afetado não conjura rituais); `ritual: true` em Rebirth, Templo, Dystopia e Arma de Sangue; Olhos Sempre Abertos com `bloodAffinity` (rituais de Sangue sem custo de vida, cânone de Calamidade); comentário das mechas brancas corrigido; check dos cortes de um braço da Arma de Sangue.
+- **Testes:** `tests/raziel.test.js` (5); check com Raziel (Turno Extra, Afinidade) e Arthur (rituais, afinidade, um braço).
+
 ## v3.45.0 — Banquete de Sangue
 
 - Versão: `VERSION` 3.44.0 → **3.45.0** (package.json/lock junto). Data: 2026-10-26.

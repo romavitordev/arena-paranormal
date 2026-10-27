@@ -26,7 +26,7 @@ const tmp = new THREE.Vector3();
 const ACTIONS = {
   // ARTHUR: andando → Ódio Incontrolável no parceiro; parado → Descarnar (ritual de Sangue) no inimigo
   arthur: {
-    moving: (c) => buffOwner(c, 'gaze', { type: 'hatred', name: 'ÓDIO (ARTHUR)', time: 6, mult: 1.25, affects: ['melee'], speedMult: 1.1, noBlock: true }, 0xd0102a, 'ÓDIO INCONTROLÁVEL'),
+    moving: (c) => buffOwner(c, 'gaze', { type: 'hatred', name: 'ÓDIO (ARTHUR)', time: 6, mult: 1.25, affects: ['melee'], speedMult: 1.1, noBlock: true, noRituals: true }, 0xd0102a, 'ÓDIO INCONTROLÁVEL'),
     still: (c) => ritualCuts(c, 0xe0204a, 70, 'DESCARNAR'),
   },
   // AGHATA: andando → amaldiçoa a arma do parceiro (sangramento); parado → Descarnar

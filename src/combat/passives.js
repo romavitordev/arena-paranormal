@@ -200,6 +200,8 @@ export const PASSIVES = {
   },
   // Labirinto — Mente Labiríntica: atordoamentos duram menos (lido em Fighter.stun)
   mentalMaze: {},
+  // Arthur (Olhos Sempre Abertos) — Afinidade com Sangue: rituais de Sangue sem gastar o próprio sangue (lido em payHealth)
+  bloodAffinity: {},
   // Raziel — Turno Extra: o finalizador abre a janela da ação extra (lido no acerto e em useAbility, Fighter.js)
   extraTurn: {},
   // Erin (Em Nome do Caos) — Sem Sanidade: barra zerada e travada; os custos saem da vida (Fighter.addEnergy/spendEnergy)

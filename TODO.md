@@ -1,6 +1,6 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.45.0 (revisado em 2026-10-26: Banquete de Sangue — Raziel, cenário Igreja Antiga, modelo 3D atual do Skate Caótico no arremesso do Xande, segurança de props e inclusão do plano de reformulação de animações e auditoria canônica)
+**Versão de referência atual:** v3.46.0 (revisado em 2026-10-26: Sede Incontrolável — Raziel revisto pelo cânone, RZ-01 a RZ-09, barra de sangue da forma verdadeira, auditoria 3.1 do Arthur e correção do hideRangedProps)
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente
 
@@ -9,7 +9,7 @@
 
 # PRÓXIMA GRANDE ATUALIZAÇÃO — LUTA + MODO PvE (planejamento de 2026-10-18)
 
-**Estado em 2026-10-26 (v3.45.0):**
+**Estado em 2026-10-26 (v3.46.0):**
 - [~] 2.2 Modelos antigos: Xande e Aguiar (v3.33.0), Fantasma, Kemi e Gal Sal + as lâminas Ereškigal (v3.34.0), Kaiser
   (v3.38.0), Balu e Lírio (v3.40.0), Arthur e Joui (v3.41.0), Arnaldo, Anfitrião, Veríssimo, Kian e O Diabo (2026-10-26)
   refeitos pelas artes oficiais; faltam os outros antigos
@@ -31,7 +31,7 @@
 - [~] 2.5 Auditoria de fidelidade ao cânone de todos os personagens (Capítulo Complementar v3.44.0/v3.45.0): **Raziel
   CONCLUÍDO (RZ-01 a RZ-09, 2026-10-26)** — Turno Extra, Sede Incontrolável, Banquete Bestial próprio, Vulto Retalhador
   no lugar do projétil, Maldição revista, crosta visível, kit próprio da forma (Língua, Predador), Afinidade com Sangue e
-  validação. Falta a revisão sistemática dos 28 personagens do elenco (§3.1 a §3.30).
+  validação. **Arthur (§3.1) auditado na v3.46.0.** Falta a revisão dos outros personagens do elenco (§3.2 a §3.30).
 - [ ] **EM BREVE (pedido de 2026-10-26): CENÁRIO NOVO + EQUIPE VAMPIROS.** Um cenário novo — pode ser o **interior da
   Igreja dos Vampiros de Hexatombe** (a Igreja de Sangue, ep. 9) — que entra junto com um **personagem novo de uma
   equipe nova, os VAMPIROS: Raziel**. Antes de começar: levantar o Raziel e a igreja na wiki/HQ (`lore/`, arte
@@ -433,7 +433,19 @@ O código atual já contém `src/characters/raziel.js`, `src/characters/forms/ra
 
 Para cada personagem, produzir a análise `habilidade atual → código real → fonte/cena → divergência → proposta → teste`, com links e timestamps conferidos:
 
-- [ ] **3.1 Arthur Cervero (`src/characters/arthur.js`):**
+- [x] **3.1 Arthur Cervero — auditado (2026-10-26)** contra a wiki "Arthur Cervero" (seções Aparência, Rituais e
+  Habilidades de Desconjuração e Calamidade):
+  | Habilidade | Código | Fonte | Divergência | Feito |
+  |---|---|---|---|---|
+  | Um braço | `oneArm`, modelo sem o esquerdo (manga vazia) | braço ESQUERDO arrancado pelo Minerador (Santo Berço) | os cortes da Arma de Sangue não eram checados | check novo: os cortes também são de um braço |
+  | Sniper | □ 110 + tiro carregado, Golpe de Sorte, Furtivo e Letal | Atirador de Elite (Calamidade), margem 16–20, d8 furtivo | — (rifle é o centro; chutes são o corpo a corpo de um braço) | — |
+  | Rebirth | arma amaldiçoada, raios VERDES | Desconj.: Amaldiçoar Tecnologia (verde); Calam.: Amaldiçoar Arma com Energia (roxo) | verde por pedido do dono (HQ) | mantido, documentado |
+  | Templo do Ódio | +35% físico, não defende | Calam.: +1 dado ataque/dano corpo a corpo, NÃO CONJURA RITUAIS, precisa atacar | faltava "não conjura rituais" | `noRituals`: Rebirth, Dystopia e Arma de Sangue bloqueados (tiro e chutes liberados); vale na assistência; CPU respeita |
+  | Dystopia | paralisa à frente, custa vida | marca o alvo, arame no braço, sangue no Símbolo do peito, olhos vermelhos | — | — |
+  | Olhos Sempre Abertos | +15% / −15%, aura de sangue | nome do jogo; cânone: Afinidade com Sangue (50%): vantagem nos rituais de Sangue e, em Calamidade, rituais de Sangue SEM INGREDIENTES | só multiplicadores | passiva `bloodAffinity`: Templo, Dystopia e Arma de Sangue não custam vida na forma; comentário corrigido (as mechas brancas são do Medo, não da afinidade) |
+  Testado: o Templo bloqueia a Dystopia e libera Brecha e o tiro; na forma a Dystopia e a Arma custam 0 de vida (fora dela
+  a Arma custa 40); CPU × CPU sem erro (a CPU às vezes enfileira um ritual logo antes do Templo pegar: só o aviso).
+  Itens originais da auditoria:
   - Conferir se a animação corporal respeita a regra de um braço em todos os golpes, esquivas, vitória, especial e transformação.
   - Confirmar que o rifle é o centro do kit de longo alcance e que golpes corpo a corpo são opções de emergência.
   - Comparar Rebirth com a arma amaldiçoada e seus efeitos de Energia na fase correta; distinguir a versão de Desconjuração da de Calamidade.
