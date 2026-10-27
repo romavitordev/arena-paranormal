@@ -32,7 +32,7 @@
   CONCLUÍDO (RZ-01 a RZ-09, 2026-10-26)** — Turno Extra, Sede Incontrolável, Banquete Bestial próprio, Vulto Retalhador
   no lugar do projétil, Maldição revista, crosta visível, kit próprio da forma (Língua, Predador), Afinidade com Sangue e
   validação. **Arthur (§3.1) auditado na v3.46.0.** Falta a revisão dos outros personagens do elenco (§3.2 a §3.30).
-- [ ] **EM BREVE (pedido de 2026-10-26): CENÁRIO NOVO + EQUIPE VAMPIROS.** Um cenário novo — pode ser o **interior da
+- [x] **FEITO (v3.45.0/v3.46.0) — CENÁRIO NOVO + EQUIPE VAMPIROS.** Um cenário novo — pode ser o **interior da
   Igreja dos Vampiros de Hexatombe** (a Igreja de Sangue, ep. 9) — que entra junto com um **personagem novo de uma
   equipe nova, os VAMPIROS: Raziel**. Antes de começar: levantar o Raziel e a igreja na wiki/HQ (`lore/`, arte
   oficial), o kit pelo cânone (o braço do Raziel já aparece na lore do Cristino, ep. 9), o modelo no Blender (sculpt_lib),
@@ -642,7 +642,7 @@ Para cada personagem, produzir a análise `habilidade atual → código real →
   - Forma Realizador da Calamidade com kit e presença visual coerentes.
   - Testar contra Kaiser e personagens sem névoa para balanceamento consistente.
 
-- [ ] **3.29 Raziel (`src/characters/raziel.js`; forma `forms/raziel_verdadeiro.js`):**
+- [x] **3.29 Raziel (`src/characters/raziel.js`; forma `forms/raziel_verdadeiro.js`):** feito pelo plano RZ-01 a RZ-09 (v3.46.0).
   - Seguir o plano RZ-01 a RZ-09: Turno Extra, Sede Incontrolável, Banquete Bestial diferenciado, investida de garras no lugar de projétil ou licença documentada, Endurecer Sangue com crosta visual, e kit bestial exclusivo.
   - Testes com CPU, jogador, alvos críticos, esquiva e finalizadores.
 
@@ -1523,7 +1523,8 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
 - [ ] **O Portador do Trono** (`char_diabo.py`, a Transformação do Diabo/Juan): ainda na técnica antiga — refazer pela
       "Arte Completa Cinematic O Portador do Trono" (coroa de espinhos, asas de braços, quatro braços, pernas de bode).
 - [ ] Os outros que ainda não usam a técnica atual (`char_*.py` sem `sculpt_lib`, conferido em 2026-10-26): Aghata, Amigo,
-      Dalmo, Erin, Estrangeiro, Ferreiro, Guizo, Jae, Labirinto, Magistrada e Manancial (fora o Portador do Trono acima).
+      Dalmo, Erin, Estrangeiro, Ferreiro, Guizo, Jae, Labirinto e Magistrada (fora o Portador do Trono acima; o Manancial
+      foi refeito em 2026-10-26).
 
 # EQUIPE — BARRA DE EQUIPE E ESPECIAIS EM EQUIPE
 
@@ -2355,7 +2356,12 @@ qualidade do Cristino / Cristopher / Dante v2 — um por vez, com o kit e as jun
 
 ## Invocações
 
-* [ ] Os Mananciais (Ferreiro)
+* [x] Os Mananciais (Ferreiro) — refeitos na técnica atual (2026-10-26, `char_manancial.py` com `sculpt_lib`) pelas
+  miniaturas oficiais (fugitivo, barbudo, velho, imóvel, castanho) e pela HQ de O Segredo na Floresta Pt. 2: pele pálida
+  cinza-esverdeada, corpo esquálido (costelas, clavículas, espinha, escápulas, barriga funda), ORELHAS pontudas, olhos
+  FUNDOS e PRETOS, cabelo preto comprido repartido emoldurando o rosto, só TRAPOS escuros, dedos longos com unhas sujas e o
+  Símbolo Espiral no peito (texturas `face_manancial` e `skin_manancial_torso`; a camisa/calça brancas antigas saíram).
+  Revisado no Blender e no jogo (Chamar os Mananciais).
 * [ ] Zumbi de Sangue e Zumbi de Sangue forte (O Diabo / Portador do Trono)
 * [ ] As feras de tinta — cão e javali (Amigo Imaginário)
 

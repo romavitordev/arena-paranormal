@@ -1270,58 +1270,60 @@ export const MATERIAL_TEXTURES = {
     brow: { angry: 3, thick: 7, color: '#b8b4ae' },
     mouth: { mouthW: 18, lipLine: true },
   }),
-  // MANANCIAL (invocação do Ferreiro): pálido, olheiras fundas, olhar arregalado de quem enlouqueceu na sala branca
-  face_manancial: face((g) => {
-    g.strokeStyle = 'rgba(120,90,90,0.35)'; g.lineWidth = 1.4;
-    for (const s of [-1, 1]) {
-      g.beginPath(); g.moveTo(CX + s * 22, EYE_Y + 22); g.quadraticCurveTo(CX + s * 34, EYE_Y + 30, CX + s * 46, EYE_Y + 22); g.stroke(); // olheira
-      g.beginPath(); g.moveTo(CX + s * 46, EYE_Y + 40); g.quadraticCurveTo(CX + s * 50, 168, CX + s * 44, 196); g.stroke(); // rosto chupado
+  // MANANCIAL (invocação do Ferreiro; miniaturas e a HQ de O Segredo na Floresta): pálido cinza-esverdeado, os olhos
+  // FUNDOS e PRETOS (covas escuras, sem íris), olheiras, o rosto chupado e os lábios rachados de quem enlouqueceu na cela
+  face_manancial: () => canvasTex(W, HT, (g) => {
+    g.fillStyle = '#bcbdac'; g.fillRect(0, 0, W, HT);
+    const rnd = seeded(15);
+    for (let i = 0; i < 80; i++) { // a pele manchada e encardida
+      g.fillStyle = `rgba(${90 + rnd() * 40 | 0},${96 + rnd() * 30 | 0},${80 + rnd() * 20 | 0},${0.05 + rnd() * 0.08})`;
+      g.beginPath(); g.ellipse(rnd() * W, rnd() * HT, 4 + rnd() * 16, 3 + rnd() * 12, rnd() * 3, 0, Math.PI * 2); g.fill();
     }
-    g.strokeStyle = 'rgba(140,60,60,0.5)'; g.lineWidth = 1; // lábios rachados
-    for (let k = -2; k <= 2; k++) { g.beginPath(); g.moveTo(CX + k * 6, MOUTH_Y - 4); g.lineTo(CX + k * 6 + 1, MOUTH_Y + 4); g.stroke(); }
-  }, {
-    skin: '#d8d0c6',
-    before(g) {
-      for (const s of [-1, 1]) {
-        const grd = g.createRadialGradient(CX + s * 32, EYE_Y + 4, 4, CX + s * 32, EYE_Y + 4, 26);
-        grd.addColorStop(0, 'rgba(60,36,48,0.55)');
-        grd.addColorStop(1, 'rgba(60,36,48,0)');
-        g.fillStyle = grd;
-        g.beginPath(); g.ellipse(CX + s * 32, EYE_Y + 6, 27, 16, 0, 0, Math.PI * 2); g.fill();
-      }
-    },
-    eye: { iris: '#4a4a50', irisLight: '#8a8a90', h: 9, lid: 1, bags: true },
-    brow: { thick: 4, color: '#2a2220' },
-    mouth: { mouthW: 16, lipLine: true },
+    // as covas dos olhos: a olheira larga e, dentro, o olho PRETO e fundo
+    for (const s of [-1, 1]) {
+      const ring = g.createRadialGradient(CX + s * 32, EYE_Y + 4, 6, CX + s * 32, EYE_Y + 6, 32);
+      ring.addColorStop(0, 'rgba(40,34,40,0.9)'); ring.addColorStop(0.55, 'rgba(70,58,66,0.55)'); ring.addColorStop(1, 'rgba(70,58,66,0)');
+      g.fillStyle = ring; g.beginPath(); g.ellipse(CX + s * 32, EYE_Y + 6, 32, 22, 0, 0, Math.PI * 2); g.fill();
+      g.fillStyle = '#060606'; g.beginPath(); g.ellipse(CX + s * 32, EYE_Y + 4, 15, 11, s * -0.08, 0, Math.PI * 2); g.fill();
+      g.fillStyle = 'rgba(220,220,210,0.55)'; g.beginPath(); g.arc(CX + s * 28, EYE_Y, 2.2, 0, Math.PI * 2); g.fill(); // o brilho úmido
+    }
+    // o rosto chupado: as sombras sob as maçãs e o nariz fino
+    g.strokeStyle = 'rgba(70,72,60,0.4)'; g.lineWidth = 2;
+    for (const s of [-1, 1]) {
+      g.beginPath(); g.moveTo(CX + s * 46, EYE_Y + 34); g.quadraticCurveTo(CX + s * 50, MOUTH_Y - 16, CX + s * 40, MOUTH_Y + 26); g.stroke();
+      g.beginPath(); g.moveTo(CX + s * 4, EYE_Y + 16); g.lineTo(CX + s * 7, NOSE_Y + 4); g.stroke();
+    }
+    // a boca entreaberta, escura, com os lábios rachados
+    g.fillStyle = 'rgba(40,24,28,0.85)'; g.beginPath(); g.ellipse(CX, MOUTH_Y, 14, 5, 0, 0, Math.PI * 2); g.fill();
+    g.strokeStyle = 'rgba(120,70,70,0.55)'; g.lineWidth = 1;
+    for (let k = -2; k <= 2; k++) { g.beginPath(); g.moveTo(CX + k * 6, MOUTH_Y - 7); g.lineTo(CX + k * 6 + 1, MOUTH_Y - 2); g.stroke(); }
   }),
-  // a camisa branca de cela, encardida, com o SÍMBOLO ESPIRAL no peito (a marca do Santo)
-  gown_manancial: () => canvasTex(512, 512, (g) => {
-    g.fillStyle = '#e8e4dc'; g.fillRect(0, 0, 512, 512);
+  // o TRONCO esquálido: a pele pálida com as sombras das costelas, a sujeira e o SÍMBOLO ESPIRAL marcado no peito
+  // (a marca do Santo; frente = metade de baixo da textura, como nas outras camisas)
+  skin_manancial_torso: () => canvasTex(512, 512, (g) => {
+    g.fillStyle = '#bcbdac'; g.fillRect(0, 0, 512, 512);
     const rnd = seeded(11);
-    for (let i = 0; i < 40; i++) {
-      g.fillStyle = `rgba(${120 + rnd() * 40},${110 + rnd() * 30},${90 + rnd() * 20},${0.06 + rnd() * 0.1})`;
+    for (let i = 0; i < 60; i++) {
+      g.fillStyle = `rgba(${80 + rnd() * 40 | 0},${84 + rnd() * 30 | 0},${70 + rnd() * 20 | 0},${0.05 + rnd() * 0.1})`;
       g.beginPath(); g.ellipse(rnd() * 512, rnd() * 512, 10 + rnd() * 40, 6 + rnd() * 30, rnd() * 3, 0, Math.PI * 2); g.fill();
     }
-    g.strokeStyle = 'rgba(150,145,140,0.35)'; g.lineWidth = 3;
-    for (let i = 0; i < 10; i++) { const x = rnd() * 512; g.beginPath(); g.moveTo(x, 0); g.bezierCurveTo(x + 20, 170, x - 20, 340, x + 6, 512); g.stroke(); }
-    // Símbolo Espiral (frente, no peito: a parte de baixo da textura é o pescoço)
-    g.strokeStyle = '#3a1418'; g.lineWidth = 7; g.lineCap = 'round';
+    // as sombras entre as costelas (faixas curvas dos lados)
+    g.strokeStyle = 'rgba(80,84,70,0.28)'; g.lineWidth = 6;
+    for (let k = 0; k < 7; k++) {
+      const y = 250 + k * 26;
+      for (const x0 of [40, 300]) { g.beginPath(); g.moveTo(x0, y); g.quadraticCurveTo(x0 + 85, y - 22, x0 + 170, y); g.stroke(); }
+    }
+    // o Símbolo Espiral cortado na pele (cicatriz escura e avermelhada)
+    g.strokeStyle = 'rgba(90,24,28,0.85)'; g.lineWidth = 6; g.lineCap = 'round';
     g.beginPath();
     for (let t = 0; t <= 1; t += 0.01) {
       const a = t * Math.PI * 6;
-      const r = 4 + t * 50;
+      const r = 4 + t * 46;
       const x = 256 + Math.cos(a) * r;
       const y = 372 + Math.sin(a) * r;
       if (t === 0) g.moveTo(x, y); else g.lineTo(x, y);
     }
     g.stroke();
-  }, { wrap: true }),
-  pants_manancial: () => canvasTex(256, 256, (g) => {
-    g.fillStyle = '#dedad2'; g.fillRect(0, 0, 256, 256);
-    const rnd = seeded(13);
-    for (let i = 0; i < 18; i++) { g.fillStyle = `rgba(110,100,85,${0.05 + rnd() * 0.08})`; g.beginPath(); g.ellipse(rnd() * 256, rnd() * 256, 8 + rnd() * 20, 6 + rnd() * 16, 0, 0, Math.PI * 2); g.fill(); }
-    g.strokeStyle = 'rgba(120,115,110,0.4)'; g.lineWidth = 2;
-    for (const x of [64, 192]) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, 256); g.stroke(); }
   }, { wrap: true }),
   vest_verissimo: () => canvasTex(512, 512, (g) => {
     g.fillStyle = '#1c1c20'; g.fillRect(0, 0, 512, 512);
