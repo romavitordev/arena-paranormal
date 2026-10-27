@@ -2239,6 +2239,7 @@ Object.assign(ABILITY_TYPES, {
               launch: !!a.launch, lowLaunch: !!a.launch, guardCrush: a.guardCrush, guardBreak: a.guardBreak, sound: a.hitSound || 'bladeHit', color: a.color, scale: 1.6, dir: forwardFromYaw(f.yaw),
             });
             if (a.blind && typeof res === 'number' && res > 0) blindFighter(world, opp, a.blind); // Punhal X (Jae)
+            if (a.bleed && typeof res === 'number' && res > 0 && opp.state !== 'ko') opp.applyBleed(a.bleed, f); // Vulto Retalhador (Raziel)
           }
         }
       });

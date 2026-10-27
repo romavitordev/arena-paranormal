@@ -82,7 +82,13 @@ for (const c of ROSTER) {
 `;
     if (p.type === 'bloodNecklace') md += `- **Passiva — Colar Banhado em Sangue:** −${Math.round((1 - p.resist) * 100)}% de dano de Sangue; sangramento ${Math.round((p.bleedMult - 1) * 100)}% mais forte
 `;
-    if (p.type === 'precognition') md += `- **Passiva — Precognição:** não é pego desprevenido (sem bônus de costas nem susto de teleporte)
+    if (p.type === 'extraTurn') md += `- **Passiva — Turno Extra:** o finalizador do combo que acerta abre ${p.window} s em que a próxima habilidade não entra em recarga (uma vez a cada ${p.cooldown} s)
+`;
+    if (p.type === 'elementalAffinity') md += `- **Passiva — Afinidade${p.element ? ` com ${p.element[0].toUpperCase()}${p.element.slice(1)}` : ' Elemental'}:** rituais${p.element ? ` de ${p.element[0].toUpperCase()}${p.element.slice(1)}` : ''} +${Math.round(((p.mult ?? 1.15) - 1) * 100)}%${p.resist ? `; −${Math.round((1 - p.resist) * 100)}% de dano de rituais desse elemento` : ''}
+`;
+    if (p.type === 'predator') md +=`- **Passiva — Predador:** +${Math.round((p.mult - 1) * 100)}% em quem está atordoado, caído, tomando golpe ou abaixo de ${Math.round(p.threshold * 100)}% da vida
+`;
+    if (p.type === 'precognition') md +=`- **Passiva — Precognição:** não é pego desprevenido (sem bônus de costas nem susto de teleporte)
 `;
     if (p.type === 'bulletDodge') md += `- **Passiva — Desviar de Balas:** esquivar de um projétil não gasta carga
 `;

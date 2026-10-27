@@ -47,6 +47,14 @@ export const PASSIVES = {
       return victim.health <= victim.maxHealth * (passive.threshold ?? 0.2) ? passive.mult ?? 1.3 : 1;
     },
   },
+  // O Verdadeiro Raziel — Predador: a fera pune quem está vulnerável (atordoado, caído, tomando golpe ou morrendo)
+  predator: {
+    damageMod({ victim, kind, passive }) {
+      if (!(passive.kinds || ['melee', 'ability']).includes(kind)) return 1;
+      const weak = ['stun', 'hitstun', 'downed', 'grabbed'].includes(victim.state) || victim.health <= victim.maxHealth * (passive.threshold ?? 0.3);
+      return weak ? passive.mult ?? 1.2 : 1;
+    },
+  },
   // Joui — Um por Um: derrubou ou lançou um, já parte pro próximo — o finalizador que entra devolve sanidade
   oneByOne: {
     onMeleeHit({ attacker, strike, dealt, passive }) {
@@ -177,14 +185,23 @@ export const PASSIVES = {
       return kind === 'melee' ? passive.hitstun ?? 0.06 : 0;
     },
   },
-  // Kaiser — Afinidade Elemental: conectado à Energia, os rituais dele (habilidades e especial) batem mais forte
+  // Kaiser — Afinidade Elemental: conectado à Energia, os rituais dele (habilidades e especial) batem mais forte.
+  // passive.element: só os rituais DESSE elemento (Raziel: Sangue); passive.resist: resiste a esse elemento (a criatura
+  // de Sangue aguenta o próprio elemento; a fraqueza a Morte já vem do ciclo)
   elementalAffinity: {
-    damageMod({ kind, passive }) {
-      return kind === 'ability' || kind === 'special' ? passive.mult ?? 1.15 : 1;
+    damageMod({ attacker, kind, passive, o }) {
+      if (kind !== 'ability' && kind !== 'special') return 1;
+      if (passive.element && (o?.element || attacker.def.element) !== passive.element) return 1;
+      return passive.mult ?? 1.15;
+    },
+    damageTakenMod({ element, passive }) {
+      return passive.resist && element && element === passive.element ? passive.resist : 1;
     },
   },
   // Labirinto — Mente Labiríntica: atordoamentos duram menos (lido em Fighter.stun)
   mentalMaze: {},
+  // Raziel — Turno Extra: o finalizador abre a janela da ação extra (lido no acerto e em useAbility, Fighter.js)
+  extraTurn: {},
   // Erin (Em Nome do Caos) — Sem Sanidade: barra zerada e travada; os custos saem da vida (Fighter.addEnergy/spendEnergy)
   noSanity: {},
   // O Anfitrião — Percepção Anacrônica: sabe o que ainda vai acontecer; de tempos em tempos desvia sozinho de um golpe

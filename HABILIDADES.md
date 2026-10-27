@@ -160,6 +160,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 - **Acácia** — △ + ○ / Y + B · custo 25 · cooldown 13 s · dano 70 · alcance 18 m
   Dissipar Espíritos "Acácia": uma chuva de pequenas flores roxas cai sobre o alvo e machuca enquanto ele ficar na área.
 - **Passiva — Resistente:** −10% de dano físico recebido
+- **Passiva — Afinidade Elemental:** rituais +15%
 
 ### Especial: Cinerária
 
@@ -585,6 +586,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 - **Ritual de Drenagem** — R2 + △ / RT + Y · custo 25 · cooldown 16 s · alcance 12 m
   Finca a bengala: a marca de Lodo abre embaixo do alvo e os filamentos fecham — ele fica LENTO por 2,5 s.
 - **Passo Imperturbável** (esquiva própria) — invulnerável por undefined s · cooldown undefined s
+- **Passiva — Afinidade Elemental:** rituais +10%
 
 ### Especial: Carniçal da Esfinge
 
@@ -1075,9 +1077,9 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 | ↑ + ○ (no combo) | Garra de baixo | 38 | 2 m | finalizador: lança alto (combo aéreo) |
 | ↓ + ○ (no combo) | Esmagar | 44 | 2 m | finalizador: derruba |
 
-### Principal (□ / X): Rasgo de Sangue
+### Principal (□ / X): Vulto Retalhador
 
-- Dano 26 · alcance 16 m · cooldown 1.8 s · custo 0
+- Dano 30 · alcance 1.6 m · cooldown 2.6 s · custo 0
 
 ### Habilidades
 
@@ -1088,7 +1090,9 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 - **Endurecer Sangue** — R2 + △ / RT + Y · custo 25 · cooldown 16 s
   Endurece o próprio sangue numa crosta rígida por cima das vestes: por 6 s recebe bem menos dano de tudo e aguenta golpes sem recuar.
 - **Maldição Sanguínea** — △ + L2 / Y + LT · custo 25 · cooldown 14 s · dano 18 · alcance 13 m
-  Aponta e APODRECE o sangue do adversário: ele fica ABALADO por 8 s (bate 20% mais fraco e apanha 12% mais). Quem estiver defendendo resiste a metade do tempo.
+  Aponta e APODRECE o sangue do adversário: ele fica ABALADO por 6 s (bate 20% mais fraco e apanha 10% mais), pingando sangue podre. Quem estiver defendendo resiste a metade do tempo.
+- **Passiva — Turno Extra:** o finalizador do combo que acerta abre 2 s em que a próxima habilidade não entra em recarga (uma vez a cada 10 s)
+- **Passiva — Afinidade com Sangue:** rituais de Sangue +10%; −15% de dano de rituais desse elemento
 
 ### Especial: Banquete de Sangue
 

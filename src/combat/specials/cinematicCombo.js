@@ -198,6 +198,14 @@ export const cinematicCombo = {
             f.health = Math.min(f.maxHealth, f.health + Math.round(dealt * h.drain));
             world.fx.burst(f.chestPos(), { count: 10, color: 0xff3040, speed: 1.2, up: 1.4, life: 0.5, size: 0.12 });
           }
+          // h.gore (o Banquete Bestial): a mordida que devora — o sangue jorra do pescoço e a cena treme
+          if (h.gore) {
+            const neck = opp.rig.joints.hd ? opp.rig.joints.hd.getWorldPosition(new THREE.Vector3()) : opp.chestPos();
+            world.fx.burst(neck, { count: 44, color: sp.color, speed: 5, life: 0.6, size: 0.16, gravity: 9 });
+            world.fx.burst(neck, { count: 10, color: 0x2a0408, kind: 'smoke', speed: 1.2, life: 0.7, size: 0.5, grow: 1 });
+            world.audio.play('drain', { volume: 0.7, pitch: 0.6 });
+            world.cameraRig.shake(0.3, 0.15);
+          }
           if (h.bleed && opp.state !== 'ko') opp.applyBleed(h.bleed, f); // ex.: Hemorragia Severa (Juan)
           if (h.fx && h.fx.chain) {
             // correntes aparecem fisicamente durante o golpe

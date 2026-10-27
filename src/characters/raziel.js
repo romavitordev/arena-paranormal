@@ -8,7 +8,7 @@
 //   ENDURECER SANGUE (camada rígida sobre as vestes: resistência a dano)     → Endurecer Sangue (R2 + △)
 //   BOTE RETALHADOR (até 105 de dano; quem desvia toma metade)              → Bote Retalhador (△ → ○)
 //   MALDIÇÃO SANGUÍNEA (apodrece o sangue: abalado, -1 dado em tudo)        → Maldição Sanguínea (△ + L2)
-//   TURNO EXTRA (duas ações por rodada)                                     → ataca mais rápido (stats.attackSpeed)
+//   TURNO EXTRA (duas ações por rodada)                                     → finalizador abre a ação extra (passiva extraTurn)
 //   AFINIDADE COM SANGUE e o gosto pelo sangue                              → as garras sugam um pouco de vida
 //   a CEIA DOS VAMPIROS (o banquete na Igreja Antiga)                        → o especial Banquete de Sangue
 //   a VERDADEIRA FORMA (rasga as vestes; corpo descarnado, costelas à mostra, a língua) → a Transformação
@@ -20,6 +20,7 @@ export const RAZIEL_KIT = {
   stats: { moveSpeed: 8.2, attackSpeed: 1.12 }, // Turno Extra: rápido como um vulto
   anims: { idle: 'idle_raziel', run: 'run', charge: 'db_charge', victory: 'vic_raziel', block: 'db_block' },
   chargeFx: { style: 'default', color: BLOOD },
+  brightBloodArmor: true, // a crosta do Endurecer Sangue mais viva e molhada: o casacão já é vermelho-sangue
   dodge: { style: 'default', distance: 5.0 },
 
   melee: {
@@ -39,31 +40,32 @@ export const RAZIEL_KIT = {
     air: { name: 'Garras do alto', anim: 'db_air', dur: 0.44, active: [0.14, 0.3], damage: 36, range: 2.0, arc: 120, knockback: 2.8, slam: 16, vertical: 2.4, sound: 'blade', hitSound: 'clawHit', trail: { color: CRIMSON } },
   },
 
-  // □: RASGO DE SANGUE — o golpe de garra que solta uma meia-lua de sangue
+  // □: VULTO RETALHADOR — no cânone o Raziel não atira nada: luta de perto e se move "como um vulto" (ep. 9). O □ é a
+  // investida longa (10 m) que atravessa a arena e termina num X de garras que faz sangrar (TODO RZ-04, opção B; antes
+  // era a meia-lua de sangue, uma licença sem base na ficha). Diferente do Frente + ○ (o bote curto do combo).
   ranged: {
-    name: 'Rasgo de Sangue',
-    type: 'projectile',
-    description: 'Rasga o ar com a garra e solta uma meia-lua de sangue que corta e faz sangrar.',
-    anim: 'db_claw_r',
-    windup: 0.2,
-    recovery: 0.3,
-    count: 1,
-    interval: 0,
-    damage: 26,
-    range: 16,
-    speed: 30,
-    radius: 0.55,
-    spread: 0,
-    knockback: 1.2,
-    hitstun: 0.36,
-    cooldown: 1.8,
+    name: 'Vulto Retalhador',
+    type: 'dashStrike',
+    description: 'Some num vulto: avança 10 m numa linha e, se encontra o adversário, rasga em X com as duas garras (faz sangrar).',
+    anim: 'db_dash',
+    windup: 0.14,
+    distance: 10,
+    speed: 34,
+    recovery: 0.32,
+    range: 1.6,
+    aiRange: 10, // a CPU usa de longe (o range é o alcance do corte no fim da investida)
+    damage: 30,
+    knockback: 2.0,
+    hitstun: 0.45,
+    xSlash: true,
+    bleed: { dps: 3, duration: 1.5 },
+    cooldown: 2.6,
     energyCost: 0,
-    visual: 'bloodCrescent',
     color: CRIMSON,
+    trailKind: 'smoke',
     element: 'sangue',
-    sound: 'blade',
+    startSound: 'blink',
     hitSound: 'clawHit',
-    onHit: { bleed: { dps: 3, duration: 1.5 } },
   },
 
   abilities: [
@@ -130,14 +132,16 @@ export const RAZIEL_KIT = {
       name: 'Maldição Sanguínea',
       input: 'carga+dodge', // △ + L2
       type: 'bloodCurse',
-      description: 'Aponta e APODRECE o sangue do adversário: ele fica ABALADO por 8 s (bate 20% mais fraco e apanha 12% mais). Quem estiver defendendo resiste a metade do tempo.',
+      // ficha: o alvo fica abalado (−1 dado em tudo) → aqui: bate 20% mais fraco e apanha 10% mais por 6 s (no ar
+      // ~43% do tempo com a recarga de 14 s); renova sem acumular; quem DEFENDE na hora resiste a metade do tempo
+      description: 'Aponta e APODRECE o sangue do adversário: ele fica ABALADO por 6 s (bate 20% mais fraco e apanha 10% mais), pingando sangue podre. Quem estiver defendendo resiste a metade do tempo.',
       energyCost: 25,
       cooldown: 14,
       windup: 0.45,
       range: 13,
-      duration: 8,
+      duration: 6,
       mult: 0.8,
-      takenMult: 1.12,
+      takenMult: 1.1,
       damage: 18,
       color: BLOOD,
     },
@@ -169,6 +173,12 @@ export const RAZIEL_KIT = {
 
   passives: [
     { type: 'lifesteal', ratio: 0.08 }, // o gosto pelo sangue: cada garra devolve um pouco de vida
+    // TURNO EXTRA (duas ações por rodada): o finalizador do combo que entra abre 2 s em que a próxima habilidade não
+    // entra em recarga (uma vez a cada 10 s)
+    { type: 'extraTurn', window: 2, cooldown: 10, color: CRIMSON },
+    // AFINIDADE COM SANGUE (ficha: Combatente, trilha Monstruoso): os rituais de Sangue dele batem 10% mais forte e ele
+    // resiste a 15% dos rituais de Sangue dos outros. As penalidades de interpretação/progressão do Monstruoso não entram
+    { type: 'elementalAffinity', element: 'sangue', mult: 1.1, resist: 0.85 },
   ],
 };
 

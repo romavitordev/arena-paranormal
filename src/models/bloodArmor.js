@@ -60,13 +60,16 @@ function tendril(points, r, mat) {
   return taperedTube(curve, 1, (t) => r * (1 - t * 0.7) + 0.003, mat, 18, 6);
 }
 
-export function buildBloodArmor(rig, { weaponSide = null, yaw = 0 } = {}) {
+// bright: crosta mais viva e molhada, para quem já veste vermelho-sangue (Raziel: senão some no casacão)
+export function buildBloodArmor(rig, { weaponSide = null, yaw = 0, bright = false } = {}) {
   const J = rig.joints || {};
   if (!J.sL || !J.eL || !J.sL.isBone) return null;
   const uniforms = { uTime: { value: 0 } };
-  const outer = porousMaterial(uniforms);
+  const outer = porousMaterial(uniforms, bright ? { color: 0xe8303a } : undefined);
+  if (bright) { outer.emissive.setHex(0x9a0814); outer.roughness = 0.12; }
   const inner = new THREE.MeshStandardMaterial({ color: 0x2a0306, roughness: 0.45, emissive: 0x1a0003, emissiveIntensity: 0.6 });
-  const solid = new THREE.MeshStandardMaterial({ color: 0xa01a22, roughness: 0.25, metalness: 0.05, emissive: 0x4a0008, emissiveIntensity: 0.6 });
+  const solid = new THREE.MeshStandardMaterial({ color: bright ? 0xd8283a : 0xa01a22, roughness: bright ? 0.12 : 0.25, metalness: 0.05, emissive: bright ? 0x8a0010 : 0x4a0008, emissiveIntensity: 0.6 });
+  const pulse = bright ? [0.8, 0.35] : [0.45, 0.15];
   const added = [];
   // direções do personagem no mundo (no momento em que a armadura nasce)
   const UP = new THREE.Vector3(0, 1, 0);
@@ -188,7 +191,7 @@ export function buildBloodArmor(rig, { weaponSide = null, yaw = 0 } = {}) {
   return {
     update(dt) {
       uniforms.uTime.value += dt;
-      outer.emissiveIntensity = 0.45 + Math.sin(uniforms.uTime.value * 2.6) * 0.15;
+      outer.emissiveIntensity = pulse[0] + Math.sin(uniforms.uTime.value * 2.6) * pulse[1];
     },
     remove() {
       for (const o of added) {

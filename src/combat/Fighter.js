@@ -110,6 +110,7 @@ export class Fighter {
     this.sacrificeWin = false;
     this.chronoCd = 0; // Percepção Anacrônica (Anfitrião): recarga da esquiva automática
     this.secretRound = false; // Segredo de Veríssimo contra o Kian: uma vez por round
+    this.extraTurnReady = 0; // Turno Extra (Raziel): recarga interna da janela
     for (const k in this.cooldowns) this.cooldowns[k] = 0;
     this.carga = { stage: 0, timer: 0 };
     this.combo = { chain: -1, steps: 0, grace: 0, queued: null, strike: null, hits: [], windows: [] };
@@ -441,7 +442,9 @@ export class Fighter {
   }
 
   hideRangedProps() {
-    const r = this.def.ranged;
+    // o disparo em andamento (pode ser o tiro carregado/variante) ou, sem ele, o □ padrão
+    const r = this.activeRanged || this.def.ranged;
+    this.activeRanged = null;
     if (!r) return;
     if (r.showProp) this.rig.showProp(r.showProp, false);
     // a arma arremessada que volta (returnsProp, ex.: machado do Balu) só reaparece quando chega de volta na mão
@@ -836,7 +839,7 @@ export class Fighter {
       this.bloodArmor = null;
     }
     if (key && !this.bloodArmor) {
-      const fx = buildBloodArmor(this.rig, { weaponSide: side, yaw: this.yaw });
+      const fx = buildBloodArmor(this.rig, { weaponSide: side, yaw: this.yaw, bright: !!this.def.brightBloodArmor });
       if (fx) {
         this.bloodArmor = { fx, key, rig: this.rig };
         this.world.fx.burst(this.chestPos(), { count: 30, color: 0xb01020, speed: 3, life: 0.5, size: 0.18, gravity: 6 });
@@ -2081,6 +2084,17 @@ export class Fighter {
     const press = pas.find((p) => p.type === 'atmosphericPressure');
     // A ESCRITA (Kian): cada golpe físico deixa uma marca; no limite ela detona (kianPowers.js)
     if (typeof res === 'number' && opp.state !== 'ko' && pas.some((p) => p.type === 'kianScript')) inscribe(this.world, this, opp, 1);
+    // TURNO EXTRA (Raziel, ficha: duas ações por rodada): o finalizador que entra abre uma janela curta em que a
+    // próxima habilidade é a "ação extra" (não entra em recarga); recarga interna para não encadear sem fim
+    const xt = pas.find((p) => p.type === 'extraTurn');
+    if (xt && s.finisher && typeof res === 'number' && opp.state !== 'ko' && !(this.extraTurnReady > this.world.time)) {
+      this.extraTurnReady = this.world.time + (xt.cooldown ?? 10);
+      const old = this.findBuff('extraTurn');
+      if (old) old.time = xt.window ?? 2;
+      else this.addBuff({ type: 'extraTurn', name: 'TURNO EXTRA', time: xt.window ?? 2, duration: xt.window ?? 2 });
+      this.notify('TURNO EXTRA', true);
+      this.world.fx.ring(this.chestPos(), { color: xt.color ?? 0xff2a3d, radius: 1.3, life: 0.3 });
+    }
     // LEITURA (Guizo — disfarce alienígena): a faca de Conhecimento marca o alvo
     const read = pas.find((p) => p.type === 'mindRead');
     if (read && typeof res === 'number' && opp.state !== 'ko') {
@@ -2556,21 +2570,6 @@ export class Fighter {
     }
   }
 
-  // Restaura ou esconde props ao término do disparo ou cancelamento
-  hideRangedProps() {
-    const r = this.activeRanged || this.def.ranged;
-    if (r) {
-      if (r.showProp) this.rig.showProp(r.showProp, false);
-      if (r.hideProp) {
-        const hasFlying = this.world?.projectiles?.list?.some((p) => p.owner === this && p.ability?.returnsProp === r.hideProp);
-        if (!r.returnsProp || !hasFlying) {
-          this.rig.showProp(r.hideProp, true);
-        }
-      }
-    }
-    this.activeRanged = null;
-  }
-
   // ------------------------------------------------ Defesa + ○: agarrão (não defensável, só esquivável)
   tryGrab() {
     const G = { ...COMBAT.grab, ...(this.def.grab || {}) };
@@ -2786,7 +2785,9 @@ export class Fighter {
     if (!seq) return; // falhou (ex.: sem posição/alvo válido) — não gasta nada
     this.payCost(cost, blood);
     (this.lastAbilityUse || (this.lastAbilityUse = {}))[a.id] = this.world.time;
-    this.cooldowns[a.id] = a.cooldown;
+    // TURNO EXTRA (Raziel): a habilidade usada dentro da janela é a ação extra — gasta a janela, não a recarga
+    const xt = a.cooldown > 0 && this.findBuff('extraTurn');
+    if (xt) { xt.done = true; this.cooldowns[a.id] = 0; } else this.cooldowns[a.id] = a.cooldown;
     this.setState('ability');
     this.seq = seq;
   }

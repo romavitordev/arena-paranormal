@@ -28,9 +28,10 @@
   referências da internet (jogos de luta consagrados como Naruto Storm, Guilty Gear, Tekken, além de coreografias de artes
   marciais e animes de ação) para trazer muito mais impacto, fluidez, peso e naturalidade (ver *2.1*).
 - [x] 2.4 Câmera de cutscenes (2026-10-26): sem cortes bruscos e sem a câmera entrar no cenário — ver *2.4*.
-- [ ] 2.5 Auditoria de fidelidade ao cânone de todos os personagens (Capítulo Complementar v3.44.0/v3.45.0): prioridade
-  imediata em Raziel e sua forma O Verdadeiro Raziel (RZ-01 a RZ-09: Turno Extra, Sede Incontrolável, Banquete Bestial
-  diferenciado, etc.), seguido de revisão sistemática de fidelidade dos 28 personagens do elenco (§3.1 a §3.30).
+- [~] 2.5 Auditoria de fidelidade ao cânone de todos os personagens (Capítulo Complementar v3.44.0/v3.45.0): **Raziel
+  CONCLUÍDO (RZ-01 a RZ-09, 2026-10-26)** — Turno Extra, Sede Incontrolável, Banquete Bestial próprio, Vulto Retalhador
+  no lugar do projétil, Maldição revista, crosta visível, kit próprio da forma (Língua, Predador), Afinidade com Sangue e
+  validação. Falta a revisão sistemática dos 28 personagens do elenco (§3.1 a §3.30).
 - [ ] **EM BREVE (pedido de 2026-10-26): CENÁRIO NOVO + EQUIPE VAMPIROS.** Um cenário novo — pode ser o **interior da
   Igreja dos Vampiros de Hexatombe** (a Igreja de Sangue, ep. 9) — que entra junto com um **personagem novo de uma
   equipe nova, os VAMPIROS: Raziel**. Antes de começar: levantar o Raziel e a igreja na wiki/HQ (`lore/`, arte
@@ -57,12 +58,17 @@
         dragonas com franjas, o jabô e a pedra vermelha, as correntes e os laços, a cabeça descarnada sem olhos com o
         estigma aceso e os dentes, garras e pés descalços; a TRANSFORMAÇÃO "O Verdadeiro Raziel" é o mesmo .glb trocando as
         peças (prop_up some; prop_true mostra a ferida com as costelas, os braços rasgados até o osso e a língua).
-        Kit: Garras (físico), Rasgo de Sangue (□), Bote Retalhador (heavyBlow com `grazeOnDodge`: quem esquiva toma
+        Kit: Garras (físico), Vulto Retalhador (□; era o Rasgo de Sangue, trocado no RZ-04), Bote Retalhador (heavyBlow com `grazeOnDodge`: quem esquiva toma
         metade), Mordida (`vampireBite`: segura, morde duas vezes e cura), Endurecer Sangue (crosta de sangue, menos dano),
         Maldição Sanguínea (`bloodCurse`: ABALADO), Turno Extra (ataca mais rápido), especial Banquete de Sangue (as
         mordidas curam: `h.drain` no cinematicCombo); na forma: Devorar, Frenesi e o Banquete Bestial. Agarrão próprio
         (garras + mordida), falas de introdução (cenas do cânone com Cristino, Juan, Jae, Labirinto e Dalmo) e de vitória
         contra os 28. Testado: cada golpe, o raspão na esquiva, a transformação e 4 partidas CPU × CPU sem erro.
+        Na forma verdadeira, BARRA DE VIDA PRÓPRIA (`hpBar: { style: 'vampire' }`, `.hb-vampire` em styles.css): sangue
+        escuro coagulado com veias pulsando e GOTAS escorrendo pela barra. Na seleção fica logo depois do Cristino.
+        Revisão da v3.45.0 (outra IA): o commit deixou DOIS `hideRangedProps` no Fighter — o segundo apagava a trava da
+        maça do Machado Demônio (Balu); juntados num só, que usa o `activeRanged` e mantém o `propLock`.
+        Kian: o cabelo voltou a ser CURTO e rente (não é black power).
         Proposta original (para referência): líder dos Vampiros, Sangue, Combatente (trilha Monstruoso), 1,90 m, rápido "como um vulto".
         Visual (arte de Hexatombe): a cabeça careca descarnada sem olhos nem nariz, a boca de fera com os dentes amarelos e
         o estigma da Coroa de Espinhos cortado na testa; o casacão preto/vermelho até o chão de ombros altos com a gola alta
@@ -377,15 +383,49 @@ A forma base é a tradução de sua ficha mais ritualística/elegante; a forma v
 ##### 2.4 Auditoria do código atual e tarefas propostas para Raziel
 O código atual já contém `src/characters/raziel.js`, `src/characters/forms/raziel_verdadeiro.js`, `src/combat/razielAbilities.js` e clipes próprios em `src/anim/razielClips.js`. Não recomeçar o personagem do zero.
 
-- [ ] **RZ-01 — Turno Extra:** Rever a implementação atual (a passiva está representada apenas por `attackSpeed: 1.12`). Escolher e documentar uma adaptação real de ação extra para combate em tempo real (ex.: janela limitada para golpe/ação adicional após acerto com cooldown interno). Limitar a uma oportunidade por janela/cooldown para não encadear infinitos. Testar jogador, CPU, bloqueio, esquiva, combo, interrupção e fim de round.
-- [ ] **RZ-02 — Sede Incontrolável:** Implementar a condição de alvo vulnerável/morrendo próximo apenas na forma verdadeira. Adicionar indicação visual/sonora breve e uma ação de devoração legível. Definir raio, limiar de vida/estado, duração, cura e recarga com base no balanceamento existente. Fazer a CPU usar a mecânica com prioridade contextual sem ficar presa tentando devorar um alvo fora de alcance. Testar KO, interrupção, alvo protegido, multiplayer e encerramento da luta.
-- [ ] **RZ-03 — Diferenciar Banquete de Sangue e Banquete Bestial:** O especial da forma verdadeira não deve apenas herdar a sequência do especial base mudando cor e dano. Base: encenação de anfitrião/predador controlado, agarrão e mordidas com drenagem. Forma verdadeira: início explosivo, garras/rasgos, mordida/devorar como centro e finalização visual mais animalesca. Se não existir mecânica segura de execução contextual, aplicar dano fixo em cinemática brutal. Testar interrupção, invulnerabilidade, KO e duração da cutscene.
-- [ ] **RZ-04 — Revisar Rasgo de Sangue:** O projétil em meia-lua é uma adaptação de gameplay, não uma habilidade canônica confirmada. Decidir explicitamente entre (A) mantê-lo como licença de gameplay, documentada como adaptação; ou (B) substituí-lo por uma investida rápida de garras (dash/bote frontal), que comunica melhor a velocidade de vulto e o combate direto do episódio. Preservar o botão e função de gameplay do golpe; testar alcance, bloqueio, esquiva e combos.
-- [ ] **RZ-05 — Maldição Sanguínea:** Manter a penalidade de −1 dado como a referência do RPG e documentar a tradução para combate em tempo real. A implementação atual de dano inicial + `ABALADO` + redução de dano causado + aumento de dano recebido é uma adaptação; verificar se o efeito é compreensível e não excessivo. Rever duração, resistência, defesa, substituição de estado e encerramento de round.
-- [ ] **RZ-06 — Endurecer Sangue:** Confirmar visualmente a crosta de sangue sobre a roupa e a leitura clara de defesa temporária. Testar dano físico, paranormal, agarrões, especiais, interrupções e fim de duração. Não converter a resistência em imunidade a todos os efeitos.
-- [ ] **RZ-07 — Forma verdadeira como kit próprio:** Preservar os golpes de base que ainda fazem sentido, mas dar função mecânica distinta à forma: pressão física, aproximação rápida, cura por mordida/devoração e punição de oponentes vulneráveis. Não depender apenas de aumento de atributos, sangramento e cor de VFX. Revisar se Endurecer Sangue precisa permanecer no kit transformado. Validar retorno à forma normal/round seguinte e troca das peças visuais `prop_up`/`prop_true`.
-- [ ] **RZ-08 — Afinidade com Sangue e ficha do Monstruoso:** Registrar que Raziel é um Combatente Monstruoso com afinidade em Sangue. Não transformar Afinidade Elemental numa habilidade genérica sem função; usá-la para orientar a identidade de rituais e resistências. Não importar para o jogo todas as penalidades de interpretação e progressão do RPG sem decisão explícita.
-- [ ] **RZ-09 — Validação final de Raziel:** Testar base e forma verdadeira contra pelo menos um personagem de cada perfil (rápido, tanque, zoner, agarrador e ritualista). Testar CPU × CPU e jogador × CPU. Verificar hitboxes, câmera, animações, VFX, barra de vida, energia e cooldown. Verificar se o especial não trava o oponente após interrupção/KO. Atualizar documentações e testes.
+- [x] **RZ-01 — Turno Extra** (2026-10-26): passiva `extraTurn` — o FINALIZADOR do combo que acerta abre 2 s em que a
+  próxima habilidade é a "ação extra" (não entra em recarga; gasta a janela); recarga interna de 10 s, zera no round;
+  vale também na forma verdadeira. Testado: a Mordida dentro da janela sai sem recarga; CPU × CPU sem erro.
+  Pedido original: Rever a implementação atual (a passiva está representada apenas por `attackSpeed: 1.12`). Escolher e documentar uma adaptação real de ação extra para combate em tempo real (ex.: janela limitada para golpe/ação adicional após acerto com cooldown interno). Limitar a uma oportunidade por janela/cooldown para não encadear infinitos. Testar jogador, CPU, bloqueio, esquiva, combo, interrupção e fim de round.
+- [x] **RZ-02 — Sede Incontrolável** (2026-10-26): no DEVORAR da forma verdadeira (`thirst` em `vampireBite`), contra
+  alvo abaixo de 30% da vida: aviso "SEDE INCONTROLÁVEL" (anel e sangue, batida de coração), o bote vai 1,6 m mais
+  longe, morde 1,4× e bebe 100%; a CPU prioriza o Devorar nessa hora só com o alvo no alcance do bote. Testado: de 3,2 m
+  pegou, 90 de dano, bebeu tudo. Pedido original: Implementar a condição de alvo vulnerável/morrendo próximo apenas na forma verdadeira. Adicionar indicação visual/sonora breve e uma ação de devoração legível. Definir raio, limiar de vida/estado, duração, cura e recarga com base no balanceamento existente. Fazer a CPU usar a mecânica com prioridade contextual sem ficar presa tentando devorar um alvo fora de alcance. Testar KO, interrupção, alvo protegido, multiplayer e encerramento da luta.
+- [x] **RZ-03 — Banquete Bestial próprio** (2026-10-26): roteiro novo no `cinematicCombo` — ruge e explode em sangue
+  (`db_powerup` + `bloodBurst`), investida mais rápida (30 m/s), câmera das garras (`shots: 'claw'`), frenesi de 4 garras
+  (sangramento), o DEVORAR no centro (duas mordidas longas com o alvo de joelhos, `drain: 1` e a opção nova `gore`:
+  sangue jorrando do pescoço e tremor) e o rasgo final que joga no chão (`endReaction.lowLaunch`). Dano fixo de 320
+  (sem execução contextual). Testado: 242 de dano/74 de cura contra o Balu, KO no meio fecha a cena, interrupção por
+  golpe libera os dois, cena de ~3,7 s. Pedido original: O especial da forma verdadeira não deve apenas herdar a sequência do especial base mudando cor e dano. Base: encenação de anfitrião/predador controlado, agarrão e mordidas com drenagem. Forma verdadeira: início explosivo, garras/rasgos, mordida/devorar como centro e finalização visual mais animalesca. Se não existir mecânica segura de execução contextual, aplicar dano fixo em cinemática brutal. Testar interrupção, invulnerabilidade, KO e duração da cutscene.
+- [x] **RZ-04 — Rasgo de Sangue → VULTO RETALHADOR** (2026-10-26, opção B): no cânone o Raziel não atira; o □ virou a
+  investida longa (`dashStrike`, 10 m a 34 m/s) que termina num X de garras com sangramento (opção `bleed` nova no
+  `dashStrike`); `aiRange: 10` para a CPU usar de longe (opção nova lida pela CPU). Diferente do Frente + ○ (bote curto
+  do combo). Testado: de 9 m acerta 28 + sangra, a 14 m erra sem dano, na defesa tira 7; CPU usa. Pedido original: O projétil em meia-lua é uma adaptação de gameplay, não uma habilidade canônica confirmada. Decidir explicitamente entre (A) mantê-lo como licença de gameplay, documentada como adaptação; ou (B) substituí-lo por uma investida rápida de garras (dash/bote frontal), que comunica melhor a velocidade de vulto e o combate direto do episódio. Preservar o botão e função de gameplay do golpe; testar alcance, bloqueio, esquiva e combos.
+- [x] **RZ-05 — Maldição Sanguínea** (2026-10-26): −1 dado → bate 20% mais fraco; apanha 10% mais (era 12%); 6 s (era
+  8 s: ficava 57% do tempo no ar, agora ~43%); renova sem acumular; quem defende resiste a metade; o alvo pinga sangue
+  podre enquanto durar (some no fim e na troca de round, testado). Pedido original: Manter a penalidade de −1 dado como a referência do RPG e documentar a tradução para combate em tempo real. A implementação atual de dano inicial + `ABALADO` + redução de dano causado + aumento de dano recebido é uma adaptação; verificar se o efeito é compreensível e não excessivo. Rever duração, resistência, defesa, substituição de estado e encerramento de round.
+- [x] **RZ-06 — Endurecer Sangue** (2026-10-26): a crosta (`buildBloodArmor`) sumia no casacão vermelho — opção nova
+  `bright` (mais viva, molhada e pulsando; `brightBloodArmor: true` no Raziel), conferida no jogo. Testado: −40% de todo
+  dano (116 → 70 físico; especial 56), 3 golpes sem recuar e o 4º faz recuar, o AGARRÃO ainda pega (não é imunidade), e
+  ao fim dos 6 s a crosta, o buff e as armaduras saem. Pedido original: Confirmar visualmente a crosta de sangue sobre a roupa e a leitura clara de defesa temporária. Testar dano físico, paranormal, agarrões, especiais, interrupções e fim de duração. Não converter a resistência em imunidade a todos os efeitos.
+- [x] **RZ-07 — Forma verdadeira com kit próprio** (2026-10-26): a fera não se protege — o Endurecer Sangue sai e entra
+  a LÍNGUA (`tongueLash`: dispara até 6,5 m, enrola, puxa para as garras e atordoa; não defensável, a esquiva escapa;
+  errar deixa exposto); □ VULTO BESTIAL (mais rápido, 36, sangra mais); passiva PREDADOR (+20% em atordoado, caído,
+  tomando golpe ou < 30% da vida); somam-se Devorar com a Sede (RZ-02), o Frenesi e o Banquete Bestial (RZ-03).
+  Testado: Língua pega (25 + sangra), atravessa a defesa (24), a esquiva escapa, de 9 m erra; Predador 90 → 108; no
+  round seguinte volta ao Raziel normal com `prop_up`/`prop_true` trocados de volta; CPU usa a Língua. Pedido original: Preservar os golpes de base que ainda fazem sentido, mas dar função mecânica distinta à forma: pressão física, aproximação rápida, cura por mordida/devoração e punição de oponentes vulneráveis. Não depender apenas de aumento de atributos, sangramento e cor de VFX. Revisar se Endurecer Sangue precisa permanecer no kit transformado. Validar retorno à forma normal/round seguinte e troca das peças visuais `prop_up`/`prop_true`.
+- [x] **RZ-08 — Afinidade com Sangue** (2026-10-26): registrado no código e no HABILIDADES — Combatente, trilha
+  Monstruoso, afinidade com Sangue. A `elementalAffinity` ganhou `element` (só os rituais desse elemento ficam mais
+  fortes) e `resist` (resiste a rituais desse elemento): Raziel +10% nos rituais de Sangue e −15% dos rituais de Sangue
+  dos outros; a fraqueza a Morte já vem do ciclo. Penalidades de interpretação/progressão do Monstruoso não entram.
+  Kaiser e Nubi seguem iguais. Testado: ritual de Sangue da Agatha 115 → 98; Kaiser 115 (igual). Pedido original: Registrar que Raziel é um Combatente Monstruoso com afinidade em Sangue. Não transformar Afinidade Elemental numa habilidade genérica sem função; usá-la para orientar a identidade de rituais e resistências. Não importar para o jogo todas as penalidades de interpretação e progressão do RPG sem decisão explícita.
+- [x] **RZ-09 — Validação final** (2026-10-26): CPU × CPU (difícil, na Igreja) contra um de cada perfil, dos dois lados
+  — rápido (Gal), tanque (Lírio), zoner (Arthur), agarrador (Dalmo), ritualista (Magistrada): 10 partidas até o fim, sem
+  erro, sem NaN, sem cena travada (a maior: Banquete Bestial, 3,9 s), forma verdadeira entrando e saindo. Testes do jogador
+  feitos com o testkit em cada item (RZ-01 a RZ-08); `tests/raziel.test.js` (5 testes) e o check cobrem o kit.
+  **Para a fase de balanceamento (não mexido agora):** (1) o Raziel venceu 9 das 10; (2) combos longos de 5 a 7 s em
+  hitstun contínuo (Gal e Magistrada no Raziel, Raziel na Magistrada) — não é estado travado (a vida cai a cada golpe),
+  é o motor permitindo combos longos e a CPU sem usar a Substituição para sair. Pedido original: Testar base e forma verdadeira contra pelo menos um personagem de cada perfil (rápido, tanque, zoner, agarrador e ritualista). Testar CPU × CPU e jogador × CPU. Verificar hitboxes, câmera, animações, VFX, barra de vida, energia e cooldown. Verificar se o especial não trava o oponente após interrupção/KO. Atualizar documentações e testes.
 
 ---
 

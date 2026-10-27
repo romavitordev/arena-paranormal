@@ -64,6 +64,8 @@ export function abilityUsePrior(a, f, opp, { distance, lowHp, opening, threat, l
   if (lowHp && (a.type === 'healOverTime' || a.type === 'agingHeal')) prior *= 3;
   if (threat && a.type === 'shuffle') prior *= 2; // Embaralhar: as cópias seguram o golpe que vem
   if (lowHp && a.ai?.when === 'hurt') prior *= 1.5;
+  // SEDE INCONTROLÁVEL (O Verdadeiro Raziel): devora quem está morrendo — só quando o alvo está no alcance do bote
+  if (a.thirst && opp.health < opp.maxHealth * a.thirst.below && distance < (a.range || 2) + a.thirst.reach + 1.5) prior *= 3;
   if (distance < 2 && a.range > 4 && !selfTarget) prior *= 0.55;
   return prior;
 }
@@ -559,7 +561,7 @@ export class CpuController {
         return out;
       }
       // à distância: principal (sniper do Arthur: segura para carregar — quanto mais longe, mais tempo)
-      if (def.ranged && def.ranged.type !== 'counter' && f.cooldowns.ranged <= 0 && d > 5 && d < (def.ranged.range ?? 99) + 0.5 && r < L.ranged * (lowHp ? 1.4 : 1) && f.energy >= (def.ranged.energyCost || 0)) {
+      if (def.ranged && def.ranged.type !== 'counter' && f.cooldowns.ranged <= 0 && d > 5 && d < (def.ranged.aiRange ?? def.ranged.range ?? 99) + 0.5 && r < L.ranged * (lowHp ? 1.4 : 1) && f.energy >= (def.ranged.energyCost || 0)) {
         if (def.ranged.chargeShot) {
           this.queue.push({ t: 0.06, held: { ranged: true } });
           this.aimHold = Math.min(1.6, 0.2 + d / 14);
@@ -666,7 +668,7 @@ export class CpuController {
     if (d > 3.5 && d < 8 && f.cooldowns.dash <= 0) add('dashIn', lowHp ? 0.2 : open ? 1.4 : 0.6, () => this.queue.push({ t: 0.05, held: { jump: true } }, { t: 0.05, held: {} }, { t: 0.05, held: { jump: true } }, { t: 0.05, held: {} }));
     // à distância
     const r = def.ranged;
-    if (r && r.type !== 'counter' && f.cooldowns.ranged <= 0 && d > 3 && d < (r.range ?? 99) + 0.5 && f.energy >= (r.energyCost || 0)) {
+    if (r && r.type !== 'counter' && f.cooldowns.ranged <= 0 && d > 3 && d < (r.aiRange ?? r.range ?? 99) + 0.5 && f.energy >= (r.energyCost || 0)) {
       add('ranged', d > 5 ? 1.4 : 0.5, () => {
         if (r.chargeShot) { this.queue.push({ t: 0.06, held: { ranged: true } }); this.aimHold = Math.min(1.6, 0.2 + d / 14); } else this.tap('ranged');
       });

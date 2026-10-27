@@ -251,6 +251,8 @@ ok(abil('kaiser', 'rootTrap') && abil('kaiser', 'cursedShots') && pas('kaiser', 
 ok(abil('arthur', 'hatredTemple') && abil('arthur', 'bloodParalysis'), 'Arthur: Templo do Ódio + Dystopia');
 ok(pas('joui', 'decepar') && get('joui').melee.strikes.slice(0, -1).every((s) => s.range <= 2.2), 'Joui: Decepar, sequência com alcance ≤ 2,2 m');
 ok(pas('aghata', 'bloodNecklace'), 'Agatha: Colar Banhado em Sangue');
+ok(pas('raziel', 'extraTurn'), 'Raziel: Turno Extra (o finalizador abre a ação extra)');
+ok(get('raziel').passives.some((p) => p.type === 'elementalAffinity' && p.element === 'sangue' && p.resist < 1), 'Raziel: Afinidade com Sangue (rituais de Sangue mais fortes, resiste a Sangue)');
 ok(pas('gal_sal', 'bulletDodge') && abil('gal_sal', 'sparkTeleport'), 'Gal: Desviar de Balas + Teletransporte');
 const mods = (c) => (c.abilities || []).filter((a) => a.input.startsWith('block+') || a.input.startsWith('carga+')).map((a) => a.input);
 ok(ROSTER.every((c) => new Set(mods(c)).size === mods(c).length), 'nenhum R1 + botão repetido no mesmo personagem');

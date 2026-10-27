@@ -50,6 +50,19 @@ html.vp-fix canvas#game, html.vp-fix #hud, html.vp-fix .screen, html.vp-fix #tou
 .bar.health.hb-blood .fill { background: linear-gradient(180deg, #ff5a4a, #b00018 55%, #5a0008); }
 .bar.health.hb-blood .trail { background: #ffb08a; }
 .bar.health.hb-blood .fx { background: repeating-linear-gradient(100deg, transparent 0 18px, rgba(60,0,8,.55) 18px 21px, transparent 21px 44px); background-size: 88px 100%; animation: hbFlow 1.6s linear infinite; mix-blend-mode: multiply; }
+/* Vampiro (O Verdadeiro Raziel): sangue escuro coagulado, as veias pulsando e as gotas escorrendo e pingando */
+.bar.health.hb-vampire { border-color: #1a0004; box-shadow: 0 0 0 1px #4a0008, 0 0 12px rgba(176,16,32,.7), inset 0 -3px 6px rgba(0,0,0,.6); }
+.bar.health.hb-vampire .fill { background: repeating-linear-gradient(96deg, transparent 0 14px, rgba(30,0,4,.45) 14px 16px, transparent 16px 37px), radial-gradient(ellipse 9px 5px at 18% 60%, rgba(40,0,4,.6) 55%, transparent 70%), radial-gradient(ellipse 6px 4px at 52% 30%, rgba(255,110,100,.35) 50%, transparent 70%), radial-gradient(ellipse 11px 6px at 78% 75%, rgba(30,0,4,.55) 55%, transparent 72%), linear-gradient(180deg, #e8303a 0%, #a00818 38%, #5a0010 72%, #2a0006); background-size: 74px 100%, 38px 100%, 38px 100%, 38px 100%, 100% 100%; animation: hbClot 3.2s linear infinite, hbPulse 1.1s ease-in-out infinite; }
+.bar.health.hb-vampire .trail { background: linear-gradient(180deg, #ff9a8a, #c8303a); }
+.bar.health.hb-vampire .fx::before, .bar.health.hb-vampire .fx::after { content: ''; position: absolute; inset: 0; }
+/* gotas que escorrem pela barra (uma camada rápida e outra lenta, alternadas) */
+.bar.health.hb-vampire .fx::before { background: radial-gradient(ellipse 2.5px 5px at 12% 50%, #ff3a40 45%, #7a0010 60%, transparent 66%), radial-gradient(ellipse 2px 4px at 47% 50%, #ff4a4a 45%, #7a0010 60%, transparent 66%), radial-gradient(ellipse 3px 6px at 81% 50%, #ff3a40 45%, #6a000c 60%, transparent 66%); background-size: 58px 34px; animation: hbBleed 1.25s linear infinite; }
+.bar.health.hb-vampire .fx::after { background: linear-gradient(180deg, rgba(120,0,14,.9), rgba(120,0,14,0)) 22% 0 / 2px 30% no-repeat, linear-gradient(180deg, rgba(120,0,14,.9), rgba(120,0,14,0)) 63% 0 / 3px 45% no-repeat, radial-gradient(ellipse 3px 5px at 30% 50%, #d01828 45%, #5a0008 60%, transparent 66%), radial-gradient(ellipse 2px 4px at 70% 50%, #e02030 45%, #5a0008 60%, transparent 66%); background-size: 2px 30%, 3px 45%, 92px 52px, 92px 52px; background-repeat: no-repeat, no-repeat, repeat, repeat; animation: hbBleedSlow 2.3s linear infinite; }
+.bar.health.hb-vampire.low .fill { animation: hbClot 1.6s linear infinite, hbPulse .45s ease-in-out infinite; }
+@keyframes hbClot { from { background-position: 0 0, 0 0, 0 0, 0 0, 0 0; } to { background-position: 74px 0, 38px 0, -38px 0, 76px 0, 0 0; } }
+@keyframes hbPulse { 0%, 100% { filter: brightness(.9) saturate(1); } 50% { filter: brightness(1.2) saturate(1.25); } }
+@keyframes hbBleed { from { background-position: 0 -34px; } to { background-position: 0 34px; } }
+@keyframes hbBleedSlow { from { background-position: 22% 0, 63% 0, 0 -52px, 46px -52px; } to { background-position: 22% 0, 63% 0, 0 52px, 46px 52px; } }
 /* Conhecimento (A Magistrada): dourado com o brilho de um sigilo varrendo a barra */
 .bar.health.hb-knowledge { box-shadow: 0 0 0 1px #6a5410, 0 0 10px rgba(255,214,90,.5); }
 .bar.health.hb-knowledge .fill { background: repeating-linear-gradient(45deg, rgba(90,60,0,.28) 0 2px, transparent 2px 9px), repeating-linear-gradient(-45deg, rgba(90,60,0,.28) 0 2px, transparent 2px 9px), linear-gradient(180deg, #ffe7a0, #c8860e 55%, #4a2e04); }
