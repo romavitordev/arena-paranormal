@@ -2,6 +2,11 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.50.0 — Chamas e Sinais
+- CELESTINE EM CHAMAS: chamas de energia azul-turquesa no cabelo, nos ombros, nos braços e subindo das pernas, como nas miniaturas de Calamidade.
+- O ESTRANGEIRO REFEITO pelas artes: rosto novo (crânio alto, queixo pontudo, olhos verdes inclinados, sem boca), pose parada própria (imóvel, braços caídos, garras pendendo), mais alto e magro, capa até o chão com as ombreiras altas e pontudas, folhas verdes no peito, faixa de pano, garras longas e pés de garra.
+- PÁGINA SOBRE: retrato para todos os 33 lutadores, refeitos com os modelos atuais.
+
 ## v3.49.0 — Celestine e a Máscara do Desespero
 - NOVA LUTADORA — CELESTINE (Portadores / Ordo Calamitas): duas machadinhas na corrente; □ crava e puxa; Corrente Giratória, Código, Investida Rebelde, Endorfina e o especial Duelo Final.
 - Transformação: veste a Máscara do Desespero e vira CELESTINE, A MAGISTRADA (os poderes da Magistrada, com a aparência dela).

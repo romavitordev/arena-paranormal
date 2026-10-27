@@ -6,6 +6,25 @@
 //   host_*: ANFITRIÃO — apresentador do caos: cabeça inclinada, braços abertos, trancos, reverências e risadas.
 
 export function addCharClips(CLIPS, k) {
+  // ======================= O ESTRANGEIRO =======================
+  // de pé, alto e imóvel como nas artes: os braços compridos caídos ao lado do corpo com as garras pendendo, a cabeça
+  // um pouco baixa olhando por cima; quase não respira — só a cabeça inclina devagar de um lado para o outro, e os
+  // dedos abrem e fecham (o cotovelo mexe pouco). Nada de guarda de luta: ele não precisa.
+  const EST = {
+    h: 0, hip: [0, 0, 0], sp: [0.06, 0, 0], hd: [0.16, 0, 0.06],
+    sL: [0.04, 0, 0.2], eL: [-0.22, 0, 0], sR: [0.04, 0, -0.2], eR: [-0.22, 0, 0],
+    lL: [-0.03, 0, 0.07], kL: [0.06, 0, 0], lR: [0.05, 0, -0.07], kR: [0.06, 0, 0],
+  };
+  Object.assign(CLIPS, {
+    est_idle: { dur: 3.6, loop: true, keys: [
+      k(0, EST),
+      k(0.3, { ...EST, h: -0.012, sp: [0.08, 0.04, 0], hd: [0.2, 0.12, -0.1], sL: [0.02, 0, 0.23], eL: [-0.3, 0, 0], sR: [0.06, 0, -0.18], eR: [-0.18, 0, 0] }),
+      k(0.55, { ...EST, h: -0.006, hd: [0.18, 0.1, -0.12] }),
+      k(0.8, { ...EST, h: -0.01, sp: [0.07, -0.03, 0], hd: [0.14, -0.06, 0.1], sL: [0.06, 0, 0.18], eL: [-0.18, 0, 0], sR: [0.02, 0, -0.23], eR: [-0.3, 0, 0] }),
+      k(1, EST),
+    ] },
+  });
+
   // ======================= ARNALDO =======================
   // guarda de esgrima: de lado, espada à frente com a ponta um pouco alta, mão esquerda nas costas
   const FENCE = {

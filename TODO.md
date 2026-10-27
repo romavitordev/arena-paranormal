@@ -1,6 +1,6 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.49.0 (revisado em 2026-10-27: Celestine e a Máscara do Desespero — Celestine (Portadores / Ordo Calamitas) e a forma Celestine, a Magistrada, a Magistrada canônica (Reescrever a Realidade), a Seita das Máscaras refeita, equipes duplas e as cores das Relíquias)
+**Versão de referência atual:** v3.50.0 (revisado em 2026-10-27: Chamas e Sinais — as chamas de energia da Celestine, o Estrangeiro refeito pelas artes oficiais e os retratos da página Sobre)
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente
 
@@ -9,7 +9,7 @@
 
 # PRÓXIMA GRANDE ATUALIZAÇÃO — LUTA + MODO PvE (planejamento de 2026-10-18)
 
-**Estado em 2026-10-27 (v3.49.0):**
+**Estado em 2026-10-27 (v3.50.0):**
 - [~] 2.2 Modelos antigos: Xande e Aguiar (v3.33.0), Fantasma, Kemi e Gal Sal + as lâminas Ereškigal (v3.34.0), Kaiser
   (v3.38.0), Balu e Lírio (v3.40.0), Arthur e Joui (v3.41.0), Arnaldo, Anfitrião, Veríssimo, Kian e O Diabo (2026-10-26)
   refeitos pelas artes oficiais; faltam os outros antigos
@@ -1542,6 +1542,10 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
       barra rasgada. Revisado pelo MCP e no jogo.
 - [ ] **PARA DEPOIS (pedido de 2026-10-27) — upgrade de modelos: A MAGISTRADA (e as MÁSCARAS que ela invoca), O
       ESTRANGEIRO e O AMIGO IMAGINÁRIO** na técnica atual (sculpt_lib), pelas artes oficiais.
+      [~] Feito em 2026-10-27: as MÁSCARAS (modelo `seita.glb`, v3.49.0) e o ESTRANGEIRO ajustado pelas artes (v3.50.0:
+      mais alto e magro, ROSTO refeito do zero, pose parada própria `est_idle`, olhos verdes, ombreiras pontudas na capa,
+      folhas no peito, faixa de pano, garras e pés de garra).
+      Faltam a MAGISTRADA e o AMIGO IMAGINÁRIO.
 - [ ] **PARA DEPOIS (2026-10-27) — O ESTRANGEIRO: os "SOLDADOS"** — ele pode invocar os seus soldados ETs: ALHEIOS de terno
       e gravata que parecem humanos e usam METRALHADORAS (modelo novo + invocação; conferir no cânone de Sinais do Outro Lado).
 - [x] **Pedidos de 2026-10-27 (feitos):**

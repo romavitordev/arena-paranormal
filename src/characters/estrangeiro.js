@@ -27,7 +27,7 @@ export default {
   },
   // alto e de braços longos: alcança mais, mas é mais lento
   stats: { moveSpeed: 7.2, attackSpeed: 0.95, size: 1.1, maxHealth: 1800 }, // Portador das Relíquias: aguenta mais que o elenco (o número não aparece na tela)
-  anims: { idle: 'db_idle', run: 'run', charge: 'charge', victory: 'vic_estrangeiro', block: 'db_block', block_hit: 'db_block_hit' },
+  anims: { idle: 'est_idle', run: 'run', charge: 'charge', victory: 'vic_estrangeiro', block: 'db_block', block_hit: 'db_block_hit' },
   chargeFx: { style: 'default', color: GREEN },
   dodge: { style: 'default', distance: 5 },
 

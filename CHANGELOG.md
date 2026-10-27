@@ -1,5 +1,16 @@
 # Changelog
 
+## v3.50.0 — Chamas e Sinais
+
+### Adicionado
+- Clipe `est_idle` (`anim/charClips.js`): a pose parada do Estrangeiro (sai o `db_idle` do Diabo).
+- `weapons.js energyFlames(color, { count, radius, height, width, lean })`: línguas de fogo em duas camadas somadas (`FLAME_GEO`, torno) que tremulam no `onBeforeRender` e ficam sempre de pé (o grupo desfaz a rotação do osso); presas na Celestine por `rig.attach` (cabeça, ombros, cotovelos, tronco, coxas e joelhos).
+- Retratos da página Sobre para `raziel`, `juan_odio`, `celestine`, `deus_morte` e `anfitriao`.
+
+### Alterado
+- `tools/blender/char_estrangeiro.py`: Builder mais magro e alto, MÁSCARA esculpida (`head_pt`: superelipse por altura em `HP`, testa, órbitas fundas, sulcos e rugas `crease_estrangeiro`, encaixes dos fios `cable_estrangeiro_green` com peso cabeça→peito), olhos verdes, ombreiras pontudas na própria capa (saem as placas quadradas), `leaf_estrangeiro` / `sash_estrangeiro` (folhas do peito e faixa de pano; saem as tiras cruzadas e as cordas verdes), dedos com garras e pés de garra.
+- Retratos da página Sobre renderizados de novo com os modelos atuais (240×320, `background: false`).
+
 ## v3.49.0 — Celestine e a Máscara do Desespero
 
 ### Adicionado

@@ -17,7 +17,7 @@ from mathutils import Vector
 
 OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'estrangeiro.glb'
 random.seed(7)
-b = Builder(width=0.86, bulk=0.82, height=1.2)  # 2,5 m — o mais alto do jogo
+b = Builder(width=0.78, bulk=0.74, height=1.24)  # 2,5 m — o mais alto do jogo, e bem magro (as artes)
 sk = b.sk
 H = sk.h
 hz = sk['hips'].z
@@ -30,7 +30,9 @@ cape = material('cape_estrangeiro', '#4a5236', 0.9)
 cape_in = material('cape_estrangeiro_in', '#262a1c', 0.9)
 robe = material('robe_estrangeiro', '#2c3022', 0.9)
 claw_m = material('claw_estrangeiro', '#d8d6c8', 0.5)
-glow = material('eyeglow_estrangeiro', '#9aff5a', 0.4, emission='#7aff3a', strength=3)
+glow = material('eyeglow_estrangeiro', '#22e83a', 0.4, emission='#12d02a', strength=1.6)  # verde (forte demais virava amarelo)
+leaf = material('leaf_estrangeiro', '#4e8a34', 0.5, emission='#2e6a22', strength=0.25)  # os ornamentos do peito
+sash = material('sash_estrangeiro', '#3a4230', 0.9)  # a faixa de pano enrolada na cintura
 
 M = {'skin': skin, 'face': material('face_estrangeiro', '#ffffff', 0.5), 'torso': armor, 'hand': skin}
 
@@ -136,31 +138,104 @@ def est_torso(sk_, profile, seg=18, depth=0.62):
 
 
 lib.torso_part = est_torso
-# a cabeça é a MÁSCARA: cinza, comprida, "em forma de cabeça humana" (face_estrangeiro)
-hc = b.body(M, [], arms=(), legs=False, head_r=(0.118, 0.13, 0.17), neck_r=0.046)
+# a cabeça base fica pequena, escondida dentro da MÁSCARA esculpida abaixo
+hc = b.body(M, [], arms=(), legs=False, head_r=(0.07, 0.085, 0.13), neck_r=0.042)
 
-# OLHOS: dois olhos verdes grandes e amendoados, acesos, na frente da máscara
+# ---------------------------------------------------------------- A MÁSCARA (rosto refeito pela miniatura de Sinais do
+# Outro Lado): crânio ALTO de topo achatado, largo na testa, que afina num QUEIXO longo e pontudo; a TESTA pesada cai
+# sobre os olhos fundos, inclinados e VERDES; um sulco desce do alto do crânio até a testa; abaixo dos olhos, RUGAS
+# verticais até o queixo — sem boca. Seção de "caixa arredondada" (superelipse) no crânio, mais redonda no rosto.
+HP = [  # (z relativo ao centro, meia-largura, meia-profundidade, expoente da seção) — em frações de H
+    (0.235, 0.03, 0.04, 2.0),
+    (0.228, 0.07, 0.085, 3.0),
+    (0.21, 0.094, 0.11, 3.2),
+    (0.15, 0.104, 0.122, 3.0),
+    (0.07, 0.106, 0.124, 2.8),
+    (0.02, 0.102, 0.12, 2.6),
+    (-0.04, 0.092, 0.112, 2.4),
+    (-0.1, 0.078, 0.1, 2.2),
+    (-0.16, 0.058, 0.084, 2.1),
+    (-0.21, 0.034, 0.066, 2.0),
+    (-0.245, 0.012, 0.04, 2.0),
+    (-0.255, 0.0, 0.0, 2.0),
+]
+HP_UP = [(-q[0],) + q[1:] for q in HP]  # lerp_table quer o x crescendo
+EYE_Z, EYE_X = -0.005, 0.044
+mask_m = material('mask_estrangeiro', '#8e937e', 0.6)  # cinza-esverdeado da miniatura
+
+
+def spow(v, e):
+    return math.copysign(abs(v) ** e, v)
+
+
+def head_pt(a, z, out=0.0):
+    """a = ângulo em volta (0 = frente, −y), z = altura relativa ao centro (frações de H); out empurra para fora."""
+    w, d, n = lerp_table(HP_UP, -z)
+    x = spow(math.sin(a), 2 / n) * (w + out)
+    y = -spow(math.cos(a), 2 / n) * (d + out)
+    front = max(0.0, math.cos(a))
+    # TESTA pesada: um friso para a frente logo acima dos olhos
+    y -= 0.016 * front ** 3 * math.exp(-((z - 0.045) / 0.022) ** 2)
+    # OLHOS FUNDOS: as órbitas afundam
+    for s in (1, -1):
+        dx = x - s * EYE_X
+        y += 0.02 * front * math.exp(-(dx / 0.03) ** 2 - ((z - EYE_Z) / 0.022) ** 2)
+    # rosto mais chato embaixo dos olhos (as maçãs marcam os lados)
+    if z < EYE_Z:
+        y *= 1 - 0.1 * front ** 2 * min(1.0, (EYE_Z - z) / 0.06)
+    return Vector((hc.x + x * H, hc.y + y * H, hc.z + z * H))
+
+
+b.add('mask', grid(lambda u, v: head_pt((u - 0.5) * TAU + math.pi, HP[0][0] - (HP[0][0] - HP[-1][0]) * v), 40, 30), mask_m, region='head', subdiv=1)
+
+# OLHOS: amendoados e inclinados (o canto de fora mais alto), acesos de verde, no fundo das órbitas
 for s_ in (1, -1):
-    eye = ellipsoid((hc.x + s_ * 0.048 * H, hc.y - 0.128 * H, hc.z + 0.02 * H), (0.034 * H, 0.012 * H, 0.018 * H), 12, 8)
-    b.add(f'eye{s_}', xform(eye, lambda p, s_=s_: Vector((p.x, p.y, p.z + (p.x - (hc.x + s_ * 0.048 * H)) * 0.45 * s_))), glow, region='head', subdiv=0)
-# a divisão que separa a máscara em duas (friso escuro do alto da cabeça até o queixo, pela frente)
-split = []
-for i in range(13):
-    t = i / 12
-    beta = 1.45 - t * 2.45  # do topo até embaixo do queixo
-    split.append(Vector((hc.x, hc.y - math.cos(beta) * 0.137 * H, hc.z + math.sin(beta) * 0.176 * H)))
-b.add('mask_split', rod(split, [0.006 * H] * 13, 5), dark, region='head', subdiv=0)
+    c = head_pt(s_ * 0.42, EYE_Z) + Vector((0, -0.004 * H, 0))  # um pouco para fora do fundo da órbita: aparece aceso
+    eye = ellipsoid(tuple(c), (0.032 * H, 0.013 * H, 0.016 * H), 12, 8)
+    b.add(f'eye{s_}', xform(eye, lambda p, c=c, s_=s_: Vector((p.x, p.y, p.z + (p.x - c.x) * 0.5 * s_))), glow, region='head', subdiv=0)
 
-# FIOS que saem da máscara e se ligam ao corpo (atrás e dos lados da cabeça até os ombros e o peito)
-cables = []
+
+def groove(pts):
+    return rod(pts, [0.0026 * H] * len(pts), 4)  # fino e meio afundado: risco, não barra
+
+
+lines = []
+# o sulco do meio: do alto do crânio até a testa
+lines.append(groove([head_pt(0.0, z, -0.0005) for z in (0.225, 0.2, 0.16, 0.12, 0.08, 0.06)]))
+# os dois sulcos das têmporas, descendo pelos lados do crânio
+for s in (1, -1):
+    lines.append(groove([head_pt(s * a_, z, 0.002) for a_, z in ((0.5, 0.215), (0.62, 0.17), (0.72, 0.11), (0.78, 0.05))]))
+# a borda de cima das órbitas (a testa pesada)
+for s in (1, -1):
+    lines.append(groove([head_pt(s * a_, EYE_Z + 0.03, 0.003) for a_ in (0.1, 0.25, 0.42, 0.6)]))
+# RUGAS verticais embaixo dos olhos até o queixo (sem boca)
+for xa, top, bot in ((0.0, -0.05, -0.22), (0.16, -0.045, -0.18), (-0.16, -0.045, -0.18), (0.34, -0.035, -0.12), (-0.34, -0.035, -0.12)):
+    lines.append(groove([head_pt(xa * (1 + 0.15 * t), top + (bot - top) * t, 0.001) for t in (0.0, 0.33, 0.66, 1.0)]))
+b.add('mask_lines', merge(*lines), material('crease_estrangeiro', '#3e4236', 0.8), region='head', subdiv=0)
+
+# FIOS verde-escuros que entram por ENCAIXES nas laterais e atrás da cabeça e caem até os ombros e as costas
+cable_m = material('cable_estrangeiro_green', '#1e3a24', 0.5)
+cables, ports = [], []
 random.seed(9)
-for i in range(18):
-    a = math.pi * 0.35 + (i / 17) * math.pi * 1.3
-    root = Vector((hc.x + math.sin(a) * 0.12 * H, hc.y - math.cos(a) * 0.13 * H, hc.z + random.uniform(-0.04, 0.08) * H))
-    end = torso_pt(a + random.uniform(-0.2, 0.2), random.uniform(0.5, 0.62), 1.0, 0.03)
-    mid = root.lerp(end, 0.5) + Vector((math.sin(a) * 0.03 * H, -math.cos(a) * 0.03 * H, -0.03 * H))
-    cables.append(rod([root, mid, end], [0.009 * H, 0.009 * H, 0.008 * H], 5))
-b.add('cables', merge(*cables), dark, region='torso', subdiv=0)
+for i in range(16):
+    s = 1 if i % 2 else -1
+    a = s * (1.45 + (i // 2) * 0.17)  # dos lados para trás
+    z = 0.13 - (i // 2 % 4) * 0.035
+    root = head_pt(a, z, 0.006)
+    outv = (root - Vector((hc.x, hc.y, root.z))).normalized()
+    ports.append(rod([root - outv * 0.01 * H, root + outv * 0.022 * H], [0.013 * H, 0.012 * H], 6))
+    end = torso_pt(a * 1.05 + random.uniform(-0.2, 0.2), random.uniform(0.46, 0.6), 1.0, 0.04)
+    mid = root + outv * 0.05 * H + Vector((0, 0, -0.1 * H))
+    cables.append(rod([root + outv * 0.02 * H, mid, end], [0.008 * H, 0.008 * H, 0.007 * H], 5))
+
+
+def cable_weights(p):
+    w = smoothstep(hc.z - 0.3 * H, hc.z, p.z)
+    return {'hd': w, 'chest': 1 - w}
+
+
+b.add('cable_ports', merge(*ports), dark, region='head', subdiv=0)
+b.add('cables', merge(*cables), cable_m, region='torso', weight_fn=cable_weights, subdiv=0)
 
 # ---------------------------------------------------------------- BRAÇOS longos e magros de pele cinzenta, braceletes
 # verdes e CINCO GARRAS enormes em cada mão
@@ -178,26 +253,31 @@ for side in ('L', 'R'):
     claws = []
     for k in range(5):
         off = Vector((sx * (k - 2) * 0.012 * H, (k - 2) * 0.004 * H, 0))
+        # dedos longos e finos que viram garras (as artes: as garras passam do meio da coxa)
         base = h + ax * 0.05 * H + off
-        tip = base + ax * 0.2 * H + Vector((0, -0.04 * H, 0)) + off * 0.6
-        claws.append(cone(tuple(base), tuple(tip), 0.009 * H, 5))
+        knuckle = base + ax * 0.1 * H + off * 0.4
+        tip = knuckle + ax * 0.2 * H + Vector((0, -0.05 * H, 0)) + off * 0.5
+        claws.append(rod([base, knuckle], [0.008 * H, 0.007 * H], 5))
+        claws.append(cone(tuple(knuckle), tuple(tip), 0.007 * H, 5))
     b.add('claws' + side, merge(*claws), claw_m, region='e' + side, subdiv=0)
 
 # ---------------------------------------------------------------- ARMADURA do torso: metal esverdeado com detalhes
 # pretos, formas verdes acesas no peito e as tiras pretas cruzadas no alto
 b.add('armor', grid(lambda u, v: torso_pt((u - 0.5) * TAU, 0.66 - v * 0.6, 1.0, 0.012), 32, 8), armor, region='torso', subdiv=0)
-leafs = []
-for sx, z, sc in ((1, 0.46, 1.0), (-1, 0.46, 1.0), (1, 0.3, 0.8), (-1, 0.3, 0.8), (0, 0.38, 1.2)):
-    p = torso_pt(sx * 0.32, z, 1.0, 0.024)
-    leafs.append(xform(ellipsoid(tuple(p), (0.018 * H * sc, 0.008 * H, 0.05 * H * sc), 8, 6), lambda q, p=p, sx=sx: Vector((q.x + (q.z - p.z) * 0.25 * sx, q.y, q.z))))
-b.add('chest_glow', merge(*leafs), glow, region='torso', subdiv=0)
-xs = [rod([torso_pt(sx * 1.0, 0.64, 1.0, 0.02), torso_pt(0, 0.54, 1.0, 0.03), torso_pt(-sx * 0.6, 0.42, 1.0, 0.024)], [0.01 * H] * 3, 5) for sx in (1, -1)]
-b.add('straps', merge(*xs), dark, region='torso', subdiv=0)
-# cordas verdes dando duas voltas na cintura, com a ponta pendurada
-belts = [rod([torso_pt((k / 28 - 0.5) * TAU, zb, 1.0, 0.03) for k in range(29)], [0.012 * H] * 29, 6) for zb in (0.08, 0.12)]
-kn = torso_pt(-0.25, 0.1, 1.0, 0.04)
-belts.append(rod([kn, kn + Vector((0, -0.006 * H, -0.14 * H)), kn + Vector((0.006 * H, -0.01 * H, -0.3 * H))], [0.011 * H, 0.01 * H, 0.008 * H], 6))
-b.add('belt', merge(*belts), green, region='torso', subdiv=0)
+# os ORNAMENTOS do peito (as artes): folhas verdes em leque, abrindo do meio do peito para cima, com as nervuras
+# escuras descendo até a cintura
+leafs, veins = [], []
+for sx, z, a_, sc in ((0, 0.5, 0, 1.15), (1, 0.48, 0.16, 1.0), (-1, 0.48, 0.16, 1.0), (1, 0.44, 0.32, 0.85), (-1, 0.44, 0.32, 0.85), (1, 0.38, 0.46, 0.7), (-1, 0.38, 0.46, 0.7)):
+    p = torso_pt(sx * a_, z, 1.0, 0.026)
+    leafs.append(xform(ellipsoid(tuple(p), (0.016 * H * sc, 0.007 * H, 0.046 * H * sc), 8, 6), lambda q, p=p, sx=sx: Vector((q.x + (q.z - p.z) * 0.35 * sx, q.y, q.z))))
+    veins.append(rod([torso_pt(sx * a_ * 0.6, z - 0.05, 1.0, 0.024), torso_pt(sx * a_ * 0.4, 0.3, 1.0, 0.022), torso_pt(sx * a_ * 0.25, 0.16, 1.0, 0.02)], [0.005 * H] * 3, 4))
+b.add('chest_leaves', merge(*leafs), leaf, region='torso', subdiv=0)
+b.add('chest_veins', merge(*veins), dark, region='torso', subdiv=0)
+# a FAIXA de pano dando três voltas largas na cintura, a ponta caindo na frente
+belts = [rod([torso_pt((k / 28 - 0.5) * TAU, zb, 1.0, 0.03 + i * 0.006) for k in range(29)], [0.02 * H] * 29, 6, flat=(outward, 0.4)) for i, zb in enumerate((0.06, 0.1, 0.14))]
+kn = torso_pt(-0.2, 0.1, 1.0, 0.05)
+belts.append(rod([kn, kn + Vector((0, -0.008 * H, -0.16 * H)), kn + Vector((0.006 * H, -0.012 * H, -0.36 * H))], [0.02 * H, 0.018 * H, 0.016 * H], 6, flat=(outward, 0.35)))
+b.add('belt', merge(*belts), sash, region='torso', subdiv=0)
 
 # ---------------------------------------------------------------- MANTO longo da cintura até o chão (cobre as pernas:
 # ele parece FLUTUAR) e a CAPA enorme dos ombros quadrados até o chão, aberta na frente
@@ -231,9 +311,15 @@ def cape_pt(u, v, out=1.0):
     flare = 0.06 + shoulder + max(0.0, 0.3 - z) * 0.08
     p = torso_pt(a, zc, 1.0, flare)
     p.z = hz + z * H
+    # as OMBREIRAS ALTAS E PONTUDAS da capa (as artes): nos lados, a borda de cima sobe em ponta até a altura das
+    # orelhas, dura como papelão
+    side = abs(math.sin(a)) ** 4
+    lift = max(0.0, 1 - v / 0.22)
+    p.z += 0.26 * H * side * lift
+    p.x *= 1 + 0.18 * side * lift
     if z < -0.16:
-        p.x *= 1 + (-0.16 - z) * 0.4
-        p.y *= 1 + (-0.16 - z) * 0.45
+        p.x *= 1 + (-0.16 - z) * 0.55
+        p.y *= 1 + (-0.16 - z) * 0.6
     return Vector((p.x * out, p.y * out, p.z))
 
 
@@ -246,11 +332,19 @@ def cape_weights(p):
 
 b.add('cape', grid(lambda u, v: cape_pt(u, v), 48, 22), cape, region='torso', weight_fn=cape_weights, subdiv=0)
 b.add('cape_in', grid(lambda u, v: cape_pt(u, v, 0.985), 48, 22, flip=True), cape_in, region='torso', weight_fn=cape_weights, subdiv=0)
-# ombreiras grandes por baixo da capa (aparecem na abertura)
-for sx in (1, -1):
-    s = sk['sL' if sx > 0 else 'sR']
-    b.add(f'pauldron{sx}', box((s.x + sx * 0.04 * H, s.y, s.z + 0.03 * H), (0.13 * H, 0.15 * H, 0.04 * H), bevel=0.01), armor, region='torso', subdiv=0)
 # a gola alta da capa, subindo atrás do pescoço
 b.add('cape_collar', grid(lambda u, v: torso_pt((u - 0.5) * 1.5 * math.pi + math.pi, 0.64, 1.0, 0.07) + Vector((0, 0.01 * H * v, v * 0.12 * H)), 24, 3), cape, region='torso', subdiv=0)
+
+# PÉS de garra aparecendo embaixo do manto: dedos ossudos compridos com unhas (as artes)
+for side in ('L', 'R'):
+    f = sk['foot' + side]
+    sx = 1 if side == 'L' else -1
+    toes = [rod([(f.x, f.y + 0.02 * H, f.z + 0.06 * H), (f.x, f.y - 0.02 * H, f.z + 0.02 * H)], [0.03 * H, 0.026 * H], 8)]
+    for k in (-1, 0, 1):
+        base = Vector((f.x + k * 0.024 * H, f.y - 0.03 * H, f.z + 0.016 * H))
+        mid = base + Vector((k * 0.02 * H, -0.08 * H, -0.008 * H))
+        toes.append(rod([base, mid], [0.011 * H, 0.009 * H], 5))
+        toes.append(cone(tuple(mid), tuple(mid + Vector((k * 0.008 * H, -0.05 * H, -0.012 * H))), 0.008 * H, 5))
+    b.add('foot' + side, merge(*toes), skin, region='foot' + side, subdiv=0)
 
 b.export(OUT)

@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.49.0';
+export const VERSION = '3.50.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,16 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.50.0',
+    date: '2026-10-27',
+    title: 'Chamas e Sinais',
+    items: [
+      'CELESTINE EM CHAMAS: como nas miniaturas de Calamidade, chamas de energia azul-turquesa saem do cabelo, dos ombros, dos braços, dos lados do corpo e sobem das pernas — tremulando o tempo todo, na luta, na seleção e na forma Celestine, a Magistrada.',
+      'O ESTRANGEIRO REFEITO pelas artes oficiais: mais alto e magro, ROSTO NOVO (o crânio alto que afina num queixo pontudo, a testa pesada sobre os olhos VERDES inclinados, os sulcos e as rugas, sem boca, e os fios verdes entrando nas laterais da cabeça), uma POSE PARADA própria (de pé, imóvel, os braços caídos com as garras pendendo e a cabeça inclinando devagar), a capa até o chão com as OMBREIRAS ALTAS E PONTUDAS, os ornamentos de folhas verdes no peito, a faixa de pano enrolada na cintura, dedos longos que viram garras e os pés de garra aparecendo embaixo do manto.',
+      'PÁGINA SOBRE: todos os 33 lutadores com retrato, feitos de novo com os modelos atuais — entraram o Raziel, o Juan (Portador), a Celestine, O Deus da Morte e O Anfitrião.',
+    ],
+  },
   {
     v: '3.49.0',
     date: '2026-10-27',

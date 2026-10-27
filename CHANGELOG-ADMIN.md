@@ -1,5 +1,12 @@
 # Registro administrativo de alterações
 
+## v3.50.0 — Chamas e Sinais
+
+- Versão: `VERSION` 3.49.0 → **3.50.0** (package.json/lock junto). Data: 2026-10-27. Reúne os commits 8f2c89a (retratos) e 6b5ef7c (chamas) e o Estrangeiro.
+- **Página Sobre:** faltavam 5 retratos (ids novos desde a v3.39); os 33 foram renderizados de novo dos modelos atuais. O Deus da Morte ganhou a câmera mais afastada (enquadramento × 1,35). Conferido: nenhuma imagem quebrada; filtro com a Ordo Calamitas.
+- **Celestine (pedido do dono, pelas miniaturas da wiki):** chamas turquesa no corpo e no cabelo. Conferidas na luta, na seleção e no retrato; o turquesa foi escurecido porque as chamas somadas estouravam para o branco.
+- **Estrangeiro (pedido do dono):** ajustado pela arte do Livro de Regras e pela miniatura de Sinais do Outro Lado; depois, também a pedido do dono, ROSTO refeito do zero (máscara esculpida pela miniatura, de perto) e POSE PARADA própria (`est_idle`; antes usava a agachada do Diabo). Conferido no jogo de perto e de longe e no retrato.
+
 ## v3.49.0 — Celestine e a Máscara do Desespero
 
 - Versão: `VERSION` 3.48.0 → **3.49.0** (package.json/lock junto). Data: 2026-10-27. Reúne os commits 557eb3e, fa60ee0 e fe06547.
