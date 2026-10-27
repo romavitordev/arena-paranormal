@@ -2,7 +2,7 @@ import { COMBAT } from '../config/combat.js';
 import * as THREE from 'three';
 import { applyHit } from './damage.js';
 import { glowMat } from '../models/rig.js';
-import { knife, mutilatorAxe, baluAxe, demonMace, chaosSkate } from '../models/weapons.js';
+import { knife, mutilatorAxe, baluAxe, demonMace, chaosSkate, chainHatchet } from '../models/weapons.js';
 import { createMistZone } from './abilities.js';
 import { addBloodPool } from './bloodPools.js';
 import { inscribe } from './kianPowers.js';
@@ -312,6 +312,17 @@ const VISUALS = {
     const mace = demonMace();
     mace.position.y = 0.33;
     spin.add(mace);
+    g.add(spin);
+    g.userData.tumble = spin;
+    return g;
+  },
+  // CELESTINE: a machadinha arremessada presa na corrente, girando (a corrente sai da mão — ability.chain)
+  hatchet() {
+    const g = new THREE.Group();
+    const spin = new THREE.Group();
+    const h = chainHatchet();
+    h.position.y = 0.18;
+    spin.add(h);
     g.add(spin);
     g.userData.tumble = spin;
     return g;

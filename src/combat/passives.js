@@ -202,6 +202,15 @@ export const PASSIVES = {
   mentalMaze: {},
   // Arthur (Olhos Sempre Abertos) — Afinidade com Sangue: rituais de Sangue sem gastar o próprio sangue (lido em payHealth)
   bloodAffinity: {},
+  // A Magistrada — Conjuração Verdadeira: os rituais custam menos (lido em Fighter.abilityCost)
+  trueConjuring: {},
+  // A Magistrada — Destronar o Anfitrião (cânone: a única capaz de solucionar o Enigma de Medo e dizimar o Anfitrião):
+  // bate mais forte nele — no Anfitrião selecionável e no Anfitrião que sai do Arnaldo
+  dethroneHost: {
+    damageMod({ victim, passive }) {
+      return victim && victim.def && victim.def.id === 'anfitriao' ? passive.mult ?? 1.3 : 1;
+    },
+  },
   // Raziel — Turno Extra: o finalizador abre a janela da ação extra (lido no acerto e em useAbility, Fighter.js)
   extraTurn: {},
   // Erin (Em Nome do Caos) — Sem Sanidade: barra zerada e travada; os custos saem da vida (Fighter.addEnergy/spendEnergy)

@@ -206,6 +206,9 @@ export const GRAB_SCENES = {
   // RAZIEL: as duas garras e a MORDIDA no pescoço (bebe o sangue); na forma verdadeira devora mais fundo
   raziel: scene({ ...S('db_claw_r'), fx: { kind: 'claw' }, sound: 'clawHit' }, { ...S('db_claw_l'), fx: { kind: 'claw', flip: true }, sound: 'clawHit' }, { anim: 'raziel_bite', fx: 'consume', sound: 'clawHit', bleed: { dps: 4, duration: 2.5 } }),
   raziel_verdadeiro: scene({ ...S('db_claw_r'), fx: { kind: 'claw' }, sound: 'clawHit' }, { ...S('db_cross'), fx: { kind: 'claw', flip: true }, sound: 'clawHit' }, { anim: 'raziel_bite', fx: 'consume', sound: 'bloodClaw', bleed: { dps: 5, duration: 3 } }),
+  // CELESTINE: as duas machadinhas e a corrente passada no pescoço; como a Magistrada, a Máscara olha de perto
+  celestine: scene({ ...S('dual_r'), fx: { kind: 'slash' }, sound: 'axeHit' }, { ...S('dual_l'), fx: { kind: 'slash', flip: true }, sound: 'axeHit' }, { anim: 'chain_sweep', fx: 'axe', sound: 'chainPull', bleed: { dps: 4, duration: 2 } }),
+  celestine_magistrada: scene({ ...S('dual_r'), fx: { kind: 'slash' }, sound: 'axeHit' }, { ...S('dual_cross'), fx: { kind: 'slash', flip: true }, sound: 'axeHit' }, { anim: 'slash_finisher', fx: 'shadow', sound: 'slashFinal' }),
   deus_morte: scene({ ...S('dm_slap', 0.34), fx: { kind: 'smash' }, sound: 'heavyPunch' }, { ...S('dm_hook', 0.34), fx: { kind: 'smash' }, sound: 'heavyPunch' }, { anim: 'dm_smash', fx: 'crush', sound: 'heavyPunch' }),
 };
 GRAB_SCENES.kian_calamidade = GRAB_SCENES.kian; // a forma de Calamidade agarra igual (só mais forte)

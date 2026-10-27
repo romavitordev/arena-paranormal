@@ -1,4 +1,4 @@
-import { addKaiserProps, addArthurProps, addJouiProps, addAghataProps, addGalSalProps, addKianProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps, addFerreiroProps, addJuanProps, addKemiProps, addFantasmaProps, addBaluProps, addErinCaosProps, addLabirintoElmoProps, addAguiarMutiladorProps, addArnaldoProps, addAnfitriaoProps, addVerissimoProps, addJaeProps, addJaeXProps, addDalmoProps, addColossoProps, addGuizoProps, addGuizoETProps, addKianCalamidadeProps, addJuanOdioProps, addMagistradaProps, addGuizoBombadoProps, addGuizoVelhoProps, addCristinoProps, addCristinoDesertorProps, addDanteProps, addDanteAbertoProps, addJouiShinokageProps, addRazielProps, addRazielVerdadeiroProps } from './props.js';
+import { addKaiserProps, addArthurProps, addJouiProps, addAghataProps, addGalSalProps, addKianProps, addErinProps, addAguiarProps, addLabirintoProps, addXandeProps, addLirioProps, addFerreiroProps, addJuanProps, addKemiProps, addFantasmaProps, addBaluProps, addErinCaosProps, addLabirintoElmoProps, addAguiarMutiladorProps, addArnaldoProps, addAnfitriaoProps, addVerissimoProps, addJaeProps, addJaeXProps, addDalmoProps, addColossoProps, addGuizoProps, addGuizoETProps, addKianCalamidadeProps, addJuanOdioProps, addMagistradaProps, addGuizoBombadoProps, addGuizoVelhoProps, addCristinoProps, addCristinoDesertorProps, addDanteProps, addDanteAbertoProps, addJouiShinokageProps, addRazielProps, addRazielVerdadeiroProps, addCelestineProps, addCelestineMagistradaProps } from './props.js';
 import { loadGLB, rigFromGLB } from './glbRig.js';
 import { preloadNpcModels } from './npcRig.js';
 
@@ -42,6 +42,7 @@ const BLENDER_MODELS = {
   cristino: { url: 'models/cristino.glb', props: addCristinoProps }, // Cristino, o Cangaceiro (Transtornados, Hexatombe)
   cristopher: { url: 'models/cristopher.glb', props: null }, // Cristopher Cohen, o dublê (Ordo Realitas, OSNF) — luta de punhos
   raziel: { url: 'models/raziel.glb', props: addRazielProps }, // Raziel, o líder dos Vampiros (Hexatombe)
+  celestine: { url: 'models/celestine.glb', props: addCelestineProps }, // Celestine, guerreira da Ordo Calamitas (Calamidade, 67 d.C.)
 };
 
 // Formas que reaproveitam o .glb de outro modelo, só com os acessórios diferentes (máscaras dos Mascarados, Erin)
@@ -59,6 +60,7 @@ const MODEL_VARIANTS = {
   cristino_desertor: { base: 'cristino', props: addCristinoDesertorProps }, // Tocado pela Coroa: rabiscos vermelhos e o rifle
   joui_shinokage: { base: 'joui', props: addJouiShinokageProps }, // sem a máscara, com a Shi no Kage (fase final)
   raziel_verdadeiro: { base: 'raziel', props: addRazielVerdadeiroProps }, // rasga as vestes: costelas, braços rasgados, a língua
+  celestine_magistrada: { base: 'celestine', props: addCelestineMagistradaProps }, // a Máscara do Desespero no rosto
   kian_calamidade: { base: 'kian', props: addKianCalamidadeProps }, // a barba cheia e as faixas // Distorcer Aparência: o disfarce alienígena
 };
 

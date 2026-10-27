@@ -1369,6 +1369,112 @@ export function demonMace() {
 // no estilo da referência do usuário: borracha preta cobrindo dos olhos ao queixo, duas lentes redondas com aro que
 // BRILHAM em verde, o filtro redondo na frente da boca, um cartucho grande na bochecha direita e tubos verdes
 // brilhantes descendo do rosto até o peito. Presa no socket `mouth` (frente do rosto, eixo +z para fora, y para cima).
+// CELESTINE — as MACHADINHAS (wiki "Celestine" → Arsenal: "duas pequenas machadinhas com detalhes talhados em azul...
+// conectados por uma corrente"; a arte "Machados de Celestine em Calamidade"): o cabo escuro com o anel turquesa perto
+// da lâmina, a LÂMINA turquesa em crescente com as pontas em espinho e os talhos azuis, e o elo onde a corrente prende no
+// pomo. Convenção de arma: empunhadura na origem, a cabeça para −Y. userData.ring: de onde sai a corrente.
+export function chainHatchet() {
+  const g = new THREE.Group();
+  const teal = toon(0x2a8a8c, { emissive: 0x062424 });
+  const carve = glowMat(0x5ad8ff, 0.9);
+  const wood = 0x2a1e18;
+  const handle = part(new THREE.CylinderGeometry(0.015, 0.018, 0.34, 8), wood);
+  handle.position.y = -0.1;
+  g.add(handle);
+  // a faixa de couro na empunhadura
+  for (let k = 0; k < 4; k++) {
+    const w = part(new THREE.TorusGeometry(0.019, 0.004, 4, 10), 0x15100c);
+    w.rotation.x = Math.PI / 2;
+    w.position.y = 0.02 - k * 0.025;
+    g.add(w);
+  }
+  // o anel turquesa perto da cabeça e o pomo com o elo da corrente
+  const ring = part(new THREE.CylinderGeometry(0.024, 0.024, 0.03, 10), 0, { mat: teal });
+  ring.position.y = -0.24;
+  g.add(ring);
+  const pommel = part(new THREE.SphereGeometry(0.02, 8, 6), 0, { mat: teal });
+  pommel.position.y = 0.075;
+  g.add(pommel);
+  const link = part(new THREE.TorusGeometry(0.016, 0.004, 4, 10), 0x3a3c40);
+  link.position.y = 0.1;
+  g.add(link);
+  g.userData.ring = link;
+  // a LÂMINA em crescente com as pontas (para a frente, +X), presa no topo do cabo
+  const s = new THREE.Shape();
+  s.moveTo(0, -0.22);
+  s.quadraticCurveTo(0.07, -0.19, 0.12, -0.12); // ponta de cima
+  s.lineTo(0.1, -0.2);
+  s.quadraticCurveTo(0.15, -0.26, 0.13, -0.33); // o gume em arco
+  s.lineTo(0.16, -0.4); // ponta de baixo
+  s.quadraticCurveTo(0.07, -0.33, 0.0, -0.3);
+  s.lineTo(-0.035, -0.32); // o espinho de trás
+  s.lineTo(-0.01, -0.27);
+  s.lineTo(-0.04, -0.22);
+  s.lineTo(0, -0.22);
+  const blade = part(extrude(s, 0.012), 0, { mat: teal });
+  g.add(blade);
+  // os talhos azuis acesos na lâmina
+  const groove = new THREE.Shape();
+  groove.moveTo(0.02, -0.25);
+  groove.quadraticCurveTo(0.07, -0.24, 0.1, -0.27);
+  groove.lineTo(0.1, -0.29);
+  groove.quadraticCurveTo(0.07, -0.265, 0.02, -0.27);
+  for (const z of [0.0085, -0.0085]) {
+    const gr = new THREE.Mesh(new THREE.ShapeGeometry(groove), carve);
+    gr.position.z = z;
+    if (z < 0) gr.rotation.y = Math.PI, gr.position.x = 0.12;
+    g.add(gr);
+  }
+  return g;
+}
+
+// A MÁSCARA DO DESESPERO (a Relíquia de Conhecimento — wiki "Relíquias da Calamidade"): branca, com TRÊS GRANDES SULCOS
+// descendo dos olhos e da boca até a borda, a fenda em CORAÇÃO INVERTIDO no nariz (como uma caveira) e o Símbolo da
+// Relíquia de Conhecimento cravado na testa. A Celestine a coloca na Transformação (a forma Celestine, a Magistrada).
+let despairTex = null;
+function despairTexture() {
+  if (despairTex) return despairTex;
+  const c = document.createElement('canvas');
+  c.width = 256;
+  c.height = 256;
+  const x = c.getContext('2d');
+  x.fillStyle = '#f2efe8';
+  x.fillRect(0, 0, 256, 256);
+  // o mapa da meia-esfera: u = de um lado ao outro (centro = 128), v = de cima (0) para baixo
+  x.fillStyle = '#0a0808';
+  for (const s of [-1, 1]) {
+    // os olhos: fendas fundas e o SULCO que desce dela até a borda
+    x.beginPath(); x.ellipse(128 + s * 34, 112, 16, 9, s * 0.15, 0, Math.PI * 2); x.fill();
+    x.beginPath(); x.moveTo(128 + s * 26, 116); x.quadraticCurveTo(128 + s * 36, 180, 128 + s * 30, 256); x.lineTo(128 + s * 44, 256); x.quadraticCurveTo(128 + s * 46, 180, 128 + s * 42, 116); x.fill();
+  }
+  // a boca e o sulco do meio até a borda
+  x.beginPath(); x.ellipse(128, 176, 18, 7, 0, 0, Math.PI * 2); x.fill();
+  x.beginPath(); x.moveTo(122, 178); x.lineTo(118, 256); x.lineTo(138, 256); x.lineTo(134, 178); x.fill();
+  // a fenda de CORAÇÃO INVERTIDO no nariz
+  x.beginPath(); x.moveTo(128, 128); x.bezierCurveTo(110, 136, 116, 156, 128, 150); x.bezierCurveTo(140, 156, 146, 136, 128, 128); x.fill();
+  // o Símbolo da Relíquia de Conhecimento na testa (círculo duplo com o triângulo e os traços)
+  x.strokeStyle = '#7a6a30';
+  x.lineWidth = 3;
+  x.beginPath(); x.arc(128, 62, 20, 0, Math.PI * 2); x.stroke();
+  x.beginPath(); x.arc(128, 62, 13, 0, Math.PI * 2); x.stroke();
+  x.beginPath(); x.moveTo(128, 46); x.lineTo(142, 72); x.lineTo(114, 72); x.closePath(); x.stroke();
+  for (let i = 0; i < 6; i++) { const a = (i / 6) * Math.PI * 2; x.beginPath(); x.moveTo(128 + Math.cos(a) * 20, 62 + Math.sin(a) * 20); x.lineTo(128 + Math.cos(a) * 27, 62 + Math.sin(a) * 27); x.stroke(); }
+  despairTex = new THREE.CanvasTexture(c);
+  despairTex.colorSpace = THREE.SRGBColorSpace;
+  return despairTex;
+}
+export function despairMask() {
+  const g = new THREE.Group();
+  const mat = new THREE.MeshToonMaterial({ map: despairTexture(), color: 0xffffff });
+  // a metade da frente (+z): com phi de 0 a π, o meio da textura (u = 0,5) cai bem na frente
+  const shell = new THREE.Mesh(new THREE.SphereGeometry(0.118, 22, 14, 0, Math.PI, 0, Math.PI), mat);
+  shell.scale.set(1, 1.24, 0.82);
+  shell.position.set(0, 0.03, -0.03);
+  shell.userData.outline = true;
+  g.add(shell);
+  return g;
+}
+
 export function gasMask(glow = 0x7aff9a) {
   const g = new THREE.Group();
   const RUBBER = 0x15171a;

@@ -9,10 +9,11 @@ export const TEAM_COLORS = {
   Transtornados: '#d0702c',
   Vampiros: '#b01020', // os Vampiros de Hexatombe (Raziel e a ceia na Igreja Antiga): vermelho-sangue escuro // a equipe do Cristino em Hexatombe (Apóstolos de Sangue): ferrugem/laranja do lampião
   // (2026-10-27) PORTADORES ≠ RELÍQUIAS: quem CARREGA a Relíquia (Juan / Sangue, Arnaldo / Energia, Ferreiro / Morte) fica
-  // no branco-osso; quem É a Relíquia (O Diabo, O Deus da Morte, A Magistrada, O Anfitrião) no dourado envelhecido; e
-  // os Sinos de Tenebris (o Estrangeiro e o Amigo Imaginário) no verde-acinzentado do OUTRO LADO
+  // no branco-osso; quem É a Relíquia (O Diabo, O Deus da Morte, A Magistrada, O Anfitrião) no MAGENTA (o dourado de
+  // antes era quase o amarelo da Ordo — nenhuma outra equipe usa magenta); e os Sinos de Tenebris (o Estrangeiro e o
+  // Amigo Imaginário) no verde-acinzentado do OUTRO LADO
   Portadores: '#d8cfb8',
-  'Relíquias': '#c9a24a',
+  'Relíquias': '#d63c8c',
   'Outro Lado': '#7fa89a',
 };
 

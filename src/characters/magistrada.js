@@ -203,16 +203,21 @@ export default {
     length: 3.0,
   },
 
-  // TRANSFORMAÇÃO (Barra cheia + vida baixa, segurando △): NOSTIS OMNIA PERDET OMNIA — a Máscara toma o corpo inteiro:
-  // os rituais e o especial batem mais, as recargas correm e a sanidade volta depressa, até o fim do round
+  // BARRA DE TRANSFORMAÇÃO (cheia + vida baixa, segurando △): REESCREVER A REALIDADE — não é transformação (2026-10-27:
+  // a Magistrada é o título de quem porta a Máscara, não se transforma no cânone; o antigo "Saber Tudo é Perder Tudo"
+  // era um fortalecimento inventado). Habilidade canônica: o corpo e a mente dela voltam (30% da vida, a sanidade
+  // cheia, sem nada de ruim em cima, recargas zeradas) e o que fortalecia o adversário some (combat/specials/realityRewrite.js)
   awakening: {
-    name: 'Saber Tudo é Perder Tudo',
-    banner: 'Nostis Omnia Perdet Omnia',
-    type: 'awakenMode',
-    mult: 1.2, affects: ['ability', 'special', 'ranged'], cdRate: 1.4, energyRegenMult: 1.5, takenMult: 0.9, aura: 'sigil', color: GOLD, heal: 0.1,
+    name: 'Reescrever a Realidade',
+    banner: 'Reescrever a Realidade',
+    type: 'realityRewrite',
+    heal: 0.3,
+    color: GOLD,
   },
 
   passives: [
     { type: 'precognition' }, // Onipresença: sabe tudo o que acontece — não é pega desprevenida
+    { type: 'trueConjuring', mult: 0.75 }, // Conjuração Verdadeira: qualquer ritual de Conhecimento — os rituais custam 25% menos
+    { type: 'dethroneHost', mult: 1.3 }, // Destronar o Anfitrião: a única capaz de dizimá-lo — +30% de dano no Anfitrião
   ],
 };

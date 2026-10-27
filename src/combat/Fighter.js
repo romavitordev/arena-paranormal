@@ -2771,6 +2771,9 @@ export class Fighter {
   abilityCost(a) {
     const focus = (this.def.passives || []).find((p) => p.type === 'ritualFocus');
     let cost = (a.energyCost || 0) * (focus ? focus.mult ?? 0.8 : 1);
+    // CONJURAÇÃO VERDADEIRA (A Magistrada, cânone: usa qualquer ritual de Conhecimento): os rituais custam menos
+    const tc = (this.def.passives || []).find((p) => p.type === 'trueConjuring');
+    if (tc) cost *= tc.mult ?? 0.75;
     // usar de novo dentro da janela de "spam" fica mais caro (ex.: Teleporte das Sombras)
     const last = this.lastAbilityUse && this.lastAbilityUse[a.id];
     if (a.spamWindow && last !== undefined && this.world.time - last < a.spamWindow) cost *= a.spamMult || 1.6;

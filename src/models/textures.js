@@ -2644,6 +2644,46 @@ export const MATERIAL_TEXTURES = {
   // o rosto DESCARNADO: carne rosada com as fibras e as cicatrizes, sem olhos nem nariz (só as covas fundas), e o
   // ESTIGMA da Coroa de Espinhos cortado na testa, brilhando vermelho (cinemática "O Verdadeiro Raziel"). A boca de fera
   // (gengiva e dentes) é esculpida no modelo.
+  // CELESTINE (Ordo Calamitas): pele clara, os olhos azul-claros (na memória revivida eles BRILHAM nessa cor), as
+  // sobrancelhas loiras e o meio-sorriso debochado de quem desafia até o imperador
+  face_celestine: face((g) => {
+    g.strokeStyle = 'rgba(150,90,80,0.55)'; g.lineWidth = 2;
+    g.beginPath(); g.moveTo(CX - 14, MOUTH_Y + 1); g.quadraticCurveTo(CX + 2, MOUTH_Y + 4, CX + 16, MOUTH_Y - 3); g.stroke(); // o meio-sorriso torto
+    for (const s of [-1, 1]) { // o brilho azul em volta da íris
+      const gr = g.createRadialGradient(CX + s * 32, EYE_Y + 4, 2, CX + s * 32, EYE_Y + 4, 16);
+      gr.addColorStop(0, 'rgba(120,220,255,0.35)'); gr.addColorStop(1, 'rgba(120,220,255,0)');
+      g.fillStyle = gr; g.beginPath(); g.arc(CX + s * 32, EYE_Y + 4, 16, 0, Math.PI * 2); g.fill();
+    }
+  }, {
+    skin: '#e8c8b0',
+    eye: { iris: '#4ab0e0', irisLight: '#c8f4ff', tilt: 0.04, lashes: true },
+    brow: { angry: 2, thick: 3, color: '#c8b890' },
+    mouth: { mouthW: 15, lip: 'rgba(170,100,96,0.5)' },
+  }),
+  // a camisa preta com o SÍMBOLO DA ORDO CALAMITAS no peito (o círculo branco ornamentado da arte; frente = metade de
+  // baixo da textura, como nas outras camisas do corpo base)
+  shirt_celestine: () => canvasTex(512, 512, (g, w, h) => {
+    g.fillStyle = '#1a191e'; g.fillRect(0, 0, w, h);
+    const rnd = seeded(67);
+    for (let i = 0; i < 30; i++) { g.fillStyle = `rgba(${rnd() < 0.5 ? '0,0,0' : '60,58,66'},${0.1 + rnd() * 0.15})`; g.fillRect(rnd() * w, 0, 3 + rnd() * 10, h); }
+    const cx = 256;
+    const cy = 372;
+    g.strokeStyle = '#e8e4dc'; g.fillStyle = '#e8e4dc'; g.lineCap = 'round';
+    g.lineWidth = 5; g.beginPath(); g.arc(cx, cy, 52, 0, Math.PI * 2); g.stroke();
+    g.lineWidth = 3; g.beginPath(); g.arc(cx, cy, 40, 0, Math.PI * 2); g.stroke();
+    // os ornamentos em volta (os "raios" curvos do emblema)
+    for (let i = 0; i < 12; i++) {
+      const a = (i / 12) * Math.PI * 2;
+      g.beginPath(); g.moveTo(cx + Math.cos(a) * 52, cy + Math.sin(a) * 52);
+      g.quadraticCurveTo(cx + Math.cos(a + 0.18) * 66, cy + Math.sin(a + 0.18) * 66, cx + Math.cos(a + 0.05) * 74, cy + Math.sin(a + 0.05) * 74); g.stroke();
+    }
+    // o centro: o gládio cruzado com a lança e o olho
+    g.lineWidth = 4;
+    g.beginPath(); g.moveTo(cx - 24, cy + 24); g.lineTo(cx + 24, cy - 24); g.stroke();
+    g.beginPath(); g.moveTo(cx + 24, cy + 24); g.lineTo(cx - 24, cy - 24); g.stroke();
+    g.beginPath(); g.ellipse(cx, cy, 13, 8, 0, 0, Math.PI * 2); g.fill();
+    g.fillStyle = '#1a191e'; g.beginPath(); g.arc(cx, cy, 4, 0, Math.PI * 2); g.fill();
+  }, { wrap: true }),
   face_raziel: () => canvasTex(W, HT, (g) => {
     g.fillStyle = '#c4847c'; g.fillRect(0, 0, W, HT);
     const rnd = seeded(390);

@@ -1567,6 +1567,58 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
         ~2 m): o perseguidor, mais rápido e agora também pressionando, vence a corrida pela distância. Próximo passo: o
         atirador ler a investida do outro (o telegraph) e esquivar no tempo certo, e usar o cenário (pilares) para fugir.
       - CPU no BOTÃO DO ANFITRIÃO: larga tudo, corre até o botão e aperta primeiro (testado no Fácil e no Difícil).
+- [ ] **PLANEJAMENTO — DISTRIBUIÇÃO PELO CÂNONE (pesquisa de 2026-10-27, wiki "Relíquias da Calamidade" e "A
+      Magistrada").** Cada Relíquia é um OBJETO, e quem a porta recebe um TÍTULO:
+      | Elemento | Relíquia (objeto) | Título do portador | Portadores no cânone |
+      |---|---|---|---|
+      | Sangue | O Trono | O Diabo | Juan (nascido Lúcio Davo, antes chamado Henri) |
+      | Conhecimento | A Máscara do Desespero | A/O Magistrada(o) | Celestine (67 d.C.), a "Última Magistrada" (sem nome) |
+      | Energia | (etérea; hoje na antiga katana do Joui) | O Anfitrião | Amphitruo, Aeneas, Liber, Silenus, Plautus, Arnaldo Fritz |
+      | Morte | O Parasita de Dimensões | O Deus da Morte | portador desconhecido; receptáculos: um Deus da Morte desconhecido e O Ferreiro |
+      Propostas (decidir com o dono antes de mexer):
+      1. **Portadora de CONHECIMENTO que falta: CELESTINE** — guerreira da Ordo Calamitas em 67 d.C. (loira, cabelo curto
+         jogado de lado, armadura com o Símbolo da Ordo Calamitas). Transformação CANÔNICA: depois dos jogos de Amphitruo
+         ela coloca a Máscara do Desespero e vira A MAGISTRADA. Fecha o padrão dos Portadores: Juan → O Diabo/Portador do
+         Trono, Celestine → A Magistrada, Arnaldo → O Anfitrião, Ferreiro → O Deus da Morte. Precisa de modelo novo
+         (Blender) e kit (guerreira romana da Ordo Calamitas).
+      2. **A transformação da MAGISTRADA não é canônica** ("Saber Tudo é Perder Tudo" é um fortalecimento genérico do
+         jogo; no cânone ela é o título de quem porta a Máscara e não se transforma). Sugestão: as RELÍQUIAS não se
+         transformam (como o Anfitrião e o Deus da Morte selecionáveis) e as habilidades canônicas dela entram no kit:
+         REESCREVER A REALIDADE (recupera corpo e mente / reescreve o estado do alvo), CONJURAÇÃO VERDADEIRA (qualquer ritual
+         de Conhecimento) e DESTRONAR O ANFITRIÃO (a única capaz de solucionar o Enigma de Medo e dizimar o Anfitrião —
+         uma interação própria contra ele).
+      3. **HENRI pela linha do tempo:** no cânone "Henri" é o nome do tempo de Escripta (Desconjuração, Dia Final, onde
+         perdeu a mão e o olho esquerdos); "Juan" é o de Hexatombe (o Pacto, o Estigma, vence como sacrifício) e o portador
+         do Trono é O Diabo. Avaliar se o Henri fica nos ESCRIPTAS em vez dos Mascarados.
+      4. **O ANFITRIÃO selecionável com o visual de AMPHITRUO** (o primeiro Anfitrião conhecido: máscara sorridente com três
+         mãos que se fundem ao rosto, armadura romana de ombreiras pontudas, a grande capa roxa com capuz, chamas roxas) — e
+         o Anfitrião do Arnaldo com o visual do Arnaldo. Bate com o pedido da skin diferente (item abaixo).
+      5. **O Ferreiro** no cânone é RECEPTÁCULO (o portador da Morte é desconhecido): continua nos Portadores, que é o mais
+         próximo.
+      6. A **cor das Relíquias** era quase o amarelo da Ordo: trocada por MAGENTA (`#d63c8c`), única entre as equipes (feito).
+         E os retratos do Anfitrião e do Deus da Morte na seleção saíam sem a cor da equipe (o retrato de vilão da Torre,
+         com o mesmo id, era gerado depois e sobrescrevia) — corrigido (os do elenco são gerados por último).
+      - [x] **2 (feito em 2026-10-27): A MAGISTRADA sem a transformação inventada** — a Barra dela agora é REESCREVER A
+        REALIDADE (`specials/realityRewrite.js`, não é transformação: 30% da vida, sanidade cheia, sem nada de ruim em cima,
+        recargas zeradas e os buffs do adversário apagados) + CONJURAÇÃO VERDADEIRA (rituais 25% mais baratos) + DESTRONAR O
+        ANFITRIÃO (+30% de dano nele). Testado no jogo.
+      - [~] **1 (em andamento): CELESTINE** — pedido do dono: entra numa equipe NOVA, a **ORDO CALAMITAS** (depois entram os
+        outros membros: Gaius, Amalia, Cornelius...). Pesquisa (wiki "Celestine"): guerreira de 67 d.C., pele clara, cabelo
+        loiro curto, armadura com panos, cachecol, o Símbolo da Ordo Calamitas no peito; arma: DUAS MACHADINHAS com talhos
+        azuis LIGADAS POR UMA CORRENTE; habilidades da ficha: NADA PESSOAL (+1 dado ao trair) e CÓDIGO (sussurra mensagens);
+        energética e debochada. Transformação canônica (Calamidade ep. 6): veste a MÁSCARA DO DESESPERO e vira A MAGISTRADA —
+        **com os MESMOS PODERES da Magistrada das Relíquias, mas a APARÊNCIA dela** (pedido do dono; como o Anfitrião do
+        Arnaldo × o Anfitrião separado).
+        Feito: o modelo `tools/blender/char_celestine.py` → `public/models/celestine.glb` (sculpt_lib; revisado no Blender),
+        as MACHADINHAS (`weapons.js chainHatchet`) e a MÁSCARA DO DESESPERO (`despairMask`) em código, `addCelestineProps` /
+        `addCelestineMagistradaProps` e as variantes `celestine` / `celestine_magistrada` em `models/index.js`, as texturas
+        `face_celestine` e `shirt_celestine` (o Símbolo da Ordo Calamitas), o visual `hatchet` do arremesso e as cenas de
+        agarrão. **Falta:** `characters/celestine.js` (machadinhas: combo duplo, □ = a machadinha na corrente que puxa,
+        Corrente Giratória, Nada Pessoal, Código, Endorfina; especial "Duelo Final"), a forma `forms/celestine_magistrada.js`
+        (o kit da Magistrada com a aparência dela; maskTransform com a Máscara), a equipe "Ordo Calamitas" (cor, ordem), as
+        falas (intro e vitória contra o elenco), a CPU, o check e os testes no jogo.
+      - [ ] **O MODELO DAS MÁSCARAS** que a Magistrada chama (os membros da Seita das Máscaras) — refazer na técnica atual
+        (pedido de 2026-10-27).
 - [ ] **PARA DEPOIS (2026-10-27) — SKIN do ANFITRIÃO do ARNALDO ≠ ANFITRIÃO base:** o Anfitrião que sai da
       transformação do Arnaldo terá uma skin diferente do Anfitrião selecionável das Relíquias — mesmas habilidades, só o
       visual muda (modelo/textura próprios para a forma `anfitriao` do Arnaldo vs. o personagem `anfitriao` da seleção).

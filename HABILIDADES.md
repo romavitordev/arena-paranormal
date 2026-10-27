@@ -1377,9 +1377,9 @@ Agarra pelo pescoço e envelhece o alvo até o fim do round (40% menos dano, 30%
 
 250 de dano · custo 50 · cooldown 14 s.
 
-### Transformação: Saber Tudo é Perder Tudo
+### Transformação: Reescrever a Realidade
 
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +20% de dano (habilidades, especial, distância), −10% de dano recebido, recargas 40% mais rápidas, sanidade regenera +50%, cura 10% na hora.
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
 
 ---
 

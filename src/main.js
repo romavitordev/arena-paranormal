@@ -95,7 +95,9 @@ function loadFailed(e) {
 Promise.all([preloadModels(), preloadArenas()])
   .catch(loadFailed)
   .then(() => {
-    Object.assign(portraits, renderPortraits([...ROSTER, ...VILLAINS.map(getForm)], renderer)); // + os vilões das TORRES
+    // + os vilões das TORRES — ANTES do elenco: o Anfitrião e o Deus da Morte são vilão (forma, sem equipe) e também
+    // lutadores da seleção (Relíquias) com o mesmo id; o retrato do elenco (com a cor da equipe) tem que ficar por último
+    Object.assign(portraits, renderPortraits([...VILLAINS.map(getForm), ...ROSTER], renderer));
     booted = true;
     // não trava a tela inicial: gera os previews no quadro seguinte
     setTimeout(() => Object.assign(arenaThumbs, renderArenaThumbs(renderer)), 50);

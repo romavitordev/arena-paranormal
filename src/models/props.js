@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { glowMat, toon } from './rig.js';
 import { MATERIAL_TEXTURES } from './textures.js';
-import { katana, scabbard, shiNoKage, relicScabbard, relicBlade, m4, sniper, guitarCase, bloodArm, bloodForearmBlade, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, roundGlasses, neonWraps, pulseEmitter, bandolier, bengala, mustache, socadeira, peixeira, spikedLantern, tenebrisPendant } from './weapons.js';
+import { katana, scabbard, shiNoKage, relicScabbard, relicBlade, m4, sniper, guitarCase, bloodArm, bloodForearmBlade, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, roundGlasses, neonWraps, pulseEmitter, bandolier, bengala, mustache, socadeira, peixeira, spikedLantern, tenebrisPendant, chainHatchet, despairMask } from './weapons.js';
 
 // Armas e acessórios adicionados em código sobre os modelos do Blender.
 // Usam só `sockets`, `attach()` e `props`, que existem nos dois tipos de rig.
@@ -1084,6 +1084,29 @@ export function addDanteAbertoProps(rig) {
 }
 
 // RAZIEL (Vampiros): tudo vem do modelo (garras, dentes, o casaco); a forma verdadeira é o mesmo .glb trocando as peças
+// CELESTINE: as duas MACHADINHAS (uma em cada mão; a corrente entre elas aparece no arremesso e nos giros — combat) e
+// a MÁSCARA DO DESESPERO guardada (aparece na Transformação: a forma Celestine, a Magistrada)
+export function addCelestineProps(rig) {
+  const { sockets, props } = rig;
+  for (const side of ['R', 'L']) {
+    const h = chainHatchet();
+    inFist(h);
+    if (side === 'L') h.rotation.y = Math.PI; // a lâmina para fora nas duas mãos
+    sockets['hand' + side].add(h);
+    props['hatchet' + side] = h;
+  }
+  const mask = despairMask();
+  mask.position.set(0, -0.02, -0.02);
+  mask.visible = false;
+  sockets.mouth.add(mask);
+  props.despairMask = mask;
+}
+
+// CELESTINE, A MAGISTRADA: o mesmo corpo com a Máscara do Desespero no rosto
+export function addCelestineMagistradaProps(rig) {
+  if (rig.props.despairMask) rig.showProp('despairMask', true);
+}
+
 export function addRazielProps(rig) {
   if (rig.props.true) rig.showProp('true', false); // o corpo rasgado só aparece na transformação
 }
