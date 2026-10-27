@@ -1,5 +1,21 @@
 # Changelog
 
+## v3.48.0 — Portadores e Relíquias
+
+### Adicionado
+- `characters/selectableForms.js`: `juanPortador`, `deusMorteReliquia`, `anfitriaoReliquia` — as formas como lutadores da seleção (mesmo id/modelo/kit/falas, `selectableForm: true`, cópias próprias dos golpes por causa do `applyAttackSpeed`).
+- Equipes `Portadores`, `Relíquias` e `Outro Lado` em `config/teams.js` (sai `Portadores das Relíquias`).
+- `weapons.js` `bloodForearmBlade` (sai `bloodBlade`); `props.js` `photoCamera` no Kaiser.
+- Habilidade `photoFlash` (Kaiser — Foto com Flash, `ranged.variants.back`); `blindFighter` reaproveitado.
+- `DanteClone` com `o.sludge` (fica longe e arremessa) + `summonMananciais.sludgeChance`; `onHit.drainSanity` nos projéteis.
+- CPU: `kitProfile(def)` (atirador, perseguidor, velocidade) e `matchupPlan(meu, dele)` (keep, escapeAt, pressure, control); corrida do Botão do Anfitrião (`hostButtonGame.at`).
+
+### Alterado
+- Juan (id `juan`) passa a se chamar HENRI; `CHARACTER_NAMES.juan = 'Henri'`.
+- Kaiser: ← + □ deixa o Disparo de Emergência e chama a Foto com Flash.
+- Tela inicial: equipes em chips gerados de `TEAM_COLORS`; somem com o menu aberto.
+- `check-roster`: regras do elenco base usam `BASE_ROSTER` (sem as formas selecionáveis); novas checagens de equipes, falas das formas e da Foto com Flash.
+
 ## v3.47.0 — Menus e Combos
 
 ### Adicionado

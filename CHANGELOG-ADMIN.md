@@ -1,5 +1,16 @@
 # Registro administrativo de alterações
 
+## v3.48.0 — Portadores e Relíquias
+
+- Versão: `VERSION` 3.47.0 → **3.48.0** (package.json/lock junto). Data: 2026-10-27. Inclui o commit do dono "3.48.0 snapshot 1 teste" (09fb45e: equipes, Henri, Arma de Sangue no antebraço, selos da tela inicial).
+- **Equipes (pedido do dono):** Portadores ≠ Relíquias. Portadores: Juan (forma `juan_odio`, selecionável), Arnaldo, Ferreiro. Relíquias: O Diabo, O Deus da Morte (selecionável), A Magistrada, O Anfitrião (selecionável). Outro Lado: Estrangeiro e Amigo. Henri (id `juan`) nos Mascarados. As formas selecionáveis usam as falas do personagem base e ficam fora das regras do elenco base (vida igual, especial 250, transformação obrigatória).
+- **Arthur:** Arma de Sangue cobrindo o antebraço (`bloodForearmBlade`), conferida no jogo.
+- **Kaiser:** Foto com Flash (← + □, energia 15, recarga 12 s, cega 2 s) — testado: olhando cega; de costas e esquivando escapa; a karambit volta depois.
+- **Ferreiro:** 50% de chance de um Manancial ficar a ~6 m arremessando Lodo que tira 12 de sanidade — testado (5–6 m, "−12 SANIDADE").
+- **CPU — inteligência única:** `kitProfile` + `matchupPlan` (os dois kits). Validado em 10 confrontos (5 sorteados), sem erro. Melhor: Kaiser × Dalmo 2,5 → 4,3 m; Arthur × Kian 6,2 m; quem enfrenta atirador pressiona e ganha. Pendente (TODO): atirador × perseguidor rápido com as duas CPUs ainda fica perto (~2 m).
+- **Botão do Anfitrião:** a CPU corre e aperta primeiro (Fácil e Difícil, ~3 s com a contagem).
+- **TODO (para depois):** modelos da Magistrada (e máscaras), do Estrangeiro (e os "soldados" alheios de terno com metralhadora) e do Amigo; transformação canônica do Estrangeiro; skin própria do Anfitrião do Arnaldo.
+
 ## v3.47.0 — Menus e Combos
 
 - Versão: `VERSION` 3.46.0 → **3.47.0** (package.json/lock junto). Data: 2026-10-27. A troca de versão também renova o cache de modelos do service worker (`arena-arquivos-<versão>`): sem ela, quem já tinha a v3.46.0 continuava vendo os Mananciais antigos.

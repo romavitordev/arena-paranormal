@@ -2,6 +2,17 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.48.0 — Portadores e Relíquias
+- NOVAS EQUIPES: PORTADORES (Juan, Arnaldo, Ferreiro), RELÍQUIAS (O Diabo, O Deus da Morte, A Magistrada, O Anfitrião) e OUTRO LADO (O Estrangeiro, o Amigo Imaginário).
+- COMECE JÁ COMO A RELÍQUIA: O Deus da Morte, O Anfitrião e o Juan (Portador) também na seleção. As transformações continuam: Henri → Juan → Portador do Trono, Arnaldo → Anfitrião, Ferreiro → Deus da Morte.
+- HENRI: o Mascarado antes chamado Juan; tomado pelo ódio, vira o JUAN, o Portador.
+- ARTHUR: a Arma de Sangue cobre o antebraço e a lâmina sai dele, na linha do braço — não é mais segurada como espada.
+- KAISER: FOTO COM FLASH (← + □) — cega por 2 s quem estiver à frente olhando para ele.
+- FERREIRO: às vezes um dos Mananciais fica longe e arremessa o Lodo que tira sanidade.
+- CPU COM UMA INTELIGÊNCIA ÚNICA: lê os kits dos dois lutadores e monta o plano para qualquer confronto (atiradores mantêm distância; contra atirador, pressiona).
+- BOTÃO DO ANFITRIÃO: a CPU corre até o botão e tenta apertar primeiro.
+- TELA INICIAL: equipes em selos pequenos com a cor de cada uma.
+
 ## v3.47.0 — Menus e Combos
 - MENU PRINCIPAL NOVO: opções em seções (LUTAR, PRATICAR, JOGO), descrição num cartão ao lado; cabe tudo na tela, inclusive no celular.
 - OUTRO LADO (EM BREVE): o modo PvE já aparece no menu com o selo EM BREVE e um aviso do que vem aí.

@@ -1,6 +1,6 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.47.0 (revisado em 2026-10-27: Menus e Combos — menu principal em seções com o Outro Lado "em breve", Torneio novo com as Lutas da CPU (sorteio/rodar/assistir), limite de combo, Raziel balanceado, Mananciais refeitos e a 1ª leva da melhoria das animações)
+**Versão de referência atual:** v3.48.0 (revisado em 2026-10-27: Portadores e Relíquias — equipes novas (Portadores, Relíquias, Outro Lado), Henri e o Juan Portador, Relíquias selecionáveis, Arma de Sangue no antebraço, Foto com Flash do Kaiser, Manancial de longe, CPU com inteligência única e o Botão do Anfitrião)
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente
 
@@ -9,7 +9,7 @@
 
 # PRÓXIMA GRANDE ATUALIZAÇÃO — LUTA + MODO PvE (planejamento de 2026-10-18)
 
-**Estado em 2026-10-27 (v3.47.0):**
+**Estado em 2026-10-27 (v3.48.0):**
 - [~] 2.2 Modelos antigos: Xande e Aguiar (v3.33.0), Fantasma, Kemi e Gal Sal + as lâminas Ereškigal (v3.34.0), Kaiser
   (v3.38.0), Balu e Lírio (v3.40.0), Arthur e Joui (v3.41.0), Arnaldo, Anfitrião, Veríssimo, Kian e O Diabo (2026-10-26)
   refeitos pelas artes oficiais; faltam os outros antigos
@@ -1544,6 +1544,29 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
       ESTRANGEIRO e O AMIGO IMAGINÁRIO** na técnica atual (sculpt_lib), pelas artes oficiais.
 - [ ] **PARA DEPOIS (2026-10-27) — O ESTRANGEIRO: os "SOLDADOS"** — ele pode invocar os seus soldados ETs: ALHEIOS de terno
       e gravata que parecem humanos e usam METRALHADORAS (modelo novo + invocação; conferir no cânone de Sinais do Outro Lado).
+- [x] **Pedidos de 2026-10-27 (feitos):**
+      - EQUIPES: HENRI (o antigo "Juan", id `juan`) nos Mascarados → no ódio vira o JUAN (Portador) → Portador do Trono.
+        PORTADORES ≠ RELÍQUIAS: Portadores = Juan (selecionável, `juan_odio`), Arnaldo, Ferreiro; Relíquias = O Diabo, O Deus
+        da Morte (selecionável), A Magistrada, O Anfitrião (selecionável) — dá para começar já como a Relíquia
+        (`characters/selectableForms.js`, mesmas definições das formas); OUTRO LADO = Estrangeiro e Amigo Imaginário. Cores,
+        páginas da seleção, falas (pelo personagem base), página Sobre e check atualizados.
+      - Tela inicial: as equipes em chips pequenos com a cor de cada uma (gerados da lista), somem com o menu aberto.
+      - ARTHUR: a Arma de Sangue cobre o ANTEBRAÇO e a lâmina sai dele na linha do braço (`bloodForearmBlade`), não é mais
+        segurada como espada.
+      - KAISER: FOTO COM FLASH (← + □, no lugar do Disparo de Emergência): a câmera fotográfica cega quem está à frente
+        olhando para ele (de costas ou esquivando escapa).
+      - FERREIRO: 50% de chance de um dos Mananciais ser o que fica LONGE (~6 m) e arremessa o LODO que tira SANIDADE
+        (`DanteClone` com `o.sludge`; `onHit.drainSanity`).
+      - CPU — INTELIGÊNCIA ÚNICA ("uma IA que saiba usar qualquer personagem contra qualquer outro"): sem IA por personagem
+        nem por confronto. `kitProfile(def)` lê o kit — ATIRADOR (tiro carregado ou arma automática de longe: Arthur, Kaiser,
+        Kemi), PERSEGUIDOR (rápido ou com 2+ formas de encurtar a distância: investidas, botes, puxões, teleporte) e a
+        velocidade — e `matchupPlan(meu, dele)` monta o plano com os DOIS kits: atirador × perseguidor fica a 9 m, foge a
+        4,5 m e prioriza o que trava (Dystopia); atirador × resto a 7,5 m / 3,5 m; quem enfrenta um atirador PRESSIONA
+        (encurta ziguezagueando, entra de dash bem mais vezes). Validado em 10 confrontos (5 sorteados do elenco), sem erro.
+      - [ ] **Ainda a melhorar:** atirador × perseguidor rápido quando OS DOIS são CPU (Arthur × Raziel, Kaiser × Jae ficam
+        ~2 m): o perseguidor, mais rápido e agora também pressionando, vence a corrida pela distância. Próximo passo: o
+        atirador ler a investida do outro (o telegraph) e esquivar no tempo certo, e usar o cenário (pilares) para fugir.
+      - CPU no BOTÃO DO ANFITRIÃO: larga tudo, corre até o botão e aperta primeiro (testado no Fácil e no Difícil).
 - [ ] **PARA DEPOIS (2026-10-27) — SKIN do ANFITRIÃO do ARNALDO ≠ ANFITRIÃO base:** o Anfitrião que sai da
       transformação do Arnaldo terá uma skin diferente do Anfitrião selecionável das Relíquias — mesmas habilidades, só o
       visual muda (modelo/textura próprios para a forma `anfitriao` do Arnaldo vs. o personagem `anfitriao` da seleção).

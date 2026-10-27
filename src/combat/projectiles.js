@@ -472,6 +472,14 @@ export class Projectiles {
       w.fx.burst(target.chestPos(), { count: 22, color: a.color ?? 0xc01020, speed: 4, life: 0.5, size: 0.18, gravity: 8 });
     }
     if (a.onHit.bleed) target.applyBleed(a.onHit.bleed, p.owner); // ex.: decadência da Decadenza
+    // o Lodo que tira SANIDADE (o Manancial que fica longe, do Ferreiro)
+    if (a.onHit.drainSanity && target.drainEnergy) {
+      const lost = target.drainEnergy(a.onHit.drainSanity);
+      if (lost > 0) {
+        target.notify(`−${Math.round(lost)} SANIDADE`, true);
+        w.fx.burst(target.chestPos(), { count: 14, color: 0x2a2632, kind: 'smoke', speed: 1.4, up: 0.8, life: 0.6, size: 0.35 });
+      }
+    }
     if (a.onHit.slow) {
       // ex.: arame farpado da Pistola Transtornada
       const old = target.findBuff(a.onHit.slow.type || 'projSlow');

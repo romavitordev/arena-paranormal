@@ -71,12 +71,32 @@ export default {
     // direção + □: muda a forma de usar a arma (mesmo cooldown, dano parecido)
     variants: {
       forward: { label: 'DISPARO CONCENTRADO', count: 1, damage: 46, windup: 0.32, speed: 150, range: 46, spread: 0, knockback: 3, hitstun: 0.35, impactScale: 1.4, cooldown: 2.8 },
-      back: { label: 'DISPARO DE EMERGÊNCIA', count: 3, interval: 0.06, damage: 12, windup: 0.05, recovery: 0.2, spread: 0.07, range: 26, motion: [{ t: [0, 0.25], back: 3.2 }], cooldown: 2.4 },
+      // ← + □: a FOTO COM FLASH (habilidade fotoFlash; recarregando, sai a rajada normal). Antes era o Disparo de
+      // Emergência (2026-10-27: pedido do dono — a câmera fotográfica cega como a granada de luz da Erin)
+      back: { ability: 'fotoFlash' },
       side: { label: 'RAJADA EM MOVIMENTO', count: 4, interval: 0.1, damage: 14, windup: 0.12, spread: 0.04, motion: [{ t: [0, 0.55], side: 3.6 }], cooldown: 2.6 },
     },
   },
 
   abilities: [
+    {
+      // FOTO COM FLASH (← + □): ergue a câmera, recua um passo e dispara o flash — quem está à frente e olhando para
+      // ele fica CEGO (a guarda cai e fica desprevenido). De costas ou esquivando na hora, escapa. Sem dano
+      id: 'fotoFlash',
+      name: 'Foto com Flash',
+      input: 'ranged+back', // ← + □
+      type: 'photoFlash',
+      description: 'Ergue a câmera fotográfica, recua um passo e dispara o flash: quem estiver à frente e olhando para ele fica CEGO por 2 s (a guarda cai). De costas ou esquivando na hora, escapa.',
+      energyCost: 15,
+      cooldown: 12,
+      windup: 0.32,
+      step: 3,
+      range: 9,
+      arc: 80,
+      lookArc: 110,
+      blind: 2.0,
+      ai: { when: 'far', min: 2.5 },
+    },
     {
       id: 'dendrobium',
       name: 'Sentir Através "Dendrobium"',

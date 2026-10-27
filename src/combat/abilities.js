@@ -2505,6 +2505,51 @@ Object.assign(ABILITY_TYPES, {
     },
   },
 
+  // KAISER — FOTO COM FLASH (pedido de 2026-10-27): ergue a câmera fotográfica, recua um passo e dispara o flash. Quem
+  // está à frente dele e OLHANDO para ele fica CEGO (como a granada de luz da Erin: a guarda cai e fica desprevenido).
+  // De costas, ou esquivando na hora, escapa. Não dá dano.
+  photoFlash: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      if (!opp) return null;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.yaw = yawTo(f.pos, opp.pos);
+      const cam = f.rig.props.photoCamera;
+      const swap = (on) => {
+        if (cam) cam.visible = on;
+        if (f.rig.props.karambit) f.rig.props.karambit.visible = !on;
+      };
+      swap(true);
+      f.anim.play('film_cam', { restart: true, duration: a.windup + 0.35 });
+      world.audio.play('ready', { volume: 0.5, pitch: 1.6 });
+      tl.each((t) => {
+        // o passo para trás enquanto ergue a câmera
+        if (t < a.windup * 0.8) {
+          const F = forwardFromYaw(f.yaw);
+          f.vel.x = -F.x * (a.step ?? 3);
+          f.vel.z = -F.z * (a.step ?? 3);
+        } else { f.vel.x = 0; f.vel.z = 0; }
+      });
+      tl.add(a.windup, () => {
+        const at = cam && cam.userData.flash ? cam.userData.flash.getWorldPosition(new THREE.Vector3()) : f.chestPos();
+        world.fx.flash(at, { color: 0xffffff, size: 5, life: 0.18 });
+        world.fx.burst(at, { count: 22, color: 0xfff8e0, speed: 6, life: 0.25, size: 0.1 });
+        world.audio.play('blink', { volume: 0.9, pitch: 1.8 });
+        if (world.screenFlash) world.screenFlash('#ffffff', 0.05);
+        const inFront = distXZ(f.pos, opp.pos) <= a.range && Math.abs(angleDiff(f.yaw, yawTo(f.pos, opp.pos))) <= (a.arc * DEG) / 2;
+        const looking = Math.abs(angleDiff(opp.yaw, yawTo(opp.pos, f.pos))) <= ((a.lookArc ?? 110) * DEG) / 2;
+        if (!inFront || opp.state === 'ko') { f.notify('FORA DA FOTO'); return; }
+        if (opp.isInvulnerable() || !looking) { opp.notify(looking ? 'DESVIOU DO FLASH' : 'DE COSTAS PARA O FLASH', true); return; }
+        blindFighter(world, opp, a.blind);
+        world.fx.flash(opp.headPos ? opp.headPos() : opp.chestPos(), { color: 0xffffff, size: 2.4, life: 0.25 });
+      });
+      tl.add(a.windup + 0.35, () => swap(false));
+      tl.end(a.windup + 0.35);
+      return seqFrom(tl, { cancel: () => swap(false) });
+    },
+  },
+
   // PROTEÇÃO PESADA: veste o capacete azul e se fecha: recebe menos dano e aguenta alguns golpes sem recuar,
   // mas fica um pouco mais lento.
   heavyProtection: {
@@ -2908,9 +2953,12 @@ Object.assign(ABILITY_TYPES, {
         const base = opp ? opp.pos : f.pos;
         const back = Math.atan2(f.pos.x - base.x, f.pos.z - base.z);
         const taken = [{ x: base.x, z: base.z, r: 0.8 }, { x: f.pos.x, z: f.pos.z, r: 0.7 }];
+        // às vezes (a.sludgeChance) um deles é o Manancial que fica LONGE e atira o Lodo que tira sanidade
+        const sludgeIdx = a.sludge && Math.random() < (a.sludgeChance ?? 0) ? 0 : -1;
         for (let i = 0; i < a.count; i++) {
           const ang = back + Math.PI + (i - (a.count - 1) / 2) * 1.1;
-          const want = { x: base.x + Math.sin(ang) * 2.2, z: base.z + Math.cos(ang) * 2.2 };
+          const far = i === sludgeIdx ? a.sludge.keep ?? 6 : 2.2;
+          const want = { x: base.x + Math.sin(ang) * far, z: base.z + Math.cos(ang) * far };
           const spot = findFreeSpotNear(world.arena, want.x, want.z, { radius: 0.5, others: taken }) || want;
           taken.push({ x: spot.x, z: spot.z, r: 0.5 });
           // o Símbolo Espiral se abre no chão e o Manancial sobe dele
@@ -2918,7 +2966,7 @@ Object.assign(ABILITY_TYPES, {
           for (let k = 0; k < 3; k++) world.after(k * 0.08, () => world.fx.ring(g, { color: 0xe8e4dc, radius: 0.5 + k * 0.35, life: 0.6, inner: 0.86 }));
           world.fx.burst(g.clone().setY(0.3), { count: 24, color: 0x2a2632, kind: 'smoke', speed: 1.6, up: 1.5, life: 0.8, size: 0.5 });
           const npc = new DanteClone(f, world, i, a.duration, {
-            model: 'manancial', hp: a.hp, damageMult: 1, element: 'morte', rise: true, strikes: a.strikes,
+            model: 'manancial', hp: a.hp, damageMult: 1, element: 'morte', rise: true, strikes: a.strikes, sludge: i === sludgeIdx ? a.sludge : null,
             anims: { idle: 'man_idle', run: 'man_run' },
             restyle(m) { m.material.transparent = false; },
             onSlain(n) {
@@ -2936,7 +2984,7 @@ Object.assign(ABILITY_TYPES, {
           npc.pos.set(spot.x, 0, spot.z);
           world.addNpc(npc);
         }
-        f.notify(`OS MANANCIAIS ×${a.count}`, true);
+        f.notify(sludgeIdx >= 0 ? `OS MANANCIAIS ×${a.count} — UM FICA LONGE COM O LODO` : `OS MANANCIAIS ×${a.count}`, true);
       });
       tl.end(0.7);
       return seqFrom(tl);

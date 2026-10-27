@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.47.0';
+export const VERSION = '3.48.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,22 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.48.0',
+    date: '2026-10-27',
+    title: 'Portadores e Relíquias',
+    items: [
+      'NOVAS EQUIPES: quem CARREGA uma Relíquia e quem É a Relíquia agora são equipes diferentes. PORTADORES: Juan, Arnaldo Fritz e o Ferreiro. RELÍQUIAS: O Diabo (Sangue), O Deus da Morte (Morte), A Magistrada (Conhecimento) e O Anfitrião (Energia). E o OUTRO LADO: O Estrangeiro e o Amigo Imaginário.',
+      'COMECE JÁ COMO A RELÍQUIA: O Deus da Morte, O Anfitrião e o Juan (Portador) agora também aparecem na seleção. As transformações continuam na luta: Henri → Juan → Portador do Trono, Arnaldo → Anfitrião, Ferreiro → Deus da Morte.',
+      'HENRI: o Mascarado que antes se chamava Juan agora é o HENRI; tomado pelo ódio ele vira o JUAN, o Portador.',
+      'ARTHUR — ARMA DE SANGUE NOVA: o sangue cobre o antebraço direito e a lâmina sai dele, na linha do braço, passando do punho — não é mais segurada como uma espada.',
+      'KAISER — FOTO COM FLASH (← + □): ele ergue a câmera fotográfica, recua um passo e dispara o flash. Quem estiver à frente e olhando para ele fica CEGO por 2 segundos, sem guarda. De costas ou esquivando na hora, escapa.',
+      'FERREIRO — O MANANCIAL DE LONGE: às vezes um dos Mananciais fica afastado, rodeando, e arremessa o Lodo que tira SANIDADE de quem acerta.',
+      'CPU COM UMA INTELIGÊNCIA ÚNICA: a CPU lê o kit dos dois lutadores e monta o plano da luta para qualquer confronto — atiradores (Arthur, Kaiser, Kemi) mantêm distância, fogem quando encostam e usam o que paralisa para abrir espaço; quem enfrenta um atirador pressiona ziguezagueando.',
+      'BOTÃO DO ANFITRIÃO: a CPU agora larga tudo, corre até o botão e tenta apertar primeiro.',
+      'TELA INICIAL: as equipes aparecem em pequenos selos com a cor de cada uma, no lugar da lista comprida.',
+    ],
+  },
   {
     v: '3.47.0',
     date: '2026-10-27',

@@ -28,6 +28,13 @@ export function addKaiserProps(rig) {
   kar.position.y += FIST;
   sockets.handL.add(kar);
   props.karambit = kar;
+  // a câmera fotográfica na mesma mão: aparece só na FOTO COM FLASH (no lugar da karambit)
+  const photo = photoCamera();
+  photo.position.set(0, -0.06, 0.03);
+  photo.rotation.set(-1.25, 0, 0);
+  photo.visible = false;
+  sockets.handL.add(photo);
+  props.photoCamera = photo;
   const back = m4();
   back.rotation.set(0, 0, 2.5);
   back.position.set(0, 0, -0.08);
@@ -592,6 +599,35 @@ function guizoKnife() {
   const fuller = new THREE.Mesh(new THREE.BoxGeometry(0.004, 0.2, 0.006), new THREE.MeshToonMaterial({ color: 0x3a2c24 }));
   fuller.position.set(0, -0.13, 0);
   g.add(fuller);
+  return g;
+}
+
+// KAISER: a câmera fotográfica (a FOTO COM FLASH — ← + □): corpo preto compacto, a lente na frente e o flash em cima
+// (userData.flash: de onde sai o clarão)
+function photoCamera() {
+  const g = new THREE.Group();
+  const black = new THREE.MeshToonMaterial({ color: 0x1c1c20 });
+  const metal = new THREE.MeshToonMaterial({ color: 0x8a8c94 });
+  const body = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.08, 0.06), black);
+  g.add(body);
+  const grip = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.08, 0.07), black);
+  grip.position.set(-0.055, -0.004, 0.006);
+  g.add(grip);
+  const lens = new THREE.Mesh(new THREE.CylinderGeometry(0.028, 0.03, 0.05, 14), metal);
+  lens.rotation.x = Math.PI / 2;
+  lens.position.set(0.01, 0, 0.05);
+  g.add(lens);
+  const glass = new THREE.Mesh(new THREE.CircleGeometry(0.022, 14), new THREE.MeshBasicMaterial({ color: 0x3a5a7a }));
+  glass.position.set(0.01, 0, 0.076);
+  g.add(glass);
+  const flash = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.03, 0.035), black);
+  flash.position.set(0.02, 0.055, 0.005);
+  g.add(flash);
+  const bulb = new THREE.Mesh(new THREE.PlaneGeometry(0.04, 0.018), new THREE.MeshBasicMaterial({ color: 0xfff8e0 }));
+  bulb.position.set(0.02, 0.055, 0.0235);
+  g.add(bulb);
+  g.userData.flash = bulb;
+  g.traverse((o) => { if (o.isMesh) o.userData.outline = true; });
   return g;
 }
 

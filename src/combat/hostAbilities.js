@@ -353,6 +353,7 @@ Object.assign(ABILITY_TYPES, {
       const tl = new Timeline();
       let disposed = false;
       const game = {
+        at, // onde está o botão (a CPU corre até ele — ai/CpuController.js)
         phase: 'intro',
         countdown: 1.8,
         countdownMark: 3,

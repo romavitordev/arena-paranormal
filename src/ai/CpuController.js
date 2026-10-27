@@ -36,6 +36,57 @@ const ACTIVE_BUFF_TYPES = {
   shadowVeil: ['veil'], // Jae: não some de novo enquanto já está escondida
 };
 
+// INTELIGÊNCIA ÚNICA (pedido de 2026-10-27: "uma IA única que saiba usar qualquer personagem contra qualquer outro"):
+// não existe IA por personagem nem por confronto. A CPU LÊ OS DOIS KITS e monta o plano da luta:
+//   kitProfile(def)   — o que o lutador é: ATIRADOR (tiro carregado ou arma automática de longe), PERSEGUIDOR (rápido ou
+//                       com várias formas de encurtar a distância: investidas longas, botes, puxões, teleporte), velocidade
+//   matchupPlan(a, b) — como ESTE kit luta contra AQUELE: a distância que quer manter, quando fugir, se deve pressionar
+// Calculado uma vez por definição (e por par de definições).
+const KIT_PROFILES = new WeakMap();
+const CLOSER_TYPES = new Set(['dashStrike', 'vampireBite', 'tongueLash', 'blink', 'teleport', 'shadowTeleport', 'shadowStep', 'sparkTeleport', 'chainPull', 'hookPull', 'pounce']);
+const isCloser = (a) => !!a && (CLOSER_TYPES.has(a.type) || (a.distance ?? 0) >= 6 || (a.step ?? 0) >= 8 || !!(a.onHit && a.onHit.pull));
+export function kitProfile(def) {
+  if (!def) return { zoner: false, chaser: false, keep: 2, speed: COMBAT.moveSpeed, reach: 0 };
+  let p = KIT_PROFILES.get(def);
+  if (p) return p;
+  const r = def.ranged;
+  const shot = r && (r.type === undefined || r.type === 'projectile');
+  const burst = !shot ? 0 : r.chargeShot ? r.chargeShot.maxDamage || 0 : (r.damage || 0) * (r.count || 1);
+  const reach = shot ? r.aiRange ?? r.range ?? 0 : 0;
+  // atirador de verdade: tiro CARREGADO (sniper) ou arma AUTOMÁTICA de longe (rajada de 3+); def.ai.style força o jeito
+  const zoner = def.ai?.style ? def.ai.style === 'zoner' : shot && burst >= 55 && (!!r.chargeShot || (reach >= 30 && (r.count || 1) >= 3));
+  const speed = def.stats?.moveSpeed ?? COMBAT.moveSpeed;
+  // quantas formas de ENCURTAR a distância o kit tem (habilidades, o □ e o físico para a frente com avanço longo)
+  const closers = (def.abilities || []).filter(isCloser).length + (isCloser(r) ? 1 : 0)
+    + ((def.melee?.forward?.motion || []).some((m) => (m.fwd ?? 0) >= 5) ? 1 : 0);
+  const chaser = !zoner && (speed >= 8 || closers >= 2);
+  p = { zoner, chaser, closers, speed, keep: zoner ? 7.5 : 2.0, reach };
+  KIT_PROFILES.set(def, p);
+  return p;
+}
+
+const MATCHUPS = new WeakMap();
+export function matchupPlan(me, them) {
+  if (!me || !them) return { keep: 2, escapeAt: 0, pressure: false, control: false };
+  let row = MATCHUPS.get(me);
+  if (!row) MATCHUPS.set(me, (row = new WeakMap()));
+  let plan = row.get(them);
+  if (plan) return plan;
+  const A = kitProfile(me);
+  const B = kitProfile(them);
+  const faster = B.speed > A.speed + 0.3;
+  if (A.zoner) {
+    // atirador: contra quem encurta a distância (ou é mais rápido) fica mais longe, foge mais cedo e usa o que trava
+    const danger = B.chaser || faster;
+    plan = { keep: danger ? 9 : 7.5, escapeAt: danger ? 4.5 : 3.5, pressure: false, control: danger };
+  } else if (B.zoner) {
+    // contra um atirador: PRESSIONA — encurta rápido, ziguezagueando para não ficar parado na mira
+    plan = { keep: 1.8, escapeAt: 0, pressure: true, control: false };
+  } else plan = { keep: 2.0, escapeAt: 0, pressure: false, control: false };
+  row.set(them, plan);
+  return plan;
+}
+
 export function canSpendDodge(f, emergency = false) {
   if (!f || f.dodges <= 0 || f.cooldowns.dodge > 0) return false;
   return emergency || f.dodges > COMBAT.substitution.charges + 1;
@@ -65,6 +116,9 @@ export function abilityUsePrior(a, f, opp, { distance, lowHp, opening, threat, l
   if (lowHp && (a.type === 'healOverTime' || a.type === 'agingHeal')) prior *= 3;
   if (threat && a.type === 'shuffle') prior *= 2; // Embaralhar: as cópias seguram o golpe que vem
   if (lowHp && a.ai?.when === 'hurt') prior *= 1.5;
+  // ATIRADOR encostado (kitProfile): o que PARALISA/ATORDOA à frente (a Dystopia do Arthur) abre espaço para fugir e atirar
+  const plan = matchupPlan(f.def, opp.def);
+  if (kitProfile(f.def).zoner && distance < plan.escapeAt + 0.5 && !selfTarget && (a.stun || a.type === 'bloodParalysis')) prior *= plan.control ? 4.5 : 3;
   // SEDE INCONTROLÁVEL (O Verdadeiro Raziel): devora quem está morrendo — só quando o alvo está no alcance do bote
   if (a.thirst && opp.health < opp.maxHealth * a.thirst.below && distance < (a.range || 2) + a.thirst.reach + 1.5) prior *= 3;
   if (distance < 2 && a.range > 4 && !selfTarget) prior *= 0.55;
@@ -266,6 +320,31 @@ export class CpuController {
     if (observedMove && opp.input && !opp.input.cpu) observePlayerMove(observedMove);
     if (this.episode) this.learnTick(f, opp, w);
 
+    // BOTÃO DO ANFITRIÃO (pedido de 2026-10-27: a CPU tem que QUERER apertar primeiro): na corrida a CPU larga tudo,
+    // corre reto até o botão e, no raio dele, martela o ○ (a reação depende um pouco da dificuldade, mas sempre tenta)
+    const race = w.hostButtonGame;
+    if (race && race.at && race.controls(f)) {
+      this.queue.length = 0;
+      this.holdCharge = 0;
+      if (race.phase !== 'running') { this.racePress = null; return out; }
+      const dx = race.at.x - f.pos.x;
+      const dz = race.at.z - f.pos.z;
+      const dist = Math.hypot(dx, dz) || 1;
+      if (dist > 0.5) {
+        const b = f.moveBasis();
+        const mx = dx / dist;
+        const mz = dz / dist;
+        out.moveX = mx * b.right.x + mz * b.right.z;
+        out.moveY = mx * b.forward.x + mz * b.forward.z;
+      }
+      if (dist <= 1.3) {
+        if (this.racePress === null || this.racePress === undefined) this.racePress = L.think[0] * 0.5; // tempo de reação
+        this.racePress -= dt;
+        if (this.racePress <= 0) { this.raceTap = !this.raceTap; if (this.raceTap) out.held.physical = true; }
+      } else this.racePress = null;
+      return out;
+    }
+
     if (this.queue.length) {
       const q = this.queue[0];
       q.t -= dt;
@@ -453,6 +532,24 @@ export class CpuController {
       }
     }
 
+    // ATIRADOR ENCURRALADO (matchupPlan — inteligência única): o adversário passou da distância de fuga do confronto
+    // (mais cedo contra quem encurta a distância) — antes de qualquer outra escolha (habilidade, especial, combo)
+    // esquiva para trás; sem carga, dash para longe
+    const planZ = matchupPlan(f.def, opp.def);
+    if (planZ.escapeAt > 0 && (f.state === 'idle' || f.state === 'charging') && f.onGround && d < planZ.escapeAt && opp.state !== 'downed' && opp.state !== 'ko'
+      && Math.random() < (0.55 + L.tactics * 0.4) * k) {
+      const away = { x: -toOpp.x, z: -toOpp.z };
+      if (canSpendDodge(f, true)) {
+        this.queue.push({ t: 0.06, held: { dodge: true }, move: away }, { t: 0.05, held: {} });
+        return out;
+      }
+      if (f.cooldowns.dash <= 0) {
+        // sem carga de esquiva: dash para longe (dois toques de × andando para trás)
+        this.queue.push({ t: 0.05, held: { jump: true }, move: away }, { t: 0.05, held: {}, move: away }, { t: 0.05, held: { jump: true }, move: away }, { t: 0.05, held: {}, move: away });
+        return out;
+      }
+    }
+
     // invocações FRACAS do adversário por perto (Zumbi fraco, clones do Trinitá): limpa antes de voltar a ele
     if ((f.state === 'idle' || f.state === 'charging') && f.onGround && w.hostileNpcs) {
       let prey = null;
@@ -563,11 +660,15 @@ export class CpuController {
         this.queue.push({ t: 0.05, held: { carga: true } }, { t: 0.06, held: { carga: true, jump: true } }, { t: 0.05, held: {} });
         return out;
       }
-      // à distância: principal (sniper do Arthur: segura para carregar — quanto mais longe, mais tempo)
-      if (def.ranged && def.ranged.type !== 'counter' && f.cooldowns.ranged <= 0 && d > 5 && d < (def.ranged.aiRange ?? def.ranged.range ?? 99) + 0.5 && r < L.ranged * (lowHp ? 1.4 : 1) && f.energy >= (def.ranged.energyCost || 0)) {
+      // ATIRADOR encurralado (kitProfile): o adversário encostou — esquiva para trás e abre distância em vez de trocar soco
+      const KP = kitProfile(def);
+      // à distância: principal (sniper do Arthur: segura para carregar — quanto mais longe, mais tempo); o atirador
+      // atira mais (e já a partir de 3,5 m)
+      if (def.ranged && def.ranged.type !== 'counter' && f.cooldowns.ranged <= 0 && d > (KP.zoner ? 3.5 : 5) && d < (def.ranged.aiRange ?? def.ranged.range ?? 99) + 0.5 && r < L.ranged * (lowHp ? 1.4 : 1) * (KP.zoner ? 1.8 : 1) && f.energy >= (def.ranged.energyCost || 0)) {
         if (def.ranged.chargeShot) {
           this.queue.push({ t: 0.06, held: { ranged: true } });
-          this.aimHold = Math.min(1.6, 0.2 + d / 14);
+          // perto (< 6 m) o tiro sai quase sem mirar — antes de o adversário chegar
+          this.aimHold = d < 6 ? 0.15 : Math.min(1.6, 0.2 + d / 14);
         } else this.tap('ranged');
         return out;
       }
@@ -597,13 +698,14 @@ export class CpuController {
         this.queue.push({ t: 0.05, held: { block: true } }, { t: 0.06, held: { block: true, physical: true } }, { t: 0.05, held: {} });
         return out;
       }
-      // perto: combo (com ↑/↓ conforme a dificuldade)
-      if (d < 2.3 && r < (lowHp ? 0.55 : 0.85)) {
+      // perto: combo (com ↑/↓ conforme a dificuldade) — o atirador só troca soco quando não deu para sair
+      if (d < 2.3 && r < (lowHp ? 0.55 : KP.zoner ? 0.4 : 0.85)) {
         this.combo();
         return out;
       }
       // médio: dash curto para entrar no combo
-      if (d > 3.5 && d < 8 && f.cooldowns.dash <= 0 && !lowHp && r < 0.12) {
+      // (contra um atirador — matchupPlan.pressure — entra bem mais vezes: não fica parado na mira)
+      if (d > 3.5 && d < 8 && f.cooldowns.dash <= 0 && !lowHp && !KP.zoner && r < (matchupPlan(def, opp.def).pressure ? 0.4 : 0.12)) {
         this.queue.push({ t: 0.05, held: { jump: true } }, { t: 0.05, held: {} }, { t: 0.05, held: { jump: true } }, { t: 0.05, held: {} });
         return out;
       }
@@ -613,15 +715,19 @@ export class CpuController {
     return this.move(out, f, d, lowHp, toOpp, side);
   }
 
-  // movimento: aproxima rodeando; com vida baixa mantém distância (atiradores no Super Difícil: na distância deles)
+  // movimento: a distância vem do PLANO DO CONFRONTO (matchupPlan — os dois kits): o atirador fica longe (mais longe
+  // contra quem encurta a distância); contra um atirador, pressiona ziguezagueando; com vida baixa abre espaço
   move(out, f, d, lowHp, toOpp, side) {
-    const r = f.def.ranged;
-    const shooter = this.L.tactics >= 0.5 && r && (r.range || 0) >= 14 && (r.chargeShot || (r.damage || 0) >= 60);
-    const keep = lowHp ? 5 : shooter && f.health > f.maxHealth * 0.5 ? 7 : 2.0;
+    const opp = f.world.opponentOf(f);
+    const P = kitProfile(f.def);
+    const plan = matchupPlan(f.def, opp && opp.def);
+    const keep = P.zoner ? (lowHp ? plan.keep + 1 : plan.keep) : plan.pressure ? plan.keep : lowHp ? 5 : plan.keep;
     const wantClose = d > keep;
-    const away = !wantClose && lowHp;
-    const mx = (wantClose ? toOpp.x : away ? -toOpp.x : -toOpp.x * 0.3) + side.x * 0.45;
-    const mz = (wantClose ? toOpp.z : away ? -toOpp.z : -toOpp.z * 0.3) + side.z * 0.45;
+    const away = !wantClose && (lowHp && !plan.pressure || (P.zoner && d < keep - 1.5));
+    // pressionando um atirador: o passo de lado troca de sentido a cada ~0,6 s (ziguezague) e pesa mais
+    const weave = plan.pressure && wantClose ? (Math.floor(f.world.time / 0.6) % 2 ? 1 : -1) * 0.75 : 0.45;
+    const mx = (wantClose ? toOpp.x : away ? -toOpp.x : -toOpp.x * 0.3) + side.x * weave;
+    const mz = (wantClose ? toOpp.z : away ? -toOpp.z : -toOpp.z * 0.3) + side.z * weave;
     const b = f.moveBasis();
     out.moveX = mx * b.right.x + mz * b.right.z;
     out.moveY = mx * b.forward.x + mz * b.forward.z;
@@ -660,19 +766,21 @@ export class CpuController {
     const add = (id, prior, run) => { if (prior > 0) opts.push({ id, prior, run }); };
     const open = this.aiOk({ ai: { when: 'opening' } }, d, opp, lowHp);
     const blockerRate = playerTendency(d, 'blk');
+    const KP = kitProfile(def); // inteligência única: o jeito de lutar vem do kit
     // perto
     if (d < 2.3) {
-      add('combo', open ? 4 : lowHp ? 1.2 : 2.8, () => this.combo());
+      add('combo', (open ? 4 : lowHp ? 1.2 : 2.8) * (KP.zoner && !open ? 0.45 : 1), () => this.combo());
       if (f.cooldowns.grab <= 0) add('grab', opp.state === 'block' ? 3 : 0.3 + blockerRate * 3, () => this.queue.push({ t: 0.05, held: { block: true } }, { t: 0.06, held: { block: true, physical: true } }, { t: 0.05, held: {} }));
       if (!open) add('guard', opp.state === 'attack' ? 1.6 : 0.4, () => this.queue.push({ t: rnd(0.3, 0.6), held: { block: true } }, { t: 0.04, held: {} }));
-      if (canSpendDodge(f)) add('backstep', lowHp ? 1 : 0.25, () => this.queue.push({ t: 0.06, held: { dodge: true }, move: { x: -side.z, z: side.x } }, { t: 0.05, held: {} }));
+      // o atirador encostado ESCAPA para trás (o resto só desvia de lado)
+      if (canSpendDodge(f, KP.zoner)) add('backstep', KP.zoner ? 2.2 : lowHp ? 1 : 0.25, () => this.queue.push({ t: 0.06, held: { dodge: true }, move: KP.zoner ? { x: -toOpp.x, z: -toOpp.z } : { x: -side.z, z: side.x } }, { t: 0.05, held: {} }));
     }
     // médio: entra com dash curto
-    if (d > 3.5 && d < 8 && f.cooldowns.dash <= 0) add('dashIn', lowHp ? 0.2 : open ? 1.4 : 0.6, () => this.queue.push({ t: 0.05, held: { jump: true } }, { t: 0.05, held: {} }, { t: 0.05, held: { jump: true } }, { t: 0.05, held: {} }));
+    if (d > 3.5 && d < 8 && f.cooldowns.dash <= 0 && !KP.zoner) add('dashIn', (lowHp ? 0.2 : open ? 1.4 : 0.6) * (matchupPlan(def, opp.def).pressure ? 2.5 : 1), () => this.queue.push({ t: 0.05, held: { jump: true } }, { t: 0.05, held: {} }, { t: 0.05, held: { jump: true } }, { t: 0.05, held: {} }));
     // à distância
     const r = def.ranged;
     if (r && r.type !== 'counter' && f.cooldowns.ranged <= 0 && d > 3 && d < (r.aiRange ?? r.range ?? 99) + 0.5 && f.energy >= (r.energyCost || 0)) {
-      add('ranged', d > 5 ? 1.4 : 0.5, () => {
+      add('ranged', (d > 5 ? 1.4 : 0.5) * (KP.zoner ? 2.2 : 1), () => {
         if (r.chargeShot) { this.queue.push({ t: 0.06, held: { ranged: true } }); this.aimHold = Math.min(1.6, 0.2 + d / 14); } else this.tap('ranged');
       });
     }

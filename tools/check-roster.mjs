@@ -155,7 +155,10 @@ ok(ROSTER.every((c) => (c.special.energyCost ?? COMBAT.specialEnergyCost) === 50
 const cin = get('kaiser');
 ok(cin.ranged.name === 'M4' && cin.ranged.count === 4 && cin.ranged.damage === 16 && cin.ranged.cooldown === 2.6, 'M4 mantida: rajada de 4 × 16, cooldown 2,6 s');
 ok(['forward', 'back', 'side'].every((k) => cin.ranged.variants[k]), 'M4 com variações por direção');
-const varMax = Math.max(...Object.values(cin.ranged.variants).map((v) => v.damage * (v.count ?? cin.ranged.count)));
+// (as variações que chamam uma habilidade — a Foto com Flash no ← + □ — não são tiro: ficam fora da conta)
+const varMax = Math.max(...Object.values(cin.ranged.variants).filter((v) => !v.ability).map((v) => v.damage * (v.count ?? cin.ranged.count)));
+const flashAb = cin.abilities.find((a) => a.id === 'fotoFlash');
+ok(cin.ranged.variants.back.ability === 'fotoFlash' && flashAb && flashAb.type === 'photoFlash' && flashAb.blind > 0 && flashAb.input === 'ranged+back', 'Kaiser: Foto com Flash no ← + □ (a câmera fotográfica cega quem olha para ele)');
 ok(varMax <= 64, `variações da M4 não aumentam o dano da rajada (máx ${varMax})`);
 ok(cin.special.type === 'mistField' && cin.special.evasion && cin.special.area && cin.special.opacity < 1, 'Cinerária é névoa: dano + evasão + área + leitura visual difícil');
 ok(cin.special.damageBonus < 1.5, `Cinerária não é mais só ×1,5 (bônus ${cin.special.damageBonus})`);

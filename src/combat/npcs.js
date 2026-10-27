@@ -87,16 +87,29 @@ export class DanteClone {
     if (this.riseT > 0) { this.riseT = Math.max(0, this.riseT - dt); this.rig.body.position.y = -1.8 * (this.riseT / 0.45); }
     if (this.t >= this.life || this.owner.state === 'ko' || !target) { this.kill(); return; }
     if (this.flash > 0) this.flash -= dt;
-    // cerca o alvo: cada clone num ângulo, girando devagar
-    const ang = this.idx * ((Math.PI * 2) / 3) + this.t * 0.6;
-    const radius = this.attack ? 1.2 : 2.0;
+    // cerca o alvo: cada clone num ângulo, girando devagar (o.sludge: o que fica LONGE e atira Lodo — Manancial do Ferreiro)
+    const S = this.o.sludge;
+    const ang = this.idx * ((Math.PI * 2) / 3) + this.t * (S ? 0.25 : 0.6);
+    const radius = S ? S.keep ?? 6 : this.attack ? 1.2 : 2.0;
     const want = v.set(target.pos.x + Math.sin(ang) * radius, 0, target.pos.z + Math.cos(ang) * radius);
     const dx = want.x - this.pos.x;
     const dz = want.z - this.pos.z;
     const dist = Math.hypot(dx, dz);
     const dTarget = distXZ(this.pos, target.pos);
     this.yaw = yawTo(this.pos, target.pos);
-    if (this.attack) {
+    if (this.attack && this.attack.ranged) {
+      // arremesso de Lodo: prepara, solta a bola no alvo e recupera (não chega perto)
+      const a = this.attack;
+      a.t += dt;
+      if (!a.fired && a.t >= a.windup) {
+        a.fired = true;
+        const from = new THREE.Vector3(this.pos.x, this.pos.y + 1.4, this.pos.z);
+        const dir = target.chestPos().sub(from).normalize();
+        w.projectiles.spawn(this.owner, { ...S.projectile, volley: 50000 + Math.floor(w.time * 10) + this.idx }, from, dir);
+        w.audio.play('drain', { volume: 0.5, pitch: 1.2 });
+      }
+      if (a.t >= a.dur) { this.attack = null; this.cd = S.cd ?? 3; this.anim.play('idle', { blend: 0.1 }); }
+    } else if (this.attack) {
       // golpe: avança um pouco e acerta na janela ativa
       const a = this.attack;
       a.t += dt;
@@ -121,7 +134,10 @@ export class DanteClone {
         if (this.anim.currentName !== this.anim.resolve('run') && dist > 0.6) this.anim.play('run');
       } else if (this.anim.currentName !== this.anim.resolve('idle')) this.anim.play('idle', { blend: 0.15 });
       this.cd -= dt;
-      if (this.cd <= 0 && dTarget < 2.4 && target.state !== 'downed' && target.state !== 'ko') {
+      if (S && this.cd <= 0 && dTarget < (S.range ?? 14) && target.state !== 'ko') {
+        this.attack = { ranged: true, t: 0, windup: S.windup ?? 0.35, dur: (S.windup ?? 0.35) + 0.35, fired: false };
+        this.anim.play('throw_r', { restart: true, duration: this.attack.dur });
+      } else if (!S && this.cd <= 0 && dTarget < 2.4 && target.state !== 'downed' && target.state !== 'ko') {
         const strikes = this.o.strikes || this.owner.def.melee.strikes;
         const s = strikes[this.strikeIdx++ % (this.o.strikes ? strikes.length : Math.min(3, strikes.length))];
         this.attack = { t: 0, dur: s.dur, active: s.active, range: s.range + 0.2, damage: s.damage, hit: false };

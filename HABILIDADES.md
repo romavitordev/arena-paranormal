@@ -144,11 +144,13 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 - Dano 16 × 4 · alcance 38 m · cooldown 2.6 s · custo 0
 - Frente + □: **DISPARO CONCENTRADO** — 46
-- Trás + □: **DISPARO DE EMERGÊNCIA** — 12 × 3
+- Trás + □: **Foto com Flash** (habilidade)
 - Lado + □: **RAJADA EM MOVIMENTO** — 14 × 4
 
 ### Habilidades
 
+- **Foto com Flash** — ranged+back · custo 15 · cooldown 12 s · alcance 9 m
+  Ergue a câmera fotográfica, recua um passo e dispara o flash: quem estiver à frente e olhando para ele fica CEGO por 2 s (a guarda cai). De costas ou esquivando na hora, escapa.
 - **Sentir Através "Dendrobium"** — R2 + △ / RT + Y · custo 25 · cooldown 14 s · dano 45 · alcance 16 m
   Raízes roxas e uma flor brotam do chão sob o alvo e o prendem por um instante.
 - **Balas Amaldiçoadas** — R2 + × / RT + A · custo 25 · cooldown 11 s
@@ -968,7 +970,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ---
 
-## JUAN
+## HENRI
 
 *Masoquista e imprevisível: quanto mais apanha, mais sanidade; quase morto, o ódio vira garras — e depois o Trono* · arma: Faca Predadora (lâmina ondulada que absorve sangue)
 
@@ -1104,102 +1106,48 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ---
 
-## O DIABO
+## JUAN
 
-*O Portador da Relíquia de Sangue: regenera, bebe o sangue derramado e oferece pactos* · arma: Quatro braços com garras
+*Juan tomado pelo Ódio do Diabo: garras que fazem sangrar — e o Trono ainda chama* · arma: Garras de sangue no braço direito
 
 ### Físico (○ / B)
 
 | Comando | Golpe | Dano | Alcance | Observações |
 |---|---|---|---|---|
-| ○ 1 | Garra direita | 32 | 2.2 m |  |
-| ○ 2 | Garra esquerda | 32 | 2.2 m |  |
-| ○ 3 | Quatro garras | 48 (2 acertos) | 2.2 m |  |
-| ○ 4 | Rasgar | 70 | 2.3 m | finalizador: lança |
-| Frente + ○ | Bote do Diabo | 38 | 2.3 m |  |
-| Trás + ○ | Recua e rasga | 34 (2 acertos) | 2.2 m | invulnerável no começo |
-| Lado + ○ | Garra em giro | 32 | 2.2 m |  |
-| No ar + ○ | Mergulho do Diabo | 40 | 2.2 m | desce com impacto |
-| ↑ + ○ (no combo) | Garra ascendente | 44 | 2.2 m | finalizador: lança alto (combo aéreo) |
-| ↓ + ○ (no combo) | Cravar as garras | 50 | 2.2 m | finalizador: derruba |
+| ○ 1 | Corte rápido | 28 | 2 m |  |
+| ○ 2 | Corte de volta | 28 | 2 m |  |
+| ○ 3 | Estocada | 33 | 2.1999999999999997 m |  |
+| ○ 4 | Corte descendente | 35 | 2 m |  |
+| ○ 5 | Banho de Sangue | 64 | 2.1999999999999997 m | finalizador: lança |
+| Frente + ○ | Bote | 38 | 2.1999999999999997 m |  |
+| Trás + ○ | Recua e corta | 35 | 2.1 m | invulnerável no começo |
+| Lado + ○ | Corte em movimento | 33 | 2.1 m |  |
+| No ar + ○ | Faca aérea | 38 | 2.1 m | desce com impacto |
+| ↑ + ○ (no combo) | Corte para cima | 45 | 2.1 m | finalizador: lança alto (combo aéreo) |
+| ↓ + ○ (no combo) | Faca no chão | 52 | 2.1 m | finalizador: derruba |
 
-### Principal (□ / X): Lança de Sangue
+### Principal (□ / X): Lâmina de Sangue
 
-- Dano 30 · alcance 22 m · cooldown 1.9 s · custo 0
-- Frente + □: **LANÇA CRAVADA** — 46
-- Lado + □: **QUATRO LANÇAS** — 13 × 4
-- Trás + □: **LANÇA E RECUO** — 24
+- Dano 24 · alcance 18 m · cooldown 2 s · custo 0
 
 ### Habilidades
 
-- **Veias de Sangue** — △ + □ / Y + X · custo 25 · cooldown 13 s · dano 36 · alcance 12 m
-  O sangue rompe as veias do alvo e vira correntes que saem do peito dele e se cravam no chão: fica preso por um instante.
-- **Ódio do Diabo** — R2 + △ / RT + Y · custo 25 · cooldown 18 s · alcance 11 m
-  Enche o adversário de um ódio paranormal por 6 s: ele bate 10% mais forte, mas não defende, não usa rituais e leva 20% a mais de dano. O Diabo se alimenta do ódio: +15% de dano e mais velocidade enquanto durar.
-- **Transportar pelo Sangue** — R2 + × / RT + A · custo 20 · cooldown 8 s
-  Afunda no sangue e sai pela poça mais perto do adversário (ou por uma fenda atrás dele). Se o adversário estiver colado, é ARRASTADO junto e cuspido no chão de outra poça.
-- **Senhor do Sangue** — △ + ○ / Y + B · custo 30 · cooldown 22 s
-  Abre poças de sangue perto do adversário e delas sobem 1 ou 2 Zumbis de Sangue PEQUENOS que lutam pelo Diabo por 12 s. Transformado (Portador do Trono), o Zumbi GRANDE vem junto.
-- **Sangue nos Arredores** — △ + L2 / Y + LT · custo 30 · cooldown 16 s · dano 24
-  O chão em volta jorra sangue em 4 ondas: dano, lentidão, e o Diabo bebe 50% do sangue derramado. Deixa poças de sangue em volta.
+- **Descarnar Discente** — R2 + △ / RT + Y · custo 30 · cooldown 14 s · dano 80 · alcance 9 m
+  Ritual de Sangue: cortes surgem no corpo do alvo, um atrás do outro (dano alto e sangramento).
+- **Perturbação Discente** — △ + ○ / Y + B · custo 20 · cooldown 12 s · dano 30 · alcance 5 m
+  Uma ordem simples a quem está perto: "PARE!" (paralisa), "VENHA!" (puxa) ou "AJOELHE!" (derruba). Sai uma ao acaso.
+- **Vínculo de Sangue** — △ + □ / Y + X · custo 25 · cooldown 20 s · alcance 9 m
+  Marca o próprio corpo e o do alvo: por 8 s, 30% do dano que o Juan recebe é replicado no alvo.
+- **Armadura de Sangue Diabólica** — △ + L2 / Y + LT · custo 30 · cooldown 24 s
+  Também nasce sozinha depois de sangrar o bastante (a cada 400 de dano recebido, mais curta, e usa a recarga). O próprio sangue endurece numa armadura com espinhos: recebe 30% menos dano, aguenta 2 golpes sem recuar e fica mais rápido. O braço da faca vira uma arma de sangue: golpes físicos 25% mais fortes.
 
-### Especial: Pacto
+### Especial: Hemorragia Severa
 
-O alvo fica transtornado por 9 s: não defende e recebe mais dano; o Diabo se cura · custo 50 · cooldown 20 s.
+250 de dano · custo 50 · cooldown 14 s.
 
 ### Transformação: Renascimento
 
 Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → transforma no Diabo até o fim do round (+150 de vida).
-
----
-
-## A MAGISTRADA
-
-*A Portadora da Relíquia de Conhecimento: sabe tudo, lembra de tudo e só age quando o Equilíbrio cai* · arma: A bengala e a Máscara do Desespero
-
-### Físico (○ / B)
-
-| Comando | Golpe | Dano | Alcance | Observações |
-|---|---|---|---|---|
-| ○ 1 | Advertência | 26 | 2.2 m |  |
-| ○ 2 | Revés | 26 | 2.2 m |  |
-| ○ 3 | Mão das Sombras | 30 | 3.4 m |  |
-| ○ 4 | Sentença | 32 | 2.3 m |  |
-| ○ 5 | Executora das Regras | 60 | 2.6 m | finalizador: lança |
-| Frente + ○ | Passo das Sombras | 36 | 2.3 m |  |
-| Trás + ○ | Recuo e Empurrão | 36 | 3.4 m | invulnerável no começo |
-| Lado + ○ | Giro da Capa | 32 | 2.4 m |  |
-| No ar + ○ | Queda da Sentença | 36 | 2.3 m | desce com impacto |
-| ↑ + ○ (no combo) | Erguer pelas Sombras | 38 | 2.3 m | finalizador: lança alto (combo aéreo) |
-| ↓ + ○ (no combo) | Golpe do Juízo | 46 | 2.3 m | finalizador: derruba |
-
-### Principal (□ / X): Sigilo do Conhecimento
-
-- Dano 30 · alcance 18 m · cooldown 2.6 s · custo 0
-
-### Habilidades
-
-- **Chamar as Máscaras** — △ + □ / Y + X · custo 35 · cooldown 24 s
-  Três membros da Seita das Máscaras (o Nathaniel entre eles) sobem das sombras em volta do adversário e lutam por ela por 10 s — socos e empurrões de sombra. Somem quando apanham demais.
-- **Dimensão das Sombras** — Energia + Pulo (△+× / Y+A) · custo 22 · cooldown 6 s
-  Some na própria sombra (a Onipresença da Máscara) e surge atrás do adversário, já podendo atacar.
-- **Olhar do Desespero** — △ + ○ / Y + B · custo 25 · cooldown 12 s · alcance 8 m
-  A Máscara encara o adversário: quem estiver à frente fica paralisado por um instante, vulnerável a combo.
-- **Controle Mental** — R2 + × / RT + A · custo 35 · cooldown 18 s · alcance 10 m
-  A Magistrada fala pelo corpo do alvo: por alguns segundos ele anda sozinho até ela e não consegue defender.
-- **Dispersão de Dano** — △ + L2 / Y + LT · custo 30 · cooldown 22 s
-  A aura dourada se abre e os Sigilos giram em volta: por 5 s ela recebe METADE do dano e aguenta 1 golpe sem recuar.
-- **Levitação** — R2 + △ / RT + Y · custo 30 · cooldown 15 s · dano 16 · alcance 18 m
-  Ergue a mão livre e as pedras do chão flutuam em volta dela; depois voam uma a uma contra o alvo (dá para defender ou sair da frente).
-- **Passiva — Precognição:** não é pego desprevenido (sem bônus de costas nem susto de teleporte)
-
-### Especial: Prisão das Sombras
-
-250 de dano · custo 50 · cooldown 14 s.
-
-### Transformação: Saber Tudo é Perder Tudo
-
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +20% de dano (habilidades, especial, distância), −10% de dano recebido, recargas 40% mais rápidas, sanidade regenera +50%, cura 10% na hora.
 
 ---
 
@@ -1281,7 +1229,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 - **Hipnose Espiral** — △ + ○ / Y + B · custo 25 · cooldown 22 s · alcance 10 m
   A espiral do Parasita de Dimensões: o Lodo desenha uma espiral no chão e o alvo anda em círculos até o centro (perto do Ferreiro), sem conseguir defender; lá fica parado, hipnotizado.
 - **Chamar os Mananciais** — △ + □ / Y + X · custo 35 · cooldown 24 s
-  Três MANANCIAIS (os filhos do Ferreiro, presos nas salas brancas para alimentar o Santo) sobem do Símbolo Espiral em volta do adversário e lutam por ele por 10 s — enlouquecidos, arranham, agarram e se jogam em cima. Quando um morre, a sirene de Santo Berço toca e o Ferreiro recupera sanidade.
+  Três MANANCIAIS (os filhos do Ferreiro, presos nas salas brancas para alimentar o Santo) sobem do Símbolo Espiral em volta do adversário e lutam por ele por 10 s — enlouquecidos, arranham, agarram e se jogam em cima; às vezes um deles fica longe e arremessa o Lodo, que tira sanidade. Quando um morre, a sirene de Santo Berço toca e o Ferreiro recupera sanidade.
 - **Espada Consumidora** — R2 + × / RT + A · custo 20 · cooldown 16 s
   Desperta a espada amaldiçoada: por alguns segundos cada corte abre um ferimento que consome o alvo.
 - **Conforto de Santo Berço** — R2 + △ / RT + Y · custo 25 · cooldown 24 s
@@ -1297,6 +1245,195 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 ### Transformação: Pacto do Santo
 
 Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → o Lodo toma o corpo: transforma no Deus da Morte (chefe com vida própria) até o fim do round.
+
+---
+
+## O DIABO
+
+*O Portador da Relíquia de Sangue: regenera, bebe o sangue derramado e oferece pactos* · arma: Quatro braços com garras
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Garra direita | 32 | 2.2 m |  |
+| ○ 2 | Garra esquerda | 32 | 2.2 m |  |
+| ○ 3 | Quatro garras | 48 (2 acertos) | 2.2 m |  |
+| ○ 4 | Rasgar | 70 | 2.3 m | finalizador: lança |
+| Frente + ○ | Bote do Diabo | 38 | 2.3 m |  |
+| Trás + ○ | Recua e rasga | 34 (2 acertos) | 2.2 m | invulnerável no começo |
+| Lado + ○ | Garra em giro | 32 | 2.2 m |  |
+| No ar + ○ | Mergulho do Diabo | 40 | 2.2 m | desce com impacto |
+| ↑ + ○ (no combo) | Garra ascendente | 44 | 2.2 m | finalizador: lança alto (combo aéreo) |
+| ↓ + ○ (no combo) | Cravar as garras | 50 | 2.2 m | finalizador: derruba |
+
+### Principal (□ / X): Lança de Sangue
+
+- Dano 30 · alcance 22 m · cooldown 1.9 s · custo 0
+- Frente + □: **LANÇA CRAVADA** — 46
+- Lado + □: **QUATRO LANÇAS** — 13 × 4
+- Trás + □: **LANÇA E RECUO** — 24
+
+### Habilidades
+
+- **Veias de Sangue** — △ + □ / Y + X · custo 25 · cooldown 13 s · dano 36 · alcance 12 m
+  O sangue rompe as veias do alvo e vira correntes que saem do peito dele e se cravam no chão: fica preso por um instante.
+- **Ódio do Diabo** — R2 + △ / RT + Y · custo 25 · cooldown 18 s · alcance 11 m
+  Enche o adversário de um ódio paranormal por 6 s: ele bate 10% mais forte, mas não defende, não usa rituais e leva 20% a mais de dano. O Diabo se alimenta do ódio: +15% de dano e mais velocidade enquanto durar.
+- **Transportar pelo Sangue** — R2 + × / RT + A · custo 20 · cooldown 8 s
+  Afunda no sangue e sai pela poça mais perto do adversário (ou por uma fenda atrás dele). Se o adversário estiver colado, é ARRASTADO junto e cuspido no chão de outra poça.
+- **Senhor do Sangue** — △ + ○ / Y + B · custo 30 · cooldown 22 s
+  Abre poças de sangue perto do adversário e delas sobem 1 ou 2 Zumbis de Sangue PEQUENOS que lutam pelo Diabo por 12 s. Transformado (Portador do Trono), o Zumbi GRANDE vem junto.
+- **Sangue nos Arredores** — △ + L2 / Y + LT · custo 30 · cooldown 16 s · dano 24
+  O chão em volta jorra sangue em 4 ondas: dano, lentidão, e o Diabo bebe 50% do sangue derramado. Deixa poças de sangue em volta.
+
+### Especial: Pacto
+
+O alvo fica transtornado por 9 s: não defende e recebe mais dano; o Diabo se cura · custo 50 · cooldown 20 s.
+
+### Transformação: Renascimento
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → transforma no Diabo até o fim do round (+150 de vida).
+
+---
+
+## O DEUS DA MORTE
+
+*Forma de chefe do Ferreiro (morreu durante o Pacto do Santo)* · arma: Punhos de Lodo
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Tapa de Lodo | 46 | 3.4 m |  |
+| ○ 2 | Gancho de Lodo | 52 | 3.4 m |  |
+| ○ 3 | Esmagar | 72 | 3.6 m | finalizador: lança |
+| No ar + ○ | Queda do Deus | 50 | 3.4 m | desce com impacto |
+| ↑ + ○ (no combo) | Erguer pelo pescoço | 50 | 3.4 m | finalizador: lança alto (combo aéreo) |
+| ↓ + ○ (no combo) | Pisão de Lodo | 60 | 3.4 m | finalizador: derruba |
+
+### Principal (□ / X): Onda de Lodo
+
+- Dano 40 · alcance 16 m · cooldown 3 s · custo 0
+
+### Habilidades
+
+- **Existido de Morte** — △ + □ / Y + X · custo 40 · cooldown 28 s
+  Do Lodo sobe um EXISTIDO DE MORTE (só um por vez) que caça o adversário por 18 s: Pancadas pesadas, a Distorção Temporal que deixa o alvo LENTO e a Aceleração (dispara e parte dos golpes passa por ele). Anda de um jeito errático — do nada em câmera lenta, do nada rápido demais.
+- **Espiral Descendente** — △ + ○ / Y + B · custo 25 · cooldown 14 s · dano 90 · alcance 3.6 m
+  Agarra a vítima e a prende no tempo: ela envelhece (dano contínuo), perde sanidade e fica lenta. Não dá para defender.
+- **Controlar Mortos** — R2 + △ / RT + Y · custo 25 · cooldown 12 s · dano 30 · alcance 16 m
+  O Lodo obedece: mãos de Lodo brotam do chão sob o inimigo, três vezes (a última lança).
+- **Senhor do Tempo** — R2 + × / RT + A · custo 30 · cooldown 18 s · alcance 16 m
+  Distorce o tempo do inimigo: ele fica muito lento por 4 s.
+
+### Especial: Envelhecimento
+
+Agarra pelo pescoço e envelhece o alvo até o fim do round (40% menos dano, 30% mais lento, sem regenerar sanidade) · 150 de dano · 1x por round · custo 50 · cooldown 60 s.
+
+---
+
+## A MAGISTRADA
+
+*A Portadora da Relíquia de Conhecimento: sabe tudo, lembra de tudo e só age quando o Equilíbrio cai* · arma: A bengala e a Máscara do Desespero
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Advertência | 26 | 2.2 m |  |
+| ○ 2 | Revés | 26 | 2.2 m |  |
+| ○ 3 | Mão das Sombras | 30 | 3.4 m |  |
+| ○ 4 | Sentença | 32 | 2.3 m |  |
+| ○ 5 | Executora das Regras | 60 | 2.6 m | finalizador: lança |
+| Frente + ○ | Passo das Sombras | 36 | 2.3 m |  |
+| Trás + ○ | Recuo e Empurrão | 36 | 3.4 m | invulnerável no começo |
+| Lado + ○ | Giro da Capa | 32 | 2.4 m |  |
+| No ar + ○ | Queda da Sentença | 36 | 2.3 m | desce com impacto |
+| ↑ + ○ (no combo) | Erguer pelas Sombras | 38 | 2.3 m | finalizador: lança alto (combo aéreo) |
+| ↓ + ○ (no combo) | Golpe do Juízo | 46 | 2.3 m | finalizador: derruba |
+
+### Principal (□ / X): Sigilo do Conhecimento
+
+- Dano 30 · alcance 18 m · cooldown 2.6 s · custo 0
+
+### Habilidades
+
+- **Chamar as Máscaras** — △ + □ / Y + X · custo 35 · cooldown 24 s
+  Três membros da Seita das Máscaras (o Nathaniel entre eles) sobem das sombras em volta do adversário e lutam por ela por 10 s — socos e empurrões de sombra. Somem quando apanham demais.
+- **Dimensão das Sombras** — Energia + Pulo (△+× / Y+A) · custo 22 · cooldown 6 s
+  Some na própria sombra (a Onipresença da Máscara) e surge atrás do adversário, já podendo atacar.
+- **Olhar do Desespero** — △ + ○ / Y + B · custo 25 · cooldown 12 s · alcance 8 m
+  A Máscara encara o adversário: quem estiver à frente fica paralisado por um instante, vulnerável a combo.
+- **Controle Mental** — R2 + × / RT + A · custo 35 · cooldown 18 s · alcance 10 m
+  A Magistrada fala pelo corpo do alvo: por alguns segundos ele anda sozinho até ela e não consegue defender.
+- **Dispersão de Dano** — △ + L2 / Y + LT · custo 30 · cooldown 22 s
+  A aura dourada se abre e os Sigilos giram em volta: por 5 s ela recebe METADE do dano e aguenta 1 golpe sem recuar.
+- **Levitação** — R2 + △ / RT + Y · custo 30 · cooldown 15 s · dano 16 · alcance 18 m
+  Ergue a mão livre e as pedras do chão flutuam em volta dela; depois voam uma a uma contra o alvo (dá para defender ou sair da frente).
+- **Passiva — Precognição:** não é pego desprevenido (sem bônus de costas nem susto de teleporte)
+
+### Especial: Prisão das Sombras
+
+250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: Saber Tudo é Perder Tudo
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +20% de dano (habilidades, especial, distância), −10% de dano recebido, recargas 40% mais rápidas, sanidade regenera +50%, cura 10% na hora.
+
+---
+
+## O ANFITRIÃO
+
+*Forma O Anfitrião (até o fim do round)* · arma: A Relíquia de Energia no relógio de bolso
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Tique | 24 | 1.9 m |  |
+| ○ 2 | Taque | 26 | 1.9 m |  |
+| ○ 3 | Ponteiro | 30 | 2 m |  |
+| ○ 4 | Badalada | 34 | 2.6 m |  |
+| ○ 5 | Hora Marcada | 62 | 2.4 m | finalizador: lança |
+| Frente + ○ | Entrada do Apresentador | 36 | 2 m |  |
+| Trás + ○ | Contratempo | 38 | 2 m | invulnerável no começo |
+| Lado + ○ | Giro do Relógio | 32 | 2.1 m |  |
+| No ar + ○ | Queda Livre | 36 | 2 m | desce com impacto |
+| ↑ + ○ (no combo) | Ponteiro para o alto | 38 | 2 m | finalizador: lança alto (combo aéreo) |
+| ↓ + ○ (no combo) | Fim do Tempo | 46 | 2.1 m | finalizador: derruba |
+
+### Principal (□ / X): Disparo do Caos
+
+- Dano 30 · alcance 18 m · cooldown 2.2 s · custo 0
+- Frente + □: **Chicotada do Caos** (habilidade)
+- Trás + □: **Tradição de Família** (habilidade)
+- Lado + □: **A Plateia** (habilidade)
+
+### Habilidades
+
+- **Regra do Caos** — △ + ○ / Y + B · custo 25 · cooldown 18 s · dano 45
+  Impõe uma de 8 regras por 6 s (não pular, não correr, não defender, não ficar parado, não atacar, permanecer em movimento, trocar de direção, aproximar-se). Vale para os DOIS: quem quebrar leva um castigo sorteado (raio, choque, empurrão, explosão ou atordoamento) — o Anfitrião conhece o jogo e leva metade.
+- **Multiplicação** — △ + □ / Y + X · custo 30 · cooldown 20 s
+  Duas cópias de Energia (5 s): cercam, batem, correm e EXPLODEM no fim perto do alvo. Às vezes ele troca de lugar com uma delas — quem é o verdadeiro?
+- **Distorção** — Energia + Pulo (△+× / Y+A) · custo 15 · cooldown 7 s · alcance 14 m
+  Some numa dobra da Realidade e reaparece atrás, do lado ou longe do adversário, que fica virado para o lado errado. Nem sempre funciona: às vezes o truque falha e ele surge na frente.
+- **Tempo Distorcido** — R2 + × / RT + A · custo 25 · cooldown 20 s · alcance 14 m
+  Os ponteiros enlouquecem: 6 s mais rápido (anda e bate), recupera as esquivas e o tempo pesa em volta do adversário por 3 s.
+- **Jogo do Orfanato** — △ + L2 / Y + LT · custo 30 · cooldown 26 s · dano 14
+  Chamas de Energia em volta da arena e a luz fica roxa por 8 s. A regra do orfanato: quem passar 4 s sem usar um ritual perde sanidade e leva dano de Energia.
+- **Botão do Anfitrião** — R2 + △ / RT + Y · custo 20 · cooldown 14 s
+  O Anfitrião estala os dedos e leva os dois ao início da arena. Corra até o botão no centro e aperte o botão físico antes do adversário para lançar um evento aleatório do caos contra ele.
+- **Chicotada do Caos** — ranged+forward · custo 15 · cooldown 6 s · dano 38 · alcance 8 m
+  Os cabos de Energia viram chicote (alcance 8 m); o estalo tem um efeito sorteado: puxa, dá choque, deixa lento ou joga para o alto.
+- **Tradição de Família** — ranged+back · custo 30 · cooldown 16 s · dano 72 · alcance 3.4 m
+  Junta Energia entre as mãos (parado, dá para interromper) e explode em volta de si (3,4 m), lançando.
+- **A Plateia** — ranged+side · custo 10 · cooldown 22 s
+  Vira para a plateia, faz uma reverência e recebe os aplausos: +20 de sanidade e, por 8 s, rituais e □ 20% mais fortes e o caos mais generoso com o raro. Fica aberto durante o número.
+
+### Especial: O Jogo do Anfitrião
+
+250 de dano · custo 50 · cooldown 14 s.
 
 ---
 

@@ -87,7 +87,7 @@ export default {
       name: 'Chamar os Mananciais',
       input: 'carga+ranged', // △ → □ / Y → X
       type: 'summonMananciais',
-      description: 'Três MANANCIAIS (os filhos do Ferreiro, presos nas salas brancas para alimentar o Santo) sobem do Símbolo Espiral em volta do adversário e lutam por ele por 10 s — enlouquecidos, arranham, agarram e se jogam em cima. Quando um morre, a sirene de Santo Berço toca e o Ferreiro recupera sanidade.',
+      description: 'Três MANANCIAIS (os filhos do Ferreiro, presos nas salas brancas para alimentar o Santo) sobem do Símbolo Espiral em volta do adversário e lutam por ele por 10 s — enlouquecidos, arranham, agarram e se jogam em cima; às vezes um deles fica longe e arremessa o Lodo, que tira sanidade. Quando um morre, a sirene de Santo Berço toca e o Ferreiro recupera sanidade.',
       energyCost: 35,
       cooldown: 24,
       count: 3,
@@ -99,6 +99,16 @@ export default {
         { anim: 'man_grab', dur: 0.42, active: [0.2, 0.3], range: 1.6, damage: 14 },
         { anim: 'man_lunge', dur: 0.46, active: [0.22, 0.34], range: 2.4, damage: 18 },
       ],
+      // (2026-10-27) às vezes um dos três é o Manancial que fica LONGE (a ~6 m, rodeando devagar) e arremessa o LODO,
+      // que tira SANIDADE de quem acerta
+      sludgeChance: 0.5,
+      sludge: {
+        keep: 6,
+        range: 14,
+        cd: 2.6,
+        windup: 0.35,
+        projectile: { name: 'Lodo do Manancial', type: 'projectile', damage: 10, range: 16, speed: 18, radius: 0.4, spread: 0, knockback: 0.8, hitstun: 0.25, visual: 'decay', color: 0x2a2632, element: 'morte', hitSound: 'impact', onHit: { drainSanity: 12 } },
+      },
       color: 0xe8e4dc,
     },
     {
