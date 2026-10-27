@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { glowMat, toon } from './rig.js';
 import { MATERIAL_TEXTURES } from './textures.js';
-import { katana, scabbard, shiNoKage, relicScabbard, relicBlade, m4, sniper, guitarCase, bloodArm, bloodForearmBlade, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, roundGlasses, neonWraps, pulseEmitter, bandolier, bengala, mustache, socadeira, peixeira, spikedLantern, tenebrisPendant, chainHatchet, despairMask, seitaMask, SEITA_MASKS } from './weapons.js';
+import { katana, scabbard, shiNoKage, relicScabbard, relicBlade, m4, sniper, guitarCase, bloodArm, bloodForearmBlade, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, roundGlasses, neonWraps, pulseEmitter, bandolier, bengala, mustache, socadeira, peixeira, spikedLantern, tenebrisPendant, chainHatchet, despairMask, seitaMask, SEITA_MASKS, energyFlames } from './weapons.js';
 
 // Armas e acessórios adicionados em código sobre os modelos do Blender.
 // Usam só `sockets`, `attach()` e `props`, que existem nos dois tipos de rig.
@@ -1100,6 +1100,17 @@ export function addCelestineProps(rig) {
   mask.visible = false;
   sockets.mouth.add(mask);
   props.despairMask = mask;
+  // as CHAMAS DE ENERGIA azul-turquesa das miniaturas de Calamidade: no cabelo, nos ombros, nos braços, nos lados do
+  // tronco e subindo das pernas (que quase somem no fogo). Ficam sempre de pé (energyFlames: upright)
+  const at = (joint, pos, o) => { const f = energyFlames(0x3ae8ff, o); f.position.set(...pos); rig.attach(joint, f); };
+  at('hd', [0, 0.3, -0.03], { count: 3, radius: 0.03, height: 0.3, width: 0.14 });
+  for (const [side, sx] of [['L', 1], ['R', -1]]) {
+    at('s' + side, [0.05 * sx, 0.02, 0], { count: 6, radius: 0.11, height: 0.38, width: 0.15 });
+    at('e' + side, [0.02 * sx, -0.12, 0], { count: 8, radius: 0.11, height: 0.44, width: 0.15 });
+    at('sp', [0.2 * sx, 0.1, 0], { count: 6, radius: 0.09, height: 0.46, width: 0.15 });
+    at('l' + side, [0.04 * sx, -0.2, 0], { count: 7, radius: 0.13, height: 0.46, width: 0.16 });
+    at('k' + side, [0, -0.26, 0], { count: 9, radius: 0.12, height: 0.52, width: 0.17 });
+  }
 }
 
 // CELESTINE, A MAGISTRADA: o mesmo corpo com a Máscara do Desespero no rosto

@@ -1475,6 +1475,54 @@ export function despairMask() {
   return g;
 }
 
+// CHAMAS DE ENERGIA (Celestine nas miniaturas de Calamidade): línguas de fogo azul-turquesa saindo do corpo e do cabelo.
+// Cada língua é uma gota (torno) em duas camadas somadas (fora turquesa, dentro quase branca) que tremula sozinha no
+// onBeforeRender — anda na luta, na seleção e nos retratos sem precisar de atualização de fora.
+const FLAME_GEO = (() => {
+  const pts = [];
+  for (let i = 0; i <= 10; i++) {
+    const t = i / 10; // 0 = base, 1 = ponta
+    pts.push(new THREE.Vector2(Math.sin(Math.min(1, t * 1.6) * Math.PI) * 0.5 * (1 - t) ** 0.8 + (t < 0.05 ? 0.2 : 0), t));
+  }
+  return new THREE.LatheGeometry(pts, 8);
+})();
+const _flameQ = new THREE.Quaternion();
+export function energyFlames(color = 0x3ae8ff, { count = 5, radius = 0.08, height = 0.24, width = 0.07, lean = 0 } = {}) {
+  const g = new THREE.Group();
+  // somadas umas às outras estouram para o branco: o turquesa vai mais escuro e a de dentro mais fraca
+  const outer = glowMat(new THREE.Color(color).multiplyScalar(0.62), 0.5);
+  const inner = glowMat(0x5ae0f0, 0.32);
+  for (let i = 0; i < count; i++) {
+    const a = (i / count) * Math.PI * 2 + Math.random() * 0.6;
+    const r = radius * (0.6 + Math.random() * 0.4);
+    const h = height * (0.65 + Math.random() * 0.55);
+    const tongue = new THREE.Group();
+    tongue.position.set(Math.cos(a) * r, -h * 0.25, Math.sin(a) * r);
+    const tilt = [Math.sin(a) * 0.3 + lean, -Math.cos(a) * 0.3]; // abre para fora do corpo
+    tongue.rotation.set(tilt[0], 0, tilt[1]);
+    const o = new THREE.Mesh(FLAME_GEO, outer);
+    o.scale.set(width, h, width);
+    const n = new THREE.Mesh(FLAME_GEO, inner);
+    n.scale.set(width * 0.45, h * 0.6, width * 0.45);
+    tongue.add(o, n);
+    const phase = Math.random() * 10;
+    const speed = 7 + Math.random() * 5;
+    o.onBeforeRender = () => {
+      // o fogo sobe sempre para cima, qualquer que seja a pose do osso (vale no quadro seguinte)
+      if (i === 0 && g.parent) g.quaternion.copy(g.parent.getWorldQuaternion(_flameQ).invert());
+      const t = performance.now() / 1000 * speed + phase;
+      tongue.scale.set(1 + Math.sin(t * 1.3) * 0.12, 1 + Math.sin(t) * 0.22 + Math.sin(t * 2.7) * 0.08, 1);
+      tongue.rotation.y = Math.sin(t * 0.4) * 0.5;
+      // a ponta balança (a chama ondula em vez de ficar parada como vela)
+      tongue.rotation.x = tilt[0] + Math.sin(t * 0.9) * 0.22;
+      tongue.rotation.z = tilt[1] + Math.cos(t * 0.7) * 0.22;
+    };
+    g.add(tongue);
+  }
+  g.userData.noShadow = true;
+  return g;
+}
+
 // MÁSCARAS DA SEITA (wiki "Seita das Máscaras"): cada membro tem a sua — branca, preta ou riscada de vermelho. A do
 // NATHANIEL: branca, o coração dourado invertido no alto, estrelas de quatro pontas em volta dos olhos e lágrimas pretas.
 // Mesmo mapa da Máscara do Desespero (meia-esfera: u = de um lado ao outro, centro 128; v = de cima para baixo).
