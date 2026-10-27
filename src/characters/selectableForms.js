@@ -18,6 +18,6 @@ const copyMelee = (m) => {
 // base (vida igual, especial de 250, transformação obrigatória) e fala pelas falas do personagem base (dialogues.js)
 const selectable = (form, extra) => ({ ...form, form: false, selectableForm: true, melee: copyMelee(form.melee), ...extra });
 
-export const juanPortador = selectable(juanOdio, { origin: 'Portadores' });
-export const deusMorteReliquia = selectable(deusMorte, { origin: 'Relíquias', relic: 'morte' });
-export const anfitriaoReliquia = selectable(anfitriao, { origin: 'Relíquias', relic: 'energia' });
+export const juanPortador = selectable(juanOdio, { origin: 'Portadores', teams: ['Mascarados'] });
+export const deusMorteReliquia = selectable(deusMorte, { origin: 'Relíquias', teams: [], relic: 'morte' });
+export const anfitriaoReliquia = selectable(anfitriao, { origin: 'Relíquias', teams: [], relic: 'energia' });

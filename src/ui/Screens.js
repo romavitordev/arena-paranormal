@@ -1,4 +1,4 @@
-import { TEAM_COLORS, TEAM_SHORT } from '../config/teams.js';
+import { TEAM_COLORS, TEAM_SHORT, defTeams } from '../config/teams.js';
 import { ROSTER } from '../characters/index.js';
 import { SelectStage } from './selectStage.js';
 import { ELEMENTS } from '../config/elements.js';
@@ -95,7 +95,7 @@ export class HomeScreen {
         <div class="t-arena">ARENA</div>
         <h1 data-text="PARANORMAL">PARANORMAL</h1>
         <div class="elements"><i class="ln"></i>${Object.values(ELEMENTS).map((e) => `<b style="--c:${e.color}" title="${e.name}"></b>`).join('')}<i class="ln"></i></div>
-        <div class="tag">${Object.entries(TEAM_COLORS).filter(([name]) => ROSTER.some((c) => c.origin === name)).map(([name, col]) => `<span style="--tc:${col}">${name}</span>`).join('')}</div>
+        <div class="tag">${Object.entries(TEAM_COLORS).filter(([name]) => ROSTER.some((c) => defTeams(c).includes(name))).map(([name, col]) => `<span style="--tc:${col}">${name}</span>`).join('')}</div>
 
         <div class="fanmade">${t('menu.fanmade')}</div>
       </div>
@@ -350,7 +350,7 @@ export class SelectScreen {
         <div class="sel-grid">${ROSTER.map((c, i) => `
           <div class="card" data-i="${i}" style="--c:${c.color}">
             <img src="${portraits[c.id]}" alt="${c.name}">
-            <span class="tm" style="--tc:${TEAM_COLORS[c.origin] || '#aaa'}">${TEAM_SHORT[c.origin] || c.origin}</span>
+            <span class="tm">${defTeams(c).map((tm) => `<i style="--tc:${TEAM_COLORS[tm] || '#aaa'}">${TEAM_SHORT[tm] || tm}</i>`).join('')}</span>
             <div class="cn"><b style="color:${c.color}">${c.name}</b></div>
           </div>`).join('')}
         </div>
@@ -455,7 +455,7 @@ export class SelectScreen {
       }).join('')}</div>${this.teamLinkLine(p)}` : '';
       this.plates[p].innerHTML = `
         <div class="pn" style="color:${front.color}">${front.name}</div>
-        <div class="po">${front.origin} · <span style="color:${ELEMENTS[front.element].color}">${ELEMENTS[front.element].name}</span></div>
+        <div class="po">${defTeams(front).join(' / ')} · <span style="color:${ELEMENTS[front.element].color}">${ELEMENTS[front.element].name}</span></div>
         <div class="pt">“${front.info.tagline}”</div>${teamLine}`;
       this.plates[p].classList.toggle('ok', this.ready[p]);
       // ficha resumida embaixo da grade

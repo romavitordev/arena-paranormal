@@ -11,6 +11,7 @@ export default {
   model: 'juan',
   color: '#c01828',
   origin: 'Mascarados', // o grupo do Estigma do Desejo em Hexatombe (com Labirinto e Aguiar)
+  teams: ['Escriptas'], // o Henri era Escripta da Desconjuração antes do pacto
   element: 'sangue',
   energyColor: 0xc01828,
   info: {

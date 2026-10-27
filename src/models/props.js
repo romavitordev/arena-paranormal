@@ -1104,7 +1104,8 @@ export function addCelestineProps(rig) {
 
 // CELESTINE, A MAGISTRADA: o mesmo corpo com a Máscara do Desespero no rosto
 export function addCelestineMagistradaProps(rig) {
-  if (rig.props.despairMask) rig.showProp('despairMask', true);
+  addCelestineProps(rig); // a variante troca as peças da base: as machadinhas e a Máscara vêm de lá
+  rig.showProp('despairMask', true);
 }
 
 export function addRazielProps(rig) {

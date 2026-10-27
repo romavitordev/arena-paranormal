@@ -52,7 +52,8 @@ async function buildRoster() {
     const E = ELEMENTS[c.element];
     const card = document.createElement('article');
     card.className = 'fcard';
-    card.dataset.origin = c.origin;
+    const teams = [c.origin, ...(c.teams || [])]; // quem é de duas equipes aparece no filtro das duas
+    card.dataset.origin = teams.join('|');
     card.dataset.element = c.element || '';
     card.style.setProperty('--c', E ? E.color : '#948a90');
     const rows = [
@@ -62,7 +63,7 @@ async function buildRoster() {
     ].filter(([, v]) => v);
     card.innerHTML = `<div class="fpic"><img src="sobre/elenco/${esc(c.id)}.webp" width="240" height="320" loading="lazy" decoding="async" alt=""></div>
       <div class="fbody">
-        <p class="fk">${esc(c.origin)}${E ? ` · <span>${esc(E.name)}</span>` : ''}</p>
+        <p class="fk">${esc(teams.join(' / '))}${E ? ` · <span>${esc(E.name)}</span>` : ''}</p>
         <h3>${esc(c.name)}</h3>
         ${c.info && c.info.tagline ? `<p class="ftag">“${esc(c.info.tagline)}”</p>` : ''}
         <dl>${rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
@@ -77,7 +78,7 @@ async function buildRoster() {
   const apply = () => {
     let n = 0;
     for (const card of rosterEl.children) {
-      const ok = (!sel.origin || card.dataset.origin === sel.origin) && (!sel.element || card.dataset.element === sel.element);
+      const ok = (!sel.origin || card.dataset.origin.split('|').includes(sel.origin)) && (!sel.element || card.dataset.element === sel.element);
       card.hidden = !ok;
       if (ok) n++;
     }
@@ -99,7 +100,7 @@ async function buildRoster() {
       box.appendChild(b);
     }
   };
-  const origins = [...new Set(ROSTER.map((c) => c.origin))];
+  const origins = [...new Set(ROSTER.flatMap((c) => [c.origin, ...(c.teams || [])]))];
   const elements = Object.keys(ELEMENTS).filter((e) => ROSTER.some((c) => c.element === e));
   chips(document.getElementById('f-origin'), 'origin', origins, (o) => o);
   chips(document.getElementById('f-element'), 'element', elements, (e) => ELEMENTS[e].name);

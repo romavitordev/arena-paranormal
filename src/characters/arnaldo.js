@@ -14,7 +14,8 @@ export default {
   name: 'ARNALDO FRITZ',
   model: 'arnaldo',
   color: '#c0141c',
-  origin: 'Portadores', // carrega a Relíquia de Energia no relógio (era da Ordo Realitas)
+  origin: 'Portadores', // carrega a Relíquia de Energia no relógio...
+  teams: ['Ordo Realitas'], // ...e é agente da Ordo (os Aniquiladores, com o Veríssimo)
   element: 'energia',
   energyColor: GOLD,
   info: {

@@ -25,7 +25,7 @@ export function moveListHTML(c) {
     s.onHit && s.onHit.pull && 'puxa o inimigo',
     s.chain && 'corrente',
   ].filter(Boolean).join(' · ');
-  let html = `<h3 style="color:${c.color}">${c.name}</h3><p class="ident">${c.origin} · <b style="color:${ELEMENTS[c.element].color}">${ELEMENTS[c.element].name}</b> — ${c.info.identity || c.info.style}</p><table class="moves">`;
+  let html = `<h3 style="color:${c.color}">${c.name}</h3><p class="ident">${[c.origin, ...(c.teams || [])].join(' / ')} · <b style="color:${ELEMENTS[c.element].color}">${ELEMENTS[c.element].name}</b> — ${c.info.identity || c.info.style}</p><table class="moves">`;
   html += row('○ ○ ○…', `Sequência: ${c.melee.strikes.map((s) => s.name).join(' → ')}`, `termina com ${FIN[c.melee.strikes.at(-1).finisher] || 'finalizador'}`);
   for (const k of ['forward', 'back', 'side', 'air', 'up', 'down']) if (c.melee[k]) html += row(DIR[k], c.melee[k].name, strike(c.melee[k]));
   const r = c.ranged;

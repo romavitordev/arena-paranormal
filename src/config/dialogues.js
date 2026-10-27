@@ -29,9 +29,10 @@ export const CHARACTER_NAMES = {
   cristino: 'Cristino',
   cristopher: 'Cristopher',
   raziel: 'Raziel',
+  celestine: 'Celestine',
 };
 
-export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto', jae_x: 'jae', colosso: 'dalmo', guizo_et: 'guizo', kian_calamidade: 'kian', juan_odio: 'juan', guizo_bombado: 'guizo', guizo_velho: 'guizo', cristino_desertor: 'cristino', dante_aberto: 'dante', raziel_verdadeiro: 'raziel' };
+export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto', jae_x: 'jae', colosso: 'dalmo', guizo_et: 'guizo', kian_calamidade: 'kian', juan_odio: 'juan', guizo_bombado: 'guizo', guizo_velho: 'guizo', cristino_desertor: 'cristino', dante_aberto: 'dante', raziel_verdadeiro: 'raziel', celestine_magistrada: 'celestine' };
 
 export const INTRO_IDS = Object.keys(CHARACTER_NAMES);
 const INTRO_HOOKS = {
@@ -64,6 +65,7 @@ const INTRO_HOOKS = {
   cristino: 'a socadeira',
   cristopher: 'esses punhos de dublê',
   raziel: 'essas garras',
+  celestine: 'essas machadinhas',
 };
 
 const INTRO_OPENERS = {
@@ -97,6 +99,7 @@ const INTRO_OPENERS = {
   cristino: (other, hook) => `Não é pessoal, ${other}. Larga ${hook} e sai do meu caminho.`,
   cristopher: (other, hook) => `HEY, ${other}! Bonito ${hook}! Mas aqui é cena de ação, e eu faço as minhas sem dublê!`,
   raziel: (other, hook) => `${other}. Desculpe a entrada sem convite. Pode deixar ${hook} na mesa — o banquete é por minha conta.`,
+  celestine: (other, hook) => `Ih, ${other}, ${hook}? Fofo. Não leva a mal o que vai acontecer — é nada pessoal.`,
 };
 
 const INTRO_REPLIES = {
@@ -129,6 +132,7 @@ const INTRO_REPLIES = {
   cristino: (other, hook) => `${hook}... Eu já vi coisa pior no mato, ${other}. Fala menos.`,
   cristopher: (other, hook) => `${hook}? Já caí de prédio por menos, ${other}! Vem, que o tio aguenta!`,
   raziel: (other, hook) => `${hook}... Que gentileza, ${other}. Eu já sinto o gosto do seu sangue daqui.`,
+  celestine: (other, hook) => `Olha só, ${hook}! Que medo, ${other}. Vem logo que a minha endorfina já subiu.`,
 };
 
 const INTRO_EXCHANGES = {
@@ -177,6 +181,11 @@ const INTRO_EXCHANGES = {
   ],
   // RAZIEL (Hexatombe): o Circo (ep. 7: decapitou o Franco, quase estripou o Dalmo, mordeu o Henri) e a guerra na Igreja
   // Antiga (ep. 9: devorou a Maria, atravessou o Remi, o Cristino cortou o braço dele e o Juan o finalizou)
+  // CELESTINE (Calamidade): a guerreira da Ordo Calamitas que vestiu a Máscara do Desespero e virou a Magistrada
+  'celestine+magistrada': [
+    { starter: 'magistrada', line: 'Eu conheço essa Máscara. Ela pesou no seu rosto antes de pesar no meu.', response: 'celestine', responseLine: 'Então você sabe que eu não devolvo nada que é meu.' },
+    { starter: 'celestine', line: 'Você é a última, né? Eu fui a primeira. Bem mais divertida.', response: 'magistrada', responseLine: 'Saber tudo custa tudo, Celestine. Você pagou primeiro.' },
+  ],
   'cristino+raziel': [
     { starter: 'raziel', line: 'O senhor desceu do telhado sem ser convidado. Que falta de modos.', response: 'cristino', responseLine: 'Não é pessoal. Só quero o seu braço.' },
     { starter: 'cristino', line: 'Eu odeio gente barulhenta. Você grita demais.', response: 'raziel', responseLine: 'E o senhor corta demais. Vamos ver quem acaba primeiro.' },
@@ -2304,6 +2313,71 @@ const VICTORY_RAZIEL = {
 };
 for (const [w, m] of Object.entries(VICTORY_RAZIEL)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
 
+// CELESTINE (Portadores / Ordo Calamitas, Calamidade): falas de vitória dela contra cada um e de cada um contra ela
+const VICTORY_CELESTINE = {
+  celestine: {
+    kaiser: ['Fumacinha bonita. Pena que eu respiro pela boca.','Nada pessoal, fotógrafo. Sorria para a foto.'],
+    arthur: ['Um braço só e ainda queria duelar comigo? Fofo.','Toca uma música triste. Combina com a derrota.'],
+    joui: ['Sombra rápida. A corrente foi mais.','Ninja de máscara. Eu conheço máscaras melhores.'],
+    dante: ['Rezou bonito. Não adiantou.','Padre, guarda o sermão pra próxima.'],
+    erin: ['Explodiu tudo e ainda perdeu. Que talento.','Gostei do barulho. Gostei mais do silêncio depois.'],
+    aghata: ['Sangue no grimório não para machadinha.','Ritual demorado. Eu sou mais rápida.'],
+    balu: ['Grandão, cai com classe pelo menos.','Machado grande, coração mole. Nada pessoal.'],
+    verissimo: ['Velhinho, a Ordo te mandou sozinho? Que crueldade.','Anota aí no relatório: Celestine passou.'],
+    cristopher: ['Dublê não substitui no chão, né?','Que muralha. Caiu igual.'],
+    kian: ['Previu a corrente? Não previu a segunda machadinha.','Escripta forte. Ainda é Escripta.'],
+    gal_sal: ['Correntes contra correntes. As minhas cortam.','Justiça é bonita. Traição ganha.'],
+    nubi: ['Calminho até no chão. Gostei de você.','A Morte fala baixo. Eu falo mais alto.'],
+    xande: ['Moleque, larga o taco e vai pra casa.','Tacada linda. Pena que errou.'],
+    guizo: ['Grava aí: a Celestine venceu.','Desliga a câmera, que o resto é segredo.'],
+    lirio: ['A marreta tem nome? Que fofo. Eu não decorei.','Grande, lento e no chão.'],
+    dalmo: ['Colosso de arena? Eu sou da arena de verdade.','Esmaga crânio, é? Perdeu o seu.'],
+    aguiar: ['Machado contra machadinha. Tamanho não é tudo.','Delegado, você está preso. Na corrente.'],
+    jae: ['Shh, é? Eu sussurro melhor. Chama Código.','Assassina furtiva. Eu traio de frente.'],
+    kemi: ['Mira bonita. Eu cheguei antes do tiro.','Fantasma, você ainda dá pra ver no chão.'],
+    labirinto: ['Encostou em mim? Não explodiu nada.','Todo labirinto tem saída. Eu fui ela.'],
+    juan: ['Pacto com o Diabo? Amador.','Masoquista? Então gostou, né?'],
+    cristino: ['Odeia barulho? Vou rir bem alto então.','Não é pessoal, cangaceiro. Nunca é.'],
+    raziel: ['Vampiro chique. Sangra igual.','O banquete acabou. Quem comeu fui eu.'],
+    o_diabo: ['Senhor do Sangue, ajoelha pra mim um pouquinho.','Pacto quebrado. Nada pessoal.'],
+    magistrada: ['A Máscara lembra de mim. Lembra quem é a dona.','Última Magistrada? Primeira a cair hoje.'],
+    arnaldo: ['Bravo, ator. Agora sai do palco.','Que jogo divertido. Eu ganhei.'],
+    ferreiro: ['Gigante de Santo Berço, cai devagar.','Espada que consome. Eu consumi primeiro.'],
+    estrangeiro: ['Apagar memória? Ninguém esquece de mim.','Fios demais. Cortei todos.'],
+    amigo: ['Tinta pra todo lado. Que bagunça.','Amigo imaginário? Eu não tenho amigos.'],
+  },
+  kaiser: { celestine: ['Fecha os olhos e respira. Ah, não dá.','Belo flash. Melhor ainda a queda.'] },
+  arthur: { celestine: ['Rebirth na cabeça, rebelde.','Debocha agora, vai.'] },
+  joui: { celestine: ['A sombra não tem corrente pra puxar.','Traidora rápida. Eu sou mais.'] },
+  dante: { celestine: ['A traição também tem fim. Amém.','Personagem divertida. Final merecido.'] },
+  erin: { celestine: ['KABOOM! Explodiu o deboche!','Ri agora, loira!'] },
+  aghata: { celestine: ['Mais uma página no grimório: a traidora.','Machadinha não vence ritual.'] },
+  balu: { celestine: ['Hahaha! Gostei de você, menina! Mas perdeu!','Machadinha? Eu tenho é machado!'] },
+  verissimo: { celestine: ['Rebelde da Calamitas. Caso encerrado.','Disciplina vence deboche, moça.'] },
+  cristopher: { celestine: ['Fica no chão, encrenqueira!','Corta essa, loira!'] },
+  kian: { celestine: ['Eu vi a traição antes de você pensar nela.','A Escrita registrou: a Calamitas caiu.'] },
+  gal_sal: { celestine: ['Presa na própria corrente.','A justiça também trai, quando precisa.'] },
+  nubi: { celestine: ['A Morte espera até os inquietos.','Calma. A endorfina passa.'] },
+  xande: { celestine: ['Tacada certeira na rebelde!','Fala menos, luta mais!'] },
+  guizo: { celestine: ['Gravei uma guerreira de 67 d.C.! Mano!','Ela riu de mim e perdeu! Tá gravado!'] },
+  lirio: { celestine: ['A Leonora não ri de piada.','Deboche não para marreta.'] },
+  dalmo: { celestine: ['Arena de verdade é a minha, neném!','Grande e de pé. Você não.'] },
+  aguiar: { celestine: ['Ha ha... o machado maior venceu.','Corrente por corda, menina.'] },
+  jae: { celestine: ['Shh... o seu Código eu também sei.','Traidora traída. Que irônico.'] },
+  kemi: { celestine: ['Um tiro. Sem deboche.','Alvo abatido. Rindo, mas abatido.'] },
+  labirinto: { celestine: ['Toquei. Agora explode.','Cortou tudo, menos a saída.'] },
+  juan: { celestine: ['Sangue de guerreira. Delicioso.','Nada pessoal, né? Pra mim foi.'] },
+  cristino: { celestine: ['Barulhenta. Agora quieta.','Não é pessoal, moça.'] },
+  raziel: { celestine: ['Que sangue antigo. Esplêndido.','A rebeldia tem um gosto ótimo.'] },
+  o_diabo: { celestine: ['Toda traidora volta pra mim.','Nada pessoal. Só um pacto.'] },
+  magistrada: { celestine: ['A Máscara escolheu de novo. Escolheu a mim.','Saber tudo é perder tudo. Você só perdeu.'] },
+  arnaldo: { celestine: ['Que reviravolta! Que traição! Bravo!','Fecham-se as cortinas para a rebelde.'] },
+  ferreiro: { celestine: ['Santo Berço não se curva a deboche.','Pequena e barulhenta. E no chão.'] },
+  estrangeiro: { celestine: ['Ninguém vai lembrar da Celestine.','Interessante. A traição também esquece.'] },
+  amigo: { celestine: ['...as machadinhas... viraram pintura...','...ela riu... no quadro...'] },
+};
+for (const [w, m] of Object.entries(VICTORY_CELESTINE)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
+
 // NUBI (Escriptas): falas originais do jogo, dela contra cada um e de cada um contra ela
 const VICTORY_NUBI = {
   nubi: {
@@ -2621,7 +2695,7 @@ export const BATTLE_REPLIES = {
   },
 };
 
-const DIALOGUE_BASE_IDS = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', juan_odio: 'juan', guizo_bombado: 'guizo', guizo_velho: 'guizo', cristino_desertor: 'cristino', dante_aberto: 'dante', raziel_verdadeiro: 'raziel' };
+const DIALOGUE_BASE_IDS = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', juan_odio: 'juan', guizo_bombado: 'guizo', guizo_velho: 'guizo', cristino_desertor: 'cristino', dante_aberto: 'dante', raziel_verdadeiro: 'raziel', celestine_magistrada: 'celestine' };
 
 export function battleLines(speakerId, opponentId, event) {
   const lines = BATTLE_DIALOGUES[event];

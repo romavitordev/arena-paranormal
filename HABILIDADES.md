@@ -1248,6 +1248,53 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ---
 
+## CELESTINE
+
+*Guerreira da Ordo Calamitas que veste a Máscara do Desespero e vira a Magistrada* · arma: Duas machadinhas ligadas por uma corrente
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Talho Direito | 30 | 2 m |  |
+| ○ 2 | Talho Esquerdo | 30 | 2 m |  |
+| ○ 3 | Cruz das Machadinhas | 42 | 2.1 m |  |
+| ○ 4 | Giro Debochado | 46 (2 acertos) | 2.2 m |  |
+| ○ 5 | Corrente Aberta | 58 | 3.6 m | finalizador: lança, usa corrente |
+| Frente + ○ | Machadinha Lançada | 32 | 4.6 m | usa corrente |
+| Trás + ○ | Puxão da Corrente | 26 | 4.6 m | usa corrente, puxa o inimigo |
+| Lado + ○ | Talho de Passagem | 30 | 2 m |  |
+| No ar + ○ | Queda das Machadinhas | 36 | 2.1 m | desce com impacto |
+| ↑ + ○ (no combo) | Machadinhas para Cima | 40 | 2.1 m | finalizador: lança alto (combo aéreo) |
+| ↓ + ○ (no combo) | Machadinhas no Chão | 46 | 2.1 m | finalizador: derruba |
+
+### Principal (□ / X): Machadinha na Corrente
+
+- Dano 28 · alcance 14 m · cooldown 2.6 s · custo 0
+- Prende e puxa o inimigo para 1.5 m, abrindo 0.6 s para combar
+
+### Habilidades
+
+- **Corrente Giratória** — △ + ○ / Y + B · custo 20 · cooldown 11 s · dano 60
+  Solta as duas machadinhas na corrente e gira com elas em volta do corpo: dois cortes em área, o último joga longe.
+- **Código** — △ + L2 / Y + LT · custo 20 · cooldown 16 s · alcance 14 m
+  Sussurra o Código: decifra a guarda do adversário e, por 7 s, ele recebe 25% a mais de dano dos golpes físicos.
+- **Investida Rebelde** — R2 + × / RT + A · custo 20 · cooldown 10 s · dano 55 · alcance 2.2 m
+  Avança rindo e crava as duas machadinhas de uma vez — quebra a defesa.
+- **Endorfina** — R2 + △ / RT + Y · custo 25 · cooldown 20 s
+  A endorfina sobe: por 7 s os golpes físicos saem 15% mais rápidos e 15% mais fortes, e ela recupera uma esquiva.
+- **Passiva:** golpes físicos pelas costas causam +20%
+
+### Especial: Duelo Final
+
+250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: A Máscara do Desespero
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
+
+---
+
 ## O DIABO
 
 *O Portador da Relíquia de Sangue: regenera, bebe o sangue derramado e oferece pactos* · arma: Quatro braços com garras

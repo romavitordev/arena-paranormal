@@ -27,6 +27,7 @@ import amigo from './amigo.js';
 import cristino from './cristino.js';
 import cristopher from './cristopher.js';
 import raziel from './raziel.js';
+import celestine from './celestine.js';
 import { juanPortador, deusMorteReliquia, anfitriaoReliquia } from './selectableForms.js';
 
 // Elenco jogável, na ordem da tela de seleção — AGRUPADO POR EQUIPE/TEMPORADA (a grade tem 3 colunas × 5 linhas por
@@ -49,7 +50,10 @@ export const ROSTER = [
   // (2026-10-27) PORTADORES ≠ RELÍQUIAS: quem CARREGA a Relíquia e quem É a Relíquia. As formas ainda acontecem na luta
   // (Henri → Juan (Portador) → Portador do Trono; Arnaldo → Anfitrião; Ferreiro → Deus da Morte), mas também dá para
   // começar já como elas (selectableForms.js)
-  juanPortador, arnaldo, ferreiro, // Portadores (Sangue, Energia, Morte)
+  // quem é de DUAS equipes (2026-10-27): `origin` é a equipe em que ele fica na seleção (e a cor do retrato); `teams`
+  // lista as outras — aparecem como etiqueta extra no cartão e na ficha (ex.: a Celestine, Portadora E Ordo Calamitas)
+  juanPortador, arnaldo, ferreiro, celestine, // Portadores (Sangue, Energia, Morte, Conhecimento) — a Celestine também é da Ordo Calamitas
+  // Ordo Calamitas: Gaius, Amalia, Cornelius... entram aqui depois
   oDiabo, deusMorteReliquia, magistrada, anfitriaoReliquia, // Relíquias (Sangue, Morte, Conhecimento, Energia)
   estrangeiro, amigo, // Outro Lado (os Sinos de Tenebris: Transmissão e Tinta)
 ];

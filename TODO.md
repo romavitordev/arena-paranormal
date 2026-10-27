@@ -1602,7 +1602,7 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
         REALIDADE (`specials/realityRewrite.js`, não é transformação: 30% da vida, sanidade cheia, sem nada de ruim em cima,
         recargas zeradas e os buffs do adversário apagados) + CONJURAÇÃO VERDADEIRA (rituais 25% mais baratos) + DESTRONAR O
         ANFITRIÃO (+30% de dano nele). Testado no jogo.
-      - [~] **1 (em andamento): CELESTINE** — pedido do dono: entra numa equipe NOVA, a **ORDO CALAMITAS** (depois entram os
+      - [x] **1 (feito em 2026-10-27): CELESTINE** — jogável: Portadores (logo depois do Ferreiro) com a etiqueta da Ordo Calamitas; kit das machadinhas na corrente (□ crava e puxa), Corrente Giratória, Código, Investida Rebelde, Endorfina, especial Duelo Final, passiva Nada Pessoal (+20% pelas costas) e a Transformação que vira CELESTINE, A MAGISTRADA (o kit da Magistrada com a aparência dela). Falas contra o elenco inteiro. Testado no jogo. Falta só o retrato da página Sobre (`public/sobre/elenco/celestine.webp`). — pedido do dono: entra numa equipe NOVA, a **ORDO CALAMITAS** (depois entram os
         outros membros: Gaius, Amalia, Cornelius...). Pesquisa (wiki "Celestine"): guerreira de 67 d.C., pele clara, cabelo
         loiro curto, armadura com panos, cachecol, o Símbolo da Ordo Calamitas no peito; arma: DUAS MACHADINHAS com talhos
         azuis LIGADAS POR UMA CORRENTE; habilidades da ficha: NADA PESSOAL (+1 dado ao trair) e CÓDIGO (sussurra mensagens);
@@ -1617,6 +1617,8 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
         Corrente Giratória, Nada Pessoal, Código, Endorfina; especial "Duelo Final"), a forma `forms/celestine_magistrada.js`
         (o kit da Magistrada com a aparência dela; maskTransform com a Máscara), a equipe "Ordo Calamitas" (cor, ordem), as
         falas (intro e vitória contra o elenco), a CPU, o check e os testes no jogo.
+      - [x] **EQUIPES DUPLAS (2026-10-27)**: `teams` no personagem = outras equipes além da `origin` (que decide o grupo na seleção e a cor do retrato); aparecem como etiquetas extras no cartão, na ficha, nos golpes e no filtro da página Sobre (`config/teams.js defTeams`). Marcados: Celestine (Portadores + Ordo Calamitas), Arnaldo (Portadores + Ordo Realitas), Henri (Mascarados + Escriptas), Juan Portador (Portadores + Mascarados). A equipe Luzidios saiu (não existe no jogo).
+      - [ ] **ORDO CALAMITAS**: Gaius, Amalia, Cornelius... (grupo próprio entre os Portadores e as Relíquias).
       - [ ] **O MODELO DAS MÁSCARAS** que a Magistrada chama (os membros da Seita das Máscaras) — refazer na técnica atual
         (pedido de 2026-10-27).
 - [ ] **PARA DEPOIS (2026-10-27) — SKIN do ANFITRIÃO do ARNALDO ≠ ANFITRIÃO base:** o Anfitrião que sai da
