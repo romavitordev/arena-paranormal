@@ -24,7 +24,12 @@ const abil = (id, t) => (get(id).abilities || []).some((a) => a.type === t);
 const allStrikes = (c) => [...c.melee.strikes, ...['forward', 'back', 'side', 'air', 'up', 'down'].map((k) => c.melee[k]).filter(Boolean)];
 
 // ---------------- base preservada ----------------
-const ids = ROSTER.map((c) => c.id);
+// as FORMAS SELECIONÁVEIS (Juan Portador, Deus da Morte, Anfitrião — characters/selectableForms.js) já são a forma
+// final de alguém: as regras do elenco base (falas em tabela, vida igual, especial 250, transformação, △ + L2) valem
+// para o BASE; elas falam pelas falas do personagem base
+const BASE_ROSTER = ROSTER.filter((c) => !c.selectableForm);
+const SEL_FORMS = ROSTER.filter((c) => c.selectableForm);
+const ids = BASE_ROSTER.map((c) => c.id);
 ok(['kaiser', 'arthur', 'joui', 'aghata', 'dante', 'erin', 'gal_sal', 'kian', 'aguiar', 'labirinto', 'xande', 'lirio'].every((i) => ids.includes(i)), `elenco com os 12 personagens (${ids.join(', ')})`);
 let validIntroPairs = 0;
 let validVictoryPairs = 0;
@@ -78,8 +83,17 @@ try {
 const PAIRS = ids.length * (ids.length - 1);
 ok(validIntroScenes && validIntroPairs === PAIRS && sampleIntro.length === 2 && randomSelectionValid, `introduções: ${PAIRS} confrontos, duas cenas alternadas e aleatórias, sem falas de resultado`);
 ok(validVictoryLines && validVictoryPairs === PAIRS && VICTORY_LINES.kaiser.erin.includes(sampleVictory) && randomSelectionValid, `vitórias: ${PAIRS} confrontos com duas falas selecionáveis aleatoriamente`);
+ok(SEL_FORMS.length === 3 && SEL_FORMS.every((f) => ['kaiser', 'raziel', 'o_diabo'].every((o) => {
+  const intro = introLines(f.id, o);
+  const back = introLines(o, f.id);
+  return intro.length === 2 && back.length === 2 && typeof victoryLine(f.id, o) === 'string' && typeof victoryLine(o, f.id) === 'string';
+})), `formas selecionáveis (${SEL_FORMS.map((f) => f.id).join(', ')}) com introdução e vitória pelas falas do personagem base`);
+ok(get('juan_odio')?.origin === 'Portadores' && get('juan_odio').awakening.form === 'diabo' && get('juan').name === 'HENRI' && get('juan').awakening.form === 'juan_odio'
+  && ['o_diabo', 'deus_morte', 'magistrada', 'anfitriao'].every((id) => get(id)?.origin === 'Relíquias') && ['estrangeiro', 'amigo'].every((id) => get(id).origin === 'Outro Lado')
+  && ['arnaldo', 'ferreiro'].every((id) => get(id).origin === 'Portadores'),
+'equipes (2026-10-27): HENRI nos Mascarados → JUAN (Portador) → Portador do Trono; PORTADORES (Juan, Arnaldo, Ferreiro) ≠ RELÍQUIAS (Diabo, Deus da Morte, Magistrada, Anfitrião); OUTRO LADO (Estrangeiro, Amigo)');
 ok(VICTORY_LINES.anfitriao.default.length >= 16 && new Set(VICTORY_LINES.anfitriao.default).size === VICTORY_LINES.anfitriao.default.length && hostRandomSelectionValid, 'Anfitrião: falas caóticas próprias, variadas e selecionadas aleatoriamente');
-ok(ROSTER.map((c) => c.name).join() === 'ARTHUR CERVERO,JOUI JOUKI,KAISER,DANTE,ERIN PARKER,AGHATA,BALU,SENHOR VERÍSSIMO,CRISTOPHER,KIAN,GAL SAL,NUBI,XANDE,GUIZO,LÍRIO,DALMO,AGUIAR,JAE,KEMI,LABIRINTO,JUAN,CRISTINO,RAZIEL,O DIABO,A MAGISTRADA,ARNALDO FRITZ,FERREIRO,O ESTRANGEIRO,AMIGO IMAGINÁRIO', 'elenco agrupado por equipe: Ordo Realitas, Escriptas, Os Cinco, Mascarados, Transtornados, Vampiros, Portadores das Relíquias');
+ok(ROSTER.map((c) => c.name).join() === 'ARTHUR CERVERO,JOUI JOUKI,KAISER,DANTE,ERIN PARKER,AGHATA,BALU,SENHOR VERÍSSIMO,CRISTOPHER,KIAN,GAL SAL,NUBI,XANDE,GUIZO,LÍRIO,DALMO,AGUIAR,JAE,KEMI,LABIRINTO,HENRI,CRISTINO,RAZIEL,JUAN,ARNALDO FRITZ,FERREIRO,O DIABO,O DEUS DA MORTE,A MAGISTRADA,O ANFITRIÃO,O ESTRANGEIRO,AMIGO IMAGINÁRIO', 'elenco agrupado por equipe: Ordo Realitas, Escriptas, Os Cinco, Mascarados, Transtornados, Vampiros, Portadores, Relíquias, Outro Lado');
 const jae = get('jae');
 ok(jae && jae.origin === 'Mascarados' && jae.element === 'sangue' && jae.awakening.form === 'jae_x' && jae.awakening.scene === 'hood' && ['dashStrike', 'shadowVeil', 'teleportBehind', 'whisperZone'].every((t) => jae.abilities.some((a) => a.type === t)) && jae.abilities.find((a) => a.type === 'dashStrike').blind > 0 && jae.abilities.find((a) => a.type === 'teleportBehind').strike && jae.passives.some((p) => p.type === 'backstab' && p.surprised), 'Jae: Mascarada de Sangue — Punhal X (cega), Shhh... (some nas sombras), Assassinato Furtivo (apunhala as costas), Zona dos Sussurros, bônus em desprevenido e o Capuz de X');
 const dalmo = get('dalmo');
@@ -102,7 +116,7 @@ ok(COMBAT.maxHealth === 1500 && COMBAT.maxEnergy === 100, 'vida 1500 e energia 1
 // VIDA IGUAL PARA TODOS (1500, sem número na tela); os PORTADORES aguentam mais — Ferreiro e Arnaldo só transformados
 {
   const PORT = ['o_diabo', 'magistrada', 'estrangeiro', 'amigo'];
-  const base = ROSTER.filter((c) => !PORT.includes(c.id));
+  const base = BASE_ROSTER.filter((c) => !PORT.includes(c.id));
   ok(base.every((c) => (c.stats.maxHealth ?? COMBAT.maxHealth) === COMBAT.maxHealth), 'vida: todo o elenco com a mesma vida (fora os Portadores)');
   ok(PORT.every((id) => ROSTER.find((c) => c.id === id).stats.maxHealth > COMBAT.maxHealth), 'vida: Diabo, Magistrada, Estrangeiro e Amigo (Portadores) aguentam mais');
   ok(['deus_morte', 'anfitriao', 'diabo'].every((id) => getForm(id).stats.maxHealth > COMBAT.maxHealth), 'vida: Ferreiro e Arnaldo aguentam mais só transformados (Deus da Morte, Anfitrião); o Portador do Trono também');
@@ -122,7 +136,7 @@ ok(GAMEPAD_LAYOUT.dodge[0] === 6, 'esquiva no LT / L2 (separada da defesa)');
 for (const c of ROSTER) {
   for (const s of allStrikes(c)) if (!CLIPS[s.anim]) ok(false, `${c.name}: animação inexistente ${s.anim}`);
   for (const a of Object.values(c.anims)) if (!CLIPS[a]) ok(false, `${c.name}: animação inexistente ${a}`);
-  ok(['forward', 'back', 'side', 'air'].every((k) => c.melee[k]), `${c.name}: físico com variações neutro/frente/trás/lado/aéreo`);
+  if (!c.selectableForm) ok(['forward', 'back', 'side', 'air'].every((k) => c.melee[k]), `${c.name}: físico com variações neutro/frente/trás/lado/aéreo`);
   ok(c.melee.strikes.at(-1).finisher, `${c.name}: sequência termina com finalizador (${c.melee.strikes.at(-1).finisher})`);
   ok(!!c.ranged, `${c.name}: botão □/X não fica vazio (${c.ranged && c.ranged.name})`);
   ok((c.abilities || []).some((a) => a.input.startsWith('block+') || a.input.startsWith('carga+')), `${c.name}: possui habilidade secundária (△ + botão ou R2 + botão)`);
@@ -131,7 +145,7 @@ for (const c of ROSTER) {
 }
 
 // ---------------- especiais ----------------
-const offensive = ROSTER.filter((c) => !['mistField', 'erase', 'marionette'].includes(c.special.type));
+const offensive = BASE_ROSTER.filter((c) => !['mistField', 'erase', 'marionette'].includes(c.special.type));
 const dmg = offensive.map((c) => c.special.damage ?? COMBAT.specialDamage);
 ok(dmg.every((d) => d === 250), `especiais ofensivos com 250 de dano (${dmg.join(', ')})`);
 ok(dmg.every((d) => d < COMBAT.maxHealth), 'especiais comuns não são hitkill (o Inexistir é a exceção pedida, com regras próprias)');
@@ -219,7 +233,7 @@ ok(inj.special.approach === 'chain' && inj.special.applyMeleePassives === false,
 const des = get('kian');
 const fistAnims = ['jab', 'cross', 'hook_l', 'hook_r', 'uppercut', 'heavy_punch', 'wave_punch', 'body_blow', 'dash_punch', 'shove', 'meteor_punch', 'flurry'];
 ok(des.unarmed && allStrikes(des).every((s) => fistAnims.includes(s.anim) && !s.trail), 'Kian: físico só com punhos');
-ok(ROSTER.every((c) => c.awakening && c.awakening.name && c.awakening.type), `todos com transformação/despertar na Barra de Transformação (faltam: ${ROSTER.filter((c) => !c.awakening).map((c) => c.id).join(', ') || 'nenhum'})`);
+ok(BASE_ROSTER.every((c) => c.awakening && c.awakening.name && c.awakening.type), `todos com transformação/despertar na Barra de Transformação (faltam: ${BASE_ROSTER.filter((c) => !c.awakening).map((c) => c.id).join(', ') || 'nenhum'})`);
 ok([...ROSTER, ...['diabo', 'fantasma', 'deus_morte'].map(getForm)].every((c) => GRAB_SCENES[c.id] && FINISHERS[GRAB_SCENES[c.id].fin.fx]), 'agarrão próprio (cena + finalizador) para todos, formas incluídas');
 ok(des.special.type === 'erase' && des.special.unblockable && des.special.resistDamage > 0, 'Kian: especial Inexistir (indefensável, resiste com sanidade cheia)');
 ok(des.special.usesPerMatch === 2 && !des.special.bonusUseOnTranscend, 'Kian: Inexistir 2x por partida (o bônus do Transcender virou fixo)');
@@ -251,7 +265,7 @@ ok(get('kian').melee.strikes.reduce((n, s) => n + s.damage, 0) <= 215, 'Kian: co
 ok(new Set(get('kian').abilities.map((a) => a.id)).size === get('kian').abilities.length, 'Kian: habilidades sem id repetido');
 ok(pas('kaiser', 'resistant') && abil('kaiser', 'flowerRain') && get('kaiser').special.area === 5, 'Kaiser: Resistente, Acácia, Cinerária em 5 m');
 // RB + LT (mod+dodge): todo personagem tem um golpe nesse comando
-ok(ROSTER.every((c) => (c.abilities || []).some((a) => a.input === 'carga+dodge')), 'todos têm habilidade em △ + L2 (Y + LT)');
+ok(BASE_ROSTER.every((c) => (c.abilities || []).some((a) => a.input === 'carga+dodge')), 'todos têm habilidade em △ + L2 (Y + LT)');
 ok(abil('kaiser', 'rootTrap') && abil('kaiser', 'cursedShots') && pas('kaiser', 'elementalAffinity') && get('kaiser').special.flowerStorm, 'Kaiser: Dendrobium, Balas Amaldiçoadas, Afinidade Elemental e Cinerária com tempestade de Acácia');
 ok(abil('arthur', 'hatredTemple') && abil('arthur', 'bloodParalysis'), 'Arthur: Templo do Ódio + Dystopia');
 ok(pas('joui', 'decepar') && get('joui').melee.strikes.slice(0, -1).every((s) => s.range <= 2.2), 'Joui: Decepar, sequência com alcance ≤ 2,2 m');
@@ -356,7 +370,7 @@ ok(jua && jua.element === 'sangue' && ['ritualCuts', 'command', 'bloodLink', 'he
   ok(dia && dia.ranged.visual === 'bloodSpear' && dia.ranged.pool && dia.ranged.onHit.impale && ['forward', 'side', 'back'].every((k) => dia.ranged.variants[k]), 'Diabo: Lança de Sangue empala, deixa poça e tem 3 variações (frente, lados, trás)');
 }
 const lir = get('lirio');
-ok(lir && lir.origin === 'Os Cinco' && lir.melee.name === 'Leonora' && lir.stats.moveSpeed < Math.min(...ROSTER.filter((c) => c.id !== 'lirio').map((c) => c.stats.moveSpeed)), 'Lírio: Os Cinco, Leonora e o mais lento do elenco');
+ok(lir && lir.origin === 'Os Cinco' && lir.melee.name === 'Leonora' && lir.stats.moveSpeed < Math.min(...BASE_ROSTER.filter((c) => c.id !== 'lirio').map((c) => c.stats.moveSpeed)), 'Lírio: Os Cinco, Leonora e o mais lento do elenco');
 ok(lir && ['heavyBlow', 'caiDentro', 'bloodBind', 'curseWeapon', 'heavyProtection'].every((t) => abil('lirio', t)) && ['ironBlood', 'thickSkin', 'heavyHand'].every((t) => pas('lirio', t)), 'Lírio: Golpe Pesado, Cai Dentro, Amarras de Sangue, Leonora Amaldiçoada, Proteção Pesada + Sangue de Ferro, Casca Grossa, Mão Pesada');
 ok(lir && lir.melee.ground && lir.melee.ground.otg && lir.melee.strikes.some((s) => s.armor) && lir.assistAuto && lir.grip.twoHand, 'Lírio: golpe no chão, resistência em golpes pesados, Cai Dentro automático na equipe e Leonora com as duas mãos');
 

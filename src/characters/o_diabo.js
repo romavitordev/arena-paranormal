@@ -14,7 +14,7 @@ export default {
   name: 'O DIABO',
   model: 'o_diabo',
   color: '#a01818',
-  origin: 'Portadores das Relíquias',
+  origin: 'Relíquias', // a Relíquia de Sangue (2026-10-27: Portadores ≠ Relíquias)
   info: {
     weapon: 'Quatro braços com garras',
     style: 'Garras em sequência, lanças e poças de sangue, a horda de Zumbis de Sangue e o Pacto',

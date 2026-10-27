@@ -1540,6 +1540,15 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
 - [x] **O Diabo** (2026-10-26) pela "Miniatura O Diabo em Calamidade": os CHIFRES altos esculpidos com os anéis em relevo,
       os DEDOS longos vermelhos com as GARRAS escuras (mãos e pés), o manto, o capuz e as mangas com DOBRAS de verdade e a
       barra rasgada. Revisado pelo MCP e no jogo.
+- [ ] **PARA DEPOIS (pedido de 2026-10-27) — upgrade de modelos: A MAGISTRADA (e as MÁSCARAS que ela invoca), O
+      ESTRANGEIRO e O AMIGO IMAGINÁRIO** na técnica atual (sculpt_lib), pelas artes oficiais.
+- [ ] **PARA DEPOIS (2026-10-27) — O ESTRANGEIRO: os "SOLDADOS"** — ele pode invocar os seus soldados ETs: ALHEIOS de terno
+      e gravata que parecem humanos e usam METRALHADORAS (modelo novo + invocação; conferir no cânone de Sinais do Outro Lado).
+- [ ] **PARA DEPOIS (2026-10-27) — SKIN do ANFITRIÃO do ARNALDO ≠ ANFITRIÃO base:** o Anfitrião que sai da
+      transformação do Arnaldo terá uma skin diferente do Anfitrião selecionável das Relíquias — mesmas habilidades, só o
+      visual muda (modelo/textura próprios para a forma `anfitriao` do Arnaldo vs. o personagem `anfitriao` da seleção).
+- [ ] **PARA DEPOIS (2026-10-27) — O ESTRANGEIRO: ajuste da TRANSFORMAÇÃO** com o nome canônico (e o que ela faz) pela
+      wiki/episódios.
 - [ ] **O Portador do Trono** (`char_diabo.py`, a Transformação do Diabo/Juan): ainda na técnica antiga — refazer pela
       "Arte Completa Cinematic O Portador do Trono" (coroa de espinhos, asas de braços, quatro braços, pernas de bode).
 - [ ] Os outros que ainda não usam a técnica atual (`char_*.py` sem `sculpt_lib`, conferido em 2026-10-26): Aghata, Amigo,

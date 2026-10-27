@@ -7,7 +7,7 @@
 // (o_diabo, Portadores das Relíquias).
 export default {
   id: 'juan',
-  name: 'JUAN',
+  name: 'HENRI', // (2026-10-27) o nome na luta e na seleção; no ódio ele vira o JUAN (o Portador — forms/juan_odio.js)
   model: 'juan',
   color: '#c01828',
   origin: 'Mascarados', // o grupo do Estigma do Desejo em Hexatombe (com Labirinto e Aguiar)

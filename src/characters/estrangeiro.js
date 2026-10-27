@@ -15,7 +15,7 @@ export default {
   name: 'O ESTRANGEIRO',
   model: 'estrangeiro',
   color: '#8acf4a',
-  origin: 'Portadores das Relíquias',
+  origin: 'Outro Lado', // os Sinos de Tenebris (Transmissão)
   element: 'transmissao',
   hpBar: { style: 'signal' }, // barra de vida de Portador (Transmissão), sem número
   energyColor: GREEN,

@@ -7,7 +7,7 @@ export default {
   name: 'FERREIRO',
   model: 'ferreiro',
   color: '#8e9096',
-  origin: 'Portadores das Relíquias', // a Relíquia de Morte vive no corpo dele (era Luzidio)
+  origin: 'Portadores', // carrega a Relíquia de Morte no corpo (era Luzidio)
   element: 'morte',
   energyColor: 0x8a8090,
   info: {

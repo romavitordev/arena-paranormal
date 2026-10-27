@@ -682,35 +682,38 @@ function bloodStrand(len, r0, r1, turns, offset, phase, mat, wobble = 0.35) {
   return taperedTube(new THREE.CatmullRomCurve3(pts), len, (t) => r0 + (r1 - r0) * t, mat);
 }
 
-// Arma de Sangue do ARTHUR (cânone: "gastando 2 PV, projeta uma lâmina a partir do próprio sangue"): a lâmina longa e
-// curva de sangue nasce do punho DIREITO — o braço que ele tem — e feixes de sangue enrolam o antebraço. Mesmo espaço
-// da faca: a lâmina sai para -Y (o `inFist` vira o cabo dentro do punho e a lâmina sai por cima do polegar).
-export function bloodBlade(len = 0.66) {
+// Arma de Sangue do ARTHUR (cânone: "gastando 2 PV, projeta uma lâmina a partir do próprio sangue"), v2 (pedido de 2026-10-27: "tem que cobrir seu antebraço como uma lâmina saindo dele e não
+// ser segurada como uma espada"): o sangue cobre o ANTEBRAÇO DIREITO numa crosta, e a lâmina NASCE dela — corre pelas
+// costas do antebraço e passa direto do punho fechado, na linha do braço (sem cabo, sem "segurar"). Espaço do soquete
+// da mão: +Y = para o cotovelo, −Y = para além dos dedos; −Z = costas do antebraço.
+export function bloodForearmBlade(fore = 0.26, reach = 0.5) {
   const mat = bloodMaterial();
   const g = new THREE.Group();
-  const blade = new THREE.Mesh(extrude(bladeShape(len, 0.085, 0.1, 0.22), 0.016), mat);
-  blade.position.y = -0.05;
-  blade.rotation.y = Math.PI / 2;
-  blade.userData.outline = true;
-  g.add(blade);
-  // a massa de sangue no punho, de onde a lâmina brota
-  const root = new THREE.Mesh(new THREE.SphereGeometry(0.05, 12, 10), mat);
-  root.scale.set(1, 1.3, 1);
-  root.position.y = -0.02;
-  root.userData.outline = true;
-  g.add(root);
-  // feixes que sobem enrolando o antebraço (o sangue sai da mão e corre braço acima)
-  for (let i = 0; i < 4; i++) {
-    const s = bloodStrand(0.24, 0.016, 0.006, 0.6 + (i % 2) * 0.2, 0.045, (i / 4) * Math.PI * 2, mat, 0.2);
-    s.rotation.x = Math.PI; // sobe (do punho para o cotovelo)
-    s.position.y = 0.03;
+  // a CROSTA que cobre o antebraço (do pulso até perto do cotovelo), mais grossa nas costas
+  const sleeve = taperedTube(new THREE.CatmullRomCurve3([new THREE.Vector3(0, -0.02, -0.006), new THREE.Vector3(0, fore * 0.5, -0.01), new THREE.Vector3(0, fore, -0.006)]), fore, (t) => 0.05 + Math.sin(t * Math.PI) * 0.008, mat, 16, 10);
+  g.add(sleeve);
+  // feixes enrolando a crosta (o sangue ainda correndo)
+  for (let i = 0; i < 3; i++) {
+    const s = bloodStrand(fore * 0.9, 0.012, 0.005, 0.8, 0.054, (i / 3) * Math.PI * 2, mat, 0.15);
+    s.rotation.x = Math.PI;
+    s.position.y = -0.01;
     g.add(s);
   }
-  // espinhos pequenos nas costas da lâmina
-  for (let i = 0; i < 3; i++) {
-    const sp = bloodSpike(0.08 + i * 0.02, 0.012, 0.03, mat);
-    sp.position.set(0, -0.14 - i * 0.14, -0.035);
-    sp.rotation.x = -2.2;
+  // a LÂMINA: o dorso preso nas costas do antebraço, a ponta passando do punho na linha do braço
+  const len = fore * 0.85 + reach;
+  const blade = new THREE.Mesh(extrude(bladeShape(len, 0.075, 0.09, 0.2), 0.016), mat);
+  blade.rotation.y = Math.PI / 2;
+  blade.position.set(0, fore * 0.85, -0.06);
+  blade.userData.outline = true;
+  g.add(blade);
+  // a "costura" da lâmina na crosta (um cordão de sangue ao longo da base)
+  const seam = taperedTube(new THREE.CatmullRomCurve3([new THREE.Vector3(0, fore * 0.85, -0.05), new THREE.Vector3(0, fore * 0.3, -0.055), new THREE.Vector3(0, -0.05, -0.058)]), fore, () => 0.016, mat, 10, 6);
+  g.add(seam);
+  // espinhos nas costas da lâmina, para trás (para o cotovelo)
+  for (let i = 0; i < 4; i++) {
+    const sp = bloodSpike(0.06 + i * 0.015, 0.011, 0.025, mat);
+    sp.position.set(0, fore * 0.7 - i * 0.16, -0.1);
+    sp.rotation.x = -2.4;
     g.add(sp);
   }
   return g;

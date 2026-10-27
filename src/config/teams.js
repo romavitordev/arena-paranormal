@@ -8,11 +8,15 @@ export const TEAM_COLORS = {
   Mascarados: '#e83a42',
   Transtornados: '#d0702c',
   Vampiros: '#b01020', // os Vampiros de Hexatombe (Raziel e a ceia na Igreja Antiga): vermelho-sangue escuro // a equipe do Cristino em Hexatombe (Apóstolos de Sangue): ferrugem/laranja do lampião
-  // quem carrega uma Relíquia (Diabo / Sangue, Magistrada / Conhecimento, Arnaldo / Energia, Ferreiro / Morte) e, por pedido do usuário, o Estrangeiro e o Amigo Imaginário: branco-osso, para não confundir com o amarelo da Ordo nem o vermelho dos Mascarados
-  'Portadores das Relíquias': '#d8cfb8',
+  // (2026-10-27) PORTADORES ≠ RELÍQUIAS: quem CARREGA a Relíquia (Juan / Sangue, Arnaldo / Energia, Ferreiro / Morte) fica
+  // no branco-osso; quem É a Relíquia (O Diabo, O Deus da Morte, A Magistrada, O Anfitrião) no dourado envelhecido; e
+  // os Sinos de Tenebris (o Estrangeiro e o Amigo Imaginário) no verde-acinzentado do OUTRO LADO
+  Portadores: '#d8cfb8',
+  'Relíquias': '#c9a24a',
+  'Outro Lado': '#7fa89a',
 };
 
-export const TEAM_SHORT = { 'Ordo Realitas': 'Ordo', 'Portadores das Relíquias': 'Portadores' }; // cabe no cartão pequeno
+export const TEAM_SHORT = { 'Ordo Realitas': 'Ordo' }; // cabe no cartão pequeno
 
 export function teamColor(def) {
   return TEAM_COLORS[def && def.origin] || null;

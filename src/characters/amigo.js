@@ -18,7 +18,7 @@ export default {
   name: 'AMIGO IMAGINÁRIO',
   model: 'amigo',
   color: '#a0602a',
-  origin: 'Portadores das Relíquias',
+  origin: 'Outro Lado', // os Sinos de Tenebris (Tinta)
   element: 'tinta',
   hpBar: { style: 'ink' }, // barra de vida de Portador (Tinta), sem número
   energyColor: INK,

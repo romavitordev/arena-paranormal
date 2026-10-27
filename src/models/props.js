@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { glowMat, toon } from './rig.js';
 import { MATERIAL_TEXTURES } from './textures.js';
-import { katana, scabbard, shiNoKage, relicScabbard, relicBlade, m4, sniper, guitarCase, bloodArm, bloodBlade, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, roundGlasses, neonWraps, pulseEmitter, bandolier, bengala, mustache, socadeira, peixeira, spikedLantern, tenebrisPendant } from './weapons.js';
+import { katana, scabbard, shiNoKage, relicScabbard, relicBlade, m4, sniper, guitarCase, bloodArm, bloodForearmBlade, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, roundGlasses, neonWraps, pulseEmitter, bandolier, bengala, mustache, socadeira, peixeira, spikedLantern, tenebrisPendant } from './weapons.js';
 
 // Armas e acessórios adicionados em código sobre os modelos do Blender.
 // Usam só `sockets`, `attach()` e `props`, que existem nos dois tipos de rig.
@@ -55,8 +55,9 @@ export function addArthurProps(rig) {
   rifle.visible = false;
   props.sniperHand = rifle;
   rig.muzzle = rifle.userData.muzzle;
-  // Arma de Sangue: a lâmina de sangue nasce do punho DIREITO — o braço que ele tem (escondida até a habilidade)
-  const blade = inFist(bloodBlade());
+  // Arma de Sangue: o sangue cobre o antebraço DIREITO — o braço que ele tem — e a lâmina sai dele, na linha do braço,
+  // passando do punho (não é segurada; escondida até a habilidade)
+  const blade = bloodForearmBlade();
   sockets.handR.add(blade);
   blade.visible = false;
   props.bloodBlade = blade;

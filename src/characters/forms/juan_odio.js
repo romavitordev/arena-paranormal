@@ -1,4 +1,5 @@
-// JUAN NO ÓDIO DO DIABO — 1ª transformação do Juan (Barra cheia + vida baixa, segurando △). Não aparece na seleção.
+// JUAN NO ÓDIO DO DIABO — 1ª transformação do HENRI (Barra cheia + vida baixa, segurando △). Desde 2026-10-27 também é
+// selecionável nos PORTADORES como "JUAN" (characters/selectableForms.js): começa já assim e vira o Portador do Trono.
 // Pedido do usuário: o Juan tem DUAS transformações — primeiro o Ódio do Diabo, depois, dentro dela, o Renascimento
 // no Trono (O Portador do Trono, a forma 'diabo'). O Diabo também existe separado, nos Portadores das Relíquias.
 // Visual (a arte "pose ultimate"): o antebraço direito vira sangue com garras, o capuz vermelho erguido e o olho que

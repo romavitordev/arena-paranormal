@@ -95,7 +95,7 @@ export class HomeScreen {
         <div class="t-arena">ARENA</div>
         <h1 data-text="PARANORMAL">PARANORMAL</h1>
         <div class="elements"><i class="ln"></i>${Object.values(ELEMENTS).map((e) => `<b style="--c:${e.color}" title="${e.name}"></b>`).join('')}<i class="ln"></i></div>
-        <div class="tag">ORDO REALITAS <i>·</i> ESCRIPTAS <i>·</i> OS CINCO <i>·</i> MASCARADOS <i>·</i> TRANSTORNADOS <i>·</i> VAMPIROS <i>·</i> PORTADORES</div>
+        <div class="tag">${Object.entries(TEAM_COLORS).filter(([name]) => ROSTER.some((c) => c.origin === name)).map(([name, col]) => `<span style="--tc:${col}">${name}</span>`).join('')}</div>
 
         <div class="fanmade">${t('menu.fanmade')}</div>
       </div>

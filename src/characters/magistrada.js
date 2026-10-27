@@ -16,7 +16,7 @@ export default {
   name: 'A MAGISTRADA',
   model: 'magistrada',
   color: '#e0b84a',
-  origin: 'Portadores das Relíquias', // Relíquia de Conhecimento
+  origin: 'Relíquias', // a Relíquia de Conhecimento
   element: 'conhecimento',
   hpBar: { style: 'knowledge' }, // barra de vida de Portador (Conhecimento), sem número
   energyColor: GOLD,

@@ -14,7 +14,7 @@ export const CHARACTER_NAMES = {
   xande: 'Xande',
   lirio: 'Lírio',
   ferreiro: 'Ferreiro',
-  juan: 'Juan',
+  juan: 'Henri', // (2026-10-27) o personagem base é o HENRI; no ódio (e nos Portadores) ele é o JUAN
   kemi: 'Kemi',
   balu: 'Balu',
   arnaldo: 'Arnaldo',

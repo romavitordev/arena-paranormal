@@ -27,6 +27,7 @@ import amigo from './amigo.js';
 import cristino from './cristino.js';
 import cristopher from './cristopher.js';
 import raziel from './raziel.js';
+import { juanPortador, deusMorteReliquia, anfitriaoReliquia } from './selectableForms.js';
 
 // Elenco jogável, na ordem da tela de seleção — AGRUPADO POR EQUIPE/TEMPORADA (a grade tem 3 colunas × 5 linhas por
 // página, então cada grupo ocupa linhas inteiras):
@@ -42,10 +43,15 @@ export const ROSTER = [
   arthur, joui, kaiser, dante, erin, aghata, balu, verissimo, cristopher, // Ordo Realitas (o Cris fecha a Equipe E de OSNF)
   kian, gal_sal, nubi, // Escriptas
   xande, guizo, lirio, // Os Cinco (Sinais do Outro Lado) — o Guizo do lado do melhor amigo
-  dalmo, aguiar, jae, kemi, labirinto, juan, // Mascarados (Hexatombe) — o Juan talvez vá para os "Sacrifícios" no futuro
+  dalmo, aguiar, jae, kemi, labirinto, juan, // Mascarados (Hexatombe) — o HENRI (id juan); no ódio ele vira o Juan
   cristino, // Transtornados (Hexatombe) — o cangaceiro que não queria jogar o jogo
   raziel, // Vampiros (Hexatombe) — o líder; Alvira, Velisar, Zéfero e Sabara entram depois
-  oDiabo, magistrada, arnaldo, ferreiro, estrangeiro, amigo, // Portadores das Relíquias (Sangue, Conhecimento, Energia, Morte) + o Estrangeiro e o Amigo Imaginário
+  // (2026-10-27) PORTADORES ≠ RELÍQUIAS: quem CARREGA a Relíquia e quem É a Relíquia. As formas ainda acontecem na luta
+  // (Henri → Juan (Portador) → Portador do Trono; Arnaldo → Anfitrião; Ferreiro → Deus da Morte), mas também dá para
+  // começar já como elas (selectableForms.js)
+  juanPortador, arnaldo, ferreiro, // Portadores (Sangue, Energia, Morte)
+  oDiabo, deusMorteReliquia, magistrada, anfitriaoReliquia, // Relíquias (Sangue, Morte, Conhecimento, Energia)
+  estrangeiro, amigo, // Outro Lado (os Sinos de Tenebris: Transmissão e Tinta)
 ];
 
 // RITMO DOS COMBOS (stats.attackSpeed): > 1 deixa os golpes físicos mais rápidos (duração, janelas de acerto,
