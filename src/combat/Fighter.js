@@ -2055,7 +2055,7 @@ export class Fighter {
       spike: fin && fin.spike,
       unblockable: !!this.findBuff('transcend') || !!this.def.unblockableMelee || this.buffs.some((b) => b.unblockable),
       dir, strike: s, sound: s.hitSound,
-      color: s.impactFx === 'sigil' ? 0xffffff : undefined,
+      color: s.impactFx === 'sigil' ? 0xffffff : s.impactFx === 'shock' ? 0xfff4e0 : undefined,
       scale: s.impactScale,
       hitstop: s.hitstop,
     });
@@ -2107,9 +2107,19 @@ export class Fighter {
     const tele = this.findBuff('telepathy');
     if (tele && typeof res === 'number' && opp.findBuff && opp.findBuff('mindLinked')) this.energy = Math.min(this.maxEnergy, this.energy + (tele.energyPerHit || 0));
     if (press && typeof res === 'number' && opp.state !== 'ko') {
+      // o COLOSSO é a forma mais forte do Dalmo: a onda de pressão é MAIOR que o impacto dos socos dele ('shock') — o
+      // anel e a onda bem maiores e mais longos; no finalizador, dois ecos por fora e o anel de choque no chão
       const c = opp.chestPos();
-      this.world.fx.distort(c, { color: press.color ?? 0xffb070, radius: s.finisher ? 2.2 : 1.2, life: 0.25 });
-      this.world.fx.ring(c, { color: press.color ?? 0xffb070, radius: s.finisher ? 2.0 : 1.1, life: 0.22, vertical: true, yaw: this.yaw });
+      const col = press.color ?? 0xffb070;
+      const big = !!s.finisher;
+      this.world.fx.distort(c, { color: col, radius: big ? 3.4 : 2.4, life: big ? 0.45 : 0.36 });
+      this.world.fx.ring(c, { color: col, radius: big ? 4.4 : 3.0, life: big ? 0.45 : 0.36, vertical: true, yaw: this.yaw });
+      if (big) {
+        const yaw = this.yaw;
+        this.world.after(0.06, () => this.world.fx.ring(c, { color: col, radius: 5.6, life: 0.42, vertical: true, yaw }));
+        this.world.after(0.12, () => this.world.fx.ring(c, { color: 0xffd8a0, radius: 6.8, life: 0.4, vertical: true, yaw }));
+        this.world.fx.ring(new THREE.Vector3(opp.pos.x, 0.06, opp.pos.z), { color: col, radius: 4.0, life: 0.5 });
+      }
       applyHit(this.world, this, opp, { damage: press.damage ?? 6, kind: 'melee', element: 'energia', reaction: false, strike: { damage: press.damage ?? 6, noPassive: true }, sound: null, color: press.color, scale: 0.6 });
       if (s.finisher && press.stun && opp.state !== 'ko') { opp.stun(press.stun); opp.notify('ATORDOADO', true); }
     }
@@ -2161,6 +2171,19 @@ export class Fighter {
     if (s.impactFx === 'sigil') {
       this.world.fx.ring(opp.chestPos(), { color: this.def.energyColor, radius: 2.2, life: 0.35, vertical: true, yaw: this.yaw });
       this.world.fx.distort(opp.chestPos(), { color: this.def.energyColor, radius: 1.6, life: 0.3 });
+    }
+    if (s.impactFx === 'shock') {
+      // Dalmo: soco de lutador de arena — sem sigilo, só FÍSICA: o anel de ar do impacto, a onda que distorce, a poeira
+      // e o suor que voam e um tranco na câmera (o mesmo peso dos socos do Kian, sem o paranormal)
+      // Dalmo é PESADO: golpes mais lentos e de mais impacto — o anel e a onda são maiores e duram mais que os do Kian, e
+      // o finalizador ainda solta um segundo anel por fora, um instante depois (o "eco" do soco)
+      const c = opp.chestPos();
+      const big = !!s.finisher;
+      this.world.fx.ring(c, { color: 0xfff4e0, radius: big ? 3.4 : 2.3, life: big ? 0.42 : 0.34, vertical: true, yaw: this.yaw });
+      this.world.fx.distort(c, { color: 0xffe8c8, radius: big ? 2.6 : 1.8, life: big ? 0.4 : 0.32 });
+      if (big) this.world.after(0.06, () => this.world.fx.ring(c, { color: 0xffe2c0, radius: 4.4, life: 0.4, vertical: true, yaw: this.yaw }));
+      this.world.fx.burst(c, { count: big ? 22 : 12, color: 0xe8e0d0, speed: big ? 5 : 3.5, life: 0.35, size: 0.08, gravity: 6 });
+      this.world.cameraRig.shake(big ? 0.35 : 0.16, big ? 0.18 : 0.1);
     }
   }
 

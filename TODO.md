@@ -25,7 +25,12 @@
   queda (ver *REAJUSTE DAS ANIMAÇÕES*).
 - [~] **MELHORIA GERAL DE TODAS AS ANIMAÇÕES** — 1ª leva na v3.47.0 (`anim/strikePolish.js`): os 15 golpes genéricos
   (jab, direto, ganchos, gancho de baixo, soco pesado, os chutes, joelhada, soco de um braço, cortes de faca) ganharam
-  antecipação, passagem (overshoot) e peso na volta, com o acerto no mesmo instante de antes. Próximas levas: combos e
+  antecipação, passagem (overshoot) e peso na volta, com o acerto no mesmo instante de antes. Depois (pedido de
+  2026-10-27): os socos do DALMO com o mesmo impacto dos do Kian — `impactFx: 'shock'` (anel de ar, onda que distorce,
+  poeira e tranco na câmera, sem o sigilo paranormal), escala de impacto e pausa no impacto maiores; anel 2,3 / onda 1,8
+  (finalizador 3,4 + eco 4,4 / 2,6) — ele é pesado, golpes lentos e de impacto. O COLOSSO (a forma mais forte) fica acima:
+  a onda da Pressão Atmosférica com anel 3,0 / onda 2,4 e, no finalizador, anel 4,4 + dois ecos (5,6 e 6,8), onda 3,4 e o
+  anel de choque no chão (sem duplicar com o 'shock'). Próximas levas: combos e
   finalizadores próprios, esquivas, habilidades. Pedido original (2026-10-26): Todas as animações de movimento, ataques básicos,
   combos, finalizadores, esquivas e habilidades de todos os personagens precisam ser melhoradas e retrabalhadas. Buscar
   referências da internet (jogos de luta consagrados como Naruto Storm, Guilty Gear, Tekken, além de coreografias de artes

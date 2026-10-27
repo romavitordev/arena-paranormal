@@ -22,21 +22,23 @@ export const DALMO_KIT = {
 
   melee: {
     name: 'Golpes de Arena',
-    // socos curtos e pesados de quem viveu nas arenas: empurram, têm peso e o último derruba
+    // socos curtos e pesados de quem viveu nas arenas: empurram, têm peso e o último derruba. impactFx 'shock' (v3.47.1,
+    // pedido do dono: "os socos do Kian parecem ter impacto, quero que os do Dalmo também"): o anel de ar, a onda e o
+    // tranco na câmera em cada soco que entra, sem o sigilo paranormal do Kian
     strikes: [
-      { name: 'Direto pesado', anim: 'cross', dur: 0.3, active: [0.09, 0.17], damage: 30, range: 1.9, arc: 100, knockback: 1.0, lunge: 1.0, sound: 'swing', hitSound: 'heavyPunch', hand: 'R' },
-      { name: 'Cruzado', anim: 'hook_l', dur: 0.34, active: [0.11, 0.19], damage: 32, range: 1.9, arc: 140, knockback: 1.1, lunge: 0.9, sound: 'swing', hitSound: 'heavyPunch', hand: 'L' },
-      { name: 'Cotovelada', anim: 'sway_elbow', dur: 0.32, active: [0.1, 0.18], damage: 30, range: 1.6, arc: 110, knockback: 0.9, lunge: 0.8, sound: 'swing', hitSound: 'heavyPunch' },
-      { name: 'Joelhada', anim: 'knee', dur: 0.34, active: [0.12, 0.2], damage: 32, range: 1.5, arc: 100, knockback: 1.0, lunge: 0.9, sound: 'swing', hitSound: 'heavyPunch' },
+      { name: 'Direto pesado', anim: 'cross', dur: 0.3, active: [0.09, 0.17], damage: 30, range: 1.9, arc: 100, knockback: 1.0, lunge: 1.0, sound: 'swing', hitSound: 'heavyPunch', hand: 'R', impactFx: 'shock', impactScale: 1.2, hitstop: 0.06 },
+      { name: 'Cruzado', anim: 'hook_l', dur: 0.34, active: [0.11, 0.19], damage: 32, range: 1.9, arc: 140, knockback: 1.1, lunge: 0.9, sound: 'swing', hitSound: 'heavyPunch', hand: 'L', impactFx: 'shock', impactScale: 1.3, hitstop: 0.065 },
+      { name: 'Cotovelada', anim: 'sway_elbow', dur: 0.32, active: [0.1, 0.18], damage: 30, range: 1.6, arc: 110, knockback: 0.9, lunge: 0.8, sound: 'swing', hitSound: 'heavyPunch', impactFx: 'shock', impactScale: 1.2, hitstop: 0.06 },
+      { name: 'Joelhada', anim: 'knee', dur: 0.34, active: [0.12, 0.2], damage: 32, range: 1.5, arc: 100, knockback: 1.0, lunge: 0.9, sound: 'swing', hitSound: 'heavyPunch', impactFx: 'shock', impactScale: 1.3, hitstop: 0.065 },
       // o fim do combo: o Golpes de Arena emenda uma cabeçada sozinho quando entra
-      { name: 'Soco de arena', anim: 'heavy_punch', dur: 0.5, active: [0.2, 0.29], damage: 58, range: 2.0, arc: 100, lunge: 1.6, finisher: 'launch', hitstop: 0.1, sound: 'swing', hitSound: 'heavyPunch', hand: 'R', impactScale: 1.9 },
+      { name: 'Soco de arena', anim: 'heavy_punch', dur: 0.5, active: [0.2, 0.29], damage: 58, range: 2.0, arc: 100, lunge: 1.6, finisher: 'launch', hitstop: 0.11, sound: 'swing', hitSound: 'heavyPunch', hand: 'R', impactFx: 'shock', impactScale: 2.0 },
     ],
-    up: { name: 'Gancho ascendente', anim: 'uppercut', dur: 0.44, active: [0.14, 0.24], damage: 44, range: 1.9, arc: 120, lunge: 0.9, finisher: 'launchHigh', launcher: true, sound: 'swing', hitSound: 'heavyPunch', impactScale: 1.5 },
+    up: { name: 'Gancho ascendente', anim: 'uppercut', dur: 0.44, active: [0.14, 0.24], damage: 44, range: 1.9, arc: 120, lunge: 0.9, finisher: 'launchHigh', launcher: true, sound: 'swing', hitSound: 'heavyPunch', impactFx: 'shock', impactScale: 1.6, hitstop: 0.08 },
     down: { name: 'Pisão', anim: 'stomp', dur: 0.62, active: [0.3, 0.4], damage: 54, range: 1.8, arc: 140, lunge: 0.8, finisher: 'knockdown', sound: 'swing', hitSound: 'heavyPunch', impactScale: 1.8, hitstop: 0.1 },
     forward: { name: 'Ombrada', anim: 'shoulder_bash', dur: 0.46, active: [0.16, 0.3], damage: 40, range: 1.9, arc: 110, knockback: 2.2, guardCrush: true, motion: [{ t: [0, 0.3], fwd: 5.5, stopClose: true }], sound: 'swing', hitSound: 'heavyPunch', impactScale: 1.5 },
     back: { name: 'Cabeçada', anim: 'headbutt', dur: 0.44, active: [0.2, 0.3], damage: 40, range: 1.5, arc: 90, knockback: 1.6, sound: 'swing', hitSound: 'heavyPunch', impactScale: 1.4 },
-    side: { name: 'Gancho de lado', anim: 'hook_r', dur: 0.36, active: [0.12, 0.21], damage: 34, range: 1.9, arc: 150, knockback: 1.3, motion: [{ t: [0, 0.2], side: 2.2 }], sound: 'swing', hitSound: 'heavyPunch' },
-    air: { name: 'Martelada no ar', anim: 'meteor_punch', dur: 0.48, active: [0.16, 0.36], damage: 44, range: 1.9, arc: 110, knockback: 4, slam: 20, vertical: 2.4, sound: 'swing', hitSound: 'heavyPunch', impactScale: 1.6 },
+    side: { name: 'Gancho de lado', anim: 'hook_r', dur: 0.36, active: [0.12, 0.21], damage: 34, range: 1.9, arc: 150, knockback: 1.3, motion: [{ t: [0, 0.2], side: 2.2 }], sound: 'swing', hitSound: 'heavyPunch', impactFx: 'shock', impactScale: 1.3, hitstop: 0.065 },
+    air: { name: 'Martelada no ar', anim: 'meteor_punch', dur: 0.48, active: [0.16, 0.36], damage: 44, range: 1.9, arc: 110, knockback: 4, slam: 20, vertical: 2.4, sound: 'swing', hitSound: 'heavyPunch', impactFx: 'shock', impactScale: 1.7, hitstop: 0.08 },
   },
 
   // □: PODE VIR! — o Dalmo não arremessa nada: se planta de braços abertos e chama o adversário ("eu sou grande, mas

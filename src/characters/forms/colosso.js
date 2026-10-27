@@ -13,7 +13,8 @@ import base from '../dalmo.js';
 const RED = 0xff2a1e;
 const PRESS = 0xffb070;
 // as Manoplas são de METAL: todo golpe soa como soco de manopla (pancada + tinido)
-const heavier = (s) => ({ ...s, damage: Math.round(s.damage * 1.15), element: 'sangue', hitSound: 'metalPunch' });
+// (o impacto 'shock' do Dalmo sai: aqui a onda é a da Pressão Atmosférica das Manoplas, que já sai em todo soco)
+const heavier = (s) => ({ ...s, damage: Math.round(s.damage * 1.15), element: 'sangue', hitSound: 'metalPunch', impactFx: undefined });
 const M = base.melee;
 const byId = Object.fromEntries(base.abilities.map((a) => [a.id, a]));
 
