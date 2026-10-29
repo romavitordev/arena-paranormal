@@ -58,6 +58,21 @@ export const ROSTER = [
   estrangeiro, amigo, // Outro Lado (os Sinos de Tenebris: Transmissão e Tinta)
 ];
 
+// VERSÕES do mesmo personagem (seleção: RB/LB trocam a versão sem sair do cartão, como no Naruto Storm). A ordem é a do
+// ciclo: no Henri, RB → Juan → Henri; LB volta pelo outro lado. Cada versão também tem o próprio cartão na grade.
+export const VERSION_GROUPS = [
+  ['juan', 'juan_odio'], // Henri → Juan (Portador)
+  ['arnaldo', 'anfitriao'], // Arnaldo Fritz → O Anfitrião
+  ['ferreiro', 'deus_morte'], // Ferreiro → O Deus da Morte
+];
+
+// índices no ROSTER das versões do lutador do índice i (ele mesmo incluído; só ele quando não tem outras)
+export function versionsOf(i) {
+  const id = ROSTER[i] && ROSTER[i].id;
+  const group = VERSION_GROUPS.find((g) => g.includes(id));
+  return group ? group.map((v) => ROSTER.findIndex((c) => c.id === v)).filter((k) => k >= 0) : [i];
+}
+
 // RITMO DOS COMBOS (stats.attackSpeed): > 1 deixa os golpes físicos mais rápidos (duração, janelas de acerto,
 // movimentos e invulnerabilidade escalam juntos; a animação acompanha porque toca com a duração do golpe).
 // Aplicado uma vez, ao carregar. Ágeis/leves acima de 1; pesados em 1 (aguentam pela vida); Juan abaixo de 1.

@@ -111,7 +111,7 @@ export default {
   "sel.hint_cpu": "<b>P1</b> wybiera swojego wojownika (lewo), potem wojownika <b>CPU</b> (prawo) · {move} ruch · <kbd>{jump}</kbd>/<kbd>Enter</kbd> potwierdź · <kbd>{phys}</kbd>/<kbd>Esc</kbd> wstecz",
   "sel.hint_pvp": "<b>P1</b> {move} ruch · <kbd>{jump}</kbd> potwierdź · <kbd>{phys}</kbd> wstecz &nbsp;|&nbsp; <b>P2</b> strzałki · <kbd>{jump2}</kbd> potwierdź · <kbd>{phys2}</kbd> wstecz",
   "sel.hint_common": " · <b>{ok}</b> potwierdź · <b>{rand}</b> losowo · <b>{back}</b> wstecz",
-  "sel.hint_page": " · <b>LB/RB</b> · <kbd>{l}</kbd>/<kbd>{r}</kbd> zmień stronę",
+  "sel.hint_version": " · <b>LB/RB</b> · <kbd>{l}</kbd>/<kbd>{r}</kbd> zmień wersję",
   "mode.target": "CEL",
   "input.carga_jump": "Energia + Skok",
   "input.side": "bok",

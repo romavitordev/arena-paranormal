@@ -111,7 +111,7 @@ export default {
   "sel.hint_cpu": "<b>P1</b> escolhe o seu lutador (esquerda) e depois o da <b>CPU</b> (direita) · {move} mover · <kbd>{jump}</kbd>/<kbd>Enter</kbd> confirmar · <kbd>{phys}</kbd>/<kbd>Esc</kbd> voltar",
   "sel.hint_pvp": "<b>P1</b> {move} mover · <kbd>{jump}</kbd> confirmar · <kbd>{phys}</kbd> voltar &nbsp;|&nbsp; <b>P2</b> setas · <kbd>{jump2}</kbd> confirmar · <kbd>{phys2}</kbd> voltar",
   "sel.hint_common": " · <b>{ok}</b> confirmar · <b>{rand}</b> aleatório · <b>{back}</b> voltar",
-  "sel.hint_page": " · <b>LB/RB</b> · <kbd>{l}</kbd>/<kbd>{r}</kbd> mudar de página",
+  "sel.hint_version": " · <b>LB/RB</b> · <kbd>{l}</kbd>/<kbd>{r}</kbd> mudar de versão",
   "mode.target": "ALVO",
   "input.carga_jump": "Energia + Salto",
   "input.side": "lado",

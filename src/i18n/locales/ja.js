@@ -111,7 +111,7 @@ export default {
   "sel.hint_cpu": "<b>P1</b> が自分（左）と <b>CPU</b>（右）のキャラを選ぶ · {move} 移動 · <kbd>{jump}</kbd>/<kbd>Enter</kbd> 決定 · <kbd>{phys}</kbd>/<kbd>Esc</kbd> 戻る",
   "sel.hint_pvp": "<b>P1</b> {move} 移動 · <kbd>{jump}</kbd> 決定 · <kbd>{phys}</kbd> 戻る &nbsp;|&nbsp; <b>P2</b> 矢印 · <kbd>{jump2}</kbd> 決定 · <kbd>{phys2}</kbd> 戻る",
   "sel.hint_common": " · <b>{ok}</b> 決定 · <b>{rand}</b> ランダム · <b>{back}</b> 戻る",
-  "sel.hint_page": " · <b>LB/RB</b> · <kbd>{l}</kbd>/<kbd>{r}</kbd> ページ切替",
+  "sel.hint_version": " · <b>LB/RB</b> · <kbd>{l}</kbd>/<kbd>{r}</kbd> バージョン切替",
   "mode.target": "的",
   "input.carga_jump": "エネルギー＋ジャンプ",
   "input.side": "横",

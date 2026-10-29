@@ -1,5 +1,5 @@
 import { TEAM_COLORS, TEAM_SHORT, defTeams } from '../config/teams.js';
-import { ROSTER } from '../characters/index.js';
+import { ROSTER, versionsOf } from '../characters/index.js';
 import { SelectStage } from './selectStage.js';
 import { ELEMENTS } from '../config/elements.js';
 import { SETTINGS, TIMER_OPTIONS, CPU_LEVELS, ROUND_OPTIONS, timerLabel, cpuLabel, cycleSetting } from '../config/settings.js';
@@ -306,15 +306,22 @@ export const MODES = {
 // Seleção de personagem no estilo Storm 4: a grade do P1 fica à esquerda e a do P2 à direita;
 // no centro, os lutadores em 3D (SelectStage) entram deslizando ao serem olhados e fazem pose ao confirmar.
 const SEL_COLS = 3;
-const SEL_PAGE = 15; // até 15 lutadores por página (3 × 5), sem barra de rolagem; LB/RB trocam de página
-// páginas por EQUIPE: o elenco vem agrupado pela origem (ROSTER); uma equipe que não cabe inteira no resto da página
-// começa a página seguinte (ex.: os Mascarados ficam juntos na página 2). Cada página = [início, fim) em ROSTER.
+const SEL_PAGE = 15; // até 15 lutadores por página (3 × 5), sem barra de rolagem; ←/→ na ponta da linha trocam de página
+// a GRADE tem UM cartão por personagem: as outras versões (VERSION_GROUPS — Juan, Anfitrião, Deus da Morte) moram no
+// cartão da versão principal e saem no RB/LB. GRID = índices no ROSTER dos cartões, na ordem da tela
+const GRID = ROSTER.map((c, i) => i).filter((i) => versionsOf(i)[0] === i);
+// posição na grade do cartão de um lutador (uma versão fica no cartão da principal)
+const posOf = (i) => GRID.indexOf(versionsOf(i)[0]);
+// páginas por EQUIPE: o elenco vem agrupado pela origem; uma equipe que não cabe inteira no resto da página começa a
+// página seguinte (ex.: os Mascarados ficam juntos na página 2). Cada página = [início, fim) em posições da GRID.
 const SEL_PAGES = (() => {
   const pages = [[0, 0]];
+  const n = GRID.length;
+  const team = (k) => ROSTER[GRID[k]].origin;
   let i = 0;
-  while (i < ROSTER.length) {
+  while (i < n) {
     let j = i;
-    while (j < ROSTER.length && ROSTER[j].origin === ROSTER[i].origin) j++;
+    while (j < n && team(j) === team(i)) j++;
     const cur = pages[pages.length - 1];
     if (cur[1] > cur[0] && cur[1] - cur[0] + (j - i) > SEL_PAGE) pages.push([i, i]);
     // equipe maior que uma página inteira: quebra de 15 em 15
@@ -327,7 +334,10 @@ const SEL_PAGES = (() => {
   }
   return pages;
 })();
-const pageOf = (i) => Math.max(0, SEL_PAGES.findIndex(([a, b]) => i >= a && i < b));
+// página do cartão de um lutador (índice no ROSTER)
+const pageOf = (i) => { const k = posOf(i); return Math.max(0, SEL_PAGES.findIndex(([a, b]) => k >= a && k < b)); };
+// as etiquetas de equipe do cartão (uma por equipe — quem é de duas mostra as duas)
+const teamTags = (c) => defTeams(c).map((tm) => `<i style="--tc:${TEAM_COLORS[tm] || '#aaa'}">${TEAM_SHORT[tm] || tm}</i>`).join('');
 const INPUT_NAMES = { 'carga+ranged': '△ → □', 'carga+physical': '△ → ○', 'block+carga': 'R2 + △', 'block+jump': 'R2 + ×', 'carga+dodge': '△ + L2', 'ranged+forward': '→ + □', 'ranged+back': '← + □' };
 const inputName = (k) => (k === 'carga+jump' ? t('input.carga_jump') : k === 'ranged+side' ? `${t('input.side')} + □` : INPUT_NAMES[k] || k);
 
@@ -341,18 +351,23 @@ export class SelectScreen {
     this.picks = [[], []]; // equipe: [líder, assist1, assist2]
     this.M = MODES[mode] || MODES.pvp;
     this.cpu = this.M.single; // um jogador escolhe os dois lados
+    // cursor = o lutador escolhido (a VERSÃO, índice no ROSTER); home = o cartão em que o cursor está na grade. As setas
+    // mudam o cartão (e a versão volta para a do cartão); RB/LB trocam só a versão (versionsOf)
     this.cursor = prev ? [...prev.cursor] : [0, 1];
+    this.home = this.cursor.map((i) => versionsOf(i)[0]);
+    this.portraits = portraits;
     this.ready = [false, false];
     const side = (p) => `
       <div class="sel-side s${p + 1}">
         <div class="sel-head"><span class="tag">${this.M.slots[p]}</span><span class="st"></span></div>
-        <div class="sel-pages"><b class="pg-prev">◀ <kbd>LB</kbd></b><span class="pg-n"></span><b class="pg-next"><kbd>RB</kbd> ▶</b></div>
-        <div class="sel-grid">${ROSTER.map((c, i) => `
-          <div class="card" data-i="${i}" style="--c:${c.color}">
+        <div class="sel-pages"><b class="pg-prev">◀</b><span class="pg-n"></span><b class="pg-next">▶</b></div>
+        <div class="sel-grid">${GRID.map((i) => { const c = ROSTER[i]; const vs = versionsOf(i); return `
+          <div class="card${vs.length > 1 ? ' ver' : ''}" data-i="${i}" style="--c:${c.color}">
             <img src="${portraits[c.id]}" alt="${c.name}">
-            <span class="tm">${defTeams(c).map((tm) => `<i style="--tc:${TEAM_COLORS[tm] || '#aaa'}">${TEAM_SHORT[tm] || tm}</i>`).join('')}</span>
+            <span class="tm">${teamTags(c)}</span>
+            ${vs.length > 1 ? `<span class="vr" title="${vs.map((k) => ROSTER[k].name).join(' · ')}">⇄ ${vs.length}</span>` : ''}
             <div class="cn"><b style="color:${c.color}">${c.name}</b></div>
-          </div>`).join('')}
+          </div>`; }).join('')}
         </div>
         <div class="det p${p + 1}"></div>
       </div>`;
@@ -385,7 +400,7 @@ export class SelectScreen {
     });
     this.hint = this.el.querySelector('.hint');
     // toque no lutador: o 1º toque olha, o 2º no mesmo confirma
-    this.cards.forEach((list, p) => list.forEach((c, i) => c.addEventListener('click', () => this.tapSide(p, 1 + i))));
+    this.cards.forEach((list, p) => list.forEach((c) => c.addEventListener('click', () => this.tapSide(p, 1 + Number(c.dataset.i)))));
     this.render();
   }
 
@@ -407,7 +422,7 @@ export class SelectScreen {
     // no modo contra CPU o lado 2 só é escolhido depois do 1
     const active = this.cpu ? (this.ready[0] ? 1 : 0) : p;
     if (active !== p || this.ready[p]) return;
-    if (this.cursor[p] === i) { this.lockPick(p); this.audio.play('confirm'); } else { this.cursor[p] = i; this.audio.play('select'); }
+    if (this.home[p] === i) { this.lockPick(p); this.audio.play('confirm'); } else { this.home[p] = this.cursor[p] = i; this.audio.play('select'); }
     this.render();
   }
 
@@ -428,6 +443,14 @@ export class SelectScreen {
     return `<div class="teamlink${done ? ' on' : ''}" style="--c:#${link.color.toString(16).padStart(6, '0')}"><small>${t('sel.teamLink')}</small><b>${link.name}</b></div>`;
   }
 
+  // lutador com outras versões: "⇄ HENRI · JUAN" na placa, a escolhida acesa, com os botões que trocam (LB/RB)
+  versionLine(p, front) {
+    const vs = versionsOf(ROSTER.indexOf(front));
+    if (vs.length < 2 || this.ready[p]) return '';
+    const names = vs.map((k) => (ROSTER[k] === front ? `<b>${ROSTER[k].name}</b>` : ROSTER[k].name)).join(' · ');
+    return `<div class="pv">⇄ ${names} <kbd>LB</kbd>/<kbd>RB</kbd></div>`;
+  }
+
   render() {
     const act = this.activeSide();
     for (let p = 0; p < 2; p++) {
@@ -437,13 +460,27 @@ export class SelectScreen {
       this.sides[p].classList.toggle('waiting', act >= 0 && act !== p && !this.ready[p]);
       this.sides[p].classList.toggle('done', this.ready[p]);
       // só os 15 da página do cursor aparecem
-      const page = pageOf(this.cursor[p]);
+      const home = this.home[p];
+      const page = pageOf(home);
       this.pages[p].classList.toggle('single', this.pageCount < 2);
       this.pages[p].querySelector('.pg-n').textContent = t('sel.page', { n: page + 1, t: this.pageCount });
-      this.cards[p].forEach((card, i) => {
+      this.cards[p].forEach((card) => {
+        const i = Number(card.dataset.i);
         card.classList.toggle('off', pageOf(i) !== page);
-        card.classList.toggle('on', this.cursor[p] === i);
-        card.classList.toggle('picked', this.team && this.picks[p].includes(i));
+        card.classList.toggle('on', home === i);
+        card.classList.toggle('picked', this.team && this.picks[p].some((k) => versionsOf(k)[0] === i));
+        // o cartão do cursor mostra a versão escolhida (RB/LB); os outros, o próprio lutador
+        const shown = home === i ? c : ROSTER[i];
+        const img = card.querySelector('img');
+        if (img.dataset.id !== shown.id) {
+          img.dataset.id = shown.id;
+          img.src = this.portraits[shown.id];
+          const b = card.querySelector('.cn b');
+          b.textContent = shown.name;
+          b.style.color = shown.color;
+          card.querySelector('.tm').innerHTML = teamTags(shown);
+        }
+        card.classList.toggle('alt', home === i && c !== ROSTER[i]);
       });
       const you = NET_UI.send && p === NET_UI.slot ? `${t('sel.you')} · ` : ''; // online: qual lado é o seu
       this.heads[p].textContent = you + (this.ready[p] ? t('sel.ready') : act >= 0 && act !== p ? t('sel.waiting') : `${t('sel.choosing')}${this.team ? ` ${this.picks[p].length + 1}/3` : ''}`);
@@ -456,7 +493,7 @@ export class SelectScreen {
       this.plates[p].innerHTML = `
         <div class="pn" style="color:${front.color}">${front.name}</div>
         <div class="po">${defTeams(front).join(' / ')} · <span style="color:${ELEMENTS[front.element].color}">${ELEMENTS[front.element].name}</span></div>
-        <div class="pt">“${front.info.tagline}”</div>${teamLine}`;
+        <div class="pt">“${front.info.tagline}”</div>${this.versionLine(p, front)}${teamLine}`;
       this.plates[p].classList.toggle('ok', this.ready[p]);
       // ficha resumida embaixo da grade
       const extras = (c.abilities || []).map((a) => `<span class="abl">${a.name} <i>${inputName(a.input)}</i></span>`).join('') || '—';
@@ -477,7 +514,7 @@ export class SelectScreen {
     const keys = { move: moveLabel(0), jump: actionLabel(0, 'jump'), phys: actionLabel(0, 'physical'), jump2: actionLabel(1, 'jump'), phys2: actionLabel(1, 'physical') };
     this.hint.innerHTML = t(this.M.soloPick ? 'tower.sel_hint' : this.cpu ? 'sel.hint_cpu' : 'sel.hint_pvp', keys)
       + t('sel.hint_common', { ok: OK, rand: RAND, back: BACK })
-      + (this.pageCount > 1 ? t('sel.hint_page', { l: actionLabel(0, 'pageL'), r: actionLabel(0, 'pageR') }) : '');
+      + (this.home.some((h) => versionsOf(h).length > 1) ? t('sel.hint_version', { l: actionLabel(0, 'pageL'), r: actionLabel(0, 'pageR') }) : '');
   }
 
   // Retorna { p1, p2 } quando os dois estão prontos, ou 'back' para voltar ao menu
@@ -544,36 +581,69 @@ export class SelectScreen {
     if (this.bk(p) && this.cpu && slot === 1) { this.ready[0] = false; if (this.team) this.picks[0].pop(); return true; }
     const n = ROSTER.length;
     let changed = false;
-    // LB / RB (Q / E · PgUp / PgDn): troca de página mantendo a posição na grade
-    if (p.pressed.pageL || p.pressed.pageR) { this.turnPage(slot, p.pressed.pageR ? 1 : -1); changed = true; }
-    // setas andam dentro da página (de uma ponta passa para a próxima página)
-    const [start, end] = SEL_PAGES[pageOf(this.cursor[slot])];
+    // LB / RB (Q / E · PgUp / PgDn): troca a VERSÃO do lutador sem sair do cartão (Henri ↔ Juan), em círculo
+    if (p.pressed.pageL || p.pressed.pageR) changed = this.cycleVersion(slot, p.pressed.pageR ? 1 : -1) || changed;
+    // setas: ↑↓ andam na coluna da página; ←→ andam na LINHA e, passando da ponta, vão para a página vizinha na mesma
+    // linha (não descem para a linha de baixo)
+    // (contas em POSIÇÕES da grade; home/cursor guardam índices no ROSTER)
+    const home = this.home[slot];
+    const pos = posOf(home);
+    const [start, end] = SEL_PAGES[pageOf(home)];
     const count = end - start;
-    let c = this.cursor[slot] - start;
-    if (p.menu.left) c = (c + count - 1) % count;
-    if (p.menu.right) c = (c + 1) % count;
-    if (p.menu.up) c = c - SEL_COLS >= 0 ? c - SEL_COLS : c + SEL_COLS * Math.floor((count - 1 - c) / SEL_COLS);
-    if (p.menu.down) c = c + SEL_COLS < count ? c + SEL_COLS : c % SEL_COLS;
-    c += start;
-    if (c !== this.cursor[slot]) { this.cursor[slot] = c; this.audio.play('select'); changed = true; }
+    const c = pos - start;
+    let target = null;
+    if (p.menu.left || p.menu.right) {
+      const row = Math.floor(c / SEL_COLS);
+      const col = c % SEL_COLS;
+      const rowLen = Math.min(SEL_COLS, count - row * SEL_COLS);
+      if (p.menu.right && col + 1 < rowLen) target = pos + 1;
+      else if (p.menu.left && col > 0) target = pos - 1;
+      else target = this.pageEdge(home, row, p.menu.right ? 1 : -1);
+    }
+    if (p.menu.up) target = start + (c - SEL_COLS >= 0 ? c - SEL_COLS : c + SEL_COLS * Math.floor((count - 1 - c) / SEL_COLS));
+    if (p.menu.down) target = start + (c + SEL_COLS < count ? c + SEL_COLS : c % SEL_COLS);
+    if (target !== null && GRID[target] !== home) { this.home[slot] = this.cursor[slot] = GRID[target]; this.audio.play('select'); changed = true; }
     if (confirm(p)) { this.lockPick(slot); this.audio.play('confirm'); changed = true; }
     else if (random(p)) {
       this.cursor[slot] = pickRandom(n, this.cursor[slot], (i) => !this.team || !this.picks[slot].includes(i));
+      this.home[slot] = versionsOf(this.cursor[slot])[0];
       this.lockPick(slot);
       this.audio.play('confirm');
-      this.flashRandom(slot, this.cursor[slot]);
+      this.flashRandom(slot, this.home[slot]);
       changed = true;
     }
     return changed;
   }
 
-  // página anterior/seguinte (circular), mantendo a mesma posição na grade quando existe
+  // passando da ponta da linha: a página vizinha (circular), na MESMA linha — entrando pela esquerda dela (indo para a
+  // direita) ou pela direita (indo para a esquerda); se a página não tem aquela linha, o último lutador dela.
+  // Com uma página só, dá a volta na própria linha. Devolve a POSIÇÃO na grade
+  pageEdge(home, row, dir) {
+    const np = (pageOf(home) + dir + this.pageCount) % this.pageCount;
+    const [s, e] = SEL_PAGES[np];
+    const rowStart = s + row * SEL_COLS;
+    if (rowStart >= e) return e - 1;
+    return dir > 0 ? rowStart : Math.min(rowStart + SEL_COLS, e) - 1;
+  }
+
+  // RB/LB: próxima/anterior versão do lutador do cartão (o cursor fica no mesmo cartão)
+  cycleVersion(slot, dir) {
+    if (this.ready[slot]) return false;
+    const vs = versionsOf(this.home[slot]);
+    if (vs.length < 2) return false;
+    const k = Math.max(0, vs.indexOf(this.cursor[slot]));
+    this.cursor[slot] = vs[(k + dir + vs.length) % vs.length];
+    this.audio.play('select');
+    return true;
+  }
+
+  // setas clicáveis do paginador (mouse / toque): página anterior/seguinte, mantendo a posição na grade quando existe
   turnPage(slot, dir) {
     if (this.pageCount < 2 || this.ready[slot]) return;
-    const page = pageOf(this.cursor[slot]);
-    const pos = this.cursor[slot] - SEL_PAGES[page][0];
+    const page = pageOf(this.home[slot]);
+    const pos = posOf(this.home[slot]) - SEL_PAGES[page][0];
     const np = (page + dir + this.pageCount) % this.pageCount;
-    this.cursor[slot] = Math.min(SEL_PAGES[np][0] + pos, SEL_PAGES[np][1] - 1);
+    this.home[slot] = this.cursor[slot] = GRID[Math.min(SEL_PAGES[np][0] + pos, SEL_PAGES[np][1] - 1)];
     this.audio.play('select');
   }
 
@@ -587,7 +657,7 @@ export class SelectScreen {
   }
 
   flashRandom(slot, i) {
-    const c = this.cards[slot][i];
+    const c = this.cards[slot][posOf(i)];
     if (!c) return;
     c.classList.remove('rand');
     void c.offsetWidth;

@@ -111,7 +111,7 @@ export default {
   "sel.hint_cpu": "<b>J1</b> choisit son combattant (gauche), puis celui de l'<b>IA</b> (droite) · {move} déplacer · <kbd>{jump}</kbd>/<kbd>Entrée</kbd> valider · <kbd>{phys}</kbd>/<kbd>Échap</kbd> retour",
   "sel.hint_pvp": "<b>J1</b> {move} déplacer · <kbd>{jump}</kbd> valider · <kbd>{phys}</kbd> retour &nbsp;|&nbsp; <b>J2</b> flèches · <kbd>{jump2}</kbd> valider · <kbd>{phys2}</kbd> retour",
   "sel.hint_common": " · <b>{ok}</b> valider · <b>{rand}</b> aléatoire · <b>{back}</b> retour",
-  "sel.hint_page": " · <b>LB/RB</b> · <kbd>{l}</kbd>/<kbd>{r}</kbd> changer de page",
+  "sel.hint_version": " · <b>LB/RB</b> · <kbd>{l}</kbd>/<kbd>{r}</kbd> changer de version",
   "mode.target": "CIBLE",
   "input.carga_jump": "Énergie + Saut",
   "input.side": "côté",

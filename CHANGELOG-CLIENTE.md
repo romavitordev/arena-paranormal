@@ -2,6 +2,13 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.51.0 — Nada Pessoal
+- SELEÇÃO NO ESTILO STORM: um cartão por personagem; RB/LB trocam a versão (Henri ↔ Juan, Arnaldo ↔ Anfitrião, Ferreiro ↔ Deus da Morte). O selo ⇄ avisa que há mais versões.
+- SELEÇÃO — SETAS: para os lados, passando da ponta, vai para a página vizinha na mesma linha. O elenco cabe em 2 páginas.
+- CELESTINE, A REBELDE — kit novo pelo cânone: Aliança Falsa (a armadilha da traição), Código (o sussurro: todo golpe vira traição) e Sala da Morte (a caveira que persegue).
+- NADA PESSOAL: cada traição soma um dado de força, até 4.
+- CELESTINE — modelo: corpo de mulher, o pano com o Símbolo da Ordo Calamitas, a corrente ligando as machadinhas, lâminas de metal com talhos azuis e cabelo prateado.
+
 ## v3.50.0 — Chamas e Sinais
 - CELESTINE EM CHAMAS: chamas de energia azul-turquesa no cabelo, nos ombros, nos braços e subindo das pernas, como nas miniaturas de Calamidade.
 - O ESTRANGEIRO REFEITO pelas artes: rosto novo (crânio alto, queixo pontudo, olhos verdes inclinados, sem boca), pose parada própria (imóvel, braços caídos, garras pendendo), mais alto e magro, capa até o chão com as ombreiras altas e pontudas, folhas verdes no peito, faixa de pano, garras longas e pés de garra.

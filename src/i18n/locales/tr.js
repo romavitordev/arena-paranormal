@@ -111,7 +111,7 @@ export default {
   "sel.hint_cpu": "<b>P1</b> önce kendi dövüşçüsünü (sol), sonra <b>CPU</b>’nunkini (sağ) seçer · {move} hareket · <kbd>{jump}</kbd>/<kbd>Enter</kbd> onayla · <kbd>{phys}</kbd>/<kbd>Esc</kbd> geri",
   "sel.hint_pvp": "<b>P1</b> {move} hareket · <kbd>{jump}</kbd> onayla · <kbd>{phys}</kbd> geri &nbsp;|&nbsp; <b>P2</b> oklar · <kbd>{jump2}</kbd> onayla · <kbd>{phys2}</kbd> geri",
   "sel.hint_common": " · <b>{ok}</b> onayla · <b>{rand}</b> rastgele · <b>{back}</b> geri",
-  "sel.hint_page": " · <b>LB/RB</b> · <kbd>{l}</kbd>/<kbd>{r}</kbd> sayfa değiştir",
+  "sel.hint_version": " · <b>LB/RB</b> · <kbd>{l}</kbd>/<kbd>{r}</kbd> sürüm değiştir",
   "mode.target": "HEDEF",
   "input.carga_jump": "Enerji + Zıplama",
   "input.side": "yan",

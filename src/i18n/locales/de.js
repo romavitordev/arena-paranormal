@@ -111,7 +111,7 @@ export default {
   "sel.hint_cpu": "<b>P1</b> wählt den eigenen Kämpfer (links), dann den der <b>CPU</b> (rechts) · {move} bewegen · <kbd>{jump}</kbd>/<kbd>Enter</kbd> bestätigen · <kbd>{phys}</kbd>/<kbd>Esc</kbd> zurück",
   "sel.hint_pvp": "<b>P1</b> {move} bewegen · <kbd>{jump}</kbd> bestätigen · <kbd>{phys}</kbd> zurück &nbsp;|&nbsp; <b>P2</b> Pfeile · <kbd>{jump2}</kbd> bestätigen · <kbd>{phys2}</kbd> zurück",
   "sel.hint_common": " · <b>{ok}</b> bestätigen · <b>{rand}</b> zufällig · <b>{back}</b> zurück",
-  "sel.hint_page": " · <b>LB/RB</b> · <kbd>{l}</kbd>/<kbd>{r}</kbd> Seite wechseln",
+  "sel.hint_version": " · <b>LB/RB</b> · <kbd>{l}</kbd>/<kbd>{r}</kbd> Version wechseln",
   "mode.target": "ZIEL",
   "input.carga_jump": "Energie + Sprung",
   "input.side": "Seite",

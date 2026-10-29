@@ -111,7 +111,7 @@ export default {
   "sel.hint_cpu": "<b>P1</b> 先选自己的角色（左），再选 <b>电脑</b> 的（右）· {move} 移动 · <kbd>{jump}</kbd>/<kbd>Enter</kbd> 确认 · <kbd>{phys}</kbd>/<kbd>Esc</kbd> 返回",
   "sel.hint_pvp": "<b>P1</b> {move} 移动 · <kbd>{jump}</kbd> 确认 · <kbd>{phys}</kbd> 返回 &nbsp;|&nbsp; <b>P2</b> 方向键 · <kbd>{jump2}</kbd> 确认 · <kbd>{phys2}</kbd> 返回",
   "sel.hint_common": " · <b>{ok}</b> 确认 · <b>{rand}</b> 随机 · <b>{back}</b> 返回",
-  "sel.hint_page": " · <b>LB/RB</b> · <kbd>{l}</kbd>/<kbd>{r}</kbd> 翻页",
+  "sel.hint_version": " · <b>LB/RB</b> · <kbd>{l}</kbd>/<kbd>{r}</kbd> 切换版本",
   "mode.target": "目标",
   "input.carga_jump": "能量 + 跳跃",
   "input.side": "侧",

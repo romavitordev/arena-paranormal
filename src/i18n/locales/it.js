@@ -111,7 +111,7 @@ export default {
   "sel.hint_cpu": "<b>P1</b> sceglie il proprio lottatore (sinistra), poi quello della <b>CPU</b> (destra) · {move} muovi · <kbd>{jump}</kbd>/<kbd>Invio</kbd> conferma · <kbd>{phys}</kbd>/<kbd>Esc</kbd> indietro",
   "sel.hint_pvp": "<b>P1</b> {move} muovi · <kbd>{jump}</kbd> conferma · <kbd>{phys}</kbd> indietro &nbsp;|&nbsp; <b>P2</b> frecce · <kbd>{jump2}</kbd> conferma · <kbd>{phys2}</kbd> indietro",
   "sel.hint_common": " · <b>{ok}</b> conferma · <b>{rand}</b> casuale · <b>{back}</b> indietro",
-  "sel.hint_page": " · <b>LB/RB</b> · <kbd>{l}</kbd>/<kbd>{r}</kbd> cambia pagina",
+  "sel.hint_version": " · <b>LB/RB</b> · <kbd>{l}</kbd>/<kbd>{r}</kbd> cambia versione",
   "mode.target": "BERSAGLIO",
   "input.carga_jump": "Energia + Salto",
   "input.side": "lato",

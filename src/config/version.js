@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.50.0';
+export const VERSION = '3.51.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,18 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.51.0',
+    date: '2026-10-29',
+    title: 'Nada Pessoal',
+    items: [
+      'SELEÇÃO NO ESTILO STORM: um cartão por personagem. As outras versões ficam guardadas no cartão e saem no RB/LB (Q/E) — no Henri, RB vira o Juan e RB de novo volta ao Henri; o mesmo no Arnaldo (O Anfitrião) e no Ferreiro (O Deus da Morte). O selo ⇄ no cartão avisa que há mais versões e a placa do centro mostra quais são.',
+      'SELEÇÃO — SETAS: para os lados, o cursor anda na linha e, passando da ponta, vai para a página vizinha na mesma linha (antes descia para a linha de baixo). O elenco agora cabe em 2 páginas.',
+      'CELESTINE, A REBELDE — KIT NOVO pelo cânone de Calamidade: ALIANÇA FALSA (△ → ○: estende a mão; quem atacar cai na armadilha — ela some, aparece nas costas e crava as duas machadinhas), CÓDIGO (△ + L2: o sussurro que só o alvo ouve; distraído, todo golpe dela vira traição) e SALA DA MORTE (R2 + ×: a caveira do jogo do Anfitrião persegue o adversário por 5 s).',
+      'NADA PESSOAL (passiva): cada traição — pelas costas, no meio do ataque do adversário ou com o Código — soma um dado de força, até 4. A Aliança Falsa vale dois.',
+      'CELESTINE — MODELO: corpo de mulher, o PANO no peito com o Símbolo da Ordo Calamitas, a CORRENTE ligando as duas machadinhas o tempo todo (some quando uma é arremessada), as lâminas de metal com os talhos azuis, o cabelo prateado e o cachecol que não cobre mais o queixo. E a frase dela: “Aproveita e reza pra deixar de ser chato... Chato!”.',
+    ],
+  },
   {
     v: '3.50.0',
     date: '2026-10-27',

@@ -111,7 +111,7 @@ export default {
   "sel.hint_cpu": "<b>P1</b> picks their own fighter (left), then the <b>CPU</b>’s (right) · {move} move · <kbd>{jump}</kbd>/<kbd>Enter</kbd> confirm · <kbd>{phys}</kbd>/<kbd>Esc</kbd> back",
   "sel.hint_pvp": "<b>P1</b> {move} move · <kbd>{jump}</kbd> confirm · <kbd>{phys}</kbd> back &nbsp;|&nbsp; <b>P2</b> arrows · <kbd>{jump2}</kbd> confirm · <kbd>{phys2}</kbd> back",
   "sel.hint_common": " · <b>{ok}</b> confirm · <b>{rand}</b> random · <b>{back}</b> back",
-  "sel.hint_page": " · <b>LB/RB</b> · <kbd>{l}</kbd>/<kbd>{r}</kbd> change page",
+  "sel.hint_version": " · <b>LB/RB</b> · <kbd>{l}</kbd>/<kbd>{r}</kbd> change version",
   "mode.target": "DUMMY",
   "input.carga_jump": "Energy + Jump",
   "input.side": "side",

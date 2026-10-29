@@ -1,5 +1,12 @@
 # Registro administrativo de alterações
 
+## v3.51.0 — Nada Pessoal
+
+- Versão: `VERSION` 3.50.0 → **3.51.0** (package.json/lock junto). Data: 2026-10-29.
+- **Seleção (pedido do dono, "como no Naruto Storm"):** ←/→ trocam de página pela ponta da linha (testado: Kaiser → Dalmo; Henri → a página das Relíquias na mesma linha); depois, também a pedido, as versões repetidas saíram da grade (30 cartões para 33 lutadores, 2 páginas) e ficam no RB/LB com o selo ⇄ e a lista na placa. Conferido na tela (P1 e P2).
+- **Celestine (pedido do dono: fidelidade ao cânone e habilidades mais únicas):** pesquisa na wiki (Celestine, Amalia, Calamidade ep. 6 — Baile dos Mascarados, Sala da Morte com a caveira e as alianças, o duelo final). Testado no jogo: Aliança Falsa contra o Dalmo atacando — ela não leva dano, 60 de dano pelas costas e 2 dados; sem ataque, nada acontece; Código → o golpe seguinte vira traição; a caveira persegue a 9 m e acerta (83). A corrente some no arremesso e volta.
+- **Pendente (TODO):** a Magistrada e o Amigo Imaginário pelas artes oficiais; os demais membros da Ordo Calamitas.
+
 ## v3.50.0 — Chamas e Sinais
 
 - Versão: `VERSION` 3.49.0 → **3.50.0** (package.json/lock junto). Data: 2026-10-27. Reúne os commits 8f2c89a (retratos) e 6b5ef7c (chamas) e o Estrangeiro.

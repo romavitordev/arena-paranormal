@@ -327,6 +327,46 @@ const VISUALS = {
     g.userData.tumble = spin;
     return g;
   },
+  // CELESTINE — SALA DA MORTE: a CAVEIRA do jogo de Morte do Anfitrião (Calamidade ep. 6), que persegue quem está na
+  // sala. Crânio de osso encarando o alvo (+z), as órbitas fundas acesas e o maxilar batendo
+  deathSkull() {
+    const g = new THREE.Group();
+    const bone = new THREE.MeshToonMaterial({ color: 0xd8d0bc });
+    const dark = new THREE.MeshBasicMaterial({ color: 0x0a0808 });
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.3, 16, 12), bone);
+    head.scale.set(0.95, 1, 1.05);
+    g.add(head);
+    const face = new THREE.Mesh(new THREE.SphereGeometry(0.22, 14, 10), bone); // a parte da frente, mais estreita
+    face.position.set(0, -0.12, 0.13);
+    face.scale.set(1, 0.9, 0.9);
+    g.add(face);
+    for (const s of [-1, 1]) {
+      const eye = new THREE.Mesh(new THREE.SphereGeometry(0.075, 10, 8), dark);
+      eye.position.set(0.1 * s, 0.0, 0.25);
+      g.add(eye);
+      const glow = new THREE.Mesh(new THREE.SphereGeometry(0.035, 8, 6), glowMat(0x9ad8ff, 0.95));
+      glow.position.set(0.1 * s, 0.0, 0.3);
+      g.add(glow);
+    }
+    const nose = new THREE.Mesh(new THREE.ConeGeometry(0.04, 0.08, 3), dark);
+    nose.position.set(0, -0.11, 0.33);
+    nose.rotation.x = Math.PI;
+    g.add(nose);
+    const jaw = new THREE.Group();
+    jaw.position.set(0, -0.2, 0.05);
+    const jm = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.07, 0.24), bone);
+    jm.position.set(0, -0.04, 0.1);
+    jaw.add(jm);
+    for (let i = 0; i < 6; i++) {
+      const tooth = new THREE.Mesh(new THREE.BoxGeometry(0.028, 0.045, 0.02), bone);
+      tooth.position.set(-0.075 + i * 0.03, 0.0, 0.22);
+      jaw.add(tooth);
+    }
+    g.add(jaw);
+    const t0 = Math.random() * 10;
+    jm.onBeforeRender = () => { jaw.rotation.x = 0.15 + 0.15 * Math.sin(performance.now() / 90 + t0); }; // bate os dentes
+    return g;
+  },
   baluAxe() {
     const g = new THREE.Group();
     const spin = new THREE.Group();

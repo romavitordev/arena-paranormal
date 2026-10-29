@@ -69,6 +69,15 @@ export function applyHit(world, attacker, victim, o) {
     }
   }
 
+  // ALIANÇA FALSA (Celestine): com a mão estendida, quem a ataca (golpe físico ou habilidade, não especial nem projétil)
+  // cai na armadilha — ela escapa e a habilidade devolve pelas costas (abilities.js falseAlliance lê `betrayed`)
+  const fa = victim.allianceStance;
+  if (fa && fa.active && (o.kind === 'melee' || o.kind === 'ability') && attacker === victim.opponent && !o.grab) {
+    fa.active = false;
+    fa.betrayed = attacker;
+    return 'countered';
+  }
+
   // EMBARALHAR (Guizo): o golpe pode acertar uma das cópias ilusórias em vez dele
   if (shuffleDodge(world, attacker, victim, o)) return 'countered';
 

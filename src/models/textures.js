@@ -250,6 +250,28 @@ function beardPaint(g, color, { mustache = color, full = true } = {}) {
   g.fill();
 }
 
+// o SÍMBOLO DA ORDO CALAMITAS (Celestine): o círculo branco ornamentado — anel duplo, os doze "raios" curvos em volta e,
+// no centro, o gládio cruzado com a lança e o olho. k = escala (1 = raio externo de ~74 px)
+function calamitasSymbol(g, cx, cy, k = 1) {
+  g.save();
+  g.translate(cx, cy);
+  g.scale(k, k);
+  g.strokeStyle = '#e8e4dc'; g.fillStyle = '#e8e4dc'; g.lineCap = 'round';
+  g.lineWidth = 5; g.beginPath(); g.arc(0, 0, 52, 0, Math.PI * 2); g.stroke();
+  g.lineWidth = 3; g.beginPath(); g.arc(0, 0, 40, 0, Math.PI * 2); g.stroke();
+  for (let i = 0; i < 12; i++) {
+    const a = (i / 12) * Math.PI * 2;
+    g.beginPath(); g.moveTo(Math.cos(a) * 52, Math.sin(a) * 52);
+    g.quadraticCurveTo(Math.cos(a + 0.18) * 66, Math.sin(a + 0.18) * 66, Math.cos(a + 0.05) * 74, Math.sin(a + 0.05) * 74); g.stroke();
+  }
+  g.lineWidth = 4;
+  g.beginPath(); g.moveTo(-24, 24); g.lineTo(24, -24); g.stroke();
+  g.beginPath(); g.moveTo(24, 24); g.lineTo(-24, -24); g.stroke();
+  g.beginPath(); g.ellipse(0, 0, 13, 8, 0, 0, Math.PI * 2); g.fill();
+  g.fillStyle = '#1a191e'; g.beginPath(); g.arc(0, 0, 4, 0, Math.PI * 2); g.fill();
+  g.restore();
+}
+
 function face(paintExtras, o) {
   return () => canvasTex(W, HT, (g) => {
     baseSkin(g, o.skin);
@@ -2637,30 +2659,24 @@ export const MATERIAL_TEXTURES = {
     brow: { angry: 2, thick: 3, color: '#c8b890' },
     mouth: { mouthW: 15, lip: 'rgba(170,100,96,0.5)' },
   }),
-  // a camisa preta com o SÍMBOLO DA ORDO CALAMITAS no peito (o círculo branco ornamentado da arte; frente = metade de
-  // baixo da textura, como nas outras camisas do corpo base)
+  // a camisa preta (o Símbolo da Ordo Calamitas fica no PANO por cima — tabard_celestine)
   shirt_celestine: () => canvasTex(512, 512, (g, w, h) => {
     g.fillStyle = '#1a191e'; g.fillRect(0, 0, w, h);
     const rnd = seeded(67);
     for (let i = 0; i < 30; i++) { g.fillStyle = `rgba(${rnd() < 0.5 ? '0,0,0' : '60,58,66'},${0.1 + rnd() * 0.15})`; g.fillRect(rnd() * w, 0, 3 + rnd() * 10, h); }
-    const cx = 256;
-    const cy = 372;
-    g.strokeStyle = '#e8e4dc'; g.fillStyle = '#e8e4dc'; g.lineCap = 'round';
-    g.lineWidth = 5; g.beginPath(); g.arc(cx, cy, 52, 0, Math.PI * 2); g.stroke();
-    g.lineWidth = 3; g.beginPath(); g.arc(cx, cy, 40, 0, Math.PI * 2); g.stroke();
-    // os ornamentos em volta (os "raios" curvos do emblema)
-    for (let i = 0; i < 12; i++) {
-      const a = (i / 12) * Math.PI * 2;
-      g.beginPath(); g.moveTo(cx + Math.cos(a) * 52, cy + Math.sin(a) * 52);
-      g.quadraticCurveTo(cx + Math.cos(a + 0.18) * 66, cy + Math.sin(a + 0.18) * 66, cx + Math.cos(a + 0.05) * 74, cy + Math.sin(a + 0.05) * 74); g.stroke();
-    }
-    // o centro: o gládio cruzado com a lança e o olho
-    g.lineWidth = 4;
-    g.beginPath(); g.moveTo(cx - 24, cy + 24); g.lineTo(cx + 24, cy - 24); g.stroke();
-    g.beginPath(); g.moveTo(cx + 24, cy + 24); g.lineTo(cx - 24, cy - 24); g.stroke();
-    g.beginPath(); g.ellipse(cx, cy, 13, 8, 0, 0, Math.PI * 2); g.fill();
-    g.fillStyle = '#1a191e'; g.beginPath(); g.arc(cx, cy, 4, 0, Math.PI * 2); g.fill();
   }, { wrap: true }),
+  // o PANO do peito (wiki: "o Símbolo da Ordo Calamitas em um pano presente em seu peito"): cinza-escuro gasto, com a
+  // trama, a barra desfiada embaixo e o Símbolo branco no alto (u = largura, v = de cima para baixo)
+  tabard_celestine: () => canvasTex(256, 512, (g, w, h) => {
+    g.fillStyle = '#34323a'; g.fillRect(0, 0, w, h);
+    const rnd = seeded(68);
+    for (let i = 0; i < 60; i++) { g.fillStyle = `rgba(${rnd() < 0.5 ? '0,0,0' : '90,88,98'},${0.08 + rnd() * 0.12})`; g.fillRect(0, rnd() * h, w, 1 + rnd() * 3); }
+    g.strokeStyle = 'rgba(0,0,0,0.45)'; g.lineWidth = 6; g.strokeRect(6, -10, w - 12, h - 30); // a barra costurada
+    g.fillStyle = '#1a191e'; // a barra desfiada
+    for (let x = 0; x < w; x += 9) g.fillRect(x, h - 26 + rnd() * 10, 5, 30);
+    // o pano é ~3× mais comprido que largo e a textura só 2×: o Símbolo vai achatado aqui para sair redondo no corpo
+    g.save(); g.translate(w / 2, 110); g.scale(1, 0.65); calamitasSymbol(g, 0, 0, 1.15); g.restore();
+  }),
   face_raziel: () => canvasTex(W, HT, (g) => {
     g.fillStyle = '#c4847c'; g.fillRect(0, 0, W, HT);
     const rnd = seeded(390);

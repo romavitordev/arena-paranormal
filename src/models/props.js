@@ -1100,6 +1100,7 @@ export function addCelestineProps(rig) {
   mask.visible = false;
   sockets.mouth.add(mask);
   props.despairMask = mask;
+  rig.root.add(hatchetChain(props.hatchetR, props.hatchetL));
   // as CHAMAS DE ENERGIA azul-turquesa das miniaturas de Calamidade: no cabelo, nos ombros, nos braços, nos lados do
   // tronco e subindo das pernas (que quase somem no fogo). Ficam sempre de pé (energyFlames: upright)
   const at = (joint, pos, o) => { const f = energyFlames(0x3ae8ff, o); f.position.set(...pos); rig.attach(joint, f); };
@@ -1111,6 +1112,43 @@ export function addCelestineProps(rig) {
     at('l' + side, [0.04 * sx, -0.2, 0], { count: 7, radius: 0.13, height: 0.46, width: 0.16 });
     at('k' + side, [0, -0.26, 0], { count: 9, radius: 0.12, height: 0.52, width: 0.17 });
   }
+}
+
+// A CORRENTE que liga as duas machadinhas (wiki: "os dois conectados por uma corrente"): elos de um pomo ao outro,
+// pendendo entre as mãos; refeita a cada quadro (onBeforeRender) — estica quando os braços abrem, cai quando fecham.
+// Some enquanto uma das machadinhas está fora da mão (o arremesso tem a própria corrente)
+const _ca = new THREE.Vector3();
+const _cb = new THREE.Vector3();
+function hatchetChain(hR, hL, links = 16) {
+  const g = new THREE.Group();
+  const mat = toon(0x6a7078);
+  const geo = new THREE.TorusGeometry(0.022, 0.0065, 5, 10);
+  const ms = [];
+  for (let i = 0; i < links; i++) {
+    const m = new THREE.Mesh(geo, mat);
+    m.frustumCulled = false;
+    m.castShadow = false;
+    ms.push(m);
+    g.add(m);
+  }
+  // o primeiro elo nunca fica invisível (é ele que atualiza os outros): sem corrente, todos encolhem a zero
+  ms[0].onBeforeRender = () => {
+    const show = hR.visible && hL.visible && !!g.parent;
+    for (const m of ms) m.scale.setScalar(show ? 1 : 0.0001);
+    if (!show) return;
+    g.parent.updateWorldMatrix(true, false);
+    g.parent.worldToLocal(hR.userData.ring.getWorldPosition(_ca)); // no espaço do modelo (o corpo só gira em y)
+    g.parent.worldToLocal(hL.userData.ring.getWorldPosition(_cb));
+    const sag = Math.max(0.05, 0.75 - _ca.distanceTo(_cb)) * 0.45; // corrente frouxa cai mais
+    const yaw = Math.atan2(_cb.x - _ca.x, _cb.z - _ca.z) + Math.PI / 2;
+    for (let i = 0; i < links; i++) {
+      const t = i / (links - 1);
+      ms[i].position.lerpVectors(_ca, _cb, t);
+      ms[i].position.y -= sag * 4 * t * (1 - t);
+      ms[i].rotation.set(i % 2 ? Math.PI / 2 : 0, yaw, 0);
+    }
+  };
+  return g;
 }
 
 // CELESTINE, A MAGISTRADA: o mesmo corpo com a Máscara do Desespero no rosto

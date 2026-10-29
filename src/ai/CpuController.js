@@ -108,6 +108,8 @@ export function abilityUsePrior(a, f, opp, { distance, lowHp, opening, threat, l
   if (a.type === 'demonAxe' && f.health < f.maxHealth * 0.45) return 0;
   // Desvio Imperturbável (Nubi): é reação — só quando o golpe já vem (janela curta)
   if (a.type === 'calmEvade') return threat ? 1.8 : 0;
+  // Aliança Falsa (Celestine): a armadilha só vale com o adversário perto e prestes a atacar (janela longa: um pouco antes)
+  if (a.type === 'falseAlliance') return distance < 3.5 && (threat || opp.state === 'attack' || opp.state === 'ability') ? 2 : distance < 2.5 ? 0.25 : 0;
 
   let prior = a.id === lastAbility ? 0.3 : 0.65;
   if (opening && !selfTarget) prior *= 2.5;
@@ -211,7 +213,7 @@ function sacrificeOk(f, opp) {
 const isModAbility = (a) => a.input.startsWith('block+') || a.input.startsWith('ranged+') || (a.input.startsWith('carga+') && a.input !== 'carga+jump');
 // tipos que não precisam do adversário perto (buffs, invocações, regras do jogo...)
 const SELF_TYPES = ['weaponState', 'blink', 'mistCloud', 'healOverTime', 'hatredTemple', 'shadowClones', 'heavyProtection', 'noiseScreen', 'selfBuff', 'gameRule',
-  'chaosRule', 'hostTime', 'hostAudience', 'hostButton', 'orphanGame', 'hostClones', 'whisperZone', 'shadowVeil', 'shuffle', 'deadlySpeedTrail', 'agingHeal', 'calmEvade'];
+  'chaosRule', 'hostTime', 'hostAudience', 'hostButton', 'orphanGame', 'hostClones', 'whisperZone', 'shadowVeil', 'shuffle', 'deadlySpeedTrail', 'agingHeal', 'calmEvade', 'falseAlliance'];
 
 export class CpuController {
   constructor({ level = 'normal' } = {}) {

@@ -1250,7 +1250,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ## CELESTINE
 
-*Guerreira da Ordo Calamitas que veste a Máscara do Desespero e vira a Magistrada* · arma: Duas machadinhas ligadas por uma corrente
+*A Rebelde: guerreira da Ordo Calamitas que trai sem pensar duas vezes e veste a Máscara do Desespero* · arma: Duas machadinhas ligadas por uma corrente
 
 ### Físico (○ / B)
 
@@ -1275,15 +1275,14 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ### Habilidades
 
-- **Corrente Giratória** — △ + ○ / Y + B · custo 20 · cooldown 11 s · dano 60
-  Solta as duas machadinhas na corrente e gira com elas em volta do corpo: dois cortes em área, o último joga longe.
-- **Código** — △ + L2 / Y + LT · custo 20 · cooldown 16 s · alcance 14 m
-  Sussurra o Código: decifra a guarda do adversário e, por 7 s, ele recebe 25% a mais de dano dos golpes físicos.
-- **Investida Rebelde** — R2 + × / RT + A · custo 20 · cooldown 10 s · dano 55 · alcance 2.2 m
-  Avança rindo e crava as duas machadinhas de uma vez — quebra a defesa.
+- **Aliança Falsa** — △ + ○ / Y + B · custo 20 · cooldown 12 s · dano 70
+  Baixa as machadinhas e estende a mão. Se o adversário atacar nesse instante, ela escapa, aparece nas costas dele e crava as duas machadinhas (não dá para defender) — a traição vale DOIS dados do Nada Pessoal. Se ninguém cair, ela debocha e fica aberta.
+- **Código** — △ + L2 / Y + LT · custo 25 · cooldown 18 s · alcance 14 m
+  Sussurra o Código no ouvido do adversário — a mensagem que só ele escuta. Distraído por 7 s: recebe 20% a mais de dano dos golpes físicos e TODO golpe dela conta como traição (Nada Pessoal).
+- **Sala da Morte** — R2 + × / RT + A · custo 30 · cooldown 16 s
+  Chama a CAVEIRA da Sala da Morte: ela flutua devagar atrás do adversário por 5 s, batendo os dentes. Quem for alcançado leva um golpe pesado e cai — dá para fugir, esquivar ou se esconder atrás de algo.
 - **Endorfina** — R2 + △ / RT + Y · custo 25 · cooldown 20 s
   A endorfina sobe: por 7 s os golpes físicos saem 15% mais rápidos e 15% mais fortes, e ela recupera uma esquiva.
-- **Passiva:** golpes físicos pelas costas causam +20%
 
 ### Especial: Duelo Final
 

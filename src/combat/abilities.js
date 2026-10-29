@@ -5,7 +5,7 @@ import { COMBAT } from '../config/combat.js';
 import { findSpotBehind, findFreeSpotNear } from './positioning.js';
 import { applyHit } from './damage.js';
 import { splitDamage } from './specials/common.js';
-import { hasPassive } from './passives.js';
+import { hasPassive, betray } from './passives.js';
 import { DanteClone, CLONE, BloodZombie } from './npcs.js';
 
 // ARMA AMALDIÇOADA: o que cada elemento faz nos golpes (lido em damage.js) e as cores
@@ -1754,6 +1754,60 @@ Object.assign(ABILITY_TYPES, {
 
 // ------------------------------------------------------------------ ERIN PARKER e AGUIAR
 Object.assign(ABILITY_TYPES, {
+  // ALIANÇA FALSA (Celestine — a Sala da Morte de Calamidade: "forma alianças e trai em seguida"): baixa as machadinhas e
+  // estende a mão. Quem atacar na janela (a.window) cai na armadilha (damage.js → allianceStance): ela escapa, surge nas
+  // COSTAS dele e crava as duas machadinhas — a traição soma a.stacks dados do Nada Pessoal. Ninguém atacou: ela debocha
+  // e fica aberta na recuperação
+  falseAlliance: {
+    start(f, a, world) {
+      const opp = f.opponent;
+      if (!opp) return null;
+      const [w0, w1] = a.window;
+      const st = (f.allianceStance = { active: false, betrayed: null });
+      f.vel.set(0, 0, 0);
+      f.yaw = yawTo(f.pos, opp.pos);
+      f.anim.play(a.offerAnim || 'point', { restart: true, duration: w1 + a.recovery });
+      let t = 0;
+      let strikeAt = null;
+      let end = w1 + a.recovery;
+      const clear = () => { if (f.allianceStance === st) f.allianceStance = null; };
+      const trap = () => {
+        // escapa: some numa fumaça escura e aparece atrás de quem confiou nela
+        world.fx.burst(f.chestPos(), { count: 16, color: 0x0c0a0e, kind: 'smoke', speed: 1.6, life: 0.4, size: 0.45 });
+        const spot = findSpotBehind(world.arena, { x: opp.pos.x, z: opp.pos.z, yaw: opp.yaw }, { distance: 1.3, radius: f.radius });
+        if (spot) f.pos.set(spot.x, Math.max(0, opp.pos.y), spot.z);
+        f.yaw = yawTo(f.pos, opp.pos);
+        f.invuln = 0.35;
+        opp.surprised = 0.5;
+        f.notify(a.betrayLabel || 'NADA PESSOAL', true);
+        world.audio.play('teleport', { volume: 0.6 });
+        f.anim.play(a.strikeAnim || 'dual_cross', { restart: true, duration: 0.42 });
+        strikeAt = t + 0.16;
+        end = t + 0.16 + a.recovery;
+      };
+      return {
+        update(dt) {
+          t += dt;
+          f.vel.x = 0;
+          f.vel.z = 0;
+          if (strikeAt === null) {
+            st.active = f.allianceStance === st && t >= w0 && t <= w1;
+            if (t >= w0 && t - dt < w0) { f.notify(a.offerLabel || 'ALIANÇA?', true); world.fx.ring(new THREE.Vector3(f.pos.x, 0.06, f.pos.z), { color: a.color, radius: 1.3, life: w1 - w0 }); }
+            if (st.betrayed) { st.active = false; trap(); }
+            else if (t > w1 && t - dt <= w1) f.notify(a.missLabel || 'CHATO!', true); // ninguém caiu: o deboche
+          } else if (t >= strikeAt && t - dt < strikeAt && opp.state !== 'ko') {
+            applyHit(world, f, opp, { damage: a.damage, kind: 'ability', element: a.element, knockback: a.knockback ?? 2.4, hitstun: a.hitstun ?? 0.7, unblockable: true, color: a.color, sound: 'axeHit', scale: 1.4, dir: forwardFromYaw(f.yaw) });
+            world.fx.burst(opp.chestPos(), { count: 20, color: a.color, speed: 4, life: 0.4, size: 0.2 });
+            world.cameraRig.shake(0.25, 0.2);
+            betray(f, a.stacks ?? 2);
+          }
+          if (t >= end) { clear(); return true; }
+          return false;
+        },
+        cancel: clear,
+      };
+    },
+  },
   // Arremessa um objeto (granada, machado na corda...) usando um projétil configurado em `projectile`.
   throwProjectile: {
     start(f, a, world) {

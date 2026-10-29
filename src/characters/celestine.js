@@ -21,8 +21,8 @@ export default {
   info: {
     weapon: 'Duas machadinhas ligadas por uma corrente',
     style: 'Cortes duplos rápidos, a machadinha voando na corrente e a traição na hora certa',
-    identity: 'Guerreira da Ordo Calamitas que veste a Máscara do Desespero e vira a Magistrada',
-    tagline: 'Nada pessoal.',
+    identity: 'A Rebelde: guerreira da Ordo Calamitas que trai sem pensar duas vezes e veste a Máscara do Desespero',
+    tagline: 'Aproveita e reza pra deixar de ser chato... Chato!', // a fala dela em Calamidade (ep. 5)
   },
   stats: { moveSpeed: 8.3, attackSpeed: 1.1 },
   anims: { idle: 'idle_dual', run: 'run', charge: 'charge_dual', victory: 'vic_gal', block: 'block_weapon' },
@@ -78,58 +78,74 @@ export default {
 
   abilities: [
     {
-      id: 'correnteGiratoria',
-      name: 'Corrente Giratória',
+      // ALIANÇA FALSA — a SALA DA MORTE dos jogos do Anfitrião (Calamidade ep. 6): "formava alianças e traía em seguida"
+      id: 'aliancaFalsa',
+      name: 'Aliança Falsa',
       input: 'carga+physical', // △ + ○
-      type: 'sweepStrike',
-      description: 'Solta as duas machadinhas na corrente e gira com elas em volta do corpo: dois cortes em área, o último joga longe.',
+      type: 'falseAlliance',
+      description: 'Baixa as machadinhas e estende a mão. Se o adversário atacar nesse instante, ela escapa, aparece nas costas dele e crava as duas machadinhas (não dá para defender) — a traição vale DOIS dados do Nada Pessoal. Se ninguém cair, ela debocha e fica aberta.',
       energyCost: 20,
-      cooldown: 11,
-      anim: 'dual_spin',
-      startSound: 'blade',
-      windup: 0.12,
-      hits: 2,
-      interval: 0.22,
-      recovery: 0.3,
-      radius: 3.4,
-      damage: 60,
+      cooldown: 12,
+      window: [0.12, 1.0],
+      recovery: 0.35,
+      offerAnim: 'point',
+      strikeAnim: 'dual_cross',
+      damage: 70,
+      knockback: 2.6,
+      hitstun: 0.8,
+      stacks: 2,
+      offerLabel: 'ALIANÇA?',
+      missLabel: 'CHATO!',
+      betrayLabel: 'NADA PESSOAL',
+      element: 'conhecimento',
       color: BLUE,
     },
     {
-      // CÓDIGO (ficha): sussurra a mensagem secreta — aqui, o que ela leu da guarda do adversário
+      // CÓDIGO (ficha): "sussurra mensagens secretas que só a pessoa ouve" — o alvo fica distraído com o que ouviu
       id: 'codigo',
       name: 'Código',
       input: 'carga+dodge', // △ + L2
       type: 'analyze',
       buffType: 'codigo',
       label: 'CÓDIGO (CELESTINE)',
-      description: 'Sussurra o Código: decifra a guarda do adversário e, por 7 s, ele recebe 25% a mais de dano dos golpes físicos.',
-      energyCost: 20,
-      cooldown: 16,
+      description: 'Sussurra o Código no ouvido do adversário — a mensagem que só ele escuta. Distraído por 7 s: recebe 20% a mais de dano dos golpes físicos e TODO golpe dela conta como traição (Nada Pessoal).',
+      energyCost: 25,
+      cooldown: 18,
       range: 14,
       duration: 7,
-      takenMult: 1.25,
+      takenMult: 1.2,
       takenKinds: ['melee'],
       color: BLUE,
     },
     {
-      id: 'investidaRebelde',
-      name: 'Investida Rebelde',
+      // SALA DA MORTE — o jogo de Morte do Anfitrião: "uma caveira que eventualmente perseguirá os agentes"
+      id: 'salaDaMorte',
+      name: 'Sala da Morte',
       input: 'block+jump', // R2 + ×
-      type: 'dashStrike',
-      description: 'Avança rindo e crava as duas machadinhas de uma vez — quebra a defesa.',
-      energyCost: 20,
-      cooldown: 10,
-      anim: 'dual_cross',
-      windup: 0.24,
-      distance: 6,
-      speed: 24,
-      recovery: 0.32,
-      range: 2.2,
-      damage: 55,
-      knockback: 3,
-      guardBreak: true,
-      hitSound: 'axeHit',
+      type: 'throwProjectile',
+      anim: 'point',
+      windup: 0.4,
+      recovery: 0.3,
+      sound: 'fearGaze',
+      description: 'Chama a CAVEIRA da Sala da Morte: ela flutua devagar atrás do adversário por 5 s, batendo os dentes. Quem for alcançado leva um golpe pesado e cai — dá para fugir, esquivar ou se esconder atrás de algo.',
+      energyCost: 30,
+      cooldown: 16,
+      element: 'morte',
+      projectile: {
+        visual: 'deathSkull',
+        speed: 6.5,
+        range: 33, // ~5 s no ar
+        homing: 2.6,
+        radius: 0.6,
+        damage: 72,
+        knockback: 3,
+        hitstun: 0.9,
+        launch: true, // derruba
+        kind: 'ability',
+        trail: 0x14101a,
+        color: 0xd8d0bc,
+        hitSound: 'heavyPunch',
+      },
       color: BLUE,
     },
     {
@@ -190,6 +206,8 @@ export default {
   },
 
   passives: [
-    { type: 'backstab', mult: 1.2 }, // Nada Pessoal: a traição vem pelas costas — +20% de dano físico por trás
+    // NADA PESSOAL (ficha): cada traição — acertar pelas costas ou no meio do ataque do adversário — soma um dado:
+    // +7% de dano físico por dado, até 4 (12 s, renova a cada traição)
+    { type: 'nothingPersonal', mult: 0.07, max: 4, time: 12 },
   ],
 };

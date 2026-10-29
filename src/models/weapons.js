@@ -1375,7 +1375,8 @@ export function demonMace() {
 // pomo. Convenção de arma: empunhadura na origem, a cabeça para −Y. userData.ring: de onde sai a corrente.
 export function chainHatchet() {
   const g = new THREE.Group();
-  const teal = toon(0x2a8a8c, { emissive: 0x062424 });
+  // metal escuro (a wiki: "com detalhes talhados em azul" — o azul é dos talhos, não da lâmina)
+  const teal = toon(0x5c666e, { emissive: 0x0a1418 });
   const carve = glowMat(0x5ad8ff, 0.9);
   const wood = 0x2a1e18;
   const handle = part(new THREE.CylinderGeometry(0.015, 0.018, 0.34, 8), wood);

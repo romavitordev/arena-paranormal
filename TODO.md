@@ -1,6 +1,6 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.50.0 (revisado em 2026-10-27: Chamas e Sinais — as chamas de energia da Celestine, o Estrangeiro refeito pelas artes oficiais e os retratos da página Sobre)
+**Versão de referência atual:** v3.51.0 (revisado em 2026-10-29: Nada Pessoal — seleção no estilo Storm (um cartão por personagem, versões no RB/LB, setas trocam de página pela ponta) e a Celestine refeita pelo cânone (kit novo: Aliança Falsa, Código e Sala da Morte; o Nada Pessoal acumulando; modelo com o pano do Símbolo e a corrente))
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente
 
@@ -9,7 +9,7 @@
 
 # PRÓXIMA GRANDE ATUALIZAÇÃO — LUTA + MODO PvE (planejamento de 2026-10-18)
 
-**Estado em 2026-10-27 (v3.50.0):**
+**Estado em 2026-10-29 (v3.51.0):**
 - [~] 2.2 Modelos antigos: Xande e Aguiar (v3.33.0), Fantasma, Kemi e Gal Sal + as lâminas Ereškigal (v3.34.0), Kaiser
   (v3.38.0), Balu e Lírio (v3.40.0), Arthur e Joui (v3.41.0), Arnaldo, Anfitrião, Veríssimo, Kian e O Diabo (2026-10-26)
   refeitos pelas artes oficiais; faltam os outros antigos
@@ -1606,6 +1606,12 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
         REALIDADE (`specials/realityRewrite.js`, não é transformação: 30% da vida, sanidade cheia, sem nada de ruim em cima,
         recargas zeradas e os buffs do adversário apagados) + CONJURAÇÃO VERDADEIRA (rituais 25% mais baratos) + DESTRONAR O
         ANFITRIÃO (+30% de dano nele). Testado no jogo.
+      - [x] **CELESTINE REFEITA PELO CÂNONE (v3.51.0, 2026-10-29)** — kit novo: Aliança Falsa (a traição da Sala da Morte),
+        Código (todo golpe vira traição), Sala da Morte (a caveira que persegue), Endorfina e o Nada Pessoal acumulando
+        (até 4 dados); a Corrente Giratória e a Investida Rebelde saíram. Modelo: corpo de mulher, o pano com o Símbolo,
+        a corrente entre as machadinhas, lâminas de metal com talhos azuis, cabelo prateado, chamas de energia.
+      - [x] **SELEÇÃO NO ESTILO STORM (v3.51.0)** — um cartão por personagem, versões no RB/LB (Henri ↔ Juan, Arnaldo ↔
+        Anfitrião, Ferreiro ↔ Deus da Morte) com o selo ⇄; ←/→ trocam de página pela ponta da linha.
       - [x] **1 (feito em 2026-10-27): CELESTINE** — jogável: Portadores (logo depois do Ferreiro) com a etiqueta da Ordo Calamitas; kit das machadinhas na corrente (□ crava e puxa), Corrente Giratória, Código, Investida Rebelde, Endorfina, especial Duelo Final, passiva Nada Pessoal (+20% pelas costas) e a Transformação que vira CELESTINE, A MAGISTRADA (o kit da Magistrada com a aparência dela). Falas contra o elenco inteiro. Testado no jogo. Retrato da página Sobre feito (2026-10-27: o elenco inteiro renderizado de novo dos modelos atuais, com os que faltavam — Raziel, Juan Portador, Celestine, Deus da Morte e Anfitrião). — pedido do dono: entra numa equipe NOVA, a **ORDO CALAMITAS** (depois entram os
         outros membros: Gaius, Amalia, Cornelius...). Pesquisa (wiki "Celestine"): guerreira de 67 d.C., pele clara, cabelo
         loiro curto, armadura com panos, cachecol, o Símbolo da Ordo Calamitas no peito; arma: DUAS MACHADINHAS com talhos

@@ -111,7 +111,7 @@ export default {
   "sel.hint_cpu": "<b>P1</b> выбирает своего бойца (слева), затем бойца <b>ИИ</b> (справа) · {move} двигать · <kbd>{jump}</kbd>/<kbd>Enter</kbd> подтвердить · <kbd>{phys}</kbd>/<kbd>Esc</kbd> назад",
   "sel.hint_pvp": "<b>P1</b> {move} двигать · <kbd>{jump}</kbd> подтвердить · <kbd>{phys}</kbd> назад &nbsp;|&nbsp; <b>P2</b> стрелки · <kbd>{jump2}</kbd> подтвердить · <kbd>{phys2}</kbd> назад",
   "sel.hint_common": " · <b>{ok}</b> подтвердить · <b>{rand}</b> случайно · <b>{back}</b> назад",
-  "sel.hint_page": " · <b>LB/RB</b> · <kbd>{l}</kbd>/<kbd>{r}</kbd> сменить страницу",
+  "sel.hint_version": " · <b>LB/RB</b> · <kbd>{l}</kbd>/<kbd>{r}</kbd> сменить версию",
   "mode.target": "ЦЕЛЬ",
   "input.carga_jump": "Энергия + Прыжок",
   "input.side": "вбок",

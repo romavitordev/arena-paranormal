@@ -111,7 +111,7 @@ export default {
   "sel.hint_cpu": "<b>P1</b>이 자신의 파이터(왼쪽)와 <b>CPU</b>의 파이터(오른쪽)를 고릅니다 · {move} 이동 · <kbd>{jump}</kbd>/<kbd>Enter</kbd> 확인 · <kbd>{phys}</kbd>/<kbd>Esc</kbd> 뒤로",
   "sel.hint_pvp": "<b>P1</b> {move} 이동 · <kbd>{jump}</kbd> 확인 · <kbd>{phys}</kbd> 뒤로 &nbsp;|&nbsp; <b>P2</b> 방향키 · <kbd>{jump2}</kbd> 확인 · <kbd>{phys2}</kbd> 뒤로",
   "sel.hint_common": " · <b>{ok}</b> 확인 · <b>{rand}</b> 무작위 · <b>{back}</b> 뒤로",
-  "sel.hint_page": " · <b>LB/RB</b> · <kbd>{l}</kbd>/<kbd>{r}</kbd> 페이지 넘기기",
+  "sel.hint_version": " · <b>LB/RB</b> · <kbd>{l}</kbd>/<kbd>{r}</kbd> 버전 바꾸기",
   "mode.target": "표적",
   "input.carga_jump": "에너지 + 점프",
   "input.side": "옆",

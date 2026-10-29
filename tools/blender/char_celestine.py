@@ -37,7 +37,9 @@ scarf = material('scarf_celestine', '#141316', 0.95)
 leather = material('leather_celestine', '#2a2018', 0.6)
 boots = material('boots_celestine', '#1c1a1e', 0.55)
 sole = material('sole_celestine', '#121014', 0.8)
-hairm = material('hair_celestine', '#d8d2c4', 0.65)
+hairm = material('hair_celestine', '#c9c6be', 0.65)  # prateado (o retrato oficial); o creme puxava para lilás na luz da arena
+shirt_plain = material('shirt_celestine_plain', '#1a191e', 0.85)
+tabard = material('tabard_celestine', '#ffffff', 0.9)  # o pano do peito com o Símbolo (textura)
 M = {
     'skin': skin,
     'face': material('face_celestine', '#ffffff', 0.75),
@@ -47,13 +49,14 @@ M = {
     'legs': pants,
     'feet': boots,
 }
-PREVIEW = {'shirt_celestine': '#1a1a1e', 'face_celestine': '#e8c8b0'}
+PREVIEW = {'shirt_celestine': '#1a1a1e', 'face_celestine': '#e8c8b0', 'tabard_celestine': '#34323a'}
 for m in bpy.data.materials:
     for k, c in PREVIEW.items():
         if m.name.endswith(k):
             m['preview'] = c
 
-TP = [(-0.115, 0.158), (0.0, 0.15), (0.17, 0.132), (0.36, 0.178), (0.47, 0.19), (0.57, 0.108), (0.63, 0.064)]
+# corpo de MULHER: quadril mais largo, cintura fina, ombros mais estreitos (antes era o tronco reto do padrão)
+TP = [(-0.115, 0.166), (0.0, 0.16), (0.17, 0.12), (0.36, 0.166), (0.47, 0.174), (0.57, 0.104), (0.63, 0.062)]
 hc = b.body(M, TP, arm_r=(0.058, 0.048, 0.04), leg_r=(0.084, 0.066, 0.052), head_r=(0.13, 0.14, 0.154), feet='bare')
 
 
@@ -126,6 +129,64 @@ for k in range(6):
         tabs.append(rod([q, q + d * 0.01 * H + Vector((0, 0, -0.11 * H))], [0.03 * H, 0.026 * H], 4, flat=(outward((0, 0)), 0.25)))
 b.add('beltTabs', merge(*tabs), leather, region='body', weight_fn=lambda p: {'hips': 1.0}, subdiv=0)
 
+# ================================================================ o BUSTO (por baixo do pano) — a camisa sem estampa
+BS = Sculpt()
+zb = top - 0.17 * H
+for s in (1, -1):
+    q = front('torso', s * 0.056 * H, zb, 0.0)
+    if q:
+        BS.ell(q + Vector((0, 0.012 * H, -0.006 * H)), (0.054 * H, 0.04 * H, 0.046 * H))
+b.add('bust', BS.mesh(res=0.004, smooth=2, target=900), shirt_plain, region='body', weight_fn=lambda p: {'chest': 1.0}, subdiv=0)
+
+# ================================================================ o PANO DO PEITO com o Símbolo da Ordo Calamitas (wiki): desce
+# do cachecol por cima do busto e do cinto e cai solto até o meio da coxa, com a barra desfiada (textura tabard_celestine)
+Z_TOP, Z_BELT, Z_BOT = top - 0.06 * H, hz + 0.0 * H, hz - 0.3 * H
+HALF = 0.085 * H
+
+
+def chest_front(x, z, off):
+    best = None
+    for name in ('torso', 'bust', 'belt'):
+        q = front(name, x, z, off)
+        if q and (best is None or q.y < best.y):
+            best = q
+    return best
+
+
+belt_y = {}
+verts, faces, uvs = [], [], []
+NX, NZ = 6, 18
+for j in range(NZ + 1):
+    t = j / NZ
+    z = Z_TOP + (Z_BOT - Z_TOP) * t
+    for i in range(NX + 1):
+        u = i / NX
+        x = (u - 0.5) * 2 * HALF * (1 + 0.15 * max(0.0, (Z_BELT - z) / H) * 3)  # abre um pouco embaixo
+        if z >= Z_BELT:
+            q = chest_front(x, z, 0.012 * H) or Vector((x, -0.12 * H, z))
+            belt_y[i] = q.y
+        else:
+            # abaixo do cinto: cai solto, um pouco para a frente
+            q = Vector((x, belt_y.get(i, -0.13 * H) - 0.012 * H - (Z_BELT - z) * 0.08, z))
+        verts.append(tuple(q))
+        uvs.append((u, 1 - t))
+row = NX + 1
+for j in range(NZ):
+    for i in range(NX):
+        a = j * row + i
+        faces.append((a, a + 1, a + 1 + row, a + row))
+
+
+def tabard_w(p):
+    if p.z > Z_BELT:
+        return W('torso')(p)
+    k = min(1.0, (Z_BELT - p.z) / (0.25 * H))
+    side = 'lL' if p.x > 0 else 'lR'
+    return {'hips': 1 - 0.4 * k, side: 0.4 * k}
+
+
+b.add('tabard', (verts, faces, uvs), tabard, region='body', weight_fn=tabard_w, subdiv=0)
+
 # ================================================================ as OMBREIRAS em placas (três lâminas sobrepostas) e as braçadeiras
 for side in ('L', 'R'):
     s = 1 if side == 'L' else -1
@@ -158,8 +219,8 @@ for i in range(26):
 # a segunda volta, mais alta (cobre o queixo de lado, como um capuz baixo)
 for i in range(20):
     a = i / 20 * TAU
-    c = Vector((nk.x + math.sin(a) * 0.08 * H, nk.y - math.cos(a) * 0.075 * H + 0.01 * H, top + 0.075 * H))
-    S.ell(c, (0.04 * H, 0.04 * H, 0.035 * H))
+    c = Vector((nk.x + math.sin(a) * 0.075 * H, nk.y - math.cos(a) * 0.07 * H + 0.01 * H, top + 0.05 * H))
+    S.ell(c, (0.034 * H, 0.034 * H, 0.03 * H))  # mais baixa: não cobre o queixo (parecia barba)
 b.add('scarf', S.mesh(res=0.005, smooth=2, disp=lambda p: 0.004 * H * (ridge(math.atan2(p.x, -p.y) * 5 + p.z / H * 20 + n3(p, 6), 2) - 0.4), target=2600),
       scarf, region='body', weight_fn=lambda p: {'neck': 0.6, 'chest': 0.4}, subdiv=0)
 # a ponta caindo pela frente, do lado direito dela (−x)

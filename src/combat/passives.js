@@ -22,6 +22,17 @@ export function computeDrain({ X, Y, dealt, energyRatio = 1.5 }) {
 export const hasPassive = (f, type) => !!(f && f.def && ((f.def.passives || []).some((p) => p.type === type)
   || (f.buffs || []).some((b) => b.passives && b.passives.some((p) => p.type === type))));
 
+// NADA PESSOAL (Celestine): soma um "dado" de traição (`n` de uma vez; a Aliança Falsa dá dois). Sem a passiva, nada
+export function betray(f, n = 1) {
+  const p = f.def && (f.def.passives || []).find((q) => q.type === 'nothingPersonal');
+  if (!p) return;
+  let b = f.findBuff('nothingPersonal');
+  if (!b) { b = { type: 'nothingPersonal', stacks: 0, time: 0 }; f.addBuff(b); }
+  b.time = p.time ?? 12;
+  b.stacks = Math.min(p.max ?? 4, b.stacks + n);
+  f.notify(`NADA PESSOAL ×${b.stacks}`, true);
+}
+
 export const PASSIVES = {
   // Joui: golpes vindos pelas costas do inimigo causam mais dano
   backstab: {
@@ -115,6 +126,29 @@ export const PASSIVES = {
   precognition: {},
   // Gal — Desviar de Balas: esquivar de projéteis não gasta carga de esquiva (lido no Fighter)
   bulletDodge: {},
+  // Celestine — NADA PESSOAL (ficha de Calamidade: "ganha mais um dado toda vez que trai alguém"): cada TRAIÇÃO —
+  // acertar o adversário pelas costas ou no meio do ataque dele (quando ele confiou que ia acertar) — soma um "dado":
+  // +mult de dano físico por dado, até `max` dados; os dados duram `time` s e cada nova traição renova
+  nothingPersonal: {
+    damageMod({ attacker, victim, kind, passive }) {
+      if (kind !== 'melee') return 1;
+      const fx = Math.sin(victim.yaw);
+      const fz = Math.cos(victim.yaw);
+      const dx = attacker.pos.x - victim.pos.x;
+      const dz = attacker.pos.z - victim.pos.z;
+      const behind = (fx * dx + fz * dz) / (Math.hypot(dx, dz) || 1) < -0.5 && !hasPassive(victim, 'precognition');
+      // o CÓDIGO sussurrado deixa o alvo distraído: enquanto dura, todo golpe dela é traição
+      const coded = !!(victim.findBuff && victim.findBuff('codigo'));
+      attacker.betrayal = behind || coded || victim.state === 'attack' || victim.state === 'ability'; // lido no onMeleeHit
+      const b = attacker.findBuff && attacker.findBuff('nothingPersonal');
+      return 1 + (b ? b.stacks * (passive.mult ?? 0.07) : 0);
+    },
+    onMeleeHit({ attacker, dealt }) {
+      if (!attacker.betrayal || !(dealt > 0)) return;
+      attacker.betrayal = false;
+      betray(attacker);
+    },
+  },
   // Dante — Concentração Inquebrável: rituais (habilidades) custam menos sanidade (lido no Fighter)
   ritualFocus: {},
   // Erin — Amuleto Elétrico: quem a acerta com golpe físico leva um choque (dano de Energia)

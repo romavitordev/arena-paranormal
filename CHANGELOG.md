@@ -1,5 +1,19 @@
 # Changelog
 
+## v3.51.0 — Nada Pessoal
+
+### Adicionado
+- `characters/index.js`: `VERSION_GROUPS` e `versionsOf(i)` (versões do mesmo personagem).
+- Seleção: `GRID` (um cartão por personagem), `posOf`, `home` (cartão) × `cursor` (versão), `cycleVersion` (LB/RB), `pageEdge` (←/→ na ponta da linha), `versionLine` (placa), selo `.vr`; chave `sel.hint_version` nos 13 idiomas (sai `sel.hint_page`).
+- Habilidade `falseAlliance` (abilities.js) + `victim.allianceStance` em damage.js; `betray(f, n)` e a passiva `nothingPersonal` (passives.js; o buff `codigo` conta como traição); visual `deathSkull` dos projéteis; CPU: `falseAlliance` como reação.
+- `props.js hatchetChain`: a corrente entre as machadinhas, refeita no `onBeforeRender`.
+- `textures.js`: `calamitasSymbol` e `tabard_celestine`; `char_celestine.py`: busto, pano do peito (`tabard`), tronco feminino, cabelo prateado, cachecol mais baixo.
+
+### Alterado
+- Celestine: sai a Corrente Giratória e a Investida Rebelde; entram a Aliança Falsa e a Sala da Morte; o Código vira traição garantida; `backstab` → `nothingPersonal`; tagline e identidade pelo cânone.
+- `chainHatchet`: a lâmina em metal escuro (os talhos azuis continuam acesos).
+- `turnPage` fica só nas setas clicáveis do paginador.
+
 ## v3.50.0 — Chamas e Sinais
 
 ### Adicionado
