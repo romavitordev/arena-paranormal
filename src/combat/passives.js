@@ -96,6 +96,19 @@ export const PASSIVES = {
     },
   },
   // Arthur — Furtivo e letal (Calamidade): com o rifle, de longe, o tiro furtivo causa mais dano
+  // Amalia — CAÓTICA (wiki: "após atacar 2 oponentes, Amalia pode conceder 1 ponto de existência a qualquer aliado"): a
+  // cada `every` flechas que acertam, a existência volta — cura `heal` da vida máxima (na equipe, a vida é de todos)
+  chaotic: {
+    onHitDealt({ attacker, kind, passive, world }) {
+      if (!(passive.kinds || ['ranged']).includes(kind)) return;
+      attacker.chaoticHits = (attacker.chaoticHits || 0) + 1;
+      if (attacker.chaoticHits < (passive.every ?? 2)) return;
+      attacker.chaoticHits = 0;
+      attacker.health = Math.min(attacker.maxHealth, attacker.health + Math.round(attacker.maxHealth * (passive.heal ?? 0.02)));
+      world.fx.burst(attacker.chestPos(), { count: 10, color: passive.color ?? 0x3affd0, speed: 1.2, up: 1.4, life: 0.5, size: 0.12 });
+      attacker.notify && attacker.notify('CAÓTICA');
+    },
+  },
   longShot: {
     damageMod({ attacker, victim, kind, passive }) {
       if (!(passive.kinds || ['ranged']).includes(kind) || !victim) return 1;

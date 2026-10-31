@@ -337,4 +337,8 @@ for s_ in (1, -1):
     mus.append(rod(pts, [0.016 * H, 0.02 * H, 0.016 * H, 0.008 * H], 7))
 b.add('mustache', merge(*mus), white, region='head', subdiv=0)
 
+# acabamento da técnica atual (sculpt_lib, 2026-10-31): as dobras do pano em relevo e os fios do cabelo
+import sculpt_lib
+sculpt_lib.cloth_pass(b.parts, ['pants_brown', 'cloth_red', 'leg_wrap'], H)
+sculpt_lib.hair_pass(b.parts, ['fur_white'], H, (HC.x, HC.y, HC.z))
 b.export(OUT)

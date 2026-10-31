@@ -534,10 +534,24 @@ export class CpuController {
       }
     }
 
+    // ATIRADOR LENDO A INVESTIDA: o perseguidor vem fechando rápido (dash, bote, carga — a distância cai mais de 7 m/s)
+    // → esquiva para o LADO no tempo certo (para trás ele alcança: é mais rápido), e o bote passa reto
+    const gap = this.lastOpp ? w.time - this.lastOpp.t : 0;
+    const closing = gap > 0 && gap < 0.1 ? (this.lastOpp.d - d) / gap : 0; // (lido quadro a quadro: sem saltos entre decisões)
+    this.lastOpp = { d, t: w.time };
+    const planZ = matchupPlan(f.def, opp.def);
+    if (planZ.escapeAt > 0 && closing > 7 && d < 5.5 && d > 1.2 && (f.state === 'idle' || f.state === 'charging' || f.state === 'block') && f.onGround
+      && w.time > (this.readRushAt || 0) && canSpendDodge(f, true)) {
+      this.readRushAt = w.time + 0.8;
+      if (Math.random() < (0.45 + L.tactics * 0.45) * k) {
+        this.queue.push({ t: 0.06, held: { dodge: true }, move: side }, { t: 0.05, held: {} });
+        return out;
+      }
+    }
+
     // ATIRADOR ENCURRALADO (matchupPlan — inteligência única): o adversário passou da distância de fuga do confronto
     // (mais cedo contra quem encurta a distância) — antes de qualquer outra escolha (habilidade, especial, combo)
     // esquiva para trás; sem carga, dash para longe
-    const planZ = matchupPlan(f.def, opp.def);
     if (planZ.escapeAt > 0 && (f.state === 'idle' || f.state === 'charging') && f.onGround && d < planZ.escapeAt && opp.state !== 'downed' && opp.state !== 'ko'
       && Math.random() < (0.55 + L.tactics * 0.4) * k) {
       const away = { x: -toOpp.x, z: -toOpp.z };

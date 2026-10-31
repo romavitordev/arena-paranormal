@@ -9,11 +9,18 @@ Referência: wiki (Juan / O Diabo / Trono do Diabo) e a arte do trono. O que pre
   - rosto do Juan com o sorriso enorme, piercings e o olho faltando; capuz vermelho rasgado e correntes no torso;
   - BOCA VERTICAL em relevo do peito ao ventre (malha); símbolo de Sangue e Sigilos dourados na textura skin_torso_diabo.
 Todas as espessuras em frações de H (o construtor NÃO escala arm_r/leg_r sozinho).
+REVISÃO (2026-10-31) pela "Arte Completa Cinematic O Portador do Trono" e a descrição da wiki ("O Diabo" → Aparência):
+  - os CHIFRES pelo cânone (saiu a galhada clara): um par grosso e anelado subindo e um segundo par que entorta para
+    BAIXO como foices, escuros, esculpidos (metaballs);
+  - a COROA DE ESPINHOS em leque atrás da cabeça: o anel dourado com dezenas de espinhos radiais (o sol de espinhos);
+  - as ASAS DE BRAÇOS mais densas e irregulares (mais braços por fileira e braços menores brotando dos cotovelos);
+  - o tronco com os MÚSCULOS em relevo (peitoral, abdômen) e as coxas de bode com o PELO em relevo e cor de pelo.
 """
 import sys, os, math, random
 sys.path.insert(0, os.path.dirname(__file__))
 from lib import *
 from mathutils import Vector
+from sculpt_lib import Sculpt, relief, ridge, n3
 
 OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'diabo.glb'
 b = Builder(width=1.08, bulk=1.2, height=1.25)
@@ -29,7 +36,7 @@ M = {
     'torso': material('skin_torso_diabo', '#ffffff', 0.7),  # símbolo de Sangue, boca vertical, sigilos dourados
     'arm': skin,
     'armR': material('arms_diabo', '#ffffff', 0.7),  # Sigilos de Conhecimento dourados (onde o Juan tinha tatuagens)
-    'legs': material('goat_fur', '#3a1210', 0.95),
+    'legs': material('goat_fur', '#5a1c14', 0.95),
     'feet': material('hoof', '#141010', 0.5),
 }
 horn = material('horn_diabo', '#1a1412', 0.45)
@@ -42,7 +49,7 @@ gold = material('crown_gold', '#b87810', 0.35, metal=0.7)  # sem emissão: o blo
 wing = material('wing_flesh', '#b0141c', 0.65)
 
 hc = b.body(M, [(-0.12, 0.17), (0.0, 0.17), (0.17, 0.155), (0.36, 0.215), (0.48, 0.24), (0.58, 0.13), (0.65, 0.07)],
-            arm_r=(0.068 * H, 0.056 * H, 0.046 * H), leg_r=(0.085 * H, 0.05 * H, 0.04 * H), head_r=(0.14, 0.15, 0.164), feet='bare')
+            arm_r=(0.056 * H, 0.048 * H, 0.04 * H), leg_r=(0.085 * H, 0.05 * H, 0.04 * H), head_r=(0.14, 0.15, 0.164), feet='bare')
 
 
 def curve_tube(base, d1, d2, ln, r0, r1=0.003, n=10, seg=8):
@@ -55,24 +62,47 @@ def curve_tube(base, d1, d2, ln, r0, r1=0.003, n=10, seg=8):
     return tube(pts, seg)
 
 
-# ---------------- GALHADA: dois chifres grandes e claros que sobem e abrem com pontas (como galhada de cervo) e
-# uma coroa de chifres curtos no alto da cabeça (referência da forma do Diabo)
-horns = []
+# ---------------- CHIFRES (wiki: "maiores e em maior número, com um segundo par que entorta pra baixo, como foices"):
+# o par de cima grosso, subindo e abrindo com os ANÉIS em relevo; o par das foices sai das têmporas, vai para trás e
+# desce curvando para a frente ao lado do rosto
+Hn = Sculpt()
 for s in (1, -1):
-    base = Vector((s * 0.09 * H, hc.y - 0.01 * H, hc.z + 0.1 * H))
-    d1 = Vector((s * 0.55, 0.1, 1)).normalized()
-    d2 = Vector((s * 0.6, 0.2, -0.25))
-    ln = 0.42 * H
-    horns.append(curve_tube(base, d1, d2, ln, 0.038 * H, n=12))
-    # pontas (galhos) saindo do chifre principal, viradas para cima
-    for k, (t, l2, out) in enumerate(((0.35, 0.16, 0.15), (0.6, 0.2, 0.05), (0.82, 0.14, -0.1))):
-        p = base + d1 * (ln * t) + d2 * (ln * t * t)
-        horns.append(curve_tube(p, Vector((s * out, 0.05, 1)).normalized(), Vector((s * 0.15, 0.05, 0)), l2 * H, 0.022 * H, n=6))
-for k in range(5):
-    x = (k - 2) * 0.035 * H
-    p = Vector((x, hc.y - 0.02 * H, hc.z + 0.15 * H))
-    horns.append(curve_tube(p, Vector((x * 2, 0.05, 1)).normalized(), Vector((0, 0.1, 0)), (0.13 - abs(k - 2) * 0.025) * H, 0.016 * H, n=5))
-b.add('horns', merge(*horns), material('antler', '#a89060', 0.65), region='head', subdiv=0)
+    base = Vector((s * 0.08 * H, hc.y - 0.005 * H, hc.z + 0.11 * H))
+    pts, rs = [], []
+    for k in range(9):
+        q = k / 8
+        pts.append(base + Vector((s * (0.06 * q + 0.1 * q * q) * H, 0.04 * q * H, (0.3 * q - 0.04 * q * q) * H)))
+        rs.append((0.042 - 0.036 * q) * H)
+    Hn.chain(pts, rs, step=0.35)
+    # as foices: das têmporas para trás e para baixo, a ponta voltando para a frente
+    b2 = Vector((s * 0.12 * H, hc.y + 0.01 * H, hc.z + 0.04 * H))
+    pts, rs = [], []
+    for k in range(10):
+        q = k / 9
+        ang = q * 2.4
+        pts.append(b2 + Vector((s * (0.06 + 0.05 * q) * H, (0.1 * math.sin(ang)) * H, (0.06 * math.cos(ang) - 0.06 - 0.1 * q) * H)))
+        rs.append((0.034 - 0.03 * q) * H)
+    Hn.chain(pts, rs, step=0.35)
+b.add('horns', Hn.mesh(res=0.004, smooth=2, disp=lambda q: 0.004 * H * (ridge(q.z / H * 60, 2) - 0.4), target=5000), horn, region='head', subdiv=0)
+# a COROA DE ESPINHOS em leque atrás da cabeça (o sol de espinhos dourado da arte)
+CC = Vector((hc.x, hc.y + 0.1 * H, hc.z + 0.06 * H))
+ring = [CC + Vector((math.sin(i / 48 * TAU) * 0.2 * H, 0, math.cos(i / 48 * TAU) * 0.2 * H)) for i in range(49)]
+thorns = [tube([(q.x, q.y, q.z, 0.014 * H, 0.014 * H) for q in ring], 6, cap_start=False, cap_end=False)]
+random.seed(31)
+for i in range(30):
+    a = i / 30 * TAU
+    if math.cos(a) < -0.55:
+        continue  # embaixo (atrás do pescoço) não tem espinho
+    d = Vector((math.sin(a), 0.05, math.cos(a)))
+    q = CC + d * 0.2 * H
+    ln = (0.09 + 0.1 * random.random() + (0.08 if i % 3 == 0 else 0)) * H
+    thorns.append(cone(tuple(q - d * 0.01 * H), tuple(q + d * ln), (0.016 if i % 3 == 0 else 0.011) * H, 5))
+for i in range(16):  # os espinhos curtos para dentro (a coroa trançada)
+    a = i / 16 * TAU
+    d = Vector((math.sin(a), 0, math.cos(a)))
+    q = CC + d * 0.2 * H
+    thorns.append(cone(tuple(q), tuple(q - d * 0.045 * H + Vector((0, -0.02 * H, 0))), 0.008 * H, 4))
+b.add('crown', merge(*thorns), gold, region='head', subdiv=0)
 # orelhas pontudas
 ears = [cone((s * 0.13 * H, hc.y + 0.01, hc.z + 0.0), (s * 0.24 * H, hc.y + 0.04 * H, hc.z + 0.07 * H), 0.035, 6) for s in (1, -1)]
 b.add('ears', merge(*ears), skin, region='head', subdiv=0)
@@ -194,7 +224,7 @@ for s in (1, -1):
             return bez(j1, j1.lerp(j2, 0.5), j2, u * 2)
         return bez(j2, j2.lerp(j3, 0.5), j3, (u - 0.5) * 2)
 
-    for row, (N, scale, dy, u0, u1) in enumerate(((15, 1.12, 0.0, 0.0, 1.0), (10, 0.72, -0.035, 0.04, 0.9), (6, 0.45, -0.065, 0.1, 0.8))):
+    for row, (N, scale, dy, u0, u1) in enumerate(((22, 1.12, 0.0, 0.0, 1.0), (16, 0.75, -0.035, 0.04, 0.92), (10, 0.5, -0.065, 0.08, 0.85))):
         for i in range(N):
             u = u0 + (u1 - u0) * i / (N - 1)
             p = along(u) + Vector((0, dy * H, 0))
@@ -205,6 +235,11 @@ for s in (1, -1):
             bend = Vector((s * -0.25, 0.05, -0.25)) * (0.8 + random.random() * 0.4)  # o antebraço cai um pouco
             spread = Vector((0, 1, 0)).cross(d)  # dedos abrem no plano da asa
             feather_arm(p, d, ln, (0.021, 0.018, 0.015)[row] * H * (1.1 - 0.3 * u), bend, spread, wings, row == 0)
+            # braços menores BROTANDO do cotovelo dos da frente (a asa ramificada da arte)
+            if row == 0 and random.random() < 0.55:
+                ep = p + d.normalized() * ln * 0.48
+                d3 = (d.normalized() + Vector((s * 0.35, 0.05, 0.3 if random.random() < 0.5 else -0.3))).normalized()
+                feather_arm(ep, d3, ln * 0.5, 0.012 * H, bend * 0.6, Vector((0, 1, 0)).cross(d3), wings, False)
 b.add('wing_bones', merge(*bones), material('wing_bone', '#7a0c12', 0.6), region='chest', subdiv=0)
 b.add('arm_wings', merge(*wings), wing, region='chest', subdiv=0)
 
@@ -306,8 +341,8 @@ for side in ('L', 'R'):
 # boca dentada no meio da tíbia
 for side in ('L', 'R'):
     l, k, f = sk['l' + side], sk['k' + side], sk['foot' + side]
-    b.add('goat_thigh' + side, tube(limb_rings(l + Vector((0, 0, 0.02 * H)), l.lerp(k, 0.92), 0.11 * H, 0.075 * H, n=4), 14), M['legs'], region='leg' + side)
-    hock = k.lerp(f, 0.55) + Vector((0, 0.07 * H, 0))
+    b.add('goat_thigh' + side, tube(limb_rings(l + Vector((0, 0, 0.02 * H)), l.lerp(k, 0.95) + Vector((0, -0.03 * H, 0)), 0.115 * H, 0.07 * H, n=5, bulge=0.12), 16), M['legs'], region='leg' + side)
+    hock = k.lerp(f, 0.6) + Vector((0, 0.13 * H, 0))  # o jarrete bem para trás (a perna de bode)
     b.add('goat_hock' + side, merge(tube(limb_rings(k, hock, 0.06 * H, 0.045 * H, n=3), 12), ellipsoid(tuple(hock), (0.045 * H, 0.05 * H, 0.045 * H), 10, 8),
                                     tube(limb_rings(hock, f + Vector((0, -0.02 * H, 0.03 * H)), 0.042 * H, 0.034 * H, n=3), 12)), M['legs'], region='k' + side, subdiv=0)
     b.add('hoof' + side, merge(box((f.x - 0.018 * H, f.y - 0.04 * H, f.z - 0.005 * H), (0.034 * H, 0.08 * H, 0.05 * H), bevel=0.008 * H),
@@ -316,5 +351,23 @@ for side in ('L', 'R'):
     teeth = [cone((mo.x + (i - 2) * 0.011 * H, mo.y - 0.004 * H, mo.z + 0.012 * H), (mo.x + (i - 2) * 0.011 * H, mo.y - 0.008 * H, mo.z - 0.003 * H), 0.004 * H, 3) for i in range(5)]
     teeth += [cone((mo.x + (i - 2) * 0.011 * H, mo.y - 0.004 * H, mo.z - 0.016 * H), (mo.x + (i - 2) * 0.011 * H, mo.y - 0.008 * H, mo.z - 0.002 * H), 0.004 * H, 3) for i in range(5)]
     b.add('shin_mouth' + side, merge(ellipsoid(tuple(mo), (0.03 * H, 0.012 * H, 0.022 * H), 8, 4), *teeth), claw, region='k' + side, subdiv=0)
+
+# o tronco com os MÚSCULOS em relevo (mantém o UV da textura do Símbolo e dos Sigilos): peitorais, os gomos do abdômen
+g2 = lambda x, s: math.exp(-(x / s) ** 2)
+def muscles(q):
+    zz = (q.z - hz) / H
+    if q.y > 0:
+        return 0.0
+    d = 0.0
+    for s in (1, -1):
+        d += 0.016 * H * g2(q.x / H - s * 0.085, 0.07) * g2(zz - 0.42, 0.06)  # peitorais
+        for r in range(3):
+            d += 0.006 * H * g2(q.x / H - s * 0.035, 0.025) * g2(zz - (0.27 - 0.08 * r), 0.03)  # gomos
+    return d
+relief(next(o for o in b.parts if o.name == 'torso'), muscles)
+# o PELO de bode em relevo nas coxas e no jarrete
+for o in b.parts:
+    if o.name.startswith('goat_thigh') or o.name.startswith('goat_hock'):
+        relief(o, lambda q: 0.006 * H * (ridge(q.z / H * 40 + n3(q, 25) * 2.5, 2) - 0.4))
 
 b.export(OUT)

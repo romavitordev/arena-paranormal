@@ -612,4 +612,8 @@ b.add('prop_hoodUp_rivets', merge(*hr), brass, region='head', weight_fn=hood_w, 
 b.group('prop_hoodUp')
 b.group('prop_hoodX')
 
+# acabamento da técnica atual (sculpt_lib, 2026-10-31): as dobras do pano em relevo e os fios do cabelo
+import sculpt_lib
+sculpt_lib.cloth_pass(b.parts, ['turtleneck_jae', 'pants_jae', 'coat_jae'], H)
+sculpt_lib.hair_pass(b.parts, ['hair_jae'], H, (HC.x, HC.y, HC.z))
 b.export(OUT)

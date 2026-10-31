@@ -140,4 +140,8 @@ for s in (1, -1):
     b.add(f'goggle_rim{s}', xform(tube([(0, 0, 0, 0.036, 0.036), (0, 0, 0.03, 0.034, 0.034)], 12), lambda p, c=c: Vector((c.x + p.x, c.y - p.z * 0.6, c.z + p.y + p.z * 0.8))), goggle, region='head', subdiv=0)
     b.add(f'goggle_lens{s}', ellipsoid((c.x, c.y - 0.022, c.z + 0.024), (0.03, 0.012, 0.03), 10, 6), lens, region='head', subdiv=0)
 
+# acabamento da técnica atual (sculpt_lib, 2026-10-31): as dobras do pano em relevo e os fios do cabelo
+import sculpt_lib
+sculpt_lib.cloth_pass(b.parts, ['shirt_green', 'pants_black', 'jacket_black', 'crop_black', 'olive_gear', 'olive_dark'], H)
+sculpt_lib.hair_pass(b.parts, ['hair_ginger'], H, (hc.x, hc.y, hc.z))
 b.export(OUT)

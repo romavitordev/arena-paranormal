@@ -1002,8 +1002,8 @@ Object.assign(ABILITY_TYPES, {
       const tl = new Timeline();
       f.vel.set(0, 0, 0);
       f.yaw = yawTo(f.pos, opp.pos);
-      f.anim.play('cast_up', { restart: true, duration: a.castTime + 0.25 });
-      world.audio.play('rebirth', { volume: 0.5, pitch: 1.4 });
+      f.anim.play(a.anim || 'cast_up', { restart: true, duration: a.castTime + 0.25 }); // a.anim: a Amalia atira para o alto
+      world.audio.play(a.sound || 'rebirth', { volume: 0.5, pitch: 1.4 });
       const center = new THREE.Vector3(opp.pos.x, 0, opp.pos.z);
       world.fx.ring(new THREE.Vector3(center.x, 0.06, center.z), { color: a.color, radius: a.radius, life: a.castTime + 0.2 });
       let rain = null;
@@ -2831,12 +2831,12 @@ Object.assign(ABILITY_TYPES, {
       const tl = new Timeline();
       f.vel.set(0, 0, 0);
       if (opp) f.yaw = yawTo(f.pos, opp.pos);
-      f.anim.play('sniper_kneel', { restart: true, duration: a.windup });
+      f.anim.play(a.aimAnim || 'sniper_kneel', { restart: true, duration: a.windup }); // a.aimAnim: o arco da Amalia
       if (a.showProp) f.rig.showProp(a.showProp, true);
       if (a.hideProp) f.rig.showProp(a.hideProp, false);
       world.audio.play('fearGaze', { volume: 0.5, pitch: 0.5 });
       tl.add(0.2, () => {
-        if (!opp || opp.state === 'ko') return;
+        if (!opp || opp.state === 'ko' || !a.slow) return; // sem a.slow (o arco da Amalia): só a mira, sem o tempo lento
         world.fx.distort(opp.chestPos(), { color: 0xa7a3ad, radius: 3, life: 0.6 });
         const old = opp.findBuff('deathAim');
         if (old) old.time = a.slowTime;
@@ -2849,7 +2849,7 @@ Object.assign(ABILITY_TYPES, {
           if (!opp || opp.state === 'ko') return;
           f.yaw = yawTo(f.pos, opp.pos);
           const from = f.rig.muzzle ? f.rig.muzzle.getWorldPosition(new THREE.Vector3()) : f.chestPos();
-          world.fx.tracer(from, opp.chestPos(), { color: 0xd8d4dc, life: 0.05, width: 0.015 });
+          world.fx.tracer(from, opp.chestPos(), { color: a.aimColor ?? 0xd8d4dc, life: 0.05, width: 0.015 });
         });
       }
       tl.add(a.windup, () => {
@@ -2858,7 +2858,7 @@ Object.assign(ABILITY_TYPES, {
         world.projectiles.spawn(f, { ...a.projectile, element: a.element }, from, target.sub(from).normalize());
         world.fx.flash(from, { color: 0xd8d4dc, size: 1.4, life: 0.1 });
         world.audio.play('sniper');
-        f.anim.play('sniper_fire', { restart: true, duration: a.recovery + 0.1 });
+        f.anim.play(a.fireAnim || 'sniper_fire', { restart: true, duration: a.recovery + 0.1 });
       });
       const restore = () => {
         if (a.showProp) f.rig.showProp(a.showProp, false);
@@ -2996,6 +2996,84 @@ Object.assign(ABILITY_TYPES, {
           world.addNpc(npc);
         }
         f.notify(`AS MÁSCARAS ×${a.count} — NATHANIEL ENTRE ELAS`, true);
+      });
+      tl.end(0.7);
+      return seqFrom(tl);
+    },
+  },
+
+  // AMALIA — ALTRUÍSMO (wiki: "pode sacrificar 1 ponto de sua própria existência para recuperar 1 ponto de qualquer
+  // aliado"): paga um pedaço da vida e devolve aos aliados — na batalha em equipe as ASSISTÊNCIAS voltam na hora e a
+  // Barra de Equipe enche um pouco; sozinha, o que volta é a sanidade e as esquivas (a existência dela vira fôlego)
+  altruism: {
+    start(f, a, world) {
+      if (f.health <= f.maxHealth * (a.healthCost + 0.02)) { f.notify('POUCA VIDA PARA SACRIFICAR'); return null; }
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.anim.play('concentrate', { restart: true, duration: 0.6 });
+      world.audio.play('ritual', { volume: 0.6, pitch: 1.3 });
+      tl.add(0.3, () => {
+        f.health -= Math.round(f.maxHealth * a.healthCost);
+        world.fx.ring(new THREE.Vector3(f.pos.x, 0.06, f.pos.z), { color: a.color, radius: 2.4, life: 0.6 });
+        world.fx.burst(f.chestPos(), { count: 30, color: a.color, speed: 3, up: 1.5, life: 0.6, size: 0.16 });
+        if (f.assists && f.assists.length) {
+          for (const as of f.assists) as.cooldown = 0;
+          f.addTeamGauge(a.teamGauge ?? 15);
+          f.notify('ALTRUÍSMO — AS ASSISTÊNCIAS VOLTARAM', true);
+        } else {
+          f.energy = Math.min(f.maxEnergy, f.energy + a.energy);
+          if (a.refillDodges) f.dodges = Math.max(f.dodges, a.refillDodges);
+          f.notify('ALTRUÍSMO', true);
+        }
+      });
+      tl.end(0.6);
+      return seqFrom(tl);
+    },
+  },
+
+  // ESTRANGEIRO — OS HOMENS DE TERNO: os Doppelgangers (Alheios que tomam o corpo de gente morta; wiki "Doppelganger")
+  // chegam numa interferência de sinal em volta do adversário — ternos e chapéus, a cara rachada ao meio. Os de FUZIL
+  // ALHEIO ficam longe e atiram o plasma verde; o COMBATENTE (a.brawlers) chega perto e bate com os punhos.
+  // "Somos Todos Um": quando um cai, os outros atiram mais rápido.
+  summonDoppels: {
+    start(f, a, world) {
+      if (world.npcs.some((n) => n.alive && n.owner === f && n.isDoppel)) { f.notify('OS HOMENS DE TERNO JÁ ESTÃO AQUI'); return null; }
+      const opp = f.opponent;
+      const tl = new Timeline();
+      f.vel.set(0, 0, 0);
+      f.anim.play('point', { restart: true, duration: 0.7 });
+      world.audio.play('teleport', { volume: 0.7, pitch: 0.7 });
+      tl.add(0.4, () => {
+        const base = opp ? opp.pos : f.pos;
+        const back = Math.atan2(f.pos.x - base.x, f.pos.z - base.z);
+        const taken = [{ x: base.x, z: base.z, r: 0.8 }, { x: f.pos.x, z: f.pos.z, r: 0.7 }];
+        const squad = [];
+        for (let i = 0; i < a.count; i++) {
+          const gunner = i >= (a.brawlers ?? 0);
+          const ang = back + Math.PI + (i - (a.count - 1) / 2) * 1.3;
+          const far = gunner ? a.gun.keep ?? 6 : 2.2;
+          const want = { x: base.x + Math.sin(ang) * far, z: base.z + Math.cos(ang) * far };
+          const spot = findFreeSpotNear(world.arena, want.x, want.z, { radius: 0.5, others: taken }) || want;
+          taken.push({ x: spot.x, z: spot.z, r: 0.5 });
+          const p = new THREE.Vector3(spot.x, 1.1, spot.z);
+          world.fx.distort(p, { color: a.color, radius: 1.5, life: 0.4 });
+          world.fx.burst(p, { count: 18, color: a.color, speed: 2.6, life: 0.35, size: 0.12 });
+          const gun = gunner ? { ...a.gun } : null;
+          const npc = new DanteClone(f, world, i, a.duration, {
+            model: 'doppel', hp: a.hp, damageMult: 1, element: 'transmissao', strikes: a.strikes, sludge: gun,
+            restyle(m) { m.material.transparent = false; },
+            setup(rig) { rig.showProp('pistol', gunner); },
+            onSlain() {
+              for (const o of squad) if (o.alive && o.o.sludge) o.o.sludge.cd = Math.max(1, (o.o.sludge.cd ?? 3) * 0.7);
+              f.notify('SOMOS TODOS UM', true);
+            },
+          });
+          npc.isDoppel = true;
+          npc.pos.set(spot.x, 0, spot.z);
+          squad.push(npc);
+          world.addNpc(npc);
+        }
+        f.notify(`OS HOMENS DE TERNO ×${a.count}`, true);
       });
       tl.end(0.7);
       return seqFrom(tl);

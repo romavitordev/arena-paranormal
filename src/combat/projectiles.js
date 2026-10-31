@@ -2,7 +2,7 @@ import { COMBAT } from '../config/combat.js';
 import * as THREE from 'three';
 import { applyHit } from './damage.js';
 import { glowMat } from '../models/rig.js';
-import { knife, mutilatorAxe, baluAxe, demonMace, chaosSkate, chainHatchet, ironMace } from '../models/weapons.js';
+import { knife, mutilatorAxe, baluAxe, demonMace, chaosSkate, chainHatchet, ironMace, flameArrow } from '../models/weapons.js';
 import { createMistZone } from './abilities.js';
 import { addBloodPool } from './bloodPools.js';
 import { inscribe } from './kianPowers.js';
@@ -326,6 +326,10 @@ const VISUALS = {
     g.add(spin);
     g.userData.tumble = spin;
     return g;
+  },
+  // AMALIA: a flecha flamejante ciano
+  flameArrow(color) {
+    return flameArrow(color);
   },
   // GAIUS: a maça de ferro arremessada, girando
   ironMace() {
@@ -696,16 +700,19 @@ export class Projectiles {
           break;
         }
         const target = w.opponentOf(p.owner);
-        if (!p.hitOnce && target && target.state !== 'ko' && !target.isInvulnerable() && target.hitTestPoint(p.pos, p.r ?? a.radius)) {
+        // a.longRange (Amalia — Longa-Distância): depois de `from` m de voo, a flecha atravessa a esquiva e a defesa
+        const far = !!a.longRange && p.traveled >= a.longRange.from;
+        if (!p.hitOnce && target && target.state !== 'ko' && (far || !target.isInvulnerable()) && target.hitTestPoint(p.pos, p.r ?? a.radius)) {
           // Sniper da Morte: quem já está morrendo (pouca vida) leva o tiro inteiro da espiral
           const exec = a.execute && target.health / target.maxHealth <= a.execute.below ? a.execute.mult : 1;
           if (exec > 1) target.notify('ESPIRAL DA MORTE', true);
           const res = applyHit(w, p.owner, target, {
             damage: Math.round(a.damage * exec), kind: a.kind || 'ranged', knockback: a.knockback, hitstun: a.hitstun,
-            unblockable: !!a.unblockable, guardCrush: a.guardCrush, element: a.element,
+            unblockable: !!a.unblockable || far, ignoreInvuln: far, guardCrush: a.guardCrush, element: a.element,
             dir: p.dir, color: a.color, sound: a.hitSound, scale: a.impactScale || 1, pos: p.pos.clone(),
             reaction: !(a.onHit && a.onHit.pull),
           });
+          if (far && typeof res === 'number') p.owner.notify && p.owner.notify('LONGA-DISTÂNCIA', true);
           if (typeof res === 'number' && res >= 0) {
             this.applyOnHit(p, target);
             if (a.hitFn && target.state !== 'ko') a.hitFn(w, p.owner, target, p); // efeito da cor do Disparo do Caos

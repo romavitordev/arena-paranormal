@@ -1,5 +1,12 @@
 # Registro administrativo de alterações
 
+## v3.53.0 — A Flecha
+
+- Versão: `VERSION` 3.52.0 → **3.53.0** (package.json/lock junto). Data: 2026-10-31.
+- **Pedido do dono: "siga o TODO, do mais simples ao mais difícil".** Feitos nesta ordem: TODO arrumado (a skin do Anfitrião e o Henri nos Escriptas já entregues), a Transformação do Estrangeiro pelo cânone (wiki "Estrangeiro": não tem forma nova; Incubar é a habilidade dele), a CPU atiradora, a postura da Esfinge, os soldados do Estrangeiro (wiki "Doppelganger": os Homens de Terno, Fuzis Alheios), a Magistrada e o Amigo pelas miniaturas, o Portador do Trono pela arte da cinematic, o acabamento dos 7 modelos antigos e a AMALIA (wiki "Amalia").
+- **Testado:** Homens de Terno (3 surgem, 68 de dano em 7 s); Incubar (15 de sanidade em 5 s, eclosão 124 com o Alheio, larva de volta em 8 s — achado e corrigido o `energyRegenMult` 0 ignorado); Amalia (combo 46, flecha 31, Longa-Distância 97 atravessando a esquiva, Chuva 62, Flechas Caóticas 58, especial 212, Altruísmo 90 de vida → 40 de sanidade, Transformação); CPU × CPU sem erro (Amalia como atiradora venceu Gaius, empatou com o Raziel, perdeu para Jae, Kaiser, Balu e Celestine — de olho no equilíbrio).
+- **Pendente (TODO):** os outros membros da Ordo Calamitas; a CPU atiradora ainda perde dos perseguidores rápidos (usar o cenário); refazer completo dos modelos antigos, um por vez.
+
 ## v3.52.0 — O Primeiro Anfitrião
 
 - Versão: `VERSION` 3.51.0 → **3.52.0** (package.json/lock junto). Data: 2026-10-30.

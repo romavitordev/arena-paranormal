@@ -1,6 +1,6 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.52.0 (revisado em 2026-10-30: O Primeiro Anfitrião — Gaius na Ordo Calamitas e o Amphitruo como versão dele e como o Anfitrião das Relíquias, a máscara esculpida, as falas novas pela voz de cada personagem, o Anfitrião irônico e a Levitação corrigida)
+**Versão de referência atual:** v3.53.0 (revisado em 2026-10-31: A Flecha — Amalia na Ordo Calamitas, os Homens de Terno e o Incubar do Estrangeiro, Magistrada, Amigo e Portador do Trono pelas artes, a Esfinge agachada, o acabamento dos modelos antigos e a CPU atiradora)
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente
 
@@ -9,7 +9,7 @@
 
 # PRÓXIMA GRANDE ATUALIZAÇÃO — LUTA + MODO PvE (planejamento de 2026-10-18)
 
-**Estado em 2026-10-30 (v3.52.0):**
+**Estado em 2026-10-31 (v3.53.0):**
 - [~] 2.2 Modelos antigos: Xande e Aguiar (v3.33.0), Fantasma, Kemi e Gal Sal + as lâminas Ereškigal (v3.34.0), Kaiser
   (v3.38.0), Balu e Lírio (v3.40.0), Arthur e Joui (v3.41.0), Arnaldo, Anfitrião, Veríssimo, Kian e O Diabo (2026-10-26)
   refeitos pelas artes oficiais; faltam os outros antigos
@@ -1492,7 +1492,8 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
       lisa com listras nítidas, asas maiores e menos ruidosas; refazer a base e refinar pelo MCP.
 - [x] Ajustes do teste: Esfinge paralisada (não a vítima), 35 s com o relógio parado na paralisia, olhos pretos na
       Transformação, Lodo que Prende e Sentença do Chacal.
-- [~] **Terminar a Esfinge** (pedido de 2026-10-23): modelo aproximado da arte oficial ("Miniatura Carniçal da Esfinge
+- [x] **Terminar a Esfinge** (pedido de 2026-10-23; a POSTURA feita em 2026-10-31: agachada como réptil — as patas abertas
+      para os lados com os cotovelos/joelhos para fora, o corpo baixo e o peito alto, `SPHINX_CROUCH` em combat/beasts.js): modelo aproximado da arte oficial ("Miniatura Carniçal da Esfinge
       em Calamidade") — pele e ossos verde-oliva, Menés escura com listras roxas e o LEQUE de espinhos roxos, colar de
       crânios em duas fileiras, asas de membrana roxa, cauda fina enrolada, garras longas. Falta: a POSTURA (na arte
       ela fica agachada, réptil, com o peito alto; hoje as patas animadas em código a deixam em pé como um cão) —
@@ -1545,9 +1546,18 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
       [~] Feito em 2026-10-27: as MÁSCARAS (modelo `seita.glb`, v3.49.0) e o ESTRANGEIRO ajustado pelas artes (v3.50.0:
       mais alto e magro, ROSTO refeito do zero, pose parada própria `est_idle`, olhos verdes, ombreiras pontudas na capa,
       folhas no peito, faixa de pano, garras e pés de garra).
-      Faltam a MAGISTRADA e o AMIGO IMAGINÁRIO.
-- [ ] **PARA DEPOIS (2026-10-27) — O ESTRANGEIRO: os "SOLDADOS"** — ele pode invocar os seus soldados ETs: ALHEIOS de terno
-      e gravata que parecem humanos e usam METRALHADORAS (modelo novo + invocação; conferir no cânone de Sinais do Outro Lado).
+      [x] 2026-10-31: a MAGISTRADA revista pela "Miniatura A Magistrada em Desconjuração" (capa preta presa atrás dos
+      braços, gola dourada em pé, ombreiras com espinhos, mangas bufantes até o cotovelo com o antebraço à mostra, luvas e
+      faixas pretas, gola escura, calça clara, sapatos de duas cores) e a MÁSCARA DO DESESPERO em relevo (os sulcos
+      afundados pelo próprio desenho — vale para a Celestine também); o AMIGO IMAGINÁRIO pela miniatura de O Segredo na
+      Ilha (barbatanas da crista bem maiores, pregas fundas, a cauda longa arrastando, os fios de tinta compridos).
+      Ainda na técnica antiga por baixo (sem `sculpt_lib` no corpo): um refazer completo fica para depois, se for preciso.
+- [x] **O ESTRANGEIRO: os "SOLDADOS"** (feito em 2026-10-30) — no cânone são os DOPPELGANGERS (wiki "Doppelganger", apelido
+      "Homens de Terno"; Sinais do Outro Lado ep. 3: chegam na van preta de terno e chapéu): o rosto rachado ao meio, olhos
+      pequenos pretos de pupila verde, dedos longos e pontudos, e os FUZIS ALHEIOS (pistolas de plasma verde, sem munição).
+      Modelo `tools/blender/char_doppel.py` → `public/models/doppel.glb` + `weapons.js alienPistol`; habilidade HOMENS DE
+      TERNO (R2 + ×, `summonDoppels`): três em volta do adversário por 10 s — dois atiram de longe, o terceiro bate; "Somos
+      Todos Um" (um cai, os outros atiram mais rápido).
 - [x] **Pedidos de 2026-10-27 (feitos):**
       - EQUIPES: HENRI (o antigo "Juan", id `juan`) nos Mascarados → no ódio vira o JUAN (Portador) → Portador do Trono.
         PORTADORES ≠ RELÍQUIAS: Portadores = Juan (selecionável, `juan_odio`), Arnaldo, Ferreiro; Relíquias = O Diabo, O Deus
@@ -1567,7 +1577,8 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
         velocidade — e `matchupPlan(meu, dele)` monta o plano com os DOIS kits: atirador × perseguidor fica a 9 m, foge a
         4,5 m e prioriza o que trava (Dystopia); atirador × resto a 7,5 m / 3,5 m; quem enfrenta um atirador PRESSIONA
         (encurta ziguezagueando, entra de dash bem mais vezes). Validado em 10 confrontos (5 sorteados do elenco), sem erro.
-      - [ ] **Ainda a melhorar:** atirador × perseguidor rápido quando OS DOIS são CPU (Arthur × Raziel, Kaiser × Jae ficam
+      - [~] (2026-10-31: o atirador agora LÊ A INVESTIDA — a distância caindo mais de 7 m/s a menos de 5,5 m — e esquiva
+        para o LADO no tempo certo; falta usar o cenário/pilares) **Ainda a melhorar:** atirador × perseguidor rápido quando OS DOIS são CPU (Arthur × Raziel, Kaiser × Jae ficam
         ~2 m): o perseguidor, mais rápido e agora também pressionando, vence a corrida pela distância. Próximo passo: o
         atirador ler a investida do outro (o telegraph) e esquivar no tempo certo, e usar o cenário (pilares) para fugir.
       - CPU no BOTÃO DO ANFITRIÃO: larga tudo, corre até o botão e aperta primeiro (testado no Fácil e no Difícil).
@@ -1591,7 +1602,7 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
          REESCREVER A REALIDADE (recupera corpo e mente / reescreve o estado do alvo), CONJURAÇÃO VERDADEIRA (qualquer ritual
          de Conhecimento) e DESTRONAR O ANFITRIÃO (a única capaz de solucionar o Enigma de Medo e dizimar o Anfitrião —
          uma interação própria contra ele).
-      3. **HENRI pela linha do tempo:** no cânone "Henri" é o nome do tempo de Escripta (Desconjuração, Dia Final, onde
+      3. [x] (feito: o Henri tem a etiqueta dos ESCRIPTAS junto dos Mascarados) **HENRI pela linha do tempo:** no cânone "Henri" é o nome do tempo de Escripta (Desconjuração, Dia Final, onde
          perdeu a mão e o olho esquerdos); "Juan" é o de Hexatombe (o Pacto, o Estigma, vence como sacrifício) e o portador
          do Trono é O Diabo. Avaliar se o Henri fica nos ESCRIPTAS em vez dos Mascarados.
       4. **O ANFITRIÃO selecionável com o visual de AMPHITRUO** (o primeiro Anfitrião conhecido: máscara sorridente com três
@@ -1646,19 +1657,34 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
         Própria Força). Transformação canônica: a Relíquia de Energia no rosto → AMPHITRUO. Na seleção, RB/LB troca entre os
         dois; o Anfitrião das Relíquias agora tem a aparência do Amphitruo (o do Arnaldo continua só como transformação).
         Modelo `char_gaius.py` (variante `amphitruo`: a máscara sorridente com as três mãos de metal e as chamas roxas).
-      - [ ] **ORDO CALAMITAS**: Amalia, Cornelius, Marius, Faustus, Cascadia...
+      - [x] **AMALIA (2026-10-31)** — a segunda da ORDO CALAMITAS: "A Flecha" (wiki "Amalia"), a arqueira de Calamidade. Modelo
+        `char_amalia.py` pela miniatura (capuz e manto verdes, cachecol, ombreiras pontudas, as fivelas até o pescoço, o
+        pano com o Símbolo, a aljava, a cicatriz em cruz e os olhos acesos na textura) + o ARCO verde de pontas brancas e a
+        AURA CIANO em código. Kit pela ficha: Flecha Flamejante (□), LONGA-DISTÂNCIA (de longe, ninguém esquiva nem
+        defende — `longRange` nos projéteis), Chuva de Flechas, ALTRUÍSMO (sacrifica vida: na equipe as assistências voltam;
+        sozinha, sanidade e esquivas), Flechas Caóticas, a passiva CAÓTICA (a cada 2 flechas que acertam, cura), o especial
+        "Não Perde a Cabeça!" e a Transformação Memória Revivida. Falas (voz própria, cenas com Celestine, Gaius e Joui, e
+        vitórias contra o elenco inteiro), agarrão, retrato da página Sobre, CPU como atiradora.
+      - [ ] **ORDO CALAMITAS**: Faustus, Marius, Remus (Marcados), Cascadia, Cornelius, Karise, Marcellus (membros)...
       - [x] **O MODELO DAS MÁSCARAS** (feito em 2026-10-27: modelo próprio `tools/blender/char_seita.py` → `public/models/seita.glb` — túnica branca longa com as regiões pretas, capuz, pelerine, forca no pescoço, corda na cintura e os Símbolos tatuados nos antebraços, como na wiki; as máscaras em 3D, uma por membro: Nathaniel, riscada de vermelho, preta e a do sorriso — `weapons.js seitaMask`) que a Magistrada chama (os membros da Seita das Máscaras) — refazer na técnica atual
         (pedido de 2026-10-27).
-- [ ] **PARA DEPOIS (2026-10-27) — SKIN do ANFITRIÃO do ARNALDO ≠ ANFITRIÃO base:** o Anfitrião que sai da
-      transformação do Arnaldo terá uma skin diferente do Anfitrião selecionável das Relíquias — mesmas habilidades, só o
-      visual muda (modelo/textura próprios para a forma `anfitriao` do Arnaldo vs. o personagem `anfitriao` da seleção).
-- [ ] **PARA DEPOIS (2026-10-27) — O ESTRANGEIRO: ajuste da TRANSFORMAÇÃO** com o nome canônico (e o que ela faz) pela
-      wiki/episódios.
-- [ ] **O Portador do Trono** (`char_diabo.py`, a Transformação do Diabo/Juan): ainda na técnica antiga — refazer pela
-      "Arte Completa Cinematic O Portador do Trono" (coroa de espinhos, asas de braços, quatro braços, pernas de bode).
-- [ ] Os outros que ainda não usam a técnica atual (`char_*.py` sem `sculpt_lib`, conferido em 2026-10-26): Aghata, Amigo,
+- [x] **SKIN do ANFITRIÃO do ARNALDO ≠ ANFITRIÃO base** — entregue na v3.52.0: o Anfitrião selecionável das Relíquias tem o
+      visual do AMPHITRUO (o Gaius); o do Arnaldo continua com o visual do Arnaldo.
+- [x] **O ESTRANGEIRO: a TRANSFORMAÇÃO pelo cânone** (2026-10-30) — a wiki não tem forma nova para ele; "Incubar" é a
+      habilidade canônica e agora faz o que a wiki diz: a LARVA vai na cabeça do adversário (exposto: +12% de dano
+      recebido; a sanidade não volta e escoa 3/s); zerada, ECLODE (90 de dano e um Doppelganger sai dela) e outra larva
+      entra 8 s depois. Corrigido junto: `energyRegenMult: 0` era ignorado (como o `takenMult` 0).
+- [x] **O Portador do Trono** (`char_diabo.py`, 2026-10-31) revisto pela "Arte Completa Cinematic O Portador do Trono" e a
+      wiki: os CHIFRES pelo cânone (o par anelado subindo + o par em FOICE descendo; saiu a galhada clara), a COROA DE
+      ESPINHOS dourada em leque atrás da cabeça, as ASAS DE BRAÇOS mais densas e ramificadas, os músculos do tronco, os
+      braços mais finos e as pernas de BODE com o jarrete bem para trás e o pelo em relevo.
+- [~] Os outros que ainda não usam a técnica atual (`char_*.py` sem `sculpt_lib`, conferido em 2026-10-26): Aghata, Amigo,
       Dalmo, Erin, Estrangeiro, Ferreiro, Guizo, Jae, Labirinto e Magistrada (fora o Portador do Trono acima; o Manancial
       foi refeito em 2026-10-26).
+      2026-10-31: ACABAMENTO COMUM (`sculpt_lib.cloth_pass` / `hair_pass`) em Aghata, Dalmo, Erin, Ferreiro, Guizo, Jae e
+      Labirinto — as dobras do pano e os fios do cabelo em relevo, sem mudar a forma (os .glb ~20% maiores). Magistrada,
+      Amigo e Estrangeiro revistos pelas artes (acima). Um refazer completo de cada um pela arte oficial (como o do
+      Veríssimo) continua possível, um por vez.
 
 # EQUIPE — BARRA DE EQUIPE E ESPECIAIS EM EQUIPE
 

@@ -96,6 +96,7 @@ export function specialSummary(c) {
       if (sp.heal) parts.push(`cura ${Math.round(sp.heal * 100)}% na hora`);
       if ((sp.passives || []).some((p) => p.type === 'precognition')) parts.push('não é pego desprevenido');
       if (sp.perfectBlockWindow) parts.push(`Bloqueio Perfeito com janela de ${String(sp.perfectBlockWindow).replace('.', ',')} s`);
+      if (sp.larva) parts.push(`a LARVA no adversário (${pct(sp.larva.takenMult)} de dano recebido, a sanidade não volta e escoa ${sp.larva.drain}/s; zerada, ECLODE: ${sp.larva.hatch.damage} de dano e um Alheio sai dela; outra larva em ${sp.larva.regrow} s)`);
       return `desperta até o fim do round: ${parts.join(', ')}`;
     }
     default: return `${sp.damage ?? COMBAT.specialDamage} de dano`;

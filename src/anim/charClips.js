@@ -25,6 +25,28 @@ export function addCharClips(CLIPS, k) {
     ] },
   });
 
+  // ======================= AMALIA (o arco) =======================
+  // de lado para o alvo: o braço esquerdo estendido segurando o arco, o direito puxando a corda até o rosto; o tiro solta
+  // a mão direita para trás (follow-through) e o arco recua um pouco
+  const ARCO = {
+    h: -0.03, hip: [0, -0.5, 0], sp: [0.02, -0.25, 0], hd: [0, 0.65, 0],
+    sL: [-1.5, -0.2, 0], eL: [-0.08, 0, 0], sR: [-1.35, 0.85, 0], eR: [-2.1, 0, 0],
+    lL: [-0.2, 0, 0.12], kL: [0.2, 0, 0], lR: [0.18, 0, -0.1], kR: [0.15, 0, 0],
+  };
+  const BOW_REST = { h: 0, hip: [0, -0.2, 0], sp: [0.03, -0.1, 0], hd: [0, 0.2, 0], sL: [-0.35, 0, 0.2], eL: [-0.4, 0, 0], sR: [0.1, 0, -0.2], eR: [-0.3, 0, 0], lL: [-0.06, 0, 0.06], kL: [0.06, 0, 0], lR: [0.06, 0, -0.06], kR: [0.06, 0, 0] };
+  Object.assign(CLIPS, {
+    bow_idle: { dur: 2.4, loop: true, keys: [k(0, BOW_REST), k(0.5, { ...BOW_REST, h: -0.012, sp: [0.05, -0.12, 0], sL: [-0.4, 0, 0.22] }), k(1, BOW_REST)] },
+    // puxa a corda (segura no fim) e solta
+    bow_shot: { dur: 0.6, keys: [
+      k(0, { ...ARCO, sR: [-1.4, 0.4, 0], eR: [-1.4, 0, 0] }),
+      k(0.55, ARCO),
+      k(0.7, { ...ARCO, sR: [-1.1, 1.2, 0], eR: [-1.5, 0, 0], sL: [-1.42, -0.2, 0] }),
+      k(1, { ...ARCO, sR: [-0.9, 1.0, 0], eR: [-1.2, 0, 0] }),
+    ] },
+    // mira longa (Longa-Distância): segura a corda puxada
+    bow_aim: { dur: 1.0, keys: [k(0, { ...ARCO, sR: [-1.4, 0.4, 0], eR: [-1.4, 0, 0] }), k(0.4, ARCO), k(1, { ...ARCO, sp: [0.02, -0.28, 0] })] },
+  });
+
   // ======================= ARNALDO =======================
   // guarda de esgrima: de lado, espada à frente com a ponta um pouco alta, mão esquerda nas costas
   const FENCE = {

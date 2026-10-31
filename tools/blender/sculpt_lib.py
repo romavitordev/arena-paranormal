@@ -301,3 +301,40 @@ def clothe(src, keep, offset=0.006, cuts=3):
         faces.append(tuple(f))
     bpy.data.meshes.remove(me)
     return verts, faces, uvs
+
+
+# ACABAMENTO DOS MODELOS ANTIGOS (2026-10-31): os personagens feitos antes do sculpt_lib ganham, sem refazer a forma,
+# as DOBRAS DE PANO em relevo (amassados horizontais + vincos quebrados pelo ruído) nas peças de roupa e os FIOS em relevo
+# no cabelo. Peças de poucos vértices são subdivididas antes (o UV acompanha). `mats`: trechos do nome do material.
+def _dense(obj, min_verts):
+    if len(obj.data.vertices) >= min_verts:
+        return
+    bm = bmesh.new()
+    bm.from_mesh(obj.data)
+    bmesh.ops.subdivide_edges(bm, edges=bm.edges[:], cuts=1, use_grid_fill=True)
+    bm.to_mesh(obj.data)
+    bm.free()
+    obj.data.update()
+
+
+def _match(obj, mats):
+    m = obj.data.materials[0].name if obj.type == 'MESH' and obj.data.materials else ''
+    return any(k in m for k in mats)
+
+
+def cloth_pass(parts, mats, H, amp=0.0035, freq=17, min_verts=400):
+    for o in parts:
+        if o.type != 'MESH' or not _match(o, mats):
+            continue
+        _dense(o, min_verts)
+        relief(o, lambda p: amp * H * (ridge(p.z / H * freq + n3(p, 7) * 1.4 + math.sin(p.x / H * 9) * 0.6, 2) - 0.42))
+
+
+def hair_pass(parts, mats, H, center, amp=0.0025, min_verts=400):
+    """fios: sulcos que correm do alto da cabeça para baixo (pelo ângulo em volta do centro da cabeça)"""
+    c = Vector(center)
+    for o in parts:
+        if o.type != 'MESH' or not _match(o, mats):
+            continue
+        _dense(o, min_verts)
+        relief(o, lambda p: amp * H * (ridge(math.atan2(p.x - c.x, p.y - c.y) * 26 + n3(p, 20) * 1.5, 2) - 0.4))

@@ -394,4 +394,8 @@ b.add('prop_hair_roots', merge(*roots), hair_root, region='head', subdiv=0)
 b.add('prop_hair_spikes', merge(*spikes), hair_red, region='head', subdiv=0)
 b.group('prop_hair')
 
+# acabamento da técnica atual (sculpt_lib, 2026-10-31): as dobras do pano em relevo e os fios do cabelo
+import sculpt_lib
+sculpt_lib.cloth_pass(b.parts, ['shirt_guizo', 'sleeve_guizo', 'tee_black', 'pants_guizo', 'plaid_guizo'], H)
+sculpt_lib.hair_pass(b.parts, ['hair_guizo'], H, (HC.x, HC.y, HC.z))
 b.export(OUT)

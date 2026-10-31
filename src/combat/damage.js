@@ -339,6 +339,11 @@ export function applyHit(world, attacker, victim, o) {
     const P = PASSIVES[p.type];
     if (P && P.onHitTaken) P.onHitTaken({ attacker, victim, kind: o.kind, dealt, passive: p, world, o });
   }
+  // passivas de quem BATE, a cada acerto que tira vida (ex.: Caótica da Amalia)
+  for (const p of (attacker && attacker.def && attacker.def.passives) || []) {
+    const P = PASSIVES[p.type];
+    if (P && P.onHitDealt && dealt > 0) P.onHitDealt({ attacker, victim, kind: o.kind, dealt, passive: p, world, o });
+  }
   // Arma de Sangue (Arthur): a lâmina do próprio sangue faz o alvo sangrar
   const blade = attacker.findBuff && attacker.findBuff('bloodBlade');
   if (blade && o.kind === 'melee' && victim.state !== 'ko') victim.applyBleed(blade.bleed, attacker);

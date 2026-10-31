@@ -106,7 +106,8 @@ export class DanteClone {
         const from = new THREE.Vector3(this.pos.x, this.pos.y + 1.4, this.pos.z);
         const dir = target.chestPos().sub(from).normalize();
         w.projectiles.spawn(this.owner, { ...S.projectile, volley: 50000 + Math.floor(w.time * 10) + this.idx }, from, dir);
-        w.audio.play('drain', { volume: 0.5, pitch: 1.2 });
+        if (S.flash) w.fx.burst(from.clone().addScaledVector(dir, 0.5), { count: 8, color: S.flash, speed: 2.4, life: 0.14, size: 0.12 }); // o clarão do cano
+        w.audio.play(S.sound || 'drain', { volume: 0.5, pitch: S.pitch ?? 1.2 });
       }
       if (a.t >= a.dur) { this.attack = null; this.cd = S.cd ?? 3; this.anim.play('idle', { blend: 0.1 }); }
     } else if (this.attack) {
@@ -136,7 +137,7 @@ export class DanteClone {
       this.cd -= dt;
       if (S && this.cd <= 0 && dTarget < (S.range ?? 14) && target.state !== 'ko') {
         this.attack = { ranged: true, t: 0, windup: S.windup ?? 0.35, dur: (S.windup ?? 0.35) + 0.35, fired: false };
-        this.anim.play('throw_r', { restart: true, duration: this.attack.dur });
+        this.anim.play(S.anim || 'throw_r', { restart: true, duration: this.attack.dur }); // S.anim: quem atira com arma (Homens de Terno: 'point')
       } else if (!S && this.cd <= 0 && dTarget < 2.4 && target.state !== 'downed' && target.state !== 'ko') {
         const strikes = this.o.strikes || this.owner.def.melee.strikes;
         const s = strikes[this.strikeIdx++ % (this.o.strikes ? strikes.length : Math.min(3, strikes.length))];

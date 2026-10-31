@@ -1468,7 +1468,24 @@ export function despairMask() {
   const g = new THREE.Group();
   const mat = new THREE.MeshToonMaterial({ map: despairTexture(), color: 0xffffff });
   // a metade da frente (+z): com phi de 0 a π, o meio da textura (u = 0,5) cai bem na frente
-  const shell = new THREE.Mesh(new THREE.SphereGeometry(0.118, 22, 14, 0, Math.PI, 0, Math.PI), mat);
+  // ESCULPIDA pelo próprio desenho (2026-10-31): onde a textura é escura (os olhos, os três SULCOS, a boca e o coração
+  // do nariz) a casca AFUNDA — o relevo nunca sai do lugar do desenho; a testa e as maçãs um pouco para fora
+  const geo = new THREE.SphereGeometry(0.118, 64, 48, 0, Math.PI, 0, Math.PI);
+  const img = despairTexture().image.getContext('2d').getImageData(0, 0, 256, 256).data;
+  const pos = geo.attributes.position;
+  const uv = geo.attributes.uv;
+  const v = new THREE.Vector3();
+  for (let i = 0; i < pos.count; i++) {
+    const px = Math.min(255, Math.floor(uv.getX(i) * 256));
+    const py = Math.min(255, Math.floor((1 - uv.getY(i)) * 256));
+    const dark = 1 - img[(py * 256 + px) * 4] / 255;
+    v.fromBufferAttribute(pos, i);
+    const front = Math.max(0, v.z / 0.118);
+    const k = 1 - 0.09 * dark * front + 0.03 * front * Math.exp(-((v.y - 0.06) ** 2) / 0.002);
+    pos.setXYZ(i, v.x * k, v.y * k, v.z * k);
+  }
+  geo.computeVertexNormals();
+  const shell = new THREE.Mesh(geo, mat);
   shell.scale.set(1, 1.24, 0.82);
   shell.position.set(0, 0.03, -0.03);
   shell.userData.outline = true;
@@ -1749,6 +1766,95 @@ export function seitaMask(kind = 'nathaniel') {
   shell.position.set(0, 0.03, -0.03);
   shell.userData.outline = true;
   g.add(shell);
+  return g;
+}
+
+// FUZIL ALHEIO (wiki "Doppelganger" — Arsenal): a arma tecnológica dos Alheios, de disparos de pura Energia esverdeada
+// e sem munição. Aqui a pistola: corpo liso cinza-escuro, as aletas, o cano curto e as faixas verdes acesas
+export function alienPistol() {
+  const g = new THREE.Group();
+  const dark = 0x2a2e30;
+  const grip = part(new THREE.BoxGeometry(0.028, 0.1, 0.04), dark);
+  grip.position.set(0, 0.03, -0.01);
+  grip.rotation.x = 0.3;
+  g.add(grip);
+  const body = part(new THREE.CapsuleGeometry(0.026, 0.12, 4, 10), 0x3a4044);
+  body.rotation.x = Math.PI / 2;
+  body.position.set(0, -0.045, 0.06);
+  g.add(body);
+  for (const z of [0.02, 0.06]) {
+    const fin = part(new THREE.BoxGeometry(0.06, 0.008, 0.02), dark);
+    fin.position.set(0, -0.045, z);
+    g.add(fin);
+  }
+  const glow = glowMat(0x7aff4a, 1);
+  for (const z of [0.04, 0.1]) {
+    const band = new THREE.Mesh(new THREE.TorusGeometry(0.027, 0.004, 4, 14), glow);
+    band.position.set(0, -0.045, z);
+    g.add(band);
+  }
+  const tip = new THREE.Mesh(new THREE.SphereGeometry(0.014, 8, 6), glow);
+  tip.position.set(0, -0.045, 0.14);
+  g.add(tip);
+  return g;
+}
+
+// AMALIA: o ARCO (wiki "Amalia" — Arsenal: "um grande arco verde com detalhes em branco"; a arte do arco): os braços
+// verde-escuros com as PONTAS BRANCAS em leque (como penas), a empunhadura enrolada em couro e a corda.
+// Empunhadura na origem; os braços do arco seguem o eixo Z local
+export function amaliaBow() {
+  const g = new THREE.Group();
+  const green = 0x2a5a3c;
+  const grip = part(new THREE.CylinderGeometry(0.018, 0.018, 0.12, 8), 0x2a2018);
+  grip.rotation.x = Math.PI / 2;
+  g.add(grip);
+  const tips = [];
+  for (const s of [1, -1]) {
+    const pts = [];
+    for (let i = 0; i <= 8; i++) {
+      const k = i / 8;
+      pts.push(new THREE.Vector3(0, 0.1 * k * k + 0.02, s * (0.06 + 0.5 * k)));
+    }
+    const limb = part(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 16, 0.016, 6), green);
+    limb.scale.x = 0.7;
+    g.add(limb);
+    const end = pts[8];
+    for (let f = 0; f < 3; f++) {
+      const blade = part(new THREE.ConeGeometry(0.012, 0.16 - f * 0.03, 4), 0xe8ece6);
+      blade.position.set(0, end.y + 0.03 + f * 0.015, end.z + s * (0.04 - f * 0.02));
+      blade.rotation.x = s * (1.1 + f * 0.35);
+      g.add(blade);
+    }
+    tips.push(end);
+  }
+  // a corda: de ponta a ponta
+  const str = new THREE.Mesh(new THREE.CylinderGeometry(0.003, 0.003, Math.abs(tips[0].z - tips[1].z), 4), new THREE.MeshBasicMaterial({ color: 0xd8dcd4 }));
+  str.rotation.x = Math.PI / 2;
+  str.position.set(0, tips[0].y, 0);
+  g.add(str);
+  return g;
+}
+
+// a FLECHA FLAMEJANTE (wiki: "flechas flamejantes da mesma cor que sua aura"): a haste, a ponta, as penas e a chama ciano
+export function flameArrow(color = 0x3affd0) {
+  const g = new THREE.Group();
+  const shaft = part(new THREE.CylinderGeometry(0.008, 0.008, 0.7, 5), 0x3a2a1e);
+  shaft.rotation.x = Math.PI / 2;
+  g.add(shaft);
+  const head = new THREE.Mesh(new THREE.ConeGeometry(0.024, 0.08, 4), glowMat(color, 1));
+  head.rotation.x = Math.PI / 2;
+  head.position.z = 0.39;
+  g.add(head);
+  for (let i = 0; i < 3; i++) {
+    const fl = part(new THREE.BoxGeometry(0.004, 0.04, 0.09), 0xe8ece6);
+    fl.position.z = -0.31;
+    fl.rotation.z = (i / 3) * Math.PI;
+    g.add(fl);
+  }
+  const fire = new THREE.Mesh(new THREE.ConeGeometry(0.05, 0.5, 6, 1, true), glowMat(color, 0.55));
+  fire.rotation.x = -Math.PI / 2;
+  fire.position.z = 0.12;
+  g.add(fire);
   return g;
 }
 

@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.52.0';
+export const VERSION = '3.53.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,20 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.53.0',
+    date: '2026-10-31',
+    title: 'A Flecha',
+    items: [
+      'NOVA LUTADORA — AMALIA, A FLECHA (ORDO CALAMITAS): a arqueira de Calamidade, de capuz e manto verdes, a cicatriz em cruz e a aura ciano. Flecha Flamejante, LONGA-DISTÂNCIA (de longe ninguém esquiva nem defende a flecha), Chuva de Flechas, ALTRUÍSMO (sacrifica a própria vida pelos aliados), Flechas Caóticas, a passiva CAÓTICA (a cada 2 flechas que acertam, cura) e o especial Não Perde a Cabeça!',
+      'O ESTRANGEIRO — HOMENS DE TERNO (R2 + X): os Doppelgangers chegam numa interferência de sinal — de terno e chapéu, a cara rachada ao meio — dois atiram plasma verde de longe e um bate de perto.',
+      'O ESTRANGEIRO — INCUBAR pelo cânone: a Transformação agora põe a LARVA na cabeça do adversário. A sanidade dele não volta e escoa; quando zera, a larva ECLODE (golpe pesado e um Alheio sai dela) e outra entra logo depois.',
+      'MODELOS REVISTOS PELAS ARTES: a Magistrada (capa preta, gola dourada em pé, ombreiras com espinhos, mangas bufantes) e a Máscara do Desespero em relevo (também na Celestine); o Amigo Imaginário (barbatanas maiores, cauda longa, fios de tinta); o Portador do Trono (chifres em foice, a coroa de espinhos dourada, asas de braços mais densas, pernas de bode).',
+      'A ESFINGE agachada como réptil (patas abertas, peito alto), como na arte oficial.',
+      'DOBRAS E CABELO: Aghata, Dalmo, Erin, Ferreiro, Guizo, Jae e Labirinto com as dobras do pano e os fios do cabelo em relevo.',
+      'CPU: o atirador agora lê a investida do adversário e esquiva para o lado na hora certa.',
+    ],
+  },
   {
     v: '3.52.0',
     date: '2026-10-30',

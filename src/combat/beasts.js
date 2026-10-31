@@ -284,6 +284,16 @@ export const SPHINX = {
   wrongBite: 60, // errou o enigma: a mordida antes de devorar (com o Estômago, ~10% da vida)
 };
 
+// a pose agachada (ver SphinxGhoul.pose): ângulos em radianos, drop em metros do modelo
+const SPHINX_CROUCH = {
+  front: { splay: 0.8, fold: 1.2 },
+  back: { splay: 1.0, fold: 1.6 },
+  drop: 0.25,
+  pitch: -0.1,
+  neck: 0.08, // o peito sobe: o pescoço compensa para a cabeça continuar olhando o alvo
+  tail: 0.15,
+};
+
 export class SphinxGhoul extends Marionette {
   configFor() { return { ...SPHINX, attacks: Object.fromEntries(Object.entries(SPHINX.attacks).map(([k, v]) => [k, { ...v }])) }; }
   buildModel() {
@@ -557,19 +567,32 @@ export class SphinxGhoul extends Marionette {
         default: break;
       }
     }
-    if (J.torso) J.torso.rotation.set(torsoX, 0, 0);
-    if (J.neck) J.neck.rotation.x = neckX;
+    // a POSTURA da arte oficial ("Miniatura Carniçal da Esfinge em Calamidade"): AGACHADA como um réptil — as patas
+    // abertas para os lados com os cotovelos/joelhos para fora, o corpo baixo e o PEITO ALTO (as de trás dobram mais).
+    // SPHINX_CROUCH: splay (abertura da coxa), fold (dobra do joelho para voltar ao chão), drop (o quanto o corpo desce),
+    // pitch (o peito sobe)
+    const C = SPHINX_CROUCH;
+    if (J.torso) {
+      if (this.torsoY0 === undefined) this.torsoY0 = J.torso.position.y;
+      J.torso.position.y = this.torsoY0 - C.drop;
+      J.torso.rotation.set(torsoX + C.pitch, 0, 0);
+    }
+    if (J.neck) J.neck.rotation.x = neckX + C.neck;
     if (J.head) J.head.rotation.x = headX;
     if (J.jaw) J.jaw.rotation.x = jaw;
-    if (J.tail) J.tail.rotation.set(Math.sin(t * 2.2) * 0.15, Math.sin(t * 1.5) * 0.35, 0);
+    if (J.tail) J.tail.rotation.set(Math.sin(t * 2.2) * 0.15 + C.tail, Math.sin(t * 1.5) * 0.35, 0);
     if (J.wingL) J.wingL.rotation.set(0, wing * 0.6, wing);
     if (J.wingR) J.wingR.rotation.set(0, -wing * 0.6, -wing);
     J.legs.forEach((l, i) => {
       if (!l.hip) return;
       const diag = i === 0 || i === 3 ? 0 : Math.PI;
       const sw = Math.sin(ph + diag);
-      l.hip.rotation.x = sw * 0.45 * walk;
-      if (l.knee) l.knee.rotation.x = Math.max(0, -sw) * 0.55 * walk * (i < 2 ? -1 : 1);
+      const s = i % 2 === 0 ? 1 : -1; // FL/BL do lado +x
+      const P = i < 2 ? C.front : C.back;
+      // andando, a pata levanta abrindo menos (o passo de lagarto: gira para a frente e volta)
+      const lift = Math.max(0, sw) * walk;
+      l.hip.rotation.set(sw * 0.4 * walk, 0, s * (P.splay - lift * 0.2));
+      if (l.knee) l.knee.rotation.set(Math.max(0, -sw) * 0.45 * walk * (i < 2 ? -1 : 1), 0, -s * (P.fold - lift * 0.25));
     });
     this.updateFlash();
   }

@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { Timeline } from '../../core/util.js';
 import { faceClose, orbit } from '../../camera/shots.js';
 import { swapFace } from './maskTransform.js';
+import { applyHit } from '../damage.js';
+import { DanteClone } from '../npcs.js';
 
 // DESPERTAR (Barra de Transformação de quem não tem uma forma própria): uma cena curta — o personagem se concentra, a
 // aura cresce, o nome do estado aparece — e ele fica nesse estado ATÉ O FIM DO ROUND. Cada um escolhe o estado pelo
@@ -27,6 +29,9 @@ import { swapFace } from './maskTransform.js';
 //   eyeDrip             cor do Lodo que escorre do rosto enquanto durar
 //   passives            passivas que valem enquanto durar (ex.: [{ type: 'precognition' }] — lidas por hasPassive)
 //   perfectBlockWindow  janela do Bloqueio Perfeito enquanto durar (s; vale a maior entre esta e a do personagem)
+//   larva               { drain, takenMult, regrow, hatch: { damage, summon } }: INCUBAR (o Estrangeiro) — a larva vai
+//                       na cabeça do ADVERSÁRIO: ele fica exposto (takenMult), a sanidade não volta e escoa (drain/s);
+//                       zerada, a larva ECLODE (dano + um Alheio que sai dela, `summon`) e outra é posta em `regrow` s
 //   glowMat             trecho do nome do material que BRILHA na cor do estado (o próprio desenho da textura vira o
 //                       brilho: na venda do Gal, as marcas douradas acendem e o pano preto continua escuro); pulsa
 export const awakenMode = {
@@ -131,7 +136,52 @@ function applyAwakening(f, sp, world, col, undoFace, glow) {
     },
     onEnd() { aura.stop(); if (drip) drip.stop(); if (undoFace) undoFace(); if (glow) glow.undo(); if (f.buffTint === tint) f.buffTint = null; },
   });
+  if (sp.larva) incubate(f, sp.larva, world, col);
   f.notify(`${(sp.label || sp.name).toUpperCase()}!`, true);
+}
+
+// INCUBAR (wiki "Estrangeiro"): "enquanto estiver com uma larva incubada, o ser fica completamente exposto à criatura
+// [...] a larva drena aos poucos a sanidade de seu hospedeiro e, quando esse processo é finalizado, o indivíduo morre
+// instantaneamente ao eclodir algum Alheio". No jogo: a eclosão é um golpe pesado, sai um Doppelganger e a próxima larva
+// entra pouco depois — até o fim do round (ou até o Estrangeiro cair)
+function incubate(f, L, world, col) {
+  const plant = () => {
+    const opp = f.opponent;
+    if (!opp || opp.state === 'ko' || f.state === 'ko' || opp.findBuff('larva')) return;
+    const glow = world.fx.emitter({ rate: 6, follow: () => opp.rig.joints.hd.getWorldPosition(new THREE.Vector3()), particle: { color: col, speed: 0.2, up: 0.5, spread: 0.12, life: 0.5, size: 0.08 } });
+    let acc = 0;
+    let hatched = false;
+    opp.addBuff({
+      type: 'larva', name: 'LARVA', debuff: true, time: Infinity, duration: Infinity, takenMult: L.takenMult, energyRegenMult: 0,
+      onTick(dt) {
+        if (hatched || opp.state === 'ko') return;
+        if (f.state === 'ko') { this.time = 0; return; }
+        acc += (L.drain ?? 3) * dt;
+        if (acc >= 1) { const n = Math.floor(acc); acc -= n; opp.energy = Math.max(0, opp.energy - n); }
+        if (opp.energy > 0) return;
+        // a sanidade acabou: a larva ECLODE
+        hatched = true;
+        this.time = 0;
+        const head = opp.rig.joints.hd.getWorldPosition(new THREE.Vector3());
+        world.fx.burst(head, { count: 40, color: col, speed: 5, life: 0.5, size: 0.18 });
+        world.fx.distort(head, { color: col, radius: 2, life: 0.4 });
+        world.cameraRig.shake(0.35, 0.3);
+        opp.notify('A LARVA ECLODIU', true);
+        applyHit(world, f, opp, { damage: L.hatch.damage, kind: 'ability', element: 'transmissao', unblockable: true, knockdown: true, knockback: 1.5, hitstun: 0.8, color: col, sound: 'heavyPunch', scale: 1.5, dir: new THREE.Vector3(Math.sin(opp.yaw + Math.PI), 0, Math.cos(opp.yaw + Math.PI)) });
+        const S = L.hatch.summon;
+        if (S && f.state !== 'ko') {
+          const npc = new DanteClone(f, world, 2, S.duration, { model: S.model, hp: S.hp, damageMult: 1, element: 'transmissao', strikes: S.strikes, rise: true, restyle(m) { m.material.transparent = false; }, setup(rig) { if (rig.props.pistol) rig.showProp('pistol', false); } });
+          npc.isDoppel = true;
+          npc.pos.set(opp.pos.x + Math.sin(opp.yaw + 1.6) * 1.4, 0, opp.pos.z + Math.cos(opp.yaw + 1.6) * 1.4);
+          world.addNpc(npc);
+        }
+        world.after(L.regrow ?? 8, plant);
+      },
+      onEnd() { glow.stop(); },
+    });
+    opp.notify('LARVA INCUBADA', true);
+  };
+  plant();
 }
 
 // acende os materiais cujo nome contém `part`: o material é CLONADO para este lutador (no espelho, o outro não muda) e o

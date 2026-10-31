@@ -2678,6 +2678,36 @@ export const MATERIAL_TEXTURES = {
     brow: { angry: 1, thick: 5, color: '#b8b4ae' },
     mouth: { mouthW: 18, lip: 'rgba(110,60,50,0.5)' },
   }),
+  // AMALIA (Ordo Calamitas): pele negra, a grande CICATRIZ EM CRUZ no rosto (wiki) e, nas memórias revividas, os OLHOS
+  // ACESOS de branco-ciano (a miniatura de Calamidade); sobrancelhas grossas e a boca séria de quem fala pouco
+  face_amalia: face((g) => {
+    g.strokeStyle = 'rgba(40,20,14,0.75)'; g.lineWidth = 5; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(CX - 46, EYE_Y - 26); g.lineTo(CX + 30, MOUTH_Y - 8); g.stroke(); // a cicatriz em cruz
+    g.beginPath(); g.moveTo(CX + 40, EYE_Y - 30); g.lineTo(CX - 26, MOUTH_Y - 4); g.stroke();
+    g.strokeStyle = 'rgba(150,100,84,0.5)'; g.lineWidth = 2;
+    g.beginPath(); g.moveTo(CX - 44, EYE_Y - 25); g.lineTo(CX + 28, MOUTH_Y - 9); g.stroke();
+    g.beginPath(); g.moveTo(CX + 38, EYE_Y - 29); g.lineTo(CX - 24, MOUTH_Y - 5); g.stroke();
+    for (const s of [-1, 1]) {
+      const gr = g.createRadialGradient(CX + s * 32, EYE_Y + 4, 2, CX + s * 32, EYE_Y + 4, 18);
+      gr.addColorStop(0, 'rgba(200,255,240,0.9)'); gr.addColorStop(0.4, 'rgba(90,255,210,0.45)'); gr.addColorStop(1, 'rgba(90,255,210,0)');
+      g.fillStyle = gr; g.beginPath(); g.arc(CX + s * 32, EYE_Y + 4, 18, 0, Math.PI * 2); g.fill();
+    }
+  }, {
+    skin: '#5e3c2c',
+    eye: { iris: '#e8fff8', irisLight: '#ffffff', tilt: 0.02, lashes: true },
+    brow: { angry: 2, thick: 5, color: '#140c0a' },
+    mouth: { mouthW: 14, lip: 'rgba(60,30,24,0.6)' },
+  }),
+  // o pano do peito da AMALIA: verde-escuro gasto com o Símbolo da Ordo Calamitas
+  tabard_amalia: () => canvasTex(256, 512, (g, w, h) => {
+    g.fillStyle = '#2c3a30'; g.fillRect(0, 0, w, h);
+    const rnd = seeded(70);
+    for (let i = 0; i < 60; i++) { g.fillStyle = `rgba(${rnd() < 0.5 ? '0,0,0' : '90,120,96'},${0.08 + rnd() * 0.12})`; g.fillRect(0, rnd() * h, w, 1 + rnd() * 3); }
+    g.strokeStyle = 'rgba(0,0,0,0.45)'; g.lineWidth = 6; g.strokeRect(6, -10, w - 12, h - 30);
+    g.fillStyle = '#16201a';
+    for (let x = 0; x < w; x += 9) g.fillRect(x, h - 26 + rnd() * 10, 5, 30);
+    g.save(); g.translate(w / 2, 150); g.scale(1, 0.95); calamitasSymbol(g, 0, 0, 1.15); g.restore(); // o pano é curto: o Símbolo quase sem achatar
+  }),
   // o pano do peito do GAIUS / AMPHITRUO: roxo-acinzentado com o Símbolo da Ordo Calamitas
   tabard_amphitruo: () => canvasTex(256, 512, (g, w, h) => {
     g.fillStyle = '#4a3a62'; g.fillRect(0, 0, w, h);

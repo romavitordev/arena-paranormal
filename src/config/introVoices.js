@@ -393,6 +393,19 @@ export const VOICES = {
       any: [(o) => `Já vi coisa pior, ${o.name}. Já fui coisa pior.`, (o) => `Calma, ${o.name}. O velho ainda dá conta.`],
     },
   },
+  // AMALIA (Ordo Calamitas): quieta, fala só o necessário; a flecha fala por ela
+  amalia: {
+    open: {
+      ally: (o) => `${o.name}. Fica fora da linha da flecha.`,
+      rival: (o) => `${o.name}. ${o.one}. Já mirei em coisa pior.`,
+      any: [(o) => `${o.name}. Uma flecha. Talvez duas.`, (o) => `Cabeça no lugar, ${o.name}. Eu não erro.`],
+    },
+    reply: {
+      ally: (o) => `Tá. Mas de longe, ${o.name}.`,
+      rival: (o) => `${o.group}. Anotado. Agora some da minha mira.`,
+      any: [(o) => `Hm. Fala menos, ${o.name}.`, (o) => `Já te achei, ${o.name}.`],
+    },
+  },
   // O ANFITRIÃO — a mesma consciência no Arnaldo e no Gaius (Amphitruo): o apresentador do caos, os JOGOS com regras que
   // ele inventa na hora, a plateia, os enigmas, as vozes que trocam de tom no meio da frase
   // Irônico, debochado, o caos puro (wiki: "agitado, prepotente e confiante, rindo dos outros, sarcástico, rude,

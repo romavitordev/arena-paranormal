@@ -5,7 +5,7 @@
 // que a Dor e a Morte?". Elemento: TRANSMISSÃO (verde — o do Sino de Tenebris ligado a ele; pedido do usuário). Fala
 // pouco: indiferente, superior.
 // Kit (Habilidades da wiki): Rajada Psíquica (□), Comandar, Oblívio (some da mente do alvo), aparece do nada atrás da
-// vítima, Toque Sutil (derrete). Especial: TORTURA MENTAL; a ABDUÇÃO é um ritual comum (R2 + △). Transformação: INCUBAR (a larva — o alvo fica exposto à mente dele).
+// vítima, Toque Sutil (derrete), os HOMENS DE TERNO (os Doppelgangers). Especial: TORTURA MENTAL; a ABDUÇÃO é um ritual comum (R2 + △). Transformação: INCUBAR (a larva — o alvo fica exposto à mente dele).
 // Modelo próprio do Blender (public/models/estrangeiro.glb, tools/blender/char_estrangeiro.py).
 const GREEN = 0x8aff4a;
 const PALE = 0xd8d6c8;
@@ -140,6 +140,37 @@ export default {
       color: GREEN,
     },
     {
+      // os DOPPELGANGERS (wiki "Doppelganger", apelido "Homens de Terno"): os Alheios gerados pelas larvas do
+      // Estrangeiro, de terno e chapéu, a cara rachada ao meio, com os Fuzis Alheios de plasma verde
+      id: 'homensDeTerno',
+      name: 'Homens de Terno',
+      input: 'block+jump', // R2 + × / RT + A
+      type: 'summonDoppels',
+      description: 'Três DOPPELGANGERS (os Homens de Terno: Alheios de terno e chapéu, a cara rachada ao meio) aparecem numa interferência de sinal em volta do adversário por 10 s: dois ficam longe atirando o plasma verde do Fuzil Alheio e o terceiro chega perto e bate. "Somos Todos Um": quando um cai, os outros atiram mais rápido.',
+      energyCost: 35,
+      cooldown: 24,
+      count: 3,
+      brawlers: 1,
+      duration: 10,
+      hp: 70,
+      strikes: [
+        { anim: 'jab', dur: 0.36, active: [0.14, 0.22], range: 1.6, damage: 12 },
+        { anim: 'cross', dur: 0.4, active: [0.16, 0.24], range: 1.7, damage: 14 },
+      ],
+      gun: {
+        keep: 6.5,
+        range: 16,
+        cd: 2.2,
+        windup: 0.4,
+        anim: 'point',
+        sound: 'sniper',
+        pitch: 1.8,
+        flash: GREEN,
+        projectile: { name: 'Fuzil Alheio', type: 'projectile', damage: 9, range: 18, speed: 30, radius: 0.3, spread: 0, knockback: 0.5, hitstun: 0.22, visual: 'bullet', color: GREEN, element: 'transmissao', hitSound: 'impact' },
+      },
+      color: GREEN,
+    },
+    {
       id: 'toqueSutil',
       name: 'Toque Sutil',
       input: 'carga+dodge', // △ + L2
@@ -174,13 +205,24 @@ export default {
   },
 
 
-  // TRANSFORMAÇÃO (Barra cheia + vida baixa, segurando △): INCUBAR — a larva entra na mente: tudo o que ele faz
-  // bate mais, as recargas correm e as garras drenam a sanidade da vítima até o fim do round
+  // TRANSFORMAÇÃO (Barra cheia + vida baixa, segurando △): INCUBAR — a habilidade da wiki ("Estrangeiro"): ele não muda
+  // de forma; põe a LARVA na cabeça do adversário. O hospedeiro fica EXPOSTO (a mente aberta: toma mais dano), a
+  // sanidade NÃO VOLTA e escoa; quando zera, a larva ECLODE — um golpe pesado e um Alheio (um Doppelganger) sai dela —
+  // e outra larva entra logo depois. Ele mesmo, com a mente do outro aberta, bate um pouco mais e recarrega mais rápido.
   awakening: {
     name: 'Incubar',
     banner: 'Incubar',
     type: 'awakenMode',
-    mult: 1.15, takenMult: 0.88, cdRate: 1.3, speedMult: 1.1, aura: 'smoke', color: GREEN, heal: 0.1,
+    mult: 1.08, cdRate: 1.2, aura: 'smoke', color: GREEN, heal: 0.1,
+    larva: {
+      drain: 3, // sanidade por segundo
+      takenMult: 1.12,
+      regrow: 8,
+      hatch: {
+        damage: 90,
+        summon: { model: 'doppel', hp: 70, duration: 8, strikes: [{ anim: 'jab', dur: 0.36, active: [0.14, 0.22], range: 1.6, damage: 12 }, { anim: 'cross', dur: 0.4, active: [0.16, 0.24], range: 1.7, damage: 14 }] },
+      },
+    },
   },
 
   passives: [

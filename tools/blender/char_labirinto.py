@@ -303,4 +303,7 @@ for i in range(14):
 b.add('prop_helmetOn', merge(helmet, *gorget), helm, region='head', subdiv=0)
 b.add('prop_helmetOn_papers', merge(*papers), paper, region='head', subdiv=0)
 
+# acabamento da técnica atual (sculpt_lib, 2026-10-31): as dobras do pano em relevo
+import sculpt_lib
+sculpt_lib.cloth_pass(b.parts, ['tunic_green', 'patch_skirt'], H)
 b.export(OUT)

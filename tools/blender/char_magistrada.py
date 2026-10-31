@@ -7,6 +7,11 @@ Relíquia de Conhecimento na testa). Camisa branca de mangas longas, calça cinz
 TECIDO BRANCO caindo do pescoço até os joelhos com franja; a corda com NÓ DE FORCA no pescoço e outra amarrada na
 cintura; correntes douradas caindo pelo peito; luvas pretas e pulseiras douradas; a grande CAPA marrom-escura até os
 pés, aberta na frente, com franja na barra e a GOLA DOURADA alta e espetada atrás da cabeça.
+REVISÃO (2026-10-31) pela "Miniatura A Magistrada em Desconjuração": a CAPA PRETA-ACINZENTADA (não marrom) presa atrás dos
+braços (os braços ficam de fora, como na miniatura); a GOLA DOURADA EM PÉ atrás da cabeça (não mais a bandeja aberta);
+as OMBREIRAS escuras com a fileira de espinhos; a camisa branca de MANGAS BUFANTES puxadas até o cotovelo (o antebraço
+à mostra), as luvas pretas com as FAIXAS no pulso; a GOLA ESCURA no pescoço por baixo do tecido; a calça clara.
+A Máscara do Desespero em relevo é peça em código (weapons.js despairMask, a mesma da Celestine).
 A bengala é adicionada em código (src/models/weapons.js bengala()).
 Coordenadas do tronco ANTES da escala do Builder (x × k_tx, y × k_ty); espessuras em frações de H.
 """
@@ -26,11 +31,14 @@ hz = sk['hips'].z
 skin = material('skin_magistrada', '#4a2e22', 0.75)
 shirt = material('shirt_magistrada', '#e6e2da', 0.85)
 scarf = material('scarf_magistrada', '#efebe2', 0.9)
-pants = material('pants_magistrada', '#8c8780', 0.9)
+pants = material('pants_magistrada', '#d6d2c8', 0.9)
 glove = material('glove_magistrada', '#141214', 0.6)
-shoe = material('shoe_magistrada', '#2a1e18', 0.7)
-cape = material('cape_magistrada', '#2e221c', 0.9)
-cape_in = material('cape_magistrada_in', '#1a1210', 0.9)
+shoe = material('shoe_magistrada', '#141216', 0.5)
+shoe_w = material('shoe_magistrada_w', '#e8e4dc', 0.6)
+gaiter = material('gaiter_magistrada', '#3c3c42', 0.9)
+plate = material('plate_magistrada', '#2c2c32', 0.5, metal=0.3)
+cape = material('cape_magistrada', '#26262c', 0.9)
+cape_in = material('cape_magistrada_in', '#121216', 0.9)
 gold = material('gold_magistrada', '#c8a048', 0.35, metal=0.8)
 rope = material('rope_magistrada', '#c8b078', 0.9)
 hairm = material('hair_magistrada', '#1a120e', 0.6)
@@ -142,25 +150,28 @@ lib.torso_part = mag_torso
 # cabeça um pouco comprida (a Máscara é ovalada)
 hc = b.body(M, [], arms=(), legs=False, head_r=(0.122, 0.134, 0.168), neck_r=0.05)
 
-# ---------------------------------------------------------------- BRAÇOS: camisa branca até o punho, luvas pretas,
-# pulseiras douradas empilhadas
+# ---------------------------------------------------------------- BRAÇOS: a camisa branca de MANGAS BUFANTES puxadas até o
+# cotovelo (franzida no punho da manga), o antebraço à mostra, as luvas pretas e as faixas pretas enroladas no pulso
 for side in ('L', 'R'):
     s, e, h = sk['s' + side], sk['e' + side], sk['hand' + side]
     sx = 1 if side == 'L' else -1
     top = s + Vector((-sx * 0.02 * H, 0, 0.005 * H))
     up = []
-    for i in range(6):
-        t = i / 5
-        p = top.lerp(e, t)
-        r = 0.064 + 0.008 * math.sin(t * math.pi)
+    for i in range(7):
+        t = i / 6
+        p = top.lerp(e + (e - s).normalized() * 0.03 * H, t)
+        r = 0.066 + 0.026 * math.sin(min(1.0, t * 1.15) * math.pi) ** 0.8  # bufante no meio, franzida nas pontas
         up.append((p.x, p.y, p.z, r, r))
-    b.add('sleeve' + side, tube(up, 14), shirt, region='arm' + side, subdiv=0)
-    b.add('delt' + side, ellipsoid((s.x - sx * 0.006 * H, s.y, s.z - 0.012 * H), (0.058 * H, 0.064 * H, 0.054 * H), 12, 8), shirt, region='arm' + side, subdiv=0)
-    lo = [(q.x, q.y, q.z, r, r * 0.95) for q, r in ((e.lerp(h, t), 0.06 - 0.012 * t) for t in (0.0, 0.3, 0.6, 0.86))]
-    b.add('sleeve_lo' + side, tube(lo, 12), shirt, region='e' + side, subdiv=0)
+    b.add('sleeve' + side, tube(up, 16), shirt, region='arm' + side, subdiv=0)
+    b.add('delt' + side, ellipsoid((s.x - sx * 0.006 * H, s.y, s.z - 0.012 * H), (0.06 * H, 0.066 * H, 0.056 * H), 12, 8), shirt, region='arm' + side, subdiv=0)
+    # a dobra franzida da manga no cotovelo
+    cuff = e + (e - s).normalized() * 0.03 * H
+    b.add('sleeveCuff' + side, tube(limb_rings(cuff, cuff + (h - e).normalized() * 0.022 * H, 0.06, 0.056, n=1), 14), shirt, region='e' + side, subdiv=0)
+    lo = [(q.x, q.y, q.z, r, r * 0.95) for q, r in ((e.lerp(h, t), 0.05 - 0.01 * t) for t in (0.0, 0.3, 0.6, 0.86))]
+    b.add('forearm' + side, tube(lo, 12), skin, region='e' + side, subdiv=0)
     b.add('hand' + side, hand_part(sk, side, 0.05), glove, region='e' + side)
-    rings = [tube(limb_rings(e.lerp(h, t), e.lerp(h, t + 0.03), 0.054, 0.054, n=1), 12) for t in (0.66, 0.71, 0.76, 0.81)]
-    b.add('bracelets' + side, merge(*rings), gold, region='e' + side, subdiv=0)
+    wraps = [tube(limb_rings(e.lerp(h, t), e.lerp(h, t + 0.045), 0.05, 0.05, n=1), 12) for t in (0.62, 0.7, 0.78)]
+    b.add('wristWraps' + side, merge(*wraps), glove, region='e' + side, subdiv=0)
 
 # ---------------------------------------------------------------- PERNAS: calça cinza larga, sapatos escuros
 b.add('pants_hip', grid(lambda u, v: torso_pt((u - 0.5) * TAU, 0.06 - v * 0.24, 1.0, 0.012), 32, 4), pants, region='torso', subdiv=0)
@@ -176,10 +187,11 @@ for side in ('L', 'R'):
         rings.append((p.x, p.y, p.z, r, r))
     b.add('pants' + side, tube(rings, 14), pants, region='leg' + side, subdiv=0)
     b.add('shoe' + side, ellipsoid((f.x, f.y - 0.05 * H, f.z + 0.025 * H), (0.046 * H, 0.12 * H, 0.036 * H), 12, 8, theta_max=math.pi * 0.6), shoe, region='foot' + side, subdiv=0)
+    b.add('shoeTop' + side, ellipsoid((f.x, f.y - 0.02 * H, f.z + 0.05 * H), (0.04 * H, 0.06 * H, 0.022 * H), 10, 6), shoe_w, region='foot' + side, subdiv=0)  # o peito do pé branco (os sapatos de duas cores)
     b.add('sole' + side, sole_part((f.x, f.y - 0.05 * H, f.z - 0.006 * H), (0.095 * H, 0.24 * H, 0.02 * H), bevel=0.005), shoe, region='foot' + side, subdiv=0)
 
 # ---------------------------------------------------------------- CAPA marrom-escura até os pés, aberta na frente
-GAP = 0.13
+GAP = 0.3  # bem aberta na frente: a capa cai por TRÁS dos braços (a miniatura)
 Z_TOP, Z_BOT = 0.62, -0.92
 
 
@@ -220,11 +232,11 @@ b.add('cape_edge', merge(*[rod(e_, [0.009 * H] * 21, 5) for e_ in edges]), gold,
 
 # GOLA DOURADA alta, atrás da cabeça, abrindo para os lados com a franja espetada (a arte do Livro de Regras)
 def collar_pt(u, v):
-    a = (u - 0.5) * 1.6 * math.pi + math.pi  # de um ombro ao outro, passando por trás
+    a = (u - 0.5) * 1.3 * math.pi + math.pi  # de um ombro ao outro, passando por trás
     base = torso_pt(a, 0.62, 1.0, 0.06)
-    up = v * 0.24 * H
-    spread = 1 + v * 0.9
-    return Vector((base.x * spread, base.y * spread + v * 0.03 * H, base.z + up))
+    up = v * 0.26 * H
+    spread = 1 + v * 0.22  # EM PÉ atrás da cabeça, abrindo só um pouco
+    return Vector((base.x * spread, base.y * spread + v * 0.02 * H, base.z + up))
 
 
 b.add('collar', grid(collar_pt, 30, 4), cape, region='torso', subdiv=0)
@@ -238,6 +250,20 @@ for i in range(34):
     spikes.append(cone(tuple(p), tuple(p + d.normalized() * (0.04 + 0.02 * (i % 2)) * H), 0.008 * H, 3))
 rim = [collar_pt(i / 30, 1.0) for i in range(31)]
 b.add('collar_gold', merge(rod(rim, [0.012 * H] * 31, 5), *spikes), gold, region='torso', subdiv=0)
+
+# ---------------------------------------------------------------- a GOLA ESCURA no pescoço (por baixo do tecido branco)
+b.add('gaiter', tube([(0, 0, 1.56 * H, 0.066 * H, 0.066 * H), (0, 0, 1.62 * H, 0.062 * H, 0.062 * H), (0, 0, 1.69 * H, 0.058 * H, 0.056 * H)], 16), gaiter, region='neck', subdiv=0)
+
+# ---------------------------------------------------------------- as OMBREIRAS escuras da capa com a fileira de espinhos
+for sx in (1, -1):
+    sh = sk['sL' if sx > 0 else 'sR']
+    c = Vector((sh.x + sx * 0.01 * H, sh.y + 0.012 * H, sh.z + 0.03 * H))
+    pl = ellipsoid(tuple(c), (0.085 * H, 0.09 * H, 0.05 * H), 14, 8, theta_max=math.pi * 0.62)
+    sp = []
+    for k in range(5):
+        q = c + Vector((sx * (-0.035 + 0.02 * k) * H, 0.02 * H, 0.04 * H))
+        sp.append(cone(tuple(q), tuple(q + Vector((sx * 0.012 * H, 0.004 * H, 0.05 * H))), 0.01 * H, 4))
+    b.add(f'shoulderPlate{sx}', merge(pl, *sp), plate, region='torso', weight_fn=lambda p: {'chest': 1.0}, subdiv=0)
 
 # ---------------------------------------------------------------- TECIDO BRANCO caindo do pescoço até os joelhos
 for sx in (1, -1):

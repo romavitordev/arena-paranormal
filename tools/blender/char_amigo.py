@@ -4,6 +4,9 @@ Referências: wiki "Amigo Imaginário" (a arte da cinematic do corpo e a miniatu
 para a frente, de coluna retorcida com ESPINHOS nas costas; um CAPUZ enorme e pontudo, fundido ao corpo, que se
 estende até o chão e se rasga em TIRAS; por baixo, TENTÁCULOS negros e dois braços secos e escuros de garras. Não tem
 rosto: só um buraco de onde escorre sem parar a TINTA marrom (o jorro até o chão é feito em código).
+REVISÃO (2026-10-31) pela "Miniatura Amigo Imaginário em O Segredo na Ilha": as BARBATANAS da crista bem maiores (a
+fileira de espinhos de pano que domina o perfil), as PREGAS fundas do manto esculpidas (relief), a CAUDA de pano bem
+mais longa arrastando para trás e os FIOS DE TINTA compridos escorrendo do buraco do rosto.
 Elemento no jogo: TINTA (marrom).
 Coordenadas do tronco ANTES da escala do Builder (x × k_tx, y × k_ty); espessuras em frações de H.
 """
@@ -12,6 +15,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 import lib
 from lib import *
 from mathutils import Vector, Matrix
+from sculpt_lib import relief, ridge, n3
 
 OUT = sys.argv[sys.argv.index('--') + 1] if '--' in sys.argv else 'amigo.glb'
 random.seed(13)
@@ -212,7 +216,7 @@ for i, p in enumerate(spine):
     else:
         nrm = Vector((p.x, p.y, 0.0)) + Vector((0, 0, 0.25 * p.y))
     t = i / (len(spine) - 1)
-    f_ = fin(p - nrm.normalized() * 0.015 * H, nrm, -tan, (0.16 - 0.09 * t) * H, (0.13 - 0.06 * t) * H)
+    f_ = fin(p - nrm.normalized() * 0.015 * H, nrm, -tan, (0.26 - 0.13 * t) * H, (0.17 - 0.07 * t) * H, 0.008)
     (fins_h if i < 5 else fins_t).append(f_)
 b.add('fins_head', merge(*fins_h), robe, region='head', subdiv=0)
 b.add('fins_back', merge(*fins_t), robe, region='torso', subdiv=0)
@@ -232,7 +236,7 @@ ink_strands = []
 for k in range(9):
     x = (k - 4) * 0.014 * H
     top = Vector((hc.x + x, hc.y - 0.1 * H, hc.z - 0.05 * H + abs(k - 4) * 0.006 * H))
-    ln = (0.1 + 0.1 * ((k * 37) % 5) / 5) * H
+    ln = (0.22 + 0.3 * ((k * 37) % 5) / 5) * H  # os fios compridos da miniatura
     ink_strands.append(rod([top, top + Vector((0, -0.008 * H, -ln * 0.5)), top + Vector((0, -0.01 * H, -ln))], [0.009 * H, 0.006 * H, 0.002 * H], 5))
 b.add('ink', merge(*ink_strands), ink, region='head', subdiv=0)
 
@@ -256,7 +260,7 @@ def robe_pt(u, v, out=1.0):
     p.y *= fold
     # a cauda: as costas se alongam para trás perto do chão
     back = max(0.0, -math.cos(a)) ** 2
-    p.y += back * smoothstep(-0.25, -0.95, z) * 0.32 * H
+    p.y += back * smoothstep(-0.2, -0.95, z) * 0.55 * H  # a cauda longa que arrasta (a miniatura de perfil)
     if v > 0.9:
         cut = (0.5 + 0.5 * math.sin(u * 47.0)) * (0.5 + 0.5 * math.sin(u * 13.0 + 1.3))
         p.z += cut * 0.12 * H * (v - 0.9) / 0.1
@@ -270,8 +274,10 @@ def robe_weights(p):
     return {'chest': max(0.0, 1 - w_leg - w_hip), 'hips': w_hip, 'l' + side: w_leg}
 
 
-b.add('robe', grid(lambda u, v: robe_pt(u, v), 64, 24), robe, region='torso', weight_fn=robe_weights, subdiv=0)
-b.add('robe_in', grid(lambda u, v: robe_pt(u, v, 0.985), 64, 24, flip=True), robe_in, region='torso', weight_fn=robe_weights, subdiv=0)
+robe_o = b.add('robe', grid(lambda u, v: robe_pt(u, v), 96, 32), robe, region='torso', weight_fn=robe_weights, subdiv=0)
+# as PREGAS fundas do pano (mais fundas embaixo), torcidas como na miniatura
+relief(robe_o, lambda q: 0.012 * H * (ridge(math.atan2(q.x, q.y) * 7 + q.z / H * 3 + n3(q, 6) * 0.8, 2) - 0.45) * smoothstep(hz + 0.5 * H, hz - 0.6 * H, q.z))
+b.add('robe_in', grid(lambda u, v: robe_pt(u, v, 0.97), 96, 32, flip=True), robe_in, region='torso', weight_fn=robe_weights, subdiv=0)
 # a barra em TIRAS rasgadas que serpenteiam pelo chão
 rags = []
 for i in range(44):

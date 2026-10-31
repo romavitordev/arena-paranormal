@@ -128,4 +128,8 @@ for side in ('L', 'R'):
 # brinco de pena (orelha esquerda)
 b.add('feather', cone((0.138 * H, 0.0, hc.z - 0.05), (0.14 * H, 0.0, hc.z - 0.17), 0.016, 5), feather, region='head', subdiv=0)
 
+# acabamento da técnica atual (sculpt_lib, 2026-10-31): as dobras do pano em relevo e os fios do cabelo
+import sculpt_lib
+sculpt_lib.cloth_pass(b.parts, ['shirt_red', 'jeans_teal', 'leather_jacket', 'plaid'], H)
+sculpt_lib.hair_pass(b.parts, ['hair_vampira', 'hair_red'], H, (hc.x, hc.y, hc.z))
 b.export(OUT)

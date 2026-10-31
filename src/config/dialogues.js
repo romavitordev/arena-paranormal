@@ -35,6 +35,7 @@ export const CHARACTER_NAMES = {
   raziel: 'Raziel',
   celestine: 'Celestine',
   gaius: 'Gaius',
+  amalia: 'Amalia',
 };
 
 export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto', jae_x: 'jae', colosso: 'dalmo', guizo_et: 'guizo', kian_calamidade: 'kian', juan_odio: 'juan', guizo_bombado: 'guizo', guizo_velho: 'guizo', cristino_desertor: 'cristino', dante_aberto: 'dante', raziel_verdadeiro: 'raziel', celestine_magistrada: 'celestine', amphitruo: 'anfitriao' };
@@ -127,6 +128,19 @@ const INTRO_EXCHANGES = {
   // CELESTINE (Calamidade): a guerreira da Ordo Calamitas que vestiu a Máscara do Desespero e virou a Magistrada
   // GAIUS (Calamidade): o mais velho da Ordo Calamitas; foi da Seita das Máscaras pela filha; a Relíquia de Energia
   // o consumiu e ele virou Amphitruo, o primeiro Anfitrião — o Arnaldo é um dos que portaram a mesma Relíquia depois
+  // AMALIA (Calamidade): A Flecha — a Celestine a chama de "Gata"; as duas chegaram juntas ao último jogo do Anfitrião
+  'amalia+celestine': [
+    { starter: 'celestine', line: 'Gata! Sobrou eu e você de novo. Igual no último jogo.', response: 'amalia', responseLine: 'Cabeça no lugar, Celestine. Dessa vez é sério.' },
+    { starter: 'amalia', line: 'Celestine. Fica quieta e luta.', response: 'celestine', responseLine: 'Ah, Gata, você fala tão pouco que cada frase parece ameaça.' },
+  ],
+  'amalia+gaius': [
+    { starter: 'gaius', line: 'Amalia, a menina das flechas. Ainda acerta uma mosca a cem passos?', response: 'amalia', responseLine: 'Duzentos. E você ainda reclama das costas.' },
+    { starter: 'amalia', line: 'Gaius. Senta. Eu cubro de longe.', response: 'gaius', responseLine: 'Ah, a juventude. Pelo menos essa é educada.' },
+  ],
+  'amalia+joui': [
+    { starter: 'joui', line: 'Eu lembro do último jogo, Amalia. Do que aconteceu com você.', response: 'amalia', responseLine: 'Eu escolhi. Não precisa pedir desculpa.' },
+    { starter: 'amalia', line: 'Você estava no corpo da Celestine. Eu vi nos olhos.', response: 'joui', responseLine: 'E dessa vez a gente luta de frente. Sem jogo.' },
+  ],
   'celestine+gaius': [
     { starter: 'gaius', line: 'Celestine, você ainda vai quebrar o pescoço fazendo flexão às cinco da manhã.', response: 'celestine', responseLine: 'E você ainda vai quebrar a bacia levantando da cadeira, velho.' },
     { starter: 'celestine', line: 'Gaius! Hoje eu te derrubo e você vai reclamar das costas a semana inteira.', response: 'gaius', responseLine: 'Ah, a juventude. Tão rápida, tão convencida.' },
@@ -2388,6 +2402,75 @@ const VICTORY_GAIUS = {
   amigo: { gaius: ['...o velho... virou pintura...','...Roma... no quadro...'] },
 };
 for (const [w, m] of Object.entries(VICTORY_GAIUS)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
+
+// AMALIA (Ordo Calamitas, Calamidade): falas de vitória dela contra cada um e de cada um contra ela
+const VICTORY_AMALIA = {
+  amalia: {
+    arthur: ['Um braço só e ainda mira bem. Eu miro melhor.', 'Toca alguma coisa. Baixinho.'],
+    joui: ['Rápido. A flecha é mais.', 'Sombra não esconde de quem mira.'],
+    kaiser: ['Fumaça não tira a mira.', 'Fala menos. Respira mais.'],
+    dante: ['Reza baixo. Eu tô mirando.', 'Bonito. Agora deita.'],
+    erin: ['Barulho demais.', 'Explodiu. Errou.'],
+    aghata: ['Ritual demora. Flecha não.', 'Anota no grimório. Errou.'],
+    balu: ['Grande. Fácil de acertar.', 'O urso caiu.'],
+    verissimo: ['Disciplina. Mas a minha mira é melhor.', 'Descansa, senhor.'],
+    cristopher: ['Dublê cai bonito.', 'Fica no chão. Melhor.'],
+    kian: ['Escrita lenta. Flecha rápida.', 'Escreve isso.'],
+    gal_sal: ['Corrente curta. Flecha longa.', 'Justiça de longe também vale.'],
+    nubi: ['Você viu chegar. Não desviou.', 'Calma. Gostei.'],
+    xande: ['Moleque. Taco curto.', 'Treina a pontaria.'],
+    guizo: ['Para de filmar.', 'Grava isso. Errou.'],
+    lirio: ['Marreta pesada. Flecha não.', 'Leonora errou. Eu não.'],
+    dalmo: ['Grande. Alvo fácil.', 'Arena acabou, neném.'],
+    aguiar: ['Predador lento.', 'Caçado.'],
+    jae: ['Silêncio. Eu ouvi.', 'Ouvido bom. Mira melhor.'],
+    kemi: ['Tiro bom. Flecha melhor.', 'Contrato cancelado.'],
+    labirinto: ['Labirinto tem saída. Flecha acha.', 'Toquei de longe.'],
+    juan: ['Muito sangue. Pouca mira.', 'Ódio erra.'],
+    cristino: ['Barulho? Eu sou quieta.', 'Silêncio. Gosto.'],
+    raziel: ['Vampiro. Coração. Flecha.', 'Janta cancelada.'],
+    arnaldo: ['Esse relógio queima. Cuidado.', 'Ator. Péssimo dia.'],
+    ferreiro: ['Gigante. Alvo grande.', 'Santo Berço caiu.'],
+    celestine: ['Perdeu a cabeça, Celestine.', 'Fica quieta, Celestine. Por favor.'],
+    gaius: ['Descansa, Gaius. Suas costas.', 'Velho teimoso. Deita.'],
+    o_diabo: ['Sem acordo.', 'Diabo também cai.'],
+    magistrada: ['Sabe tudo. Não viu a flecha.', 'Celestine? Não. Outra.'],
+    estrangeiro: ['Esquece. Eu não erro.', 'Coisa estranha. Caiu.'],
+    amigo: ['Bicho pintado. Alvo grande.', 'Tinta não segura flecha.'],
+  },
+  arthur: { amalia: ['Flecha contra Rebirth. A bala chegou antes.', 'Desculpa, arqueira. Era luta.'] },
+  joui: { amalia: ['Eu te devo essa, Amalia. Desculpa.', 'Corte limpo. Você não sentiu.'] },
+  kaiser: { amalia: ['Arco contra fuzil. Moderno ganha.', 'Boa mira, moça. A minha é melhor.'] },
+  dante: { amalia: ['Que a sua aura descanse, arqueira.', 'Um tiro certeiro. O meu.'] },
+  erin: { amalia: ['KABOOM! Flecha nenhuma segura isso!', 'Arco é muito devagar, gata!'] },
+  aghata: { amalia: ['Mais uma página. A arqueira de Roma.', 'Sangue mais rápido que flecha.'] },
+  balu: { amalia: ['Hahaha! Pegou a arqueira!', 'Machadada de perto, flechinha!'] },
+  verissimo: { amalia: ['Precisão admirável. Ainda assim, caiu.', 'Arquearia é bonita. Escopeta é eficiente.'] },
+  cristopher: { amalia: ['Peguei a flecha no ar. Mentira, doeu.', 'Cena de ação! Ela cai, eu fico!'] },
+  kian: { amalia: ['A Ordo Calamitas caiu antes. Cai de novo.', 'Uma flecha não apaga a Escrita.'] },
+  gal_sal: { amalia: ['A justiça alcança qualquer distância.', 'Preso. Como deveria.'] },
+  nubi: { amalia: ['A flecha demorou horas pra mim.', 'Respira. Você mira rápido demais.'] },
+  xande: { amalia: ['Tacada no arco! Desculpa!', 'Os Cinco venceram, moça!'] },
+  guizo: { amalia: ['GRAVEI UMA FLECHA VOANDO! Mano!', 'Ela não fala nada! Que medo!'] },
+  lirio: { amalia: ['A Leonora quebrou o arco, viu?', 'Flechinha não para marreta.'] },
+  dalmo: { amalia: ['Flecha faz cosquinha, neném.', 'De perto a gente conversa.'] },
+  aguiar: { amalia: ['Ha ha... presa que atira.', 'Arqueira boa. Presa melhor.'] },
+  jae: { amalia: ['Shh... a corda faz barulho.', 'Você respira alto, arqueira.'] },
+  kemi: { amalia: ['Atiradora contra arqueira. Pólvora ganha.', 'Nada pessoal. Um tiro.'] },
+  labirinto: { amalia: ['Perdida no labirinto, arqueira.', 'Flecha nenhuma acha a saída.'] },
+  juan: { amalia: ['Gostei da dor. Atira de novo.', 'Sangue ganha de flecha.'] },
+  cristino: { amalia: ['Pelo menos você é quieta.', 'Lampião ilumina, flecha cai.'] },
+  raziel: { amalia: ['Sangue de arqueira. Raro.', 'A ceia está servida, flecha nenhuma salva.'] },
+  arnaldo: { amalia: ['Uma guerreira de Roma. Uma honra, senhora.', 'A arqueira saiu de cena.'] },
+  ferreiro: { amalia: ['Santo Berço não teme flechas.', 'A espada consome. Inclusive Roma.'] },
+  celestine: { amalia: ['Desculpa, Gata. Nada pessoal.', 'Mira boa, Gata. A machadinha voou mais rápido.'] },
+  gaius: { amalia: ['Ah, a juventude. Boa mira, menina.', 'Muita flecha, pouca paciência. Senta.'] },
+  o_diabo: { amalia: ['Um pacto e a mira é sua de novo.', 'A flecha também queima no Sangue.'] },
+  magistrada: { amalia: ['A Ordo Calamitas acabou. Como estava escrito.', 'O Equilíbrio sabia onde a flecha ia cair.'] },
+  estrangeiro: { amalia: ['Ninguém vai lembrar da arqueira.', 'Interessante. A flecha também esquece.'] },
+  amigo: { amalia: ['...a flecha... virou pintura...', '...a arqueira... no quadro...'] },
+};
+for (const [w, m] of Object.entries(VICTORY_AMALIA)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
 
 // NUBI (Escriptas): falas originais do jogo, dela contra cada um e de cada um contra ela
 const VICTORY_NUBI = {

@@ -29,6 +29,7 @@ import cristopher from './cristopher.js';
 import raziel from './raziel.js';
 import celestine from './celestine.js';
 import gaius from './gaius.js';
+import amalia from './amalia.js';
 import { juanPortador, deusMorteReliquia, anfitriaoReliquia } from './selectableForms.js';
 
 // Elenco jogável, na ordem da tela de seleção — AGRUPADO POR EQUIPE/TEMPORADA (a grade tem 3 colunas × 5 linhas por
@@ -54,7 +55,8 @@ export const ROSTER = [
   // quem é de DUAS equipes (2026-10-27): `origin` é a equipe em que ele fica na seleção (e a cor do retrato); `teams`
   // lista as outras — aparecem como etiqueta extra no cartão e na ficha (ex.: a Celestine, Portadora E Ordo Calamitas)
   juanPortador, arnaldo, ferreiro, celestine, // Portadores (Sangue, Energia, Morte, Conhecimento) — a Celestine também é da Ordo Calamitas
-  gaius, // Ordo Calamitas (Calamidade, 67 d.C.) — o Gaius; no RB/LB, o AMPHITRUO (a versão transformada). Amalia, Cornelius... depois
+  gaius, // Ordo Calamitas (Calamidade, 67 d.C.) — o Gaius; no RB/LB, o AMPHITRUO (a versão transformada)
+  amalia, // Ordo Calamitas — A Flecha, a arqueira (Calamidade). Faustus, Marius, Remus, Cascadia, Cornelius... depois
   oDiabo, deusMorteReliquia, magistrada, anfitriaoReliquia, // Relíquias (Sangue, Morte, Conhecimento, Energia)
   estrangeiro, amigo, // Outro Lado (os Sinos de Tenebris: Transmissão e Tinta)
 ];

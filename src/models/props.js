@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { glowMat, toon } from './rig.js';
 import { MATERIAL_TEXTURES } from './textures.js';
-import { katana, scabbard, shiNoKage, relicScabbard, relicBlade, m4, sniper, guitarCase, bloodArm, bloodForearmBlade, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, roundGlasses, neonWraps, pulseEmitter, bandolier, bengala, mustache, socadeira, peixeira, spikedLantern, tenebrisPendant, chainHatchet, despairMask, seitaMask, SEITA_MASKS, energyFlames, ironMace, amphitruoMask } from './weapons.js';
+import { katana, scabbard, shiNoKage, relicScabbard, relicBlade, m4, sniper, guitarCase, bloodArm, bloodForearmBlade, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, roundGlasses, neonWraps, pulseEmitter, bandolier, bengala, mustache, socadeira, peixeira, spikedLantern, tenebrisPendant, chainHatchet, despairMask, seitaMask, SEITA_MASKS, energyFlames, ironMace, amphitruoMask, alienPistol, amaliaBow } from './weapons.js';
 
 // Armas e acessórios adicionados em código sobre os modelos do Blender.
 // Usam só `sockets`, `attach()` e `props`, que existem nos dois tipos de rig.
@@ -937,6 +937,12 @@ export function addMagistradaProps(rig) {
   cane.rotation.x = -0.3;
   sockets.handR.add(cane);
   props.cane = cane;
+  // a MÁSCARA DO DESESPERO em relevo (a mesma da Celestine): os sulcos e o coração do nariz afundados no rosto
+  const mask = despairMask();
+  mask.scale.setScalar(1.08);
+  mask.position.set(0, -0.02, -0.015);
+  sockets.mouth.add(mask);
+  props.despairMask = mask;
 }
 
 // GUIZO BOMBADO (Distorcer Aparência, uma das versões sorteadas): o mesmo Guizo, só que INFLADO — ombros e peito largos,
@@ -1199,6 +1205,28 @@ export function addSeitaProps(rig) {
     sockets.mouth.add(m);
     props['mask_' + kind] = m;
   }
+}
+
+// AMALIA: o ARCO na mão esquerda e a AURA CIANO das memórias revividas (miniatura de Calamidade: as chamas verde-ciano
+// saindo dos ombros, dos braços e das pernas)
+export function addAmaliaProps(rig) {
+  const bow = amaliaBow();
+  rig.sockets.handL.add(bow);
+  rig.props.bow = bow;
+  const at = (joint, pos, o) => { const f = energyFlames(0x3affd0, o); f.position.set(...pos); rig.attach(joint, f); };
+  for (const [side, sx] of [['L', 1], ['R', -1]]) {
+    at('s' + side, [0.05 * sx, 0.02, 0], { count: 5, radius: 0.1, height: 0.32, width: 0.13 });
+    at('e' + side, [0.02 * sx, -0.12, 0], { count: 5, radius: 0.09, height: 0.32, width: 0.12 });
+    at('k' + side, [0, -0.26, 0], { count: 6, radius: 0.1, height: 0.36, width: 0.14 });
+  }
+}
+
+// DOPPELGANGER (os Homens de Terno do Estrangeiro): o Fuzil Alheio na mão direita — a pistola de plasma verde
+export function addDoppelProps(rig) {
+  const gun = alienPistol();
+  gun.rotation.x = -1.4;
+  rig.sockets.handR.add(gun);
+  rig.props.pistol = gun;
 }
 
 export function addRazielProps(rig) {

@@ -2,6 +2,13 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.53.0 — A Flecha
+- NOVA LUTADORA — AMALIA (Ordo Calamitas): a arqueira de Calamidade. Longa-Distância (de longe ninguém esquiva nem defende), Chuva de Flechas, Altruísmo e a passiva Caótica.
+- O ESTRANGEIRO chama os HOMENS DE TERNO (os Doppelgangers com os Fuzis Alheios) e o INCUBAR põe a larva no adversário: a sanidade escoa e, zerada, a larva eclode.
+- Magistrada, Amigo Imaginário e Portador do Trono revistos pelas artes oficiais; a Máscara do Desespero em relevo.
+- A Esfinge agachada como réptil; dobras de pano e fios de cabelo em mais 7 personagens.
+- CPU atiradora esquiva a investida na hora certa.
+
 ## v3.52.0 — O Primeiro Anfitrião
 - NOVO LUTADOR — GAIUS (Ordo Calamitas): a maça de ferro, o ANULAR (habilidades contra ele não causam dano por 3 s) e a Transformação em AMPHITRUO.
 - AMPHITRUO: na seleção, RB/LB troca entre Gaius e Amphitruo; o Anfitrião das Relíquias agora tem essa aparência.

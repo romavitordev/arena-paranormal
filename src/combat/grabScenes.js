@@ -213,6 +213,8 @@ export const GRAB_SCENES = {
 };
 // GAIUS: a maça de ferro curta e pesada (dois golpes e o esmagar por cima); o AMPHITRUO agarra como o Anfitrião
 GRAB_SCENES.gaius = scene({ ...S('slash_h', 0.32), fx: { kind: 'smash' }, sound: 'heavyPunch' }, { ...S('slash_h_back', 0.32), fx: { kind: 'smash' }, sound: 'heavyPunch' }, { anim: 'slash_v', fx: 'slam', sound: 'heavyPunch' });
+// AMALIA: chuta, gira o arco e crava a flecha à queima-roupa
+GRAB_SCENES.amalia = scene({ ...S('kick_front', 0.3), fx: { kind: 'punch' }, sound: 'kick' }, { ...S('slash_h', 0.3), fx: { kind: 'slash' }, sound: 'blade' }, { anim: 'bow_shot', fx: 'slam', sound: 'sniper' });
 GRAB_SCENES.amphitruo = GRAB_SCENES.anfitriao;
 GRAB_SCENES.kian_calamidade = GRAB_SCENES.kian; // a forma de Calamidade agarra igual (só mais forte)
 GRAB_SCENES.magistrada = GRAB_SCENES.arnaldo; // a bengala em esgrima, como a espada do Arnaldo

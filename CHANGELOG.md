@@ -1,5 +1,22 @@
 # Changelog
 
+## v3.53.0 — A Flecha
+
+### Adicionado
+- `characters/amalia.js` (Ordo Calamitas) + `tools/blender/char_amalia.py` → `public/models/amalia.glb`; `weapons.js` `amaliaBow` / `flameArrow`; `props.js` `addAmaliaProps` (o arco e a aura ciano); texturas `face_amalia` / `tabard_amalia`; visual `flameArrow`; clipes `bow_idle` / `bow_shot` / `bow_aim`; agarrão; falas (`introVoices`, cenas com Celestine, Gaius e Joui, vitórias contra o elenco); retrato da página Sobre.
+- Projéteis: `longRange: { from }` — depois de `from` m de voo o tiro atravessa esquiva e defesa (Longa-Distância).
+- Habilidade `altruism`; passiva `chaotic` (gancho novo `onHitDealt` em damage.js).
+- Estrangeiro: `summonDoppels` (Homens de Terno) com o modelo `tools/blender/char_doppel.py` → `public/models/doppel.glb` e `weapons.js alienPistol`; `awakenMode.larva` (Incubar: a larva no adversário, eclosão com um Doppelganger).
+- `sculpt_lib.cloth_pass` / `hair_pass`: o acabamento comum dos modelos antigos.
+
+### Alterado
+- `Fighter`: `energyRegenMult` 0 passa a valer (`typeof === 'number'`).
+- `DanteClone` (`o.sludge`): `anim`, `sound`, `pitch` e `flash` configuráveis (os Homens de Terno atiram com a pose `point`).
+- `deathShot`: `aimAnim` / `fireAnim` / `aimColor` e o tempo lento só com `a.slow`; `flowerRain`: `anim` / `sound`.
+- CPU: o atirador lê a investida (a distância caindo > 7 m/s a menos de 5,5 m) e esquiva para o lado; `def.ai.style` força o perfil (Amalia: `zoner`).
+- Esfinge: `SPHINX_CROUCH` (combat/beasts.js) — a postura agachada.
+- Modelos: `char_magistrada.py`, `char_amigo.py`, `char_diabo.py` revistos; `despairMask` esculpida pelo desenho; Magistrada com a máscara 3D em `addMagistradaProps`.
+
 ## v3.52.0 — O Primeiro Anfitrião
 
 ### Adicionado

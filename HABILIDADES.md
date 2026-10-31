@@ -1339,6 +1339,51 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ---
 
+## AMALIA
+
+*A Flecha: a arqueira da Ordo Calamitas — fala pouco, acerta sempre* · arma: O grande arco verde e as flechas flamejantes
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Corte do Arco | 26 | 2 m |  |
+| ○ 2 | Revés do Arco | 26 | 2 m |  |
+| ○ 3 | Chute Frontal | 30 | 1.9 m |  |
+| ○ 4 | Chute Giratório | 36 | 2 m |  |
+| ○ 5 | Flecha à Queima-Roupa | 58 | 3.2 m | finalizador: lança |
+| Frente + ○ | Avanço Rasteiro | 34 | 2.1 m |  |
+| Trás + ○ | Salto e Flecha | 32 | 4.5 m | invulnerável no começo |
+| Lado + ○ | Giro do Arco | 32 | 2.2 m |  |
+| No ar + ○ | Flecha do Alto | 34 | 2.2 m | desce com impacto |
+| ↑ + ○ (no combo) | Arco para Cima | 38 | 2 m | finalizador: lança alto (combo aéreo) |
+| ↓ + ○ (no combo) | Pisão | 42 | 1.9 m | finalizador: derruba |
+
+### Principal (□ / X): Flecha Flamejante
+
+- Dano 28 · alcance 30 m · cooldown 1.8 s · custo 0
+
+### Habilidades
+
+- **Longa-Distância** — △ + □ / Y + X · custo 30 · cooldown 14 s
+  Mira com calma e solta a flecha mais forte: a mais de 9 m o alvo NÃO consegue esquivar nem defender. A mira deixa ela parada um instante.
+- **Chuva de Flechas** — △ + ○ / Y + B · custo 25 · cooldown 13 s · dano 72 · alcance 20 m
+  Atira para o alto e as flechas flamejantes caem sobre a área do alvo — machucam enquanto ele ficar dentro do círculo.
+- **Altruísmo** — △ + L2 / Y + LT · custo 0 · cooldown 20 s
+  Sacrifica 6% da própria vida pelos aliados: na batalha em equipe as ASSISTÊNCIAS voltam na hora e a Barra de Equipe enche um pouco; sozinha, recupera 40 de sanidade e as esquivas.
+- **Flechas Caóticas** — R2 + × / RT + A · custo 20 · cooldown 10 s
+  Três flechas em leque, uma atrás da outra — boas para pegar quem vem correndo de lado.
+
+### Especial: Não Perde a Cabeça!
+
+250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: Memória Revivida
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +15% de dano (distância, habilidades), +8% de velocidade, recargas 30% mais rápidas, cura 10% na hora.
+
+---
+
 ## O DIABO
 
 *O Portador da Relíquia de Sangue: regenera, bebe o sangue derramado e oferece pactos* · arma: Quatro braços com garras
@@ -1562,6 +1607,8 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
   Some numa interferência de sinal e reaparece atrás do alvo, como nas abduções.
 - **Abdução** — R2 + △ / RT + Y · custo 25 · cooldown 14 s · dano 40 · alcance 14 m
   Um círculo verde marca o chão debaixo do adversário: se ele não sair a tempo, a luz o ERGUE no ar e logo depois o crava de volta no chão. Pouco dano, mas abre para o combo.
+- **Homens de Terno** — R2 + × / RT + A · custo 35 · cooldown 24 s
+  Três DOPPELGANGERS (os Homens de Terno: Alheios de terno e chapéu, a cara rachada ao meio) aparecem numa interferência de sinal em volta do adversário por 10 s: dois ficam longe atirando o plasma verde do Fuzil Alheio e o terceiro chega perto e bate. "Somos Todos Um": quando um cai, os outros atiram mais rápido.
 - **Toque Sutil** — △ + L2 / Y + LT · custo 35 · cooldown 30 s · dano 40 · alcance 1.6 m
   Um toque de um dedo: o sangue do alvo borbulha e ele derrete por dentro — dano contínuo, lento e mais fraco por alguns segundos. Curtíssimo alcance; dá para esquivar.
 
@@ -1571,7 +1618,7 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ### Transformação: Incubar
 
-Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +15% de dano, −12% de dano recebido, +10% de velocidade, recargas 30% mais rápidas, cura 10% na hora.
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → desperta até o fim do round: +8% de dano, recargas 20% mais rápidas, cura 10% na hora, a LARVA no adversário (+12% de dano recebido, a sanidade não volta e escoa 3/s; zerada, ECLODE: 90 de dano e um Alheio sai dela; outra larva em 8 s).
 
 ---
 

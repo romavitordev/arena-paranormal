@@ -465,4 +465,8 @@ for side in ('L', 'R'):
     b.add('prop_colosso_greave_spikes' + side, merge(*gs), spike, region='k' + side, subdiv=0)
 b.group('prop_colosso')
 
+# acabamento da técnica atual (sculpt_lib, 2026-10-31): as dobras do pano em relevo e os fios do cabelo
+import sculpt_lib
+sculpt_lib.cloth_pass(b.parts, ['shirt_dalmo', 'pants_dalmo', 'bandage_dalmo'], H)
+sculpt_lib.hair_pass(b.parts, ['hair_dalmo'], H, (HC.x, HC.y, HC.z))
 b.export(OUT)

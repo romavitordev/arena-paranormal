@@ -661,7 +661,7 @@ export class Fighter {
     if (hasPassive(this, 'noSanity')) this.energy = 0; // Em Nome do Caos: nada repõe a sanidade
     if (this.state !== 'ko' && this.state !== 'special' && !this.buffs.some((b) => b.noRegen)) {
       let enMult = 1;
-      for (const b of this.buffs) if (b.energyRegenMult) enMult *= b.energyRegenMult;
+      for (const b of this.buffs) if (typeof b.energyRegenMult === 'number') enMult *= b.energyRegenMult; // 0 vale (a Larva do Incubar: a sanidade não volta)
       this.addEnergy(COMBAT.energyRegen * dt * this.world.energyRegenFactor(this) * enMult);
     }
     // resistência da defesa
