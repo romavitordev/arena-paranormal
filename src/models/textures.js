@@ -2659,6 +2659,35 @@ export const MATERIAL_TEXTURES = {
     brow: { angry: 2, thick: 3, color: '#c8b890' },
     mouth: { mouthW: 15, lip: 'rgba(170,100,96,0.5)' },
   }),
+  // GAIUS (Ordo Calamitas): o velho guerreiro — pele morena, rugas na testa e em volta dos olhos cansados, sobrancelhas
+  // grisalhas grossas; nas memórias revividas os olhos brilham ROXOS (a aura dele)
+  face_gaius: face((g) => {
+    g.strokeStyle = 'rgba(70,40,30,0.45)'; g.lineWidth = 2;
+    for (let i = 0; i < 3; i++) { g.beginPath(); g.moveTo(CX - 40, EYE_Y - 34 - i * 8); g.quadraticCurveTo(CX, EYE_Y - 40 - i * 8, CX + 40, EYE_Y - 34 - i * 8); g.stroke(); } // a testa enrugada
+    for (const s of [-1, 1]) {
+      for (let i = 0; i < 3; i++) { g.beginPath(); g.moveTo(CX + s * 50, EYE_Y + 2 + i * 5); g.lineTo(CX + s * 60, EYE_Y - 2 + i * 7); g.stroke(); } // pés de galinha
+      g.beginPath(); g.moveTo(CX + s * 22, EYE_Y + 16); g.quadraticCurveTo(CX + s * 32, EYE_Y + 22, CX + s * 42, EYE_Y + 16); g.stroke(); // as olheiras
+      g.beginPath(); g.moveTo(CX + s * 12, NOSE_Y + 4); g.quadraticCurveTo(CX + s * 24, MOUTH_Y - 6, CX + s * 24, MOUTH_Y + 8); g.stroke(); // o sulco do nariz à boca
+      const gr = g.createRadialGradient(CX + s * 32, EYE_Y + 4, 2, CX + s * 32, EYE_Y + 4, 16);
+      gr.addColorStop(0, 'rgba(190,120,255,0.35)'); gr.addColorStop(1, 'rgba(190,120,255,0)');
+      g.fillStyle = gr; g.beginPath(); g.arc(CX + s * 32, EYE_Y + 4, 16, 0, Math.PI * 2); g.fill();
+    }
+  }, {
+    skin: '#a87858',
+    eye: { iris: '#8a5ad8', irisLight: '#e0c8ff', tilt: -0.04 },
+    brow: { angry: 1, thick: 5, color: '#b8b4ae' },
+    mouth: { mouthW: 18, lip: 'rgba(110,60,50,0.5)' },
+  }),
+  // o pano do peito do GAIUS / AMPHITRUO: roxo-acinzentado com o Símbolo da Ordo Calamitas
+  tabard_amphitruo: () => canvasTex(256, 512, (g, w, h) => {
+    g.fillStyle = '#4a3a62'; g.fillRect(0, 0, w, h);
+    const rnd = seeded(69);
+    for (let i = 0; i < 60; i++) { g.fillStyle = `rgba(${rnd() < 0.5 ? '0,0,0' : '120,100,150'},${0.08 + rnd() * 0.12})`; g.fillRect(0, rnd() * h, w, 1 + rnd() * 3); }
+    g.strokeStyle = 'rgba(0,0,0,0.45)'; g.lineWidth = 6; g.strokeRect(6, -10, w - 12, h - 30);
+    g.fillStyle = '#2a1e3a';
+    for (let x = 0; x < w; x += 9) g.fillRect(x, h - 26 + rnd() * 10, 5, 30);
+    g.save(); g.translate(w / 2, 100); g.scale(1, 0.55); calamitasSymbol(g, 0, 0, 1.15); g.restore(); // o pano é ~3,5× mais comprido que largo
+  }),
   // a camisa preta (o Símbolo da Ordo Calamitas fica no PANO por cima — tabard_celestine)
   shirt_celestine: () => canvasTex(512, 512, (g, w, h) => {
     g.fillStyle = '#1a191e'; g.fillRect(0, 0, w, h);

@@ -1,6 +1,6 @@
 // Versão semântica do jogo e NOVIDADES (changelog).
 // Para uma nova atualização: atualize VERSION e acrescente a entrada no TOPO de CHANGELOG.
-export const VERSION = '3.51.0';
+export const VERSION = '3.52.0';
 export const VERSION_LABEL = `v${VERSION}`;
 
 export function formatVersion(version) {
@@ -11,6 +11,19 @@ export function formatVersion(version) {
 }
 
 export const CHANGELOG = [
+  {
+    v: '3.52.0',
+    date: '2026-10-30',
+    title: 'O Primeiro Anfitrião',
+    items: [
+      'NOVO LUTADOR — GAIUS (ORDO CALAMITAS): o velho guerreiro de Roma, de capuz, barba grisalha e a maça de ferro. Maça Arremessada, Golpe do Veterano, ANULAR (a habilidade dele no cânone: por 3 s as habilidades usadas contra ele não causam dano), Carga do Veterano, Cansado Mas Firme e o especial Ciente da Própria Força.',
+      'AMPHITRUO, O PRIMEIRO ANFITRIÃO: a Transformação do Gaius — a Relíquia de Energia se funde ao rosto dele. Na seleção, RB/LB no cartão do Gaius troca entre os dois. O Anfitrião das Relíquias agora tem essa aparência; o do Arnaldo continua só como a transformação dele.',
+      'A MÁSCARA DO AMPHITRUO: metal esculpido com as ondulações, os olhos apertados de riso, o sorriso largo de dentes à mostra e as TRÊS MÃOS de metal segurando o rosto, com os dedos de cima subindo como coroa. E as chamas roxas pelo corpo.',
+      'FALAS NOVAS: as introduções agora saem da voz de cada personagem e reagem a quem é o adversário — colega de equipe vira conversa de aliado, equipe rival é citada — em vez de só comentar a arma. Todo mundo tem falas próprias contra o Anfitrião.',
+      'O ANFITRIÃO FALA COMO O ANFITRIÃO: irônico, debochado, o caos puro — muda as regras no meio, fala com a plateia, e lembra do Jogo do Orfanato, da Celestine, do Gaius e do Arnaldo. O Anfitrião e o Amphitruo dividem as mesmas falas (a mesma consciência).',
+      'LEVITAÇÃO (Kian e Magistrada): mais rápida, e se for interrompida as pedras que ainda giravam caem na hora (antes continuavam voando).',
+    ],
+  },
   {
     v: '3.51.0',
     date: '2026-10-29',

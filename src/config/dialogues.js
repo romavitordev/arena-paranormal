@@ -1,4 +1,8 @@
 // Falas de introducao pre-luta; independentes do resultado.
+import { VOICES, TEAM_REF } from './introVoices.js';
+import { HOST_VICTORY, VICTORY_VS_HOST, BATTLE_EXTRA, BATTLE_REPLIES_EXTRA } from './hostLines.js';
+import { defTeams } from './teams.js';
+import { ROSTER } from '../characters/index.js';
 export const CHARACTER_NAMES = {
   kaiser: 'Kaiser',
   arthur: 'Arthur Cervero',
@@ -30,110 +34,49 @@ export const CHARACTER_NAMES = {
   cristopher: 'Cristopher',
   raziel: 'Raziel',
   celestine: 'Celestine',
+  gaius: 'Gaius',
 };
 
-export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto', jae_x: 'jae', colosso: 'dalmo', guizo_et: 'guizo', kian_calamidade: 'kian', juan_odio: 'juan', guizo_bombado: 'guizo', guizo_velho: 'guizo', cristino_desertor: 'cristino', dante_aberto: 'dante', raziel_verdadeiro: 'raziel', celestine_magistrada: 'celestine' };
+export const BASE_CHARACTER = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', anfitriao: 'arnaldo', aguiar_mutilador: 'aguiar', erin_caos: 'erin', labirinto_elmo: 'labirinto', jae_x: 'jae', colosso: 'dalmo', guizo_et: 'guizo', kian_calamidade: 'kian', juan_odio: 'juan', guizo_bombado: 'guizo', guizo_velho: 'guizo', cristino_desertor: 'cristino', dante_aberto: 'dante', raziel_verdadeiro: 'raziel', celestine_magistrada: 'celestine', amphitruo: 'anfitriao' };
 
 export const INTRO_IDS = Object.keys(CHARACTER_NAMES);
-const INTRO_HOOKS = {
-  kaiser: 'a névoa',
-  arthur: 'o rifle',
-  joui: 'a katana',
-  aghata: 'o grimório',
-  dante: 'o lodo',
-  erin: 'as granadas',
-  gal_sal: 'as correntes',
-  nubi: 'a bengala de chacal',
-  kian: 'os presságios',
-  aguiar: 'a máscara',
-  labirinto: 'o capacete',
-  xande: 'o skate',
-  lirio: 'a Leonora',
-  ferreiro: 'a Espada Consumidora',
-  juan: 'o trono',
-  kemi: 'o contrato',
-  balu: 'o machado',
-  arnaldo: 'a espada da fita vermelha',
-  verissimo: 'a espada do Arnaldo',
-  jae: 'o punhal X',
-  dalmo: 'esses punhos',
-  guizo: 'uma faca e uma câmera',
-  o_diabo: 'um pacto',
-  magistrada: 'a Máscara do Desespero',
-  estrangeiro: 'o sinal',
-  amigo: 'o sino',
-  cristino: 'a socadeira',
-  cristopher: 'esses punhos de dublê',
-  raziel: 'essas garras',
-  celestine: 'essas machadinhas',
-};
+// as equipes de cada lutador (a principal e as outras), pela ficha; o Anfitrião é o das Relíquias
+const TEAMS_OF = Object.fromEntries(ROSTER.map((c) => [c.id, defTeams(c)]));
 
-const INTRO_OPENERS = {
-  kaiser: (other, hook) => `${other}, trouxe ${hook} pra conversa ou veio só ouvir?`,
-  arthur: (other, hook) => `${other}, com ${hook} por perto fica difícil conversar. O que te trouxe?`,
-  joui: (other, hook) => `${other}, ${hook} já diz bastante. Quer contar o resto?`,
-  aghata: (other, hook) => `${other}, vim perguntar sobre ${hook}. Ou isso é mais uma pista?`,
-  dante: (other, hook) => `${other}, eu poderia começar perguntando sobre ${hook}. Qual é a história?`,
-  erin: (other, hook) => `${other}, pergunta rápida: devo me preocupar com ${hook}?`,
-  gal_sal: (other, hook) => `${other}, ${hook} te trouxe até aqui, ou foi escolha sua?`,
-  // NUBI (falas originais do jogo): calma, distante; cada segundo dura horas pra ela
-  nubi: (other, hook) => `${other}. Eu tive horas pra pensar em ${hook} enquanto você piscava.`,
-  kian: (other, hook) => `${other}, ${hook} foi escolha sua ou consequência?`,
-  aguiar: (other, hook) => `${other}, devo me preocupar com ${hook} ou com a intenção?`,
-  labirinto: (other, hook) => `${other}, você veio com ${hook}; isso é parte do caminho ou o destino?`,
-  xande: (other, hook) => `${other}, vi ${hook} quando você chegou. A gente pode falar primeiro?`,
-  lirio: (other, hook) => `${other}, tu trouxe ${hook} pra conversa? A Leonora também veio.`,
-  ferreiro: (other, hook) => `${other}, você chegou com ${hook}. É motivo de preocupação?`,
-  juan: (other, hook) => `${other}, quando os outros veem ${hook}, você acha que enxergam você?`,
-  kemi: (other, hook) => `${other}, com ${hook} assim, isso é pessoal ou trabalho?`,
-  balu: (other, hook) => `Opa, ${other}! Chegou com ${hook}, hein. Bora conversar antes ou já vamos pra parte divertida?`,
-  arnaldo: (other, hook) => `${other}, que entrada! Trouxe ${hook} para o palco, então. Qual é o seu papel nesta cena?`,
-  verissimo: (other, hook) => `${other}. Vi ${hook} no relatório. Me diga o que veio fazer aqui, sem rodeios.`,
-  jae: (other, hook) => `${other}... trouxe ${hook}? Shh. Vamos brincar de esconde-esconde.`,
-  dalmo: (other, hook) => `${other}, eu sou grande, mas não sou dois. Vem com ${hook} que eu te mostro a arena.`,
-  guizo: (other, hook) => `Mano, é ${other} de verdade! Tô gravando — vem com ${hook} que isso vai pro site!`,
-  o_diabo: (other, hook) => `${other}... eu sei o que você quer. Vim te oferecer ${hook}. O preço a gente discute depois.`,
-  magistrada: (other, hook) => `${other}. Eu já sei por que você veio. ${hook[0].toUpperCase() + hook.slice(1)} lembra de tudo.`,
-  estrangeiro: (other, hook) => `${other}... você ouviu ${hook}. Agora não consegue mais deixar de ouvir.`,
-  amigo: (other, hook) => `(${hook} ecoa de dentro da criatura) ...${other}... quer brincar... no quadro?`,
-  cristino: (other, hook) => `Não é pessoal, ${other}. Larga ${hook} e sai do meu caminho.`,
-  cristopher: (other, hook) => `HEY, ${other}! Bonito ${hook}! Mas aqui é cena de ação, e eu faço as minhas sem dublê!`,
-  raziel: (other, hook) => `${other}. Desculpe a entrada sem convite. Pode deixar ${hook} na mesa — o banquete é por minha conta.`,
-  celestine: (other, hook) => `Ih, ${other}, ${hook}? Fofo. Não leva a mal o que vai acontecer — é nada pessoal.`,
-};
+// como o OUTRO é visto numa fala: o nome e a equipe (a primeira dele que não é do falante)
+function seen(id, by) {
+  const mine = TEAMS_OF[by] || [];
+  const team = (TEAMS_OF[id] || []).find((tm) => !mine.includes(tm)) || (TEAMS_OF[id] || [])[0];
+  const ref = TEAM_REF[team] || { one: 'alguém de fora', group: 'gente como você' };
+  return { name: CHARACTER_NAMES[id] || HOST_NAMES[id] || id, one: ref.one, group: ref.group };
+}
+const HOST_NAMES = { anfitriao: 'Anfitrião', amphitruo: 'Amphitruo' }; // fora de CHARACTER_NAMES (as cenas dele são montadas na hora)
+// português: a equipe entra depois de preposição ("pra os Vampiros" → "pros Vampiros") e a fala começa maiúscula
+const CONTRACT = { 'pra o': 'pro', 'pra a': 'pra', 'pra os': 'pros', 'pra as': 'pras', 'de o': 'do', 'de a': 'da', 'de os': 'dos', 'de as': 'das', 'por o': 'pelo', 'por a': 'pela', 'por os': 'pelos', 'por as': 'pelas', 'em o': 'no', 'em a': 'na', 'em os': 'nos', 'em as': 'nas' };
+const polish = (s) => { const out = s.replace(/\b(pra|de|por|em) (os|as|o|a)\b/g, (m) => CONTRACT[m] || m); return out[0].toUpperCase() + out.slice(1); };
+const sameTeam = (x, y) => (TEAMS_OF[x] || []).some((tm) => (TEAMS_OF[y] || []).includes(tm));
+// número estável por par (as duas cenas do mesmo confronto sempre escolhem as mesmas falas soltas)
+function pairSeed(x, y) {
+  let h = 7;
+  for (const ch of [x, y].sort().join('+')) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  return h;
+}
+const pick = (list, k) => list[k % list.length];
 
-const INTRO_REPLIES = {
-  kaiser: (other, hook) => `${other}, percebi ${hook}. Só não sei se devo confiar.`,
-  arthur: (other, hook) => `Se ${hook} veio com você, é porque não deu pra deixar em casa, né, ${other}?`,
-  joui: (other, hook) => `${other}, com ${hook} na conversa, acho que já entendi.`,
-  aghata: (other, hook) => `${other}, eu estava curiosa sobre ${hook}. Agora estou mais ainda.`,
-  dante: (other, hook) => `Entendo. Não esperava que você trouxesse ${hook}, ${other}.`,
-  erin: (other, hook) => `${other}, posso olhar ${hook} depois? Prometo não desmontar.`,
-  gal_sal: (other, hook) => `Não culpe ${hook}, ${other}. Você ainda pode escolher.`,
-  nubi: (other, hook) => `${hook}, ${other}? Pra mim essa conversa já dura séculos.`,
-  kian: (other, hook) => `${other}, ${hook} não muda o que você decidiu.`,
-  aguiar: (other, hook) => `Ha ha... você veio com ${hook}. Chamou minha atenção, ${other}.`,
-  labirinto: (other, hook) => `${other}, então esse é o caminho que você escolheu com ${hook}.`,
-  xande: (other, hook) => `Justo. Eu também trouxe meu jeito de fazer as coisas, ${other}.`,
-  lirio: (other, hook) => `Então tu veio com ${hook}. A Leonora respeita isso, eu acho, ${other}.`,
-  ferreiro: (other, hook) => `Entendo. ${hook} pode esperar enquanto conversamos, ${other}?`,
-  juan: (other, hook) => `${other}, reconheço ${hook}. Ainda quero ouvir você.`,
-  kemi: (other, hook) => `${other}, não vou tirar conclusões só por causa de ${hook}. O resto fica no relatório.`,
-  balu: (other, hook) => `Hahaha! Tá bom, ${other}. Mas aviso: o tio Balu já lutou com coisa pior que ${hook}.`,
-  arnaldo: (other, hook) => `Ah, ${other}, ${hook} rende um belo segundo ato. Vamos ver se você sabe as falas.`,
-  verissimo: (other, hook) => `Anotado, ${other}. ${hook} não muda o plano. Nunca muda.`,
-  jae: (other, hook) => `Que fofo, ${other}. Só ${hook}? Não grita, tá?`,
-  dalmo: (other, hook) => `${hook}? Já apanhei de coisa pior na arena, ${other}. Segura aí.`,
-  guizo: (other, hook) => `${hook}? ...Tá, eu tô com um pouco de medo. Mas a câmera tá ligada, ${other}!`,
-  o_diabo: (other, hook) => `${hook}? Que gracinha, ${other}. Todo mundo traz alguma coisa. Ninguém traz o suficiente.`,
-  magistrada: (other, hook) => `${hook}... Saber tudo tem um preço, ${other}. Você ainda não pagou o seu.`,
-  estrangeiro: (other, hook) => `${hook}. Interessante, ${other}. Amanhã você não vai lembrar desta conversa.`,
-  amigo: (other, hook) => `(a tinta pinga no chão) ...${hook} já tocou, ${other}... ninguém lembra de quando parou.`,
-  cristino: (other, hook) => `${hook}... Eu já vi coisa pior no mato, ${other}. Fala menos.`,
-  cristopher: (other, hook) => `${hook}? Já caí de prédio por menos, ${other}! Vem, que o tio aguenta!`,
-  raziel: (other, hook) => `${hook}... Que gentileza, ${other}. Eu já sinto o gosto do seu sangue daqui.`,
-  celestine: (other, hook) => `Olha só, ${hook}! Que medo, ${other}. Vem logo que a minha endorfina já subiu.`,
-};
+// as duas cenas de um confronto sem cena do cânone: a 1ª é sobre QUEM o outro é (colega ou a equipe dele); a 2ª é da
+// personalidade de cada um
+export function voiceScenes(first, second) {
+  const vA = VOICES[first];
+  const vB = VOICES[second];
+  const ally = sameTeam(first, second);
+  const k = pairSeed(first, second);
+  const sB = seen(second, first);
+  const sA = seen(first, second);
+  return [
+    { starter: first, line: polish((ally ? vA.open.ally : vA.open.rival)(sB)), response: second, responseLine: polish((ally ? vB.reply.ally : vB.reply.rival)(sA)) },
+    { starter: second, line: polish(pick(vB.open.any, k)(sA)), response: first, responseLine: polish(pick(vA.reply.any, k >>> 3)(sB)) },
+  ];
+}
 
 const INTRO_EXCHANGES = {
   // NUBI (falas originais do jogo): o líder dela, o tiro que ela desviou na Mansão Leone, o machado do Balu e a outra
@@ -182,6 +125,20 @@ const INTRO_EXCHANGES = {
   // RAZIEL (Hexatombe): o Circo (ep. 7: decapitou o Franco, quase estripou o Dalmo, mordeu o Henri) e a guerra na Igreja
   // Antiga (ep. 9: devorou a Maria, atravessou o Remi, o Cristino cortou o braço dele e o Juan o finalizou)
   // CELESTINE (Calamidade): a guerreira da Ordo Calamitas que vestiu a Máscara do Desespero e virou a Magistrada
+  // GAIUS (Calamidade): o mais velho da Ordo Calamitas; foi da Seita das Máscaras pela filha; a Relíquia de Energia
+  // o consumiu e ele virou Amphitruo, o primeiro Anfitrião — o Arnaldo é um dos que portaram a mesma Relíquia depois
+  'celestine+gaius': [
+    { starter: 'gaius', line: 'Celestine, você ainda vai quebrar o pescoço fazendo flexão às cinco da manhã.', response: 'celestine', responseLine: 'E você ainda vai quebrar a bacia levantando da cadeira, velho.' },
+    { starter: 'celestine', line: 'Gaius! Hoje eu te derrubo e você vai reclamar das costas a semana inteira.', response: 'gaius', responseLine: 'Ah, a juventude. Tão rápida, tão convencida.' },
+  ],
+  'gaius+magistrada': [
+    { starter: 'magistrada', line: 'Você já usou uma Máscara, Gaius. A Seita lembra de todos que entram.', response: 'gaius', responseLine: 'Entrei pela minha filha. E saí inteiro. Não é qualquer um.' },
+    { starter: 'gaius', line: 'Vocês cumpriram o acordo. Ela vive. Mas não me peçam para voltar.', response: 'magistrada', responseLine: 'O Equilíbrio não pede. Ele espera.' },
+  ],
+  'arnaldo+gaius': [
+    { starter: 'gaius', line: 'Esse relógio aí... sinto a mesma chama que eu guardei em Roma.', response: 'arnaldo', responseLine: 'Então o senhor sabe que ela cobra caro. E que gosta de plateia.' },
+    { starter: 'arnaldo', line: 'O primeiro a usar a Relíquia de Energia. Uma honra, mestre.', response: 'gaius', responseLine: 'Honra nenhuma, rapaz. Ela me comeu inteiro. Toma cuidado com ela.' },
+  ],
   'celestine+magistrada': [
     { starter: 'magistrada', line: 'Eu conheço essa Máscara. Ela pesou no seu rosto antes de pesar no meu.', response: 'celestine', responseLine: 'Então você sabe que eu não devolvo nada que é meu.' },
     { starter: 'celestine', line: 'Você é a última, né? Eu fui a primeira. Bem mais divertida.', response: 'magistrada', responseLine: 'Saber tudo custa tudo, Celestine. Você pagou primeiro.' },
@@ -428,20 +385,7 @@ function buildIntroDialogues() {
       const first = INTRO_IDS[i];
       const second = INTRO_IDS[j];
       const pairKey = [first, second].sort().join('+');
-      const scenes = INTRO_EXCHANGES[pairKey] || [
-        {
-          starter: first,
-          line: INTRO_OPENERS[first](CHARACTER_NAMES[second], INTRO_HOOKS[second]),
-          response: second,
-          responseLine: INTRO_REPLIES[second](CHARACTER_NAMES[first], INTRO_HOOKS[first]),
-        },
-        {
-          starter: second,
-          line: INTRO_OPENERS[second](CHARACTER_NAMES[first], INTRO_HOOKS[first]),
-          response: first,
-          responseLine: INTRO_REPLIES[first](CHARACTER_NAMES[second], INTRO_HOOKS[second]),
-        },
-      ];
+      const scenes = INTRO_EXCHANGES[pairKey] || voiceScenes(first, second);
       dialogues[first][second] = scenes;
       dialogues[second][first] = scenes;
     }
@@ -2378,6 +2322,73 @@ const VICTORY_CELESTINE = {
 };
 for (const [w, m] of Object.entries(VICTORY_CELESTINE)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
 
+// GAIUS (Ordo Calamitas, Calamidade): falas de vitória dele contra cada um e de cada um contra ele
+const VICTORY_GAIUS = {
+  gaius: {
+    kaiser: ['Fumaça não assusta quem já respirou o pó do Coliseu.','Fuma menos, rapaz. Vai chegar na minha idade.'],
+    arthur: ['Um braço só e ainda me deu trabalho. Respeito.','Toca alguma coisa calma pro velho descansar.'],
+    joui: ['Rápido como eu era. Era.','Sombra nenhuma esconde de quem já usou uma Máscara.'],
+    dante: ['Bonito sermão. A maça não ouviu.','Reza por mim também, padre. Minhas costas agradecem.'],
+    erin: ['Muito barulho, menina. Velho já é meio surdo mesmo.','Explodiu tudo e caiu igual.'],
+    aghata: ['Ritual de Sangue? Eu já vi Roma pegar fogo.','Volta pro grimório, menina.'],
+    balu: ['Grandão, você bate forte. Eu bato antes.','Machado grande, mas o velho tem paciência.'],
+    verissimo: ['Mais um velho na guerra. Que bom te ver de pé... ah, não está.','Disciplina eu respeito. Só que a maça pesa mais.'],
+    cristopher: ['Dublê? Eu caio de verdade faz trinta anos.','Fica deitado, filho. Descansa.'],
+    kian: ['A Escrita não me mete medo. A idade mete.','Muito poder, pouca paciência.'],
+    gal_sal: ['Correntes eu já carreguei. Pesam mais que as suas.','Justiça leva tempo. Eu tenho de sobra.'],
+    nubi: ['A Morte espera por mim faz tempo. Hoje não.','Calmo, você. Gostei.'],
+    xande: ['Moleque bom de taco. Treina mais.','Ah, a juventude... perdeu, mas perdeu bonito.'],
+    guizo: ['Para de filmar o velho, garoto.','Grava aí: o velho ainda dá conta.'],
+    lirio: ['Marreta pesada. Maça mais esperta.','Força você tem. Juízo, falta.'],
+    dalmo: ['Arena? Eu lutei no Coliseu de verdade, grandão.','Grande e de pé... era.'],
+    aguiar: ['Machado e maça. Ganhou o mais velho.','Delegado, descansa. Eu também quero.'],
+    jae: ['Sussurro não engana ouvido velho.','Rápida, menina. Mas eu vi.'],
+    kemi: ['Tiro de longe? Velho anda devagar, mas chega.','Fantasma nenhum me tira o sono. A coluna tira.'],
+    labirinto: ['Já me perdi em lugar pior que você.','Todo labirinto acaba. Inclusive você.'],
+    juan: ['Pacto com o Diabo? Eu fiz com a Seita. Também cobra.','Muito sangue, pouco juízo, rapaz.'],
+    cristino: ['Cangaceiro bom. Velho melhor.','Silencioso. Gosto disso.'],
+    raziel: ['Vampiro, eu sou velho demais pra virar janta.','Carne velha é dura, criatura.'],
+    arnaldo: ['A chama ainda queima em você, rapaz. Cuidado com ela.','Bom ator. Péssimo dia.'],
+    ferreiro: ['Gigante de Santo Berço. Caiu igual a qualquer um.','Espada que consome. Maça que derruba.'],
+    celestine: ['Ah, Celestine. Rápida, convencida... e no chão.','Vai treinar mais, menina. O velho espera.'],
+    o_diabo: ['Já recusei acordo melhor que o seu.','O Sangue não assusta quem guardou a Energia.'],
+    magistrada: ['Diga à Seita que eu cumpri a minha parte.','Saber tudo e ainda apanhar de um velho.'],
+    estrangeiro: ['Apagar minha memória? Já esqueço sozinho.','Coisa feia. Mas cai igual.'],
+    amigo: ['Bicho pintado. Já vi pior em Roma.','Tinta não segura maça.'],
+  },
+  kaiser: { gaius: ['Respira, vovô. Ah, não dá.','Fumaça e idade não combinam.'] },
+  arthur: { gaius: ['Rebirth na cabeça do vovô.','Desculpa, senhor. Mas era luta.'] },
+  joui: { gaius: ['O senhor era rápido. Eu ainda sou.','Descansa, velho guerreiro.'] },
+  dante: { gaius: ['Que a idade lhe traga sabedoria. E repouso.','Um velho personagem. Um final digno.'] },
+  erin: { gaius: ['KABOOM, vovô!','Ops. Machucou a coluna?'] },
+  aghata: { gaius: ['Mais um nome antigo pro grimório.','A Ordo Calamitas caiu. Igual Roma.'] },
+  balu: { gaius: ['Hahaha! Velho duro de derrubar!','Machadada de respeito, vovô.'] },
+  verissimo: { gaius: ['Dois velhos. Um de pé.','Experiência contra experiência. Venci.'] },
+  cristopher: { gaius: ['Fica deitado, vovô. Eu seguro.','Respeito os mais velhos. Depois da luta.'] },
+  kian: { gaius: ['A Relíquia que te consome é minha, velho.','Roma caiu. Você também.'] },
+  gal_sal: { gaius: ['Preso na idade e na corrente.','Justiça não tem idade.'] },
+  nubi: { gaius: ['A Morte chega pra todos. Até pra Roma.','Descanse.'] },
+  xande: { gaius: ['Tacada no vovô! Desculpa!','Juventude venceu, tio!'] },
+  guizo: { gaius: ['Gravei um romano de verdade! Mano!','O vovô bateu forte, hein!'] },
+  lirio: { gaius: ['A Leonora não respeita idade.','Maça contra marreta. Marreta ganhou.'] },
+  dalmo: { gaius: ['Coliseu de verdade, é? Agora tem dono.','Grande e de pé, vovô.'] },
+  aguiar: { gaius: ['Ha ha... carne velha.','O predador não escolhe idade.'] },
+  jae: { gaius: ['Shh... dorme, velhinho.','Ouvido velho não ouviu nada.'] },
+  kemi: { gaius: ['Alvo lento. Alvo abatido.','Nada pessoal, vovô.'] },
+  labirinto: { gaius: ['Se perdeu, velho?','Toquei. Agora descansa.'] },
+  juan: { gaius: ['Sangue velho. Ainda serve.','O Diabo manda lembranças, vovô.'] },
+  cristino: { gaius: ['Não é pessoal, velho.','Silêncio. Finalmente.'] },
+  raziel: { gaius: ['Carne velha... ainda assim, esplêndida.','A sua história acaba à minha mesa.'] },
+  arnaldo: { gaius: ['Fecham-se as cortinas para o primeiro ato.','A Relíquia escolheu bem os dois. Mas hoje, eu.'] },
+  ferreiro: { gaius: ['Santo Berço não se curva a Roma.','Velho e forte. Mas eu sou mais.'] },
+  celestine: { gaius: ['Nada pessoal, velho. Mentira, foi bem pessoal.','Reza pra deixar de ser chato... Chato!'] },
+  o_diabo: { gaius: ['Toda chama acaba virando cinza, Gaius.','Um pacto a mais na coleção.'] },
+  magistrada: { gaius: ['A Seita não esquece quem já foi dela.','O Equilíbrio cobra até dos velhos.'] },
+  estrangeiro: { gaius: ['Ninguém vai lembrar de Roma.','Interessante. Um velho esquecido.'] },
+  amigo: { gaius: ['...o velho... virou pintura...','...Roma... no quadro...'] },
+};
+for (const [w, m] of Object.entries(VICTORY_GAIUS)) VICTORY_LINES[w] = { ...(VICTORY_LINES[w] || {}), ...m };
+
 // NUBI (Escriptas): falas originais do jogo, dela contra cada um e de cada um contra ela
 const VICTORY_NUBI = {
   nubi: {
@@ -2695,7 +2706,15 @@ export const BATTLE_REPLIES = {
   },
 };
 
-const DIALOGUE_BASE_IDS = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', juan_odio: 'juan', guizo_bombado: 'guizo', guizo_velho: 'guizo', cristino_desertor: 'cristino', dante_aberto: 'dante', raziel_verdadeiro: 'raziel', celestine_magistrada: 'celestine' };
+// o Anfitrião (o das Relíquias e o Amphitruo): as frases novas no tom do caos (hostLines.js) somadas às antigas; as
+// frases de combate de quem ainda não tinha (e as do Anfitrião, no tom certo)
+VICTORY_LINES.anfitriao = { ...HOST_VICTORY, default: [...HOST_VICTORY.default, ...VICTORY_LINES.anfitriao.default] };
+for (const k of ['critical', 'special', 'transform']) {
+  Object.assign(BATTLE_DIALOGUES[k], BATTLE_EXTRA[k]);
+  Object.assign(BATTLE_REPLIES[k], BATTLE_REPLIES_EXTRA[k]);
+}
+
+const DIALOGUE_BASE_IDS = { deus_morte: 'ferreiro', diabo: 'juan', fantasma: 'kemi', juan_odio: 'juan', guizo_bombado: 'guizo', guizo_velho: 'guizo', cristino_desertor: 'cristino', dante_aberto: 'dante', raziel_verdadeiro: 'raziel', celestine_magistrada: 'celestine', amphitruo: 'anfitriao' };
 
 export function battleLines(speakerId, opponentId, event) {
   const lines = BATTLE_DIALOGUES[event];
@@ -2712,6 +2731,8 @@ export function battleLines(speakerId, opponentId, event) {
 
 export function victoryLines(winner, loser, loserName = CHARACTER_NAMES[loser] || loser) {
   if (winner !== 'anfitriao') winner = BASE_CHARACTER[winner] || winner;
+  // quem derruba o ANFITRIÃO (o das Relíquias ou o Amphitruo) fala com ele — não com o Arnaldo nem com o Gaius
+  if ((loser === 'anfitriao' || loser === 'amphitruo') && winner !== 'anfitriao' && VICTORY_VS_HOST[winner]) return VICTORY_VS_HOST[winner];
   loser = BASE_CHARACTER[loser] || loser;
   const w = VICTORY_LINES[winner] || {};
   const matchup = w[loser];
@@ -2729,6 +2750,14 @@ export function victoryLine(winner, loser, loserName = CHARACTER_NAMES[loser] ||
 }
 
 export function introLines(idA, idB) {
+  // O ANFITRIÃO (o das Relíquias e o Amphitruo: a mesma consciência) tem a própria voz — as cenas com ele são montadas na hora
+  const host = (id) => id === 'anfitriao' || id === 'amphitruo';
+  if (host(idA) || host(idB)) {
+    const other = host(idA) ? BASE_CHARACTER[idB] || idB : BASE_CHARACTER[idA] || idA;
+    const scenes = host(other) ? voiceScenes('anfitriao', 'anfitriao') : host(idA) ? voiceScenes('anfitriao', other) : voiceScenes(other, 'anfitriao');
+    const scene = scenes[Math.floor(Math.random() * scenes.length)];
+    return [[scene.starter, scene.line], [scene.response, scene.responseLine]];
+  }
   idA = BASE_CHARACTER[idA] || idA;
   idB = BASE_CHARACTER[idB] || idB;
   const variations = INTRO_DIALOGUES[idA]?.[idB];

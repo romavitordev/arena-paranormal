@@ -2,6 +2,14 @@
 
 Este arquivo reúne as mesmas novidades exibidas no menu do jogo.
 
+## v3.52.0 — O Primeiro Anfitrião
+- NOVO LUTADOR — GAIUS (Ordo Calamitas): a maça de ferro, o ANULAR (habilidades contra ele não causam dano por 3 s) e a Transformação em AMPHITRUO.
+- AMPHITRUO: na seleção, RB/LB troca entre Gaius e Amphitruo; o Anfitrião das Relíquias agora tem essa aparência.
+- A máscara do Amphitruo esculpida: sorriso largo, olhos apertados, ondulações e as três mãos de metal segurando o rosto.
+- FALAS NOVAS: introduções na voz de cada personagem, reagindo a quem é o adversário; todos têm falas contra o Anfitrião.
+- O ANFITRIÃO irônico e caótico, com falas ligadas ao cânone (Jogo do Orfanato, Celestine, Gaius, Arnaldo).
+- LEVITAÇÃO mais rápida; interrompida, as pedras caem.
+
 ## v3.51.0 — Nada Pessoal
 - SELEÇÃO NO ESTILO STORM: um cartão por personagem; RB/LB trocam a versão (Henri ↔ Juan, Arnaldo ↔ Anfitrião, Ferreiro ↔ Deus da Morte). O selo ⇄ avisa que há mais versões.
 - SELEÇÃO — SETAS: para os lados, passando da ponta, vai para a página vizinha na mesma linha. O elenco cabe em 2 páginas.

@@ -2,7 +2,7 @@ import { COMBAT } from '../config/combat.js';
 import * as THREE from 'three';
 import { applyHit } from './damage.js';
 import { glowMat } from '../models/rig.js';
-import { knife, mutilatorAxe, baluAxe, demonMace, chaosSkate, chainHatchet } from '../models/weapons.js';
+import { knife, mutilatorAxe, baluAxe, demonMace, chaosSkate, chainHatchet, ironMace } from '../models/weapons.js';
 import { createMistZone } from './abilities.js';
 import { addBloodPool } from './bloodPools.js';
 import { inscribe } from './kianPowers.js';
@@ -323,6 +323,17 @@ const VISUALS = {
     const h = chainHatchet();
     h.position.y = 0.18;
     spin.add(h);
+    g.add(spin);
+    g.userData.tumble = spin;
+    return g;
+  },
+  // GAIUS: a maça de ferro arremessada, girando
+  ironMace() {
+    const g = new THREE.Group();
+    const spin = new THREE.Group();
+    const m = ironMace();
+    m.position.y = -0.05;
+    spin.add(m);
     g.add(spin);
     g.userData.tumble = spin;
     return g;

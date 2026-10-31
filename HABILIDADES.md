@@ -1294,6 +1294,51 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ---
 
+## GAIUS
+
+*O mais velho da Ordo Calamitas: reclama da idade, mas sabe muito bem a força que tem* · arma: A maça pequena de ferro
+
+### Físico (○ / B)
+
+| Comando | Golpe | Dano | Alcance | Observações |
+|---|---|---|---|---|
+| ○ 1 | Maçada | 32 | 2 m |  |
+| ○ 2 | Revés da Maça | 32 | 2 m |  |
+| ○ 3 | Empurrão do Veterano | 26 | 1.7 m |  |
+| ○ 4 | Maça de Cima | 44 | 2.1 m |  |
+| ○ 5 | Ainda Dou Conta | 62 | 2.3 m | finalizador: lança |
+| Frente + ○ | Passo Pesado | 38 | 2.2 m |  |
+| Trás + ○ | Recuo e Contragolpe | 36 | 2.2 m | invulnerável no começo |
+| Lado + ○ | Maçada Larga | 34 | 2.3 m |  |
+| No ar + ○ | Queda da Maça | 38 | 2.2 m | desce com impacto |
+| ↑ + ○ (no combo) | Maça para Cima | 40 | 2.1 m | finalizador: lança alto (combo aéreo) |
+| ↓ + ○ (no combo) | Esmagar | 48 | 2.1 m | finalizador: derruba |
+
+### Principal (□ / X): Maça Arremessada
+
+- Dano 34 · alcance 13 m · cooldown 2.8 s · custo 0
+
+### Habilidades
+
+- **Golpe do Veterano** — △ + ○ / Y + B · custo 30 · cooldown 12 s · dano 88 · alcance 2.2 m
+  Firma os pés, ergue a maça e desce com tudo — gasta muito da defesa e derruba. Preparação longa (aguenta um golpe pequeno depois de firmar); errar deixa ele aberto.
+- **Anular** — △ + L2 / Y + LT · custo 25 · cooldown 18 s
+  Já viu de tudo e sabe desmanchar um poder: por 3 s as HABILIDADES usadas contra ele não causam dano (golpes físicos, tiros e especiais ainda doem).
+- **Carga do Veterano** — R2 + × / RT + A · custo 20 · cooldown 10 s · dano 52 · alcance 2.2 m
+  Abaixa o ombro e avança com a maça por baixo — quebra a defesa e empurra longe.
+- **Cansado, Mas Firme** — R2 + △ / RT + Y · custo 20 · cooldown 18 s
+  Respira fundo e se planta: por 6 s recebe 25% menos dano, é empurrado bem menos e aguenta 2 golpes sem recuar.
+
+### Especial: Ciente da Própria Força
+
+250 de dano · custo 50 · cooldown 14 s.
+
+### Transformação: A Relíquia de Energia
+
+Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanidade cheia → 250 de dano.
+
+---
+
 ## O DIABO
 
 *O Portador da Relíquia de Sangue: regenera, bebe o sangue derramado e oferece pactos* · arma: Quatro braços com garras
@@ -1429,9 +1474,9 @@ Barra de Transformação cheia + vida ≤ 35%: segurar △ até passar da sanida
 
 ---
 
-## O ANFITRIÃO
+## AMPHITRUO
 
-*Forma O Anfitrião (até o fim do round)* · arma: A Relíquia de Energia no relógio de bolso
+*Forma Amphitruo (até o fim do round): o Gaius consumido pela Relíquia de Energia, o primeiro Anfitrião* · arma: A Relíquia de Energia: a máscara em constante transformação
 
 ### Físico (○ / B)
 

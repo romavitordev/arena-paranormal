@@ -1,5 +1,19 @@
 # Changelog
 
+## v3.52.0 — O Primeiro Anfitrião
+
+### Adicionado
+- `characters/gaius.js` (Ordo Calamitas) e a forma `forms/amphitruo.js` (`...anfitriao`, modelo `amphitruo`, `baseId: 'gaius'`); modelo `tools/blender/char_gaius.py` → `public/models/gaius.glb` (variante `amphitruo`); `weapons.js` `ironMace`, `amphitruoMask` (rosto esculpido por vértice com cor por vértice + `metalHand`); `props.js` `addGaiusProps` / `addAmphitruoProps`; texturas `face_gaius` e `tabard_amphitruo`; visual `ironMace` dos projéteis; agarrões `gaius` / `amphitruo`; falas do Gaius contra o elenco inteiro.
+- `config/introVoices.js` (`VOICES`, `TEAM_REF`): as introduções montadas pela voz de cada um (ally / rival / any), com `voiceScenes` em dialogues.js (contrações e maiúscula no `polish`); o Anfitrião com voz própria em `introLines`.
+- `config/hostLines.js`: `HOST_VICTORY`, `VICTORY_VS_HOST` (quem derruba o Anfitrião fala com ele) e as frases de combate que faltavam (`BATTLE_EXTRA` / `BATTLE_REPLIES_EXTRA`).
+
+### Alterado
+- `VERSION_GROUPS`: `['gaius', 'anfitriao']` (sai `['arnaldo', 'anfitriao']`); `anfitriaoReliquia = selectable(amphitruo, { id: 'anfitriao' })`.
+- `damage.js`: `takenMult` 0 passa a valer (`typeof === 'number'`) — o Anular zera as habilidades.
+- `dethroneHost` vale também contra o `amphitruo`; `victoryLines` não troca mais o Anfitrião derrotado pelo Arnaldo.
+- Levitação: `cancel` derruba as pedras que não partiram; Kian/Magistrada `windup` 0,32, `interval` 0,09, `speed` 34, `recovery` 0,22.
+- Saem `INTRO_HOOKS` / `INTRO_OPENERS` / `INTRO_REPLIES` (os moldes que só citavam a arma).
+
 ## v3.51.0 — Nada Pessoal
 
 ### Adicionado

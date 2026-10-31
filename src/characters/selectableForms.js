@@ -3,9 +3,10 @@
 // cópias próprias dos golpes (o ritmo de ataque do elenco — applyAttackSpeed — mexe nos golpes, e a forma usada na
 // transformação não pode mudar junto).
 //   PORTADORES: JUAN (o Portador; a forma com ódio do Henri) → Portador do Trono
-//   RELÍQUIAS:  O DEUS DA MORTE (Morte) e O ANFITRIÃO (Energia), ao lado do Diabo (Sangue) e da Magistrada (Conhecimento)
+//   RELÍQUIAS:  O DEUS DA MORTE (Morte) e O ANFITRIÃO (Energia — com a aparência do AMPHITRUO, versão do Gaius), ao lado do
+//               Diabo (Sangue) e da Magistrada (Conhecimento)
 import juanOdio from './forms/juan_odio.js';
-import anfitriao from './forms/anfitriao.js';
+import amphitruo from './forms/amphitruo.js';
 import deusMorte from './forms/deus_morte.js';
 
 const copyMelee = (m) => {
@@ -20,4 +21,5 @@ const selectable = (form, extra) => ({ ...form, form: false, selectableForm: tru
 
 export const juanPortador = selectable(juanOdio, { origin: 'Portadores', teams: ['Mascarados'] });
 export const deusMorteReliquia = selectable(deusMorte, { origin: 'Relíquias', teams: [], relic: 'morte' });
-export const anfitriaoReliquia = selectable(anfitriao, { origin: 'Relíquias', teams: [], relic: 'energia' });
+// o Anfitrião das Relíquias é o AMPHITRUO (o Gaius consumido; 2026-10-29) — mantém o id anfitriao (falas, Torre, Destronar)
+export const anfitriaoReliquia = selectable(amphitruo, { id: 'anfitriao', origin: 'Relíquias', teams: [], relic: 'energia' });

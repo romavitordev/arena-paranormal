@@ -28,6 +28,7 @@ import cristino from './cristino.js';
 import cristopher from './cristopher.js';
 import raziel from './raziel.js';
 import celestine from './celestine.js';
+import gaius from './gaius.js';
 import { juanPortador, deusMorteReliquia, anfitriaoReliquia } from './selectableForms.js';
 
 // Elenco jogável, na ordem da tela de seleção — AGRUPADO POR EQUIPE/TEMPORADA (a grade tem 3 colunas × 5 linhas por
@@ -53,7 +54,7 @@ export const ROSTER = [
   // quem é de DUAS equipes (2026-10-27): `origin` é a equipe em que ele fica na seleção (e a cor do retrato); `teams`
   // lista as outras — aparecem como etiqueta extra no cartão e na ficha (ex.: a Celestine, Portadora E Ordo Calamitas)
   juanPortador, arnaldo, ferreiro, celestine, // Portadores (Sangue, Energia, Morte, Conhecimento) — a Celestine também é da Ordo Calamitas
-  // Ordo Calamitas: Gaius, Amalia, Cornelius... entram aqui depois
+  gaius, // Ordo Calamitas (Calamidade, 67 d.C.) — o Gaius; no RB/LB, o AMPHITRUO (a versão transformada). Amalia, Cornelius... depois
   oDiabo, deusMorteReliquia, magistrada, anfitriaoReliquia, // Relíquias (Sangue, Morte, Conhecimento, Energia)
   estrangeiro, amigo, // Outro Lado (os Sinos de Tenebris: Transmissão e Tinta)
 ];
@@ -62,7 +63,7 @@ export const ROSTER = [
 // ciclo: no Henri, RB → Juan → Henri; LB volta pelo outro lado. Cada versão também tem o próprio cartão na grade.
 export const VERSION_GROUPS = [
   ['juan', 'juan_odio'], // Henri → Juan (Portador)
-  ['arnaldo', 'anfitriao'], // Arnaldo Fritz → O Anfitrião
+  ['gaius', 'anfitriao'], // Gaius → Amphitruo (o Anfitrião das Relíquias tem a aparência dele; o do Arnaldo é só transformação)
   ['ferreiro', 'deus_morte'], // Ferreiro → O Deus da Morte
 ];
 

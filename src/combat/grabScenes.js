@@ -211,6 +211,9 @@ export const GRAB_SCENES = {
   celestine_magistrada: scene({ ...S('dual_r'), fx: { kind: 'slash' }, sound: 'axeHit' }, { ...S('dual_cross'), fx: { kind: 'slash', flip: true }, sound: 'axeHit' }, { anim: 'slash_finisher', fx: 'shadow', sound: 'slashFinal' }),
   deus_morte: scene({ ...S('dm_slap', 0.34), fx: { kind: 'smash' }, sound: 'heavyPunch' }, { ...S('dm_hook', 0.34), fx: { kind: 'smash' }, sound: 'heavyPunch' }, { anim: 'dm_smash', fx: 'crush', sound: 'heavyPunch' }),
 };
+// GAIUS: a maça de ferro curta e pesada (dois golpes e o esmagar por cima); o AMPHITRUO agarra como o Anfitrião
+GRAB_SCENES.gaius = scene({ ...S('slash_h', 0.32), fx: { kind: 'smash' }, sound: 'heavyPunch' }, { ...S('slash_h_back', 0.32), fx: { kind: 'smash' }, sound: 'heavyPunch' }, { anim: 'slash_v', fx: 'slam', sound: 'heavyPunch' });
+GRAB_SCENES.amphitruo = GRAB_SCENES.anfitriao;
 GRAB_SCENES.kian_calamidade = GRAB_SCENES.kian; // a forma de Calamidade agarra igual (só mais forte)
 GRAB_SCENES.magistrada = GRAB_SCENES.arnaldo; // a bengala em esgrima, como a espada do Arnaldo
 GRAB_SCENES.o_diabo = GRAB_SCENES.diabo;

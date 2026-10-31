@@ -804,9 +804,22 @@ export const ABILITY_TYPES = {
           for (const m of stones) {
             const u = m.userData;
             if (u.done) continue;
+            if (u.falling) {
+              // interrompido: a pedra que ainda não tinha saído perde a força e cai
+              u.vel.y -= 22 * dt;
+              m.position.addScaledVector(u.vel, dt);
+              m.rotation.x += dt * 6;
+              if (m.position.y <= 0.12) {
+                u.done = true;
+                world.fx.burst(m.position, { count: 8, color: 0x6a6460, speed: 2.4, life: 0.35, size: 0.1, gravity: 9 });
+                world.scene.remove(m);
+                m.geometry.dispose();
+              }
+              continue;
+            }
             if (!u.flying) {
               // sobem e giram em volta da mão erguida
-              u.ang += dt * 2.4;
+              u.ang += dt * 3.4;
               const rise = Math.min(1, t / a.windup);
               m.position.set(f.pos.x + Math.sin(u.ang) * u.r, f.pos.y + 0.1 + (u.h - 0.1) * rise + Math.sin(t * 5 + u.ang) * 0.05, f.pos.z + Math.cos(u.ang) * u.r);
               m.rotation.x += dt * 2;
@@ -849,7 +862,17 @@ export const ABILITY_TYPES = {
         });
       }
       tl.end(total);
-      return seqFrom(tl);
+      // interrompido (apanhou, foi agarrado, caiu...): as pedras que ainda giravam caem na hora — as que já partiram
+      // seguem o voo
+      const drop = () => {
+        for (const m of stones) {
+          const u = m.userData;
+          if (u.done || u.flying) continue;
+          u.falling = true;
+          u.vel.set((Math.random() - 0.5) * 1.5, 1.2, (Math.random() - 0.5) * 1.5);
+        }
+      };
+      return seqFrom(tl, { cancel: drop });
     },
   },
 

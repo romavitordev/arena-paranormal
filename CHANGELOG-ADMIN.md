@@ -1,5 +1,13 @@
 # Registro administrativo de alterações
 
+## v3.52.0 — O Primeiro Anfitrião
+
+- Versão: `VERSION` 3.51.0 → **3.52.0** (package.json/lock junto). Data: 2026-10-30.
+- **Levitação (pedido do dono: bugava e era lenta):** testada — sem interrupção ~1,2 s parado e as 5 pedras acertam (84); interrompida, as pedras somem em menos de 0,6 s (antes giravam por 3 s+).
+- **Gaius / Amphitruo (pedido do dono: o Anfitrião separado do Arnaldo com o visual do Amphitruo; depois, o Gaius na Ordo Calamitas com o Amphitruo como versão):** referências da wiki (Amphitruo, Gaius, O Anfitrião; arte de Arquivos Secretos, a arte dos Anfitriões, a "Máscara de Amphitruo", as miniaturas). Testado: combo 167, maça arremessada (some e volta), as 4 habilidades, especial 214, Transformação → Amphitruo (máscara aparece, maça some); o Anular zerou a Levitação da Magistrada (0 contra 78 sem ele — achado e corrigido o `takenMult` 0 ignorado); RB no cartão do Gaius → Amphitruo.
+- **Falas (pedido do dono: "todas genéricas, citando a arma do outro"; o Anfitrião irônico e caótico, pelas falas do ep. 6):** introduções refeitas pela voz de cada personagem e pela equipe do adversário; o tom do Anfitrião foi tirado da descrição da wiki, com frases escritas para o jogo (sem copiar o texto da série além dos bordões curtos). As falas de vitória por par continuam; entraram as contra o Anfitrião e as do Anfitrião.
+- **Pendente (TODO):** a Magistrada e o Amigo Imaginário pelas artes oficiais; os demais membros da Ordo Calamitas.
+
 ## v3.51.0 — Nada Pessoal
 
 - Versão: `VERSION` 3.50.0 → **3.51.0** (package.json/lock junto). Data: 2026-10-29.

@@ -120,7 +120,8 @@ export function applyHit(world, attacker, victim, o) {
     const P = PASSIVES[p.type];
     if (P && P.damageTakenMod) mult *= P.damageTakenMod({ attacker, victim, kind: o.kind, element, passive: p, world, o });
   }
-  for (const b of victim.buffs || []) if (b.takenMult && (!b.takenKinds || b.takenKinds.includes(o.kind))) mult *= b.takenMult;
+  // (typeof: takenMult 0 também vale — o ANULAR do Gaius zera o dano das habilidades)
+  for (const b of victim.buffs || []) if (typeof b.takenMult === 'number' && (!b.takenKinds || b.takenKinds.includes(o.kind))) mult *= b.takenMult;
   // fraquezas da forma (Deus da Morte: fogo e Energia)
   const weak = weaknessMult(victim, attacker, o);
   if (weak > 1 && !o.noWeakFx) victim.notify('FRAQUEZA!', true);

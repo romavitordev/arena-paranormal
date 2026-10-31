@@ -1,6 +1,6 @@
 # TODO — ARENA PARANORMAL
 
-**Versão de referência atual:** v3.51.0 (revisado em 2026-10-29: Nada Pessoal — seleção no estilo Storm (um cartão por personagem, versões no RB/LB, setas trocam de página pela ponta) e a Celestine refeita pelo cânone (kit novo: Aliança Falsa, Código e Sala da Morte; o Nada Pessoal acumulando; modelo com o pano do Símbolo e a corrente))
+**Versão de referência atual:** v3.52.0 (revisado em 2026-10-30: O Primeiro Anfitrião — Gaius na Ordo Calamitas e o Amphitruo como versão dele e como o Anfitrião das Relíquias, a máscara esculpida, as falas novas pela voz de cada personagem, o Anfitrião irônico e a Levitação corrigida)
 **Documento:** TODO principal
 **Histórico de desenvolvimento:** Changelog Admin + Changelog Cliente
 
@@ -9,7 +9,7 @@
 
 # PRÓXIMA GRANDE ATUALIZAÇÃO — LUTA + MODO PvE (planejamento de 2026-10-18)
 
-**Estado em 2026-10-29 (v3.51.0):**
+**Estado em 2026-10-30 (v3.52.0):**
 - [~] 2.2 Modelos antigos: Xande e Aguiar (v3.33.0), Fantasma, Kemi e Gal Sal + as lâminas Ereškigal (v3.34.0), Kaiser
   (v3.38.0), Balu e Lírio (v3.40.0), Arthur e Joui (v3.41.0), Arnaldo, Anfitrião, Veríssimo, Kian e O Diabo (2026-10-26)
   refeitos pelas artes oficiais; faltam os outros antigos
@@ -1597,6 +1597,16 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
       4. **O ANFITRIÃO selecionável com o visual de AMPHITRUO** (o primeiro Anfitrião conhecido: máscara sorridente com três
          mãos que se fundem ao rosto, armadura romana de ombreiras pontudas, a grande capa roxa com capuz, chamas roxas) — e
          o Anfitrião do Arnaldo com o visual do Arnaldo. Bate com o pedido da skin diferente (item abaixo).
+         **Referências levantadas (2026-10-29, wiki "Amphitruo": arte de Arquivos Secretos, "Máscara de Amphitruo", miniatura
+         de Calamidade):** o corpo é o de GAIUS (Ordo Calamitas, alto e magro). A MÁSCARA é metálica, cinza-escura, "em
+         constante transformação": rosto de SORRISO LARGO (boca aberta em meia-lua mostrando os dentes) e OLHOS PEQUENOS
+         apertados de riso; a superfície toda em SULCOS/FAIXAS ondulados horizontais (como camadas de metal derretido);
+         TRÊS MÃOS saem das bordas e seguram o rosto (uma de cada lado + uma em cima), fundidas a ele, com os DEDOS
+         subindo acima da cabeça como uma coroa. Armadura com OMBREIRAS PONTUDAS que sobem até o pescoço (detalhes roxos nos
+         lados), o PANO no peito com o Símbolo da Ordo Calamitas, cordas/faixas enroladas no tronco, a saia de pano, e a
+         grande CAPA ROXA com CAPUZ dos ombros até o chão, derramando no piso. Em combate brilha em roxo, com CHAMAS
+         ROXAS/AZUIS subindo pelo corpo todo (as mesmas chamas da Celestine servem: `energyFlames`). Fala: "Agora é minha
+         vez de brilhar!".
       5. **O Ferreiro** no cânone é RECEPTÁCULO (o portador da Morte é desconhecido): continua nos Portadores, que é o mais
          próximo.
       6. A **cor das Relíquias** era quase o amarelo da Ordo: trocada por MAGENTA (`#d63c8c`), única entre as equipes (feito).
@@ -1628,7 +1638,15 @@ O projeto deve continuar evoluindo sem recriar sistemas já existentes.
         (o kit da Magistrada com a aparência dela; maskTransform com a Máscara), a equipe "Ordo Calamitas" (cor, ordem), as
         falas (intro e vitória contra o elenco), a CPU, o check e os testes no jogo.
       - [x] **EQUIPES DUPLAS (2026-10-27)**: `teams` no personagem = outras equipes além da `origin` (que decide o grupo na seleção e a cor do retrato); aparecem como etiquetas extras no cartão, na ficha, nos golpes e no filtro da página Sobre (`config/teams.js defTeams`). Marcados: Celestine (Portadores + Ordo Calamitas), Arnaldo (Portadores + Ordo Realitas), Henri (Mascarados + Escriptas), Juan Portador (Portadores + Mascarados). A equipe Luzidios saiu (não existe no jogo).
-      - [ ] **ORDO CALAMITAS**: Gaius, Amalia, Cornelius... (grupo próprio entre os Portadores e as Relíquias).
+      - [x] **FALAS (v3.52.0)** — introduções pela voz de cada personagem (`introVoices.js`), falas contra o Anfitrião e as
+        dele no tom irônico (`hostLines.js`); **LEVITAÇÃO** corrigida (interrompida, as pedras caem; mais rápida).
+      - [x] **GAIUS (2026-10-29)** — o primeiro da ORDO CALAMITAS (grupo próprio entre os Portadores e as Relíquias): o velho
+        guerreiro da maça de ferro (Maça Arremessada, Golpe do Veterano, ANULAR — a habilidade canônica que anula as
+        habilidades usadas contra ele —, Carga do Veterano, Cansado Mas Firme, passiva Couro Velho, especial Ciente da
+        Própria Força). Transformação canônica: a Relíquia de Energia no rosto → AMPHITRUO. Na seleção, RB/LB troca entre os
+        dois; o Anfitrião das Relíquias agora tem a aparência do Amphitruo (o do Arnaldo continua só como transformação).
+        Modelo `char_gaius.py` (variante `amphitruo`: a máscara sorridente com as três mãos de metal e as chamas roxas).
+      - [ ] **ORDO CALAMITAS**: Amalia, Cornelius, Marius, Faustus, Cascadia...
       - [x] **O MODELO DAS MÁSCARAS** (feito em 2026-10-27: modelo próprio `tools/blender/char_seita.py` → `public/models/seita.glb` — túnica branca longa com as regiões pretas, capuz, pelerine, forca no pescoço, corda na cintura e os Símbolos tatuados nos antebraços, como na wiki; as máscaras em 3D, uma por membro: Nathaniel, riscada de vermelho, preta e a do sorriso — `weapons.js seitaMask`) que a Magistrada chama (os membros da Seita das Máscaras) — refazer na técnica atual
         (pedido de 2026-10-27).
 - [ ] **PARA DEPOIS (2026-10-27) — SKIN do ANFITRIÃO do ARNALDO ≠ ANFITRIÃO base:** o Anfitrião que sai da

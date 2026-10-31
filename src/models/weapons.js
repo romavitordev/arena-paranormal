@@ -1476,6 +1476,175 @@ export function despairMask() {
   return g;
 }
 
+// GAIUS: a MAÇA pequena de ferro, de uma mão, com o cabo enrolado em couro (wiki "Gaius" — Arsenal). Cabo em y, a
+// cabeça em cima (o pulso segura embaixo, como as outras armas de uma mão)
+export function ironMace() {
+  const g = new THREE.Group();
+  const iron = toon(0x5a5c62);
+  const handle = part(new THREE.CylinderGeometry(0.016, 0.018, 0.4, 8), 0x3a2a1e);
+  handle.position.y = -0.04;
+  g.add(handle);
+  for (let k = 0; k < 5; k++) { // o couro enrolado na base
+    const w = part(new THREE.TorusGeometry(0.02, 0.005, 4, 10), 0x24180f);
+    w.rotation.x = Math.PI / 2;
+    w.position.y = -0.18 + k * 0.024;
+    g.add(w);
+  }
+  const head = part(new THREE.SphereGeometry(0.055, 12, 10), 0, { mat: iron });
+  head.position.y = 0.2;
+  g.add(head);
+  for (let k = 0; k < 6; k++) { // os flanges de ferro
+    const fl = part(new THREE.BoxGeometry(0.016, 0.1, 0.05), 0, { mat: iron });
+    const a = (k / 6) * Math.PI * 2;
+    fl.position.set(Math.cos(a) * 0.05, 0.2, Math.sin(a) * 0.05);
+    fl.rotation.y = -a;
+    g.add(fl);
+  }
+  const cap = part(new THREE.ConeGeometry(0.025, 0.05, 6), 0, { mat: iron });
+  cap.position.y = 0.27;
+  g.add(cap);
+  return g;
+}
+
+// AMPHITRUO: a MÁSCARA da Relíquia de Energia no rosto do Gaius (wiki "Amphitruo" e a "Máscara de Amphitruo"): metal
+// cinza-prateado "em constante transformação", SORRISO LARGO de dentes à mostra, olhos pequenos apertados de riso, a
+// superfície toda em SULCOS ondulados (como metal derretido) e TRÊS MÃOS de metal que saem das bordas e seguram o rosto,
+// fundidas a ele — uma na testa, uma no queixo e a de cima com os dedos subindo como coroa
+// a máscara ESCULPIDA: uma meia-esfera deformada vértice a vértice — maçãs do rosto saltadas pelo sorriso, a boca
+// afundada em meia-lua de canto a canto, os olhos apertados afundados, a testa alta e as ONDULAÇÕES concêntricas em
+// relevo. As cores vêm da própria forma (cor por vértice): o fundo da boca e dos olhos escuro, os sulcos mais escuros,
+// o metal mais claro nas cristas — assim o desenho nunca sai do lugar do relevo
+const AMPH_R = 0.13;
+const smileY = (x) => -0.4 + 0.85 * x * x; // a curva da boca (os cantos sobem)
+function amphitruoFace() {
+  const geo = new THREE.SphereGeometry(AMPH_R, 72, 56, 0, Math.PI, 0, Math.PI);
+  const pos = geo.attributes.position;
+  const col = new Float32Array(pos.count * 3);
+  const v = new THREE.Vector3();
+  const g2 = (x, y, cx, cy, s) => Math.exp(-((x - cx) ** 2 + (y - cy) ** 2) / s);
+  for (let i = 0; i < pos.count; i++) {
+    v.fromBufferAttribute(pos, i).normalize();
+    const { x, y, z } = v;
+    const front = Math.max(0, z);
+    let r = 1;
+    // maçãs do rosto empurradas para cima pelo sorriso
+    r += 0.09 * front * (g2(x, y, 0.5, -0.18, 0.025) + g2(x, y, -0.5, -0.18, 0.025));
+    // o queixo para a frente
+    r += 0.06 * front * g2(x, y, 0, -0.78, 0.05);
+    // a BOCA: uma meia-lua afundada de canto a canto (aberta no meio, fechando nos cantos)
+    const open = Math.max(0, 1 - (x / 0.62) ** 2); // altura da boca: máxima no meio
+    const dy = y - smileY(x);
+    const inMouth = Math.abs(x) < 0.62 && dy < 0.03 && dy > -0.08 - 0.26 * open;
+    if (inMouth) r -= 0.2 * front * Math.min(1, open * 2.5);
+    // os OLHOS apertados de riso: duas meias-luas finas, os cantos de fora caindo
+    let inEye = false;
+    for (const s of [-1, 1]) {
+      const ex = x - s * 0.34;
+      const top = 0.16 - 2.6 * ex * ex;
+      if (Math.abs(ex) < 0.17 && y < top && y > top - 0.05) { r -= 0.07 * front; inEye = true; }
+    }
+    // o sulco do nariz e as rugas de riso nos cantos da boca
+    r -= 0.025 * front * g2(x, y, 0, -0.05, 0.002);
+    for (const s of [-1, 1]) r -= 0.02 * front * Math.exp(-(((x - s * 0.66) ** 2) / 0.002 + ((y + 0.22) ** 2) / 0.03));
+    // as ONDULAÇÕES concêntricas (centro na testa), mais fortes longe da boca
+    const ring = Math.sin(Math.hypot(x * 1.1, (y - 0.42) * 0.9) * 46 + Math.sin(Math.atan2(y - 0.42, x) * 5) * 0.8);
+    const wave = 0.016 * ring * (inMouth || inEye ? 0 : 1);
+    r += wave;
+    v.multiplyScalar(r * AMPH_R);
+    pos.setXYZ(i, v.x, v.y * 1.18, v.z * 0.92); // comprida e um pouco achatada
+    // cor: o metal (mais claro nas cristas), os sulcos escuros, a boca e os olhos quase pretos
+    let c = 0.36 + 0.09 * ring; // cinza-prateado (o claro demais estourava na luz roxa)
+    if (inMouth) c = 0.07;
+    if (inEye) c = 0.06;
+    if (z < 0.05) c *= 0.75; // a borda de trás
+    col[i * 3] = c * 0.98;
+    col[i * 3 + 1] = c;
+    col[i * 3 + 2] = c * 1.06;
+  }
+  geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  geo.computeVertexNormals();
+  const face = new THREE.Mesh(geo, new THREE.MeshToonMaterial({ vertexColors: true }));
+  face.userData.outline = true;
+  // os DENTES: uma fileira em cima, seguindo o sorriso, um pouco para dentro da boca
+  const tooth = new THREE.MeshBasicMaterial({ color: 0xf2efe6 }); // sem sombra: sempre claros contra o fundo da boca
+  const teeth = new THREE.Group();
+  for (let k = 0; k < 12; k++) {
+    const x = -0.47 + (k / 11) * 0.94;
+    const y = smileY(x) - 0.03;
+    const z = Math.sqrt(Math.max(0.01, 1 - x * x - y * y)) * 0.97; // logo atrás do lábio, à frente do fundo da boca
+    const t = new THREE.Mesh(new THREE.BoxGeometry(0.013, 0.02, 0.008), tooth);
+    t.position.set(x * AMPH_R, y * AMPH_R * 1.18, z * AMPH_R * 0.92);
+    t.lookAt(t.position.clone().multiplyScalar(2));
+    teeth.add(t);
+  }
+  const g = new THREE.Group();
+  g.add(face, teeth);
+  return g;
+}
+
+// uma mão de metal: palma, quatro dedos de duas falanges curvados (agarrando) e o polegar; dedos para +y, palma +z
+function metalHand(mat, { spread = 0.16, curl = 0.5, len = 1 } = {}) {
+  const g = new THREE.Group();
+  const palm = part(new THREE.BoxGeometry(0.07, 0.075, 0.022), 0, { mat });
+  g.add(palm);
+  for (let k = 0; k < 4; k++) {
+    const L = (k === 1 || k === 2 ? 0.05 : 0.042) * len;
+    const base = new THREE.Group();
+    base.position.set(-0.026 + k * 0.0175, 0.036, 0);
+    base.rotation.z = (k - 1.5) * -spread;
+    base.rotation.x = curl * 0.6;
+    const p1 = part(new THREE.CylinderGeometry(0.0072, 0.0082, L, 6), 0, { mat });
+    p1.position.y = L / 2;
+    base.add(p1);
+    const mid = new THREE.Group();
+    mid.position.y = L;
+    mid.rotation.x = curl;
+    const p2 = part(new THREE.CylinderGeometry(0.0058, 0.007, L * 0.8, 6), 0, { mat });
+    p2.position.y = (L * 0.8) / 2;
+    mid.add(p2);
+    const nail = part(new THREE.ConeGeometry(0.0058, 0.012, 5), 0, { mat });
+    nail.position.y = L * 0.8 + 0.005;
+    mid.add(nail);
+    base.add(mid);
+    g.add(base);
+  }
+  const th = new THREE.Group();
+  th.position.set(0.036, -0.012, 0.004);
+  th.rotation.z = -0.95;
+  th.rotation.x = curl * 0.5;
+  const tp = part(new THREE.CylinderGeometry(0.0075, 0.0085, 0.05, 6), 0, { mat });
+  tp.position.y = 0.025;
+  th.add(tp);
+  g.add(th);
+  return g;
+}
+
+export function amphitruoMask() {
+  const g = new THREE.Group();
+  const metal = toon(0x8e9098);
+  const face = amphitruoFace();
+  face.position.set(0, 0.04, -0.03);
+  g.add(face);
+  // as TRÊS MÃOS fundidas ao rosto (a arte dos Anfitriões): nascem nas BORDAS da máscara, a palma virada para o rosto e
+  // os dedos curvados POR CIMA dele — a da esquerda agarra a testa e a têmpora, a da direita o queixo e a bochecha; a
+  // de cima sobe atrás da cabeça com os dedos abertos como uma coroa
+  const hL = metalHand(metal, { curl: 0.75, spread: 0.12 });
+  hL.position.set(0.125, 0.09, 0.0);
+  hL.rotation.set(0, -Math.PI / 2, 0.55); // palma para o rosto (−x), dedos subindo e entrando na testa
+  hL.scale.setScalar(1.3);
+  g.add(hL);
+  const hR = metalHand(metal, { curl: 0.8, spread: 0.12 });
+  hR.position.set(-0.125, -0.06, 0.02);
+  hR.rotation.set(0, Math.PI / 2, Math.PI + 0.45); // palma para o rosto (+x), dedos descendo e segurando o queixo
+  hR.scale.setScalar(1.3);
+  g.add(hR);
+  const hT = metalHand(metal, { spread: 0.36, curl: 0.1, len: 1.3 });
+  hT.position.set(0.0, 0.2, -0.06);
+  hT.rotation.set(-0.25, 0, 0);
+  hT.scale.setScalar(1.25);
+  g.add(hT);  return g;
+}
+
 // CHAMAS DE ENERGIA (Celestine nas miniaturas de Calamidade): línguas de fogo azul-turquesa saindo do corpo e do cabelo.
 // Cada língua é uma gota (torno) em duas camadas somadas (fora turquesa, dentro quase branca) que tremula sozinha no
 // onBeforeRender — anda na luta, na seleção e nos retratos sem precisar de atualização de fora.

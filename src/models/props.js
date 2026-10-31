@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { glowMat, toon } from './rig.js';
 import { MATERIAL_TEXTURES } from './textures.js';
-import { katana, scabbard, shiNoKage, relicScabbard, relicBlade, m4, sniper, guitarCase, bloodArm, bloodForearmBlade, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, roundGlasses, neonWraps, pulseEmitter, bandolier, bengala, mustache, socadeira, peixeira, spikedLantern, tenebrisPendant, chainHatchet, despairMask, seitaMask, SEITA_MASKS, energyFlames } from './weapons.js';
+import { katana, scabbard, shiNoKage, relicScabbard, relicBlade, m4, sniper, guitarCase, bloodArm, bloodForearmBlade, knife, karambit, sickleBlade, mutilatorAxe, shotgun, handGrenade, antenna, barbedBat, chaosSkate, leonora, magnum, espadaConsumidora, facaPredadora, sniperFantasma, baluAxe, demonMace, gasMask, swordArnaldo, pocketWatch, roundGlasses, neonWraps, pulseEmitter, bandolier, bengala, mustache, socadeira, peixeira, spikedLantern, tenebrisPendant, chainHatchet, despairMask, seitaMask, SEITA_MASKS, energyFlames, ironMace, amphitruoMask } from './weapons.js';
 
 // Armas e acessórios adicionados em código sobre os modelos do Blender.
 // Usam só `sockets`, `attach()` e `props`, que existem nos dois tipos de rig.
@@ -1084,6 +1084,37 @@ export function addDanteAbertoProps(rig) {
 }
 
 // RAZIEL (Vampiros): tudo vem do modelo (garras, dentes, o casaco); a forma verdadeira é o mesmo .glb trocando as peças
+// GAIUS (Ordo Calamitas): a MAÇA de ferro na mão direita e a MÁSCARA da Relíquia de Energia guardada (aparece na
+// Transformação: vira AMPHITRUO)
+export function addGaiusProps(rig) {
+  const { sockets, props } = rig;
+  const mace = ironMace();
+  inFist(mace);
+  sockets.handR.add(mace);
+  props.mace = mace;
+  const mask = amphitruoMask();
+  mask.position.set(0, -0.03, -0.02);
+  mask.visible = false;
+  sockets.mouth.add(mask);
+  props.amphMask = mask;
+}
+
+// AMPHITRUO (o Gaius consumido pela Relíquia de Energia): a máscara no rosto, a maça some ("consumida, não sendo
+// utilizada pela nova entidade") e as CHAMAS ROXAS e azuis por todo o corpo (a arte e as miniaturas)
+export function addAmphitruoProps(rig) {
+  addGaiusProps(rig);
+  rig.showProp('amphMask', true);
+  rig.showProp('mace', false);
+  const at = (joint, pos, o, color = 0xa050ff) => { const f = energyFlames(color, o); f.position.set(...pos); rig.attach(joint, f); };
+  at('hd', [0, 0.3, -0.04], { count: 3, radius: 0.05, height: 0.36, width: 0.15 });
+  for (const [side, sx] of [['L', 1], ['R', -1]]) {
+    at('s' + side, [0.08 * sx, 0.04, 0], { count: 6, radius: 0.13, height: 0.42, width: 0.16 });
+    at('e' + side, [0.02 * sx, -0.12, 0], { count: 6, radius: 0.11, height: 0.4, width: 0.15 }, 0x6a5aff);
+    at('sp', [0.24 * sx, 0.05, 0], { count: 6, radius: 0.1, height: 0.5, width: 0.16 });
+    at('k' + side, [0, -0.3, 0], { count: 8, radius: 0.16, height: 0.5, width: 0.17 }, 0x5a6aff);
+  }
+}
+
 // CELESTINE: as duas MACHADINHAS (uma em cada mão; a corrente entre elas aparece no arremesso e nos giros — combat) e
 // a MÁSCARA DO DESESPERO guardada (aparece na Transformação: a forma Celestine, a Magistrada)
 export function addCelestineProps(rig) {

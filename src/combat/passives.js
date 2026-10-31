@@ -242,7 +242,7 @@ export const PASSIVES = {
   // bate mais forte nele — no Anfitrião selecionável e no Anfitrião que sai do Arnaldo
   dethroneHost: {
     damageMod({ victim, passive }) {
-      return victim && victim.def && victim.def.id === 'anfitriao' ? passive.mult ?? 1.3 : 1;
+      return victim && victim.def && (victim.def.id === 'anfitriao' || victim.def.id === 'amphitruo') ? passive.mult ?? 1.3 : 1;
     },
   },
   // Raziel — Turno Extra: o finalizador abre a janela da ação extra (lido no acerto e em useAbility, Fighter.js)
